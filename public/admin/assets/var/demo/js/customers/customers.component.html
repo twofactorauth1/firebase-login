@@ -127,7 +127,7 @@
 	            </tr>
 	        </thead>
 	        <tbody>
-	            <tr ng-repeat="customer in vm.displayedCustomers" class="product-item">
+	            <tr ng-repeat="customer in vm.displayedCustomers" class="product-item" ng-click="vm.viewCustomerLedger(customer)">
 	            
 	                <td class=""><strong>Id: </strong>{{customer.OCRD_CardCode}}</td>
 

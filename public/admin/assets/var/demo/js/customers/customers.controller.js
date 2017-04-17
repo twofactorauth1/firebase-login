@@ -12,6 +12,8 @@ function customersComponentController($scope, $attrs, $filter, $modal, $timeout,
 
     vm.state = {};
 
+    vm.viewCustomerLedger = viewCustomerLedger;
+
 
     vm.uiState = {
         loading: true
@@ -23,6 +25,12 @@ function customersComponentController($scope, $attrs, $filter, $modal, $timeout,
             vm.uiState.loading = false;
         }
     }, true);
+
+
+
+    function viewCustomerLedger(customer){
+        $location.path('/invoices/' + customer.OCRD_CardCode);
+    }
 
     function init(element) {
         vm.element = element;
