@@ -110,12 +110,12 @@
 	    <table class="table table-hover table-striped" ng-class="{'grid': tableView == 'grid', 'bg-white table-list-view': tableView == 'list'}" ng-if="!vm.uiState.loading">
 	        <thead ng-class="{'bg-white': tableView == 'grid'}">
 	            <tr>
-	                <th st-sort="OCRD_CardCode">Id</th>
-	                <th st-sort="OCRD_CardName">Name</th>
-	                <th class="hidden-xs">Address</th>
-	                <th st-sort="OCRD_City">City</th>
-	                <th st-sort="OCRD_State1">State</th>
-	                <th st-sort="OCRD_ZipCode">ZipCode</th>
+	                <th class="code-col" st-sort="OCRD_CardCode">Id</th>
+	                <th class="name-col" st-sort="OCRD_CardName">Name</th>
+	                <th class="address-col" class="hidden-xs">Address</th>
+	                <th class="city-col" st-sort="OCRD_City">City</th>
+	                <th class="state-col" st-sort="OCRD_State1">State</th>
+	                <th class="zip-col" st-sort="OCRD_ZipCode">ZipCode</th>
 	            </tr>
 	            <tr ng-if="showFilter">
 	                <th>
@@ -132,7 +132,7 @@
 	                <td class=""><strong>Id: </strong>{{customer.OCRD_CardCode}}</td>
 
 	                <td><strong>Name: </strong><div class="name-block-container"><span class="list-name"></span><span ng-text-truncate="customer.OCRD_CardName" ng-tt-chars-threshold="30" ng-tt-no-toggling></span></div></td>
-	                <td class="hidden-xs"><strong>Address: </strong>{{customer.OCRD_Address}}</td>
+	                <td class="hidden-xs"><strong>Address: </strong><div class="name-block-container"><span class="list-name"></span><span ng-text-truncate="customer.OCRD_Address" ng-tt-chars-threshold="30" ng-tt-no-toggling></span></div></td>
 	                <td><strong>City: </strong>{{customer.OCRD_City}}</td>
 	                <td><strong>State: </strong>{{customer.OCRD_State1}}</td>
 	                <td><strong>ZipCode: </strong>{{customer.OCRD_ZipCode}}</td>	 
@@ -140,7 +140,7 @@
 	        </tbody>
 	        <tfoot>
 	            <tr>
-	                <td class="text-center" st-custom-pagination="" st-displayed-pages="showPages" st-items-by-page="itemPerPage || 500" colspan="6">
+	                <td class="text-center" st-custom-pagination="" st-displayed-pages="showPages" st-items-by-page="itemPerPage || 200" colspan="6">
 	                </td>
 	            </tr>
 	        </tfoot>
