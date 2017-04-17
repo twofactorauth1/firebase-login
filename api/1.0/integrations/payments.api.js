@@ -182,7 +182,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
                         var customerId = account.get('billing').stripeCustomerId;
 
-                        paymentsManager.listChargesForAccount(account, created, endingBefore, limit, startingAfter, userId, function(err, charges){
+                        paymentsManager.listChargesForAccount(account, null, endingBefore, limit, startingAfter, userId, function(err, charges){
                             self.log.debug(accountId, userId, '<< listChargesForAccount');
                             return self.sendResultOrError(resp, err, charges, "Error listing revenue");
                         });
