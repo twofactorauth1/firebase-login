@@ -45,6 +45,9 @@ function ssbBlogRecentPostComponentController(SimpleSiteBuilderBlogService, $sco
             }, 2000)
             checkHasFeaturedPosts();
             if(vm.blog.posts.length>1){
+                if(vm.blog.posts.length>6){
+                  vm.blog.posts=   vm.blog.posts.slice(0, 6);
+                }
                 vm.element.closest("div.ssb-page-section").css({'display': 'block'});
             }else{
                  vm.element.closest("div.ssb-page-section").css({'display': 'none'});
