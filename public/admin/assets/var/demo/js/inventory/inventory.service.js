@@ -12,7 +12,7 @@
         var inventoryService = {
             limit: pagingConstant.numberOfRowsPerPage || 50,
             skip: 0,
-            page: 0,
+            page: 1,
             fieldSearch:{}
         };
 

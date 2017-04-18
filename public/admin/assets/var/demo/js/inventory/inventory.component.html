@@ -133,7 +133,7 @@
 	        <tfoot>
 	            <tr>
 	            	<td colspan="10" class="center">
-		                <div class="pagination pagination-centered" ng-show="vm.state.inventory.length > vm.uiState.curPage">
+		                <div class="pagination pagination-centered hidden" ng-show="vm.state.inventory.length > vm.uiState.curPage">
 	                        <button type="button" class="btn btn-primary" ng-disabled="vm.uiState.curPage == 0" ng-click="vm.previousPage()">
 	                            <span class="fa fa-arrow-left"></span>
 	                            <span class="hidden-xs">PREV</span>
@@ -145,6 +145,17 @@
 	                            <span class="fa fa-arrow-right"></span>
 	                        </button>
 	                    </div>
+
+
+
+	                    <nav ng-if="vm.numberOfPages() && vm.pages.length >= 2">
+	                    	<ul class="pagination">
+	                    		<li ng-repeat="page in vm.pages" ng-class="{active: page == vm.uiState.curPage}">
+	                    			<a ng-click="vm.selectPage(page)" class="ng-binding">{{page}}</a>
+	                    		</li>
+	                    	</ul>
+	                    </nav>
+
 	                </td>
 	            </tr>
 	        </tfoot>
