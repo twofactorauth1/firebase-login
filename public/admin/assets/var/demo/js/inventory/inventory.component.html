@@ -2,7 +2,7 @@
     <div class="row">
         <div class="col-sm-8">
             <h1 class="mainTitle">INVENTORY</h1>
-            <span ng-if="vm.state.inventory" class="mainDescription">There are currently {{vm.state.totalInventory | number : fractionSize}} products.</span>
+            <span ng-if="vm.state.inventory" class="mainDescription">There are currently {{vm.state.totalInventory | number : fractionSize}} product<span ng-if="vm.state.totalInventory > 1">s</span>. ({{vm.state.inventory.length || 0}} in filtered view)</span>
         </div>
     </div>
 </section>

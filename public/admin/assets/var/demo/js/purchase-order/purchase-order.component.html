@@ -2,7 +2,7 @@
     <div class="row">
         <div class="col-sm-8">
             <h1 class="mainTitle">PURCHASE ORDERS</h1>
-            <span ng-if="vm.state.orders" class="mainDescription">There are currently {{vm.state.orders.length}} purchase orders. ({{vm.displayedOrders.length || 0}} in filtered view)</span>
+            <span ng-if="vm.state.orders" class="mainDescription">There are currently {{vm.state.orders.length}} purchase order<span ng-if="vm.state.orders.length > 1">s</span>. ({{vm.displayedOrders.length || 0}} in filtered view)</span>
         </div>
     </div>
 </section>
