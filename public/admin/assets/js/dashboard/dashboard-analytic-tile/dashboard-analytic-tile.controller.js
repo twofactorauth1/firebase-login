@@ -25,6 +25,7 @@ function dashboardAnalyticTileComponentController($scope, $attrs, $filter, Dashb
     function analyticMap() {
         var ret = {};
         var analyticsObject = DashboardService.state.analytics;
+        var revenuedata = DashboardService.revenueFromStripe;
 
         if (analyticsObject) {
             switch(vm.analytic.name) {
@@ -115,12 +116,12 @@ function dashboardAnalyticTileComponentController($scope, $attrs, $filter, Dashb
                     ret.data = [
                         {
                             analyticDataLabel: 'YTD Order Rev.',
-                            analyticDataValue: '$' + parseFloat(analyticsObject.revenue.YTDTotalAmount).toFixed(2)
+                            analyticDataValue: '$' + parseFloat(revenuedata).toFixed(2)
                         },
-                        {
-                            analyticDataLabel: 'YTD Tax Collected',
-                            analyticDataValue: analyticsObject.revenue.YTDTotalTax
-                        },
+                        // {
+                        //     analyticDataLabel: 'YTD Tax Collected',
+                        //     analyticDataValue: analyticsObject.revenue.YTDTotalTax
+                        // },
                         {
                             analyticDataLabel: 'YTD New Orders',
                             analyticDataValue: analyticsObject.revenue.YTDTotalOrders
@@ -143,6 +144,11 @@ function dashboardAnalyticTileComponentController($scope, $attrs, $filter, Dashb
     }
 
     $scope.$watch(function() { return DashboardService.state.analytics }, function(state, oldState) {
+        if(state && state !== oldState){
+            vm.analyticMap();
+        }
+    })
+      $scope.$watch(function() { return DashboardService.revenueFromStripe }, function(state, oldState) {
         if(state && state !== oldState){
             vm.analyticMap();
         }
