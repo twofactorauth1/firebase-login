@@ -32,6 +32,7 @@ function purchaseOrderDetailsController($scope, $state, $attrs, $filter, $modal,
     function getPurchaseOrderDetails(orderId){ 
         PurchaseOrderService.getPurchaseOrderDetails(orderId).then(function(response){
             vm.state.purchaseOrder = response.data;
+            renderPdfToContainer(vm.state.purchaseOrder);
             vm.uiState.loading = false;
         })
     }
@@ -90,6 +91,12 @@ function purchaseOrderDetailsController($scope, $state, $attrs, $filter, $modal,
         
     }
 
+    function renderPdfToContainer(po){
+        if(po.attachment && po.attachment.url &&  po.attachment.mimeType == 'application/pdf'){
+            //var myPDF = new PDFObject({ url: 'https://research.google.com/pubs/archive/44678.pdf' }).embed('pdf-container');
+            var myPDF = new PDFObject({ url: po.attachment.url }).embed('pdf-container');
+        }
+    }
 
     function init(element) {
         vm.element = element;
