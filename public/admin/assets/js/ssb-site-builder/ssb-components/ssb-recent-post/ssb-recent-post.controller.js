@@ -115,7 +115,6 @@ function ssbBlogRecentPostComponentController(SimpleSiteBuilderBlogService, $sco
         return Date.parse($filter('date')(blogpost.modified.date|| blogpost.created.date, "MM/dd/yyyy"));
     }
     function showNumberOfPosts(){
-        debugger;
         var showCount=6
         if(vm.component.post_count){
             showCount= parseInt(vm.component.post_count)+1;
