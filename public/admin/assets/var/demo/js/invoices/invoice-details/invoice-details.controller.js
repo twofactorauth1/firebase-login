@@ -27,8 +27,18 @@ function invoiceDetailsController($scope, $state, $attrs, $filter, $modal, $time
     function init(element) {
         vm.element = element;
         InvoiceService.viewCustomerInvoice($stateParams.customerId).then(function(response){
-            vm.invoice = response.data.response.payload.querydata.data;
-            if(vm.invoice && vm.invoice.row){
+            var invoice = response.data.response.payload.querydata.data;
+            if(invoice && invoice.row){
+                if(angular.isArray(invoice.row)){
+                    vm.invoice = invoice
+                }
+                else{
+                    vm.invoice = {
+                        row: [
+                            invoice.row
+                        ]
+                    }
+                }
                 vm.totalLineOrder = calculateTotal(vm.invoice);
                 vm.uiState.loading = false;
             }
