@@ -128,25 +128,20 @@ module.exports = {
                 var value = fieldSearch[key];
                 self.log.debug('value:', value);
                 if(value){
-
                     if(key == 'In_Stock'){
                         if(value == -1){
-                            fieldSearchArr.push({
-                                [key]: 0
-                            })
+                            var obj = {};
+                            obj[key] = 0;
+                            fieldSearchArr.push(obj);
+                        } else{
+                            var obj = {};
+                            obj[key] ={$gt:0};
+                            fieldSearchArr.push(obj);
                         }
-                        else{
-                            fieldSearchArr.push({
-                                [key]: {
-                                    $gt: 0
-                                }
-                            })
-                        }
-                    }
-                    else{
-                        fieldSearchArr.push({
-                            [key]: new RegExp(value, 'i')
-                        })
+                    } else{
+                        var obj = {};
+                        obj[key] = new RegExp(value, 'i');
+                        fieldSearchArr.push(obj);
                     }
                     
                 }
@@ -155,8 +150,7 @@ module.exports = {
                 query["$and"] = fieldSearchArr; 
             }
             self.log.debug('query:', query);
-        }
-        else {
+        } else {
             query = {
                 $or:[
                     {'@id':regex},
@@ -248,6 +242,54 @@ module.exports = {
                 value = JSON.parse(value);
 
                 var data = value.response.payload.querydata.data.row;
+                _.each(data, function(row){
+                    try {
+                        row.OITM_ItemCode = parseInt(row.OITM_ItemCode);
+                    } catch(e) {
+                        self.log.error('Error parsing row [' + row['@id'] + '.OITM_ItemCode', e);
+                    }
+                    try {
+                        row.In_Stock = parseInt(row.In_Stock);
+                    } catch(e) {
+                        self.log.error('Error parsing row [' + row['@id'] + '.In_Stock', e);
+                    }
+                    try {
+                        row.Committed = parseInt(row.Committed);
+                    } catch(e) {
+                        self.log.error('Error parsing row [' + row['@id'] + '.Committed', e);
+                    }
+                    try {
+                        row.Available = parseInt(row.Available);
+                    } catch(e) {
+                        self.log.error('Error parsing row [' + row['@id'] + '.Available', e);
+                    }
+                    try {
+                        row.OITM_SLength1 = parseFloat(row.OITM_SLength1);
+                    } catch(e) {
+                        self.log.error('Error parsing row [' + row['@id'] + '.OITM_SLength1', e);
+                    }
+                    try {
+                        row.OITM_SWidth1 = parseFloat(row.OITM_SWidth1);
+                    } catch(e) {
+                        self.log.error('Error parsing row [' + row['@id'] + '.OITM_SWidth1', e);
+                    }
+                    try {
+                        row.OITM_BHeight1 = parseFloat(row.OITM_BHeight1);
+                    } catch(e) {
+                        self.log.error('Error parsing row [' + row['@id'] + '.OITM_BHeight1', e);
+                    }
+                    try {
+                        row.OITM_SWeight1 = parseFloat(row.OITM_SWeight1);
+                    } catch(e) {
+                        self.log.error('Error parsing row [' + row['@id'] + '.OITM_SWeight1', e);
+                    }
+                    try {
+                        row.OITM_SVolume = parseFloat(row.OITM_SVolume);
+                    } catch(e) {
+                        self.log.error('Error parsing row [' + row['@id'] + '.OITM_SVolume', e);
+                    }
+
+                });
                 self.log.debug(0,0, 'Bulk inserting [' + data.length + '] records');
                 ziDao.dropCollection('new_inventory', function(){
                     ziDao.bulkInsert(data, 'new_inventory', function(err, value){
