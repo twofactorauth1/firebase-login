@@ -78,7 +78,7 @@ module.exports = {
             name: file.name,
             size: file.size,
             mimeType: file.mimeType
-        }
+        };
         
 
         if(file.path) {
@@ -98,17 +98,19 @@ module.exports = {
                     self.log.debug('S3 upload complete');
                     console.dir(value);
             
-            if(value && value.url)
-                value.url = value.url.replace("s3.amazonaws.com", "s3-us-west-1.amazonaws.com");
+                    if(value && value.url) {
+                        value.url = value.url.replace("s3.amazonaws.com", "s3-us-west-1.amazonaws.com");
+                    }
 
-            if (value.url.substring(0, 5) == 'http:') {
-              attachment.url = value.url.substring(5, value.url.length);
-            } else {
-              attachment.url = value.url;
-            }
 
-            po.set("attachment", attachment);
-            console.log(po);
+                    if (value.url.substring(0, 5) == 'http:') {
+                      attachment.url = value.url.substring(5, value.url.length);
+                    } else {
+                      attachment.url = value.url;
+                    }
+
+                    po.set("attachment", attachment);
+                    console.log(po);
                     uploadPromise.resolve(value);
                 }
             });

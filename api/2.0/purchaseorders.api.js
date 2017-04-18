@@ -78,11 +78,13 @@ _.extend(api.prototype, baseApi.prototype, {
                         fileToUpload.size = file.size;
                         fileToUpload.name = file.name;
                         fileToUpload.path = file.path;
+                        fileToUpload.type = file.type;
+
 
                         po.set("accountId", accountId);
                         po.set("userId", userId);
 
-                        console.log(file);
+                        //console.log(file);
 
                         poManager.createPO(fileToUpload, adminUrl, po, accountId, userId, function(err, value, file){                                                       
                             self.sendResultOrError(res, err, value, 'Could not save PO');
