@@ -26,12 +26,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url('demo'), this.isAuthAndSubscribedApi.bind(this), this.demo.bind(this));
         app.get(this.url('inventory'), this.isAuthAndSubscribedApi.bind(this), this.inventory.bind(this));
         app.get(this.url('inventory/filter'), this.isAuthAndSubscribedApi.bind(this), this.inventoryFilter.bind(this));
-
-        //TODO: remove these two.  Subsumed by filter
-        //app.get(this.url('inventory/search'), this.isAuthAndSubscribedApi.bind(this), this.inventorySearch.bind(this));
-        //app.get(this.url('inventory/search/:field/:value'), this.isAuthAndSubscribedApi.bind(this), this.inventoryFieldSearch.bind(this));
-
-
+        app.post(this.url('inventory/search'), this.isAuthAndSubscribedApi.bind(this), this.inventorySearch.bind(this));
 
         app.get(this.url('inventory/:id'), this.isAuthAndSubscribedApi.bind(this), this.inventoryItem.bind(this));
         app.get(this.url('loadinventory'), this.isAuthAndSubscribedApi.bind(this), this.loadinventory.bind(this));
@@ -104,7 +99,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 fieldNames = req.query.fieldNames.split(',');
             }
             //TODO: security
-            manager.inventorySearch(accountId, userId, term, fieldNames, skip, limit, sortBy, sortDir, function(err, value){
+            manager.inventorySearch(accountId, userId, term, null, skip, limit, sortBy, sortDir, function(err, value){
                 self.log.debug(accountId, userId, '<< inventorySearch');
                 return self.sendResultOrError(resp, err, value, "Error searching inventory");
             });
@@ -120,46 +115,29 @@ _.extend(api.prototype, baseApi.prototype, {
             });
         }
 
-
-
     },
+
 
     inventorySearch: function(req, resp) {
         var self = this;
         var accountId = parseInt(self.accountId(req));
         var userId = self.userId(req);
         self.log.debug(accountId, userId, '>> inventorySearch');
-        var term = req.query.term;
-        var fieldNames = null;
-        if(req.query.fieldNames) {
-            fieldNames = req.query.fieldNames.split(',');
-        }
         var skip = parseInt(req.query.skip) || 0;
         var limit = parseInt(req.query.limit) || 0;
         var sortBy = req.query.sortBy || null;
         var sortDir = parseInt(req.query.sortDir) || null;
+        var fieldSearch = req.body;
+
+        /*
+         * Search across the fields 
+         */
+        
+            
         //TODO: security
-        manager.inventorySearch(accountId, userId, term, fieldNames, skip, limit, sortBy, sortDir, function(err, value){
+        manager.inventorySearch(accountId, userId, null, fieldSearch, skip, limit, sortBy, sortDir, function(err, value){
             self.log.debug(accountId, userId, '<< inventorySearch');
             return self.sendResultOrError(resp, err, value, "Error searching inventory");
-        });
-    },
-
-    inventoryFieldSearch: function(req, resp) {
-        var self = this;
-        var accountId = parseInt(self.accountId(req));
-        var userId = self.userId(req);
-        self.log.debug(accountId, userId, '>> inventoryFieldSearch');
-        var field = req.params.field;
-        var value = req.params.value;
-        var skip = parseInt(req.query.skip) || 0;
-        var limit = parseInt(req.query.limit) || 0;
-        var sortBy = req.query.sortBy || null;
-        var sortDir = parseInt(req.query.sortDir) || null;
-        //TODO: security
-        manager.inventoryFieldSearch(accountId, userId, field, value, skip, limit, sortBy, sortDir, function(err, list){
-            self.log.debug(accountId, userId, '<< inventorySearch');
-            return self.sendResultOrError(resp, err, list, "Error searching inventory");
         });
     },
 

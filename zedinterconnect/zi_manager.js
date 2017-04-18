@@ -114,24 +114,49 @@ module.exports = {
         });
     },
 
-    inventorySearch: function(accountId, userId, term, fieldNames, skip, limit, sortBy, sortDir, fn) {
+    inventorySearch: function(accountId, userId, term, fieldSearch, skip, limit, sortBy, sortDir, fn) {
         var self = this;
         self.log.debug(accountId, userId, '>> inventorySearch');
         var regex = new RegExp('\.*'+term+'\.*', 'i');
         var query = {};
 
-        if(fieldNames && fieldNames.length > 0) {
-            if(fieldNames > 1) {
-                query.$or = [];
-                _.each(fieldNames, function(fieldName){
-                    var obj = {};
-                    obj[fieldName] = regex;
-                    query.$or.push(obj);
-                });
-            } else {
-                query[fieldNames[0]] = regex;
+        if(fieldSearch){
+            var fieldSearchArr = [];
+        
+            for(var i=0; i <= Object.keys(fieldSearch).length - 1; i++){
+                var key = Object.keys(fieldSearch)[i];
+                var value = fieldSearch[key];
+                self.log.debug('value:', value);
+                if(value){
+
+                    if(key == 'In_Stock'){
+                        if(value == -1){
+                            fieldSearchArr.push({
+                                [key]: 0
+                            })
+                        }
+                        else{
+                            fieldSearchArr.push({
+                                [key]: {
+                                    $gt: 0
+                                }
+                            })
+                        }
+                    }
+                    else{
+                        fieldSearchArr.push({
+                            [key]: new RegExp(value, 'i')
+                        })
+                    }
+                    
+                }
             }
-        } else {
+            if(fieldSearchArr.length){
+                query["$and"] = fieldSearchArr; 
+            }
+            self.log.debug('query:', query);
+        }
+        else {
             query = {
                 $or:[
                     {'@id':regex},

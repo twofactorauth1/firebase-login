@@ -165,8 +165,8 @@ _.extend(api.prototype, baseApi.prototype, {
                     } else {
                         
                         var created = {
-                            gte:start.getTime() || null,//req.query.from OR today-30days as a timestamp (1492095302)
-                            lte:end.getTime() || null//req.query.to OR today as a timestamp
+                            gte:Math.round(start.getTime() / 1000) || null,//req.query.from OR today-30days as a timestamp (1492095302)
+                            lte:Math.round(end.getTime() / 1000) || null//req.query.to OR today as a timestamp
                         };
                         var limit = req.query.limit || 0;
 
@@ -182,7 +182,14 @@ _.extend(api.prototype, baseApi.prototype, {
 
                         var customerId = account.get('billing').stripeCustomerId;
 
-                        paymentsManager.listChargesForAccount(account, null, endingBefore, limit, startingAfter, userId, function(err, charges){
+                        paymentsManager.listChargesForAccount(account, created, endingBefore, limit, startingAfter, userId, function(err, charges){
+                            var totalrevenue =0;
+                            var totaldataarray = charges.data;
+                            for(var i  =0 ;i<totaldataarray.length;i++)
+                            {
+                            totalrevenue=totalrevenue+(totaldataarray[i].amount/100);
+                            }  
+                            charges.totalrevenue=totalrevenue;
                             self.log.debug(accountId, userId, '<< listChargesForAccount');
                             return self.sendResultOrError(resp, err, charges, "Error listing revenue");
                         });

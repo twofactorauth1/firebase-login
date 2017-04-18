@@ -175,7 +175,9 @@
 
             function success(data) {
                 console.log('DashboardService getAnalytics: ', JSON.stringify(data));
+                
                 dashboardService.state.analytics = data;
+                //delete dashboardService.state.analytics.revenue.YTDTotalAmount;
             }
 
             function error(error) {
@@ -282,13 +284,7 @@
 
         function getRevenueFromStripe(){
             function success(data) {
-                console.log(data);
-                var totaldataarray = data.data;
-                for(var i  =0 ;i<totaldataarray.length;i++){
-                for(var j=0;j<totaldataarray[i].length;j++){
-                totalrevenue=totalrevenue+(totaldataarray[i][j].amount/100);
-                }};  
-                 dashboardService.revenueFromStripe = totalrevenue.toFixed(2);
+             dashboardService.revenueFromStripe =data.totalrevenue;
             }
 
             function error(error) {

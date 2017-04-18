@@ -13,7 +13,7 @@ function ssbBlogRecentPostComponentController(SimpleSiteBuilderBlogService, $sco
     vm.init = init;
     vm.initData = initData;
     vm.hasFeaturedPosts = false;
-
+    vm.showNumberOfPosts=showNumberOfPosts;// default
     var path = $location.$$url.replace('/page/', '');
 
     if(path){
@@ -114,7 +114,17 @@ function ssbBlogRecentPostComponentController(SimpleSiteBuilderBlogService, $sco
     function sortBlogPosts(blogpost){
         return Date.parse($filter('date')(blogpost.modified.date|| blogpost.created.date, "MM/dd/yyyy"));
     }
-
+    function showNumberOfPosts(){
+        var showCount=6
+        if(vm.component.post_count){
+            showCount= parseInt(vm.component.post_count)+1;
+        }
+       if(showCount>vm.blog.posts.length){
+           showCount=vm.blog.posts.length
+       }
+        console.log("showCount---",showCount)
+        return showCount
+    }
     function init(element) {
     	vm.element = element;
         checkHasFeaturedPosts();

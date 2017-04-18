@@ -281,6 +281,10 @@ app.constant('analyticsConstant', {
   refreshAfterTime: 600000 // in milliseconds
 });
 
+app.constant('pagingConstant', {
+  numberOfRowsPerPage: 50
+})
+
 
 app.constant('commerceConstant', {
   redirect_timeout_options: {
@@ -974,6 +978,12 @@ app.constant('JS_REQUIRES', {
     name: 'deep-diff',
     files: [
         '../js/libs/deep-diff/index.js'
+    ]
+  },
+  {
+    name: 'pdfobject',
+    files: [
+        '../js/libs/pdfobject/pdfobject.min.js'
     ]
   }]
 });

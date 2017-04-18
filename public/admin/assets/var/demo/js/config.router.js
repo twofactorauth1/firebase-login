@@ -270,7 +270,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         templateUrl: "/admin/assets/var/demo/js/purchase-order/purchase-order-details/purchase-order-details.html",
         title: 'Purchase Order',
         icon: 'ti-layout-media-left-alt',
-        resolve: loadSequence('PurchaseOrderDetailsComponent', 'PurchaseOrderDetailsController', 'PurchaseOrderService')
+        resolve: loadSequence('PurchaseOrderDetailsComponent', 'PurchaseOrderDetailsController', 'PurchaseOrderService', 'pdfobject')
     }).state('app.invoices', {
         url: '/invoices',
         templateUrl: "/admin/assets/var/demo/js/invoices/invoice.html",
@@ -288,7 +288,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         templateUrl: "/admin/assets/var/demo/js/invoices/invoice-details/invoice-details.html",
         title: 'Invoice Details',
         icon: 'ti-layout-media-left-alt',
-        resolve: loadSequence('InvoiceDetailsComponent', 'InvoiceDetailsController', 'InvoiceService')
+        resolve: loadSequence('InvoiceDetailsComponent', 'InvoiceDetailsController', 'InvoiceService', 'CustomersService')
     }).state('app.account.users', {
         url: '/users',
         templateUrl: "/admin/assets/js/users/users.html",

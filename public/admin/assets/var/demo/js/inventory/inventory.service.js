@@ -5,14 +5,14 @@
 
 	app.factory('InventoryService', InventoryService);
 
-	InventoryService.$inject = ['$http', '$q', '$timeout'];
+	InventoryService.$inject = ['$http', '$q', '$timeout', 'pagingConstant'];
 	/* @ngInject */
-	function InventoryService($http, $q, $timeout) {
+	function InventoryService($http, $q, $timeout, pagingConstant) {
 
         var inventoryService = {
-            limit: 50,
+            limit: pagingConstant.numberOfRowsPerPage || 50,
             skip: 0,
-            page: 0,
+            page: 1,
             fieldSearch:{}
         };
 
@@ -48,27 +48,46 @@
                 console.error('inventoryService getInventory error: ', JSON.stringify(error));
             }
 
+            var _method = "GET";
+
             var _qString = "?limit="+inventoryService.limit+"&skip="+ inventoryService.skip;
             
             if(inventoryService.sortBy){
                 _qString += "&sortBy=" + inventoryService.sortBy + "&sortDir=" + inventoryService.sortDir;
             }
 
-            if(inventoryService.globalSearch){
-                _qString += "&term=" + inventoryService.globalSearch;
-                //_qString += "&fieldNames=OITM_ItemName,OMRC_FirmName,OITM_ItemCode";
+            if(checkIfFieldSearch()){
+                _method = "POST";
                 urlParts.push('search');
             }
-
+            else if(inventoryService.globalSearch){
+                _qString += "&term=" + inventoryService.globalSearch;
+                urlParts.push('filter');
+            }
             return (
-
                 inventoryRequest($http({
                   url: urlParts.join('/') + _qString,
-                  method: 'GET',
+                  method: _method,
                   data: angular.toJson(inventoryService.fieldSearch)
                 }).success(success).error(error))
             );
             
+        }
+
+        function checkIfFieldSearch(){
+            var isFieldSearch = false;
+            var fieldSearch = inventoryService.fieldSearch;
+            if(!_.isEmpty(fieldSearch)){
+                for(var i=0; i <= Object.keys(fieldSearch).length - 1; i++){
+                    var key = Object.keys(fieldSearch)[i];
+                    var value = fieldSearch[key];
+                    
+                    if(value){
+                       isFieldSearch = true; 
+                    }
+                }
+            }
+            return isFieldSearch;
         }
 
         function getSingleInventory(productId){           

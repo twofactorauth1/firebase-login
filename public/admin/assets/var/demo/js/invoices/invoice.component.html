@@ -33,13 +33,13 @@
 	                                    </div>
 	                                </div>
 	                                <div class="visible-xs margin-bottom-15 clearfix"></div>
-	                                <div class="form-group col-xs-12 col-sm-6 row margin-bottom-0 padding-right-0 pull-right">
-	                                    <div class="col-xs-6 col-sm-4 center">
+	                                <div class="form-group col-xs-12 col-sm-6 row margin-bottom-0 padding-right-30 pull-right">
+	                                    <div class="col-xs-6 col-sm-6 center">
 	                                        <button type="button" class="btn btn-o btn-wide btn-info btn-scroll btn-scroll-top ti ti-import ng-click-active hidden" ng-click="openImportModal()">
 	                                            <span>Import</span>
 	                                        </button>
 	                                    </div>
-	                                    <div class="col-xs-6 col-sm-4 center">
+	                                    <div class="col-xs-6 col-sm-6 center">
 	                                        <button type="button" class="btn btn-o btn-wide btn-info btn-scroll btn-scroll-top ti ti-export ng-click-active hidden">
 	                                            <span>Export</span>
 	                                        </button>
@@ -49,12 +49,6 @@
 	                                                <button class="btn btn-info" ng-class="{'active': tableView == 'grid'}" href="" ng-click="tableView = 'grid'" tooltip-placement="top" tooltip="Grid"> <span class="fa fa-th"></span> </button>
 	                                            </div>
 	                                        </div>
-	                                    </div>
-	                                    <div class="visible-xs margin-bottom-15 clearfix"></div>
-	                                    <div class="col-xs-6 col-xs-offset-6 col-sm-4 center">
-	                                        <button type="button" class="btn btn-o btn-wide btn-info btn-scroll btn-scroll-top ti ti-plus ng-click-active" ng-click="openinvoiceModal()">
-	                                            <span>New</span>
-	                                        </button>
 	                                    </div>
 	                                </div>
 	                            </div>
@@ -138,20 +132,20 @@
 	        </tbody>
 	        <tfoot>
 	            <tr>
-	            	<td colspan="10" class="center">	
+	            	<td colspan="10" class="center">
 		                <div class="pagination pagination-centered" ng-show="vm.state.inventory.length > vm.uiState.curPage">
 	                        <button type="button" class="btn btn-primary" ng-disabled="vm.uiState.curPage == 0" ng-click="vm.previousPage()">
 	                            <span class="fa fa-arrow-left"></span>
 	                            <span class="hidden-xs">PREV</span>
 	                        </button>
-	                        
+
 	                        <span>Page {{vm.uiState.curPage + 1}} of {{ vm.numberOfPages() }}</span>
 	                        <button type="button" class="btn btn-primary" ng-disabled="vm.uiState.curPage >= vm.numberOfPages() - 1" ng-click="vm.nextPage()">
 	                            <span class="hidden-xs">Next</span>
 	                            <span class="fa fa-arrow-right"></span>
 	                        </button>
 	                    </div>
-	                </td>    
+	                </td>
 	            </tr>
 	        </tfoot>
 	    </table>
