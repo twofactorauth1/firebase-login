@@ -115,8 +115,8 @@ function dashboardAnalyticTileComponentController($scope, $attrs, $filter, Dashb
                     ret.buttonTitle = 'View Orders';
                     ret.data = [
                         {
-                            analyticDataLabel: 'YTD Order Rev.',
-                            analyticDataValue: '$' + parseFloat(revenuedata).toFixed(2)
+                            analyticDataLabel: 'YTD New Order Rev.',
+                            analyticDataValue: '$' + parseFloat(analyticsObject.revenue.YTDTotalAmount).toFixed(2)
                         },
                         // {
                         //     analyticDataLabel: 'YTD Tax Collected',
@@ -125,6 +125,10 @@ function dashboardAnalyticTileComponentController($scope, $attrs, $filter, Dashb
                         {
                             analyticDataLabel: 'YTD New Orders',
                             analyticDataValue: analyticsObject.revenue.YTDTotalOrders
+                        },
+                        {
+                            analyticDataLabel: 'YTD Revenue(Stripe)',
+                            analyticDataValue: '$' + parseFloat(revenuedata).toFixed(2)
                         }
                     ]
 
