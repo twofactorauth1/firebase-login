@@ -126,11 +126,29 @@ module.exports = {
             for(var i=0; i <= Object.keys(fieldSearch).length - 1; i++){
                 var key = Object.keys(fieldSearch)[i];
                 var value = fieldSearch[key];
-                
+                self.log.debug('value:', value);
                 if(value){
-                    fieldSearchArr.push({
-                        [key]: new RegExp('\.*'+value+'\.', 'i')
-                    })
+
+                    if(key == 'In_Stock'){
+                        if(value == -1){
+                            fieldSearchArr.push({
+                                [key]: 0
+                            })
+                        }
+                        else{
+                            fieldSearchArr.push({
+                                [key]: {
+                                    $gt: 0
+                                }
+                            })
+                        }
+                    }
+                    else{
+                        fieldSearchArr.push({
+                            [key]: new RegExp('\.*'+value+'\.', 'i')
+                        })
+                    }
+                    
                 }
             }
             if(fieldSearchArr.length){
@@ -138,8 +156,6 @@ module.exports = {
             }
             self.log.debug('query:', query);
         }
-            
-
         else {
             query = {
                 $or:[

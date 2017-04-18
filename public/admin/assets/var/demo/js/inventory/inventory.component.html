@@ -115,7 +115,10 @@
 	                <th>
 	                    <input ng-model="vm.uiState.fieldSearch.OITM_ItemCode" ng-model-options="{ debounce: 800 }" placeholder="SKU" class="form-control" type="search" />
 	                </th>
-	                <th>
+	                <th class="hidden-xs desc-col"></th>
+	                <th class="hidden-xs dim-col"></th>
+	                <th class="hidden-xs weight-col"></th>
+	                <th class="qty-col">
 	                    <select ng-model="vm.uiState.fieldSearch.In_Stock" class="form-control" ng-options="options.value as options.label for options in vm.quantitySearchOptions" ng-change="updateSettings()">
                             <option value="">-- choose --</option>
                         </select>

@@ -44,7 +44,7 @@ function inventoryComponentController($scope, $attrs, $filter, $modal, $timeout,
            "value":  1
         },{
            "label": "On Hand = 0",
-           "value":  0
+           "value":  -1
         }
 
     ]
