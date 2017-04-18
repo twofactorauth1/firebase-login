@@ -979,5 +979,11 @@ app.constant('JS_REQUIRES', {
     files: [
         '../js/libs/deep-diff/index.js'
     ]
+  },
+  {
+    name: 'pdfobject',
+    files: [
+        '../js/libs/pdfobject/pdfobject.min.js'
+    ]
   }]
 });

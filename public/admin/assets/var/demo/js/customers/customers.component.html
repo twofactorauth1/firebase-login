@@ -2,7 +2,7 @@
     <div class="row">
         <div class="col-sm-8">
             <h1 class="mainTitle">CUSTOMERS</h1>
-            <span ng-if="vm.state.customers" class="mainDescription">There are currently {{vm.state.customers.length | number : fractionSize}} customer<span ng-if="vm.state.customers.length > 1">s</span>. ({{vm.displayedCustomers.length || 0}} in filtered view)</span>
+            <span ng-if="vm.state.customers" class="mainDescription">There {{vm.state.customers.length > 1 ? 'are' : 'is'}}  currently {{vm.state.customers.length | number : fractionSize}} customer<span ng-if="vm.state.customers.length > 1">s</span>. ({{vm.displayedCustomers.length || 0}} in filtered view)</span>
         </div>
     </div>
 </section>
