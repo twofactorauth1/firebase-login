@@ -38,6 +38,16 @@ function inventoryComponentController($scope, $attrs, $filter, $modal, $timeout,
     vm.showFilter = showFilter;
     vm.pagingConstant = pagingConstant;
     vm.selectPage = selectPage;
+    vm.quantitySearchOptions =[
+        {
+           "label": "On Hand > 0",
+           "value":  1
+        },{
+           "label": "On Hand = 0",
+           "value":  0
+        }
+
+    ]
 
     $scope.$watch(function() { return InventoryService.inventory }, function(inventory) {
         if(angular.isDefined(inventory)){
