@@ -2,7 +2,7 @@
     <div class="row">
         <div class="col-sm-8">
             <h1 class="mainTitle">Customer Ledger</h1>
-            <span class="mainDescription">{{vm.invoice.row[0]._CustStatmentHdr_CardName}}</span>
+            <span class="mainDescription">{{vm.invoice.row[0]._CustStatmentHdr_CardName || vm.listInvoice.OCRD_CardName}}</span>
         </div>
     </div>
 </section>
@@ -23,7 +23,7 @@
 
                     <div class="description">
                         <span>
-                            {{vm.invoice.row[0]._CustStatmentHdr_Address}}
+                            {{vm.invoice.row[0]._CustStatmentHdr_Address || vm.listInvoice.OCRD_Address}}
                         </span>
                     </div>
                     <hr>
@@ -34,7 +34,7 @@
 
                     <div class="description">
                         <span>
-                            {{vm.invoice.row[0]._CustStatmentHdr_CardCode}}
+                            {{vm.invoice.row[0]._CustStatmentHdr_CardCode || vm.listInvoice.OCRD_CardCode}}
                         </span>
                     </div>
                     <hr>
@@ -57,7 +57,7 @@
 
                     <div class="description">
                         <span>
-                            {{vm.invoice.row[0]._CustStatmentHdr_City}}
+                            {{vm.invoice.row[0]._CustStatmentHdr_City || vm.listInvoice.OCRD_City}}
                         </span>
                     </div>
                     <hr>
@@ -67,7 +67,7 @@
 
                     <div class="description">
                         <span>
-                            {{vm.invoice.row[0]._CustStatmentHdr_State1}}
+                            {{vm.invoice.row[0]._CustStatmentHdr_State1 || vm.listInvoice.OCRD_State1}}
                         </span>
                     </div>
                     <hr>
@@ -77,7 +77,7 @@
 
                     <div class="description">
                         <span>
-                            {{vm.invoice.row[0]._CustStatmentHdr_ZipCode}}
+                            {{vm.invoice.row[0]._CustStatmentHdr_ZipCode || vm.listInvoice.OCRD_ZipCode}}
                         </span>
                     </div>
                     <hr>
@@ -101,7 +101,7 @@
                     </ul>
 
                     <textarea id="newNote" rows="5" class="form-control margin-bottom-15" ng-model="vm.newNote.text"></textarea>
-                    <button type="button" ng-disabled="!(vm.newNote.text) || vm.uiState.saveLoading" class="btn btn-info btn-block btn-o btn-wide btn-scroll btn-scroll-top ti-plus" ng-click="vm.addNote(vm.newNote.text)">
+                    <button type="button" ng-disabled="!(vm.newNote.text) || vm.uiState.saveLoading || true" class="btn btn-info btn-block btn-o btn-wide btn-scroll btn-scroll-top ti-plus" ng-click="vm.addNote(vm.newNote.text)">
                         <span>Add</span>
                     </button>
                 </div>
@@ -142,9 +142,14 @@
                         </tr>
                     </tbody>
                     <tfoot>
-                        <tr>
+                        <tr ng-if="vm.totalLineOrder">
                             <td class="text-right padding-right-20" colspan="10">
-                                <span ng-if="vm.totalLineOrder" class="order-total-text">Total</span><span class="order-total-value">{{vm.totalLineOrder | currency : vm.invoice.row[0]._CustStatmentHdr_Currency}}</span>
+                                <span class="order-total-text">Total</span><span class="order-total-value">{{vm.totalLineOrder | currency : vm.invoice.row[0]._CustStatmentHdr_Currency}}</span>
+                            </td>
+                        </tr>
+                        <tr ng-if="!vm.totalLineOrder">
+                            <td class="text-center" colspan="10">
+                                <span class="footer-no-text">No Data</span>
                             </td>
                         </tr>
                     </tfoot>
