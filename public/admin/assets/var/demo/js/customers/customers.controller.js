@@ -2,9 +2,9 @@
 
 app.controller('CustomersComponentController', customersComponentController);
 
-customersComponentController.$inject = ['$scope', '$attrs', '$filter', '$modal', '$timeout', '$location', 'CustomersService'];
+customersComponentController.$inject = ['$scope', '$attrs', '$filter', '$modal', '$timeout', '$location', 'pagingConstant', 'CustomersService'];
 /* @ngInject */
-function customersComponentController($scope, $attrs, $filter, $modal, $timeout, $location, CustomersService) {
+function customersComponentController($scope, $attrs, $filter, $modal, $timeout, $location, pagingConstant, CustomersService) {
 
     var vm = this;
 
@@ -13,6 +13,8 @@ function customersComponentController($scope, $attrs, $filter, $modal, $timeout,
     vm.state = {};
 
     vm.viewCustomerLedger = viewCustomerLedger;
+
+    vm.pagingConstant = pagingConstant;
 
 
     vm.uiState = {

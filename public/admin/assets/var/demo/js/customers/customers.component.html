@@ -2,7 +2,7 @@
     <div class="row">
         <div class="col-sm-8">
             <h1 class="mainTitle">CUSTOMERS</h1>
-            <span ng-if="vm.state.customers" class="mainDescription">There are currently {{vm.state.customers.length | number : fractionSize}} customers.</span>
+            <span ng-if="vm.state.customers" class="mainDescription">There are currently {{vm.state.customers.length | number : fractionSize}} customer<span ng-if="vm.state.customers.length > 1">s</span>. ({{vm.displayedCustomers.length || 0}} in filtered view)</span>
         </div>
     </div>
 </section>
@@ -134,7 +134,7 @@
 	        </tbody>
 	        <tfoot>
 	            <tr>
-	                <td class="text-center" st-custom-pagination="" st-displayed-pages="showPages" st-items-by-page="itemPerPage || 200" colspan="6">
+	                <td class="text-center" st-custom-pagination="" st-displayed-pages="showPages" st-items-by-page="vm.pagingConstant.numberOfRowsPerPage || 50" colspan="6">
 	                </td>
 	            </tr>
 	        </tfoot>

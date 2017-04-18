@@ -2,15 +2,17 @@
 
 app.controller('InventoryComponentController', inventoryComponentController);
 
-inventoryComponentController.$inject = ['$scope', '$attrs', '$filter', '$modal', '$timeout', '$location', 'InventoryService'];
+inventoryComponentController.$inject = ['$scope', '$attrs', '$filter', '$modal', '$timeout', '$location', 'pagingConstant', 'InventoryService'];
 /* @ngInject */
-function inventoryComponentController($scope, $attrs, $filter, $modal, $timeout, $location, InventoryService) {
+function inventoryComponentController($scope, $attrs, $filter, $modal, $timeout, $location, pagingConstant, InventoryService) {
 
     var vm = this;
 
     vm.init = init;
 
     vm.state = {};
+
+    vm.showPages = 5;
 
     vm.uiState = {
         loading: true,
@@ -31,18 +33,18 @@ function inventoryComponentController($scope, $attrs, $filter, $modal, $timeout,
     vm.getDimentions = getDimentions;
     vm.getWeight = getWeight;
     vm.numberOfPages = numberOfPages;
-    vm.nextPage = nextPage;
-    vm.previousPage = previousPage;
+    
     vm.sortInventory = sortInventory;
     vm.showFilter = showFilter;
-    
+    vm.pagingConstant = pagingConstant;
+    vm.selectPage = selectPage;
 
     $scope.$watch(function() { return InventoryService.inventory }, function(inventory) {
         if(angular.isDefined(inventory)){
             vm.state.inventory = inventory.results;
             vm.state.totalInventory = inventory.total;
             vm.uiState.loading = false;
-            
+            drawPages();
         }
     }, true);
 
@@ -50,6 +52,7 @@ function inventoryComponentController($scope, $attrs, $filter, $modal, $timeout,
     $scope.$watch(function() { return InventoryService.page }, function(page) {
         if(angular.isDefined(page)){
             vm.uiState.curPage = InventoryService.page;
+            drawPages();
         }
     }, true);
 
@@ -57,6 +60,41 @@ function inventoryComponentController($scope, $attrs, $filter, $modal, $timeout,
         $location.path('/inventory/' + product["@id"]);
     }
 
+    function drawPages(){      
+      var start = 1;
+      var end;
+      var i;
+      var prevPage = vm.uiState.curPage;
+      var totalItemCount = vm.state.totalInventory;
+      var currentPage = vm.uiState.curPage;
+      var numPages = numberOfPages();
+
+      start = Math.max(start, currentPage - Math.abs(Math.floor(vm.showPages / 2)));
+      end = start + vm.showPages;
+
+      if (end > numPages) {
+        end = numPages + 1;
+        start = Math.max(1, end - vm.showPages);
+      }
+
+      vm.pages = [];
+      
+
+      for (i = start; i < end; i++) {
+        vm.pages.push(i);
+      }
+    }
+
+    function selectPage(page){
+        if(page != InventoryService.page){
+            vm.uiState.pageLoading = true;
+            InventoryService.page = page;
+            
+            InventoryService.skip = (page - 1) * InventoryService.limit;
+            loadInventory();
+        }
+        
+    }
 
     function getDimentions(product){
         var _dimentions = "";
@@ -108,12 +146,6 @@ function inventoryComponentController($scope, $attrs, $filter, $modal, $timeout,
         return 0;
     }
 
-    function nextPage() {
-        vm.uiState.pageLoading = true;
-        InventoryService.page = InventoryService.page + 1;
-        InventoryService.skip = InventoryService.skip + InventoryService.limit;
-        loadInventory();
-    }
 
     function loadInventory(){
         vm.uiState.pageLoading = true;
@@ -122,15 +154,6 @@ function inventoryComponentController($scope, $attrs, $filter, $modal, $timeout,
             vm.state.totalInventory = response.data.total;
             vm.uiState.pageLoading = false;
         });
-    }
-
-
-    function previousPage() {
-        vm.uiState.pageLoading = true;
-        InventoryService.page = InventoryService.page - 1;
-        
-        InventoryService.skip = InventoryService.skip - InventoryService.limit;
-        loadInventory();
     }
 
     /********** SORTING RELATED **********/
@@ -162,7 +185,7 @@ function inventoryComponentController($scope, $attrs, $filter, $modal, $timeout,
 
 
     function loadDefaults(){
-        InventoryService.page = 0;
+        InventoryService.page = 1;
         InventoryService.skip = 0;
     }
 

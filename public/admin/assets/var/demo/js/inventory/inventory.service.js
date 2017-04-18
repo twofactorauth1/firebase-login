@@ -5,14 +5,14 @@
 
 	app.factory('InventoryService', InventoryService);
 
-	InventoryService.$inject = ['$http', '$q', '$timeout'];
+	InventoryService.$inject = ['$http', '$q', '$timeout', 'pagingConstant'];
 	/* @ngInject */
-	function InventoryService($http, $q, $timeout) {
+	function InventoryService($http, $q, $timeout, pagingConstant) {
 
         var inventoryService = {
-            limit: 50,
+            limit: pagingConstant.numberOfRowsPerPage || 50,
             skip: 0,
-            page: 0,
+            page: 1,
             fieldSearch:{}
         };
 
@@ -57,7 +57,7 @@
             if(inventoryService.globalSearch){
                 _qString += "&term=" + inventoryService.globalSearch;
                 //_qString += "&fieldNames=OITM_ItemName,OMRC_FirmName,OITM_ItemCode";
-                urlParts.push('search');
+                urlParts.push('filter');
             }
 
             return (
