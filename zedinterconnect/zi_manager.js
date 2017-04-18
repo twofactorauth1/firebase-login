@@ -145,7 +145,7 @@ module.exports = {
                     }
                     else{
                         fieldSearchArr.push({
-                            [key]: new RegExp('\.*'+value+'\.', 'i')
+                            [key]: new RegExp(value, 'i')
                         })
                     }
                     
