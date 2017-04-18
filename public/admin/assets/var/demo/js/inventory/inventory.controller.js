@@ -2,9 +2,9 @@
 
 app.controller('InventoryComponentController', inventoryComponentController);
 
-inventoryComponentController.$inject = ['$scope', '$attrs', '$filter', '$modal', '$timeout', '$location', 'InventoryService'];
+inventoryComponentController.$inject = ['$scope', '$attrs', '$filter', '$modal', '$timeout', '$location', 'pagingConstant', 'InventoryService'];
 /* @ngInject */
-function inventoryComponentController($scope, $attrs, $filter, $modal, $timeout, $location, InventoryService) {
+function inventoryComponentController($scope, $attrs, $filter, $modal, $timeout, $location, pagingConstant, InventoryService) {
 
     var vm = this;
 
@@ -35,7 +35,7 @@ function inventoryComponentController($scope, $attrs, $filter, $modal, $timeout,
     vm.previousPage = previousPage;
     vm.sortInventory = sortInventory;
     vm.showFilter = showFilter;
-    
+    vm.pagingConstant = pagingConstant;
 
     $scope.$watch(function() { return InventoryService.inventory }, function(inventory) {
         if(angular.isDefined(inventory)){

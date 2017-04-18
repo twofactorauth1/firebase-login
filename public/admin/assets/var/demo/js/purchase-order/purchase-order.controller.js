@@ -2,9 +2,9 @@
 
 app.controller('PurchaseOrderComponentController', purchaseOrderComponentController);
 
-purchaseOrderComponentController.$inject = ['$scope', '$attrs', '$filter', '$modal', '$timeout', '$location', 'SweetAlert', 'toaster', 'PurchaseOrderService'];
+purchaseOrderComponentController.$inject = ['$scope', '$attrs', '$filter', '$modal', '$timeout', '$location', 'SweetAlert', 'toaster', 'pagingConstant', 'PurchaseOrderService'];
 /* @ngInject */
-function purchaseOrderComponentController($scope, $attrs, $filter, $modal, $timeout, $location, SweetAlert, toaster, PurchaseOrderService) {
+function purchaseOrderComponentController($scope, $attrs, $filter, $modal, $timeout, $location, SweetAlert, toaster, pagingConstant, PurchaseOrderService) {
 
     var vm = this;
 
@@ -25,6 +25,7 @@ function purchaseOrderComponentController($scope, $attrs, $filter, $modal, $time
     vm.orderSelectClickFn = orderSelectClickFn;
     vm.bulkActionSelectFn = bulkActionSelectFn;
     vm.selectedOrdersFn = selectedOrdersFn;
+    vm.pagingConstant = pagingConstant;
 
     vm.bulkActionChoice = {};
 

@@ -5,12 +5,12 @@
 
 	app.factory('InventoryService', InventoryService);
 
-	InventoryService.$inject = ['$http', '$q', '$timeout'];
+	InventoryService.$inject = ['$http', '$q', '$timeout', 'pagingConstant'];
 	/* @ngInject */
-	function InventoryService($http, $q, $timeout) {
+	function InventoryService($http, $q, $timeout, pagingConstant) {
 
         var inventoryService = {
-            limit: 50,
+            limit: pagingConstant.numberOfRowsPerPage || 50,
             skip: 0,
             page: 0,
             fieldSearch:{}
