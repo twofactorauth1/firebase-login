@@ -2,7 +2,7 @@
     <div class="row">
         <div class="col-sm-8">
             <h1 class="mainTitle">INVENTORY</h1>
-            <span ng-if="vm.state.inventory" class="mainDescription">There are currently {{vm.state.totalInventory | number : fractionSize}} product<span ng-if="vm.state.totalInventory > 1">s</span>. ({{vm.state.inventory.length || 0}} in filtered view)</span>
+            <span ng-if="vm.state.inventory" class="mainDescription">There {{vm.state.totalInventory > 1 ? 'are' : 'is'}} currently {{vm.state.totalInventory | number : fractionSize}} product<span ng-if="vm.state.totalInventory > 1">s</span>. ({{vm.state.inventory.length || 0}} in filtered view)</span>
         </div>
     </div>
 </section>
@@ -114,6 +114,14 @@
 	                </th>
 	                <th>
 	                    <input ng-model="vm.uiState.fieldSearch.OITM_ItemCode" ng-model-options="{ debounce: 800 }" placeholder="SKU" class="form-control" type="search" />
+	                </th>
+	                <th class="hidden-xs desc-col"></th>
+	                <th class="hidden-xs dim-col"></th>
+	                <th class="hidden-xs weight-col"></th>
+	                <th class="qty-col">
+	                    <select ng-model="vm.uiState.fieldSearch.In_Stock" class="form-control" ng-options="options.value as options.label for options in vm.quantitySearchOptions" ng-change="updateSettings()">
+                            <option value="">-- choose --</option>
+                        </select>
 	                </th>
 	            </tr>
 	        </thead>
