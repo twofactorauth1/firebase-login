@@ -412,6 +412,18 @@
 
     </div>    
 </div>
+
+<div  ng-if="(component.components[0].type === 'ssb-recent-post')">
+     <h4 class="ssb-sidebar-sub-heading-separator">Number Recent Posts</h4>
+    <div class="row padding-10">
+        <div class="form-group">
+
+            <div class="col-xs-12">
+                <input type="text" ng-model="component.components[0].post_count" min="1" max="20" ng-change="vm.uiState.updateColumnLayout(component)" touchspin>
+            </div>
+        </div>
+   </div>
+</div>
 <div  ng-if="(component.components[0].type === 'ssb-blog-post-list') ||
             (component.components[0].type === 'ssb-recent-post')
              ">
