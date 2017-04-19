@@ -283,15 +283,21 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         title: 'Customers',
         icon: 'ti-layout-media-left-alt',
         resolve: loadSequence('CustomersComponent', 'CustomersComponentController', 'CustomersService')
+    }).state('app.ledgerDetails', {
+        url: '/ledger/:customerId',
+        templateUrl: "/admin/assets/var/demo/js/customers/ledger-details/ledger-details.html",
+        title: 'Invoice Details',
+        icon: 'ti-layout-media-left-alt',
+        resolve: loadSequence('LedgerDetailsComponent', 'LedgerDetailsController', 'CustomersService')
     }).state('app.invoiceDetails', {
-        url: '/invoices/:customerId',
+        url: '/invoices/:customerId/:transId',
         templateUrl: "/admin/assets/var/demo/js/invoices/invoice-details/invoice-details.html",
         title: 'Invoice Details',
         icon: 'ti-layout-media-left-alt',
         resolve: loadSequence('InvoiceDetailsComponent', 'InvoiceDetailsController', 'InvoiceService', 'CustomersService')
     }).state('app.account.users', {
         url: '/users',
-        templateUrl: "/admin/assets/js/users/users.html",
+        templateUrl: "/admin/assets/var/demo/js/users/users.html",
         title: 'Users',
         icon: 'ti-layout-media-left-alt',
         resolve: loadSequence('UsersCtrl', 'customerService')

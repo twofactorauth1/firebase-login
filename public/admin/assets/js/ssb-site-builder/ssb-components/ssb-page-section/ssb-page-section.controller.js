@@ -81,6 +81,9 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
                     
 
                 }
+                if(section.layoutModifiers.grid && section.layoutModifiers.grid.isActive){
+                   classString += ' ssb-page-section-layout-' + section.layout + '-grid';
+                }
                 if(section.layoutModifiers.columns && angular.isDefined(section.layoutModifiers.columns.columnsNum)){
                     var _col = section.layoutModifiers.columns.columnsNum || 1;
                     classString += ' ssb-text-column-layout ssb-text-column-' + _col;
@@ -200,6 +203,32 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
             styleString += 'border-width: ' + section.border.width + 'px;';
             styleString += 'border-style: ' + section.border.style + ';';
             styleString += 'border-radius: ' + section.border.radius + '%;';
+        }
+
+        if (section.layoutModifiers &&
+            section.layoutModifiers.grid && section.layoutModifiers.grid.isActive ){
+             angular.forEach(section.components, function(cmp,index) {
+               section.components[index].gridHeight= section.layoutModifiers.grid.height;
+            });
+            if(section.layoutModifiers.grid && section.layoutModifiers.grid.overlay &&         section.layoutModifiers.grid.overlay.isOverlayActive){
+                angular.forEach(section.components, function(cmp,index) {
+                section.components[index].isOverlayActive=true;
+                section.components[index].overlayBackground=
+                   section.layoutModifiers.grid.overlay.overlayColor;
+                section.components[index].overlayOpacity=
+                   section.layoutModifiers.grid.overlay.overlayOpacity ;
+                section.components[index].gridHeight=
+                   section.layoutModifiers.grid.height;
+            });
+            }else{
+                angular.forEach(section.components, function(cmp,index) {
+                 section.components[index].isOverlayActive=false;
+                });
+            }
+        }else{
+            angular.forEach(section.components, function(cmp,index) {
+             section.components[index].isOverlayActive=false;
+            });
         }
         setUpFroalaVideoSize(section);
         resizeSliderImagesToFullHeight(section);

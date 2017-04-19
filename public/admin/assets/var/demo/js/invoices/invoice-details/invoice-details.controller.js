@@ -10,55 +10,57 @@ function invoiceDetailsController($scope, $state, $attrs, $filter, $modal, $time
 
     vm.init = init;
 
-    console.log($stateParams.customerId);
+    
 
     vm.uiState = {loading: true};
 
-    vm.backToInvoices = backToInvoices;
+    vm.backToLedger = backToLedger;
     vm.calculateTotal = calculateTotal;
     vm.parseValueToFloat = parseValueToFloat;
     vm.parseValueToDate = parseValueToDate;
 
+    vm.customerId = $stateParams.customerId;
+    vm.transId = $stateParams.transId;
 
-    function backToInvoices(){
-        $state.go("app.customers");
+    function backToLedger(){
+        $state.go('app.ledgerDetails', {customerId: vm.customerId});
     }
 
     function init(element) {
         vm.element = element;
-        InvoiceService.viewCustomerInvoice($stateParams.customerId).then(function(response){
-            var invoice = response.data.response.payload.querydata.data;
-            if(invoice && invoice.row){
-                if(angular.isArray(invoice.row)){
-                    vm.invoice = invoice
+        InvoiceService.viewCustomerInvoice(vm.customerId).then(function(response){
+            var customer = response.data.response.payload.querydata.data;
+            if(customer && customer.row){
+                if(angular.isArray(customer.row)){
+                    vm.customer = customer;
                 }
                 else{
-                    vm.invoice = {
+                    vm.customer = {
                         row: [
-                            invoice.row
+                            customer.row
                         ]
                     }
                 }
-                vm.totalLineOrder = calculateTotal(vm.invoice);
+                loadInvoiceDetails(vm.customer.row);
                 vm.uiState.loading = false;
             }
             else{
-                $scope.$watch(function() { return CustomersService.customers }, function(customers) {
-                    if(angular.isDefined(customers)){
-                        vm.listInvoice = _.find(CustomersService.customers, function(customer){
-                            return customer.OCRD_CardCode.toLowerCase() == $stateParams.customerId.toLowerCase()
-                        })
-                    }
-                    vm.uiState.loading = false;
-                }, true);
+                vm.uiState.loading = false;
             }
-            
         })
+    }
+
+
+    function loadInvoiceDetails(ledgerDetails){
+        vm.invoiceDetails = _.filter(ledgerDetails, function(row){
+            return row._CustStatmentDtl_TransId == vm.transId
+        })
+        vm.totalLineOrder = calculateTotal(vm.invoiceDetails);            
     }
 
     function calculateTotal(orders){
         var _sum = 0;
-        _.each(orders.row, function(order){
+        _.each(orders, function(order){
             _sum+= parseFloat(order.INV1_LineTotal)
         })
         return _sum;
