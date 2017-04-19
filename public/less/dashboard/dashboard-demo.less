@@ -19,7 +19,7 @@
                         font-weight: normal;
                     }
                     background: rgba(0, 0, 0, 0.5);
-                    height: 40px; 
+                    height: 40px;
                     text-transform: uppercase;
                 }
                 .content-row{
@@ -44,11 +44,11 @@
     }
 
     .inbox-widget-container{
-        border-radius: 8px;
+        margin-bottom: 40px;
         padding-left: 15px;
+        padding-right: 15px;
         cursor: pointer;
         .tabbable{
-
             span.message-count{
                 position: absolute;
                 margin-top: -8px;
@@ -67,16 +67,16 @@
                 margin-right: 0 !important;
             }
             min-height: 250px;
-            margin-right: -35px;
             background: #fff!important;
             ul.nav.nav-tabs{
                 @media screen and (max-width: 767px) {
                     float: none !important;
                 }
-                li{ 
+                li{
+                    text-align: center;
                     @media screen and (max-width: 767px) {
                         float: left !important;
-                    }                  
+                    }
                     border-bottom: 1px solid #eeeeee;
                     a{
                         margin: 0 !important;
@@ -94,11 +94,11 @@
                     }
                 }
 
-                
-            } 
+
+            }
 
             ul.message-container-top{
-                list-style: none;                
+                list-style: none;
                 padding: 0;
                 margin-bottom: 0;
                 li{
@@ -109,21 +109,20 @@
             }
 
             .message-container-left{
-                               
-                .message-user{ 
+                .message-user{
                     float: left;
                     margin-right: 10px;
                     img{
                         max-width: 50px;
                         border-radius: 30%;
                         margin:0;
-                    }    
+                    }
                 }
                 .message-title{
                     font-size: 16px;
                     color: #2C3030;
                 }
-                .message-date{                    
+                .message-date{
                     float: right;
                     color: #48b1cc;
                 }
@@ -132,20 +131,20 @@
                     height: 50px;
                 }
                 ul.message-container-top{
-                    li:first-child{                        
-                       //border-left: #32CD32 5px solid; 
-                    } 
+                    li:first-child{
+                       //border-left: #32CD32 5px solid;
+                    }
                 }
             }
 
             .message-container{
                 margin-left: -15px;
-                margin-top: -15px; 
+                margin-top: -15px;
                 padding: 0;
-            } 
+            }
 
             .active-message{
-                background: rgba(230,230,250, 0.3);
+                //background: rgba(230,230,250, 0.3);
             }
 
             li.active-message{
@@ -158,28 +157,28 @@
                 margin-top: -14px;
                 min-height: 320px;
                 @media screen and (max-width: 767px) {
-                    margin-top: 20px !important; 
+                    margin-top: 20px !important;
                     margin-left: -15px !important;
                 }
-                .message-user{ 
+                .message-user{
                     float: left;
                     margin-right: 10px;
                     img{
                         max-width: 60px;
                         border-radius: 30%;
                         margin:0;
-                    }    
+                    }
                 }
                 .message-date{
                     color: #48b1cc;
                 }
-                ul.message-container-top{                    
+                ul.message-container-top{
                     li{
                         border-left: none;
                         border-right: none;
-                    }    
+                    }
                 }
-            }  
+            }
         }
         .message-footer{
             @media screen and (max-width: 767px) {
@@ -198,7 +197,7 @@
                     border-right: none !important;
                 }
             }
-            
+
             i.green{
                 color: green;
             }
@@ -210,4 +209,4 @@
             padding-right: 15px;
         }
     }
-}    
+}

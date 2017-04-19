@@ -6,7 +6,7 @@
                 <!-- span class="message-count">2</span -->
             </tab-heading>
 
-            <div class="col-sm-6 message-container message-container-left">
+            <div class="col-sm-5 message-container message-container-left">
                 <ul class="message-container-top">
                     <li ng-class="{'active-message': vm.selectedMessageIndex === $index}" ng-repeat="message in vm.inboxMessages" ng-click="vm.setSelectedMessage($index)">
                     <div>
@@ -15,12 +15,12 @@
                             <span class="message-date" >{{message.messageDate}}</span>
                         </div>
 
-                        <p ng-text-truncate="message.description" ng-tt-chars-threshold="60" ng-tt-no-toggling></p>
+                        <p ng-text-truncate="message.description" ng-tt-chars-threshold="100" ng-tt-no-toggling></p>
                     </div>
                     </li>
                 </ul>
             </div>
-            <div class="col-sm-6 message-container message-container-right active-message">
+            <div class="col-sm-7 message-container message-container-right active-message">
                 <ul class="message-container-top">
                     <li>
                         <div class="message-user">
@@ -47,8 +47,8 @@
 
         </tab>
     </tabset>
-    <div class="message-footer">
-        <!-- div class="col-sm-4 footer-text black-border-right center">
+    <!-- div class="message-footer">
+        <div class="col-sm-4 footer-text black-border-right center">
             <span class="margin-right-30">Pulse Secure</span>
             <span>Consec-ADD-5000U</span>
             <i class="fa fa-arrow-circle-up green" aria-hidden="true"></i>
@@ -62,7 +62,7 @@
             <span class="margin-right-30">QNC</span>
             <span>KJ-K62-4373/180/BL</span>
             <i class="fa fa-arrow-circle-up green" aria-hidden="true"></i>
-        </div -->
-    </div>
+        </div>
+    </div -->
     <div class="clearfix"></div>
 </section>
