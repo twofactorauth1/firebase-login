@@ -689,6 +689,12 @@ app.constant('JS_REQUIRES', {
     'CustomersComponentController': 'assets/var/demo/js/customers/customers.controller.js',
     'CustomersService': 'assets/var/demo/js/customers/customers.service.js',
 
+    // Ledger Details
+
+    
+    'LedgerDetailsComponent': 'assets/var/demo/js/customers/ledger-details/ledger-details.component.js',
+    'LedgerDetailsController': 'assets/var/demo/js/customers/ledger-details/ledger-details.controller.js',    
+
     'asideCtrl': 'assets/js/controllers/asideCtrl.js',
     'toasterCtrl': 'assets/js/controllers/toasterCtrl.js',
     'sweetAlertCtrl': 'assets/js/controllers/sweetAlertCtrl.js',

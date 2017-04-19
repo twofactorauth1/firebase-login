@@ -185,10 +185,26 @@ _.extend(api.prototype, baseApi.prototype, {
                         paymentsManager.listChargesForAccount(account, created, endingBefore, limit, startingAfter, userId, function(err, charges){
                             var totalrevenue =0;
                             var totaldataarray = charges.data;
-                            for(var i  =0 ;i<totaldataarray.length;i++)
-                            {
-                            totalrevenue=totalrevenue+(totaldataarray[i].amount/100);
-                            }  
+                            if(totaldataarray[1]!=undefined){
+                            if(typeof(totaldataarray[1].length)!="number"){
+                                for(var i  =0 ;i<totaldataarray.length;i++)
+                                {
+                                totalrevenue=totalrevenue+(totaldataarray[i].amount/100);
+                                } 
+                            }else{
+                                for(var i  =0 ;i<totaldataarray.length;i++){
+                                for(var j=0;j<totaldataarray[i].length;j++){
+                                totalrevenue=totalrevenue+(totaldataarray[i][j].amount/100);
+                                 }};
+                                 } 
+                            }
+                               else
+                                {
+                                 for(var i  =0 ;i<totaldataarray.length;i++)
+                                {
+                                totalrevenue=totalrevenue+(totaldataarray[i].amount/100);
+                                } 
+                              }
                             charges.totalrevenue=totalrevenue;
                             self.log.debug(accountId, userId, '<< listChargesForAccount');
                             return self.sendResultOrError(resp, err, charges, "Error listing revenue");

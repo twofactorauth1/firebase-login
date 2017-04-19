@@ -283,6 +283,12 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         title: 'Customers',
         icon: 'ti-layout-media-left-alt',
         resolve: loadSequence('CustomersComponent', 'CustomersComponentController', 'CustomersService')
+    }).state('app.ledgerDetails', {
+        url: '/ledger/:customerId',
+        templateUrl: "/admin/assets/var/demo/js/customers/ledger-details/ledger-details.html",
+        title: 'Invoice Details',
+        icon: 'ti-layout-media-left-alt',
+        resolve: loadSequence('LedgerDetailsComponent', 'LedgerDetailsController', 'CustomersService')
     }).state('app.invoiceDetails', {
         url: '/invoices/:customerId',
         templateUrl: "/admin/assets/var/demo/js/invoices/invoice-details/invoice-details.html",
