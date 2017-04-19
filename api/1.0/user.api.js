@@ -239,19 +239,21 @@ _.extend(api.prototype, baseApi.prototype, {
     */
     findByEmail: function(req,resp) {
         var self = this;
+        var accountId = parseInt(self.accountId(req));
+        var userId = self.userId(req);
         var userEmail = req.params.email;
-        self.log.debug('>> findByEmail');
+        self.log.debug(accountId, userId, '>> findByEmail');
 
         if (!userEmail) {
             return this.wrapError(resp, 400, null, "Invalid parameter for ID");
         }
         userDao.getUserByUsername(userEmail, function(err, value) {
             if (!err) {
-                var responseObj// if value is not set it null
+                var responseObj = null;// if value is not set it null
                 if (value != null) {
-                    var responseObj =  value.toJSON("public", {accountId:self.accountId(req)});
-                    self.log.debug('<< getUserById');
+                    responseObj =  value.toJSON("public", {accountId:accountId});
                 }
+                self.log.debug(accountId, userId, '<< getUserById');
                 self.checkPermissionAndSendResponse(req, self.sc.privs.VIEW_USER, resp, responseObj);
             } else {
                 self.log.debug('<< getUserById(400)');
