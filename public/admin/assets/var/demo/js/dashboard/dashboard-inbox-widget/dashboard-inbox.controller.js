@@ -22,25 +22,25 @@ function dashboardInboxComponentController($scope, $attrs, $filter, $modal, $tim
 
     function getInboxMessages(){
         var messages = [];
-       
+
         messages.push({
-            title: 'Notification of constraint juniper product.',
-            description: 'Notification of constraint juniper product. Notification of constraint juniper product. Notification of constraint juniper product. Notification of constraint juniper product. Notification of constraint juniper product',
-            messageDate: '3 Feb 2017',
-            detailedTime: 'Today at 15:45',
-            userName: "Jenet Erickson"
+            title: 'Site Outage',
+            description: 'There will be a brief site outage this Saturday, 22-April, from 02:00 - 04:00 Pacific Time. If you encounter any issues after this window, please contact our support team via Intercom.',
+            messageDate: '19 Apr 2017',
+            detailedTime: '19 Apr 2017',
+            userName: "Indigenous Admin"
         },{
-            title: 'Notification of sonicWall Inventory arrival.',
-            description: 'Notification of sonicWall Inventory arrival. Notification of sonicWall Inventory arrival. Notification of sonicWall Inventory arrival. Notification of sonicWall Inventory arrival. Notification of sonicWall Inventory arrival. ',
-            messageDate: 'Yesterday',
-            detailedTime: 'Yesterday at 16:25',
-            userName: "Jacob BROWN"
+            title: 'Our Phone Number has changed',
+            description: 'Our front desk phone number changed to 415-999-8888. If you have trouble reaching us, don\'t hesitate to email or use the Intercom link (lower right hand corner)',
+            messageDate: '10 Apr 2017',
+            detailedTime: '10 Apr 2017',
+            userName: 'Securematics Admin'
         },{
-            title: 'Order status changed.',
-            description: 'Order number 32312 status changed from pending to complete.',
-            messageDate: 'Yesterday',
-            detailedTime: 'Yesterday at 12:30',
-            userName: 'Kein Williams'
+            title: 'Email Outage - Resolved',
+            description: 'Email services have recovered.',
+            messageDate: '1 Apr 2017',
+            detailedTime: '1 Apr 2017',
+            userName: 'Securematics Admin'
         });
         vm.inboxMessages = messages;
 

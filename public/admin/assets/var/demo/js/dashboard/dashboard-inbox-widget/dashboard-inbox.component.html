@@ -3,39 +3,33 @@
         <tab>
             <tab-heading>
                 <i class="ti-comment-alt"></i>
-                <span class="message-count">2</span>
+                <!-- span class="message-count">2</span -->
             </tab-heading>
-            
-            <div class="col-sm-7 message-container message-container-left">
+
+            <div class="col-sm-5 message-container message-container-left">
                 <ul class="message-container-top">
                     <li ng-class="{'active-message': vm.selectedMessageIndex === $index}" ng-repeat="message in vm.inboxMessages" ng-click="vm.setSelectedMessage($index)">
-                    <div class="message-user">
-                        <img class="thumbnail img-circle" src="/admin/assets/images/default-user.png">
-                    </div>
-                    <div>    
+                    <div>
                         <div class="margin-bottom-5 margin-top-5">
                             <span class="message-title">{{message.title}}</span>
-                            <span class="message-date" >{{message.messageDate}}</span> 
+                            <span class="message-date" >{{message.messageDate}}</span>
                         </div>
-                        
-                        <p ng-text-truncate="message.description" ng-tt-chars-threshold="60" ng-tt-no-toggling></p>
+
+                        <p ng-text-truncate="message.description" ng-tt-chars-threshold="100" ng-tt-no-toggling></p>
                     </div>
                     </li>
                 </ul>
-
-                <button class="btn btn-large btn-block btn-primary btn-message" type="button">Read all notifications</button>
-            
             </div>
-            <div class="col-sm-5 message-container message-container-right active-message">
+            <div class="col-sm-7 message-container message-container-right active-message">
                 <ul class="message-container-top">
-                    <li>   
+                    <li>
                         <div class="message-user">
                             <img class="thumbnail img-circle" src="/admin/assets/images/default-user.png">
                         </div>
-                        <div>    
+                        <div>
                             <div class="margin-bottom-5">
                                 <h3 class="message-title margin-top-5 margin-bottom-5">{{vm.selectedMessage.userName}}</h3>
-                                <span class="message-date">{{vm.selectedMessage.detailedTime}}</span> 
+                                <span class="message-date">{{vm.selectedMessage.detailedTime}}</span>
                             </div>
 
                         </div>
@@ -47,33 +41,13 @@
                     <h4 class="message-title">{{vm.selectedMessage.title}}</h4>
                     <hr>
                     <p>{{vm.selectedMessage.description}}</p>
-                </div>   
-            </div>
-            
-
-        </tab>
-        <tab>
-            <tab-heading>
-                <i class="ti-signal"></i>
-            </tab-heading>
-
-            <div class="disabled greyed-out">
-                Under Construction
+                </div>
             </div>
 
-        </tab>
-        <tab>
-            <tab-heading>
-                <i class="ti-star"></i>
-            </tab-heading>
 
-            <div class="disabled greyed-out">
-                Under Construction
-            </div>
         </tab>
-
     </tabset>
-    <div class="message-footer">
+    <!-- div class="message-footer">
         <div class="col-sm-4 footer-text black-border-right center">
             <span class="margin-right-30">Pulse Secure</span>
             <span>Consec-ADD-5000U</span>
@@ -89,6 +63,6 @@
             <span>KJ-K62-4373/180/BL</span>
             <i class="fa fa-arrow-circle-up green" aria-hidden="true"></i>
         </div>
-    </div>
+    </div -->
     <div class="clearfix"></div>
 </section>

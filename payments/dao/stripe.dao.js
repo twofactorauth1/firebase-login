@@ -13,6 +13,7 @@ var userDao = require('../../dao/user.dao');
 var subscriptionDao = require('./subscription.dao.js');
 var paymentDao = require('./payment.dao.js');
 var customerLinkDao = require('./customer_link.dao.js');
+var async = require('async');
 
 /*-- for stripe api--*/
 var stripe = require("stripe")( stripeConfigs.STRIPE_SECRET_KEY);//TODO: app config
@@ -1001,6 +1002,8 @@ var dao = {
             } else {
                 params.limit = limit;
             }
+        } else {
+            params.limit = 100;
         }
         if(starting_after && starting_after.length>0) {params.starting_after = starting_after;}
 
@@ -1014,16 +1017,50 @@ var dao = {
                  Get ALL the charges
                  */
                 params.starting_after = charges.data[charges.data.length-1].id;
+                var results = {};
+                results.data = charges.data;
 
-                var _charges = [];
-                var p1 = $.Deferred();
-                _charges.push(charges.data);
-                self._getAllStripeCharges(params, _charges, apiToken, p1);
-                $.when(p1).done(function() {
-                    charges.data = _charges;
-                    self.log.debug('<< listStripeCharges');
-                    return fn(err, charges);
-                });
+                var more_charges = {has_more: false};
+                var startTime = new Date().getTime();
+                async.doWhilst(
+                    function(callback){
+                        self.log.debug('calling stripe:', params);
+                        self.log.debug('resultCount:', results.data.length);
+                        stripe.charges.list(params, apiToken, function(err, _more_charges) {
+                            if (err) {
+                                self.log.error('error: ' + err);
+                                callback(err);
+                            } else {
+                                more_charges = _more_charges;
+                                self.log.debug('has more?', _more_charges.has_more);
+                                results.data = results.data.concat(more_charges.data);
+                                if(more_charges.has_more === true) {
+                                    params.starting_after = more_charges.data[more_charges.data.length-1].id;
+                                }
+                                callback();
+                            }
+
+                        });
+                    },
+                    function(){
+                        var elapsedTime = (new Date().getTime() - startTime) /1000;
+                        if(elapsedTime > 50) {
+                            self.log.warn('listCharges query time exceeded');
+                            results.estimated = true;
+                        }
+                        return (more_charges.has_more === true && elapsedTime < 50);
+                    },
+                    function(err){
+                        if(err) {
+                            self.log.error('Error getting charges:', err);
+                            fn(err);
+                        } else {
+
+                            self.log.debug('<< listStripeCharges');
+                            fn(null, results);
+                        }
+                    }
+                );
             } else {
                 self.log.debug('<< listStripeCharges');
                 return fn(err, charges);
@@ -1042,7 +1079,8 @@ var dao = {
                 return deferred.promise;
             }
 
-            _charges.push(charges.data);
+            //_charges.push(charges.data);
+            _charges = _charges.concat(charges.data);
             if(charges.has_more === true) {
                 params.starting_after = charges.data[charges.data.length-1].id;
                 self._getAllStripeCharges(params, _charges, apiToken, deferred);

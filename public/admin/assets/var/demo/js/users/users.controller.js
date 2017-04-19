@@ -77,7 +77,19 @@
                     });
                 }else{
                     //add new
-                    AccountService.addNewUser(vm.state.account._id, $scope.newuser.username, $scope.newuser.password, function(err, newuser){
+                    /*
+                     * Not sure if this is helpful or not... but you can set the roleAry and cardCodes in the params object
+                     * and it will be passed to the API:
+                     *
+                     * params.roleAry = ['vendor'];
+                     * params.cardCodes = ['C111111', 'C111112']
+                     * etc
+                     */
+                    var params = {
+                        roleAry:['vendor'],
+                        cardCodes:['C111111', 'C111112']
+                    };
+                    AccountService.addNewUserWithParams(vm.state.account._id, $scope.newuser.username, $scope.newuser.password, params, function(err, newuser){
                         if(err) {
                             toaster.pop('warning', err.message);
                         } else {
