@@ -257,10 +257,72 @@
         </div>
     </div>
 </div>
+<div ng-if="component.components[0].type=='text-only'">
+    <h4 class="ssb-sidebar-sub-heading-separator">Tile settings</h4>
 
+    <div class="row padding-10">
+        <div>
+            <div class="form-group">
+                <label for="bg_blur">
+                    Grid layout
+                    <span tooltip-placement="top" tooltip-append-to-body="true" tooltip="Enable Grid layout.">
+                        <i class="fa fa-info-circle" />
+                    </span>
+                </label>
+                <switch ng-model="component.layoutModifiers.grid.isActive" class="pull-right"></switch>
+            </div>
+        </div>
+    <div ng-if="component.layoutModifiers.grid.isActive" class="form-group">
+                <label for="bg_overlay">
+                    Add overlay to tile
+                    <span tooltip-placement="top" tooltip-append-to-body="true" tooltip="Add/remove Overlay to background image.">
+                        <i class="fa fa-info-circle" />
+                    </span>
+                </label>
+                <switch ng-model="component.layoutModifiers.grid.overlay.isOverlayActive" class="pull-right"></switch>
+            </div>
 
+            <div ng-if="component.layoutModifiers.grid.overlay.isOverlayActive" class="form-group ssb-spectrum-color-picker-small">
+                 <div class="ssb-spectrum-color-picker-background-container">
+                     <spectrum-colorpicker class="ssb-spectrum-color-picker-background" format="'rgb'" options="vm.spectrum.options" ng-model="component.layoutModifiers.grid.overlay.overlayColor"></spectrum-colorpicker>
+                     <i class="fa fa-eyedropper" />
+                 </div>
+                 <label for="colorpicker">
+                     Overlay color
+                     <span tooltip-placement="top" tooltip-append-to-body="true" tooltip="Add color to Overlay effect.">
+                         <i class="fa fa-info-circle" />
+                     </span>
+                 </label>
+             </div>
 
+            <div class="form-group" ng-if="component.layoutModifiers.grid.overlay.isOverlayActive">
+                <div>
+                    <label for="bg_overlay_opacity">Overlay opacity</label>
+                    <span tooltip-placement="top" tooltip-append-to-body="true" tooltip="Set Overlay opacity.">
+                        <i class="fa fa-info-circle" />
+                    </span>
+                </div>
+                <div>
+                    <rzslider
+                        class="slider-opacity"
+                        name="bg-opacity"
+                        rz-slider-model="component.layoutModifiers.grid.overlay.overlayOpacity"
+                        rz-slider-options="{floor: 0, ceil: 100, step: 10}">
+                    </rzslider>
+                </div>
+            </div>
+        <div ng-if="component.layoutModifiers.grid.isActive" class="form-group">
+             <label>
+                Grid height
+                <span tooltip-placement="top" tooltip-append-to-body="true" tooltip="Height of grid"><i class="fa fa-info-circle" /></span>
+            </label>
+            <div class="col-xs-6 pull-right">
+                <input type="text" ng-model="component.layoutModifiers.grid.height" step="10" min="50" max="500" touchspin>
+            </div>
 
+        </div>
+    </div>
+</div>
 <div ng-if="(vm.component.components[0] && vm.component.components[0].src) || (component.bg.img.show && component.bg.img.url) || (component.bg.video.show && component.bg.video.url)">
 
     <h4 class="ssb-sidebar-sub-heading-separator">Effects</h4>
