@@ -76,32 +76,17 @@
             vm.state.analyticsWidgets = [{
                'completed': false,
                'link': "#",
-               'name': 'Inventory'  
+               'name': 'Inventory'
             },
             {
                'completed': false,
                'link': "#",
-               'name': 'Quotes'  
+               'name': 'PurchaseOrders'
             },
             {
                'completed': false,
                'link': "#",
-               'name': 'PurchaseOrders'  
-            },
-            {
-               'completed': false,
-               'link': "#",
-               'name': 'Invoices'  
-            },
-            {
-               'completed': false,
-               'link': "#",
-               'name': 'Renewals'  
-            },
-            {
-               'completed': false,
-               'link': "#",
-               'name': 'Promotions'  
+               'name': 'Invoices'
             }]
 
         }
@@ -177,7 +162,7 @@
                 vm.state.broadCastMessage = messages[0];
             }
             else{
-                vm.state.broadCastMessage = null;   
+                vm.state.broadCastMessage = null;
             }
         });
 
@@ -200,7 +185,7 @@
                     //updateChart
 
                     //figure out what's different
-                    
+
                     var chart = $('#live-traffic-chart').highcharts();
                     if(chart)
                         chart.series[0].setData(_.pluck(liveTraffic, 'count'), true);
@@ -211,7 +196,7 @@
 
             }
         });
-        
+
         function reflowCharts(){
             window.Highcharts.charts.forEach(function(chart){
                 if(chart){
@@ -232,7 +217,7 @@
             $timeout(function() {
                 reflowCharts();
             }, 1000);
-            
+
         })();
 
     }]);
