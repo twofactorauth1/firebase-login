@@ -696,6 +696,9 @@ app.constant('JS_REQUIRES', {
     'LedgerDetailsController': 'assets/var/demo/js/customers/ledger-details/ledger-details.controller.js',    
 
     'asideCtrl': 'assets/var/demo/js/controllers/asideCtrl.js',
+    'UsersCtrl': 'assets/var/demo/js/users/users.controller.js',
+
+
     'toasterCtrl': 'assets/js/controllers/toasterCtrl.js',
     'sweetAlertCtrl': 'assets/js/controllers/sweetAlertCtrl.js',
     'mapsCtrl': 'assets/js/controllers/mapsCtrl.js',
@@ -709,7 +712,7 @@ app.constant('JS_REQUIRES', {
     'chatCtrl': 'assets/js/controllers/chatCtrl.js',
     'editTopicCtrl': 'assets/js/controllers/editTopicCtrl.js',
     'singleCustomerAnalyticsCtrl': 'assets/js/controllers/singleCustomerAnalyticsCtrl.js',
-    'UsersCtrl': 'assets/js/users/users.controller.js',
+    
     'MessagesCtrl': 'assets/js/messages/messages.controller.js',
     'BroadcastMessageEditorCtrl': 'assets/js/messages/broadcast-message-editor/broadcast-message-editor.controller.js',
 
