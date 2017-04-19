@@ -100,15 +100,21 @@ _.extend(api.prototype, baseApi.prototype, {
         var password = req.body.password;
         var email = req.body.username;
         var roleAry = ['super','admin','member'];
-        if(req.body.roleAry) {
-            roleAry = req.body.roleAry.split(',');
+        if(req.body.roleAry){
+            if(!_.isArray(req.body.roleAry)){
+                roleAry = req.body.roleAry.split(',');
+            } else {
+                roleAry = req.body.roleAry;
+            }
         }
+        var params = _.omit(req.body, ['username', 'password', 'roleAry']);
+
         var callingUser = parseInt(self.userId(req));
         self.checkPermission(req, self.sc.privs.MODIFY_ACCOUNT, function(err, isAllowed){
             if(isAllowed !== true) {
                 return self.send403(resp);
             } else {
-                userManager.createUser(accountId, username, password, email, roleAry, callingUser, function(err, user){
+                userManager.createUser(accountId, username, password, email, roleAry, callingUser, params, function(err, user){
                     self.log.debug('<< createUserForAccount');
                     return self.sendResultOrError(resp, err, user, 'Error creating user', null);
                 });
