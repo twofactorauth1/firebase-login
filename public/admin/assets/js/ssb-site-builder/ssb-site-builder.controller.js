@@ -42,6 +42,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
     vm.savePost = savePost;
     vm.updateColumnLayout = updateColumnLayout;
     vm.setDefaultSpacing = setDefaultSpacing;
+    vm.updatetestimonialHeight = updatetestimonialHeight;
     vm.isNavHero = isNavHero;
     vm.isSortableDisabled = angular.element($window).width() < 768 ? true : false
     vm.toggleSidebarPanel = toggleSidebarPanel;
@@ -162,6 +163,8 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
         updateColumnLayout: vm.updateColumnLayout,
 
         setDefaultSpacing: vm.setDefaultSpacing,
+
+        updatetestimonialHeight:vm.updatetestimonialHeight,
 
         isNavHero: vm.isNavHero,
 
@@ -1371,7 +1374,9 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
         }
         section.spacing.default = value ? false : true;
     }
-
+    function updatetestimonialHeight(){
+       $scope.$broadcast('updatetestimonialHeight.component', {})
+    }
 
     $scope.$on('$refreshAccountSettings', function(event, account) {
         if(account && account._id){

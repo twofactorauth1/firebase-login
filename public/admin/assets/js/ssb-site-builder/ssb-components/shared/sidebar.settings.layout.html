@@ -11,6 +11,15 @@
             </ui-select-choices>
         </ui-select>
     </div>
+     <div class="form-group">
+            <label>
+                Width of Testimonials
+                <span tooltip-placement="top" tooltip-append-to-body="true" tooltip="Set width of inner element "><i class="fa fa-info-circle" /></span>
+            </label>
+            <div class="col-xs-6 pull-right">
+                <input type="text" ng-model="component.components[0].customWidth" min="500" max="1024" ng-change="vm.uiState.updatetestimonialHeight()"   touchspin>
+            </div>
+        </div>
 </div>
 <div class="row padding-10" ng-if="component.components[0]" ng-init="defaultSpacing = !component.spacing.default">
     <div class="form-group">
