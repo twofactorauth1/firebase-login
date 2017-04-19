@@ -194,7 +194,7 @@ _.extend(api.prototype, baseApi.prototype, {
                             }else{
                                 for(var i  =0 ;i<totaldataarray.length;i++){
                                 for(var j=0;j<totaldataarray[i].length;j++){
-                                totalrevenue=totalrevenue+(totaldataarray[i][j].amount%100);
+                                totalrevenue=totalrevenue+(totaldataarray[i][j].amount/100);
                                  }};
                                  } 
                             }
