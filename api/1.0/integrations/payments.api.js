@@ -136,6 +136,9 @@ _.extend(api.prototype, baseApi.prototype, {
         var self = this;
         var accountId = parseInt(self.accountId(req));
         var userId = self.userId(req);
+        self.log.debug(accountId, userId, '>> listChargesForAccount');
+
+
         var start = req.query.start;
         var end = req.query.end;
         if(!end) {
@@ -150,10 +153,6 @@ _.extend(api.prototype, baseApi.prototype, {
             start = moment(start, 'YYYY-MM-DD[T]HH:mm:ss').toDate();
             self.log.debug('start:', start);
         }
-         
-         //we prefer to pass the accountId and userId to our logging methods.  It helps for readability and tracking.
-        self.log.debug(accountId, userId, '>> listChargesForAccount');
-
         self.checkPermission(req, self.sc.privs.VIEW_PAYMENTS, function(err, isAllowed){
             if(isAllowed !== true) {
                 return self.send403(resp);
@@ -183,28 +182,12 @@ _.extend(api.prototype, baseApi.prototype, {
                         var customerId = account.get('billing').stripeCustomerId;
 
                         paymentsManager.listChargesForAccount(account, created, endingBefore, limit, startingAfter, userId, function(err, charges){
-                            var totalrevenue =0;
-                            var totaldataarray = charges.data;
-                            if(totaldataarray[1]!=undefined){
-                            if(typeof(totaldataarray[1].length)!="number"){
-                                for(var i  =0 ;i<totaldataarray.length;i++)
-                                {
-                                totalrevenue=totalrevenue+(totaldataarray[i].amount/100);
-                                } 
-                            }else{
-                                for(var i  =0 ;i<totaldataarray.length;i++){
-                                for(var j=0;j<totaldataarray[i].length;j++){
-                                totalrevenue=totalrevenue+(totaldataarray[i][j].amount/100);
-                                 }};
-                                 } 
-                            }
-                               else
-                                {
-                                 for(var i  =0 ;i<totaldataarray.length;i++)
-                                {
-                                totalrevenue=totalrevenue+(totaldataarray[i].amount/100);
-                                } 
-                              }
+                            var totalrevenue = 0;
+                            _.each(charges.data, function(charge){
+                                totalrevenue+= (charge.amount - charge.amount_refunded);
+                            });
+                            totalrevenue = totalrevenue / 100;
+
                             charges.totalrevenue=totalrevenue;
                             self.log.debug(accountId, userId, '<< listChargesForAccount');
                             return self.sendResultOrError(resp, err, charges, "Error listing revenue");
@@ -215,10 +198,6 @@ _.extend(api.prototype, baseApi.prototype, {
         });
 
     },
-
-
-
-      
 
     listIndigenousPlans: function(req, resp) {
         var self = this;
