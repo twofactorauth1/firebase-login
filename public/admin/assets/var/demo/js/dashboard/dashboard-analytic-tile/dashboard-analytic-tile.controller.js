@@ -101,8 +101,8 @@ function dashboardAnalyticTileComponentController($scope, $attrs, $filter, Dashb
                 case 'Invoices':
 
                     ret.widgetTitle = 'Invoices';
-                    ret.buttonTitle = 'Pay Invoice';
-                    ret.link = '#/customers';
+                    ret.buttonTitle = 'View Ledger';
+                    ret.link = '#/customers'; // Really, this should go to ledger for non-Admin
 
                     ret.header = [
                         {label: 'Invoice #'},
