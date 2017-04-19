@@ -1,0 +1,128 @@
+<section id="page-title" class="padding-top-15 padding-bottom-15">
+    <div class="row">
+        <div class="col-sm-8">
+            <h1 class="mainTitle">Ledger Summary</h1>
+            <span class="mainDescription">{{vm.ledger.row[0]._CustStatmentHdr_CardName || vm.listledger.OCRD_CardName}}</span>
+        </div>
+    </div>
+</section>
+<div st-table="vm.displayedCustomerLedger" st-safe-src="vm.ledger.row">
+    <div class="ledger-top-buttons container-fluid container-fullw bg-white">
+        <div class="col-xs-12 col-md-12 padding-right-30 margin-top-5">
+            <button type="button" class="btn btn-primary btn-o pull-right btn btn-primary btn-o margin-bottom-5 margin-left-5" ng-click="vm.backToCustomers()">
+            Back to Customers
+            </button>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+    <div class="ledger-details-container col-xs-12" ng-if="!vm.uiState.loading">
+        <div class="inner-ledger-details bg-white col-xs-12">
+            <div class="col-sm-4 col-xs-12 ledger-details-panel ledger-details-left-panel">
+                <div class="form-group">
+                    <h4>Address</h4>
+
+                    <div class="description">
+                        <span>
+                            {{vm.ledger.row[0]._CustStatmentHdr_Address || vm.listledger.OCRD_Address}}
+                        </span>
+                    </div>
+                    <hr>
+                </div>
+
+                <div class="form-group">
+                    <h4>Customer</h4>
+
+                    <div class="description">
+                        <span>
+                            {{vm.ledger.row[0]._CustStatmentHdr_CardCode || vm.listledger.OCRD_CardCode}}
+                        </span>
+                    </div>
+                    <hr>
+                </div>
+            </div>
+
+            <div class="col-sm-4 col-xs-12 ledger-details-panel ledger-details-middle-panel">
+                <div class="form-group hidden">
+                    <h4>Status</h4>
+
+                    <div class="description">
+                        <span>
+                            {{vm.ledger.ledgerStatus}}
+                        </span>
+                    </div>
+                    <hr>
+                </div>
+                <div class="form-group">
+                    <h4>City</h4>
+
+                    <div class="description">
+                        <span>
+                            {{vm.ledger.row[0]._CustStatmentHdr_City || vm.listledger.OCRD_City}}
+                        </span>
+                    </div>
+                    <hr>
+                </div>
+                <div class="form-group">
+                    <h4>State</h4>
+
+                    <div class="description">
+                        <span>
+                            {{vm.ledger.row[0]._CustStatmentHdr_State1 || vm.listledger.OCRD_State1}}
+                        </span>
+                    </div>
+                    <hr>
+                </div>
+                <div class="form-group">
+                    <h4>Zip</h4>
+
+                    <div class="description">
+                        <span>
+                            {{vm.ledger.row[0]._CustStatmentHdr_ZipCode || vm.listledger.OCRD_ZipCode}}
+                        </span>
+                    </div>
+                    <hr>
+                </div>
+            </div>
+        </div>
+        <div class="inner-ledger-details bg-white col-xs-12 margin-top-30 purchase-orders-list">
+            <div ng-init="tableView='list'">
+                <table class="table table-hover table-striped" ng-class="{'grid': tableView == 'grid', 'bg-white table-list-view': tableView == 'list'}" ng-if="!vm.uiState.loading">
+                    <thead ng-class="{'bg-white': tableView == 'grid'}">
+                        <tr>
+                            <th>Invoice #</th>
+                            <th>Var Po #</th>
+                            <th>Invoice Date</th>
+                            <th>Due Date</th>
+                            <th>Invoice Total</th>                            
+                        </tr>
+                        <tr ng-if="showFilter">
+                            <th>
+                                <input st-search="_CustStatmentDtl_TransId" placeholder="Invoice #" class="form-control" type="search" />
+                            </th>
+                            <th>
+                                <input st-search="_CustStatmentDtl_Customer_PO_No" placeholder="Var Po #" class="form-control" type="search" />
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="ledger in vm.displayedCustomerLedger" class="product-item">
+                            <td><strong>Invoice #: </strong>{{ledger._CustStatmentDtl_TransId}}</td>
+                            <td><strong>Var Po #: </strong>{{ledger._CustStatmentDtl_Customer_PO_No}}</td>
+                            <td><strong>Invoice Date: </strong>{{vm.parseValueToDate(ledger._CustStatmentDtl_RefDate) | date:'M/d/yyyy'}}</td>
+                            <td><strong>Due Date: </strong>{{vm.parseValueToDate(ledger._CustStatmentDtl_DueDate) | date:'M/d/yyyy'}}</td>
+                            <td><strong>Invoice Total: </strong>{{ledger._CustStatmentDtl_Amount}}</td>
+                            
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        
+                    </tfoot>
+                </table>
+                <div class="load1 csspinner height-400" ng-show="vm.uiState.loading"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="loading-ledger-details center" ng-if="vm.uiState.loading">
+    <h2>Loading ledger summary. Please wait....</h2>
+</div>

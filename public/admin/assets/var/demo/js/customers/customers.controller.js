@@ -31,7 +31,7 @@ function customersComponentController($scope, $attrs, $filter, $modal, $timeout,
 
 
     function viewCustomerLedger(customer){
-        $location.path('/invoices/' + customer.OCRD_CardCode);
+        $location.path('/ledger/' + customer.OCRD_CardCode);
     }
 
     function init(element) {

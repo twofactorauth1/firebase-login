@@ -13,10 +13,11 @@
             
         };
 
-        var baseInvoiceAPIUrl = '/api/1.0/integrations/zi';
+        var baseCustomerAPIUrl = '/api/1.0/integrations/zi';
 
         
-        customerService.getCustomers = getCustomers;
+        customerService.getCustomers = getCustomers;;
+        customerService.getLedgerDetails = getLedgerDetails;
 
         customerService.loading = {value: 0};
 
@@ -46,7 +47,26 @@
                 console.error('customerService getCustomers error: ', JSON.stringify(error));
             }
 
-            return customerRequest($http.get([baseInvoiceAPIUrl, 'customers'].join('/')).success(success).error(error));
+            return customerRequest($http.get([baseCustomerAPIUrl, 'customers'].join('/')).success(success).error(error));
+        }
+
+
+        /**
+            * Get list of all customers
+        */
+        function getLedgerDetails(customerId) {
+
+            function success(data) {
+               // invoiceService.invoice = data.response.payload.querydata.data;
+            }
+
+            function error(error) {
+                console.error('CustomerService getLedgerDetails error: ', JSON.stringify(error));
+            }
+
+            var qString = "?cardCodeFrom="+ customerId + "&cardCodeTo=" + customerId;
+
+            return customerRequest($http.get([baseCustomerAPIUrl, 'ledger'].join('/') + qString).success(success).error(error));
         }
 
 
