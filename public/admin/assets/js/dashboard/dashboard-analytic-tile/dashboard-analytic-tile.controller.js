@@ -21,12 +21,18 @@ function dashboardAnalyticTileComponentController($scope, $attrs, $filter, Dashb
         'Revenue': {},
         'SocialMedia': {}
     };
-
+   
     function analyticMap() {
         var ret = {};
-        var analyticsObject = DashboardService.state.analytics;
         var revenuedata = DashboardService.revenueFromStripe;
-
+        revenuedata = parseFloat(revenuedata).toFixed(2);
+            if(!isNaN(revenuedata)){
+                var finalrevenuedata = '$'+revenuedata;
+            }else{
+                var finalrevenuedata = ' ';
+            }
+            
+        var analyticsObject = DashboardService.state.analytics;
         if (analyticsObject) {
             switch(vm.analytic.name) {
                 case 'visitors':
@@ -129,7 +135,7 @@ function dashboardAnalyticTileComponentController($scope, $attrs, $filter, Dashb
                         ,
                         {
                            analyticDataLabel: 'YTD Revenue (Stripe)',
-                           analyticDataValue: '$' + parseFloat(revenuedata).toFixed(2)
+                           analyticDataValue: finalrevenuedata
                         }
                     ]
 
@@ -141,7 +147,7 @@ function dashboardAnalyticTileComponentController($scope, $attrs, $filter, Dashb
         } else {
             $timeout(function(){
                 vm.analyticMap();;
-            }, 100);
+            }, 200);
         }
 
         vm.uiDetails = ret;
