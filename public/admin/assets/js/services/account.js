@@ -91,6 +91,18 @@
         });
     };
 
+    this.addNewUserWithParams = function(id, username, password, params, fn) {
+        var apiUrl = baseUrl + ['user'].join('/');
+        params = params || {};
+        params.username = username;
+        params.password = password;
+        $http.post(apiUrl, params).success(function(data){
+            fn(null, data);
+        }).error(function(err){
+            fn(err);
+        });
+    };
+
     this.removeUserFromAccount = function(userId, fn) {
         var apiUrl = baseUrl + ['user', userId].join('/');
         $http.delete(apiUrl).success(function(data){
