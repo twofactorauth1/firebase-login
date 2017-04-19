@@ -30,12 +30,6 @@ function dashboardInboxComponentController($scope, $attrs, $filter, $modal, $tim
             detailedTime: '19 Apr 2017',
             userName: "Indigenous Admin"
         },{
-            title: 'New Features',
-            description: 'With the next deployment (22-April), we will add Inventory availability monitoring to the Securematics Portal. Watch for an email detailing this feature set. ',
-            messageDate: '17 Apr 2017',
-            detailedTime: '17 Apr 2017',
-            userName: "Indigenous Admin"
-        },{
             title: 'Our Phone Number has changed',
             description: 'Our front desk phone number changed to 415-999-8888. If you have trouble reaching us, don\'t hesitate to email or use the Intercom link (lower right hand corner)',
             messageDate: '10 Apr 2017',
