@@ -18,6 +18,7 @@ function ledgerDetailsController($scope, $state, $attrs, $filter, $modal, $timeo
     
     vm.parseValueToFloat = parseValueToFloat;
     vm.parseValueToDate = parseValueToDate;
+    vm.viewInventoryDetails = viewInventoryDetails;
 
 
     function backToCustomers(){
@@ -96,6 +97,10 @@ function ledgerDetailsController($scope, $state, $attrs, $filter, $modal, $timeo
             var formattedDate = Date.parse(value); // "M/d/yyyy h:mm:ss a"
             return formattedDate;
         }
+    }
+
+    function viewInventoryDetails(transId){
+        $location.path('/invoices/' + $stateParams.customerId + '/' + transId);
     }
 
 

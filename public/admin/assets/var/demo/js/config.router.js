@@ -290,7 +290,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         icon: 'ti-layout-media-left-alt',
         resolve: loadSequence('LedgerDetailsComponent', 'LedgerDetailsController', 'CustomersService')
     }).state('app.invoiceDetails', {
-        url: '/invoices/:customerId',
+        url: '/invoices/:customerId/:transId',
         templateUrl: "/admin/assets/var/demo/js/invoices/invoice-details/invoice-details.html",
         title: 'Invoice Details',
         icon: 'ti-layout-media-left-alt',
