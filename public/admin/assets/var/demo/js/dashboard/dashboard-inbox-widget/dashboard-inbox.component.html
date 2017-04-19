@@ -9,9 +9,6 @@
             <div class="col-sm-6 message-container message-container-left">
                 <ul class="message-container-top">
                     <li ng-class="{'active-message': vm.selectedMessageIndex === $index}" ng-repeat="message in vm.inboxMessages" ng-click="vm.setSelectedMessage($index)">
-                    <div class="message-user">
-                        <img class="thumbnail img-circle" src="/admin/assets/images/default-user.png">
-                    </div>
                     <div>
                         <div class="margin-bottom-5 margin-top-5">
                             <span class="message-title">{{message.title}}</span>
