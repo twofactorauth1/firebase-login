@@ -42,7 +42,8 @@ function dashboardAnalyticTileComponentController($scope, $attrs, $filter, Dashb
 
                     ret.widgetTitle = 'Inventory';
                     ret.buttonTitle = 'Check Inventory';
-                    
+                    ret.link = '#/inventory';
+
                     ret.header = [
                         {label: 'SKU #'},
                         {label: 'Vender'},
@@ -50,7 +51,7 @@ function dashboardAnalyticTileComponentController($scope, $attrs, $filter, Dashb
                     ];
 
                     ret.data = [
-                        {                         
+                        {
                             field1: "SRX-210",
                             field2: "Juniper",
                             field3: "490"
@@ -69,7 +70,7 @@ function dashboardAnalyticTileComponentController($scope, $attrs, $filter, Dashb
                         {label: 'Amount'}
                     ];
                     ret.data = [
-                        {                         
+                        {
                             field1: "12345",
                             field2: "Tesla",
                             field3: "$432,000"
@@ -81,14 +82,16 @@ function dashboardAnalyticTileComponentController($scope, $attrs, $filter, Dashb
 
                     ret.widgetTitle = 'Purchase Orders';
                     ret.buttonTitle = 'Submit a PO';
+                    ret.link = '#/purchase-orders';
+
                     ret.header = [
                         {label: 'PO #'},
                         {label: 'Amount'},
                         {label: 'Status'}
                     ];
                     ret.data = [
-                        {                         
-                            field1: "12345",                            
+                        {
+                            field1: "12345",
                             field2: "$432,000",
                             field3: "Complete",
                         }
@@ -99,20 +102,22 @@ function dashboardAnalyticTileComponentController($scope, $attrs, $filter, Dashb
 
                     ret.widgetTitle = 'Invoices';
                     ret.buttonTitle = 'Pay Invoice';
+                    ret.link = '#/customers';
+
                     ret.header = [
                         {label: 'Invoice #'},
                         {label: 'Amount'},
                         {label: 'Due Date'}
                     ];
                     ret.data = [
-                        {                         
-                            field1: "12345",                            
+                        {
+                            field1: "12345",
                             field2: "$432,000",
                             field3: "2/15/17",
                         }
                     ];
                     break;
-                
+
                 case 'Renewals':
 
                     ret.widgetTitle = 'Renewals';
@@ -123,12 +128,12 @@ function dashboardAnalyticTileComponentController($scope, $attrs, $filter, Dashb
                         {label: 'Amount'}
                     ];
                     ret.data = [
-                        {                         
-                            field1: "2/15/17",                            
+                        {
+                            field1: "2/15/17",
                             field2: "Tesla",
                             field3: "$32,000",
-                        },{                         
-                            field1: "2/15/19",                            
+                        },{
+                            field1: "2/15/19",
                             field2: "Google",
                             field3: "$22,000",
                         }
@@ -143,14 +148,14 @@ function dashboardAnalyticTileComponentController($scope, $attrs, $filter, Dashb
                         {label: 'Promo Potential'}
                     ];
                     ret.data = [
-                        {                         
-                            field1: "Ruckus 10PK",                            
+                        {
+                            field1: "Ruckus 10PK",
                             field2: "$1000,000"
                         }
                     ];
 
                     break;
-                
+
                 default:
                 //code
             }

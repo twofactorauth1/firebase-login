@@ -6,14 +6,14 @@
 
         <h3 class="analytic-title indi-rounded-title">{{vm.uiDetails.widgetTitle}}</h3>
 
-        <div class="analytic-details">           
+        <div class="analytic-details">
                 <table class="analytic-details-table">
                     <tr class="header-row">
                         <th ng-repeat="obj in vm.uiDetails.header">
                             {{obj.label }}
                         </th>
                     </tr>
-                    <tbody>                        
+                    <tbody>
                         <tr class="content-row" ng-repeat="item in vm.uiDetails.data">
                             <td>{{item.field1}}</td>
                             <td>{{item.field2}}</td>
@@ -23,7 +23,7 @@
                 </table>
 
             <div class="analytic-button-container center margin-top-10">
-                <a href="{{vm.analytic.link}}" class="center btn btn-primary btn-lg btn-wide btn-o ng-scope"></i>{{vm.uiDetails.buttonTitle}}</a>
+                <a ng-href="{{vm.uiDetails.link}}" class="center btn btn-primary btn-lg btn-wide btn-o ng-scope">{{vm.uiDetails.buttonTitle}}</a>
             </div>
 
         </div>
