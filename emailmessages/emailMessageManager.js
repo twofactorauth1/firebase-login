@@ -1832,7 +1832,7 @@ var emailMessageManager = {
             function(results, cb) {
                 var emailMessageQueryDuration = new Date().getTime() - startTime;
                 self.log.info(accountId, userId, 'Email Query Duration:', emailMessageQueryDuration);
-                var headers = ['Email', 'Delivered', 'Opened', 'Clicked', 'Unsubscribed'];
+                var headers = ['Email', 'Phone', 'Delivered', 'Opened', 'Clicked', 'Unsubscribed'];
                 var csv = headers.join(',') + '\n';
 
                 var unsubGrouping = {};
@@ -1864,6 +1864,7 @@ var emailMessageManager = {
                     async.each(results, function(message, callback){
                         var isUnsubscribed = false;
                         var contactName = '';
+                        var phone = '';
                         if(unsubscriptions[message.receiver]) {
                             isUnsubscribed = true;
                         }
@@ -1871,13 +1872,17 @@ var emailMessageManager = {
                         contactDao.getContactByEmailAndAccount(message.receiver, accountId, function(err, contact){
                             if(err || !contact) {
                                 self.log.debug('Error getting contact for email:' + message.receiver, err);
-                                contactName = '';
                             } else {
                                 self.log.debug('Found contact');
                                 contactName = (contact.get('first') + ' ' + contact.get('last')).trim() + ' ';
+                                var phones = contact.getPhones();
+                                if (phones.length > 0) {
+                                    phone = phones[0];
+                                }
                             }
 
                             csv += contactName + '<' + message.receiver + '>,';
+                            csv += phone + ',';
                             csv += (message.deliveredDate || false) + ',';
                             csv += (message.openedDate || false) + ',';
                             csv += (message.clickedDate || false) + ',';
