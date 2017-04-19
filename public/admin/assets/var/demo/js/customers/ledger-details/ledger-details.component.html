@@ -6,7 +6,7 @@
         </div>
     </div>
 </section>
-<div st-table="vm.displayedCustomerLedger" st-safe-src="vm.ledger.row">
+<div st-table="vm.displayedCustomerLedger" st-safe-src="vm.ledgerDetails">
     <div class="ledger-top-buttons container-fluid container-fullw bg-white">
         <div class="col-xs-12 col-md-12 padding-right-30 margin-top-5">
             <button type="button" class="btn btn-primary btn-o pull-right btn btn-primary btn-o margin-bottom-5 margin-left-5" ng-click="vm.backToCustomers()">
@@ -110,8 +110,7 @@
                             <td><strong>Var Po #: </strong>{{ledger._CustStatmentDtl_Customer_PO_No}}</td>
                             <td><strong>Invoice Date: </strong>{{vm.parseValueToDate(ledger._CustStatmentDtl_RefDate) | date:'M/d/yyyy'}}</td>
                             <td><strong>Due Date: </strong>{{vm.parseValueToDate(ledger._CustStatmentDtl_DueDate) | date:'M/d/yyyy'}}</td>
-                            <td><strong>Invoice Total: </strong>{{ledger._CustStatmentDtl_Amount}}</td>
-                            
+                            <td><strong>Invoice Total: </strong>{{ledger.invoiceTotal | currency : ledger._CustStatmentHdr_Currency}}</td>
                         </tr>
                     </tbody>
                     <tfoot>

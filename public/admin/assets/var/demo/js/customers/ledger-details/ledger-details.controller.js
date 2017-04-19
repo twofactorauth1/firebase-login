@@ -54,6 +54,36 @@ function ledgerDetailsController($scope, $state, $attrs, $filter, $modal, $timeo
             
         })
     }
+
+    $scope.$watch('vm.ledger.row', function(ledgerDetails) {
+        if(angular.isDefined(ledgerDetails)){
+            vm.ledgerDetails = _.uniq(ledgerDetails, function(ld){
+                return ld._CustStatmentDtl_TransId;
+            });
+
+            _.each(vm.ledgerDetails, function(ledger){
+                ledger.invoiceTotal = calculateInvoiceTotal(ledger);
+            })
+
+        }
+    }, true);
+
+
+    function calculateInvoiceTotal(ledger){
+        var _sum = 0;
+        if(vm.ledger && vm.ledger.row){
+            var invoiceDetails = _.filter(vm.ledger.row, function(row){
+                return row._CustStatmentDtl_TransId == ledger._CustStatmentDtl_TransId
+            })
+
+            if(invoiceDetails && invoiceDetails.length){
+                _.each(invoiceDetails, function(order){
+                    _sum+= parseFloat(order.INV1_LineTotal)
+                })
+            }
+        }
+        return _sum;
+    }
     
     function parseValueToFloat(value){
         if(value){
