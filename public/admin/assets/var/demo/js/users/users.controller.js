@@ -2,7 +2,7 @@
 /*global app, moment, angular, window*/
 /*jslint unparam:true*/
 (function (angular) {
-    app.controller('usersCtrl', ['$scope', "toaster", "$filter", "$modal", "$timeout", "AccountService","UserService", "userConstant", "SweetAlert", function ($scope, toaster, $filter, $modal, $timeout, AccountService,UserService, userConstant, SweetAlert) {
+    app.controller('usersCtrl', ['$scope', '$http', "toaster", "$filter", "$modal", "$timeout", "AccountService","UserService", "userConstant", "SweetAlert", function ($scope, $http, toaster, $filter, $modal, $timeout, AccountService,UserService, userConstant, SweetAlert) {
 
         var vm = this;
 
@@ -104,6 +104,21 @@
             $scope.closeModal();
         };
 
+        $scope.openEditUserCardModal = function(userId) {
+            $scope.currentUserId = userId;
+            vm.openSimpleModal('edit-user-card-modal');
+        };
+        $scope.closeUserCardModal = function() {
+            $scope.currentUserId = null;
+            $scope.closeModal();
+        };
+
+
+
+        $scope.updateUser = function(isAdmin){
+            console.log($scope.edituser);
+        };
+
         $scope.checkPasswordLength = function() {
             $scope.passwordInValid = false;
             if ($scope.edituser && $scope.edituser.password1 && $scope.edituser.password1.length < 6) {            
@@ -112,6 +127,7 @@
                 $scope.passwordInValid = false;
             }
         };
+
 
         $scope.setUserPassword = function(userId) {
             $scope.checkPasswordLength();
@@ -156,6 +172,9 @@
                 }
             });
         };
+
+
+
 
         (function init() {
 

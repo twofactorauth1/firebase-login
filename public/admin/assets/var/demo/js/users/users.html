@@ -45,8 +45,9 @@
                         <td>{{user.first}} {{user.last}}</td>
                         <td>{{user.username}}</td>
                         <td class="table-action" >
-                            <a ng-if="vm.uiState.isAdminUser || currentUser._id === user._id" ng-click="openEditUserModal(user._id)"><i class="fa fa-pencil"></i></a>
-                            <a ng-if="currentUser._id !== user._id && vm.uiState.isAdminUser" ng-click="vm.removeUserFromAccount(user._id)" class="delete-row"><i class="fa fa-trash-o"></i></a>
+                            <a ng-if="vm.uiState.isAdminUser || currentUser._id === user._id" ng-click="openEditUserModal(user._id)"><span tooltip-placement="top" tooltip="Edit user"><i class="fa fa-pencil"></i></span></a>
+                            <a ng-if="currentUser._id !== user._id && vm.uiState.isAdminUser" ng-click="vm.removeUserFromAccount(user._id)" class="delete-row"><span tooltip-placement="top" tooltip="Delete user"><i class="fa fa-trash-o"></i></span></a>
+                            <a ng-if="vm.uiState.isAdminUser" ng-click="openEditUserCardModal(user._id)"><span tooltip-placement="top" tooltip="Edit user cards"><i class="fa fa-address-book-o"></i></span></a>
                         </td>
                     </tr>
                     </tbody>
@@ -56,3 +57,7 @@
 </div>    
 <div data-ng-include=" 'assets/views/partials/new-user-modal.html' "></div>
 <div data-ng-include=" 'assets/views/partials/edit-password-modal.html' "></div>
+<div data-ng-include=" 'assets/var/demo/views/partials/edit-user-card-modal.html' "></div>
+
+
+
