@@ -15,7 +15,7 @@
                 reports:{}
             }
         };
-        var baseStripApi = '/api/1.0/integrations/payments/revenue';
+        var baseStripeApi = '/api/1.0/integrations/payments/revenue';
         var baseWorkstreamsAPIUrl = '/api/2.0/dashboard/workstreams';
         var baseAnalyticsAPIUrl = '/api/2.0/dashboard/analytics';
         var baseAccountAPIUrl = '/api/1.0/account/';
@@ -283,6 +283,9 @@
         }
 
         function getRevenueFromStripe(){
+            var start = moment().dayOfYear(1).hour(1).minute(0).second(0);
+            var queryParams = '?start=' + start.toISOString();
+
             function success(data) {
              dashboardService.revenueFromStripe =data.totalrevenue;
             }
@@ -291,7 +294,7 @@
                 console.error('dashRequest getRevenueFromStripe error: ', JSON.stringify(error));
             }
 
-            return dashRequest($http.get(baseStripApi).success(success).error(error));
+            return dashRequest($http.get(baseStripeApi + queryParams).success(success).error(error));
         }
 
         $rootScope.$on('$ssbAccountUpdated', function(event, account) {

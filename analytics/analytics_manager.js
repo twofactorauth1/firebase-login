@@ -381,7 +381,7 @@ module.exports = {
                     _.each(value, function(result){
                         result['ip_geo_info.province'] = result._id;
                     });
-                    self.log.debug(accountId, userId, '<< getLiveVisitors');
+                    self.log.trace(accountId, userId, '<< getLiveVisitors');
                     //fn(err, value);
                     if(results.length > 0){
                         results[0].locations = value;
