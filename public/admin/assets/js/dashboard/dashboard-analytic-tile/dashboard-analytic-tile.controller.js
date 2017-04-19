@@ -126,11 +126,11 @@ function dashboardAnalyticTileComponentController($scope, $attrs, $filter, Dashb
                             analyticDataLabel: 'YTD New Orders',
                             analyticDataValue: analyticsObject.revenue.YTDTotalOrders
                         }
-                        //,
-                        //{
-                        //    analyticDataLabel: 'YTD Revenue (Stripe)',
-                        //    analyticDataValue: '$' + parseFloat(revenuedata).toFixed(2)
-                        //}
+                        ,
+                        {
+                           analyticDataLabel: 'YTD Revenue (Stripe)',
+                           analyticDataValue: '$' + parseFloat(revenuedata).toFixed(2)
+                        }
                     ]
 
                     break;
