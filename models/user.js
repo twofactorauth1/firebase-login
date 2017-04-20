@@ -871,6 +871,13 @@ var user = $$.m.ModelBase.extend({
         return userAccount.permissions || [];
     },
 
+    setPermissionsForAccount: function(accountId, roleAry) {
+        var userAccount = this.getUserAccount(accountId);
+        if(userAccount) {
+            userAccount.permissions = roleAry;
+        }
+    },
+
 
     getUserAccount: function (accountId) {
         var accounts = this.get("accounts");
