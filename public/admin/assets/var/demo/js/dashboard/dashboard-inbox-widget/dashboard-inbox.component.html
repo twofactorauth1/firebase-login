@@ -8,7 +8,7 @@
 
             <div class="col-sm-5 message-container message-container-left">
                 <ul class="message-container-top">
-                    <li ng-class="{'active-message': vm.selectedMessageIndex === $index}" ng-repeat="message in vm.inboxMessages | orderBy:'-modified.date'" ng-click="vm.setSelectedMessage($index)">
+                    <li ng-class="{'active-message': vm.selectedMessageIndex === $index}" ng-repeat="message in vm.inboxMessages" ng-click="vm.setSelectedMessage($index)">
                     <div>
                         <div class="margin-bottom-5 margin-top-5">
                             <span class="message-title">{{message.subject}}</span>

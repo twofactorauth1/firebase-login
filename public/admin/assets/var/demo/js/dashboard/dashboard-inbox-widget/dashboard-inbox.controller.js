@@ -20,8 +20,8 @@ function dashboardInboxComponentController($scope, $attrs, $filter, $modal, $tim
 
     var unbindMessageWatcher = $scope.$watch(function() { return DashboardService.broadcastMessages }, function(messages) {          
         if(messages){
-            vm.inboxMessages = messages; 
-            vm.setSelectedMessage(0)  
+            vm.inboxMessages = $filter('orderBy')(messages, '-modified.date');
+            vm.setSelectedMessage(0);
         }
     }, true);
 
