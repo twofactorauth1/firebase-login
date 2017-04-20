@@ -193,14 +193,19 @@ _.extend(api.prototype, baseApi.prototype, {
         var message = req.body.message;
         var startDate = null;
         var endDate = null;
+        var subject = null;
         if(req.body.startDate){
             startDate = moment(req.body.startDate).toDate();
         }
-        if(req.body.startDate){
+        if(req.body.endDate){
             endDate = moment(req.body.endDate).toDate();
         }
 
-        manager.createBroadcastMessage(accountId, userId, message, startDate, endDate, function(err, value){
+        if(req.body.subject){
+            subject = req.body.subject;
+        }
+
+        manager.createBroadcastMessage(accountId, userId, message, subject, startDate, endDate, function(err, value){
             self.log.debug(accountId, userId, '<< createBroadcastMessage');
             self.sendResultOrError(resp, err, value, 'Could not create message');
         });

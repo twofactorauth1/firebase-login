@@ -118,7 +118,7 @@ var insightsManager = {
         });
     },
 
-    createBroadcastMessage:function(accountId, userId, message, startDate, endDate, fn){
+    createBroadcastMessage:function(accountId, userId, message, subject, startDate, endDate, fn){
         var self = this;
         self.log.debug(accountId, userId, '>> createBroadcastMessage');
 
@@ -138,6 +138,7 @@ var insightsManager = {
                 var msg = new $$.m.BroadcastMessage({
                     accountId:accountId,
                     message:message,
+                    subject: subject,
                     startDate:startDate,
                     endDate:endDate,
                     orgId:orgId,
