@@ -25,7 +25,7 @@
                 <h4 class="text-center margin-top-30 margin-bottom-30">Loading Messages, Please wait....</h4>                
             </div>
             <ul class="list-unstyled broadcast-message-container-list">                  
-                <li ng-repeat="message in vm.state.messages">
+                <li ng-repeat="message in vm.state.messages | orderBy:'-modified.date'">
                     <p class="message-title" ng-bind-html="message.message | unsafe"></p>                    
                     <div class="btn-group btn-group-sm" role="group" aria-label="Post Status">
                         <button
