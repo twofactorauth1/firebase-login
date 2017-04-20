@@ -28,22 +28,22 @@ function inventoryComponentController($scope, $attrs, $filter, $modal, $timeout,
         },
         showFilter: InventoryService.showFilter
     };
-    
+
     vm.viewSingleInventory = viewSingleInventory;
     vm.getDimentions = getDimentions;
     vm.getWeight = getWeight;
     vm.numberOfPages = numberOfPages;
-    
+
     vm.sortInventory = sortInventory;
     vm.showFilter = showFilter;
     vm.pagingConstant = pagingConstant;
     vm.selectPage = selectPage;
     vm.quantitySearchOptions =[
         {
-           "label": "On Hand > 0",
+           "label": "> 0",
            "value":  1
         },{
-           "label": "On Hand = 0",
+           "label": "= 0",
            "value":  -1
         }
 
@@ -70,7 +70,7 @@ function inventoryComponentController($scope, $attrs, $filter, $modal, $timeout,
         $location.path('/inventory/' + product["@id"]);
     }
 
-    function drawPages(){      
+    function drawPages(){
       var start = 1;
       var end;
       var i;
@@ -88,7 +88,7 @@ function inventoryComponentController($scope, $attrs, $filter, $modal, $timeout,
       }
 
       vm.pages = [];
-      
+
 
       for (i = start; i < end; i++) {
         vm.pages.push(i);
@@ -99,11 +99,11 @@ function inventoryComponentController($scope, $attrs, $filter, $modal, $timeout,
         if(page != InventoryService.page){
             vm.uiState.pageLoading = true;
             InventoryService.page = page;
-            
+
             InventoryService.skip = (page - 1) * InventoryService.limit;
             loadInventory();
         }
-        
+
     }
 
     function getDimentions(product){
@@ -117,9 +117,9 @@ function inventoryComponentController($scope, $attrs, $filter, $modal, $timeout,
                 _dimentions =  parseFloat(product.OITM_SLength1).toFixed(2) + "X" +
                     parseFloat(product.OITM_SWidth1).toFixed(2) + "X" +
                     parseFloat(product.OITM_BHeight1).toFixed(2)
-            }    
+            }
 
-            
+
         }
         return _dimentions
     }
@@ -144,7 +144,7 @@ function inventoryComponentController($scope, $attrs, $filter, $modal, $timeout,
 
 
     /********** PAGINATION RELATED **********/
-    
+
     vm.uiState.pageSize = InventoryService.limit;
     vm.uiState.skip = InventoryService.skip;
 
@@ -178,7 +178,7 @@ function inventoryComponentController($scope, $attrs, $filter, $modal, $timeout,
                 vm.uiState.sortData.details[name].direction = -1;
             }
             else{
-                vm.uiState.sortData.details[name].direction = 1;   
+                vm.uiState.sortData.details[name].direction = 1;
             }
         }
         else{
