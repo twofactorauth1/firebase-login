@@ -109,7 +109,7 @@
                         <tr ng-repeat="ledger in vm.displayedCustomerLedger" class="product-item" ng-click="vm.viewInventoryDetails(ledger._CustStatmentDtl_TransId)">
                             <td><strong>Invoice : </strong>{{ledger._CustStatmentDtl_TransId}}</td>
                             <td><strong>Lines: </strong>{{ledger.lineItems}}</td>
-                            <td><strong>Var PO : </strong>{{ledger._CustStatmentDtl_Customer_PO_No}}</td>
+                            <td><strong>Var PO : </strong>{{ledger['_CustStatmentDtl_Customer_PO_No.']}}</td>
                             <td><strong>Invoice Date: </strong>{{vm.parseValueToDate(ledger._CustStatmentDtl_RefDate) | date:'M/d/yyyy'}}</td>
                             <td><strong>Due Date: </strong>{{vm.parseValueToDate(ledger._CustStatmentDtl_DueDate) | date:'M/d/yyyy'}}</td>
                             <td><strong>Invoice Total: </strong>{{ledger.invoiceTotal | currency : ledger._CustStatmentHdr_Currency}}</td>
