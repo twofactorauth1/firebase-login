@@ -874,7 +874,7 @@ _.extend(api.prototype, baseApi.prototype, {
                     } else {
                         var results = [];
                         _.each(userAry, function(element){
-                            results.push(element.toJSON('public', {accountId:accountId}));
+                            results.push(element.toJSON('manage', {accountId:accountId}));
                         });
                         return self.sendResult(resp, results);
                     }
