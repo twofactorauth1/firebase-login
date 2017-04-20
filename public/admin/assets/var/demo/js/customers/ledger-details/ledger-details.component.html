@@ -89,12 +89,12 @@
                 <table class="table table-hover table-striped" ng-class="{'grid': tableView == 'grid', 'bg-white table-list-view': tableView == 'list'}" ng-if="!vm.uiState.loading">
                     <thead ng-class="{'bg-white': tableView == 'grid'}">
                         <tr>
-                            <th>Invoice</th>
-                            <th>Lines</th>
+                            <th st-sort="_CustStatmentDtl_TransId" style="white-space: nowrap;">Invoice</th>
+                            <th st-sort="lineItems" style="white-space: nowrap;">Lines</th>
                             <th>Var PO</th>
                             <th>Invoice Date</th>
                             <th>Due Date</th>
-                            <th>Invoice Total</th>
+                            <th st-sort="invoiceTotal" style="white-space: nowrap;">Invoice Total</th>
                         </tr>
                         <tr ng-if="showFilter">
                             <th>
