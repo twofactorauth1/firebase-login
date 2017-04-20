@@ -122,7 +122,7 @@ module.exports = {
 
         if(fieldSearch){
             var fieldSearchArr = [];
-        
+
             for(var i=0; i <= Object.keys(fieldSearch).length - 1; i++){
                 var key = Object.keys(fieldSearch)[i];
                 var value = fieldSearch[key];
@@ -138,23 +138,26 @@ module.exports = {
                             obj[key] ={$gt:0};
                             fieldSearchArr.push(obj);
                         }
-                    } else{
+                    } else if (key == 'OITM_ItemCode') {
+                        var obj = {};
+                        obj[key] = parseInt(value);
+                        fieldSearchArr.push(obj);
+                    } else {
                         var obj = {};
                         obj[key] = new RegExp(value, 'i');
                         fieldSearchArr.push(obj);
                     }
-                    
+
                 }
             }
             if(fieldSearchArr.length){
-                query["$and"] = fieldSearchArr; 
+                query["$and"] = fieldSearchArr;
             }
-            self.log.debug('query:', query);
         } else {
             query = {
                 $or:[
                     {'@id':regex},
-                    {OITM_ItemCode:regex},
+                    {OITM_ItemCode:parseInt(term)},
                     {OITM_ItemName:regex},
                     {OITM_U_dscription:regex},
                     {OITB_ItmsGrpNam:regex},
@@ -173,7 +176,7 @@ module.exports = {
                 ]
             };
         }
-
+        self.log.debug('query:', query);
 
         var fields = null;
         var collection = 'inventory';
