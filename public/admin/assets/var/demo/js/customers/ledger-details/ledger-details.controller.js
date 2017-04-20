@@ -15,7 +15,7 @@ function ledgerDetailsController($scope, $state, $attrs, $filter, $modal, $timeo
     vm.uiState = {loading: true};
 
     vm.backToCustomers = backToCustomers;
-    
+
     vm.parseValueToFloat = parseValueToFloat;
     vm.parseValueToDate = parseValueToDate;
     vm.viewInventoryDetails = viewInventoryDetails;
@@ -52,7 +52,7 @@ function ledgerDetailsController($scope, $state, $attrs, $filter, $modal, $timeo
                     vm.uiState.loading = false;
                 }, true);
             }
-            
+
         })
     }
 
@@ -78,6 +78,8 @@ function ledgerDetailsController($scope, $state, $attrs, $filter, $modal, $timeo
             })
 
             if(invoiceDetails && invoiceDetails.length){
+                ledger.lineItems = invoiceDetails.length;
+
                 _.each(invoiceDetails, function(order){
                     _sum+= parseFloat(order.INV1_LineTotal)
                 })
@@ -85,7 +87,7 @@ function ledgerDetailsController($scope, $state, $attrs, $filter, $modal, $timeo
         }
         return _sum;
     }
-    
+
     function parseValueToFloat(value){
         if(value){
             return parseFloat(value);
