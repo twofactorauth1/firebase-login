@@ -266,6 +266,10 @@ module.exports = {
 
             if(creds && creds.accessToken) {
                 accessToken = creds.accessToken;
+            } else {
+                var charges = {"object":"list","data":[],"has_more":false,"url":"/v1/charges","totalrevenue":0};
+                self.log.debug(accountId, userId, '<< listChargesForAccount (no Stripe)');
+                return fn(null, charges);
             }
         }
 
