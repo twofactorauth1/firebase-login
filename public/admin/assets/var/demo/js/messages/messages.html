@@ -8,7 +8,7 @@
         </div>
     </section>
     <div>
-        <div class="container-fluid container-fullw bg-white padding-top-10 padding-bottom-10" ng-if="(!vm.state.messages || vm.state.messages.length <= 0 )&& !vm.uiState.loading">
+        <div class="container-fluid container-fullw bg-white padding-top-10 padding-bottom-10" ng-if="!vm.uiState.loading">
             <div class="form-group margin-bottom-0 pull-right">
                 <button ng-disabled="vm.uiState.saveLoading" type="button" class="btn btn-warning btn-wide btn-scroll btn-scroll-top ti ti-plus" ng-click="vm.editMessage()">
                     <span>Add New Message</span>
@@ -24,7 +24,7 @@
             <div ng-if="vm.uiState.loading">                
                 <h4 class="text-center margin-top-30 margin-bottom-30">Loading Messages, Please wait....</h4>                
             </div>
-            <ul class="list-unstyled">                  
+            <ul class="list-unstyled broadcast-message-container-list">                  
                 <li ng-repeat="message in vm.state.messages">
                     <p class="message-title" ng-bind-html="message.message | unsafe"></p>                    
                     <div class="btn-group btn-group-sm" role="group" aria-label="Post Status">

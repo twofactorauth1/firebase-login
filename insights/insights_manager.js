@@ -145,6 +145,10 @@ var insightsManager = {
                     created:{
                         date:new Date(),
                         by:userId
+                    },
+                    modified:{
+                        date:new Date(),
+                        by:userId
                     }
                 });
                 broadcastMessageDao.saveOrUpdate(msg, function(err, value){
