@@ -88,11 +88,17 @@ table.grid {
 
 @media(min-width:768px) {
     table.grid tbody tr {
+        width: 48%!important;
+    }
+}
+
+@media(min-width:1175px) {
+    table.grid tbody tr {
         width: 32%!important;
     }
 }
 
-@media(min-width:992px) {
+@media(min-width:1700px) {
     table.grid tbody tr {
         width: 24%!important;
     }
@@ -103,7 +109,7 @@ table.grid {
     border: 0;
 }
 
-table.bg-white.table-list-view tbody{        
+table.bg-white.table-list-view tbody{
     tr:hover{
         td:first-child{
             border-left: #32CD32 4px solid
@@ -113,5 +119,5 @@ table.bg-white.table-list-view tbody{
         td:first-child{
             border-left: transparent 4px solid;
         }
-    }        
+    }
 }

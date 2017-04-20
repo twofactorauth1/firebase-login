@@ -43,7 +43,7 @@
             </div>
 
             <div class="col-sm-4 col-xs-12 invoice-details-panel invoice-details-middle-panel">
-               
+
                 <div class="form-group">
                     <h4>Posted</h4>
 
@@ -64,10 +64,10 @@
                     </div>
                     <hr>
                 </div>
-                
+
             </div>
 
-            <div class="col-sm-4 col-xs-12 invoice-details-panel invoice-details-right-panel">
+            <div class="col-sm-4 col-xs-12 invoice-details-panel invoice-details-right-panel hidden">
                 <div class="form-group">
                     <h4>Memo</h4>
                     <ul class="notes panel-scroll" perfect-scrollbar wheel-propagation="false" suppress-scroll-x="true">
@@ -96,7 +96,7 @@
                     <thead ng-class="{'bg-white': tableView == 'grid'}">
                         <tr>
                             <th>Item</th>
-                            
+
                             <th colspan="2">Item Description</th>
                             <th>Qty</th>
                             <th>Unit Price</th>
@@ -114,7 +114,7 @@
                     <tbody>
                         <tr ng-repeat="order in vm.displayedOrders" class="product-item">
                             <td><strong>Code: </strong>{{order.INV1_ItemCode}}</td>
-                            
+
                             <td><strong>Item: </strong><span class="list-name"></span><span ng-text-truncate="order.INV1_Dscription" ng-tt-chars-threshold="25" ng-tt-no-toggling></span></td>
                             <td><strong>Description: </strong><span class="list-name"></span><span ng-text-truncate="order.INV1_U_dscription" ng-tt-chars-threshold="30" ng-tt-no-toggling title="{{order.INV1_U_dscription}}"></span></td>
                             <td><strong>Qty: </strong>{{vm.parseValueToFloat(order.INV1_Quantity)}}</td>
