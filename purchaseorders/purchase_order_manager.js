@@ -26,7 +26,6 @@ var accountDao = require('../dao/account.dao');
 module.exports = {
 	
     listPurchaseOrders: function (accountId, userId, fn) {
-        var userId = null;
         log.debug(accountId, userId, '>> listPurchaseOrders');
 
         async.waterfall([
