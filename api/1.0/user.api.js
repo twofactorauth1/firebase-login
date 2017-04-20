@@ -988,7 +988,7 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug(accountId, userId, '>> updateUserPermissions');
         var roleAry = req.body.roleAry;
         var targetUserId = req.params.id;
-        
+
         self.isAdmin(req, function(err, isAdmin){
             self.isOrgAdminUser(accountId, userId, req, function(err, isOrgAdminUser){
                 if(isAdmin === true || isOrgAdminUser === true) {
@@ -1000,7 +1000,7 @@ _.extend(api.prototype, baseApi.prototype, {
                             user.setPermissionsForAccount(accountId, roleAry);
                             userDao.saveOrUpdate(user, function(err, savedUser){
                                 self.log.debug(accountId, userId, '<< updateUserPermissions');
-                                self.sendResultOrError(resp, err, savedUser, 'Error updating user');
+                                self.sendResultOrError(resp, err, savedUser.toJSON('manage', {accountId:accountId}), 'Error updating user');
                             });
                         }
                     });
