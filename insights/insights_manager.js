@@ -52,15 +52,24 @@ var insightsManager = {
         var self = this;
         self.log.debug(accountId, userId, '>> listBroadcastMessages');
         var query = {accountId:accountId};
-        broadcastMessageDao.findMany(query, $$.m.BroadcastMessage, function(err, list){
+        accountDao.getAccountByID(accountId, function(err, account){
             if(err) {
                 self.log.error(accountId, userId, 'Error listing messages:', err);
                 return fn(err);
             } else {
-                self.log.debug(accountId, userId, '<< listBroadcastMessages');
-                return fn(null, list);
+                query.orgId = account.get('orgId') || 0;
+                broadcastMessageDao.findMany(query, $$.m.BroadcastMessage, function(err, list){
+                    if(err) {
+                        self.log.error(accountId, userId, 'Error listing messages:', err);
+                        return fn(err);
+                    } else {
+                        self.log.debug(accountId, userId, '<< listBroadcastMessages');
+                        return fn(null, list);
+                    }
+                });
             }
         });
+
     },
 
     getActiveBroadcastMessages:function(accountId, userId, fn){
@@ -73,16 +82,88 @@ var insightsManager = {
             accountId: {$gte:0}
         };
 
-        console.log(query);
-        broadcastMessageDao.findMany(query, $$.m.BroadcastMessage, function(err, list){
+        accountDao.getAccountByID(accountId, function(err, account){
             if(err) {
                 self.log.error(accountId, userId, 'Error finding active messages:', err);
                 return fn(err);
             } else {
-                self.log.debug(accountId, userId, '<< getActiveBroadcastMessages');
-                return fn(null, list);
+                query.orgId = account.get('orgId') || 0;
+                broadcastMessageDao.findMany(query, $$.m.BroadcastMessage, function(err, list){
+                    if(err) {
+                        self.log.error(accountId, userId, 'Error finding active messages:', err);
+                        return fn(err);
+                    } else {
+                        self.log.debug(accountId, userId, '<< getActiveBroadcastMessages');
+                        return fn(null, list);
+                    }
+                });
             }
         });
+
+    },
+
+
+
+    getActiveBroadcastMessagesWithUser:function(accountId, userId, fn){
+        var self = this;
+        self.log.debug(accountId, userId, '>> getActiveBroadcastMessagesWithUser');
+        var now = moment().toDate();
+        var query = {
+            startDate : {$lte:now},
+            endDate : {$gte:now},
+            accountId: {$gte:0}
+        };
+
+        accountDao.getAccountByID(accountId, function(err, account){
+            if(err) {
+                self.log.error(accountId, userId, 'Error finding active messages:', err);
+                return fn(err);
+            } else {
+                query.orgId = account.get('orgId') || 0;
+                broadcastMessageDao.findMany(query, $$.m.BroadcastMessage, function(err, list){
+                    if(err) {
+                        self.log.error(accountId, userId, 'Error finding active messages:', err);
+                        return fn(err);
+                    } else {
+                        self.log.debug(accountId, userId, '<< getActiveBroadcastMessagesWithUser');
+                        
+                        async.each(list, function (message, cb) {
+                            if(message.get("modified") && message.get("modified").by){
+                                userDao.getById(message.get("modified").by, function (err, user) {
+                                    if (err) {
+                                        log.error(accountId, userId, 'Error getting user: ' + err);
+                                        cb(err);
+                                    } else {
+                                        var _user = {
+                                            _id: user.get("_id"),
+                                            username: user.get("username"),
+                                            first: user.get("first"),
+                                            last: user.get("last"),
+                                            profilePhotos: user.get("profilePhotos")
+                                        };
+                                        message.set("user", _user);
+                                        cb();
+                                    }
+                                });
+                            }
+                            else{
+                                cb();
+                            }
+                            
+                        }, function (err) {
+                            if (err) {
+                                log.error(accountId, userId, 'Error finding active message users: ' + err);
+                                return fn(err, null);
+                            } else {
+                                log.debug('<< getActiveBroadcastMessagesWithUser');
+                                return fn(null, list);
+                            }
+                        });
+                    }
+                });
+            }
+        });
+
     },
 
     updateBroadcastMessage:function(accountId, userId, broadcastMessage, fn){
@@ -101,7 +182,7 @@ var insightsManager = {
         });
     },
 
-    createBroadcastMessage:function(accountId, userId, message, startDate, endDate, fn){
+    createBroadcastMessage:function(accountId, userId, message, subject, startDate, endDate, fn){
         var self = this;
         self.log.debug(accountId, userId, '>> createBroadcastMessage');
 
@@ -112,26 +193,40 @@ var insightsManager = {
         // if(!moment().isDate(endDate)) {
         //     return fn('endDate parameter must be a date!');
         // }
-
-        var msg = new $$.m.BroadcastMessage({
-            accountId:accountId,
-            message:message,
-            startDate:startDate,
-            endDate:endDate,
-            created:{
-                date:new Date(),
-                by:userId
-            }
-        });
-        broadcastMessageDao.saveOrUpdate(msg, function(err, value){
+        accountDao.getAccountByID(accountId, function(err, account){
             if(err) {
                 self.log.error(accountId, userId, 'Error creating message:', err);
                 return fn(err);
             } else {
-                self.log.debug(accountId, userId, '<< createBroadcastMessage');
-                return fn(null, value);
+                var orgId = account.get('orgId') || 0;
+                var msg = new $$.m.BroadcastMessage({
+                    accountId:accountId,
+                    message:message,
+                    subject: subject,
+                    startDate:startDate,
+                    endDate:endDate,
+                    orgId:orgId,
+                    created:{
+                        date:new Date(),
+                        by:userId
+                    },
+                    modified:{
+                        date:new Date(),
+                        by:userId
+                    }
+                });
+                broadcastMessageDao.saveOrUpdate(msg, function(err, value){
+                    if(err) {
+                        self.log.error(accountId, userId, 'Error creating message:', err);
+                        return fn(err);
+                    } else {
+                        self.log.debug(accountId, userId, '<< createBroadcastMessage');
+                        return fn(null, value);
+                    }
+                });
             }
         });
+
 
     },
 
@@ -973,7 +1068,8 @@ var insightsManager = {
         var query = {
             //startDate : {$lte:now},
             //endDate : {$gte:now},
-            accountId: {$gte:0}
+            accountId: {$gte:0},
+            orgId: account.get("orgId") || 0
         };
         broadcastMessageDao.findMany(query, $$.m.BroadcastMessage, function(err, list){
             if(err) {

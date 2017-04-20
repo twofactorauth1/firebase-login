@@ -1,8 +1,9 @@
 'use strict';
 /*global app, Papa*/
-app.controller('importContactModalCtrl', ['$scope', '$location', '$timeout', '$modalInstance', 'FileUploader', 'editableOptions', 'ContactService', 'userConstant', 'SocialConfigService', 'getContacts', 'contactConstant', 'toaster', function ($scope, $location, $timeout, $modalInstance, FileUploader, editableOptions, ContactService, userConstant, SocialConfigService, getContacts, contactConstant, toaster) {
-
+app.controller('importContactModalCtrl', ['$scope', '$location', '$timeout', '$modalInstance', 'FileUploader', 'editableOptions', 'ContactService', 'userConstant', 'SocialConfigService', 'getContacts', 'contactConstant', 'toaster','$filter', function ($scope, $location, $timeout, $modalInstance, FileUploader, editableOptions, ContactService, userConstant, SocialConfigService, getContacts, contactConstant, toaster,$filter) {
+  $scope.counter=0;
   $scope.getContacts = getContacts;
+  
   /*
    * @editableOptions
    * - editable options for xeditable in preview contacts
@@ -303,20 +304,79 @@ app.controller('importContactModalCtrl', ['$scope', '$location', '$timeout', '$m
     match: '',
     known: ['address 1 - postal code', 'zip', 'zip code', 'postal code', 'business postal code'],
     errorRows: []
-  },{
-    name: 'Custom',
-    value: 'custom',
-    match: '',
-    known: ['custom', 'extra', 'additional'],
-    errorRows: []
   }
+  //,{
+  //   name: 'Custom',
+  //   value: 'custom',
+  //   match: '',
+  //   known: ['custom', 'extra', 'additional'],
+  //   errorRows: []
+  // }
   ];
 
   /*
    * @guessHeaders
    * - on upload match fields automatically based on known variations
    */
+   var blankFormattedContact = {
+    first: '',
+    middle: '',
+    last: '',
+    birthday: '',
+    gender: '',
+    details: [{
+      _id: Math.uuid(8),
+      source: "csv",
+      location: "",
+      emails: [],
+      photos: {
+        square: "",
+        small: "",
+        medium: "",
+        large: ""
+      },
+      websites: [],
+      company: "",
+      phones: [],
+      addresses: [{
+        _id: Math.uuid(8),
+        type: "w",
+        address: '',
+        address2: '',
+        city: '',
+        state: '',
+        zip: '',
+        country: '',
+        countryCode: '',
+        displayName: '',
+        lat: "",
+        lon: "",
+        defaultShipping: false,
+        defaultBilling: false
+      }],
+      
+    }],
+    extra:[]
+   
+  };
 
+  $scope.addmorefields = function(){
+   
+    var newcolumns=
+                {
+                name: 'Custom'+$scope.counter,
+                value: ' ',
+                label: 'Custom'+$scope.counter,
+
+                match: '',
+                flag: 'custom',
+                known: ['custom', 'extra', 'additional'],
+                errorRows: []
+                };
+  $scope.contactColumns.push(newcolumns);
+  $scope.counter++;
+
+    };
   $scope.guessHeaders = function (fn) {
     _.each($scope.contactColumns, function (_column) {
       var bestMatch = {
@@ -346,7 +406,7 @@ app.controller('importContactModalCtrl', ['$scope', '$location', '$timeout', '$m
     });
     $scope.updatePreview();
 
-    if (fn) {
+     if (fn) {
       fn();
     }
   };
@@ -459,7 +519,22 @@ app.controller('importContactModalCtrl', ['$scope', '$location', '$timeout', '$m
    */
 
   $scope.updatePreview = function (selected) {
+    if(selected!=undefined)
+    {
+    if(selected.name!=undefined)
+    {
+    var currentobj = $filter('filter')($scope.contactColumns, {'flag': 'Custom','name':selected.name})[0];
+      currentobj.value=selected.match;
     
+
+    }
+    }
+  var customfields = $filter('filter')($scope.contactColumns, {'flag': 'Custom'});
+  blankFormattedContact.extra = [];
+  for(var k=0;k<customfields.length;k++)
+  {
+  blankFormattedContact.extra.push(customfields[k]);
+  }
     var column = angular.copy(selected);
     if (selected && !selected.match) {
       selected.index = null;
@@ -476,11 +551,32 @@ app.controller('importContactModalCtrl', ['$scope', '$location', '$timeout', '$m
     else{
       _.each($scope.contactColumns, function (_column) {
       _colVal = _column.value;
+       //blankFormattedContact.custom
       _formatIndex = _formattedColumns[_colVal].index;
       if(angular.isDefined(_formatIndex) && _formatIndex !== null)
         $scope.previewContact[_colVal] = angular.copy($scope.csvResults[$scope.currentRow][_formatIndex]);
+      if(blankFormattedContact.extra!=undefined)
+      {
+      for(var j=0;j< blankFormattedContact.extra.length;j++)
+      { 
+        if(blankFormattedContact.extra[j]!=undefined)
+        {
+        if(blankFormattedContact.extra[j].match==_colVal)
+        {
+          blankFormattedContact.extra[j].value =  $scope.previewContact[_colVal];
+        }
+      }
+      }
+      } 
     });
+      
+     
     }
+      
+      
+ 
+
+
     
   };
 
@@ -526,45 +622,7 @@ app.controller('importContactModalCtrl', ['$scope', '$location', '$timeout', '$m
    * - black formatted contact object for uploading
    */
 
-  var blankFormattedContact = {
-    first: '',
-    middle: '',
-    last: '',
-    birthday: '',
-    gender: '',
-    details: [{
-      _id: Math.uuid(8),
-      source: "csv",
-      location: "",
-      emails: [],
-      photos: {
-        square: "",
-        small: "",
-        medium: "",
-        large: ""
-      },
-      websites: [],
-      company: "",
-      phones: [],
-      addresses: [{
-        _id: Math.uuid(8),
-        type: "w",
-        address: '',
-        address2: '',
-        city: '',
-        state: '',
-        zip: '',
-        country: '',
-        countryCode: '',
-        displayName: '',
-        lat: "",
-        lon: "",
-        defaultShipping: false,
-        defaultBilling: false
-      }],
-      custom: ''
-    }]
-  };
+  
 
   /*
    * @uploadMatchedCSV

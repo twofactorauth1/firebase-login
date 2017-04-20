@@ -38,7 +38,7 @@ _.extend(api.prototype, baseApi.prototype, {
         var self = this;
         var accountId = parseInt(self.accountId(req));
         var userId = self.userId(req);
-        self.log.debug(accountId, userId, '<< listPurchaseOrders');
+        self.log.debug(accountId, userId, '>> listPurchaseOrders');
 
         poManager.listPurchaseOrders(accountId, userId, function(err, list){
             self.log.debug(accountId, userId, '<< listPurchaseOrders');

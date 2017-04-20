@@ -118,14 +118,15 @@
 
         $scope.openEditUserCardModal = function(userId) {
             $scope.currentUserId = userId;
+            $scope.editUser = _.find(vm.state.users, function(user){
+                return user._id == userId
+            })
             vm.openSimpleModal('edit-user-card-modal');
         };
         $scope.closeUserCardModal = function() {
             $scope.currentUserId = null;
             $scope.closeModal();
         };
-
-
 
         $scope.updateUser = function(isAdmin){
             console.log($scope.edituser);

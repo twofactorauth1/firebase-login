@@ -1,0 +1,82 @@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.12.0/codemirror.min.css">
+<div ng-controller="broadcastMessageEditorCtrl as vm">
+	<div class="ssb-topbar message-topbar">
+		<div class="ssb-topbar-inner">		    
+
+		    <div id="ssb-froala-scrollable-container"></div>
+
+		    <div class="pull-right text-right">
+
+		        <div		            
+		            class="close-panel fa fa-2x fa-arrow-left"
+		            ng-click="vm.backToMessages()"
+		            tooltip-placement="bottom"
+		            tooltip-append-to-body="true"
+		            tooltip="Back to messages">
+		        </div>
+
+		    </div>
+
+		</div>
+	</div>
+	<div class="broadcast-message-editor-container">
+		
+		<div class="broadcast-message-editor-scrollable-container row" ng-if="vm.state.message">
+
+
+
+		    <div class="broadcast-message-editor" >
+		    	<input autocomplete="false" type="text" class="broadcast-message-editor-title" ng-model="vm.state.message.subject" placeholder="Subject " />
+		        <p
+		            class=""
+		            elem
+		            broadcast-message-editor="true"
+		            ng-model="vm.state.message.message"
+		            placeholder="Type your message here..." stop-event="touchend">
+		        </p>
+
+		    </div>
+
+		    <div class="broadcast-message-editor-controls">
+
+		        <div class="broadcast-message-editor-controls-inner">
+		            <div class="broadcast-message-editor-controls-inner-fixed">
+
+		                <div class="btn-group btn-group-md row block clearfix" role="group" aria-label="Post Status">
+
+		                    <button
+		                        ng-disabled="vm.uiState.saveLoading || !vm.state.message.message"
+		                        class="btn btn-primary"
+		                        ng-click="vm.saveMessage()"
+		                        tooltip-placement="top"
+		                        tooltip-append-to-body="true"
+		                        tooltip="Save">
+
+		                        <i ng-if="!vm.uiState.saveLoading" class="fa fa-save"></i>
+		                        <span ng-if="!vm.uiState.saveLoading" class="sr-only">Save</span>
+		                        <span ng-hide="!vm.uiState.saveLoading" ng-if="vm.uiState.saveLoading"><i class="fa fa-spinner fa-spin"></i></span>
+		                        <span ng-if="vm.uiState.saveLoading" class="sr-only">Saving</span>
+
+		                    </button>
+
+
+		                </div>
+
+		                <div class="row block broadcast-message-editor-controls-date">
+		                <label>Start Date:</label>
+		                    <indi-datepicker ng-model="vm.state.message.startDate" popup="MM/dd/yyyy"></indi-datepicker>
+		                </div>
+
+		                <div class="row block broadcast-message-editor-controls-date">
+		                <label>End Date:</label>
+		                    <indi-datepicker ng-model="vm.state.message.endDate" popup="MM/dd/yyyy"></indi-datepicker>
+		                </div>
+		            </div>
+
+		        </div>
+
+		    </div>
+
+		</div>
+	</div>	
+</div>

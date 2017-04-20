@@ -713,8 +713,8 @@ app.constant('JS_REQUIRES', {
     'editTopicCtrl': 'assets/js/controllers/editTopicCtrl.js',
     'singleCustomerAnalyticsCtrl': 'assets/js/controllers/singleCustomerAnalyticsCtrl.js',
     
-    'MessagesCtrl': 'assets/js/messages/messages.controller.js',
-    'BroadcastMessageEditorCtrl': 'assets/js/messages/broadcast-message-editor/broadcast-message-editor.controller.js',
+    'MessagesCtrl': 'assets/var/demo/js/messages/messages.controller.js',
+    'BroadcastMessageEditorCtrl': 'assets/var/demo/js/messages/broadcast-message-editor/broadcast-message-editor.controller.js',
 
     //*** Services
     'accountService': 'assets/js/services/account.js',
@@ -742,6 +742,7 @@ app.constant('JS_REQUIRES', {
     'siteAnalyticsService': 'assets/js/site-analytics/site-analytics.service.js',
     'analyticsWidgetStateService': 'assets/js/site-analytics/analytics-widget-state-service.js',
     'broadcastMessagesService': 'assets/js/messages/messages.service.js',
+    'utilService': 'assets/js/services/util.js',
     //*** Filters
     'htmlToPlaintext': 'assets/js/filters/htmlToPlaintext.js',
     'secTotime': 'assets/js/filters/secTotime.js',

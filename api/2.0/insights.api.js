@@ -37,6 +37,7 @@ _.extend(api.prototype, baseApi.prototype, {
         //broadcast messages
         app.get(this.url('messages'), this.isAuthAndSubscribedApi.bind(this), this.listBroadcastMessages.bind(this));
         app.get(this.url('messages/active'), this.isAuthAndSubscribedApi.bind(this), this.getActiveBroadcastMessages.bind(this));
+        app.get(this.url('messages/messageswithuser'), this.isAuthAndSubscribedApi.bind(this), this.getActiveBroadcastMessagesWithUser.bind(this));
         app.post(this.url('messages'), this.isAuthAndSubscribedApi.bind(this), this.createBroadcastMessage.bind(this));
         app.post(this.url('messages/:id'), this.isAuthAndSubscribedApi.bind(this), this.updateBroadcastMessage.bind(this));
         app.del(this.url('messages/:id'), this.isAuthAndSubscribedApi.bind(this), this.removeBroadcastMessage.bind(this));
@@ -184,6 +185,20 @@ _.extend(api.prototype, baseApi.prototype, {
         });
     },
 
+    getActiveBroadcastMessagesWithUser: function(req, resp){
+        var self = this;
+        var accountId = parseInt(self.accountId(req));
+        var userId = self.userId(req);
+        self.log.debug(accountId, userId, '>> getActiveBroadcastMessagesWithUser');
+
+        manager.getActiveBroadcastMessagesWithUser(accountId, userId, function(err, value){
+            self.log.debug(accountId, userId, '<< getActiveBroadcastMessagesWithUser');
+            self.sendResultOrError(resp, err, value, 'Could not get active messages');
+        });
+    },
+
+
+
     createBroadcastMessage: function(req, resp){
         var self = this;
         var accountId = parseInt(self.accountId(req));
@@ -193,14 +208,19 @@ _.extend(api.prototype, baseApi.prototype, {
         var message = req.body.message;
         var startDate = null;
         var endDate = null;
+        var subject = null;
         if(req.body.startDate){
             startDate = moment(req.body.startDate).toDate();
         }
-        if(req.body.startDate){
+        if(req.body.endDate){
             endDate = moment(req.body.endDate).toDate();
         }
 
-        manager.createBroadcastMessage(accountId, userId, message, startDate, endDate, function(err, value){
+        if(req.body.subject){
+            subject = req.body.subject;
+        }
+
+        manager.createBroadcastMessage(accountId, userId, message, subject, startDate, endDate, function(err, value){
             self.log.debug(accountId, userId, '<< createBroadcastMessage');
             self.sendResultOrError(resp, err, value, 'Could not create message');
         });
