@@ -1,4 +1,4 @@
-<section class="inbox-widget-container">
+<section class="inbox-widget-container" ng-show="vm.inboxMessages">
     <tabset class="tabbable tabs-left margin-bottom-0">
         <tab>
             <tab-heading>
@@ -8,14 +8,14 @@
 
             <div class="col-sm-5 message-container message-container-left">
                 <ul class="message-container-top">
-                    <li ng-class="{'active-message': vm.selectedMessageIndex === $index}" ng-repeat="message in vm.inboxMessages" ng-click="vm.setSelectedMessage($index)">
+                    <li ng-class="{'active-message': vm.selectedMessageIndex === $index}" ng-repeat="message in vm.inboxMessages | orderBy:'-modified.date'" ng-click="vm.setSelectedMessage($index)">
                     <div>
                         <div class="margin-bottom-5 margin-top-5">
-                            <span class="message-title">{{message.title}}</span>
-                            <span class="message-date" >{{message.messageDate}}</span>
+                            <span class="message-title">{{message.subject}}</span>
+                            <span class="message-date" >{{message.modified.date | date:'dd MMM yyyy'}}</span>
                         </div>
 
-                        <p ng-text-truncate="message.description" ng-tt-chars-threshold="100" ng-tt-no-toggling></p>
+                        <p ng-text-truncate="message.message" ng-tt-chars-threshold="100" ng-tt-no-toggling></p>
                     </div>
                     </li>
                 </ul>
@@ -28,8 +28,8 @@
                         </div>
                         <div>
                             <div class="margin-bottom-5">
-                                <h3 class="message-title margin-top-5 margin-bottom-5">{{vm.selectedMessage.userName}}</h3>
-                                <span class="message-date">{{vm.selectedMessage.detailedTime}}</span>
+                                <h3 class="message-title margin-top-5 margin-bottom-5">{{vm.selectedMessage.userName || '&nbsp;'}}</h3>
+                                <span class="message-date">{{vm.selectedMessage.modified.date | date:'dd MMM yyyy'}}</span>
                             </div>
 
                         </div>
@@ -38,9 +38,9 @@
 
                 <div class="clearfix"></div>
                 <div class="col-xs-12 margin-top-20">
-                    <h4 class="message-title">{{vm.selectedMessage.title}}</h4>
+                    <h4 class="message-title">{{vm.selectedMessage.subject}}</h4>
                     <hr>
-                    <p>{{vm.selectedMessage.description}}</p>
+                    <p class="message-title" ng-bind-html="vm.selectedMessage.message | unsafe"></p>   
                 </div>
             </div>
 

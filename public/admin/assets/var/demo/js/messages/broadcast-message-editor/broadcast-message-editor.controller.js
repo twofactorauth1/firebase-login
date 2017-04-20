@@ -77,8 +77,7 @@
                 vm.state.message = _.find(messages, function(message){
                     return message._id == $stateParams.id
                 })    
-            }
-            
+            }            
           }
         }, true);
 

@@ -267,7 +267,7 @@
             };
             //dashboardService.getWorkstreams();
             dashboardService.getAccount();
-            //dashboardService.getActiveMessages();
+            dashboardService.getActiveMessages();
             if (away) {
                 console.log(away);
             }
