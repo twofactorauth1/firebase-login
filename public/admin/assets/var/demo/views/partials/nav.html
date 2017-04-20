@@ -162,6 +162,25 @@
 			</li>
 		</ul>
 	</li>
+    <li ng-class="{'active open':$state.includes('app.customers')}" ng-if="account.subdomain == 'smaticsdemo'">
+        <a href="javascript:void(0)">
+            <div class="item-content">
+                <div class="item-media">
+                    <i class="ti-panel"></i>
+                </div>
+                <div class="item-inner">
+                    <span class="title" translate="sidebar.nav.customers.MAIN"> Platform </span>
+                </div>
+            </div>
+        </a>
+        <ul class="sub-menu">
+            <li ui-sref-active="active">
+                <a ui-sref="app.broadcastmessage">
+                    <span class="title" translate="sidebar.nav.customers.BROADCAST"> Broadcast Message </span>
+                </a>
+            </li>
+        </ul>
+    </li>
 </ul>
 <div class="wrapper ng-scope" ng-if="account.billing.plan==='NO_PLAN_ARGUMENT'" class="hidden">
     <!--accountConstant.plan_types.TRIAL-->
