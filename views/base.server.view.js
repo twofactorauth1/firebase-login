@@ -9,7 +9,7 @@ require('../utils/jadehelpers');
 var url = require('url');
 var accountDao = require('../dao/account.dao');
 var constants = requirejs("constants/constants");
-
+var orgManager = require('../organizations/organization_manager');
 
 var baseView = function(req,resp,options) {
     this.init.apply(this, arguments);
@@ -136,6 +136,10 @@ _.extend(baseView.prototype, {
 
     getAccountByHost: function(req, fn) {
         accountDao.getAccountByHost(req.get("host"), fn);
+    },
+
+    getOrganizationByAccountId: function(accountId, fn) {
+        orgManager.getOrgByAccountId(accountId, null, fn);
     },
 
     ip: function(req) {

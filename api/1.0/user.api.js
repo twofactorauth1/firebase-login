@@ -118,7 +118,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         userDao.getById(user.id(), function(err, value) {
            if (!err && value) {
-               var json = value.toJSON("public");
+               var json = value.toJSON("manage", {accountId:self.accountId(req)});
                if(json && json.profilePhotos && json.profilePhotos[0] && json.profilePhotos[0].url) {
                    json.profilePhotos[0] = json.profilePhotos[0].url;
                }

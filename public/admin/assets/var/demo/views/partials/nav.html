@@ -162,7 +162,7 @@
 			</li>
 		</ul>
 	</li>
-    <li ng-class="{'active open':$state.includes('app.broadcastmessage') || $state.includes('app.singlebroadcastmessage')}" ng-if="account.subdomain == 'smaticsdemo'">
+    <li ng-class="{'active open':$state.includes('app.broadcastmessage') || $state.includes('app.singlebroadcastmessage')}" ng-if="account.isOrgAdmin == true">
         <a href="javascript:void(0)">
             <div class="item-content">
                 <div class="item-media">
