@@ -52,15 +52,24 @@ var insightsManager = {
         var self = this;
         self.log.debug(accountId, userId, '>> listBroadcastMessages');
         var query = {accountId:accountId};
-        broadcastMessageDao.findMany(query, $$.m.BroadcastMessage, function(err, list){
+        accountDao.getAccountByID(accountId, function(err, account){
             if(err) {
                 self.log.error(accountId, userId, 'Error listing messages:', err);
                 return fn(err);
             } else {
-                self.log.debug(accountId, userId, '<< listBroadcastMessages');
-                return fn(null, list);
+                query.orgId = account.get('orgId') || 0;
+                broadcastMessageDao.findMany(query, $$.m.BroadcastMessage, function(err, list){
+                    if(err) {
+                        self.log.error(accountId, userId, 'Error listing messages:', err);
+                        return fn(err);
+                    } else {
+                        self.log.debug(accountId, userId, '<< listBroadcastMessages');
+                        return fn(null, list);
+                    }
+                });
             }
         });
+
     },
 
     getActiveBroadcastMessages:function(accountId, userId, fn){
@@ -73,16 +82,24 @@ var insightsManager = {
             accountId: {$gte:0}
         };
 
-        console.log(query);
-        broadcastMessageDao.findMany(query, $$.m.BroadcastMessage, function(err, list){
+        accountDao.getAccountByID(accountId, function(err, account){
             if(err) {
                 self.log.error(accountId, userId, 'Error finding active messages:', err);
                 return fn(err);
             } else {
-                self.log.debug(accountId, userId, '<< getActiveBroadcastMessages');
-                return fn(null, list);
+                query.orgId = account.get('orgId') || 0;
+                broadcastMessageDao.findMany(query, $$.m.BroadcastMessage, function(err, list){
+                    if(err) {
+                        self.log.error(accountId, userId, 'Error finding active messages:', err);
+                        return fn(err);
+                    } else {
+                        self.log.debug(accountId, userId, '<< getActiveBroadcastMessages');
+                        return fn(null, list);
+                    }
+                });
             }
         });
+
     },
 
     updateBroadcastMessage:function(accountId, userId, broadcastMessage, fn){
@@ -112,26 +129,35 @@ var insightsManager = {
         // if(!moment().isDate(endDate)) {
         //     return fn('endDate parameter must be a date!');
         // }
-
-        var msg = new $$.m.BroadcastMessage({
-            accountId:accountId,
-            message:message,
-            startDate:startDate,
-            endDate:endDate,
-            created:{
-                date:new Date(),
-                by:userId
-            }
-        });
-        broadcastMessageDao.saveOrUpdate(msg, function(err, value){
+        accountDao.getAccountByID(accountId, function(err, account){
             if(err) {
                 self.log.error(accountId, userId, 'Error creating message:', err);
                 return fn(err);
             } else {
-                self.log.debug(accountId, userId, '<< createBroadcastMessage');
-                return fn(null, value);
+                var orgId = account.get('orgId') || 0;
+                var msg = new $$.m.BroadcastMessage({
+                    accountId:accountId,
+                    message:message,
+                    startDate:startDate,
+                    endDate:endDate,
+                    orgId:orgId,
+                    created:{
+                        date:new Date(),
+                        by:userId
+                    }
+                });
+                broadcastMessageDao.saveOrUpdate(msg, function(err, value){
+                    if(err) {
+                        self.log.error(accountId, userId, 'Error creating message:', err);
+                        return fn(err);
+                    } else {
+                        self.log.debug(accountId, userId, '<< createBroadcastMessage');
+                        return fn(null, value);
+                    }
+                });
             }
         });
+
 
     },
 

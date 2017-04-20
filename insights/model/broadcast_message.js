@@ -13,6 +13,7 @@ var broadcastMessage = $$.m.ModelBase.extend({
         return {
             "_id" : null,
             "accountId": 0,
+            orgId:0,
             message:'',
             startDate:null,
             endDate:null,
