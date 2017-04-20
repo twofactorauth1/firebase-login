@@ -267,7 +267,7 @@
             };
             //dashboardService.getWorkstreams();
             dashboardService.getAccount();
-            //dashboardService.getActiveMessages();
+            dashboardService.getActiveMessages();
             if (away) {
                 console.log(away);
             }
@@ -285,7 +285,7 @@
                 console.error('dashRequest getActiveMessages error: ', JSON.stringify(error));
             }
 
-            return dashRequest($http.get(baseBroadcastMessagesAPIUrl + "active").success(success).error(error));
+            return dashRequest($http.get(baseBroadcastMessagesAPIUrl + "messageswithuser").success(success).error(error));
 
         }
 

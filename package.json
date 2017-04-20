@@ -24,6 +24,7 @@
     "eslint": "^3.0.1",
     "eslint-config-google": "^0.6.0",
     "express": "3.4.8",
+    "express-basic-auth": "^1.0.1",
     "express-uncapitalize": "^1.0.0",
     "express3-handlebars": "~0.5.0",
     "fast-csv": "^0.5.1",
@@ -43,9 +44,9 @@
     "log4js": ">=0.6.10",
     "mandrill-api": "^1.0.39",
     "maxmind": "^1.1.0",
-    "mongodb":"2.2.22",
     "moment": "2.6.0",
     "moment-timezone": "~0.5.0",
+    "mongodb": "2.2.22",
     "mongoskin": "2.1.0",
     "newrelic": "^1.14.1",
     "nice-route53": "^1.0.3",
@@ -83,9 +84,9 @@
     "ua-parser-js": "^0.7.3",
     "underscore": ">=1.6.0",
     "validate.js": "^0.5.0",
+    "webshot": "0.18.0",
     "wiredep": "^1.8.6",
-    "xml2js": "^0.4.4",
-    "webshot": "0.18.0"
+    "xml2js": "^0.4.4"
   },
   "devDependencies": {
     "autoprefixer": "^6.3.6",

@@ -247,7 +247,7 @@ module.exports = {
      * @param callingUser
      * @param fn
      */
-    createUser: function(accountId, username, password, email, roleAry, callingUser, fn) {
+    createUser: function(accountId, username, password, email, roleAry, callingUser, params, fn) {
         var self = this;
         log.debug(accountId, callingUser, '>> createUser');
         username = username.toLowerCase();
@@ -270,16 +270,17 @@ module.exports = {
             },
             function stepOne(callback){
                 log.debug(accountId, callingUser, 'Creating user');
-                var user = new $$.m.User({
-                    username:username,
-                    email:email,
-                    created: {
-                        date: new Date().getTime(),
-                        strategy: $$.constants.user.credential_types.LOCAL,
-                        by: callingUser, //self-created
-                        isNew: true
-                    }
-                });
+                params = params || {};
+                params.username = username;
+                params.email = email;
+                params.created = {
+                    date: new Date().getTime(),
+                    strategy: $$.constants.user.credential_types.LOCAL,
+                    by: callingUser, //self-created
+                    isNew: true
+                };
+
+                var user = new $$.m.User(params);
                 user.encryptPasswordAsync(password, function(err, hash){
                     if(err) {
                         log.error(accountId, callingUser, 'Error encrypting password: ' + err);

@@ -10,6 +10,7 @@ var stripeDao = require('./dao/stripe.dao.js');
 var log = $$.g.getLogger("payments_manager");
 var paypalClient = require('./paypal/paypal.client');
 var async = require('async');
+var appConfig = require('../configs/app.config');
 
 module.exports = {
     createStripeCustomerForUser: function(cardToken, user, accountId, newAccountId, accessToken, fn) {
@@ -251,15 +252,28 @@ module.exports = {
         var accountId = account.id();
         self.log.debug(accountId, userId, '>> listChargesForAccount');
 
-        var customerId = account.get('billing').stripeCustomerId;
-        if(!customerId || customerId === '') {
-            self.log.error(accountId, userId, 'No stripe customerId found for account: ' + accountId);
-            return fn('No stripe customerId found');
-        }
         //if no limit is passed, assume 0
         var _limit = limit || 0;
+        var accessToken = null;
+        if(accountId !== appConfig.mainAccountID) {
+            var credentials = account.get('credentials');
+            var creds = null;
+            _.each(credentials, function (cred) {
+                if (cred.type === 'stripe') {
+                    creds = cred;
+                }
+            });
 
-        stripeDao.listStripeCharges(created, customerId, endingBefore, _limit, startingAfter, null, function(err, charges){
+            if(creds && creds.accessToken) {
+                accessToken = creds.accessToken;
+            } else {
+                var charges = {"object":"list","data":[],"has_more":false,"url":"/v1/charges","totalrevenue":0};
+                self.log.debug(accountId, userId, '<< listChargesForAccount (no Stripe)');
+                return fn(null, charges);
+            }
+        }
+
+        stripeDao.listStripeCharges(created, null, endingBefore, _limit, startingAfter, accessToken, function(err, charges){
             if(err) {
                 self.log.error(accountId, userId, 'Error listing charges:', err);
                 return fn(err);

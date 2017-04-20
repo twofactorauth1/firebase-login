@@ -1,15 +1,15 @@
 <section id="page-title" class="padding-top-15 padding-bottom-15">
     <div class="row">
         <div class="col-sm-8">
-            <h1 class="mainTitle">Customer Ledger</h1>
-            <span class="mainDescription">{{vm.invoice.row[0]._CustStatmentHdr_CardName || vm.listInvoice.OCRD_CardName}}</span>
+            <h1 class="mainTitle">Invoice Details</h1>
+            <span class="mainDescription">{{vm.invoiceDetails[0]._CustStatmentHdr_CardName}}</span>
         </div>
     </div>
 </section>
-<div st-table="vm.displayedOrders" st-safe-src="vm.invoice.row">
+<div st-table="vm.displayedOrders" st-safe-src="vm.invoiceDetails">
     <div class="invoice-top-buttons container-fluid container-fullw bg-white">
         <div class="col-xs-12 col-md-12 padding-right-30 margin-top-5">
-            <button type="button" class="btn btn-primary btn-o pull-right btn btn-primary btn-o margin-bottom-5 margin-left-5" ng-click="vm.backToInvoices()">
+            <button type="button" class="btn btn-primary btn-o pull-right btn btn-primary btn-o margin-bottom-5 margin-left-5" ng-click="vm.backToLedger()">
             Back to Ledger
             </button>
         </div>
@@ -19,72 +19,55 @@
         <div class="inner-invoice-details bg-white col-xs-12">
             <div class="col-sm-4 col-xs-12 invoice-details-panel invoice-details-left-panel">
                 <div class="form-group">
-                    <h4>Address</h4>
-
-                    <div class="description">
-                        <span>
-                            {{vm.invoice.row[0]._CustStatmentHdr_Address || vm.listInvoice.OCRD_Address}}
-                        </span>
-                    </div>
-                    <hr>
-                </div>
-
-                <div class="form-group">
                     <h4>Customer</h4>
 
                     <div class="description">
                         <span>
-                            {{vm.invoice.row[0]._CustStatmentHdr_CardCode || vm.listInvoice.OCRD_CardCode}}
+                            {{vm.invoiceDetails[0]._CustStatmentHdr_CardCode}}
                         </span>
                     </div>
                     <hr>
                 </div>
+
+                <div class="form-group">
+                    <h4>Invoice</h4>
+
+                    <div class="description">
+                        <span>
+                            {{vm.invoiceDetails[0]._CustStatmentDtl_TransId}}
+                        </span>
+                    </div>
+                    <hr>
+                </div>
+
             </div>
 
             <div class="col-sm-4 col-xs-12 invoice-details-panel invoice-details-middle-panel">
-                <div class="form-group hidden">
-                    <h4>Status</h4>
+
+                <div class="form-group">
+                    <h4>Posted</h4>
 
                     <div class="description">
                         <span>
-                            {{vm.invoice.invoiceStatus}}
+                            {{vm.parseValueToDate(vm.invoiceDetails[0]._CustStatmentDtl_RefDate) | date:'M/d/yyyy'}}
                         </span>
                     </div>
                     <hr>
                 </div>
                 <div class="form-group">
-                    <h4>City</h4>
+                    <h4>Due</h4>
 
                     <div class="description">
                         <span>
-                            {{vm.invoice.row[0]._CustStatmentHdr_City || vm.listInvoice.OCRD_City}}
+                            {{vm.parseValueToDate(vm.invoiceDetails[0]._CustStatmentDtl_DueDate) | date:'M/d/yyyy'}}
                         </span>
                     </div>
                     <hr>
                 </div>
-                <div class="form-group">
-                    <h4>State</h4>
 
-                    <div class="description">
-                        <span>
-                            {{vm.invoice.row[0]._CustStatmentHdr_State1 || vm.listInvoice.OCRD_State1}}
-                        </span>
-                    </div>
-                    <hr>
-                </div>
-                <div class="form-group">
-                    <h4>Zip</h4>
-
-                    <div class="description">
-                        <span>
-                            {{vm.invoice.row[0]._CustStatmentHdr_ZipCode || vm.listInvoice.OCRD_ZipCode}}
-                        </span>
-                    </div>
-                    <hr>
-                </div>
             </div>
 
-            <div class="col-sm-4 col-xs-12 invoice-details-panel invoice-details-right-panel">
+            <div class="col-sm-4 col-xs-12 invoice-details-panel invoice-details-right-panel hidden">
                 <div class="form-group">
                     <h4>Memo</h4>
                     <ul class="notes panel-scroll" perfect-scrollbar wheel-propagation="false" suppress-scroll-x="true">
@@ -113,8 +96,7 @@
                     <thead ng-class="{'bg-white': tableView == 'grid'}">
                         <tr>
                             <th>Item</th>
-                            <th>Posted</th>
-                            <th>Due</th>
+
                             <th colspan="2">Item Description</th>
                             <th>Qty</th>
                             <th>Unit Price</th>
@@ -132,24 +114,18 @@
                     <tbody>
                         <tr ng-repeat="order in vm.displayedOrders" class="product-item">
                             <td><strong>Code: </strong>{{order.INV1_ItemCode}}</td>
-                            <td><strong>Posted: </strong>{{vm.parseValueToDate(order._CustStatmentDtl_RefDate) | date:'M/d/yyyy'}}</td>
-                            <td><strong>Due: </strong>{{vm.parseValueToDate(order._CustStatmentDtl_DueDate) | date:'M/d/yyyy'}}</td>
+
                             <td><strong>Item: </strong><span class="list-name"></span><span ng-text-truncate="order.INV1_Dscription" ng-tt-chars-threshold="25" ng-tt-no-toggling></span></td>
                             <td><strong>Description: </strong><span class="list-name"></span><span ng-text-truncate="order.INV1_U_dscription" ng-tt-chars-threshold="30" ng-tt-no-toggling title="{{order.INV1_U_dscription}}"></span></td>
                             <td><strong>Qty: </strong>{{vm.parseValueToFloat(order.INV1_Quantity)}}</td>
-                            <td><strong>Unit Price: </strong>{{order.INV1_Price | currency : vm.invoice.row[0]._CustStatmentHdr_Currency}}</td>
-                            <td><strong>Line Total: </strong>{{order.INV1_LineTotal | currency : vm.invoice.row[0]._CustStatmentHdr_Currency}}</td>
+                            <td><strong>Unit Price: </strong>{{order.INV1_Price | currency : vm.invoiceDetails[0]._CustStatmentHdr_Currency}}</td>
+                            <td><strong>Line Total: </strong>{{order.INV1_LineTotal | currency : vm.invoiceDetails[0]._CustStatmentHdr_Currency}}</td>
                         </tr>
                     </tbody>
                     <tfoot>
                         <tr ng-if="vm.totalLineOrder">
                             <td class="text-right padding-right-20" colspan="10">
-                                <span class="order-total-text">Total</span><span class="order-total-value">{{vm.totalLineOrder | currency : vm.invoice.row[0]._CustStatmentHdr_Currency}}</span>
-                            </td>
-                        </tr>
-                        <tr ng-if="!vm.totalLineOrder">
-                            <td class="text-center" colspan="10">
-                                <span class="footer-no-text">No Data</span>
+                                <span class="order-total-text">Total</span><span class="order-total-value">{{vm.totalLineOrder | currency }}</span>
                             </td>
                         </tr>
                     </tfoot>
@@ -160,5 +136,5 @@
     </div>
 </div>
 <div class="loading-invoice-details center" ng-if="vm.uiState.loading">
-    <h2>Loading customer ledger. Please wait....</h2>
+    <h2>Loading invoice details. Please wait....</h2>
 </div>

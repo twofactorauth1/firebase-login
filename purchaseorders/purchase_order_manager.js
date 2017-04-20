@@ -14,7 +14,7 @@ var appConfig = require('../configs/app.config');
 var notificationConfig = require('../configs/notification.config');
 var userDao = require('../dao/user.dao');
 var emailMessageManager = require('../emailmessages/emailMessageManager');
-
+var userManager = require('../dao/user.manager');
 require('./model/purchase_order');
 
 
@@ -26,45 +26,79 @@ var accountDao = require('../dao/account.dao');
 module.exports = {
 	
     listPurchaseOrders: function (accountId, userId, fn) {
-        var userId = null;
         log.debug(accountId, userId, '>> listPurchaseOrders');
-        var query = {
-            accountId: accountId
-        };
 
-        purchaseOrderdao.findMany(query, $$.m.PurchaseOrder, function (err, orders) {
-            if (err) {
-                log.error(accountId, userId, 'Error listing orders: ', err);
-                return fn(err, null);
-            } else {
-                async.each(orders, function (order, cb) {
-                    userDao.getById(order.get('userId'), function (err, user) {
-                        if (err) {
-                            log.error(accountId, userId, 'Error getting user: ' + err);
-                            cb(err);
-                        } else {
-                            var _user = {
-                                _id: user.get("_id"),
-                                username: user.get("username"),
-                                first: user.get("first"),
-                                last: user.get("last")
-                            }
-                            order.set("submitter", _user);
-                            cb();
-                        }
-                    });
-                }, function (err) {
-                    if (err) {
-                        log.error(accountId, userId, 'Error fetching users for orders: ' + err);
-                        return fn(err, orders);
+        async.waterfall([
+            function(cb) {
+                userManager.getUserById(userId, function(err, user){
+                    cb(err, user);
+                });
+            },
+            function(user, cb) {
+                if(!user) {
+                    cb('user not found');
+                } else {
+                    var query = {
+                        accountId:accountId
+                    };
+                    if(_.contains(user.getPermissionsForAccount(accountId), 'vendor')){
+                        var cardCodes = user.get('cardCodes');
+                        query.cardCode = {$in:cardCodes};
+                    }
+                    cb(null, query);
+                }
+            },
+            function(query, cb) {
+                purchaseOrderdao.findMany(query, $$.m.PurchaseOrder, function (err, orders) {
+                    if(err) {
+                        log.error(accountId, userId, 'Error finding POs:', err);
+                        cb(err);
                     } else {
-                        log.debug(accountId, userId, '<< listPurchaseOrders');
-                        return fn(null, orders);
+                        /*
+                         * Cache users
+                         */
+                        var userIDMap = {};
+                        async.each(orders, function(order, callback){
+                            if(userIDMap[order.get('userId')]) {
+                                var _user = userIDMap[order.get('userId')];
+                                order.set("submitter", _user);
+                                callback();
+                            } else {
+                                userManager.getUserById(order.get('userId'), function(err, user){
+                                    if(err) {
+                                        log.error(accountId, userId, 'Error getting user:', err);
+                                        //return anyway
+                                        callback();
+                                    } else {
+                                        var _user = {
+                                            _id: user.get("_id"),
+                                            username: user.get("username"),
+                                            first: user.get("first"),
+                                            last: user.get("last")
+                                        };
+                                        userIDMap[order.get('userId')] = _user;
+                                        order.set("submitter", _user);
+                                        callback();
+                                    }
+                                });
+                            }
+                        }, function(err){
+                            cb(err, orders);
+                        });
                     }
                 });
-
+            }
+        ], function(err, orders){
+            if (err) {
+                log.error(accountId, userId, 'Error fetching users for orders: ' + err);
+                return fn(err, orders);
+            } else {
+                log.debug(accountId, userId, '<< listPurchaseOrders');
+                return fn(null, orders);
             }
         });
+
+
     },
 
     createPO: function(file, adminUrl, po, accountId, userId, fn) {
@@ -149,92 +183,116 @@ module.exports = {
     },
 
 
-    getPurchaseOrderById: function (orderId, fn) {
+    getPurchaseOrderById: function (accountId, userId, orderId, fn) {
         var self = this;
-        log.debug('>> getPurchaseOrderById');
+        log.debug(accountId, userId, '>> getPurchaseOrderById');
         purchaseOrderdao.getById(orderId, $$.m.PurchaseOrder, function (err, order) {
             if (err) {
                 log.error('Error getting purchase order: ' + err);
                 return fn(err, null);
             } else {
-                log.debug('<< getPurchaseOrderById');
-                async.each(order.get("notes"), function (note, cb) {
-                    userDao.getById(note.userId, function (err, user) {
-                        if (err) {
-                            log.error(accountId, userId, 'Error getting user: ' + err);
-                            cb(err);
-                        } else {
-                            var _user = {
-                                _id: user.get("_id"),
-                                username: user.get("username"),
-                                first: user.get("first"),
-                                last: user.get("last"),
-                                profilePhotos: user.get("profilePhotos")
-                            }
-                            note.user = _user;
-                            cb();
-                        }
-                    });
-                }, function (err) {
-                    if (err) {
-                        log.error('Error getting purchase order: ' + err);
-                        return fn(err, null);
+                userManager.getUserById(userId, function(err, user){
+                    if(err || !user) {
+                        log.error('Error getting user:', err);
+                        return fn(err);
                     } else {
-                        log.debug('<< getPurchaseOrderById');
-                        return fn(null, order);
+                        if(_.contains(user.getPermissionsForAccount(accountId), 'vendor')){
+                            if(!_.contains(user.get('cardCodes'), order.get('cardCode'))) {
+                                return fn();
+                            }
+                        }
+                        async.each(order.get("notes"), function (note, cb) {
+                            userDao.getById(note.userId, function (err, user) {
+                                if (err) {
+                                    log.error(accountId, userId, 'Error getting user: ' + err);
+                                    cb(err);
+                                } else {
+                                    var _user = {
+                                        _id: user.get("_id"),
+                                        username: user.get("username"),
+                                        first: user.get("first"),
+                                        last: user.get("last"),
+                                        profilePhotos: user.get("profilePhotos")
+                                    };
+                                    note.user = _user;
+                                    cb();
+                                }
+                            });
+                        }, function (err) {
+                            if (err) {
+                                log.error(accountId, userId, 'Error getting purchase order: ' + err);
+                                return fn(err, null);
+                            } else {
+                                log.debug('<< getPurchaseOrderById');
+                                return fn(null, order);
+                            }
+                        });
                     }
                 });
+
             }
         });
     },
 
     addNotesToPurchaseOrder: function(accountId, userId, purchaseOrderId, note, fn){
         var self = this;
-        log.debug('>> addNotesToPurchaseOrder');
+        log.debug(accountId, userId, '>> addNotesToPurchaseOrder');
         purchaseOrderdao.getById(purchaseOrderId, $$.m.PurchaseOrder, function (err, po) {
             if (err) {
-                log.error('Error getting purchase order: ' + err);
+                log.error(accountId, userId, 'Error getting purchase order: ' + err);
                 return fn(err, null);
             } else {
-                log.debug('<< addNotesToPurchaseOrder');
                 po.get("notes").push(note);
                 purchaseOrderdao.saveOrUpdate(po, function(err, order){
-                if(err) {
-                    self.log.error('Exception during po creation: ' + err);
-                    fn(err, null);
-                } else {
-                    userDao.getById(userId, function (err, user) {
-                        if (err) {
-                            log.error(accountId, userId, 'Error getting user: ' + err);
-                            fn(err, null);
-                        } else {
-                            var _user = {
-                                _id: user.get("_id"),
-                                username: user.get("username"),
-                                first: user.get("first"),
-                                last: user.get("last"),
-                                profilePhotos: user.get("profilePhotos")
+                    if(err) {
+                        self.log.error(accountId,userId,'Exception during po creation: ' + err);
+                        fn(err, null);
+                    } else {
+                        userDao.getById(userId, function (err, user) {
+                            if (err) {
+                                log.error(accountId, userId, 'Error getting user: ' + err);
+                                fn(err, null);
+                            } else {
+                                var _user = {
+                                    _id: user.get("_id"),
+                                    username: user.get("username"),
+                                    first: user.get("first"),
+                                    last: user.get("last"),
+                                    profilePhotos: user.get("profilePhotos")
+                                };
+                                note.user = _user;
+                                log.debug(accountId, userId, '<< addNotesToPurchaseOrder');
+                                return fn(null, note);
                             }
-                            note.user = _user;
-                            return fn(null, note);
-                        }
-                    });
-                }
-            });
+                        });
+                    }
+                });
             }
         });
     },
 
-    deletePurchaseOrder: function(accountId, purchaseOrderId, fn){
+    deletePurchaseOrder: function(accountId, userId, purchaseOrderId, fn){
         var self = this;
-        log.debug('>> addNotesToPurchaseOrder');
-        console.log(purchaseOrderId);
-        purchaseOrderdao.removeById(purchaseOrderId, $$.m.PurchaseOrder, function(err, value){
-            if(err) {
+        log.debug(accountId, userId, '>> deletePurchaseOrder');
+        userManager.getUserById(userId, function(err, user){
+            if(err || !user) {
                 self.log.error('Error deleting po: ' + err);
                 return fn(err, null);
             } else {
-                fn(null, value);
+                var query = {_id:purchaseOrderId};
+                if(_.contains(user.getPermissionsForAccount(accountId), 'vendor')){
+                    var cardCodes = user.get('cardCodes');
+                    query.cardCode = {$in:cardCodes};
+                }
+                purchaseOrderdao.removeByQuery(query, $$.m.PurchaseOrder, function(err, value){
+                    if(err) {
+                        self.log.error('Error deleting po: ' + err);
+                        return fn(err, null);
+                    } else {
+                        log.debug(accountId, userId, '<< deletePurchaseOrder');
+                        fn(null, value);
+                    }
+                });
             }
         });
     },

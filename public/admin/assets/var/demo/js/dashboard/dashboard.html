@@ -39,7 +39,7 @@
 
             <div
                 ng-repeat="analytic in vm.state.analyticsWidgets track by analytic.name"
-                class="analytic-unlocked col-xs-12 col-sm-6 " ng-class="{'col-md-4 col-lg-3': app.layout.isSidebarClosed, 'col-xs-12 col-sm-6 col-md-6 col-lg-4': !app.layout.isSidebarClosed}">
+                class="analytic-unlocked col-xs-12 col-sm-6 " ng-class="{'col-md-4': app.layout.isSidebarClosed, 'col-xs-12 col-sm-6 col-md-6 col-lg-4': !app.layout.isSidebarClosed}">
                 <dashboard-analytic-tile-demo-component
                     state="vm.state"
                     ui-state="vm.uiState"
@@ -51,11 +51,4 @@
         <!-- end: Analytics -->
 
     </div>
-
-    <div class="indi-help-text center">
-        <span>
-            Need some help getting started? <a href="#" ng-click="cancel($event);" onclick="Intercom('showNewMessage', '')">Contact</a> our Success Team
-        </span>
-    </div>
-
 </div>
