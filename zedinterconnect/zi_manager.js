@@ -92,6 +92,26 @@ module.exports = {
         });
     },
 
+    getInventoryItemBySKU: function(accountId, userId, sku, fn) {
+        var self = this;
+        self.log.debug(accountId, userId, '>> getInventoryItemBySKU');
+        var query = {'OITM_ItemName':sku};
+        var collection = 'inventory';
+        ziDao.findRawWithFieldsLimitAndOrder(query, 0, 1, null, null, collection, null, function(err, resp) {
+            if(err) {
+                self.log.error(accountId, userId, 'Error getting inventory item:', err);
+                fn(err);
+            } else {
+                if(resp && resp.results) {
+                    self.log.debug(accountId, userId, '<< getInventoryItemBySKU');
+                    fn(null, resp.results[0]);
+                } else {
+                    fn();
+                }
+            }
+        });
+    },
+
     inventoryFilter: function(accountId, userId, query, skip, limit, sortBy, sortDir, fn) {
         var self = this;
         self.log.debug(accountId, userId, '>> inventoryFilter');

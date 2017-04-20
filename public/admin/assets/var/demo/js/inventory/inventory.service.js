@@ -19,11 +19,10 @@
         var baseInventoryAPIUrl = '/api/1.0/integrations/zi/inventory';
 
         inventoryService.loading = {value: 0};
-        
+
         inventoryService.getInventory = getInventory;
         inventoryService.getSingleInventory = getSingleInventory;
-
-
+        inventoryService.getSingleInventoryBySKU = getSingleInventoryBySKU;
 
         function inventoryRequest(fn) {
             inventoryService.loading.value = inventoryService.loading.value + 1;
@@ -51,7 +50,7 @@
             var _method = "GET";
 
             var _qString = "?limit="+inventoryService.limit+"&skip="+ inventoryService.skip;
-            
+
             if(inventoryService.sortBy){
                 _qString += "&sortBy=" + inventoryService.sortBy + "&sortDir=" + inventoryService.sortDir;
             }
@@ -71,7 +70,7 @@
                   data: angular.toJson(inventoryService.fieldSearch)
                 }).success(success).error(error))
             );
-            
+
         }
 
         function checkIfFieldSearch(){
@@ -81,16 +80,16 @@
                 for(var i=0; i <= Object.keys(fieldSearch).length - 1; i++){
                     var key = Object.keys(fieldSearch)[i];
                     var value = fieldSearch[key];
-                    
+
                     if(value){
-                       isFieldSearch = true; 
+                       isFieldSearch = true;
                     }
                 }
             }
             return isFieldSearch;
         }
 
-        function getSingleInventory(productId){           
+        function getSingleInventory(productId){
             function success(data) {
                 console.log(data);
             }
@@ -98,9 +97,22 @@
             function error(error) {
                 console.error('inventoryService getSingleInventory error: ', JSON.stringify(error));
             }
-           
-            return inventoryRequest($http.get([baseInventoryAPIUrl, productId].join('/')).success(success).error(error));                       
-            
+
+            return inventoryRequest($http.get([baseInventoryAPIUrl, productId].join('/')).success(success).error(error));
+
+        }
+
+        function getSingleInventoryBySKU(sku){
+            function success(data) {
+                console.log(data);
+            }
+
+            function error(error) {
+                console.error('inventoryService getSingleInventoryBySKU error: ', JSON.stringify(error));
+            }
+
+            return inventoryRequest($http.get([baseInventoryAPIUrl, 'sku', sku].join('/')).success(success).error(error));
+
         }
 
 		(function init() {

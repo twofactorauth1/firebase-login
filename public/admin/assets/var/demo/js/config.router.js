@@ -294,7 +294,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         templateUrl: "/admin/assets/var/demo/js/invoices/invoice-details/invoice-details.html",
         title: 'Invoice Details',
         icon: 'ti-layout-media-left-alt',
-        resolve: loadSequence('InvoiceDetailsComponent', 'InvoiceDetailsController', 'InvoiceService', 'CustomersService')
+        resolve: loadSequence('InvoiceDetailsComponent', 'InvoiceDetailsController', 'InvoiceService', 'InventoryService')
     }).state('app.account.users', {
         url: '/users',
         templateUrl: "/admin/assets/var/demo/js/users/users.html",
