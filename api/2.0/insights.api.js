@@ -37,6 +37,7 @@ _.extend(api.prototype, baseApi.prototype, {
         //broadcast messages
         app.get(this.url('messages'), this.isAuthAndSubscribedApi.bind(this), this.listBroadcastMessages.bind(this));
         app.get(this.url('messages/active'), this.isAuthAndSubscribedApi.bind(this), this.getActiveBroadcastMessages.bind(this));
+        app.get(this.url('messages/messageswithuser'), this.isAuthAndSubscribedApi.bind(this), this.getActiveBroadcastMessagesWithUser.bind(this));
         app.post(this.url('messages'), this.isAuthAndSubscribedApi.bind(this), this.createBroadcastMessage.bind(this));
         app.post(this.url('messages/:id'), this.isAuthAndSubscribedApi.bind(this), this.updateBroadcastMessage.bind(this));
         app.del(this.url('messages/:id'), this.isAuthAndSubscribedApi.bind(this), this.removeBroadcastMessage.bind(this));
@@ -183,6 +184,20 @@ _.extend(api.prototype, baseApi.prototype, {
             self.sendResultOrError(resp, err, value, 'Could not get active messages');
         });
     },
+
+    getActiveBroadcastMessagesWithUser: function(req, resp){
+        var self = this;
+        var accountId = parseInt(self.accountId(req));
+        var userId = self.userId(req);
+        self.log.debug(accountId, userId, '>> getActiveBroadcastMessagesWithUser');
+
+        manager.getActiveBroadcastMessagesWithUser(accountId, userId, function(err, value){
+            self.log.debug(accountId, userId, '<< getActiveBroadcastMessagesWithUser');
+            self.sendResultOrError(resp, err, value, 'Could not get active messages');
+        });
+    },
+
+
 
     createBroadcastMessage: function(req, resp){
         var self = this;

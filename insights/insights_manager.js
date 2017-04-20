@@ -102,6 +102,70 @@ var insightsManager = {
 
     },
 
+
+
+    getActiveBroadcastMessagesWithUser:function(accountId, userId, fn){
+        var self = this;
+        self.log.debug(accountId, userId, '>> getActiveBroadcastMessagesWithUser');
+        var now = moment().toDate();
+        var query = {
+            startDate : {$lte:now},
+            endDate : {$gte:now},
+            accountId: {$gte:0}
+        };
+
+        accountDao.getAccountByID(accountId, function(err, account){
+            if(err) {
+                self.log.error(accountId, userId, 'Error finding active messages:', err);
+                return fn(err);
+            } else {
+                query.orgId = account.get('orgId') || 0;
+                broadcastMessageDao.findMany(query, $$.m.BroadcastMessage, function(err, list){
+                    if(err) {
+                        self.log.error(accountId, userId, 'Error finding active messages:', err);
+                        return fn(err);
+                    } else {
+                        self.log.debug(accountId, userId, '<< getActiveBroadcastMessagesWithUser');
+                        
+                        async.each(list, function (message, cb) {
+                            if(message.get("modified") && message.get("modified").by){
+                                userDao.getById(message.get("modified").by, function (err, user) {
+                                    if (err) {
+                                        log.error(accountId, userId, 'Error getting user: ' + err);
+                                        cb(err);
+                                    } else {
+                                        var _user = {
+                                            _id: user.get("_id"),
+                                            username: user.get("username"),
+                                            first: user.get("first"),
+                                            last: user.get("last"),
+                                            profilePhotos: user.get("profilePhotos")
+                                        };
+                                        message.set("user", _user);
+                                        cb();
+                                    }
+                                });
+                            }
+                            else{
+                                cb();
+                            }
+                            
+                        }, function (err) {
+                            if (err) {
+                                log.error(accountId, userId, 'Error finding active message users: ' + err);
+                                return fn(err, null);
+                            } else {
+                                log.debug('<< getActiveBroadcastMessagesWithUser');
+                                return fn(null, list);
+                            }
+                        });
+                    }
+                });
+            }
+        });
+
+    },
+
     updateBroadcastMessage:function(accountId, userId, broadcastMessage, fn){
         var self = this;
         self.log.debug(accountId, userId, '>> updateBroadcastMessage');

@@ -121,6 +121,9 @@
                 .message-title{
                     font-size: 16px;
                     color: #2C3030;
+                    :after{
+                        content: "\00a0";
+                    }
                 }
                 .message-date{
                     float: right;
@@ -172,7 +175,11 @@
                 .message-date{
                     color: #48b1cc;
                 }
+
                 ul.message-container-top{
+                    .message-title:after{
+                        content: "\00a0";
+                    }
                     li{
                         border-left: none;
                         border-right: none;
