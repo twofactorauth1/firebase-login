@@ -22,7 +22,7 @@
 
         inventoryService.getInventory = getInventory;
         inventoryService.getSingleInventory = getSingleInventory;
-        inventoryService.getSingleInventoryBySKU = getSingleInventoryBySKU;
+        inventoryService.getSingleInventoryByName = getSingleInventoryByName;
 
         function inventoryRequest(fn) {
             inventoryService.loading.value = inventoryService.loading.value + 1;
@@ -102,16 +102,16 @@
 
         }
 
-        function getSingleInventoryBySKU(sku){
+        function getSingleInventoryByName(name){
             function success(data) {
                 console.log(data);
             }
 
             function error(error) {
-                console.error('inventoryService getSingleInventoryBySKU error: ', JSON.stringify(error));
+                console.error('inventoryService getSingleInventoryByName error: ', JSON.stringify(error));
             }
 
-            return inventoryRequest($http.get([baseInventoryAPIUrl, 'sku', sku].join('/')).success(success).error(error));
+            return inventoryRequest($http.get([baseInventoryAPIUrl, 'name', name].join('/')).success(success).error(error));
 
         }
 

@@ -51,8 +51,8 @@ function invoiceDetailsController($scope, $state, $attrs, $filter, $modal, $time
         })
     }
 
-    function goToInventory(sku){
-        InventoryService.getSingleInventoryBySKU(sku).then(function(response){
+    function goToInventory(name){
+        InventoryService.getSingleInventoryByName(name).then(function(response){
             if (response) {
                 $state.go('app.singleInventory', {inventoryId: response.data["@id"]});
             } else {

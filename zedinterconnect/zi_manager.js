@@ -92,10 +92,10 @@ module.exports = {
         });
     },
 
-    getInventoryItemBySKU: function(accountId, userId, sku, fn) {
+    getInventoryItemByName: function(accountId, userId, name, fn) {
         var self = this;
-        self.log.debug(accountId, userId, '>> getInventoryItemBySKU');
-        var query = {'OITM_ItemName':sku};
+        self.log.debug(accountId, userId, '>> getInventoryItemByName');
+        var query = {'OITM_ItemName':name};
         var collection = 'inventory';
         ziDao.findRawWithFieldsLimitAndOrder(query, 0, 1, null, null, collection, null, function(err, resp) {
             if(err) {
@@ -103,7 +103,7 @@ module.exports = {
                 fn(err);
             } else {
                 if(resp && resp.results) {
-                    self.log.debug(accountId, userId, '<< getInventoryItemBySKU');
+                    self.log.debug(accountId, userId, '<< getInventoryItemByName');
                     fn(null, resp.results[0]);
                 } else {
                     fn();

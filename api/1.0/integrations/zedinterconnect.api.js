@@ -28,7 +28,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.post(this.url('inventory/search'), this.isAuthAndSubscribedApi.bind(this), this.inventorySearch.bind(this));
 
         app.get(this.url('inventory/:id'), this.isAuthAndSubscribedApi.bind(this), this.inventoryItem.bind(this));
-        app.get(this.url('inventory/sku/:id'), this.isAuthAndSubscribedApi.bind(this), this.inventoryItemBySKU.bind(this));
+        app.get(this.url('inventory/name/:id'), this.isAuthAndSubscribedApi.bind(this), this.inventoryItemByName.bind(this));
 
         app.get(this.url('loadinventory'), this.isAuthAndSubscribedApi.bind(this), this.loadinventory.bind(this));
         app.get(this.url('ledger'), this.isAuthAndSubscribedApi.bind(this), this.ledger.bind(this));
@@ -79,14 +79,14 @@ _.extend(api.prototype, baseApi.prototype, {
         });
     },
 
-    inventoryItemBySKU: function(req, resp) {
+    inventoryItemByName: function(req, resp) {
         var self = this;
         var accountId = parseInt(self.accountId(req));
         var userId = self.userId(req);
-        self.log.debug(accountId, userId, '>> inventoryItemBySKU');
-        var sku = req.params.id;
+        self.log.debug(accountId, userId, '>> inventoryItemByName');
+        var name = req.params.id;
         //TODO: security
-        manager.getInventoryItemBySKU(accountId, userId, sku, function(err, value){
+        manager.getInventoryItemByName(accountId, userId, name, function(err, value){
             self.log.debug(accountId, userId, '<< inventory');
             return self.sendResultOrError(resp, err, value, "Error calling inventory");
         });
