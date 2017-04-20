@@ -9,6 +9,7 @@ var baseApi = require('../../base.api.js');
 var appConfig = require('../../../configs/app.config');
 var ziDao = require('../../../zedinterconnect/dao/zi.dao');
 var manager = require('../../../zedinterconnect/zi_manager');
+var userManager = require('../../../dao/user.manager');
 
 var api = function () {
     this.init.apply(this, arguments);
@@ -19,8 +20,6 @@ _.extend(api.prototype, baseApi.prototype, {
     base: "integrations/zi",
 
     dao: ziDao,
-
-
 
     initialize: function () {
         app.get(this.url('demo'), this.isAuthAndSubscribedApi.bind(this), this.demo.bind(this));
@@ -191,6 +190,32 @@ _.extend(api.prototype, baseApi.prototype, {
         });
 
 
+    },
+
+    _isUserAdmin: function(req, fn) {
+        var self = this;
+        var userId = self.userId(req);
+        var accountId = parseInt(self.accountId(req));
+        userManager.getUserById(userId, function(err, user){
+            if(user && _.contains(user.getPermissionsForAccount(accountId), 'admin')) {
+                fn(null, true);
+            } else {
+                fn(null, false);
+            }
+        });
+    },
+
+    _isUserVendor: function(req, fn) {
+        var self = this;
+        var userId = self.userId(req);
+        var accountId = parseInt(self.accountId(req));
+        userManager.getUserById(userId, function(err, user){
+            if(user && _.contains(user.getPermissionsForAccount(accountId), 'vendor')) {
+                fn(null, true);
+            } else {
+                fn(null, false);
+            }
+        });
     }
 });
 

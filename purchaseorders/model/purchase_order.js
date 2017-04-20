@@ -18,6 +18,7 @@ var purchaseOrder = $$.m.ModelBase.extend({
             userId : null,
             attachment: null,
             notes: [],
+            cardCode:null,
             created: {
                 date: new Date(),
                 by: null

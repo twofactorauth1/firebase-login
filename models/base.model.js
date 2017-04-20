@@ -176,6 +176,7 @@ _.extend(modelBase.prototype, {
             var keys;
             if (transientMode == "public") keys = this.transients.public;
             else if(transientMode == "db") keys = this.transients.db;
+            else if(transientMode === 'manage') keys = this.transients.manage;
 
             if (keys != null) {
                 for (var i = 0; i < keys.length; i++) {

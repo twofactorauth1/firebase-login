@@ -9,6 +9,7 @@ var baseApi = require('../base.api.js');
 var poDao = require('../../purchaseorders/dao/purchase_order.dao');
 var poManager = require('../../purchaseorders/purchase_order_manager');
 var formidable = require('formidable');
+var userManager = require('../../dao/user.manager');
 require('../../purchaseorders/model/purchase_order');
 
 var api = function () {
@@ -105,7 +106,7 @@ _.extend(api.prototype, baseApi.prototype, {
         var userId = self.userId(req);
         self.log.debug(accountId, userId, '<< getPurchaseOrder');
         var purchaseOrderId = req.params.id;
-        poManager.getPurchaseOrderById(purchaseOrderId, function(err, order){
+        poManager.getPurchaseOrderById(accountId, userId, purchaseOrderId, function(err, order){
             self.log.debug(accountId, userId, '<< getPurchaseOrder');
             return self.sendResultOrError(resp, err, order, "Error getting Purchase Order");
         });
@@ -138,6 +139,8 @@ _.extend(api.prototype, baseApi.prototype, {
         var self = this;
         var purchaseOrderId = req.params.id;
         var accountId = parseInt(self.accountId(req));
+        var userId = self.userId(req);
+        self.log.debug(accountId, userId, '>> deletePurchaseOrder');
 
         self.checkPermissionForAccount(req, self.sc.privs.MODIFY_ORDER, accountId, function(err, isAllowed) {
             if (isAllowed !== true) {
@@ -147,7 +150,7 @@ _.extend(api.prototype, baseApi.prototype, {
                     self.wrapError(res, 400, null, "Invalid paramater for ID");
                 }
                 
-                poManager.deletePurchaseOrder(accountId, purchaseOrderId, function(err, value){                                                       
+                poManager.deletePurchaseOrder(accountId, userId, purchaseOrderId, function(err, value){
                     self.log.debug('<< deletePurchaseOrder');
                     self.sendResultOrError(res, err, {deleted:true}, "Error deleting PO");
                     self.createUserActivity(req, 'DELETE_PO', null, null, function(){});
@@ -172,6 +175,32 @@ _.extend(api.prototype, baseApi.prototype, {
                     self.log.debug('<< deleteBulkPurchaseOrders');
                     self.sendResultOrError(res, err, {deleted:true}, "Error deleting PO's");
                 }); 
+            }
+        });
+    },
+
+    _isUserAdmin: function(req, fn) {
+        var self = this;
+        var userId = self.userId(req);
+        var accountId = parseInt(self.accountId(req));
+        userManager.getUserById(userId, function(err, user){
+            if(user && _.contains(user.getPermissionsForAccount(accountId), 'admin')) {
+                fn(null, true);
+            } else {
+                fn(null, false);
+            }
+        });
+    },
+
+    _isUserVendor: function(req, fn) {
+        var self = this;
+        var userId = self.userId(req);
+        var accountId = parseInt(self.accountId(req));
+        userManager.getUserById(userId, function(err, user){
+            if(user && _.contains(user.getPermissionsForAccount(accountId), 'vendor')) {
+                fn(null, true);
+            } else {
+                fn(null, false);
             }
         });
     }
