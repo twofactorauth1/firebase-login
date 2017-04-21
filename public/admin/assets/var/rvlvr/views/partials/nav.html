@@ -113,13 +113,12 @@
                     <span class="title" translate="sidebar.nav.customers.ANALYTICS"> Analytics </span>
                 </a>
             </li>
-            <!-- Not ready yet
-            <li ui-sref-active="active">
+            
+            <li ui-sref-active="active" ng-class="{'active': $state.includes('app.singlebroadcastmessage' || $state.includes('app.singlebroadcastmessage'))}">
                 <a ui-sref="app.broadcastmessage">
                     <span class="title" translate="sidebar.nav.customers.BROADCAST"> Broadcast Message </span>
                 </a>
             </li>
-            -->
         </ul>
     </li>
 	<li ng-class="{'active open':$state.includes('app.products', 'app.orders')}">

@@ -23,7 +23,10 @@
 		
 		<div class="broadcast-message-editor-scrollable-container row" ng-if="vm.state.message">
 
+
+
 		    <div class="broadcast-message-editor" >
+		    	<input autocomplete="false" type="text" class="broadcast-message-editor-title" ng-model="vm.state.message.subject" placeholder="Subject " />
 		        <p
 		            class=""
 		            elem

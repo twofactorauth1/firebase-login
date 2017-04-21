@@ -302,14 +302,14 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         icon: 'ti-layout-media-left-alt',
         resolve: loadSequence('UsersCtrl', 'customerService')
     }).state('app.broadcastmessage', {
-        url: '/messages',
-        templateUrl: "/admin/assets/var/demo/js/messages/messages.html",
+        url: '/customer/messages',
+        templateUrl: "/admin/assets/js/messages/messages.html",
         title: 'Messages',
         icon: 'ti-layout-media-left-alt',
         resolve: loadSequence('MessagesCtrl', 'broadcastMessagesService')
     }).state('app.singlebroadcastmessage', {
-        url: '/messages/:id',
-        templateUrl: "/admin/assets/var/demo/js/messages/broadcast-message-editor/broadcast-message-editor.html",
+        url: '/customer/messages/:id',
+        templateUrl: "/admin/assets/js/messages/broadcast-message-editor/broadcast-message-editor.html",
         title: 'Message Single',
         icon: 'ti-layout-media-left-alt',
         resolve: loadSequence('froala-wysiwyg-editor', 'froala-wysiwyg-editor-plugins', 'custom-froala-wysiwyg-editor', 'spectrum', 'BroadcastMessageEditorCtrl', 'broadcastMessagesService')
