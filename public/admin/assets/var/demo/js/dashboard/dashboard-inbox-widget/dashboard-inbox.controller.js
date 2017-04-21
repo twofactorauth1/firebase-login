@@ -1,6 +1,6 @@
 (function(){
 
-app.controller('DashboardInboxComponentController', dashboardInboxComponentController);
+app.controller('DashboardInboxDemoComponentController', dashboardInboxComponentController);
 
 dashboardInboxComponentController.$inject = ['$scope', '$attrs', '$filter', '$modal', '$timeout', 'DashboardService'];
 /* @ngInject */
