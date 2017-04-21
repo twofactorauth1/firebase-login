@@ -45,9 +45,6 @@ function ssbBlogRecentPostComponentController(SimpleSiteBuilderBlogService, $sco
             }, 2000)
             checkHasFeaturedPosts();
             if(vm.blog.posts.length>1){
-                if(vm.blog.posts.length>6){
-                  vm.blog.posts=   vm.blog.posts.slice(0, 6);
-                }
                 vm.element.closest("div.ssb-page-section").css({'display': 'block'});
             }else{
                  vm.element.closest("div.ssb-page-section").css({'display': 'none'});
@@ -101,8 +98,8 @@ function ssbBlogRecentPostComponentController(SimpleSiteBuilderBlogService, $sco
                     })
                 }
             }
-            if(vm.blog.posts.length>5)
-               vm.blog.posts=   vm.blog.posts.slice(0, 5)
+            //if(vm.blog.posts.length>5)
+            //   vm.blog.posts=   vm.blog.posts.slice(0, 5)
             checkHasFeaturedPosts();
         }
     }
@@ -118,6 +115,7 @@ function ssbBlogRecentPostComponentController(SimpleSiteBuilderBlogService, $sco
         var showCount=6
         if(vm.component.post_count){
             showCount= parseInt(vm.component.post_count)+1;
+            console.log('custom post_count', vm.component.post_count);
         }
        if(showCount>vm.blog.posts.length){
            showCount=vm.blog.posts.length
