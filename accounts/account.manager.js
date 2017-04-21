@@ -45,6 +45,42 @@ var defaultBilling = {
 var accountManager = {
     log:LOG,
 
+    getOrganizationByAccountId: function(accountId, userId, fn) {
+        var self = this;
+        self.log.debug(accountId, userId, '>> getOrganizationByAccountId');
+        accountDao.getAccountByID(accountId, function(err, account){
+            if(err) {
+                self.log.error(accountId, userId, 'Error getting account:', err);
+                fn(err);
+            } else {
+                var orgId = account.get('orgId') || 0;
+                organizationDao.getById(orgId, $$.m.Organization, function(err, organization){
+                    if(err) {
+                        self.log.error(accountId, userId, 'Error getting organization:', err);
+                        fn(err);
+                    } else {
+                        self.log.debug(accountId, userId, '<< getOrganizationByAccountId');
+                        fn(null, organization);
+                    }
+                });
+            }
+        });
+    },
+
+    getOrganizationById: function(accountId, userId, orgId, fn) {
+        var self = this;
+        self.log.debug(accountId, userId, 'getOrganizationbyId');
+        organizationDao.getById(orgId || 0, $$.m.Organization, function(err, organization){
+            if(err) {
+                self.log.error(accountId, userId, 'Error getting organization:', err);
+                fn(err);
+            } else {
+                self.log.debug(accountId, userId, '<< getOrganizationbyId');
+                fn(null, organization);
+            }
+        });
+    },
+
     getAccountIdsByOrg: function(accountId, userId, orgId, fn) {
         var self = this;
         self.log.debug(accountId, userId, '>> getAccountIdsByOrg');

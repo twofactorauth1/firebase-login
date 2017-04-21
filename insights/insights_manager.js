@@ -1068,7 +1068,8 @@ var insightsManager = {
         var query = {
             //startDate : {$lte:now},
             //endDate : {$gte:now},
-            accountId: {$gte:0}
+            accountId: {$gte:0},
+            orgId: account.get("orgId") || 0
         };
         broadcastMessageDao.findMany(query, $$.m.BroadcastMessage, function(err, list){
             if(err) {

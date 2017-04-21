@@ -649,6 +649,10 @@ app.constant('JS_REQUIRES', {
     // 'DashboardAnalyticTileComponent': 'assets/js/dashboard/dashboard-analytic-tile/dashboard-analytic-tile.component.js',
     'DashboardAnalyticTileComponentController': 'assets/js/dashboard/dashboard-analytic-tile/dashboard-analytic-tile.controller.js',
 
+    'DashboardInboxComponent': 'assets/var/demo/js/dashboard/dashboard-inbox-widget/dashboard-inbox.component.js',
+    'DashboardInboxComponentController': 'assets/var/demo/js/dashboard/dashboard-inbox-widget/dashboard-inbox.controller.js',
+
+    
     'asideCtrl': 'assets/js/controllers/asideCtrl.js',
     'toasterCtrl': 'assets/js/controllers/toasterCtrl.js',
     'sweetAlertCtrl': 'assets/js/controllers/sweetAlertCtrl.js',

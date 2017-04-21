@@ -11,7 +11,7 @@ function dashboardInbox() {
             uiState: '='
         },
         replace: true,
-        templateUrl: 'assets/js/dashboard/dashboard-inbox-widget/dashboard-inbox.component.html',
+        templateUrl: 'assets/var/demo/js/dashboard/dashboard-inbox-widget/dashboard-inbox.component.html',
         controller: 'DashboardInboxComponentController',
         controllerAs: 'vm',
         bindToController: true,

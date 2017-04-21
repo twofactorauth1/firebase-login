@@ -2,7 +2,7 @@
 /*global app, moment, angular, window*/
 /*jslint unparam:true*/
 (function (angular) {
-    app.controller('broadcastMessageEditorCtrl', ['$scope', "$location", "toaster", "BroadcastMessagesService", function ($scope, $location, toaster, BroadcastMessagesService) {
+    app.controller('broadcastMessageEditorCtrl', ['$scope', "$location", "toaster", "$stateParams", "BroadcastMessagesService", function ($scope, $location, toaster, $stateParams, BroadcastMessagesService) {
 
         var vm = this;
 
@@ -14,6 +14,8 @@
             loading: true,
             saveLoading: false
         };
+
+        vm.messageId = $stateParams.id;
 
         vm.saveMessage = saveMessage;
 
@@ -45,6 +47,7 @@
                     console.log(error);
                 }).finally(function() {
                     vm.uiState.saveLoading = false;
+                    backToMessages();
                 });
             }
             else if(vm.state.message && vm.state.message._id){
@@ -62,12 +65,19 @@
 
         function backToMessages()
         {
-            $location.url("/customer/messages");
+            $location.url("customer/messages");
         }
 
-        var unbindMessageWatcher = $scope.$watch(function() { return BroadcastMessagesService.message }, function(message) {          
-          if(message){
-            vm.state.message = message;
+        var unbindMessageWatcher = $scope.$watch(function() { return BroadcastMessagesService.messages }, function(messages) {          
+          if(messages){
+            if(vm.messageId == 'new'){
+                vm.state.message = {};
+            }
+            else{
+                vm.state.message = _.find(messages, function(message){
+                    return message._id == $stateParams.id
+                })    
+            }            
           }
         }, true);
 

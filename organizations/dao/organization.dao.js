@@ -7,12 +7,20 @@
 
 require('../../dao/base.dao.js');
 require('../model/organization');
+var urlUtils = require('../../utils/urlutils');
 
 var dao = {
 
     getByOrgDomain: function(domain, fn) {
         var query = {orgDomain:domain};
         this.findOne(query, $$.m.Organization, fn);
+    },
+
+    getOrganizationByHost: function(host, fn) {
+        var parsed = urlUtils.getSubdomainFromHost(host);
+        console.log('parsed:', parsed);
+
+        this.getByOrgDomain(parsed.orgDomain, fn);
     },
 
     options: {
