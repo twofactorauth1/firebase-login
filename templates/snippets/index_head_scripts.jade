@@ -48,6 +48,10 @@ script(type="text/javascript").
         }
     }
 
+script(type="text/javascript").
+    window.indigenous = window.indigenous || {};
+    window.indigenous.orgId = #{account.orgId};
+
 if (typeof account.website.theme !== 'undefined' && typeof account.website.themeOverrides !== 'undefined')
     style.
         .ssb-theme-#{account.website.theme.handle} {

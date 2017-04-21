@@ -471,6 +471,10 @@ _.extend(view.prototype, BaseView.prototype, {
                     data.account.website.settings = {};
                 }
 
+                if(!data.account.orgId) {
+                    data.account.orgId = 0;
+                }
+
                 var blogUrlParts = [];
                 if (self.req.params.length) {
                     blogUrlParts = self.req.params[0].split('/');

@@ -344,7 +344,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 }
             },
             function createSubscription(cb){
-                paymentsManager.createStripeSubscription(customerId, planId, accountId, userId, coupon, setupFee, function(err, sub) {
+                paymentsManager.createStripeSubscription(customerId, planId, accountId, userId, coupon, setupFee, null, function(err, sub) {
                     if(err) {
                         invoiceItems.forEach(function(item, index) {
                             stripeDao.deleteInvoiceItem(item.id, null, function(err, confirmation) {
