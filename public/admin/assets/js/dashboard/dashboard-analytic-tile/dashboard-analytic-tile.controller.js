@@ -27,7 +27,7 @@ function dashboardAnalyticTileComponentController($scope, $attrs, $filter, Dashb
         var revenuedata = DashboardService.revenueFromStripe;
         revenuedata = parseFloat(revenuedata).toFixed(2);
             if(!isNaN(revenuedata)){
-                var finalrevenuedata = '$'+revenuedata;
+                var finalrevenuedata = revenuedata;
             }else{
                 var finalrevenuedata = 'loading....';
             }
@@ -122,7 +122,7 @@ function dashboardAnalyticTileComponentController($scope, $attrs, $filter, Dashb
                     ret.data = [
                         {
                             analyticDataLabel: 'YTD New Order Rev.',
-                            analyticDataValue: '$' + parseFloat(analyticsObject.revenue.YTDTotalAmount).toFixed(2)
+                            analyticDataValue: parseFloat(analyticsObject.revenue.YTDTotalAmount).toFixed(2)
                         },
                         // {
                         //     analyticDataLabel: 'YTD Tax Collected',
