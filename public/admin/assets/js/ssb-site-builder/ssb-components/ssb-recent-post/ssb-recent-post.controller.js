@@ -109,20 +109,20 @@ function ssbBlogRecentPostComponentController(SimpleSiteBuilderBlogService, $sco
     }
 
     function sortBlogPosts(blogpost){
-        return Date.parse($filter('date')(blogpost.publish_date, "MM/dd/yyyy"));
+        return Date.parse(blogpost.publish_date.split('T')[0]);
     }
+
     function showNumberOfPosts(){
         var showCount=6
         if(vm.component.post_count){
             showCount= parseInt(vm.component.post_count)+1;
-            console.log('custom post_count', vm.component.post_count);
         }
        if(showCount>vm.blog.posts.length){
            showCount=vm.blog.posts.length
        }
-        console.log("showCount---",showCount)
-        return showCount
+       return showCount
     }
+
     function init(element) {
     	vm.element = element;
         checkHasFeaturedPosts();
