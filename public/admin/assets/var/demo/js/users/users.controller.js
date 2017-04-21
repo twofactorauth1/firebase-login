@@ -118,9 +118,20 @@
 
         $scope.openEditUserCardModal = function(userId) {
             $scope.currentUserId = userId;
+            $scope.editUser = null;
+            // UserService.getUser(function(user){
+            //     var userAccount = _.find(user.accounts, function(account){
+            //         return vm.state.account._id == account.accountId
+            //     })
+            //     if(userAccount){
+            //         $scope.permissions = userAccount.permissions;
+            //         $scope.userIsAdmin = $scope.permissions.include
+            //     }
+            // })
             $scope.editUser = _.find(vm.state.users, function(user){
                 return user._id == userId
             })
+            $scope.isAdmin = true;
             vm.openSimpleModal('edit-user-card-modal');
         };
         $scope.closeUserCardModal = function() {
@@ -128,8 +139,10 @@
             $scope.closeModal();
         };
 
-        $scope.updateUser = function(isAdmin){
-            console.log($scope.edituser);
+        $scope.updateUser = function(){
+            UserService.editUser($scope.editUser, $scope.currentUserId, function(){
+                $scope.closeUserCardModal();
+            })
         };
 
         $scope.checkPasswordLength = function() {
