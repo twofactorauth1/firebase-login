@@ -1,6 +1,6 @@
 (function(){
 
-app.directive('dashboardInboxComponent', dashboardInbox);
+app.directive('dashboardInboxDemoComponent', dashboardInbox);
 /* @ngInject */
 function dashboardInbox() {
 
