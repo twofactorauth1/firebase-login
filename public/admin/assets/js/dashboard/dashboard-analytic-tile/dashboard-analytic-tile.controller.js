@@ -21,15 +21,18 @@ function dashboardAnalyticTileComponentController($scope, $attrs, $filter, Dashb
         'Revenue': {},
         'SocialMedia': {}
     };
-   
+   $scope.finalrevenuedata = 'loading....';
+   $scope.showrevenue=false;
     function analyticMap() {
         var ret = {};
         var revenuedata = DashboardService.revenueFromStripe;
+        $scope.finalrevenuedata = 'loading....';
         revenuedata = parseFloat(revenuedata).toFixed(2);
             if(!isNaN(revenuedata)){
-                var finalrevenuedata = revenuedata;
+                 $scope.finalrevenuedata = revenuedata;
+                  $scope.showrevenue = true;
             }else{
-                var finalrevenuedata = 'loading....';
+                 $scope.finalrevenuedata = 'loading....';
             }
             
         var analyticsObject = DashboardService.state.analytics;
@@ -135,7 +138,7 @@ function dashboardAnalyticTileComponentController($scope, $attrs, $filter, Dashb
                         ,
                         {
                            analyticDataLabel: 'YTD Revenue (Stripe)',
-                           analyticDataValue: finalrevenuedata
+                           analyticDataValue: $scope.finalrevenuedata
                         }
                     ]
 
