@@ -93,15 +93,17 @@ function dashboardAnalyticTileComponentController($scope, $attrs, $filter, Dashb
                         if(purchaseOrders){
                             ret.data = purchaseOrders;
                         }
-                        ret.data = [
-                            {
+                        ret.data = []
+
+                        _.each(purchaseOrders, function(order){
+                            ret.data.push({
                                 field1: "12345",
                                 field2: "$432,000",
-                                field3: "Complete",
-                            }
-                        ];
+                                field3: "2/15/17" 
+                            })
+                        })
                     });
-
+                            
                     break;
                 case 'Invoices':
 
