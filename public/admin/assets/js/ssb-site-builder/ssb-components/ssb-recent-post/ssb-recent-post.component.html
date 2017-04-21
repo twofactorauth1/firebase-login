@@ -1,10 +1,11 @@
 <div ng-class="component.type+'-v'+component.version">
     <div  class="col-xs-12" ng-if="vm.blog.posts.length>0" >
-        <h3 ng-attr-style="{{vm.titleStyle()}}">
+        <h3>
             <div elem ng-model="vm.component.title"></div>
         </h3>
-        <div class="col-lg-12"  ng-repeat="post in vm.blog.posts| orderBy:vm.sortBlogPosts:true | limitTo:(1- vm.showNumberOfPosts())">
-            <a ng-if="!vm.compactView" ng-class="{'ssb-theme-btn' : post.display_title || post.post_title}" class="btn btn-link" href="/blog/{{post.post_url}}" target="_self" ng-attr-style="{{vm.descriptionStyle()}}">{{post.display_title || post.post_title}} </a>
+        <div class="margin-bottom-5" ng-repeat="post in vm.blog.posts| orderBy:vm.sortBlogPosts:true | limitTo:(1- vm.showNumberOfPosts())">
+            <a ng-if="!vm.compactView" ng-class="{'ssb-theme-btn' : post.display_title || post.post_title}" class="btn-link" href="/blog/{{post.post_url}}" target="_self" ng-attr-style="{{vm.descriptionStyle()}}">{{post.display_title || post.post_title}}</a>
+            <hr ng-if="((vm.component && vm.component.settings && vm.component.settings.hr && vm.component.settings.hr === true) && !$last)">
         </div>
     </div>
 </div>
