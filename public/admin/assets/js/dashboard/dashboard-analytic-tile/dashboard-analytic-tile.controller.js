@@ -29,7 +29,7 @@ function dashboardAnalyticTileComponentController($scope, $attrs, $filter, Dashb
             if(!isNaN(revenuedata)){
                 var finalrevenuedata = '$'+revenuedata;
             }else{
-                var finalrevenuedata = ' ';
+                var finalrevenuedata = 'loading....';
             }
             
         var analyticsObject = DashboardService.state.analytics;
@@ -147,7 +147,7 @@ function dashboardAnalyticTileComponentController($scope, $attrs, $filter, Dashb
         } else {
             $timeout(function(){
                 vm.analyticMap();;
-            }, 200);
+            }, 100);
         }
 
         vm.uiDetails = ret;
@@ -160,9 +160,9 @@ function dashboardAnalyticTileComponentController($scope, $attrs, $filter, Dashb
         }
     })
       $scope.$watch(function() { return DashboardService.revenueFromStripe }, function(state, oldState) {
-        if(state && state !== oldState){
+        
             vm.analyticMap();
-        }
+        
     })
 
     function init(element) {
