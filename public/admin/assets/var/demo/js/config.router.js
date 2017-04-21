@@ -245,7 +245,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         templateUrl: "/admin/assets/var/demo/js/dashboard/dashboard.html",
         title: 'Dashboard',
         icon: 'ti-layout-media-left-alt',
-        resolve: loadSequence('DOHYCtrl', 'dashboardService', 'DashboardWorkstreamTileComponentController', 'DashboardAnalyticTileComponentController', 'DashboardInboxComponentController', 'jsVideoUrlParser', 'highcharts')
+        resolve: loadSequence('DOHYCtrl', 'dashboardService', 'DashboardInboxComponent', 'DashboardWorkstreamTileComponentController', 'DashboardAnalyticTileComponentController', 'DashboardInboxComponentController', 'jsVideoUrlParser', 'highcharts')
     })
     .state('app.inventory', {
         url: '/inventory',
