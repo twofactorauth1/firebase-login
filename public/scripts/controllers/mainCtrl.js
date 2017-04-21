@@ -33,5 +33,11 @@ mainApp.controller('MainCtrl', ['$scope', 'websiteService', 'accountService', 't
             }
         });
 
+        /*
+         * Setup some org specific settings
+         */
+        $scope.orgId = $window.indigenous.orgId;
+        ENV.stripeKey = ENV.stripeKey[$scope.orgId];
+
     }
 ]);

@@ -39,6 +39,9 @@ _.extend(view.prototype, BaseView.prototype, {
                         logger.warn('Could not find organization for account:', account);
                     }
                     data.account = account.toJSON();
+                    if(!data.account.orgId) {
+                        data.account.orgId = 0;
+                    }
                     if(org && account.id() === org.get('adminAccount')) {
                         data.account.isOrgAdmin = true;
                     } else {
