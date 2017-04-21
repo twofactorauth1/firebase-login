@@ -559,6 +559,17 @@
         var deleteMessage = "Do you want to delete the "+ selectedContacts.length + " contact?";
         if(selectedContacts.length > 1)
           deleteMessage = "Do you want to delete the "+ selectedContacts.length + " contacts?";
+        if(selectedContacts.length>1)
+        {
+        var yesconfimationtext="Yes, delete them!";
+        var noconfirmationtext="No, do not delete them!";
+        }
+        else
+        {
+        var yesconfimationtext="Yes, delete it!";
+        var noconfirmationtext="No, do not delete it!";
+
+        }
         if ($scope.bulkActionChoice.action.data == 'delete') {
             SweetAlert.swal({
                 title: "Are you sure?",
@@ -566,8 +577,8 @@
                 type: "warning",
                 showCancelButton: true,
                 confirmButtonColor: "#DD6B55",
-                confirmButtonText: "Yes, delete it!",
-                cancelButtonText: "No, do not delete it!",
+                confirmButtonText: yesconfimationtext,
+                cancelButtonText: noconfirmationtext,
                 closeOnConfirm: true,
                 closeOnCancel: true
               },
