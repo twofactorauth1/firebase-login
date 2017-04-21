@@ -526,7 +526,7 @@ var dao = {
     getStripeSubscription: function(customerId, subscriptionId, accessToken, fn) {
         var self = this;
         self.log.debug('>> getStripeSubscription');
-        var apiToken = self.delegateStripe(null);
+        var apiToken = self.delegateStripe(accessToken);
 
         stripe.customers.retrieveSubscription( customerId, subscriptionId, apiToken,
             function(err, subscription) {
