@@ -134,8 +134,9 @@ module.exports = {
                         /*
                          * Cache users
                          */
-                        var userIDMap = {};
-                        if(orders && orders.length){
+                        
+                        if(orders){
+                            var userIDMap = {};
                             async.each(orders.results, function(order, callback){
                                 if(userIDMap[order.get('userId')]) {
                                     var _user = userIDMap[order.get('userId')];
@@ -165,7 +166,7 @@ module.exports = {
                             });
                         }
                         else{
-                            cb(null, orders);
+                            cb(err, orders);
                         }
                         
                     }
