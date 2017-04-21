@@ -63,6 +63,8 @@ _.extend(api.prototype, baseApi.prototype, {
         app.post(this.url('initialize'), this.initializeUserAndAccount.bind(this));
 
         app.get(this.url('authenticated'), this.setup.bind(this), this.isAuthenticatedSession.bind(this));
+        app.get(this.url('orgConfig'), this.isAuthApi.bind(this), this.getOrgConfig.bind(this));
+        app.post(this.url('orgConfig'), this.isAuthApi.bind(this), this.updateOrgConfig.bind(this));
         app.get(this.url(':id'), this.isAuthApi.bind(this), this.getUserById.bind(this));
         app.put(this.url(':id'), this.isAuthApi.bind(this), this.updateUser.bind(this));
         app.post(this.url(':id/permissions'), this.isAuthApi.bind(this), this.updateUserPermissions.bind(this));
@@ -979,6 +981,29 @@ _.extend(api.prototype, baseApi.prototype, {
         });
 
 
+    },
+
+    getOrgConfig: function(req, resp) {
+        var self = this;
+        var accountId = parseInt(self.accountId(req));
+        var userId = self.userId(req);
+        self.log.debug(accountId, userId, '>> getOrgConfig');
+        userManager.getUserOrgConfig(accountId, userId, function(err, orgConfig){
+            self.log.debug(accountId, userId, '<< getOrgConfig');
+            self.sendResultOrError(resp, err, orgConfig, 'Error getting config');
+        });
+    },
+
+    updateOrgConfig: function(req, resp) {
+        var self = this;
+        var accountId = parseInt(self.accountId(req));
+        var userId = self.userId(req);
+        self.log.debug(accountId, userId, '>> updateOrgConfig');
+        var orgConfig = req.body;
+        userManager.updateUserOrgConfig(accountId, userId, orgConfig, function(err, orgConfig){
+            self.log.debug(accountId, userId, '<< updateOrgConfig');
+            self.sendResultOrError(resp, err, orgConfig, 'Error updating config');
+        });
     },
 
     updateUserPermissions: function(req, resp) {
