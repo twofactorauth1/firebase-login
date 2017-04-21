@@ -135,33 +135,39 @@ module.exports = {
                          * Cache users
                          */
                         var userIDMap = {};
-                        async.each(orders, function(order, callback){
-                            if(userIDMap[order.get('userId')]) {
-                                var _user = userIDMap[order.get('userId')];
-                                order.set("submitter", _user);
-                                callback();
-                            } else {
-                                userManager.getUserById(order.get('userId'), function(err, user){
-                                    if(err) {
-                                        log.error(accountId, userId, 'Error getting user:', err);
-                                        //return anyway
-                                        callback();
-                                    } else {
-                                        var _user = {
-                                            _id: user.get("_id"),
-                                            username: user.get("username"),
-                                            first: user.get("first"),
-                                            last: user.get("last")
-                                        };
-                                        userIDMap[order.get('userId')] = _user;
-                                        order.set("submitter", _user);
-                                        callback();
-                                    }
-                                });
-                            }
-                        }, function(err){
-                            cb(err, orders);
-                        });
+                        if(orders && orders.length){
+                            async.each(orders.results, function(order, callback){
+                                if(userIDMap[order.get('userId')]) {
+                                    var _user = userIDMap[order.get('userId')];
+                                    order.set("submitter", _user);
+                                    callback();
+                                } else {
+                                    userManager.getUserById(order.get('userId'), function(err, user){
+                                        if(err) {
+                                            log.error(accountId, userId, 'Error getting user:', err);
+                                            //return anyway
+                                            callback();
+                                        } else {
+                                            var _user = {
+                                                _id: user.get("_id"),
+                                                username: user.get("username"),
+                                                first: user.get("first"),
+                                                last: user.get("last")
+                                            };
+                                            userIDMap[order.get('userId')] = _user;
+                                            order.set("submitter", _user);
+                                            callback();
+                                        }
+                                    });
+                                }
+                            }, function(err){
+                                cb(err, orders);
+                            });
+                        }
+                        else{
+                            cb(null, orders);
+                        }
+                        
                     }
                 });
             }
