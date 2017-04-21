@@ -32,6 +32,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.post(this.url('po/:id/notes'), this.isAuthAndSubscribedApi.bind(this), this.addPurchaseOrderNotes.bind(this));
         app.post(this.url('po/deletepurchaseorders'), this.isAuthAndSubscribedApi.bind(this), this.deleteBulkPurchaseOrders.bind(this));
         app.delete(this.url('po/:id'), this.isAuthAndSubscribedApi.bind(this), this.deletePurchaseOrder.bind(this));
+        app.get(this.url('dashboard/listpurchaseorders'), this.isAuthAndSubscribedApi.bind(this), this.getDashboardPurchaseOrders.bind(this));
     },
 
     listPurchaseOrders: function(req, resp) {
@@ -46,6 +47,17 @@ _.extend(api.prototype, baseApi.prototype, {
         });
     },
 
+    getDashboardPurchaseOrders: function(req, resp){
+        var self = this;
+        var accountId = parseInt(self.accountId(req));
+        var userId = self.userId(req);
+        self.log.debug(accountId, userId, '>> getDashboardPurchaseOrders');
+
+        poManager.getDashboardPurchaseOrders(accountId, userId, function(err, list){
+            self.log.debug(accountId, userId, '<< getDashboardPurchaseOrders');
+            return self.sendResultOrError(resp, err, list, "Error listing orders");
+        });
+    },
     
     createPurchaseOrder: function(req, res) {
         var self = this;
