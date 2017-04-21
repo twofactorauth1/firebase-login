@@ -96,10 +96,9 @@
                     <thead ng-class="{'bg-white': tableView == 'grid'}">
                         <tr>
                             <th>Item</th>
-
-                            <th colspan="2">Item Description</th>
+                            <th colspan="2">Description</th>
                             <th>Qty</th>
-                            <th>Unit Price</th>
+                            <th style="white-space: nowrap;">Unit Price</th>
                             <th class="hidden-xs">Line Total</th>
                         </tr>
                         <tr ng-if="showFilter">
@@ -114,12 +113,11 @@
                     <tbody>
                         <tr ng-repeat="order in vm.displayedOrders" class="product-item">
                             <td><strong>Code: </strong>{{order.INV1_ItemCode}}</td>
-
-                            <td><strong>Item: </strong><span class="list-name"></span><span ng-text-truncate="order.INV1_Dscription" ng-tt-chars-threshold="25" ng-tt-no-toggling></span></td>
-                            <td><strong>Description: </strong><span class="list-name"></span><span ng-text-truncate="order.INV1_U_dscription" ng-tt-chars-threshold="30" ng-tt-no-toggling title="{{order.INV1_U_dscription}}"></span></td>
+                            <td><strong>Item: </strong><a ng-click="vm.goToInventory(order.INV1_Dscription)"><span style="white-space: nowrap;" ng-text-truncate="order.INV1_Dscription" ng-tt-chars-threshold="25" ng-tt-no-toggling></span></td></a></td>
+                            <td><strong>Description: </strong><span class="hidden-xs" ng-text-truncate="order.INV1_U_dscription" ng-tt-chars-threshold="30" ng-tt-no-toggling title="{{order.INV1_U_dscription}}"></span></td>
                             <td><strong>Qty: </strong>{{vm.parseValueToFloat(order.INV1_Quantity)}}</td>
                             <td><strong>Unit Price: </strong>{{order.INV1_Price | currency : vm.invoiceDetails[0]._CustStatmentHdr_Currency}}</td>
-                            <td><strong>Line Total: </strong>{{order.INV1_LineTotal | currency : vm.invoiceDetails[0]._CustStatmentHdr_Currency}}</td>
+                            <td class="hidden-xs"><strong>Line Total: </strong>{{order.INV1_LineTotal | currency : vm.invoiceDetails[0]._CustStatmentHdr_Currency}}</td>
                         </tr>
                     </tbody>
                     <tfoot>

@@ -79,24 +79,32 @@ function dashboardAnalyticTileComponentController($scope, $attrs, $filter, Dashb
 
                     break;
                 case 'PurchaseOrders':
-
                     ret.widgetTitle = 'Purchase Orders';
                     ret.buttonTitle = 'Submit a PO';
                     ret.link = '#/purchase-orders';
 
                     ret.header = [
                         {label: 'PO #'},
-                        {label: 'Amount'},
-                        {label: 'Status'}
-                    ];
-                    ret.data = [
-                        {
-                            field1: "12345",
-                            field2: "$432,000",
-                            field3: "Complete",
-                        }
+                        {label: 'DESC'},
+                        {label: 'Submitter'}
                     ];
 
+                    $scope.$watch(function() { return DashboardService.purchaseOrders; }, function(purchaseOrders){
+                        if(purchaseOrders){
+                            ret.data = purchaseOrders;
+                        }
+                        ret.data = []
+
+                        _.each(purchaseOrders, function(order){
+                            ret.data.push({
+                                field1: order.title,
+                                field2: order.text,
+                                field3: getPoUser(order),
+                                link: ret.link + "/" + order._id
+                            })
+                        })
+                    });
+                            
                     break;
                 case 'Invoices':
 
@@ -175,6 +183,20 @@ function dashboardAnalyticTileComponentController($scope, $attrs, $filter, Dashb
             vm.analyticMap();
         }
     })
+
+
+    function getPoUser(order){
+        var _user = "";
+        if(order.submitter){
+            if(order.submitter.first){
+                _user = order.submitter.first + " " + order.submitter.last; 
+            }
+            else{
+                _user = order.submitter.username;
+            }
+        }
+        return _user;
+    }
 
     function init(element) {
         vm.element = element;

@@ -17,6 +17,7 @@ var emailMessageManager = require('../../emailmessages/emailMessageManager');
 var userManager = require('../../dao/user.manager');
 var moment = require('moment');
 var accountManager = require('../../accounts/account.manager');
+var orgManager = require('../../organizations/organization_manager');
 var utils = require('../../utils/commonutils');
 
 var api = function() {
@@ -41,6 +42,7 @@ _.extend(api.prototype, baseApi.prototype, {
         //GET
         //app.get(this.url(''), this.isAuthApi, this.getCurrentAccount.bind(this));
         app.get(this.url(''), this.setup.bind(this), this.getCurrentAccount.bind(this));
+        app.get(this.url('organization'), this.isAuthApi.bind(this), this.getCurrentOrganization.bind(this));
 
         app.get(this.url('billing'), this.isAuthApi.bind(this), this.getCurrentAccountBilling.bind(this));
         app.post(this.url('billing'), this.isAuthApi.bind(this), this.updateCurrentAccountBilling.bind(this));
@@ -168,6 +170,24 @@ _.extend(api.prototype, baseApi.prototype, {
 
     },
 
+    getCurrentOrganization: function(req, resp) {
+        var self = this;
+        var userId = self.userId(req);
+        var accountId = parseInt(self.accountId(req));
+        self.log.debug(accountId, userId, '>> getCurrentOrganization');
+        self.checkPermission(req, self.sc.privs.MODIFY_ACCOUNT, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(res);
+            } else {
+                accountManager.getOrganizationByAccountId(accountId, userId, function(err, org){
+                    self.log.debug(accountId, userId, '<< getCurrentOrganization');
+                    self.sendResultOrError(resp, err, org, "Error finding organization");
+                });
+            }
+        });
+
+    },
+
     /**
      * No security here
      * @param req
@@ -184,18 +204,29 @@ _.extend(api.prototype, baseApi.prototype, {
                     self.log.debug(accountId, userId, '<< getCurrentAccount');
                     return resp.send({});
                 } else {
-                    self.log.debug(accountId, userId, '<< getCurrentAccount');
-                    self._addTrialDaysToAccount(value);
-                    if(accountId !== appConfig.mainAccountID) {
-                        self.sm.verifySubscriptionWithoutSettingSessionVariables(req, accountId, function(err, isValid){
-                            if(isValid === false && accountId !== appConfig.mainAccountID) {
-                                value.set('locked_sub', true);
+                    accountManager.getOrganizationById(accountId, userId, value.get('orgId'), function(err, organization){
+                        self.log.debug(accountId, userId, '<< getCurrentAccount');
+                        self._addTrialDaysToAccount(value);
+                        if(accountId !== appConfig.mainAccountID) {
+                            self.sm.verifySubscriptionWithoutSettingSessionVariables(req, accountId, function(err, isValid){
+                                if(isValid === false && accountId !== appConfig.mainAccountID) {
+                                    value.set('locked_sub', true);
+                                }
+                                var json = value.toJSON('public');
+                                if(organization && value.id() === organization.get('adminAccount')) {
+                                    json.isOrgAdmin = true;
+                                }
+                                return resp.send(json);
+                            });
+                        } else {
+                            var json = value.toJSON('public');
+                            if(organization && value.id() === organization.get('adminAccount')) {
+                                json.isOrgAdmin = true;
                             }
-                            return resp.send(value.toJSON('public'));
-                        });
-                    } else {
-                        return resp.send(value.toJSON('public'));
-                    }
+                            return resp.send(json);
+                        }
+                    });
+
 
                 }
             } else {

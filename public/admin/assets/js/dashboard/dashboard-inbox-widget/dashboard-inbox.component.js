@@ -1,6 +1,6 @@
 (function(){
 
-app.directive('dashboardInboxDemoComponent', dashboardInbox);
+app.directive('dashboardInboxComponent', dashboardInbox);
 /* @ngInject */
 function dashboardInbox() {
 
@@ -12,7 +12,7 @@ function dashboardInbox() {
         },
         replace: true,
         templateUrl: 'assets/var/demo/js/dashboard/dashboard-inbox-widget/dashboard-inbox.component.html',
-        controller: 'DashboardInboxDemoComponentController',
+        controller: 'DashboardInboxComponentController',
         controllerAs: 'vm',
         bindToController: true,
         link: function(scope, element, attrs, ctrl) {

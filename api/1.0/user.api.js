@@ -63,8 +63,11 @@ _.extend(api.prototype, baseApi.prototype, {
         app.post(this.url('initialize'), this.initializeUserAndAccount.bind(this));
 
         app.get(this.url('authenticated'), this.setup.bind(this), this.isAuthenticatedSession.bind(this));
+        app.get(this.url('orgConfig'), this.isAuthApi.bind(this), this.getOrgConfig.bind(this));
+        app.post(this.url('orgConfig'), this.isAuthApi.bind(this), this.updateOrgConfig.bind(this));
         app.get(this.url(':id'), this.isAuthApi.bind(this), this.getUserById.bind(this));
         app.put(this.url(':id'), this.isAuthApi.bind(this), this.updateUser.bind(this));
+        app.post(this.url(':id/permissions'), this.isAuthApi.bind(this), this.updateUserPermissions.bind(this));
         app.delete(this.url(':id'), this.isAuthAndSubscribedApi.bind(this), this.deleteUser.bind(this));
 
         app.get(this.url('exists/:username'), this.setup.bind(this), this.userExists.bind(this));
@@ -118,7 +121,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         userDao.getById(user.id(), function(err, value) {
            if (!err && value) {
-               var json = value.toJSON("public");
+               var json = value.toJSON("manage", {accountId:self.accountId(req)});
                if(json && json.profilePhotos && json.profilePhotos[0] && json.profilePhotos[0].url) {
                    json.profilePhotos[0] = json.profilePhotos[0].url;
                }
@@ -942,13 +945,7 @@ _.extend(api.prototype, baseApi.prototype, {
         var user = new $$.m.User(req.body);
         var userId=req.body._id;
 
-  /*      userDao.saveOrUpdate(user, function(err, value) {
-            if (!err) {
-                self.sendResult(resp, value);
-            } else {
-                self.wrapError(resp, 500, "There was an error updating contact", err, value);
-            }
-        });*/
+
 
         userDao.getById(userId, function(err, value) {
             if (!err && value != null) {
@@ -964,7 +961,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 }
                 self.checkPermission(req, self.sc.privs.MODIFY_USER, function (err, isAllowed) {
                     if (isAllowed !== true || !_.contains(value.getAllAccountIds(), self.accountId(req))) {
-                        return self.send403(res);
+                        return self.send403(resp);
                     } else {
                         userDao.saveOrUpdate(user, function(err, value) {
                             if (!err && value != null) {
@@ -984,6 +981,59 @@ _.extend(api.prototype, baseApi.prototype, {
         });
 
 
+    },
+
+    getOrgConfig: function(req, resp) {
+        var self = this;
+        var accountId = parseInt(self.accountId(req));
+        var userId = self.userId(req);
+        self.log.debug(accountId, userId, '>> getOrgConfig');
+        userManager.getUserOrgConfig(accountId, userId, function(err, orgConfig){
+            self.log.debug(accountId, userId, '<< getOrgConfig');
+            self.sendResultOrError(resp, err, orgConfig, 'Error getting config');
+        });
+    },
+
+    updateOrgConfig: function(req, resp) {
+        var self = this;
+        var accountId = parseInt(self.accountId(req));
+        var userId = self.userId(req);
+        self.log.debug(accountId, userId, '>> updateOrgConfig');
+        var orgConfig = req.body;
+        userManager.updateUserOrgConfig(accountId, userId, orgConfig, function(err, orgConfig){
+            self.log.debug(accountId, userId, '<< updateOrgConfig');
+            self.sendResultOrError(resp, err, orgConfig, 'Error updating config');
+        });
+    },
+
+    updateUserPermissions: function(req, resp) {
+        var self = this;
+        var accountId = parseInt(self.accountId(req));
+        var userId = self.userId(req);
+        self.log.debug(accountId, userId, '>> updateUserPermissions');
+        var roleAry = req.body.roleAry;
+        var targetUserId = req.params.id;
+
+        self.isAdmin(req, function(err, isAdmin){
+            self.isOrgAdminUser(accountId, userId, req, function(err, isOrgAdminUser){
+                if(isAdmin === true || isOrgAdminUser === true) {
+                    userManager.getUserById(userId, function(err, user){
+                        if(err || !user) {
+                            self.log.error(accountId, userId, 'Error fetching user:', err);
+                            return self.wrapError(resp, 500, null, err);
+                        } else {
+                            user.setPermissionsForAccount(accountId, roleAry);
+                            userDao.saveOrUpdate(user, function(err, savedUser){
+                                self.log.debug(accountId, userId, '<< updateUserPermissions');
+                                self.sendResultOrError(resp, err, savedUser.toJSON('manage', {accountId:accountId}), 'Error updating user');
+                            });
+                        }
+                    });
+                } else {
+                    return self.send403(resp);
+                }
+            });
+        });
     },
 
     getUserPreferences: function(req, res) {

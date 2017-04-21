@@ -21,15 +21,18 @@ function dashboardAnalyticTileComponentController($scope, $attrs, $filter, Dashb
         'Revenue': {},
         'SocialMedia': {}
     };
-   
+   $scope.finalrevenuedata = 'loading....';
+   $scope.showrevenue=false;
     function analyticMap() {
         var ret = {};
         var revenuedata = DashboardService.revenueFromStripe;
+        $scope.finalrevenuedata = 'loading....';
         revenuedata = parseFloat(revenuedata).toFixed(2);
             if(!isNaN(revenuedata)){
-                var finalrevenuedata = '$'+revenuedata;
+                 $scope.finalrevenuedata = revenuedata;
+                  $scope.showrevenue = true;
             }else{
-                var finalrevenuedata = ' ';
+                 $scope.finalrevenuedata = 'loading....';
             }
             
         var analyticsObject = DashboardService.state.analytics;
@@ -122,7 +125,7 @@ function dashboardAnalyticTileComponentController($scope, $attrs, $filter, Dashb
                     ret.data = [
                         {
                             analyticDataLabel: 'YTD New Order Rev.',
-                            analyticDataValue: '$' + parseFloat(analyticsObject.revenue.YTDTotalAmount).toFixed(2)
+                            analyticDataValue: parseFloat(analyticsObject.revenue.YTDTotalAmount).toFixed(2)
                         },
                         // {
                         //     analyticDataLabel: 'YTD Tax Collected',
@@ -135,7 +138,7 @@ function dashboardAnalyticTileComponentController($scope, $attrs, $filter, Dashb
                         ,
                         {
                            analyticDataLabel: 'YTD Revenue (Stripe)',
-                           analyticDataValue: finalrevenuedata
+                           analyticDataValue: $scope.finalrevenuedata
                         }
                     ]
 
@@ -147,7 +150,7 @@ function dashboardAnalyticTileComponentController($scope, $attrs, $filter, Dashb
         } else {
             $timeout(function(){
                 vm.analyticMap();;
-            }, 200);
+            }, 100);
         }
 
         vm.uiDetails = ret;
@@ -160,9 +163,9 @@ function dashboardAnalyticTileComponentController($scope, $attrs, $filter, Dashb
         }
     })
       $scope.$watch(function() { return DashboardService.revenueFromStripe }, function(state, oldState) {
-        if(state && state !== oldState){
+        
             vm.analyticMap();
-        }
+        
     })
 
     function init(element) {

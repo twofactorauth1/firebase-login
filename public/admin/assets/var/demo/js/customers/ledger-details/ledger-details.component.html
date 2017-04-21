@@ -89,12 +89,12 @@
                 <table class="table table-hover table-striped" ng-class="{'grid': tableView == 'grid', 'bg-white table-list-view': tableView == 'list'}" ng-if="!vm.uiState.loading">
                     <thead ng-class="{'bg-white': tableView == 'grid'}">
                         <tr>
-                            <th>Invoice</th>
-                            <th>Lines</th>
-                            <th>Var PO</th>
-                            <th>Invoice Date</th>
-                            <th>Due Date</th>
-                            <th>Invoice Total</th>
+                            <th st-sort="_CustStatmentDtl_TransId" style="white-space: nowrap;">Invoice</th>
+                            <th class="hidden-xs" st-sort="lineItems" style="white-space: nowrap;">Lines</th>
+                            <th class="hidden-xs">Var PO</th>
+                            <th style="white-space: nowrap;"><span class="hidden-xs">Invoice </span>Date</th>
+                            <th style="white-space: nowrap;">Due <span class="hidden-xs">Date</span></th>
+                            <th st-sort="invoiceTotal" style="white-space: nowrap;"><span class="hidden-xs">Invoice </span>Total</th>
                         </tr>
                         <tr ng-if="showFilter">
                             <th>
@@ -108,8 +108,8 @@
                     <tbody>
                         <tr ng-repeat="ledger in vm.displayedCustomerLedger" class="product-item" ng-click="vm.viewInventoryDetails(ledger._CustStatmentDtl_TransId)">
                             <td><strong>Invoice : </strong>{{ledger._CustStatmentDtl_TransId}}</td>
-                            <td><strong>Lines: </strong>{{ledger.lineItems}}</td>
-                            <td><strong>Var PO : </strong>{{ledger['_CustStatmentDtl_Customer_PO_No.']}}</td>
+                            <td class="hidden-xs"><strong>Lines: </strong>{{ledger.lineItems}}</td>
+                            <td class="hidden-xs"><strong>Var PO : </strong>{{ledger['_CustStatmentDtl_Customer_PO_No.']}}</td>
                             <td><strong>Invoice Date: </strong>{{vm.parseValueToDate(ledger._CustStatmentDtl_RefDate) | date:'M/d/yyyy'}}</td>
                             <td><strong>Due Date: </strong>{{vm.parseValueToDate(ledger._CustStatmentDtl_DueDate) | date:'M/d/yyyy'}}</td>
                             <td><strong>Invoice Total: </strong>{{ledger.invoiceTotal | currency : ledger._CustStatmentHdr_Currency}}</td>

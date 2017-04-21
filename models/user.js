@@ -188,7 +188,9 @@ var user = $$.m.ModelBase.extend({
                     default_tab: "account_information"
                 }
             },
-            intercomHash: ""
+            intercomHash: "",
+
+            orgConfig:[]
         };
     },
 
@@ -299,6 +301,32 @@ var user = $$.m.ModelBase.extend({
         }
     },
     //endregion
+
+    getOrgConfig: function(orgId) {
+        var orgConfigAry = this.get('orgConfig');
+        for(var i=0; i<orgConfigAry.length; i++) {
+            if(orgConfigAry[i].orgId === orgId) {
+                return orgConfigAry[i];
+            }
+        }
+        return null;
+    },
+
+    setOrgConfig: function(orgId, orgConfig) {
+        var orgConfigAry = this.get('orgConfig');
+        var index = -1;
+        for(var i=0; i<orgConfigAry.length; i++) {
+            if(orgConfigAry[i].orgId === orgId) {
+                index = i;
+            }
+        }
+        if(index > 0) {
+            orgConfigAry[index] = orgConfig;
+        } else {
+            orgConfigAry.push(orgConfig);
+        }
+        return orgConfig;
+    },
 
 
     //region Profile
@@ -869,6 +897,13 @@ var user = $$.m.ModelBase.extend({
         }
 
         return userAccount.permissions || [];
+    },
+
+    setPermissionsForAccount: function(accountId, roleAry) {
+        var userAccount = this.getUserAccount(accountId);
+        if(userAccount) {
+            userAccount.permissions = roleAry;
+        }
     },
 
 

@@ -92,6 +92,26 @@ module.exports = {
         });
     },
 
+    getInventoryItemByName: function(accountId, userId, name, fn) {
+        var self = this;
+        self.log.debug(accountId, userId, '>> getInventoryItemByName');
+        var query = {'OITM_ItemName':name};
+        var collection = 'inventory';
+        ziDao.findRawWithFieldsLimitAndOrder(query, 0, 1, null, null, collection, null, function(err, resp) {
+            if(err) {
+                self.log.error(accountId, userId, 'Error getting inventory item:', err);
+                fn(err);
+            } else {
+                if(resp && resp.results) {
+                    self.log.debug(accountId, userId, '<< getInventoryItemByName');
+                    fn(null, resp.results[0]);
+                } else {
+                    fn();
+                }
+            }
+        });
+    },
+
     inventoryFilter: function(accountId, userId, query, skip, limit, sortBy, sortDir, fn) {
         var self = this;
         self.log.debug(accountId, userId, '>> inventoryFilter');
@@ -122,7 +142,7 @@ module.exports = {
 
         if(fieldSearch){
             var fieldSearchArr = [];
-        
+
             for(var i=0; i <= Object.keys(fieldSearch).length - 1; i++){
                 var key = Object.keys(fieldSearch)[i];
                 var value = fieldSearch[key];
@@ -138,23 +158,26 @@ module.exports = {
                             obj[key] ={$gt:0};
                             fieldSearchArr.push(obj);
                         }
-                    } else{
+                    } else if (key == 'OITM_ItemCode') {
+                        var obj = {};
+                        obj[key] = parseInt(value);
+                        fieldSearchArr.push(obj);
+                    } else {
                         var obj = {};
                         obj[key] = new RegExp(value, 'i');
                         fieldSearchArr.push(obj);
                     }
-                    
+
                 }
             }
             if(fieldSearchArr.length){
-                query["$and"] = fieldSearchArr; 
+                query["$and"] = fieldSearchArr;
             }
-            self.log.debug('query:', query);
         } else {
             query = {
                 $or:[
                     {'@id':regex},
-                    {OITM_ItemCode:regex},
+                    {OITM_ItemCode:parseInt(term)},
                     {OITM_ItemName:regex},
                     {OITM_U_dscription:regex},
                     {OITB_ItmsGrpNam:regex},
@@ -173,7 +196,7 @@ module.exports = {
                 ]
             };
         }
-
+        self.log.debug('query:', query);
 
         var fields = null;
         var collection = 'inventory';

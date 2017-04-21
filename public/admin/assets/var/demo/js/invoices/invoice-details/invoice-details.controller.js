@@ -2,15 +2,15 @@
 
 app.controller('InvoiceDetailsController', invoiceDetailsController);
 
-invoiceDetailsController.$inject = ['$scope', '$state', '$attrs', '$filter', '$modal', '$timeout', '$stateParams', '$location', 'InvoiceService', 'CustomersService'];
+invoiceDetailsController.$inject = ['$scope', '$state', '$attrs', '$filter', '$modal', '$timeout', '$stateParams', '$location', 'InvoiceService', 'InventoryService'];
 /* @ngInject */
-function invoiceDetailsController($scope, $state, $attrs, $filter, $modal, $timeout, $stateParams, $location, InvoiceService, CustomersService) {
+function invoiceDetailsController($scope, $state, $attrs, $filter, $modal, $timeout, $stateParams, $location, InvoiceService, InventoryService) {
 
     var vm = this;
 
     vm.init = init;
 
-    
+
 
     vm.uiState = {loading: true};
 
@@ -18,6 +18,7 @@ function invoiceDetailsController($scope, $state, $attrs, $filter, $modal, $time
     vm.calculateTotal = calculateTotal;
     vm.parseValueToFloat = parseValueToFloat;
     vm.parseValueToDate = parseValueToDate;
+    vm.goToInventory = goToInventory;
 
     vm.customerId = $stateParams.customerId;
     vm.transId = $stateParams.transId;
@@ -50,12 +51,21 @@ function invoiceDetailsController($scope, $state, $attrs, $filter, $modal, $time
         })
     }
 
+    function goToInventory(name){
+        InventoryService.getSingleInventoryByName(name).then(function(response){
+            if (response) {
+                $state.go('app.singleInventory', {inventoryId: response.data["@id"]});
+            } else {
+                // no-op;
+            }
+        });
+    }
 
     function loadInvoiceDetails(ledgerDetails){
         vm.invoiceDetails = _.filter(ledgerDetails, function(row){
             return row._CustStatmentDtl_TransId == vm.transId
         })
-        vm.totalLineOrder = calculateTotal(vm.invoiceDetails);            
+        vm.totalLineOrder = calculateTotal(vm.invoiceDetails);
     }
 
     function calculateTotal(orders){

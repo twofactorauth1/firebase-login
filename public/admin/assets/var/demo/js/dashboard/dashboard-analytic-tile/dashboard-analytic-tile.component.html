@@ -1,6 +1,6 @@
 <div class="analytic-tile-container image--basic" ng-hide="!vm.uiDetails.header">
 
-    <div class="indi-rounded panel panel-white text-center">
+    <div class="indi-rounded panel panel-white text-center demo-analytic-widget">
 
         <img class="indi-rounded-img" src="//s3.amazonaws.com/indigenous-digital-assets/account_6/dohy-circle-configure-business-profile_1449548586772.png" alt="{{vm.uiDetails.widgetTitle}}" />
 
@@ -15,9 +15,11 @@
                     </tr>
                     <tbody>
                         <tr class="content-row" ng-repeat="item in vm.uiDetails.data">
-                            <td>{{item.field1}}</td>
-                            <td>{{item.field2}}</td>
-                            <td ng-if="item.field3">{{item.field3}}</td>
+                            <td>
+                                <a href="{{item.link}}"><span ng-text-truncate="item.field1" ng-tt-chars-threshold="10" ng-tt-no-toggling></span></a>
+                            </td>
+                            <td><span ng-text-truncate="item.field2" ng-tt-chars-threshold="10" ng-tt-no-toggling></span></td>
+                            <td ng-if="item.field3"><span ng-text-truncate="item.field3" ng-tt-chars-threshold="15" ng-tt-no-toggling></span></td>
                         </tr>
                     </tbody>
                 </table>

@@ -14,9 +14,15 @@
                     <span class="pull-left">{{mydata.analyticDataLabel}}</span>
                 </div>
 
-                <div class="analytic-data-value">
-                    <span class="pull-right">{{mydata.analyticDataValue}}</span>
+                <div class="analytic-data-value" ng-if="mydata.analyticDataLabel == 'YTD New Order Rev.' || mydata.analyticDataLabel == 'YTD Revenue (Stripe)' ">
+                    <span class="pull-right" ng-show="showrevenue || mydata.analyticDataLabel == 'YTD New Order Rev.'">${{mydata.analyticDataValue | number : fractionSize}}</span>
+                     <span class="pull-right" ng-if="mydata.analyticDataLabel == 'YTD Revenue (Stripe)'" ng-hide="showrevenue">{{finalrevenuedata}}</span>
+
                 </div>
+                <div class="analytic-data-value" ng-if="mydata.analyticDataLabel != 'YTD New Order Rev.' && mydata.analyticDataLabel != 'YTD Revenue (Stripe)'">
+                    <span class="pull-right">{{mydata.analyticDataValue | number : fractionSize}}</span>
+                </div>
+
 
             </div>
 

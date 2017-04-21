@@ -18,6 +18,7 @@ var accountDao = require("../dao/account.dao");
 var middleware = require('../common/sharedMiddleware');
 var orgDao = require('../organizations/dao/organization.dao');
 var userDao = require('../dao/user.dao');
+var orgManager = require('../organizations/organization_manager');
 
 //this flag instructs the securitymanager to verify the subscription.
 var verifySubscription = true;
@@ -536,6 +537,35 @@ _.extend(apiBase.prototype, {
                 fn(null, false);
             }
         });
+    },
+
+    isOrgAdminUser: function(accountId, userId, req, fn) {
+        orgManager.getOrgByAccountId(accountId, userId, function(err, organization){
+            if(organization && organization.get('adminAccount') === accountId) {
+                userDao.getById(userId, $$.m.User, function(err, user){
+                    if(user && _.contains(user.getPermissionsForAccount(accountId), 'admin')) {
+                        fn(null, true);
+                    } else {
+                        fn(null, false);
+                    }
+                });
+            } else {
+                fn(null, false);
+            }
+        });
+    },
+
+    _isAdmin: function(req, fn) {
+        var self = this;
+        //console.log(req);
+
+        if(self.userId(req) === 1 || self.userId(req)===4) {
+            fn(null, true);
+        } else if(_.contains(req.session.permissions, 'manager')){
+            fn(null, true);
+        } else {
+            fn(null, false);
+        }
     },
 
     getOrgAdminId: function(accountId, userId, req, fn) {

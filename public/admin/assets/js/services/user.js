@@ -33,6 +33,16 @@
       });
     };
 
+
+    this.editUser = function(user, id, fn) {
+      var apiUrl = baseUrl + ['user', id].join('/');
+      $http.put(apiUrl, user)
+      .success(function(data, status, headers, config) {
+        // ToasterService.show('success', 'User update.');
+        fn(data);
+      });
+    };
+
     this.setPassword = function(password, fn) {
       var apiUrl = baseUrl + ['user', 'password'].join('/');
       console.log('---- UserService.setPassword.api = ', apiUrl);

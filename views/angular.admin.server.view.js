@@ -23,6 +23,7 @@ _.extend(view.prototype, BaseView.prototype, {
 
     show: function(root) {
         logger.debug('>> show [' + _req.originalUrl + ']');
+        var self = this;
         var data = {
             router:"account/admin",
             root:root || "admin",
@@ -31,92 +32,110 @@ _.extend(view.prototype, BaseView.prototype, {
             includeFooter:true
         };
 
-        var self = this;
-        this.getAccountByHost(_req, function(err, account) {
+        self.getAccountByHost(_req, function(err, account) {
             if (!err && account != null) {
-                data.account = account.toJSON();
-                logger.info('data.account.isOrgAdmin', data.account.isOrgAdmin);
-                //determine trial days remaining
-                data.account.billing = data.account.billing || {};
-                var trialDays = data.account.billing.trialLength || appConfig.trialLength;//using 15 instead of 14 to give 14 FULL days
-                var endDate = moment(data.account.billing.signupDate).add(trialDays, 'days');
-                data.account.trialDaysRemaining = endDate.diff(moment(), 'days');
-                if(data.account.trialDaysRemaining < 0) {
-                    data.account.trialDaysRemaining = 0;
-                }
+                self.getOrganizationByAccountId(account.id(), function(err, org){
+                    if(err || !org) {
+                        logger.warn('Could not find organization for account:', account);
+                    }
+                    data.account = account.toJSON();
+                    if(org && account.id() === org.get('adminAccount')) {
+                        data.account.isOrgAdmin = true;
+                    } else {
+                        data.account.isOrgAdmin = false;
+                        logger.debug('org:', org);
+                        logger.debug('account:', account);
+                    }
+                    logger.info('data.account.isOrgAdmin', data.account.isOrgAdmin);
+                    //determine trial days remaining
+                    data.account.billing = data.account.billing || {};
+                    var trialDays = data.account.billing.trialLength || appConfig.trialLength;//using 15 instead of 14 to give 14 FULL days
+                    var endDate = moment(data.account.billing.signupDate).add(trialDays, 'days');
+                    data.account.trialDaysRemaining = endDate.diff(moment(), 'days');
+                    if(data.account.trialDaysRemaining < 0) {
+                        data.account.trialDaysRemaining = 0;
+                    }
+
+                    data.segmentIOWriteKey='';
+
+                    data.showPreloader = false;
+                    data.includeJs = false;
+
+
+                    data = self.baseData(data);
+                    /*
+                     * Add some objects in case the user object is incomplete.
+                     */
+
+                    data.user.user_preferences = data.user.user_preferences || {};
+                    data.user.user_preferences.welcome_alert = data.user.user_preferences.welcome_alert || {};
+                    data.environment = urlUtils.getEnvironmentFromRequest(_req);
+                    if(!data.user.intercomHash) {
+                        logger.debug('calculating hash');
+                        data.user.intercomHash = CryptoJS.HmacSHA256(data.user.email, intercomConfig.INTERCOM_SECRET_KEY).toString(CryptoJS.enc.Hex);
+                        logger.trace('hash:', data.user.intercomHash);
+                        //TODO: save this to the user for next time.
+                    }
+
+
+                    var statusArray = [$$.m.BlogPost.status.PRIVATE,$$.m.BlogPost.status.DRAFT,$$.m.BlogPost.status.FUTURE,$$.m.BlogPost.status.PUBLISHED];
+                    logger.debug('listing blog posts');
+
+
+                    cmsManager.listBlogPosts(data.account._id, 50, statusArray, function (err, value) {
+                        logger.debug('done listing blog posts');
+                        if (err) {
+                            console.error('<< angular.admin.server.view: listBlogPosts error ', err);
+                        } else {
+                            data.serverProps.posts = JSON.stringify(_.map(value, function(val){ return val.toJSON(); }));
+                        }
+                        logger.debug('listing pages');
+                        cmsManager.getPagesByWebsiteId(data.account.website.websiteId, data.account._id, function(err, value) {
+                            logger.debug('done listing pages');
+                            if (err) {
+                                console.error('<< angular.admin.server.view: getPagesByWebsiteId error ', err);
+                            } else {
+                                data.serverProps.pages = JSON.stringify(_.map(value, function(val){ return val.toJSON(); }));
+                            }
+
+                            //console.dir(data);
+                            logger.debug('Starting render');
+                            if(data.account.orgId && data.account.orgId === 2) {
+                                logger.debug('Rendering var admin');
+                                self.resp.render('var/demo/admin', data);
+                            } else if(data.account.orgId && data.account.orgId === 1){
+                                logger.debug('Rendering rvlvr admin');
+                                self.resp.render('var/rvlvr/admin', data);
+                            } else {
+                                self.resp.render('admin', data);
+                            }
+
+                            logger.debug('<< show [' + _req.originalUrl + ']');
+                            //logger.debug('_cleanUp');
+                            self.cleanUp();
+                            //logger.debug('cleanUp_');
+                            data = self = null;
+
+                        });
+
+                    });
+                });
+
 
                 //logger.debug('getAccountByHost', data.account);
             } else {
                 logger.warn('Error or null in getAccount');
                 logger.error('Error: ' + err);
-            }
-
-            data.segmentIOWriteKey='';
-
-            data.showPreloader = false;
-            data.includeJs = false;
-
-
-            data = self.baseData(data);
-            /*
-             * Add some objects in case the user object is incomplete.
-             */
-            //data.user.user_preferences.welcome_alert.initial
-            data.user.user_preferences = data.user.user_preferences || {};
-            data.user.user_preferences.welcome_alert = data.user.user_preferences.welcome_alert || {};
-            data.environment = urlUtils.getEnvironmentFromRequest(_req);
-            if(!data.user.intercomHash) {
-                logger.debug('calculating hash');
-                data.user.intercomHash = CryptoJS.HmacSHA256(data.user.email, intercomConfig.INTERCOM_SECRET_KEY).toString(CryptoJS.enc.Hex);
-                logger.trace('hash:', data.user.intercomHash);
-                //TODO: save this to the user for next time.
-            }
-
-
-            var statusArray = [$$.m.BlogPost.status.PRIVATE,$$.m.BlogPost.status.DRAFT,$$.m.BlogPost.status.FUTURE,$$.m.BlogPost.status.PUBLISHED];
-            logger.debug('listing blog posts');
-
-            
-            cmsManager.listBlogPosts(data.account._id, 50, statusArray, function (err, value) {
-                logger.debug('done listing blog posts');
-                if (err) {
-                    console.error('<< angular.admin.server.view: listBlogPosts error ', err);
-                } else {
-                    data.serverProps.posts = JSON.stringify(_.map(value, function(val){ return val.toJSON(); }));
-                }
-                logger.debug('listing pages');
-                cmsManager.getPagesByWebsiteId(data.account.website.websiteId, data.account._id, function(err, value) {
-                    logger.debug('done listing pages');
-                    if (err) {
-                        console.error('<< angular.admin.server.view: getPagesByWebsiteId error ', err);
-                    } else {
-                        data.serverProps.pages = JSON.stringify(_.map(value, function(val){ return val.toJSON(); }));
+                app.render('404.html', {}, function(err, html){
+                    if(err) {
+                        self.log.error('Error during render:', err);
                     }
-
-                    //console.dir(data);
-                    logger.debug('Starting render');
-                    if(data.account.orgId && data.account.orgId === 2) {
-                        logger.debug('Rendering var admin');
-                        self.resp.render('var/demo/admin', data);
-                    } else if(data.account.orgId && data.account.orgId === 1){
-                        logger.debug('Rendering rvlvr admin');
-                        self.resp.render('var/rvlvr/admin', data);
-                    } else {
-                        self.resp.render('admin', data);
-                    }
-
-                    logger.debug('<< show [' + _req.originalUrl + ']');
-                    //logger.debug('_cleanUp');
-                    self.cleanUp();
-                    //logger.debug('cleanUp_');
-                    data = self = null;
-
+                    self.resp.status(404).send(html);
                 });
-
-            });
-
+            }
 
         });
+
     }
 });
 
