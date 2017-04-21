@@ -21,6 +21,7 @@
         var baseLiveTrafficAPIUrl = '/api/1.0/analytics/live';
         var basePlatformLiveTrafficAPIUrl = '/api/1.0/analytics/admin/live';
         var baseBroadcastMessagesAPIUrl = '/api/2.0/insights/messages/';
+        var basePurchaseOrderAPIUrl = '/api/2.0/purchaseorders/dashboard/listpurchaseorders/';
 
 
         dashboardService.getActiveMessages = getActiveMessages;
@@ -79,7 +80,7 @@
         dashboardService.getAccount = getAccount;
         dashboardService.getLiveTraffic = getLiveTraffic;
         dashboardService.getPlatformLiveTraffic = getPlatformLiveTraffic;
-
+        dashboardService.getPurchaseOrders = getPurchaseOrders;
 
 		function dashRequest(fn) {
             dashboardService.loading.value = dashboardService.loading.value + 1;
@@ -289,6 +290,19 @@
 
         }
 
+        function getPurchaseOrders(){
+            function success(data) {
+                console.log(data);
+                dashboardService.purchaseOrders = data.results;
+            }
+
+            function error(error) {
+                console.error('dashRequest getPurchaseOrders error: ', JSON.stringify(error));
+            }
+
+            return dashRequest($http.get(basePurchaseOrderAPIUrl).success(success).error(error));
+        }
+
 
 
 		(function init() {
@@ -298,6 +312,7 @@
             dashboardService.getWorkstreams();
             dashboardService.getLiveTraffic();
             dashboardService.getActiveMessages();
+            dashboardService.getPurchaseOrders();
             dashboardService.numberPolling++;
 		})();
 

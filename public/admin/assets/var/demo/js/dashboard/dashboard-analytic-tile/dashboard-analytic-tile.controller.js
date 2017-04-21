@@ -79,23 +79,28 @@ function dashboardAnalyticTileComponentController($scope, $attrs, $filter, Dashb
 
                     break;
                 case 'PurchaseOrders':
-
                     ret.widgetTitle = 'Purchase Orders';
                     ret.buttonTitle = 'Submit a PO';
                     ret.link = '#/purchase-orders';
 
                     ret.header = [
                         {label: 'PO #'},
-                        {label: 'Amount'},
-                        {label: 'Status'}
+                        {label: 'DESC'},
+                        {label: 'Submittor'}
                     ];
-                    ret.data = [
-                        {
-                            field1: "12345",
-                            field2: "$432,000",
-                            field3: "Complete",
+
+                    $scope.$watch(function() { return DashboardService.purchaseOrders; }, function(purchaseOrders){
+                        if(purchaseOrders){
+                            ret.data = purchaseOrders;
                         }
-                    ];
+                        ret.data = [
+                            {
+                                field1: "12345",
+                                field2: "$432,000",
+                                field3: "Complete",
+                            }
+                        ];
+                    });
 
                     break;
                 case 'Invoices':
