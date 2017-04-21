@@ -37,7 +37,7 @@ module.exports = {
         }
     },
 
-    createStripeSubscription: function(customerId, planId, accountId, userId, coupon, setupFee, fn) {
+    createStripeSubscription: function(customerId, planId, accountId, userId, coupon, setupFee, accessToken, fn) {
         log.debug(accountId, userId, '>> createStripeSubscription(' + customerId + ',' + planId +',' + accountId + ',' + userId + ',' + coupon + ','+ setupFee + ',callback)');
         if(setupFee && setupFee > 0) {
             stripeDao.createInvoiceItem(customerId, setupFee, 'usd', null, null, 'Signup Fee', null, null, function(err, value){

@@ -216,9 +216,22 @@ var securityManager = {
                 return cb(null, false);
             }
             //if no verification OR verification older than 24 hours
+            var accessToken = null;
+            if(account.get('orgId') && account.get('orgId') > 0 && billing.stripeParent !== 6) {
+                var credentials = account.get('credentials');
+                var creds = null;
+                _.each(credentials, function (cred) {
+                    if (cred.type === 'stripe') {
+                        creds = cred;
+                    }
+                });
+                if(creds && creds.accessToken) {
+                    accessToken = creds.accessToken;
+                }
+            }
             if(!billing.lastVerified || moment().diff(billing.lastVerified, 'hours') >24) {
                 //TODO: handle accessToken
-                stripeDao.getStripeSubscription(billing.stripeCustomerId, billing.subscriptionId, null, function(err, subscription){
+                stripeDao.getStripeSubscription(billing.stripeCustomerId, billing.subscriptionId, accessToken, function(err, subscription){
                     if(err || !subscription) {
                         log.error('Error getting stripe subscription: ' + err);
                         return cb(err, false);
@@ -248,7 +261,7 @@ var securityManager = {
             } else {
                 //verified within the last 24hrs... set the subname and privs
                 //TODO: handle accessToken
-                stripeDao.getStripeSubscription(billing.stripeCustomerId, billing.subscriptionId, null, function(err, subscription){
+                stripeDao.getStripeSubscription(billing.stripeCustomerId, billing.subscriptionId, accessToken, function(err, subscription){
                     if(err) {
                         log.error('Error getting stripe subscription: ' + err);
                         return cb(err, false);
@@ -317,7 +330,20 @@ var securityManager = {
                 return cb(null, false);
             }
             //if no verification OR verification older than 24 hours
-            stripeDao.getStripeSubscription(billing.stripeCustomerId, billing.subscriptionId, null, function(err, subscription){
+            var accessToken = null;
+            if(account.get('orgId') && account.get('orgId') > 0 && billing.stripeParent !== 6) {
+                var credentials = account.get('credentials');
+                var creds = null;
+                _.each(credentials, function (cred) {
+                    if (cred.type === 'stripe') {
+                        creds = cred;
+                    }
+                });
+                if(creds && creds.accessToken) {
+                    accessToken = creds.accessToken;
+                }
+            }
+            stripeDao.getStripeSubscription(billing.stripeCustomerId, billing.subscriptionId, accessToken, function(err, subscription){
                 if(err || !subscription) {
                     log.error('Error getting stripe subscription: ' + err);
                     return cb(err, false);
@@ -447,29 +473,46 @@ var securityManager = {
     },
 
     isValidSub: function(accountId, billing, cb) {
-        stripeDao.getStripeSubscription(billing.stripeCustomerId, billing.subscriptionId, null, function(err, subscription){
-            if(err || !subscription) {
-                log.error('Error getting stripe subscription: ' + err);
-                return cb(err, false);
-            } else if(subscription.status === 'active' || subscription.status === 'trialing') {
 
-                var planId = subscription.plan.id;
-                var planName = subscription.plan.name;
-                subscriptionPrivilegeDao.getByPlanId(accountId, planId, function(err, subPrivs){
-                    if(err || !subPrivs) {
-                        log.error('Error getting subscription privileges for plan [' + planId + '] with accountId [' + accountId + ']: ' + err);
-                        return cb(err, false);
+        accountDao.getAccountByID(accountId, function(err, account){
+            var accessToken = null;
+            if(account && account.get('orgId') && account.get('orgId') > 0 && billing.stripeParent !== 6) {
+                var credentials = account.get('credentials');
+                var creds = null;
+                _.each(credentials, function (cred) {
+                    if (cred.type === 'stripe') {
+                        creds = cred;
                     }
-
-                    log.trace('<< _isValidSub(true)');
-                    return cb(null, true);
                 });
-            } else {
-                //TODO: If the sub is expired, put in privs here
-                log.warn('The subscription for account ' + accountId + ' appears to be expired.');
-                return cb(null, false);
+                if(creds && creds.accessToken) {
+                    accessToken = creds.accessToken;
+                }
             }
+            stripeDao.getStripeSubscription(billing.stripeCustomerId, billing.subscriptionId, accessToken, function(err, subscription){
+                if(err || !subscription) {
+                    log.error('Error getting stripe subscription: ' + err);
+                    return cb(err, false);
+                } else if(subscription.status === 'active' || subscription.status === 'trialing') {
+
+                    var planId = subscription.plan.id;
+                    var planName = subscription.plan.name;
+                    subscriptionPrivilegeDao.getByPlanId(accountId, planId, function(err, subPrivs){
+                        if(err || !subPrivs) {
+                            log.error('Error getting subscription privileges for plan [' + planId + '] with accountId [' + accountId + ']: ' + err);
+                            return cb(err, false);
+                        }
+
+                        log.trace('<< _isValidSub(true)');
+                        return cb(null, true);
+                    });
+                } else {
+                    //TODO: If the sub is expired, put in privs here
+                    log.warn('The subscription for account ' + accountId + ' appears to be expired.');
+                    return cb(null, false);
+                }
+            });
         });
+
     }
 
 
