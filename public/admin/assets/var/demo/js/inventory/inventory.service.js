@@ -17,12 +17,15 @@
         };
 
         var baseInventoryAPIUrl = '/api/1.0/integrations/zi/inventory';
+        var baseOrgConfigAPIUrl = '/api/1.0/user/orgConfig';
 
         inventoryService.loading = {value: 0};
 
         inventoryService.getInventory = getInventory;
         inventoryService.getSingleInventory = getSingleInventory;
         inventoryService.getSingleInventoryByName = getSingleInventoryByName;
+        inventoryService.getUserOrgConfig = getUserOrgConfig;
+        inventoryService.updateUserOrgConfig = updateUserOrgConfig;
 
         function inventoryRequest(fn) {
             inventoryService.loading.value = inventoryService.loading.value + 1;
@@ -115,8 +118,42 @@
 
         }
 
+        function getUserOrgConfig(){
+            function success(data) {
+                console.log(data);
+                inventoryService.userOrgConfig = data;
+            }
+
+            function error(error) {
+                console.error('inventoryService getUserOrgConfig error: ', JSON.stringify(error));
+            }
+
+            return inventoryRequest($http.get([baseOrgConfigAPIUrl].join('/')).success(success).error(error));
+
+        }
+
+        function updateUserOrgConfig(orgConfig){
+            function success(data) {
+                inventoryService.userOrgConfig = data;
+            }
+
+            function error(error) {
+                console.error('inventoryService updateUserOrgConfig error: ', JSON.stringify(error));
+            }
+
+            return (
+                inventoryRequest($http({
+                  url: [baseOrgConfigAPIUrl].join('/'),
+                  method: "POST",
+                  data: angular.toJson(orgConfig)
+                }).success(success).error(error))
+            );
+        }
+
 		(function init() {
+            inventoryService.getUserOrgConfig();
             inventoryService.getInventory();
+           
 		})();
 
 

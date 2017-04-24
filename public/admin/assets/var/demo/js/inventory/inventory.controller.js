@@ -2,9 +2,9 @@
 
 app.controller('InventoryComponentController', inventoryComponentController);
 
-inventoryComponentController.$inject = ['$scope', '$attrs', '$filter', '$modal', '$timeout', '$location', 'pagingConstant', 'SweetAlert', 'InventoryService'];
+inventoryComponentController.$inject = ['$scope', '$attrs', '$filter', '$modal', '$timeout', '$location', 'pagingConstant', 'SweetAlert', 'toaster', 'InventoryService'];
 /* @ngInject */
-function inventoryComponentController($scope, $attrs, $filter, $modal, $timeout, $location, pagingConstant, SweetAlert, InventoryService) {
+function inventoryComponentController($scope, $attrs, $filter, $modal, $timeout, $location, pagingConstant, SweetAlert, toaster, InventoryService) {
 
     var vm = this;
 
@@ -65,6 +65,14 @@ function inventoryComponentController($scope, $attrs, $filter, $modal, $timeout,
             vm.state.totalInventory = inventory.total;
             vm.uiState.loading = false;
             drawPages();
+        }
+    }, true);
+
+
+    $scope.$watch(function() { return InventoryService.userOrgConfig }, function(config) {
+        if(angular.isDefined(config)){
+            vm.state.userOrgConfig = config;
+            vm.uiState.inVentoryWatchList = config.watchList || [];
         }
     }, true);
 
@@ -291,15 +299,12 @@ function inventoryComponentController($scope, $attrs, $filter, $modal, $timeout,
               },
               function (isConfirm) {
                 if (isConfirm) {
-                    // var _selectedOrdersId = [];
-                    // _.each(selectedOrders, function(order){
-                    //     _selectedOrdersId.push(order._id);
-                    // })
-                    // PurchaseOrderService.deleteBulkPurchaseOrders(_selectedOrdersId).then(function(response){
-                    //     vm.bulkActionChoice = null;
-                    //     vm.bulkActionChoice = {};
-                    //     toaster.pop('success', 'Purchase orders Successfully Deleted');
-                    // });
+                    vm.state.userOrgConfig.watchList = vm.uiState.inVentoryWatchList;
+                    InventoryService.updateUserOrgConfig(vm.state.userOrgConfig).then(function(response){
+                        vm.bulkActionChoice = null;
+                        vm.bulkActionChoice = {};
+                        toaster.pop('success', 'Items added to inventory watch list');
+                    });
                 } else {
                     vm.bulkActionChoice = null;
                     vm.bulkActionChoice = {};

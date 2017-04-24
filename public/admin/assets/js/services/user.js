@@ -235,6 +235,7 @@
         fn(data);
       });
     };
+    
     this.findUserByUsername=function(username,fn){
         var findUserUrl=baseUrl+['user','email',username].join('/');
         $http.get(findUserUrl).success(function(data){
@@ -243,5 +244,15 @@
             fn(err);
         });
     };
+
+    this.getUserOrganizationConfig = function(fn){
+        var apiUrl = baseUrl + ['user','orgConfig'].join('/');
+        $http.get(apiUrl).success(function(data){
+            fn(null,data);
+        }).error(function(err){
+            fn(err);
+        });
+    }
+
   });
 })(angular);
