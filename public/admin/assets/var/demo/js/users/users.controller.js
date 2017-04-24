@@ -120,6 +120,7 @@
 
         $scope.openEditUserCardModal = function(userId) {
             $scope.currentUserId = userId;
+            vm.state.isAdmin = false;
             $scope.editUser = null;
             $scope.editUser = _.find(vm.state.users, function(user){
                 return user._id == userId
@@ -128,8 +129,6 @@
             var _userAccount = _.find($scope.editUser.accounts, function(account){
                 return account.accountId == vm.state.account._id
             })
-
-            
 
             if(_userAccount && _userAccount.permissions){
                 if(_.contains(_userAccount.permissions, "admin")){
@@ -151,6 +150,7 @@
             var _permissions = getUserPermissions(vm.state.isAdmin);
             UserService.editUser($scope.editUser, $scope.currentUserId, function(){
                 UserService.updateUserPermisions($scope.currentUserId, _permissions, function(user){                
+                    updateUserPermissions(user, $scope.currentUserId);
                     $scope.closeUserCardModal();
                 })
             })
@@ -247,6 +247,25 @@
                 permissions = ["super", "admin", "member"];
             }
             return permissions;
+        }
+
+        function updateUserPermissions(user, userId){
+            var editUser = _.find(vm.state.users, function(user){
+                return user._id == userId
+            })
+
+            var _editUserAccount = _.find(editUser.accounts, function(account){
+                return account.accountId == vm.state.account._id
+            })
+
+            var _updatedUserAccount = _.find(user.accounts, function(account){
+                return account.accountId == vm.state.account._id
+            })
+
+            if(_editUserAccount && _updatedUserAccount){
+                _editUserAccount.permissions = angular.copy(_updatedUserAccount.permissions);
+            }
+
         }
 
 

@@ -1042,8 +1042,8 @@ _.extend(api.prototype, baseApi.prototype, {
         var userId = self.userId(req);
         self.log.debug(accountId, userId, '>> updateUserPermissions');
         var roleAry = req.body.roleAry;
-        var targetUserId = req.params.id;
-
+        var targetUserId = parseInt(req.params.id);
+        console.log(targetUserId);
         self.isAdmin(req, function(err, isAdmin){
             self.isOrgAdminUser(accountId, userId, req, function(err, isOrgAdminUser){
                 if(isAdmin === true || isOrgAdminUser === true) {
@@ -1187,19 +1187,6 @@ _.extend(api.prototype, baseApi.prototype, {
             fn(null, true);
         } else {
             fn(null, false);
-        }
-    },
-
-    isAdminOrOrgAdmin: function(req, fn) {
-        var self = this;
-        if(self.userId(req) === 1 || self.userId(req)===4) {
-            fn(null, true);
-        } else if(_.contains(req.session.permissions, 'manager')){
-            fn(null, true);
-        } else {
-            var accountId = parseInt(self.accountId(req));
-            var userId = self.userId(req);
-            return self.isOrgAdmin(accountId, userId, req, fn);
         }
     }
 });
