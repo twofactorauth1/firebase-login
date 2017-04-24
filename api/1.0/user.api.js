@@ -1017,9 +1017,9 @@ _.extend(api.prototype, baseApi.prototype, {
         var self = this;
         var accountId = parseInt(self.accountId(req));
         var userId = self.userId(req);
-        self.log.debug(accountId, userId, '>> getOrgConfig');
+        //self.log.debug(accountId, userId, '>> getOrgConfig');
         userManager.getUserOrgConfig(accountId, userId, function(err, orgConfig){
-            self.log.debug(accountId, userId, '<< getOrgConfig');
+            //self.log.debug(accountId, userId, '<< getOrgConfig');
             self.sendResultOrError(resp, err, orgConfig, 'Error getting config');
         });
     },
@@ -1028,7 +1028,7 @@ _.extend(api.prototype, baseApi.prototype, {
         var self = this;
         var accountId = parseInt(self.accountId(req));
         var userId = self.userId(req);
-        self.log.debug(accountId, userId, '>> updateOrgConfig');
+        //self.log.debug(accountId, userId, '>> updateOrgConfig');
         var orgConfig = req.body;
         userManager.updateUserOrgConfig(accountId, userId, orgConfig, function(err, orgConfig){
             self.log.debug(accountId, userId, '<< updateOrgConfig');

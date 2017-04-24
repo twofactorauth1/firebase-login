@@ -34,6 +34,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url('ledger'), this.isAuthAndSubscribedApi.bind(this), this.ledger.bind(this));
 
         app.get(this.url('customers'), this.isAuthAndSubscribedApi.bind(this), this.getCustomers.bind(this));
+        app.get(this.url('dashboard/inventory'), this.isAuthAndSubscribedApi.bind(this), this.getDashboardInventory.bind(this));
     },
 
     demo: function(req, resp) {
@@ -62,6 +63,25 @@ _.extend(api.prototype, baseApi.prototype, {
         manager.cachedInventory(accountId, userId, skip, limit, sortBy, sortDir, function(err, value){
             self.log.debug(accountId, userId, '<< inventory');
             return self.sendResultOrError(resp, err, value, "Error calling inventory");
+        });
+
+    },
+
+    getDashboardInventory: function(req, resp) {
+        var self = this;
+        var accountId = parseInt(self.accountId(req));
+        var userId = self.userId(req);
+        self.log.debug(accountId, userId, '>> getDashboardInventory');
+        var skip = null;
+        var limit = null;
+        var sortBy = null;
+        var sortDir = null;
+
+
+        //TODO: security
+        manager.getDashboardInventory(accountId, userId, function(err, value){
+            self.log.debug(accountId, userId, '<< getDashboardInventory');
+            return self.sendResultOrError(resp, err, value, "Error calling getDashboardInventory");
         });
 
     },

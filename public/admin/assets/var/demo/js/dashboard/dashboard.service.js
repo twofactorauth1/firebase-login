@@ -22,6 +22,7 @@
         var basePlatformLiveTrafficAPIUrl = '/api/1.0/analytics/admin/live';
         var baseBroadcastMessagesAPIUrl = '/api/2.0/insights/messages/';
         var basePurchaseOrderAPIUrl = '/api/2.0/purchaseorders/dashboard/listpurchaseorders/';
+        var baseInventoryAPIUrl = '/api/1.0/integrations/zi/dashboard/inventory';
 
 
         dashboardService.getActiveMessages = getActiveMessages;
@@ -81,6 +82,7 @@
         dashboardService.getLiveTraffic = getLiveTraffic;
         dashboardService.getPlatformLiveTraffic = getPlatformLiveTraffic;
         dashboardService.getPurchaseOrders = getPurchaseOrders;
+        dashboardService.getInventory = getInventory;
 
 		function dashRequest(fn) {
             dashboardService.loading.value = dashboardService.loading.value + 1;
@@ -269,6 +271,8 @@
             //dashboardService.getWorkstreams();
             dashboardService.getAccount();
             dashboardService.getActiveMessages();
+            dashboardService.getPurchaseOrders();
+            dashboardService.getInventory();
             if (away) {
                 console.log(away);
             }
@@ -304,6 +308,20 @@
         }
 
 
+        function getInventory(){
+            function success(data) {
+                console.log(data);
+                dashboardService.inventory = data.results;
+            }
+
+            function error(error) {
+                console.error('dashRequest getInventory error: ', JSON.stringify(error));
+            }
+
+            return dashRequest($http.get(baseInventoryAPIUrl).success(success).error(error));
+        }
+
+
 
 		(function init() {
 
@@ -313,6 +331,7 @@
             dashboardService.getLiveTraffic();
             dashboardService.getActiveMessages();
             dashboardService.getPurchaseOrders();
+            dashboardService.getInventory();
             dashboardService.numberPolling++;
 		})();
 
