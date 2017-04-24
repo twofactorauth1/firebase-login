@@ -123,7 +123,7 @@
                     <tfoot>
                         <tr ng-if="vm.totalLineOrder">
                             <td class="text-right padding-right-20" colspan="10">
-                                <span class="order-total-text">Total</span><span class="order-total-value">{{vm.totalLineOrder | currency }}</span>
+                                <span class="order-total-text">Total</span><span class="order-total-value">{{vm.totalLineOrder | currency : vm.invoiceDetails[0]._CustStatmentHdr_Currency}}</span>
                             </td>
                         </tr>
                     </tfoot>

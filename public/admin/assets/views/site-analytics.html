@@ -19,7 +19,7 @@
                     <div class="input-group-addon"><i class="fa fa-calendar"></i></div>
                     <input date-range-picker class="form-control deshboard-date-picker date-picker" type="text" ng-model="selectedDate" options="pickerOptions" />
                     <span class="input-group-addon" ng-click="displayDatePicker()"><i class="fa fa-chevron-down fa-fw"></i></span>
-                </div>                
+                </div>
             </div>
             <div class="space20 visible-xs"></div>
             <div class="pull-left analytics-dashboard-btn" ng-class="{'col-xs-12 col-sm-3': app.layout.isSidebarClosed, 'col-xs-12 col-sm-4': !app.layout.isSidebarClosed}">
@@ -147,7 +147,7 @@
                 </div>
             </div>
         </div>
-    </div>    
+    </div>
         <div class="clearfix"></div>
     <div class="row">
         <div class="col-sm-6">
@@ -211,9 +211,9 @@
                 </div>
             </div>
         </div>
-    </div>    
+    </div>
         <div class="clearfix"></div>
-    <div class="row">    
+    <div class="row">
         <div class="col-xs-12 col-sm-6 device-info" >
             <div id="device" class="panel panel-white" ng-class="{'load1 csspinner': !device_data_loaded}">
                 <div class="panel-heading border-light">
@@ -255,7 +255,7 @@
                     </div>
                 </div>
             </div>
-        </div>        
+        </div>
     </div>
     <div id="pageanalytics" class="panel panel-white no-radius" ng-class="{'load1 csspinner': !pagedformattedTopPages}">
         <div class="panel-heading border-light">
@@ -350,7 +350,7 @@
         <div class="col-xs-12 col-sm-12" >
             <div id="rev" class="panel panel-white" ng-class="{'load1 csspinner': !revenueConfig.options}">
                 <div class="panel-heading border-light">
-                    <h4 class="panel-title text-primary"><span class="text-bold">Revenue</span> Overview</h4>
+                    <h4 class="panel-title text-primary"><span class="text-bold">New Revenue</span> Overview</h4>
                     <ct-paneltool class="panel-tools" tool-collapse="tool-collapse"></ct-paneltool>
                 </div>
                 <div class="panel-wrapper" collapse="rev">
@@ -373,7 +373,7 @@
                                     <span class="value">{{(revenue | currency:"$":0) || '--'}}</span>
                                     <i class="fa" ng-class="{'fa-caret-up text-green': revenuePercent > 0, 'fa-caret-down text-red': revenuePercent < 0}"></i><strong class="text-muted">{{revenuePercent || '--'}}</strong><span class="percentage">%</span>
                                 </div>
-                                Revenue
+                                New Revenue
                             </div>
                         </div>
                     </div>

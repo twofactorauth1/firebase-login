@@ -32,6 +32,28 @@ var manager = {
                 });
             }
         });
+    },
+
+    getAdminAccountByOrgId: function(accountId, userId, orgId, fn) {
+        var self = this;
+        self.log.debug(accountId, userId, '>> getAdminAccountByOrgId');
+        dao.getById(orgId || 0, $$.m.Organization, function(err, organization){
+            if(err) {
+                self.log.error(accountId, userId, 'Error getting org:', err);
+                fn(err);
+            } else {
+                accountDao.getAccountByID(organization.get('adminAccount'), function(err, adminAccount){
+                    if(err) {
+                        self.log.error(accountId, userId, 'Error getting admin account:', err);
+                        fn(err);
+                    } else {
+                        self.log.debug(accountId, userId, '<< getAdminAccountByOrgId');
+                        fn(null, adminAccount);
+                    }
+                });
+
+            }
+        });
     }
 
 

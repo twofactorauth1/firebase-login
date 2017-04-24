@@ -431,7 +431,7 @@
 
 
         function saveOtherPageLinks() {
-            function success(data) {                
+            function success(data) {
                 resetDeletedPageLinkList();
                 console.log('SimpleSiteBuilderService requested pages saved' + data);
             }
@@ -448,7 +448,7 @@
                     }).success(success).error(errorPage))
             );
             }
-            
+
         }
 
         /**
@@ -1345,7 +1345,7 @@
                 return angular.isDefined(window.WebFont);
             }, function(newValue, oldValue) {
                 if (newValue) {
-                    var defaultFamilies = ['Roboto', 'Roboto Condensed', 'Roboto Slab', 'Oswald', 'Montserrat', 'Droid Serif', 'Open Sans', 'Open Sans Condensed', 'Lato', 'Raleway', 'Quicksand', 'Ubuntu', 'Merriweather', 'Quattrocento', 'Lora', 'Playfair Display', 'Pacifico', 'Satisfy', 'Parisienne', 'Petit Formal Script', 'Indie Flower', 'Shadows Into Light Two', 'Amatic SC', 'Delius Swash Caps', 'Itim', 'Neucha', 'Patrick Hand SC', 'Schoolbell'];
+                    var defaultFamilies = ['Roboto', 'Roboto Condensed', 'Roboto Slab', 'Oswald', 'Montserrat', 'Droid Serif', 'Open Sans', 'Open Sans Condensed', 'Lato', 'Raleway', 'Quicksand', 'Ubuntu', 'Merriweather', 'Quattrocento', 'Lora', 'Playfair Display', 'Pacifico', 'Satisfy', 'Parisienne', 'Petit Formal Script', 'Indie Flower', 'Shadows Into Light Two', 'Amatic SC', 'Delius Swash Caps', 'Itim', 'Neucha', 'Patrick Hand SC', 'Schoolbell', 'PT Sans'];
                     if (theme.name && theme.hasCustomFonts) {
                       var _fontStack = theme.defaultFontStack.split(',')[0].replace(/"/g, '');
                       if(defaultFamilies.indexOf(_fontStack) === -1)
@@ -1448,6 +1448,7 @@
                 "'Petit Formal Script', cursive": 'Petit Formal Script',
                 "'Quattrocento',serif": 'Quattrocento',
                 "'Quicksand',sans-serif": 'Quicksand',
+                "'PT Sans',sans-serif": 'PT Sans',
                 "'Raleway',sans-serif": 'Raleway',
                 "'Roboto Condensed',sans-serif": 'Roboto Condensed',
                 "'Roboto Slab',serif": 'Roboto Slab',
@@ -1490,21 +1491,21 @@
          *
          */
         function getLocationFinderRanges() {
-            
+
             return [{
                 "description": "5 miles",
-                "value": 5 
+                "value": 5
             },{
                 "description": "10 miles",
-                "value": 10 
+                "value": 10
             },
             {
                 "description": "25 miles",
-                "value": 25 
+                "value": 25
             },
             {
                 "description": "50 miles",
-                "value": 50 
+                "value": 50
             },
             {
                 "description": "100 miles",
@@ -1686,7 +1687,7 @@
                     component._id = ssbService.getTempUUID();
                     component.anchor = component._id;
                     if(angular.isObject(component.elementStyles) && Object.keys(component.elementStyles).length){
-                        _.each(component.elementStyles, function(value, key){ 
+                        _.each(component.elementStyles, function(value, key){
                             if(value){
                                 delete value._id;
                                 delete value.id;
@@ -2033,7 +2034,7 @@
         }
 
         function resetDeletedPageLinkList(){
-            ssbService.deletedNavLinks = [];   
+            ssbService.deletedNavLinks = [];
         }
 
         function checkIfDiffrentLenthSection(section){

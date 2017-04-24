@@ -86,7 +86,7 @@ function dashboardAnalyticTileComponentController($scope, $attrs, $filter, Dashb
                     ret.header = [
                         {label: 'PO #'},
                         {label: 'DESC'},
-                        {label: 'Submittor'}
+                        {label: 'Submitter'}
                     ];
 
                     $scope.$watch(function() { return DashboardService.purchaseOrders; }, function(purchaseOrders){
@@ -97,9 +97,10 @@ function dashboardAnalyticTileComponentController($scope, $attrs, $filter, Dashb
 
                         _.each(purchaseOrders, function(order){
                             ret.data.push({
-                                field1: "12345",
-                                field2: "$432,000",
-                                field3: "2/15/17" 
+                                field1: order.title,
+                                field2: order.text,
+                                field3: getPoUser(order),
+                                link: ret.link + "/" + order._id
                             })
                         })
                     });
@@ -182,6 +183,20 @@ function dashboardAnalyticTileComponentController($scope, $attrs, $filter, Dashb
             vm.analyticMap();
         }
     })
+
+
+    function getPoUser(order){
+        var _user = "";
+        if(order.submitter){
+            if(order.submitter.first){
+                _user = order.submitter.first + " " + order.submitter.last; 
+            }
+            else{
+                _user = order.submitter.username;
+            }
+        }
+        return _user;
+    }
 
     function init(element) {
         vm.element = element;

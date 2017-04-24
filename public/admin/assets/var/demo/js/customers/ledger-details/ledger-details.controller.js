@@ -19,6 +19,7 @@ function ledgerDetailsController($scope, $state, $attrs, $filter, $modal, $timeo
     vm.parseValueToFloat = parseValueToFloat;
     vm.parseValueToDate = parseValueToDate;
     vm.viewInventoryDetails = viewInventoryDetails;
+    vm.calculateLedgerTotal = calculateLedgerTotal;
 
 
     function backToCustomers(){
@@ -27,6 +28,7 @@ function ledgerDetailsController($scope, $state, $attrs, $filter, $modal, $timeo
 
     function init(element) {
         vm.element = element;
+
         CustomersService.getLedgerDetails($stateParams.customerId).then(function(response){
             var ledger = response.data.response.payload.querydata.data;
             if(ledger && ledger.row){
@@ -52,8 +54,7 @@ function ledgerDetailsController($scope, $state, $attrs, $filter, $modal, $timeo
                     vm.uiState.loading = false;
                 }, true);
             }
-
-        })
+        });
     }
 
     $scope.$watch('vm.ledger.row', function(ledgerDetails) {
@@ -65,7 +66,6 @@ function ledgerDetailsController($scope, $state, $attrs, $filter, $modal, $timeo
             _.each(vm.ledgerDetails, function(ledger){
                 ledger.invoiceTotal = calculateInvoiceTotal(ledger);
             })
-
         }
     }, true);
 
@@ -105,7 +105,15 @@ function ledgerDetailsController($scope, $state, $attrs, $filter, $modal, $timeo
         $location.path('/invoices/' + $stateParams.customerId + '/' + transId);
     }
 
-
+    function calculateLedgerTotal(ledger){
+        console.log('inside', ledger);
+        var _sum = 0;
+        _.each(ledger, function(invoice){
+            _sum+= parseFloat(invoice.invoiceTotal)
+        });
+        vm.ledgerTotal = _sum;
+        return _sum;
+    }
 }
 
 })();

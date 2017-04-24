@@ -17,6 +17,7 @@ var analyticsManager = require('../analytics/analytics_manager');
 var socialConfigManager = require('../socialconfig/socialconfig_manager');
 var workstreamManager = require('../workstream/workstream_manager');
 var ssbManager = require('../ssb/ssb_manager');
+var accountManager = require('../accounts/account.manager');
 
 var emailMessageManager = require('../emailmessages/emailMessageManager');
 var notificationConfig = require('../configs/notification.config');
@@ -815,6 +816,59 @@ module.exports = {
                     fn(null, list);
                 }
 
+            }
+        });
+    },
+
+    getUserOrgConfig: function(accountId, userId, fn) {
+        var self = this;
+        self.log.debug(accountId, userId, '>> getUserOrgConfig');
+        accountManager.getOrganizationByAccountId(accountId, userId, function(err, organization){
+            if(err) {
+                self.log.error(accountId, userId, 'Error finding organization:', err);
+                fn(err);
+            } else {
+                dao.getById(userId, $$.m.User, function(err, user){
+                    if(err || !user) {
+                        self.log.error(accountId, userId, 'Error finding user:', err);
+                        fn(err);
+                    } else {
+                        var orgConfig = user.getOrgConfig(organization.id());
+                        self.log.debug(accountId, userId, '<< getUserOrgConfig');
+                        fn(null, orgConfig);
+                    }
+                });
+            }
+        });
+    },
+
+    updateUserOrgConfig: function(accountId, userId, orgConfig, fn) {
+        var self = this;
+        self.log.debug(accountId, userId, '>> updateUserOrgConfig');
+        accountManager.getOrganizationByAccountId(accountId, userId, function(err, organization){
+            if(err) {
+                self.log.error(accountId, userId, 'Error finding organization:', err);
+                fn(err);
+            } else {
+                dao.getById(userId, $$.m.User, function(err, user){
+                    if(err || !user) {
+                        self.log.error(accountId, userId, 'Error finding user:', err);
+                        fn(err);
+                    } else {
+                        orgConfig.orgId = organization.id();
+                        user.setOrgConfig(organization.id(), orgConfig);
+                        dao.saveOrUpdate(user, function(err, updatedUser){
+                            if(err) {
+                                self.log.error(accountId, userId, 'Error saving user:', err);
+                                fn(err);
+                            } else {
+                                self.log.debug(accountId, userId, '<< updateUserOrgConfig');
+                                fn(null, orgConfig);
+                            }
+                        });
+
+                    }
+                });
             }
         });
     }

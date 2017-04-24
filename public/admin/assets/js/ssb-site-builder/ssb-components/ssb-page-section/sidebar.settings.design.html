@@ -4,22 +4,22 @@
         <div class="form-group">
             <label>
                 Number of columns
-                <span tooltip-placement="top" tooltip-append-to-body="true" tooltip="number of columns to show per row. "><i class="fa fa-info-circle" /></span>
+                <span tooltip-placement="top" tooltip-append-to-body="true" tooltip="Number of columns to show per row. "><i class="fa fa-info-circle" /></span>
             </label>
             <div class="col-xs-6 pull-right">
                 <input type="text" ng-model="component.layoutModifiers.columns.columnsNum" min="1" max="6" ng-change="vm.uiState.updateColumnLayout(component)" touchspin>
             </div>
         </div>
-        
+
         <div class="form-group">
             <label>
                 Column Spacing
-                <span tooltip-placement="top" tooltip-append-to-body="true" tooltip="space between columns"><i class="fa fa-info-circle" /></span>
+                <span tooltip-placement="top" tooltip-append-to-body="true" tooltip="Space between columns"><i class="fa fa-info-circle" /></span>
             </label>
             <div class="col-xs-6 pull-right">
                 <input type="text" ng-model="component.layoutModifiers.columns.columnsSpacing" step="10" min="0" max="500" touchspin>
             </div>
-        </div>       
+        </div>
     </div>
 </div>
 
@@ -46,7 +46,7 @@
         <div class="form-group" ng-hide="isEmail">
             <label for="bg_hide" class="margin-bottom-0">
                 Show image
-                <span tooltip-placement="top" tooltip-append-to-body="true" tooltip="show/hide background image of component.">
+                <span tooltip-placement="top" tooltip-append-to-body="true" tooltip="Show/hide background image of component.">
                     <i class="fa fa-info-circle" />
                 </span>
             </label>
@@ -74,7 +74,7 @@
         <div class="form-group" ng-init="switch=true" ng-hide="isEmail">
             <label for="bg_hide" class="margin-bottom-0">
                 Show image
-                <span tooltip-placement="top" tooltip-append-to-body="true" tooltip="show/hide background image of component.">
+                <span tooltip-placement="top" tooltip-append-to-body="true" tooltip="Show/hide background image of component.">
                     <i class="fa fa-info-circle" />
                 </span>
             </label>
@@ -185,7 +185,7 @@
     <div class="form-group" ng-if="component.type != 'contact-us' && component.type != 'navigation' && component.type != 'top-bar' && component.type != 'blog'" ng-hide="isEmail || component.components[0].type === 'ssb-blog-post-list'">
         <label class="margin-bottom-0">
             Show video
-            <span tooltip-placement="top" tooltip-append-to-body="true" tooltip="show/hide background video of component.">
+            <span tooltip-placement="top" tooltip-append-to-body="true" tooltip="Show/hide background video of component.">
                 <i class="fa fa-info-circle" />
             </span>
         </label>
@@ -253,7 +253,7 @@
                     </span>
                 </label>
                 <switch ng-model="component.fixedLeftNavigation" class="pull-right"></switch>
-            </div>    
+            </div>
         </div>
     </div>
 </div>
@@ -413,7 +413,7 @@
                         rz-slider-options="{floor: 0, ceil: 100, step: 10}">
                     </rzslider>
                 </div>
-            </div>              
+            </div>
         </div>
     </div>
 </div>
@@ -469,32 +469,40 @@
                 </rzslider>
             </div>
         </div>
-        
+
         <div data-ng-include data-src=" 'assets/js/ssb-site-builder/ssb-components/shared/ssb-slider-dot-settings.html' "></div>
 
-    </div>    
+    </div>
 </div>
 
 <div  ng-if="(component.components[0].type === 'ssb-recent-post')">
-     <h4 class="ssb-sidebar-sub-heading-separator">Number Recent Posts</h4>
+    <h4 class="ssb-sidebar-sub-heading-separator">Post Formatting</h4>
     <div class="row padding-10">
         <div class="form-group">
-
             <div class="col-xs-12">
                 <input type="text" ng-model="component.components[0].post_count" min="1" max="20" ng-change="vm.uiState.updateColumnLayout(component)" touchspin>
             </div>
         </div>
-   </div>
+    </div>
+    <div class="row padding-10">
+        <div class="form-group">
+            <label for="hr_separator" class="margin-bottom-0">
+                HR Separator
+                <span tooltip-placement="top" tooltip-append-to-body="true" tooltip="Show/hide separator between posts.">
+                    <i class="fa fa-info-circle" />
+                </span>
+            </label>
+            <switch ng-model="component.components[0].settings.hr" class="pull-right"></switch>
+        </div>
+    </div>
 </div>
-<div  ng-if="(component.components[0].type === 'ssb-blog-post-list') ||
-            (component.components[0].type === 'ssb-recent-post')
-             ">
-     <h4 class="ssb-sidebar-sub-heading-separator">Title Configurations</h4>
+<div ng-if="(component.components[0].type === 'ssb-blog-post-list')">
+     <h4 class="ssb-sidebar-sub-heading-separator">Title Font</h4>
     <div class="row padding-10">
         <div class="form-group">
             <label>
                 Font
-                <span tooltip-placement="top" tooltip-append-to-body="true" tooltip="font family for title"><i class="fa fa-info-circle" /></span>
+                <span tooltip-placement="top" tooltip-append-to-body="true" tooltip="Font family for title"><i class="fa fa-info-circle" /></span>
             </label>
             <select ng-model="component.components[0].settings.title.fontFamily" class="form-control margin-bottom-0">
                 <option value="">--Select--</option>
@@ -506,7 +514,7 @@
         <div class="form-group">
             <label for="txt_size">
                 Text Size
-               <span tooltip-placement="top" tooltip-append-to-body="true" tooltip="font size for title"><i class="fa fa-info-circle" /></span>
+               <span tooltip-placement="top" tooltip-append-to-body="true" tooltip="Font size for title"><i class="fa fa-info-circle" /></span>
             </label>
             <div class="col-xs-7 pull-right">
                 <input type="text" ng-model="component.components[0].settings.title.fontSize" min="6" max="96" touchspin>
@@ -527,13 +535,16 @@
         </div>
 
     </div>
-    <h4 class="ssb-sidebar-sub-heading-separator">Description Configurations</h4>
+</div>
+<div ng-if="(component.components[0].type === 'ssb-blog-post-list') ||
+            (component.components[0].type === 'ssb-recent-post')">
+    <h4 class="ssb-sidebar-sub-heading-separator">Body Font</h4>
     <div class="row padding-10">
 
         <div class="form-group">
             <label>
                 Font
-                <span tooltip-placement="top" tooltip-append-to-body="true" tooltip="font family for description"><i class="fa fa-info-circle" /></span>
+                <span tooltip-placement="top" tooltip-append-to-body="true" tooltip="Font family for description"><i class="fa fa-info-circle" /></span>
             </label>
             <select ng-model= "component.components[0].settings.description.fontFamily"  class="form-control margin-bottom-0">
                 <option value="">--Select--</option>
@@ -545,7 +556,7 @@
         <div class="form-group">
             <label for="txt_size">
                 Text Size
-               <span tooltip-placement="top" tooltip-append-to-body="true" tooltip="font size for description"><i class="fa fa-info-circle" /></span>
+               <span tooltip-placement="top" tooltip-append-to-body="true" tooltip="Font size for description"><i class="fa fa-info-circle" /></span>
             </label>
             <div class="col-xs-7 pull-right">
                 <input type="text" ng-model="component.components[0].settings.description.fontSize" min="6" max="96" touchspin>
@@ -569,10 +580,10 @@
 <div ng-if="(component.components[0].type === 'image-gallery' && component.components[0].version == 4) || (!vm.uiState.isNavHero(vm.component) && !vm.isHero && component.components[0].type === 'testimonials' && component.components[0].version == 2)">
     <h4 class="ssb-sidebar-sub-heading-separator">Slider Effects</h4>
     <div class="row padding-10">
-        
+
         <div data-ng-include data-src=" 'assets/js/ssb-site-builder/ssb-components/shared/ssb-slider-dot-settings.html' "></div>
 
-    </div>    
+    </div>
 </div>
 
 
