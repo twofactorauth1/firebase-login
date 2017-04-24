@@ -99,6 +99,9 @@ function ssbSiteBuilderEditControlController($scope, $rootScope, $interval, $att
                 }
 
                 if (editControl && editControl.length) {
+                    if(left>800){
+                        left-=10;//data hide for the button as edit icon appear in left
+                    }
                     editControl.css({ top: top, left: left });
                     $timeout(function() {
                         editControl.addClass('ssb-on');
