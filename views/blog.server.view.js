@@ -187,6 +187,10 @@ _.extend(view.prototype, BaseView.prototype, {
                     };
                 }
 
+                if(!data.account.orgId) {
+                    data.account.orgId = 0;
+                }
+
 
                 if (pageHolder[handle] && pageHolder[handle].seo && pageHolder[handle].seo.keywords && pageHolder[handle].seo.keywords.length) {
                     data.seo.keywords = _.pluck(pageHolder[handle].seo.keywords,"text").join(",");
