@@ -45,18 +45,18 @@ function dashboardAnalyticTileComponentController($scope, $attrs, $filter, Dashb
                     ret.link = '#/inventory';
 
                     ret.header = [
+                        {label: 'Vendor'},
                         {label: 'Product'},
-                        {label: 'Vender'},
                         {label: 'Qty OH'}
                     ];
 
                     $scope.$watch(function() { return DashboardService.inventory; }, function(inventory){
-                       
+
                         ret.data = []
                         _.each(inventory, function(item){
                             ret.data.push({
-                                field1: item.OITM_ItemCode,
-                                field2: item.OMRC_FirmName,
+                                field1: item.OMRC_FirmName,
+                                field2: item.OITM_ItemName,
                                 field3: item.In_Stock,
                                 link: ret.link + "/" + item["@id"]
                             })
@@ -94,7 +94,7 @@ function dashboardAnalyticTileComponentController($scope, $attrs, $filter, Dashb
                         {label: 'Submitter'}
                     ];
 
-                    $scope.$watch(function() { return DashboardService.purchaseOrders; }, function(purchaseOrders){                        
+                    $scope.$watch(function() { return DashboardService.purchaseOrders; }, function(purchaseOrders){
                         ret.data = []
 
                         _.each(purchaseOrders, function(order){
@@ -106,7 +106,7 @@ function dashboardAnalyticTileComponentController($scope, $attrs, $filter, Dashb
                             })
                         })
                     });
-                            
+
                     break;
                 case 'Invoices':
 
@@ -191,7 +191,7 @@ function dashboardAnalyticTileComponentController($scope, $attrs, $filter, Dashb
         var _user = "";
         if(order.submitter){
             if(order.submitter.first){
-                _user = order.submitter.first + " " + order.submitter.last; 
+                _user = order.submitter.first + " " + order.submitter.last;
             }
             else{
                 _user = order.submitter.username;
