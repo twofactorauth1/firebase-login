@@ -320,7 +320,7 @@ var user = $$.m.ModelBase.extend({
                 index = i;
             }
         }
-        if(index > 0) {
+        if(index > -1) {
             orgConfigAry[index] = orgConfig;
         } else {
             orgConfigAry.push(orgConfig);
