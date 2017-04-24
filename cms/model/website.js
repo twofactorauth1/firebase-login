@@ -106,7 +106,21 @@ var website = $$.m.ModelBase.extend({
              *  }]
              * }]
              */
-            linkLists: null,
+            linkLists: [{
+                    "name": "Head Menu",
+                    "handle": "head-menu",
+                    "links": [
+                        
+                    ]
+                },
+                {
+                    "name": "Main Menu",
+                    "handle": "main-menu",
+                    "links": [
+                        
+                    ]
+                }
+            ],
 
 
             /**
