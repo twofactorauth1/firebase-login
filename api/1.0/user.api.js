@@ -490,40 +490,73 @@ _.extend(api.prototype, baseApi.prototype, {
                     }
                 });
             },
-            function(user, account, callback){
+            function(user, account, callback) {
+                //need to get the organization and Stripe Token
+                orgDao.getById(orgId, $$.m.Organization, function(err, organization){
+                    self.log.debug('got organization:', organization);
+                    if(organization && organization.id() !== 0) {
+                        accountDao.getAccountByID(organization.get('adminAccount'), function(err, adminAccount){
+                            //TODO access token
+                            if(adminAccount) {
+                                self.getStripeTokenFromAccountObject(adminAccount, req, function(err, accessToken){
+                                    if(err || !accessToken) {
+                                        self.log.error('Error getting access token:', err);
+                                        callback(err || 'Error getting access token');
+                                    } else {
+                                        callback(null, user, account, organization, adminAccount, accessToken);
+                                    }
+                                });
+                            } else {
+                                self.log.error('Error getting admin account:', err);
+                                callback(err || 'Error getting admin account');
+                            }
+                        });
+                    } else {
+                        callback(err, user, account, organization, null, null);
+                    }
+
+                });
+            },
+            function(user, account, organization, adminAccount, accessToken, callback){
                 self.log.debug('Created user[' + user.id() + '] and account[' + account.id() + '] objects.');
-                paymentsManager.createStripeCustomerForUser(cardToken, user, appConfig.mainAccountID, account.id(), null, function(err, stripeCustomer) {
+                var ownerAccountId = appConfig.mainAccountID;
+
+                if(orgId && orgId !== 0) {
+                    ownerAccountId = organization.get('adminAccount');
+                }
+                paymentsManager.createStripeCustomerForUser(cardToken, user, ownerAccountId, account.id(), accessToken, function(err, stripeCustomer) {
                     if (err) {
                         self.log.error('Error creating Stripe customer: ' + err);
                         accountDao.deleteAccountAndArtifacts(account.id(), function(_err, value){
                             return self.wrapError(res, 500, 'Error creating Stripe Customer', err.code);
                         });
                     } else {
-                        callback(null, stripeCustomer, user, account);
+                        callback(null, stripeCustomer, user, account, accessToken);
                     }
 
                 });
+
             },
-            function(stripeCustomer, user, account, callback){
+            function(stripeCustomer, user, account, accessToken, callback){
                 self.log.debug('Created Stripe customer: ' +  stripeCustomer.id);
                 if(plan != 'NO_PLAN_ARGUMENT') {
-                    paymentsManager.createStripeSubscription(stripeCustomer.id, plan, account.id(), user.id(), coupon, setupFee, function(err, sub) {
+                    paymentsManager.createStripeSubscription(stripeCustomer.id, plan, account.id(), user.id(), coupon, setupFee, accessToken, function(err, sub) {
                         if (err) {
                             self.log.error('Error creating Stripe subscription: ' + err);
                             accountDao.deleteAccountAndArtifacts(account.id(), function(_err, value){
                                 return self.wrapError(res, 500, 'Error creating Stripe Subscription', err.code);
                             });
                         } else {
-                            callback(null, sub, stripeCustomer, user, account);
+                            callback(null, sub, stripeCustomer, user, account, accessToken);
                         }
                     });
                 } else {
-                    callback(null, null, stripeCustomer, user, account);
+                    callback(null, null, stripeCustomer, user, account, accessToken);
                 }
 
 
             },
-            function(sub, stripeCustomer, user, account, callback) {
+            function(sub, stripeCustomer, user, account, accessToken, callback) {
                 if(sub) {
                     self.log.debug('Created subscription: ' + sub.id);
                 } else {
@@ -560,20 +593,20 @@ _.extend(api.prototype, baseApi.prototype, {
                         //req.session.locked = true;//TODO: change this eventually
                         self.log.debug('Just set session accountId to: ' + req.session.accountId);
 
-                        callback(null, account.id(), sub.id, user, stripeCustomer.id, sub, updatedAccount);
+                        callback(null, account.id(), sub.id, user, stripeCustomer.id, sub, updatedAccount, accessToken);
                     });
                 });
             },
-            function(accountId, subId, user, stripeCustomerId, sub, account, callback) {
+            function(accountId, subId, user, stripeCustomerId, sub, account, accessToken, callback) {
                 if(orgId && orgId>0) {
                     orgDao.getById(orgId, $$.m.Organization, function(err, organization){
-                        callback(err, accountId, subId, user, stripeCustomerId, sub, account, organization);
+                        callback(err, accountId, subId, user, stripeCustomerId, sub, account, organization, accessToken);
                     });
                 } else {
-                    callback(null, accountId, subId, user, stripeCustomerId, sub, account, null);
+                    callback(null, accountId, subId, user, stripeCustomerId, sub, account, null, accessToken);
                 }
             },
-            function(accountId, subId, user, stripeCustomerId, sub, account, organization, callback) {
+            function(accountId, subId, user, stripeCustomerId, sub, account, organization, accessToken, callback) {
                 self.log.debug('Updated account billing.');
                 self.sm.addSubscriptionToAccount(accountId, subId, plan, user.id(), function(err, value){
                     if(organization) {
@@ -583,25 +616,18 @@ _.extend(api.prototype, baseApi.prototype, {
                                 self = null;
                                 return;
                             } else {
-                                if(err) {
-                                    res.redirect("/home");
-                                    self = null;
-                                    return;
-                                } else {
-                                    callback(err, accountId, subId, user, stripeCustomerId, sub, account, organization, value);
-                                }
-
+                                callback(err, accountId, subId, user, stripeCustomerId, sub, account, organization, value, accessToken);
                             }
 
                         });
                     } else {
                         authenticationDao.getAuthenticatedUrlForAccount(accountId, user.id(), 'admin/welcome', null, function(err, value){
-                            callback(err, accountId, subId, user, stripeCustomerId, sub, account, organization, value);
+                            callback(err, accountId, subId, user, stripeCustomerId, sub, account, organization, value, accessToken);
                         });
                     }
                 });
             },
-            function(accountId, subId, user, stripeCustomerId, sub, account, organization, value, callback){
+            function(accountId, subId, user, stripeCustomerId, sub, account, organization, value, accessToken, callback){
                 self.log.debug('Redirecting to: ' + value);
 
                 user.set("accountUrl", value.toLowerCase());
@@ -618,7 +644,11 @@ _.extend(api.prototype, baseApi.prototype, {
                 contactActivityManager.createActivity(activity, function(err, value){});
 
                 self.log.debug('Creating customer contact for main account.');
-                contactDao.createCustomerContact(user, appConfig.mainAccountID, fingerprint, self.ip(req), function(err, contact){
+                var adminAccountId = appConfig.mainAccountID;
+                if(organization && organization.id() !== 0) {
+                    adminAccountId = organization.get('adminAccount');
+                }
+                contactDao.createCustomerContact(user, adminAccountId, fingerprint, self.ip(req), function(err, contact){
                     if(err) {
                         self.log.error('Error creating customer for user: ' + user.id());
                     } else {
@@ -639,7 +669,7 @@ _.extend(api.prototype, baseApi.prototype, {
                              */
                             if(campaignId) {
                                 self.log.debug('Updating campaign with id: ' + campaignId);
-                                campaignManager.handleCampaignSignupEvent(appConfig.mainAccountID, campaignId, contact.id(), function(err, value){
+                                campaignManager.handleCampaignSignupEvent(adminAccountId, campaignId, contact.id(), function(err, value){
                                     if(err) {
                                         self.log.error('Error handling campaign signup: ' + err);
                                     } else {
@@ -665,11 +695,11 @@ _.extend(api.prototype, baseApi.prototype, {
                             contactActivityManager.createActivity(activity, function(err, value){});
                             self.log.debug('creating Order for main account');
                             if(sub.id !=='NOSUBSCRIPTION') {
-                                paymentsManager.getInvoiceForSubscription(stripeCustomerId, subId, null, function(err, invoice){
+                                paymentsManager.getInvoiceForSubscription(stripeCustomerId, subId, accessToken, function(err, invoice){
                                     if(err) {
                                         self.log.error('Error getting invoice for subscription: ' + err);
                                     } else {
-                                        orderManager.createOrderFromStripeInvoice(invoice, appConfig.mainAccountID, contact.id(), accountId, function(err, order){
+                                        orderManager.createOrderFromStripeInvoice(invoice, adminAccountId, contact.id(), accountId, function(err, order){
                                             if(err) {
                                                 self.log.error('Error creating order for invoice: ' + err);
                                             } else {
@@ -987,9 +1017,9 @@ _.extend(api.prototype, baseApi.prototype, {
         var self = this;
         var accountId = parseInt(self.accountId(req));
         var userId = self.userId(req);
-        self.log.debug(accountId, userId, '>> getOrgConfig');
+        //self.log.debug(accountId, userId, '>> getOrgConfig');
         userManager.getUserOrgConfig(accountId, userId, function(err, orgConfig){
-            self.log.debug(accountId, userId, '<< getOrgConfig');
+            //self.log.debug(accountId, userId, '<< getOrgConfig');
             self.sendResultOrError(resp, err, orgConfig, 'Error getting config');
         });
     },
@@ -998,7 +1028,7 @@ _.extend(api.prototype, baseApi.prototype, {
         var self = this;
         var accountId = parseInt(self.accountId(req));
         var userId = self.userId(req);
-        self.log.debug(accountId, userId, '>> updateOrgConfig');
+        //self.log.debug(accountId, userId, '>> updateOrgConfig');
         var orgConfig = req.body;
         userManager.updateUserOrgConfig(accountId, userId, orgConfig, function(err, orgConfig){
             self.log.debug(accountId, userId, '<< updateOrgConfig');
@@ -1012,12 +1042,12 @@ _.extend(api.prototype, baseApi.prototype, {
         var userId = self.userId(req);
         self.log.debug(accountId, userId, '>> updateUserPermissions');
         var roleAry = req.body.roleAry;
-        var targetUserId = req.params.id;
-
+        var targetUserId = parseInt(req.params.id);
+        console.log(targetUserId);
         self.isAdmin(req, function(err, isAdmin){
             self.isOrgAdminUser(accountId, userId, req, function(err, isOrgAdminUser){
                 if(isAdmin === true || isOrgAdminUser === true) {
-                    userManager.getUserById(userId, function(err, user){
+                    userManager.getUserById(targetUserId, function(err, user){
                         if(err || !user) {
                             self.log.error(accountId, userId, 'Error fetching user:', err);
                             return self.wrapError(resp, 500, null, err);
@@ -1146,6 +1176,18 @@ _.extend(api.prototype, baseApi.prototype, {
                 });
             }
         });
+    },
+    isAdmin: function(req, fn) {
+        var self = this;
+        //console.log(req);
+        
+        if(self.userId(req) === 1 || self.userId(req)===4) {
+            fn(null, true);
+        } else if(_.contains(req.session.permissions, 'manager')){
+            fn(null, true);
+        } else {
+            fn(null, false);
+        }
     }
 });
 

@@ -121,6 +121,12 @@
                                 <span class="footer-no-text">No Data</span>
                             </td>
                         </tr>
+                         <tr ng-if="vm.ledgerDetails">
+                             <td class="text-right padding-right-20" colspan="10">
+                                 <span class="order-total-text">Total</span><span class="order-total-value">{{vm.ledgerTotal || vm.calculateLedgerTotal(vm.ledgerDetails) | currency : ledger._CustStatmentHdr_Currency }}</span>
+                             </td>
+                         </tr>
+
                     </tfoot>
                 </table>
                 <div class="load1 csspinner height-400" ng-show="vm.uiState.loading"></div>

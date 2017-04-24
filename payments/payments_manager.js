@@ -37,20 +37,20 @@ module.exports = {
         }
     },
 
-    createStripeSubscription: function(customerId, planId, accountId, userId, coupon, setupFee, fn) {
-        log.debug(accountId, userId, '>> createStripeSubscription(' + customerId + ',' + planId +',' + accountId + ',' + userId + ',' + coupon + ','+ setupFee + ',callback)');
+    createStripeSubscription: function(customerId, planId, accountId, userId, coupon, setupFee, accessToken, fn) {
+        log.debug(accountId, userId, '>> createStripeSubscription(' + customerId + ',' + planId +',' + accountId + ',' + userId + ',' + coupon + ','+ setupFee + ',' + accessToken + ',callback)');
         if(setupFee && setupFee > 0) {
-            stripeDao.createInvoiceItem(customerId, setupFee, 'usd', null, null, 'Signup Fee', null, null, function(err, value){
+            stripeDao.createInvoiceItem(customerId, setupFee, 'usd', null, null, 'Signup Fee', null, accessToken, function(err, value){
                 if(err) {
                     log.error(accountId, userId, 'Error creating signup fee invoice item: ' + err);
                     return fn(err, null);
                 } else {
                     log.debug(accountId, userId, 'Created signup fee invoice item.');
-                    stripeDao.createStripeSubscription(customerId, planId, coupon, null, null, null, null, null, accountId, null, userId, null, fn);
+                    stripeDao.createStripeSubscription(customerId, planId, coupon, null, null, null, null, null, accountId, null, userId, accessToken, fn);
                 }
             });
         } else {
-            stripeDao.createStripeSubscription(customerId, planId, coupon, null, null, null, null, null, accountId, null, userId, null, fn);
+            stripeDao.createStripeSubscription(customerId, planId, coupon, null, null, null, null, null, accountId, null, userId, accessToken, fn);
         }
 
     },

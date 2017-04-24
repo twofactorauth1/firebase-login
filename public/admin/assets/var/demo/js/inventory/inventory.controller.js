@@ -2,9 +2,9 @@
 
 app.controller('InventoryComponentController', inventoryComponentController);
 
-inventoryComponentController.$inject = ['$scope', '$attrs', '$filter', '$modal', '$timeout', '$location', 'pagingConstant', 'InventoryService'];
+inventoryComponentController.$inject = ['$scope', '$attrs', '$filter', '$modal', '$timeout', '$location', 'pagingConstant', 'SweetAlert', 'toaster', 'InventoryService'];
 /* @ngInject */
-function inventoryComponentController($scope, $attrs, $filter, $modal, $timeout, $location, pagingConstant, InventoryService) {
+function inventoryComponentController($scope, $attrs, $filter, $modal, $timeout, $location, pagingConstant, SweetAlert, toaster, InventoryService) {
 
     var vm = this;
 
@@ -26,7 +26,8 @@ function inventoryComponentController($scope, $attrs, $filter, $modal, $timeout,
             OMRC_FirmName: InventoryService.fieldSearch.OMRC_FirmName,
             OITM_ItemCode: InventoryService.fieldSearch.OITM_ItemCode
         },
-        showFilter: InventoryService.showFilter
+        showFilter: InventoryService.showFilter,
+        inVentoryWatchList: []
     };
 
     vm.viewSingleInventory = viewSingleInventory;
@@ -38,6 +39,7 @@ function inventoryComponentController($scope, $attrs, $filter, $modal, $timeout,
     vm.showFilter = showFilter;
     vm.pagingConstant = pagingConstant;
     vm.selectPage = selectPage;
+    vm.checkIfSelected = checkIfSelected;
     vm.quantitySearchOptions =[
         {
            "label": "> 0",
@@ -49,12 +51,28 @@ function inventoryComponentController($scope, $attrs, $filter, $modal, $timeout,
 
     ]
 
+
+    vm.productSelectClickFn = productSelectClickFn;
+    vm.bulkActionSelectFn = bulkActionSelectFn;
+    
+    vm.bulkActionChoice = {};
+
+    vm.bulkActionChoices = [{data: 'watch', label: 'Watch'}];
+
     $scope.$watch(function() { return InventoryService.inventory }, function(inventory) {
         if(angular.isDefined(inventory)){
             vm.state.inventory = inventory.results;
             vm.state.totalInventory = inventory.total;
             vm.uiState.loading = false;
             drawPages();
+        }
+    }, true);
+
+
+    $scope.$watch(function() { return InventoryService.userOrgConfig }, function(config) {
+        if(angular.isDefined(config)){
+            vm.state.userOrgConfig = config;
+            vm.uiState.inVentoryWatchList = config.watchList || [];
         }
     }, true);
 
@@ -242,6 +260,58 @@ function inventoryComponentController($scope, $attrs, $filter, $modal, $timeout,
             OITM_ItemCode: null
         }
     }
+
+
+    function productSelectClickFn($event, product) {
+        $event.stopPropagation();
+
+        if(_.contains(vm.uiState.inVentoryWatchList, product["@id"])){
+            vm.uiState.inVentoryWatchList = _.without(vm.uiState.inVentoryWatchList, product["@id"]);
+        }
+        else{
+            if(vm.uiState.inVentoryWatchList.length == 5){
+                vm.uiState.inVentoryWatchList.shift();
+            }
+            vm.uiState.inVentoryWatchList.push(product["@id"]);
+        }
+    };
+
+
+    function checkIfSelected(product){
+        return _.contains(vm.uiState.inVentoryWatchList, product["@id"]);
+    }
+
+    function bulkActionSelectFn() {
+        
+        var watchMessage = "Do you want to add the selected items in inventory watch list?";
+        
+        if (vm.bulkActionChoice.action.data == 'watch') {
+            SweetAlert.swal({
+                title: "Are you sure?",
+                text: watchMessage,
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Yes, add to watch list!",
+                cancelButtonText: "No, do not add to watch list!",
+                closeOnConfirm: true,
+                closeOnCancel: true
+              },
+              function (isConfirm) {
+                if (isConfirm) {
+                    vm.state.userOrgConfig.watchList = vm.uiState.inVentoryWatchList;
+                    InventoryService.updateUserOrgConfig(vm.state.userOrgConfig).then(function(response){
+                        vm.bulkActionChoice = null;
+                        vm.bulkActionChoice = {};
+                        toaster.pop('success', 'Items added to inventory watch list');
+                    });
+                } else {
+                    vm.bulkActionChoice = null;
+                    vm.bulkActionChoice = {};
+                }
+              });
+        }
+    };
 
     function init(element) {
         vm.element = element;

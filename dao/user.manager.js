@@ -28,6 +28,8 @@ var CREATE_DEFAULT_PAGES = true;
 
 module.exports = {
 
+    log:log,
+
     createAccountAndUserFromTempAccount: function(accountToken, fingerprint, sendWelcomeEmail, fn) {
         var self = this;
         log.debug('>> createAccountAndUserFromTempAccount');

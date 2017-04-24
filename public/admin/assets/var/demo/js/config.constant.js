@@ -639,8 +639,8 @@ app.constant('JS_REQUIRES', {
     'DashboardWorkstreamTileComponentController': 'assets/var/demo/js/dashboard/dashboard-workstream-tile/dashboard-workstream-tile.controller.js',
     'DashboardAnalyticTileComponent': 'assets/var/demo/js/dashboard/dashboard-analytic-tile/dashboard-analytic-tile.component.js',
     'DashboardAnalyticTileComponentController': 'assets/var/demo/js/dashboard/dashboard-analytic-tile/dashboard-analytic-tile.controller.js',
-    'DashboardInboxComponent': 'assets/var/demo/js/dashboard/dashboard-inbox-widget/dashboard-inbox.component.js',
-    'DashboardInboxComponentController': 'assets/var/demo/js/dashboard/dashboard-inbox-widget/dashboard-inbox.controller.js',
+    
+    'DashboardInboxComponentController': 'assets/js/dashboard/dashboard-inbox-widget/dashboard-inbox.controller.js',
 
     // Inventory
 

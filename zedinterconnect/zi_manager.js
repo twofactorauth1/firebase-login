@@ -11,6 +11,8 @@ var ziConfig = require('../configs/zed.config');
 var async = require('async');
 var request = require('request');
 var parseString = require('xml2js').parseString;
+var userDao = require('../dao/user.dao');
+var accountManager = require('../accounts/account.manager');
 
 module.exports = {
     log: logger,
@@ -70,6 +72,51 @@ module.exports = {
                 fn(null, value);
             }
         });
+    },
+
+
+    getDashboardInventory: function(accountId, userId, fn) {
+        var self = this;
+        self.log.debug(accountId, userId, '>> getDashboardInventory');
+        var query = {};
+        var fields = null;
+        var collection = 'inventory';
+
+        accountManager.getOrganizationByAccountId(accountId, userId, function(err, organization){
+            if(err) {
+                self.log.error(accountId, userId, 'Error finding organization:', err);
+                fn(err);
+            } else {
+                userDao.getById(userId, function (err, user) {
+                    if (err) {
+                        log.error(accountId, userId, 'Error getting user: ' + err);
+                        fn(err, null);
+                    } else {
+                        var watchList = [];
+                        var orgConfig = user.getOrgConfig(organization.id());
+                        if(orgConfig){
+                            watchList = orgConfig.watchList || [];
+                        }
+                        query = {
+                            '@id': {'$in': watchList} 
+                        };
+
+                        ziDao.findRawWithFieldsLimitAndOrder(query, null, null, null, fields, collection, null, function(err, value){
+                            if(err) {
+                                self.log.error(accountId, userId, 'Error getting dashboard inventory:', err);
+                                fn(err);
+                            } else {
+                                self.log.debug(accountId, userId, '<< getDashboardInventory');
+                                fn(null, value);
+                            }
+                        });
+                    }
+                });
+            }
+        });
+
+        
+        
     },
 
     getInventoryItem: function(accountId, userId, itemId, fn) {

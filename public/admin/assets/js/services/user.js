@@ -235,6 +235,7 @@
         fn(data);
       });
     };
+    
     this.findUserByUsername=function(username,fn){
         var findUserUrl=baseUrl+['user','email',username].join('/');
         $http.get(findUserUrl).success(function(data){
@@ -243,5 +244,33 @@
             fn(err);
         });
     };
+
+    this.getUserOrganizationConfig = function(fn){
+        var apiUrl = baseUrl + ['user','orgConfig'].join('/');
+        $http.get(apiUrl).success(function(data){
+            fn(null,data);
+        }).error(function(err){
+            fn(err);
+        });
+    }
+
+    this.getAccountUsers = function(fn){
+        var apiUrl = baseUrl + ['user','members'].join('/');
+        $http.get(apiUrl).success(function(data){
+            fn(data);
+        }).error(function(err){
+            fn(err);
+        });
+    }
+
+    this.updateUserPermisions = function(_id, permissions, fn){
+      var apiUrl = baseUrl + ['user', _id, 'permissions'].join('/');
+      $http.post(apiUrl, {
+        roleAry: permissions
+      }).success(function(data, status, headers, config) {
+          fn(data);
+      });
+    }
+
   });
 })(angular);

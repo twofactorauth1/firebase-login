@@ -437,7 +437,7 @@
                                 if(vm.originalData.bg.color)
                                   elem.style.setProperty( 'background-color', vm.originalData.bg.color, 'important' );
                                 else
-                                  this.style.setProperty( 'background-color', originalData.bg.color, 'important' );
+                                  elem.style.setProperty( 'background-color', originalData.bg.color, 'important' );
                                 if(vm.originalData.txtcolor)
                                   elem.style.setProperty( 'color', vm.originalData.txtcolor, 'important' );
                                 else

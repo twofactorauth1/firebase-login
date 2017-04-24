@@ -40,23 +40,28 @@ function dashboardAnalyticTileComponentController($scope, $attrs, $filter, Dashb
             switch(vm.analytic.name) {
                 case 'Inventory':
 
-                    ret.widgetTitle = 'Inventory';
-                    ret.buttonTitle = 'Check Inventory';
+                    ret.widgetTitle = 'Inventory Watch';
+                    ret.buttonTitle = 'View Inventory';
                     ret.link = '#/inventory';
 
                     ret.header = [
-                        {label: 'SKU #'},
+                        {label: 'Product'},
                         {label: 'Vender'},
                         {label: 'Qty OH'}
                     ];
 
-                    ret.data = [
-                        {
-                            field1: "SRX-210",
-                            field2: "Juniper",
-                            field3: "490"
-                        }
-                    ];
+                    $scope.$watch(function() { return DashboardService.inventory; }, function(inventory){
+                       
+                        ret.data = []
+                        _.each(inventory, function(item){
+                            ret.data.push({
+                                field1: item.OITM_ItemCode,
+                                field2: item.OMRC_FirmName,
+                                field3: item.In_Stock,
+                                link: ret.link + "/" + item["@id"]
+                            })
+                        })
+                    });
 
                     break;
 
@@ -89,10 +94,7 @@ function dashboardAnalyticTileComponentController($scope, $attrs, $filter, Dashb
                         {label: 'Submitter'}
                     ];
 
-                    $scope.$watch(function() { return DashboardService.purchaseOrders; }, function(purchaseOrders){
-                        if(purchaseOrders){
-                            ret.data = purchaseOrders;
-                        }
+                    $scope.$watch(function() { return DashboardService.purchaseOrders; }, function(purchaseOrders){                        
                         ret.data = []
 
                         _.each(purchaseOrders, function(order){

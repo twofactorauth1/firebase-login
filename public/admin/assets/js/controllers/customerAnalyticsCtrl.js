@@ -45,6 +45,7 @@
             //update user preferences
             if (dateSwitch) {
                 $scope.analyticsOverviewConfig = {};
+                $scope.frontrunnerSitesPageviewsConfig = {};
                 $scope.timeonSiteConfig = {};
                 $scope.trafficSourcesConfig = {};
                 $scope.newVsReturningConfig = {};
@@ -1005,6 +1006,14 @@
                 reflowCharts();
             }
         });
+
+        $scope.$watch('frontrunnerSite', function (value, oldValue) {
+            if(angular.isDefined(value) && angular.isDefined(oldValue) && !angular.equals(value, oldValue) && $scope.dataLoaded){
+                AnalyticsWidgetStateService.setPlateformAnalyticsWidgetStates("frontrunnerSite", value);
+                reflowCharts();
+            }
+        });
+
 
         $scope.$watch('locations', function (value, oldValue) {
             if(angular.isDefined(value) && angular.isDefined(oldValue) && !angular.equals(value, oldValue) && $scope.dataLoaded){
