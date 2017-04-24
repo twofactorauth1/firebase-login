@@ -254,5 +254,23 @@
         });
     }
 
+    this.getAccountUsers = function(fn){
+        var apiUrl = baseUrl + ['user','members'].join('/');
+        $http.get(apiUrl).success(function(data){
+            fn(data);
+        }).error(function(err){
+            fn(err);
+        });
+    }
+
+    this.updateUserPermisions = function(_id, permissions, fn){
+      var apiUrl = baseUrl + ['user', _id, 'permissions'].join('/');
+      $http.post(apiUrl, {
+        roleAry: permissions
+      }).success(function(data, status, headers, config) {
+          fn(data);
+      });
+    }
+
   });
 })(angular);

@@ -1047,7 +1047,7 @@ _.extend(api.prototype, baseApi.prototype, {
         self.isAdmin(req, function(err, isAdmin){
             self.isOrgAdminUser(accountId, userId, req, function(err, isOrgAdminUser){
                 if(isAdmin === true || isOrgAdminUser === true) {
-                    userManager.getUserById(userId, function(err, user){
+                    userManager.getUserById(targetUserId, function(err, user){
                         if(err || !user) {
                             self.log.error(accountId, userId, 'Error fetching user:', err);
                             return self.wrapError(resp, 500, null, err);
@@ -1176,6 +1176,31 @@ _.extend(api.prototype, baseApi.prototype, {
                 });
             }
         });
+    },
+    isAdmin: function(req, fn) {
+        var self = this;
+        //console.log(req);
+        
+        if(self.userId(req) === 1 || self.userId(req)===4) {
+            fn(null, true);
+        } else if(_.contains(req.session.permissions, 'manager')){
+            fn(null, true);
+        } else {
+            fn(null, false);
+        }
+    },
+
+    isAdminOrOrgAdmin: function(req, fn) {
+        var self = this;
+        if(self.userId(req) === 1 || self.userId(req)===4) {
+            fn(null, true);
+        } else if(_.contains(req.session.permissions, 'manager')){
+            fn(null, true);
+        } else {
+            var accountId = parseInt(self.accountId(req));
+            var userId = self.userId(req);
+            return self.isOrgAdmin(accountId, userId, req, fn);
+        }
     }
 });
 

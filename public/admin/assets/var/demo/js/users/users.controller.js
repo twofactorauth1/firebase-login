@@ -8,7 +8,9 @@
 
         vm.state = {       
             adminUserName: userConstant.admin_user.userName,
-            adminUserEmailFilter: userConstant.admin_user.emailDomain
+            adminUserEmailFilter: userConstant.admin_user.emailDomain,
+            cardCodes: null,
+            isAdmin: false
         };
 
         vm.uiState = {
@@ -25,7 +27,7 @@
         });
 
         function loadAccountUsers(){
-            AccountService.getUsersByAccount(vm.state.account._id, function(users){ 
+            UserService.getAccountUsers(function(users){ 
                 // We should not list global admin user
                 users = _.reject(users, function(user){ return user.username == vm.state.adminUserName });               
                 vm.state.users = users;
@@ -119,19 +121,24 @@
         $scope.openEditUserCardModal = function(userId) {
             $scope.currentUserId = userId;
             $scope.editUser = null;
-            // UserService.getUser(function(user){
-            //     var userAccount = _.find(user.accounts, function(account){
-            //         return vm.state.account._id == account.accountId
-            //     })
-            //     if(userAccount){
-            //         $scope.permissions = userAccount.permissions;
-            //         $scope.userIsAdmin = $scope.permissions.include
-            //     }
-            // })
             $scope.editUser = _.find(vm.state.users, function(user){
                 return user._id == userId
             })
-            $scope.isAdmin = true;
+
+            var _userAccount = _.find($scope.editUser.accounts, function(account){
+                return account.accountId == vm.state.account._id
+            })
+
+            
+
+            if(_userAccount && _userAccount.permissions){
+                if(_.contains(_userAccount.permissions, "admin")){
+                    vm.state.isAdmin = true;
+                }
+            }
+
+            getOrgConfig(vm.state.account.orgId);
+
             vm.openSimpleModal('edit-user-card-modal');
         };
         $scope.closeUserCardModal = function() {
@@ -140,8 +147,12 @@
         };
 
         $scope.updateUser = function(){
+            setOrgConfig(vm.state.account.orgId);
+            var _permissions = getUserPermissions(vm.state.isAdmin);
             UserService.editUser($scope.editUser, $scope.currentUserId, function(){
-                $scope.closeUserCardModal();
+                UserService.updateUserPermisions($scope.currentUserId, _permissions, function(user){                
+                    $scope.closeUserCardModal();
+                })
             })
         };
 
@@ -199,7 +210,44 @@
             });
         };
 
+        function getOrgConfig(orgId){
+            var orgConfigAry = $scope.editUser.orgConfig || [];
 
+            var orgConfig = _.find(orgConfigAry, function(config){
+                return config.orgId == orgId
+            })
+            if(orgConfig){
+                vm.state.cardCodes = orgConfig.cardCodes;
+            }
+            else{
+                vm.state.cardCodes = null;
+            }
+        };
+
+        function setOrgConfig(orgId){
+            var orgConfigAry = $scope.editUser.orgConfig || [];
+
+            var orgConfig = _.find(orgConfigAry, function(config){
+                return config.orgId == orgId
+            })
+            if(orgConfig){
+                orgConfig.cardCodes = vm.state.cardCodes;
+            }
+            else{
+                orgConfigAry.push({
+                    orgId: orgId,
+                    cardCodes: vm.state.cardCodes
+                })
+            }
+        };
+
+        function getUserPermissions(isAdmin){
+            var permissions = ["vendor"];
+            if(isAdmin){
+                permissions = ["super", "admin", "member"];
+            }
+            return permissions;
+        }
 
 
         (function init() {
