@@ -111,7 +111,7 @@
 	                <th class="hidden-xs desc-col">Description</th>
 	                <th class="hidden-xs hidden-sm dim-col">Dimension</th>
 	                <th class="hidden-xs hidden-sm weight-col">Weight</th>
-	                <th class="qty-col sort" style="white-space: nowrap;" width="1%" ng-class="{'st-sort-ascent': vm.uiState.sortData.details['totalQuantity'].direction === 1, 'st-sort-descent': vm.uiState.sortData.details['totalQuantity'].direction === -1}" ng-click="vm.sortInventory('In_Stock', 'totalQuantity')">On-hand</th>
+	                <th class="qty-col sort" style="white-space: nowrap;" width="1%" ng-class="{'st-sort-ascent': vm.uiState.sortData.details['totalQuantity'].direction === 1, 'st-sort-descent': vm.uiState.sortData.details['totalQuantity'].direction === -1}" ng-click="vm.sortInventory('In_Stock', 'totalQuantity')">Qty. On Hand</th>
 	            </tr>
 	            <tr ng-if="vm.uiState.showFilter">
 	            	<th></th>
