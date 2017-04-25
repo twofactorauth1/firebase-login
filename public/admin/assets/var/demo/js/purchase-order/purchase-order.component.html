@@ -55,7 +55,7 @@
 	                                    <div class="visible-xs margin-bottom-15 clearfix"></div>
 	                                    <div class="col-xs-5 col-xs-offset-6 col-sm-6 center">
 	                                        <button type="button" class="btn btn-o btn-wide btn-info btn-scroll btn-scroll-top ti ti-plus ng-click-active" ng-click="vm.openModal()">
-	                                            <span>New</span>
+	                                            <span>Submit PO</span>
 	                                        </button>
 	                                    </div>
 	                                </div>
@@ -119,7 +119,7 @@
                     <td class="hidden-xs" ng-show='vm.displayedOrders.length'><i class="fa fa-2x" ng-click='vm.orderSelectClickFn($event, order)' ng-class='{"fa-check-circle": order.isSelected, "fa-circle-o": !order.isSelected}'></i></td>
                     <td><strong>Name: </strong><div class="name-block-container"><span class="list-name"></span><span ng-text-truncate="order.title" ng-tt-chars-threshold="25" ng-tt-no-toggling></span></div></td>
 	                <td class=""><strong>Submitter: </strong>{{order.submitter.first}} {{order.submitter.last}}</td>
-	                <td><strong>Date: </strong>{{order.created.date | date:'MMM d yy'}}</td>
+	                <td><strong>Date: </strong>{{order.created.date | date:'MMM d yy HH:mm:ss'}}</td>
 	                <td class="hidden-xs"><strong>Attachment: </strong>{{order.attachment.name}}</td>
 	            </tr>
 	        </tbody>
