@@ -255,9 +255,9 @@ function inventoryComponentController($scope, $attrs, $filter, $modal, $timeout,
     function clearFilter(){
         InventoryService.fieldSearch = {};
         vm.uiState.fieldSearch = {
-            OITM_ItemName: null,
-            OMRC_FirmName: null,
-            OITM_ItemCode: null
+            OITM_ItemName: undefined,
+            OMRC_FirmName: undefined,
+            OITM_ItemCode: undefined
         }
     }
 
