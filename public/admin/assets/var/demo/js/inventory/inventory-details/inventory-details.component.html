@@ -47,18 +47,7 @@
                 </div>
                 <hr>
             </div>
-            <div class="form-group">
-                <h4>SKU</h4>
-
-                <div class="description">
-                    <span>
-                        {{vm.inventory.OITM_ItemCode}}
-                    </span>
-                </div>
-                <hr>
-            </div>
-
-
+            
             <div class="form-group">
                 <h4>Group</h4>
 
@@ -82,33 +71,7 @@
         </div>
 
         <div class="col-sm-5 col-xs-12 inventory-details-panel inventory-details-right-panel">
-            <div class="form-group">
-                <h4>Available</h4>
-
-                <div class="description">
-                    <span ng-if="vm.inventory.Available > 0">
-                        {{vm.inventory.Available}}
-                    </span>
-                    <span ng-if="vm.inventory.Available <= 0">
-                        &nbsp;
-                    </span>
-                </div>
-                <hr>
-            </div>
-
-            <div class="form-group">
-                <h4>Committed</h4>
-
-                <div class="description">
-                    <span ng-if="vm.inventory.Committed > 0">
-                        {{vm.inventory.Available}}
-                    </span>
-                    <span ng-if="vm.inventory.Committed <= 0">
-                        &nbsp;
-                    </span>
-                </div>
-                <hr>
-            </div>
+            
             <div class="form-group">
                 <h4>Length</h4>
 
@@ -165,21 +128,6 @@
                 </div>
                 <hr>
             </div>
-
-            <div class="form-group">
-                <h4>Volume</h4>
-
-                <div class="description">
-                     <span ng-if="vm.inventory.OITM_SVolume > 0">
-                        {{vm.parseValueToFloat(vm.inventory.OITM_SVolume) | number : fractionSize}}
-                    </span>
-                    <span ng-if="vm.inventory.OITM_SVolume <= 0">
-                        &nbsp;
-                    </span>
-                </div>
-                <hr>
-            </div>
-
         </div>
     </div>
 </div>
