@@ -113,11 +113,11 @@
                 <h4>Length</h4>
 
                 <div class="description">
-                    <span ng-if="vm.inventory.OITM_SLength1 > 0">
+                    <span ng-if="vm.inventory.OITM_SLength1 > 0 && vm.checkProductGroup() != vm.uiState.dimNotApplicableText">
                         {{vm.parseValueToFloat(vm.inventory.OITM_SLength1) | number : fractionSize}} {{vm.inventory.OLGT_UnitName_10}}
                     </span>
-                    <span ng-if="vm.inventory.OITM_SLength1 <= 0">
-                        &nbsp;
+                    <span ng-if="vm.inventory.OITM_SLength1 <= 0 || vm.checkProductGroup() == vm.uiState.dimNotApplicableText">
+                        {{vm.checkProductGroup() == vm.uiState.dimNotApplicableText ? vm.uiState.dimNotApplicableText : ''}}
                     </span>
                 </div>
                 <hr>
@@ -127,11 +127,12 @@
                 <h4>Width</h4>
 
                 <div class="description">
-                    <span ng-if="vm.inventory.OITM_SWidth1 > 0">
+
+                    <span ng-if="vm.inventory.OITM_SWidth1 > 0 && vm.checkProductGroup() != vm.uiState.dimNotApplicableText">
                         {{vm.parseValueToFloat(vm.inventory.OITM_SWidth1) | number : fractionSize}} {{vm.inventory.OLGT_UnitName_10}}
                     </span>
-                    <span ng-if="vm.inventory.OITM_SWidth1 <= 0">
-                        &nbsp;
+                    <span ng-if="vm.inventory.OITM_SWidth1 <= 0 || vm.checkProductGroup() == vm.uiState.dimNotApplicableText">
+                        {{vm.checkProductGroup() == vm.uiState.dimNotApplicableText ? vm.uiState.dimNotApplicableText : ''}}
                     </span>
                 </div>
                 <hr>
@@ -140,11 +141,11 @@
                 <h4>Height</h4>
 
                 <div class="description">
-                    <span ng-if="vm.inventory.OITM_BHeight1 > 0">
+                    <span ng-if="vm.inventory.OITM_BHeight1 > 0 && vm.checkProductGroup() != vm.uiState.dimNotApplicableText">
                         {{vm.parseValueToFloat(vm.inventory.OITM_BHeight1) | number : fractionSize}} {{vm.inventory.OLGT_UnitName_10}}
                     </span>
-                    <span ng-if="vm.inventory.OITM_BHeight1 <= 0">
-                        &nbsp;
+                    <span ng-if="vm.inventory.OITM_BHeight1 <= 0 || vm.checkProductGroup() == vm.uiState.dimNotApplicableText">
+                        {{vm.checkProductGroup() == vm.uiState.dimNotApplicableText ? vm.uiState.dimNotApplicableText : ''}}
                     </span>
                 </div>
                 <hr>

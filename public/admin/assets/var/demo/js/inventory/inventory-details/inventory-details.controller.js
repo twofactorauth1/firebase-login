@@ -12,11 +12,16 @@ function inventoryDetailsController($scope, $state, $attrs, $filter, $modal, $ti
 
     console.log($stateParams.inventoryId);
 
-    vm.uiState = {loading: true};
+    vm.uiState = {
+        loading: true,
+        dimNotApplicableText: 'NA'
+    };
 
     vm.backToInventory = backToInventory;
 
     vm.parseValueToFloat = parseValueToFloat;
+
+    vm.checkProductGroup = checkProductGroup;
 
     function backToInventory(){
         $state.go("app.inventory");
@@ -29,6 +34,14 @@ function inventoryDetailsController($scope, $state, $attrs, $filter, $modal, $ti
             return parseFloat(value);
         }
     }
+
+    function checkProductGroup(value){
+        if(vm.inventory.OITB_ItmsGrpNam && vm.inventory.OITB_ItmsGrpNam.toLowerCase() == 'services'){            
+            return vm.uiState.dimNotApplicableText;
+        }
+    }
+
+    
 
     function init(element) {
         vm.element = element;
