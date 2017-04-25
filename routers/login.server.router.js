@@ -455,11 +455,17 @@ _.extend(router.prototype, BaseRouter.prototype, {
         var token = req.params.token;
         self.log.debug('email: ' + email);
         if (password !== password2) {
-            req.flash("error", "Passwords do not match");
-            self.log.error('Passwords do not match');
-            return resp.redirect("/forgotpassword/reset/" + token);
+           
+            new ForgotPasswordView(req, resp).ForgotPasswordMismatch(token, email);
+            // req.flash("error", "Passwords do not match");
+            // self.log.error('Passwords do not match');
+            // return resp.redirect("/forgotpassword/reset/" + token);
+        }else
+        {
+           
+            new ForgotPasswordView(req, resp).handleResetByToken(token, password, email); 
         }
-        new ForgotPasswordView(req, resp).handleResetByToken(token, password, email);
+       
     },
     //endregion
 

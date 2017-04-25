@@ -206,7 +206,7 @@ app.directive('simpleFormComponent', ["ipCookie", '$window', '$timeout', 'userSe
                                 if(scope.originalData.bg.color)
                                   elem.style.setProperty( 'background-color', scope.originalData.bg.color, 'important' );
                                 else
-                                  this.style.setProperty( 'background-color', originalData.bg.color, 'important' );
+                                  elem.style.setProperty( 'background-color', originalData.bg.color, 'important' );
                                 if(scope.originalData.txtcolor)
                                   elem.style.setProperty( 'color', scope.originalData.txtcolor, 'important' );
                                 else

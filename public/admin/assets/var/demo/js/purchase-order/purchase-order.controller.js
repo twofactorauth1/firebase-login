@@ -29,7 +29,7 @@ function purchaseOrderComponentController($scope, $attrs, $filter, $modal, $time
 
     vm.bulkActionChoice = {};
 
-    vm.bulkActionChoices = [{data: 'delete', label: 'Delete'}];
+    vm.bulkActionChoices = [{data: 'archive', label: 'Archive'}];
 
     vm.init = init;
 
@@ -41,8 +41,48 @@ function purchaseOrderComponentController($scope, $attrs, $filter, $modal, $time
         }        
     }, true);
 
+    $scope.$watchGroup(["$parent.account", "$parent.currentUser"], _.debounce(function(values) {
+        if(values[0] && values[1]){
+            vm.state.account = values[0];
+            vm.state.user = values[1];
+            vm.state.orgCardAndPermissions = getOrgConfigAndPermissions(vm.state.user, vm.state.account)
+        }
+    }, 0), true);
+
+
+    // Need to move this to a service in order to use it globally 
+    function getOrgConfigAndPermissions(user, account){
+
+        var userAccount = _.find(user.accounts, function(acc){
+            return acc.accountId == account._id
+        })
+       
+        var orgConfigAry = user.orgConfig || [];  
+        var orgConfigAndPermissions = {
+            permissions: null,
+            config: null
+        }
+        var orgConfig = _.find(orgConfigAry, function(config){
+            return config.orgId == account.orgId
+        })
+
+        orgConfigAndPermissions.permissions = userAccount.permissions;
+        orgConfigAndPermissions.config = orgConfig;
+
+
+        return orgConfigAndPermissions;
+    };
+
 
     function openModal(size){
+
+        var templateUrl = 'new-purchase-order-modal';
+
+        var isVendor = _.contains(vm.state.orgCardAndPermissions.permissions, 'vendor');
+        if(isVendor){
+            templateUrl = 'new-vendor-purchase-order-modal';
+        }
+
         $scope.modalInstance = $modal.open({
             templateUrl: 'new-purchase-order-modal',
             size: size,
@@ -116,18 +156,18 @@ function purchaseOrderComponentController($scope, $attrs, $filter, $modal, $time
 
     function bulkActionSelectFn() {
         var selectedOrders = vm.selectedOrdersFn();
-        var deleteMessage = "Do you want to delete the "+ selectedOrders.length + " purchase order?";
+        var deleteMessage = "Do you want to archive the "+ selectedOrders.length + " purchase order?";
         if(selectedOrders.length > 1)
-          deleteMessage = "Do you want to delete the "+ selectedOrders.length + " purchase orders?";
-        if (vm.bulkActionChoice.action.data == 'delete') {
+          deleteMessage = "Do you want to archive the "+ selectedOrders.length + " purchase orders?";
+        if (vm.bulkActionChoice.action.data == 'archive') {
             SweetAlert.swal({
                 title: "Are you sure?",
                 text: deleteMessage,
                 type: "warning",
                 showCancelButton: true,
                 confirmButtonColor: "#DD6B55",
-                confirmButtonText: "Yes, delete it!",
-                cancelButtonText: "No, do not delete it!",
+                confirmButtonText: "Yes, archive it!",
+                cancelButtonText: "No, do not archive it!",
                 closeOnConfirm: true,
                 closeOnCancel: true
               },
@@ -140,7 +180,7 @@ function purchaseOrderComponentController($scope, $attrs, $filter, $modal, $time
                     PurchaseOrderService.deleteBulkPurchaseOrders(_selectedOrdersId).then(function(response){
                         vm.bulkActionChoice = null;
                         vm.bulkActionChoice = {};
-                        toaster.pop('success', 'Purchase orders Successfully Deleted');
+                        toaster.pop('success', 'Purchase orders successfully archived');
                     });
                 } else {
                     vm.bulkActionChoice = null;

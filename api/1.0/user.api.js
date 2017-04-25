@@ -1017,9 +1017,9 @@ _.extend(api.prototype, baseApi.prototype, {
         var self = this;
         var accountId = parseInt(self.accountId(req));
         var userId = self.userId(req);
-        //self.log.debug(accountId, userId, '>> getOrgConfig');
+        self.log.debug(accountId, userId, '>> getOrgConfig');
         userManager.getUserOrgConfig(accountId, userId, function(err, orgConfig){
-            //self.log.debug(accountId, userId, '<< getOrgConfig');
+            self.log.debug(accountId, userId, '<< getOrgConfig');
             self.sendResultOrError(resp, err, orgConfig, 'Error getting config');
         });
     },
@@ -1028,7 +1028,7 @@ _.extend(api.prototype, baseApi.prototype, {
         var self = this;
         var accountId = parseInt(self.accountId(req));
         var userId = self.userId(req);
-        //self.log.debug(accountId, userId, '>> updateOrgConfig');
+        self.log.debug(accountId, userId, '>> updateOrgConfig');
         var orgConfig = req.body;
         userManager.updateUserOrgConfig(accountId, userId, orgConfig, function(err, orgConfig){
             self.log.debug(accountId, userId, '<< updateOrgConfig');
@@ -1043,7 +1043,10 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug(accountId, userId, '>> updateUserPermissions');
         var roleAry = req.body.roleAry;
         var targetUserId = parseInt(req.params.id);
-        console.log(targetUserId);
+        if(targetUserId === 1) {
+            //can't update admin!
+            return self.send403(resp);
+        }
         self.isAdmin(req, function(err, isAdmin){
             self.isOrgAdminUser(accountId, userId, req, function(err, isOrgAdminUser){
                 if(isAdmin === true || isOrgAdminUser === true) {

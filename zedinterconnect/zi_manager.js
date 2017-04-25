@@ -299,6 +299,48 @@ module.exports = {
         });
     },
 
+    getLedgerWithLimit: function(accountId, userId, cardCodeAry, dateString, limit, fn) {
+        var self = this;
+        self.log.debug(accountId, userId, '>> getLedgerWithLimit');
+        var resultAry = [];
+        if(cardCodeAry.length == 0) {
+            cardCodeAry.push('admin');
+        }
+        async.each(cardCodeAry, function(cardCode, callback){
+            var path = 'query/Indigenous/CustomerAging2.aspx?0=' + cardCode + '&1=' + cardCode + '&2=' + dateString + '&accept=application/json';
+            if(cardCode === 'admin') {
+                //just a hack to load them all.
+                path = 'query/Indigenous/CustomerAging2.aspx?0=0&1=L9999999&2=' + dateString + '&accept=application/json';
+            }
+            self._ziRequest(path, function(err, value) {
+                if(err) {
+                    self.log.error(accountId, userId, 'Error calling zi:', err);
+                    callback(err);
+                } else {
+
+                    var response = JSON.parse(value);//response.payload.querydata.data.row
+
+                    if(response && response.response) {
+                        response = response.response;
+                    }
+                    if(response &&
+                        response.payload &&
+                        response.payload.querydata &&
+                        response.payload.querydata.data &&
+                        response.payload.querydata.data.row) {
+                        resultAry = resultAry.concat(response.payload.querydata.data.row);
+                    }
+                    callback();
+                }
+            });
+        }, function(err){
+            //sort by _CustStatmentDtl_DueDate
+            resultAry = _.first(_.sortBy(resultAry, '_CustStatmentDtl_DueDate'), limit);
+            self.log.debug(accountId, userId, '<< getLedgerWithLimit');
+            fn(err, resultAry);
+        });
+    },
+
     loadInventoryCollection: function(fn) {
         var self = this;
         self.log.debug(0, 0, '>> loadInventoryCollection');

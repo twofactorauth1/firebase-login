@@ -692,7 +692,7 @@ var dao = {
                 user.clearPasswordRecoverToken();
                 user.encryptPasswordAsync(password, function(err, hash){
                     if(err) {
-                        this.log.error('Error encrypting password: ' + err);
+                        //this.log.error('Error encrypting password: ' + err);
                         return fn(err, null);
                     }
                     user.createOrUpdateLocalCredentials(hash);

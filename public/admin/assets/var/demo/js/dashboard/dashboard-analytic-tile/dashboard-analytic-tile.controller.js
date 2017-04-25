@@ -45,18 +45,18 @@ function dashboardAnalyticTileComponentController($scope, $attrs, $filter, Dashb
                     ret.link = '#/inventory';
 
                     ret.header = [
+                        {label: 'Vendor'},
                         {label: 'Product'},
-                        {label: 'Vender'},
                         {label: 'Qty OH'}
                     ];
 
                     $scope.$watch(function() { return DashboardService.inventory; }, function(inventory){
-                       
+
                         ret.data = []
                         _.each(inventory, function(item){
                             ret.data.push({
-                                field1: item.OITM_ItemCode,
-                                field2: item.OMRC_FirmName,
+                                field1: item.OMRC_FirmName,
+                                field2: item.OITM_ItemName,
                                 field3: item.In_Stock,
                                 link: ret.link + "/" + item["@id"]
                             })
@@ -94,7 +94,7 @@ function dashboardAnalyticTileComponentController($scope, $attrs, $filter, Dashb
                         {label: 'Submitter'}
                     ];
 
-                    $scope.$watch(function() { return DashboardService.purchaseOrders; }, function(purchaseOrders){                        
+                    $scope.$watch(function() { return DashboardService.purchaseOrders; }, function(purchaseOrders){
                         ret.data = []
 
                         _.each(purchaseOrders, function(order){
@@ -106,7 +106,7 @@ function dashboardAnalyticTileComponentController($scope, $attrs, $filter, Dashb
                             })
                         })
                     });
-                            
+
                     break;
                 case 'Invoices':
 
@@ -115,17 +115,22 @@ function dashboardAnalyticTileComponentController($scope, $attrs, $filter, Dashb
                     ret.link = '#/customers'; // Really, this should go to ledger for non-Admin
 
                     ret.header = [
-                        {label: 'Invoice #'},
+                        {label: 'Invoice #'},                        
+                        {label: 'Due Date'},
                         {label: 'Amount'},
-                        {label: 'Due Date'}
                     ];
-                    ret.data = [
-                        {
-                            field1: "12345",
-                            field2: "$432,000",
-                            field3: "2/15/17",
-                        }
-                    ];
+                    $scope.$watch(function() { return DashboardService.invoices; }, function(invoices){
+                        ret.data = []
+
+                        _.each(invoices, function(invoice){
+                            ret.data.push({
+                                field1: invoice._CustStatmentDtl_TransId,
+                                field2: $filter('date')(parseValueToDate(invoice._CustStatmentDtl_DueDate), 'M/d/yyyy'),                               
+                                field3: invoice._CustStatmentDtl_Amount,
+                                link: ret.link + "/" + invoice._CustStatmentDtl_TransId
+                            })
+                        })
+                    });
                     break;
 
                 case 'Renewals':
@@ -191,13 +196,20 @@ function dashboardAnalyticTileComponentController($scope, $attrs, $filter, Dashb
         var _user = "";
         if(order.submitter){
             if(order.submitter.first){
-                _user = order.submitter.first + " " + order.submitter.last; 
+                _user = order.submitter.first + " " + order.submitter.last;
             }
             else{
                 _user = order.submitter.username;
             }
         }
         return _user;
+    }
+
+    function parseValueToDate(value){
+        if(value){
+            var formattedDate = Date.parse(value); // "M/d/yyyy h:mm:ss a"
+            return formattedDate;
+        }
     }
 
     function init(element) {
