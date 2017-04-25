@@ -113,9 +113,26 @@ _.extend(view.prototype, BaseView.prototype, {
             }
         });
     },
+    ForgotPasswordMismatch: function(token, email) {
+        var self = this;
+        var data = self.baseData({
+                    reset:true,
+                    email:email,
+                    errMsg:"Password do not match",
+                    token:token
+                });
+         self.resp.render('forgotpassword', data);
+                self.cleanUp();
+                data = self = null;
+                
+
+
+        
+    },
 
 
     handleResetByToken: function(token, password, email) {
+
         var self = this;
 
         authenticationDao.updatePasswordByToken(this.accountId(), token, password, email, function(err, value) {
@@ -148,7 +165,7 @@ _.extend(view.prototype, BaseView.prototype, {
                 var data = self.baseData({
                     reset:true,
                     token:token,
-                    errMsg: "Error on submission. Please verify link matches that in the 'Password Reset' email and below email address is entered correctly."
+                      errMsg: "Error on submission.Please Verify link matches that in the 'Password Reset' email and below email address is entered correctly."
                 });
 
                 self.resp.render('forgotpassword', data);
