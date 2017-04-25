@@ -41,8 +41,48 @@ function purchaseOrderComponentController($scope, $attrs, $filter, $modal, $time
         }        
     }, true);
 
+    $scope.$watchGroup(["$parent.account", "$parent.currentUser"], _.debounce(function(values) {
+        if(values[0] && values[1]){
+            vm.state.account = values[0];
+            vm.state.user = values[1];
+            vm.state.orgCardAndPermissions = getOrgConfigAndPermissions(vm.state.user, vm.state.account)
+        }
+    }, 0), true);
+
+
+    // Need to move this to a service in order to use it globally 
+    function getOrgConfigAndPermissions(user, account){
+
+        var userAccount = _.find(user.accounts, function(acc){
+            return acc.accountId == account._id
+        })
+       
+        var orgConfigAry = user.orgConfig || [];  
+        var orgConfigAndPermissions = {
+            permissions: null,
+            config: null
+        }
+        var orgConfig = _.find(orgConfigAry, function(config){
+            return config.orgId == account.orgId
+        })
+
+        orgConfigAndPermissions.permissions = userAccount.permissions;
+        orgConfigAndPermissions.config = orgConfig;
+
+
+        return orgConfigAndPermissions;
+    };
+
 
     function openModal(size){
+
+        var templateUrl = 'new-purchase-order-modal';
+
+        var isVendor = _.contains(vm.state.orgCardAndPermissions.permissions, 'vendor');
+        if(isVendor){
+            templateUrl = 'new-vendor-purchase-order-modal';
+        }
+
         $scope.modalInstance = $modal.open({
             templateUrl: 'new-purchase-order-modal',
             size: size,

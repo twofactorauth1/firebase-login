@@ -1,4 +1,4 @@
-<script type="text/ng-template" id="new-purchase-order-modal">
+<script type="text/ng-template" id="new-vendor-purchase-order-modal">
     <div class="modal-header">
         <button type="button" class="close" ng-click="vm.closeModal()">
             <span aria-hidden="true">&times;</span>
@@ -22,11 +22,6 @@
                 <textarea required placeholder="Text" class="form-control" ng-model="newPurchaseOrder.text"></textarea>
             </div>
             <div class="form-group">
-                <label class="">Card Code<span class="required">*</span></label>
-                    <input type="text" placeholder="Card Code" class="form-control" ng-model="newPurchaseOrder.cardCode">
-                    
-            </div>
-            <div class="form-group">
                 <label class="block">
                     Attachment
                     <span class="required">*</span>
@@ -44,6 +39,6 @@
         </form>
     </div>
     <div class="modal-footer">
-        <button class="btn btn-primary" ng-disabled='form.$invalid || vm.checkIfInValid(newPurchaseOrder) || vm.uiState.saveLoading || !newPurchaseOrder.cardCode' ng-click="vm.createPurchaseOrder(newPurchaseOrder, form)">Submit</button>
+        <button class="btn btn-primary" ng-disabled='form.$invalid || vm.checkIfInValid(newPurchaseOrder) || vm.uiState.saveLoading' ng-click="vm.createPurchaseOrder(newPurchaseOrder, form)">Submit</button>
     </div>
 </script>
