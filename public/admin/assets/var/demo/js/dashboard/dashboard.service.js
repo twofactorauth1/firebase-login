@@ -23,7 +23,7 @@
         var baseBroadcastMessagesAPIUrl = '/api/2.0/insights/messages/';
         var basePurchaseOrderAPIUrl = '/api/2.0/purchaseorders/dashboard/listpurchaseorders/';
         var baseInventoryAPIUrl = '/api/1.0/integrations/zi/dashboard/inventory';
-
+        var baseInvoiceAPIUrl = '/api/1.0/integrations/zi/ledger/top';
 
         dashboardService.getActiveMessages = getActiveMessages;
         dashboardService.loading = { value:0 };
@@ -83,6 +83,7 @@
         dashboardService.getPlatformLiveTraffic = getPlatformLiveTraffic;
         dashboardService.getPurchaseOrders = getPurchaseOrders;
         dashboardService.getInventory = getInventory;
+        dashboardService.getInvoices = getInvoices;
 
 		function dashRequest(fn) {
             dashboardService.loading.value = dashboardService.loading.value + 1;
@@ -322,6 +323,20 @@
         }
 
 
+        function getInvoices(){
+            function success(data) {
+                console.log(data);
+                dashboardService.invoices = data;
+            }
+
+            function error(error) {
+                console.error('dashRequest getInvoices error: ', JSON.stringify(error));
+            }
+
+            return dashRequest($http.get(baseInvoiceAPIUrl).success(success).error(error));
+        }
+
+
 
 		(function init() {
 
@@ -332,6 +347,7 @@
             dashboardService.getActiveMessages();
             dashboardService.getPurchaseOrders();
             dashboardService.getInventory();
+            dashboardService.getInvoices();
             dashboardService.numberPolling++;
 		})();
 
