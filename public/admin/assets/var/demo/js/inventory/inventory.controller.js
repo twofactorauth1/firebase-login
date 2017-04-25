@@ -138,8 +138,8 @@ function inventoryComponentController($scope, $attrs, $filter, $modal, $timeout,
 
             if(_sum > 0){
                 _dimentions =  parseFloat(product.OITM_SLength1).toFixed(2) + "X" +
-                    parseFloat(product.OITM_SWidth1).toFixed(2) + "X" +
-                    parseFloat(product.OITM_BHeight1).toFixed(2)
+                    parseFloat(product.OITM_BHeight1).toFixed(2) + "X" +
+                    parseFloat(product.OITM_SWidth1).toFixed(2)
             }
 
         }
