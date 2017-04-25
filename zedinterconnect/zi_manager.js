@@ -11,6 +11,8 @@ var ziConfig = require('../configs/zed.config');
 var async = require('async');
 var request = require('request');
 var parseString = require('xml2js').parseString;
+var userDao = require('../dao/user.dao');
+var accountManager = require('../accounts/account.manager');
 
 module.exports = {
     log: logger,
@@ -70,6 +72,51 @@ module.exports = {
                 fn(null, value);
             }
         });
+    },
+
+
+    getDashboardInventory: function(accountId, userId, fn) {
+        var self = this;
+        self.log.debug(accountId, userId, '>> getDashboardInventory');
+        var query = {};
+        var fields = null;
+        var collection = 'inventory';
+
+        accountManager.getOrganizationByAccountId(accountId, userId, function(err, organization){
+            if(err) {
+                self.log.error(accountId, userId, 'Error finding organization:', err);
+                fn(err);
+            } else {
+                userDao.getById(userId, function (err, user) {
+                    if (err) {
+                        log.error(accountId, userId, 'Error getting user: ' + err);
+                        fn(err, null);
+                    } else {
+                        var watchList = [];
+                        var orgConfig = user.getOrgConfig(organization.id());
+                        if(orgConfig){
+                            watchList = orgConfig.watchList || [];
+                        }
+                        query = {
+                            '@id': {'$in': watchList} 
+                        };
+
+                        ziDao.findRawWithFieldsLimitAndOrder(query, null, null, null, fields, collection, null, function(err, value){
+                            if(err) {
+                                self.log.error(accountId, userId, 'Error getting dashboard inventory:', err);
+                                fn(err);
+                            } else {
+                                self.log.debug(accountId, userId, '<< getDashboardInventory');
+                                fn(null, value);
+                            }
+                        });
+                    }
+                });
+            }
+        });
+
+        
+        
     },
 
     getInventoryItem: function(accountId, userId, itemId, fn) {
@@ -249,6 +296,48 @@ module.exports = {
                 self.log.debug(accountId, userId, '<< getLedger');
                 fn(null, value);
             }
+        });
+    },
+
+    getLedgerWithLimit: function(accountId, userId, cardCodeAry, dateString, limit, fn) {
+        var self = this;
+        self.log.debug(accountId, userId, '>> getLedgerWithLimit');
+        var resultAry = [];
+        if(cardCodeAry.length == 0) {
+            cardCodeAry.push('admin');
+        }
+        async.each(cardCodeAry, function(cardCode, callback){
+            var path = 'query/Indigenous/CustomerAging2.aspx?0=' + cardCode + '&1=' + cardCode + '&2=' + dateString + '&accept=application/json';
+            if(cardCode === 'admin') {
+                //just a hack to load them all.
+                path = 'query/Indigenous/CustomerAging2.aspx?0=0&1=L9999999&2=' + dateString + '&accept=application/json';
+            }
+            self._ziRequest(path, function(err, value) {
+                if(err) {
+                    self.log.error(accountId, userId, 'Error calling zi:', err);
+                    callback(err);
+                } else {
+
+                    var response = JSON.parse(value);//response.payload.querydata.data.row
+
+                    if(response && response.response) {
+                        response = response.response;
+                    }
+                    if(response &&
+                        response.payload &&
+                        response.payload.querydata &&
+                        response.payload.querydata.data &&
+                        response.payload.querydata.data.row) {
+                        resultAry = resultAry.concat(response.payload.querydata.data.row);
+                    }
+                    callback();
+                }
+            });
+        }, function(err){
+            //sort by _CustStatmentDtl_DueDate
+            resultAry = _.first(_.sortBy(resultAry, '_CustStatmentDtl_DueDate'), limit);
+            self.log.debug(accountId, userId, '<< getLedgerWithLimit');
+            fn(err, resultAry);
         });
     },
 

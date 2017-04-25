@@ -305,7 +305,7 @@ var user = $$.m.ModelBase.extend({
     getOrgConfig: function(orgId) {
         var orgConfigAry = this.get('orgConfig');
         for(var i=0; i<orgConfigAry.length; i++) {
-            if(orgConfigAry[i].orgId === orgId) {
+            if(orgConfigAry[i].orgId == orgId) {
                 return orgConfigAry[i];
             }
         }
@@ -316,11 +316,11 @@ var user = $$.m.ModelBase.extend({
         var orgConfigAry = this.get('orgConfig');
         var index = -1;
         for(var i=0; i<orgConfigAry.length; i++) {
-            if(orgConfigAry[i].orgId === orgId) {
+            if(orgConfigAry[i].orgId == orgId) {
                 index = i;
             }
         }
-        if(index > 0) {
+        if(index > -1) {
             orgConfigAry[index] = orgConfig;
         } else {
             orgConfigAry.push(orgConfig);
@@ -901,7 +901,7 @@ var user = $$.m.ModelBase.extend({
 
     setPermissionsForAccount: function(accountId, roleAry) {
         var userAccount = this.getUserAccount(accountId);
-        if(userAccount) {
+        if(userAccount && roleAry) {
             userAccount.permissions = roleAry;
         }
     },

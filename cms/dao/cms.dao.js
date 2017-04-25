@@ -138,6 +138,7 @@ var dao = {
      * @returns {*}
      */
     getThemeConfig: function(themeId, fn) {
+
         return this._getThemeConfig(themeId, false, fn);
     },
 
@@ -157,99 +158,29 @@ var dao = {
 
     _getThemeConfig: function(themeId, signed, fn) {
         var self = this,
-            pathToThemeConfig = themesConfig.PATH_TO_THEMES + "/" + themeId + "/config.json",
-            themeConfig, defaultConfig, defaultComponents, themeComponents, defaultComponent, componentType, themeComponent, index;
+        themeConfig;
 
-        async.parallel([
+        themeConfig = {
+            "linkLists": [
+                {
+                    "name": "Head Menu",
+                    "handle": "head-menu",
+                    "links": [
+                        
+                    ]
+                },
 
-            function(cb) {
-                // Read theme config
-                fs.readFile(pathToThemeConfig, "utf8", function(err, data) {
-                    if (err) {
-                        self.log.error("An error occurred reading Theme config File: " + err);
-                        return cb("An error occurred reading theme config file: " + err);
-                    }
-
-                    var data = JSON.parse(data);
-
-                    if (data['theme-id'] != themeId) {
-                        self.log.error("Configuration ID does not match directory Id for: " + themeId);
-                        return cb("Configuration ID does not match directory Id for: " + themeId);
-                    }
-
-                    if (signed === true) {
-                        // This ensures the Theme ID has not changed if the user makes modifications and returns this file
-                        cryptoUtil.signDocument(data, themeId);
-                    }
-
-                    themeConfig = data;
-
-                    cb();
-                    data = null;
-                });
-            },
-
-            function(cb) {
-                fs.readFile(themesConfig.PATH_TO_THEMES + "/default-config.json", "utf8", function(err, data) {
-                    if (err) {
-                        self.log.error("An error occurred reading Default theme config File: " + err);
-                        return cb("An error occurred reading default theme config file: " + err);
-                    }
-
-                    defaultConfig = JSON.parse(data);
-
-                    cb();
-                });
-            }
-        ], function(err) {
-
-            if (err) {
-                return fn(err);
-            }
-
-            //Merge the default into the Theme Specific configs
-            themeConfig = $$.u.objutils.extend({}, defaultConfig, themeConfig);
-
-            //Special case for merging theme components
-            defaultComponents = defaultConfig.components;
-            themeComponents = themeConfig.components;
-
-            if (themeComponents == null) {
-                themeComponents = [];
-                themeConfig.components = themeComponents;
-            }
-            for (var i = 0, l = defaultComponents.length; i < l; i++) {
-                defaultComponent = defaultComponents[i];
-                componentType = defaultComponent.type;
-
-                //Get the theme component of same type
-                var themeComponent = _.findWhere(themeComponents, {
-                    type: componentType
-                });
-
-                if (themeComponent == null) {
-                    //Do not add it if it is an excluded component from the theme
-                    if (themeConfig['excluded-components'].indexOf(componentType) == -1) {
-                        themeComponents.push(defaultComponent);
-                    } else {
-                        console.log("NOT ADDING: " + componentType);
-                    }
-                } else {
-                    //Merge these together
-                    index = themeComponents.indexOf(themeComponent);
-                    themeComponent = $$.u.objutils.extend(true, {}, defaultComponent, themeComponent);
-                    themeComponents[index] = themeComponent;
+                {
+                    "name": "Main Menu",
+                    "handle": "main-menu",
+                    "links": [
+                        
+                    ]
                 }
-            }
-
-            fn(null, themeConfig);
-
-            self = pathToThemeConfig = themeConfig = defaultConfig = defaultComponents = themeComponents = defaultComponent = componentType = themeComponent = index = themeId = signed = fn = null;
-        });
+            ]
+        }
+        fn(null, themeConfig);
     },
-    //endregion
-
-    //region COMPONENT
 
     getComponentVersions: function(type, fn) {
         //TODO: This should be in the DB eventually.

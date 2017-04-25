@@ -40,23 +40,28 @@ function dashboardAnalyticTileComponentController($scope, $attrs, $filter, Dashb
             switch(vm.analytic.name) {
                 case 'Inventory':
 
-                    ret.widgetTitle = 'Inventory';
-                    ret.buttonTitle = 'Check Inventory';
+                    ret.widgetTitle = 'Inventory Watch';
+                    ret.buttonTitle = 'View Inventory';
                     ret.link = '#/inventory';
 
                     ret.header = [
-                        {label: 'SKU #'},
-                        {label: 'Vender'},
+                        {label: 'Vendor'},
+                        {label: 'Product'},
                         {label: 'Qty OH'}
                     ];
 
-                    ret.data = [
-                        {
-                            field1: "SRX-210",
-                            field2: "Juniper",
-                            field3: "490"
-                        }
-                    ];
+                    $scope.$watch(function() { return DashboardService.inventory; }, function(inventory){
+
+                        ret.data = []
+                        _.each(inventory, function(item){
+                            ret.data.push({
+                                field1: item.OMRC_FirmName,
+                                field2: item.OITM_ItemName,
+                                field3: item.In_Stock,
+                                link: ret.link + "/" + item["@id"]
+                            })
+                        })
+                    });
 
                     break;
 
@@ -90,9 +95,6 @@ function dashboardAnalyticTileComponentController($scope, $attrs, $filter, Dashb
                     ];
 
                     $scope.$watch(function() { return DashboardService.purchaseOrders; }, function(purchaseOrders){
-                        if(purchaseOrders){
-                            ret.data = purchaseOrders;
-                        }
                         ret.data = []
 
                         _.each(purchaseOrders, function(order){
@@ -104,7 +106,7 @@ function dashboardAnalyticTileComponentController($scope, $attrs, $filter, Dashb
                             })
                         })
                     });
-                            
+
                     break;
                 case 'Invoices':
 
@@ -189,7 +191,7 @@ function dashboardAnalyticTileComponentController($scope, $attrs, $filter, Dashb
         var _user = "";
         if(order.submitter){
             if(order.submitter.first){
-                _user = order.submitter.first + " " + order.submitter.last; 
+                _user = order.submitter.first + " " + order.submitter.last;
             }
             else{
                 _user = order.submitter.username;

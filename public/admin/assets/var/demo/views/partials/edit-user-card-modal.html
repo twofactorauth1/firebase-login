@@ -12,7 +12,7 @@
             <div class="form-group">
                 <label class="">Card Code(s)</label>
                     <tags-input
-                        ng-model="editUser.cardCodes"
+                        ng-model="vm.state.cardCodes"
                         add-on-paste="true"
                         placeholder="Add card code(s)"
                         add-on-comma="true"
@@ -22,7 +22,7 @@
             </div>
             <div class="form-group">
                 <label class="block">Admin?</label>
-                <input type="checkbox" ng-model="isAdmin" />
+                <input type="checkbox" ng-model="vm.state.isAdmin" />
             </div>
 
         </form>
