@@ -32,6 +32,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         app.get(this.url('loadinventory'), this.isAuthAndSubscribedApi.bind(this), this.loadinventory.bind(this));
         app.get(this.url('ledger'), this.isAuthAndSubscribedApi.bind(this), this.ledger.bind(this));
+        app.get(this.url('ledger/top'), this.isAuthAndSubscribedApi.bind(this), this.getTopInvoices.bind(this));
 
         app.get(this.url('customers'), this.isAuthAndSubscribedApi.bind(this), this.getCustomers.bind(this));
         app.get(this.url('dashboard/inventory'), this.isAuthAndSubscribedApi.bind(this), this.getDashboardInventory.bind(this));
@@ -207,7 +208,35 @@ _.extend(api.prototype, baseApi.prototype, {
                 return self.sendResultOrError(resp, err, value, "Error calling aging");
             });
         });
+    },
 
+    getTopInvoices: function(req, resp) {
+        var self = this;
+        var accountId = parseInt(self.accountId(req));
+        var userId = self.userId(req);
+        self.log.debug(accountId, userId, '>> getTopInvoices');
+        var dateString = moment().format("M/DD/YY");
+        var limit = 5;
+        if(req.query.limit) {
+            limit = parseInt(req.query.limit);
+        }
+
+        var cardCodeAry = [];
+        self._isUserAdmin(req, function(err, isAdmin){
+            if(isAdmin && isAdmin === true) {
+                manager.getLedgerWithLimit(accountId, userId, cardCodeAry, dateString, limit, function(err, value){
+                    self.log.debug(accountId, userId, '<< getTopInvoices');
+                    return self.sendResultOrError(resp, err, value, "Error calling aging");
+                });
+            } else {
+                self.getUserProperty(userId, 'cardCodes', function(err, cardCodes){
+                    manager.getLedgerWithLimit(accountId, userId, cardCodes, dateString, limit, function(err, value){
+                        self.log.debug(accountId, userId, '<< getTopInvoices');
+                        return self.sendResultOrError(resp, err, value, "Error calling aging");
+                    });
+                });
+            }
+        });
 
 
     },
