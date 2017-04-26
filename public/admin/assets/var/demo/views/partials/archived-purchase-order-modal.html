@@ -1,0 +1,46 @@
+<script type="text/ng-template" id="archived-purchase-order-modal">
+    <div class="modal-header">
+        <button type="button" class="close" ng-click="vm.closeModal()">
+            <span aria-hidden="true">&times;</span>
+            <span class="sr-only">Close</span>
+        </button>
+        <h3 class="modal-title">View Archived</h3>
+    </div>
+    <div class="modal-body bg-white new-purchase-order-modal" style="max-height: 400px;overflow: auto;" stop-event="touchend">
+        <div st-table="vm.archivedOrders" st-safe-src="vm.state.archivedOrders" >        
+            <table class="table table-hover table-striped" ng-class="{'grid': tableView == 'grid', 'bg-white table-list-view': tableView == 'list'}" ng-if="!vm.uiState.modalLoading">
+                <thead ng-class="{'bg-white': tableView == 'grid'}">
+                    <tr>                        
+                        <th st-sort="title">Name</th>
+                        <th st-sort="submitter">Submitter</th>
+                        <th st-sort="vm.getters.created">Date</th>
+                        <th class="hidden-xs">Attachment</th>
+                    </tr>
+                    <tr ng-if="showFilter">
+                        <th>
+                            <input st-search="title" placeholder="Name" class="form-control" type="search" />
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="order in vm.archivedOrders" class="product-item" ng-click="vm.viewPurchaseOrderDetails(order)">
+                        <td><strong>Name: </strong><div class="name-block-container"><span class="list-name"></span><span ng-text-truncate="order.title" ng-tt-chars-threshold="25" ng-tt-no-toggling></span></div></td>
+                        <td class=""><strong>Submitter: </strong>{{order.submitter.first}} {{order.submitter.last}}</td>
+                        <td><strong>Date: </strong>{{order.created.date | date:'MMM d yy HH:mm:ss'}}</td>
+                        <td class="hidden-xs"><strong>Attachment: </strong>{{order.attachment.name}}</td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td class="text-center" st-custom-pagination="" st-displayed-pages="showPages" st-items-by-page="vm.pagingConstant.numberOfRowsPerPage || 50" colspan="6">
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+        <div class="load1 csspinner height-300" ng-show="vm.uiState.modalLoading"></div>
+    </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" ng-click="vm.closeModal()">Close</button>
+    </div>
+</script>

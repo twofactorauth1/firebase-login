@@ -18,6 +18,7 @@ function purchaseOrderComponentController($scope, $attrs, $filter, $modal, $time
     
     vm.createPurchaseOrder = createPurchaseOrder;
     vm.openModal = openModal;
+    vm.viewArchivedPo = viewArchivedPo; 
     vm.closeModal = closeModal;
     vm.checkIfInValid = checkIfInValid;
     vm.viewPurchaseOrderDetails = viewPurchaseOrderDetails;
@@ -72,9 +73,23 @@ function purchaseOrderComponentController($scope, $attrs, $filter, $modal, $time
 
 
     function closeModal() {
-        $scope.modalInstance.close();
+        if($scope.modalInstance)
+            $scope.modalInstance.close();
+        vm.uiState.modalLoading = false;
     }
 
+    function viewArchivedPo(size){
+
+        $scope.modalInstance = $modal.open({
+            templateUrl: 'archived-purchase-order-modal',
+            size: size,
+            keyboard: false,
+            backdrop: 'static',
+            scope: $scope
+        });
+
+        getArchivedPurchaseOrders();
+    }
 
     function createPurchaseOrder(po, form){
         vm.uiState.saveLoading = true;
@@ -103,6 +118,7 @@ function purchaseOrderComponentController($scope, $attrs, $filter, $modal, $time
 
 
     function viewPurchaseOrderDetails(order){
+        closeModal();
         $location.path('/purchase-orders/' + order._id);
     }
 
@@ -167,6 +183,16 @@ function purchaseOrderComponentController($scope, $attrs, $filter, $modal, $time
               });
         }
     };
+
+
+
+    function getArchivedPurchaseOrders(){       
+        vm.uiState.modalLoading = true;  
+        PurchaseOrderService.getArchivedPurchaseOrders().then(function(response){
+            vm.state.archivedOrders = response.data;
+            vm.uiState.modalLoading = false;
+        })
+    }
 
     function init(element) {
         vm.element = element;
