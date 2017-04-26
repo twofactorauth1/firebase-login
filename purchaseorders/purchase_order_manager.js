@@ -39,7 +39,8 @@ module.exports = {
                     cb('user not found');
                 } else {
                     var query = {
-                        accountId:accountId
+                        accountId:accountId,
+                        archived: {$ne: true}
                     };
                     if(_.contains(user.getPermissionsForAccount(accountId), 'vendor')){
                         var cardCodes = user.get('cardCodes');
@@ -102,6 +103,82 @@ module.exports = {
     },
 
 
+    listArchivedPurchaseOrders: function (accountId, userId, fn) {
+        log.debug(accountId, userId, '>> listArchivedPurchaseOrders');
+
+        async.waterfall([
+            function(cb) {
+                userManager.getUserById(userId, function(err, user){
+                    cb(err, user);
+                });
+            },
+            function(user, cb) {
+                if(!user) {
+                    cb('user not found');
+                } else {
+                    var query = {
+                        accountId:accountId,
+                        archived: true
+                    };
+                    if(_.contains(user.getPermissionsForAccount(accountId), 'vendor')){
+                        var cardCodes = user.get('cardCodes');
+                        query.cardCode = {$in:cardCodes};
+                    }
+                    cb(null, query);
+                }
+            },
+            function(query, cb) {
+                purchaseOrderdao.findMany(query, $$.m.PurchaseOrder, function (err, orders) {
+                    if(err) {
+                        log.error(accountId, userId, 'Error finding POs:', err);
+                        cb(err);
+                    } else {
+                        /*
+                         * Cache users
+                         */
+                        var userIDMap = {};
+                        async.each(orders, function(order, callback){
+                            if(userIDMap[order.get('userId')]) {
+                                var _user = userIDMap[order.get('userId')];
+                                order.set("submitter", _user);
+                                callback();
+                            } else {
+                                userManager.getUserById(order.get('userId'), function(err, user){
+                                    if(err) {
+                                        log.error(accountId, userId, 'Error getting user:', err);
+                                        //return anyway
+                                        callback();
+                                    } else {
+                                        var _user = {
+                                            _id: user.get("_id"),
+                                            username: user.get("username"),
+                                            first: user.get("first"),
+                                            last: user.get("last")
+                                        };
+                                        userIDMap[order.get('userId')] = _user;
+                                        order.set("submitter", _user);
+                                        callback();
+                                    }
+                                });
+                            }
+                        }, function(err){
+                            cb(err, orders);
+                        });
+                    }
+                });
+            }
+        ], function(err, orders){
+            if (err) {
+                log.error(accountId, userId, 'Error fetching users for orders: ' + err);
+                return fn(err, orders);
+            } else {
+                log.debug(accountId, userId, '<< listArchivedPurchaseOrders');
+                return fn(null, orders);
+            }
+        });
+    },
+
+
     getDashboardPurchaseOrders: function (accountId, userId, fn) {
         log.debug(accountId, userId, '>> getDashboardPurchaseOrders');
 
@@ -116,7 +193,8 @@ module.exports = {
                     cb('user not found');
                 } else {
                     var query = {
-                        accountId:accountId
+                        accountId:accountId,
+                        archived: {$ne: true}
                     };
                     if(_.contains(user.getPermissionsForAccount(accountId), 'vendor')){
                         var cardCodes = user.get('cardCodes');
@@ -380,25 +458,77 @@ module.exports = {
         });
     },
 
-
-
-    deleteBulkPurchaseOrders: function(accountId, orderIds, fn) {
+    archivePurchaseOrder: function(accountId, userId, purchaseOrderId, fn){
         var self = this;
-        self.log = log;
-        self.log.debug('>> deleteBulkPurchaseOrders');
-        var query = {
-            _id: {'$in': orderIds}
-        };
-        purchaseOrderdao.removeByQuery(query, $$.m.PurchaseOrder, function(err, value){
-            if(err) {
-                self.log.error('Error deleting po: ' + err);
+        log.debug(accountId, userId, '>> archivePurchaseOrder');
+        userManager.getUserById(userId, function(err, user){
+            if(err || !user) {
+                self.log.error('Error archiving po: ' + err);
                 return fn(err, null);
             } else {
-                fn(null, value);
+                var query = {_id:purchaseOrderId};
+                if(_.contains(user.getPermissionsForAccount(accountId), 'vendor')){
+                    var cardCodes = user.get('cardCodes');
+                    query.cardCode = {$in:cardCodes};
+                }
+                purchaseOrderdao.findOne(query, $$.m.PurchaseOrder, function(err, po){
+                    if(err) {
+                        self.log.error('Error getting po: ' + err);
+                        return fn(err, null);
+                    } else {
+                        po.set('archived', true);
+                        po.set('modified', {date: new Date(), by: userId});
+                        purchaseOrderdao.saveOrUpdate(po, function(err, savedPo){
+                            if(err) {
+                                self.log.error(accountId, userId,'Error saving PO:', err);
+                                return fn(err);
+                            }
+                            else{
+                                log.debug(accountId, userId, '<< archivePurchaseOrder');
+                                fn(null, savedPo);
+                            }
+                        })    
+                    }
+                });
             }
         });
     },
 
+    archiveBulkPurchaseOrders: function(accountId, userId, orderIds, fn) {
+        var self = this;
+        self.log = log;
+        self.log.debug('>> archiveBulkPurchaseOrders');
+        var query = {
+            _id: {'$in': orderIds}
+        };
+        purchaseOrderdao.findMany(query, $$.m.PurchaseOrder, function(err, orders){
+            if(err) {
+                self.log.error(accountId, userId, 'Error finding orders with orderIds:', err);
+                fn(err);
+            } else {
+                async.eachSeries(orders, function(po, callback){
+                    po.set('archived', true);
+                    po.set('modified', {date: new Date(), by: userId});
+                    callback();
+                }, function(err){
+                    if(err) {
+                        fn(err);
+                    } else {
+                        purchaseOrderdao.batchUpdate(orders, $$.m.PurchaseOrder, function(err, updatedOrders){
+                            if(err) {
+                                self.log.error(accountId, userId,'Error saving Purchase Orders:', err);
+                                return fn(err);
+                            }
+                            else{
+                                log.debug(accountId, userId, '<< archiveBulkPurchaseOrders');
+                                fn(null, orderIds);
+                            }
+                        });
+                    }
+                });
+            }
+        });
+    },
 
     _sendEmailOnPOCreation: function(po, accountId, adminUrl) {
         var self = this;

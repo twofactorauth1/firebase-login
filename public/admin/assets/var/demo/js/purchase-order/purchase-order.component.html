@@ -44,7 +44,7 @@
 	                                </div>
 	                                <div class="visible-xs margin-bottom-15 clearfix"></div>
 	                                <div class="form-group col-xs-12 col-sm-5 row margin-bottom-0 padding-right-30 pull-right">
-	                                    <div class="col-xs-7 col-sm-6 center">
+	                                    <div class="col-xs-7 col-sm-4 center">
 	                                        <div class="form-group">
 	                                            <div class="btn-group tableView" style="white-space: nowrap;">
 	                                                <button class="btn btn-info" ng-class="{'active': tableView == 'list'}" href="" ng-click="tableView = 'list'" tooltip-placement="top" tooltip="List"> <span class="fa fa-th-list"></span> </button>
@@ -53,8 +53,11 @@
 	                                        </div>
 	                                    </div>
 	                                    <div class="visible-xs margin-bottom-15 clearfix"></div>
-	                                    <div class="col-xs-5 col-xs-offset-6 col-sm-6 center">
-	                                        <button type="button" class="btn btn-o btn-wide btn-info btn-scroll btn-scroll-top ti ti-plus ng-click-active" ng-click="vm.openModal()">
+	                                    <div class="col-xs-5 col-xs-offset-6 col-sm-8 center">
+	                                    	<button type="button" class="btn btn-o btn-info btn-scroll btn-scroll-top ti ti-eye ng-click-active" ng-click="vm.viewArchivedPo('lg')">
+	                                            <span>View archived PO</span>
+	                                        </button>
+	                                        <button type="button" class="btn btn-o btn-info btn-scroll btn-scroll-top ti ti-plus ng-click-active" ng-click="vm.openModal()">
 	                                            <span>Submit PO</span>
 	                                        </button>
 	                                    </div>
@@ -87,8 +90,8 @@
 	                                        </div>
 	                                    </div>
 	                                    <div class="col-xs-6">
-	                                        <button type="button" class="btn btn-o btn-wide btn-info btn-scroll btn-scroll-top ti ti-plus ng-click-active pull-right" ng-click="openProductModal()">
-	                                            <span>New</span>
+	                                        <button type="button" class="btn btn-o btn-wide btn-info btn-scroll btn-scroll-top ti ti-plus ng-click-active pull-right" ng-click="vm.openModal()">
+	                                            <span>Submit PO</span>
 	                                        </button>
 	                                    </div>
 	                                </div>
@@ -134,4 +137,5 @@
 	</div>
 </div>
 <div data-ng-include=" 'assets/var/demo/views/partials/new-purchase-order.html' "></div>
+<div data-ng-include=" 'assets/var/demo/views/partials/archived-purchase-order-modal.html' "></div>
 <div data-ng-include=" 'assets/var/demo/views/partials/vendor/new-purchase-order.html' "></div>

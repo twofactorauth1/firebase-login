@@ -23,7 +23,7 @@ function purchaseOrderDetailsController($scope, $state, $attrs, $filter, $modal,
     vm.backToPurchaseOrders = backToPurchaseOrders;
     vm.getPurchaseOrderDetails = getPurchaseOrderDetails;
     vm.addNote = addNote;
-    vm.deletePurchaseOrder = deletePurchaseOrder;
+    vm.archivePurchaseOrder = archivePurchaseOrder;
 
     function backToPurchaseOrders(){
         $state.go("app.purchaseorders");
@@ -64,10 +64,10 @@ function purchaseOrderDetailsController($scope, $state, $attrs, $filter, $modal,
     };
 
 
-    function deletePurchaseOrder(po){
+    function archivePurchaseOrder(po){
         SweetAlert.swal({
             title: "Are you sure?",
-            text: "You want to delete this purchase order.",
+            text: "You want to archive this purchase order.",
             type: "warning",
             showCancelButton: true,
             confirmButtonColor: "#DD6B55",
@@ -80,10 +80,10 @@ function purchaseOrderDetailsController($scope, $state, $attrs, $filter, $modal,
             
             if (isConfirm) {
                 vm.uiState.saveLoading = true;
-                PurchaseOrderService.deletePurchaseOrder(po._id).then(function(response){
-                    console.log("PO deleted");
+                PurchaseOrderService.archivePurchaseOrder(po._id).then(function(response){
+                    console.log("PO archived");
                     vm.uiState.saveLoading = false;
-                    toaster.pop('success', 'Purchase order Successfully Deleted');
+                    toaster.pop('success', 'Purchase order successfully archived');
                     backToPurchaseOrders();
                 })
             }

@@ -25,7 +25,9 @@
         poService.getPurchaseOrderDetails = getPurchaseOrderDetails;
         poService.addPurchaseOrderNote = addPurchaseOrderNote;
         poService.deletePurchaseOrder = deletePurchaseOrder;
-        poService.deleteBulkPurchaseOrders = deleteBulkPurchaseOrders;
+        poService.archivePurchaseOrder = archivePurchaseOrder;
+        poService.archiveBulkPurchaseOrders = archiveBulkPurchaseOrders;
+        poService.getArchivedPurchaseOrders = getArchivedPurchaseOrders;
 
         function poRequest(fn) {
             poService.loading.value = poService.loading.value + 1;
@@ -141,7 +143,7 @@
 
 
 
-        function deleteBulkPurchaseOrders(orderArray) {
+        function archiveBulkPurchaseOrders(orderArray) {
 
             function success(data) {
                 console.log("purchase order deleted");                
@@ -151,15 +153,51 @@
             }
 
             function error(error) {
-                console.error('PurchaseOrderService deletePurchaseOrder error: ', JSON.stringify(error));
+                console.error('PurchaseOrderService archiveBulkPurchaseOrders error: ', JSON.stringify(error));
             }
             return (
                 poRequest($http({
-                    url: [basePoAPIUrlv2, 'po', 'deletepurchaseorders'].join('/'),
+                    url: [basePoAPIUrlv2, 'po', 'archivepurchaseorders'].join('/'),
                     method: 'POST',
                     data: orderArray
                 }).success(success).error(error))
             );
+        }
+
+
+        function archivePurchaseOrder(orderId) {
+
+            function success(data) {
+                console.log("purchase order archive");
+                poService.purchaseOrders = _.reject(poService.purchaseOrders, function(c){ return c._id == orderId });                   
+            }
+
+            function error(error) {
+                console.error('PurchaseOrderService archivePurchaseOrder error: ', JSON.stringify(error));
+            }
+
+            return (
+                poRequest($http({
+                    url: [basePoAPIUrlv2, 'po', 'archive', orderId].join('/'),
+                    method: 'PUT'
+                }).success(success).error(error))
+            );
+        }
+
+        /**
+            * Get list of all po's for the account
+        */
+        function getArchivedPurchaseOrders() {
+
+            function success(data) {
+                
+            }
+
+            function error(error) {
+                console.error('PurchaseOrderService getArchivedPurchaseOrders error: ', JSON.stringify(error));
+            }
+
+            return poRequest($http.get([basePoAPIUrlv2, "archived"].join('/')).success(success).error(error));
         }
 
 
