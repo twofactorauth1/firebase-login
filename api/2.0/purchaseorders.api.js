@@ -30,9 +30,11 @@ _.extend(api.prototype, baseApi.prototype, {
         app.post(this.url(''), this.isAuthAndSubscribedApi.bind(this), this.createPurchaseOrder.bind(this));
         app.get(this.url('po/:id'), this.isAuthAndSubscribedApi.bind(this), this.getPurchaseOrder.bind(this));
         app.post(this.url('po/:id/notes'), this.isAuthAndSubscribedApi.bind(this), this.addPurchaseOrderNotes.bind(this));
-        app.post(this.url('po/deletepurchaseorders'), this.isAuthAndSubscribedApi.bind(this), this.deleteBulkPurchaseOrders.bind(this));
+        app.post(this.url('po/archivepurchaseorders'), this.isAuthAndSubscribedApi.bind(this), this.archiveBulkPurchaseOrders.bind(this));
         app.delete(this.url('po/:id'), this.isAuthAndSubscribedApi.bind(this), this.deletePurchaseOrder.bind(this));
+        app.put(this.url('po/archive/:id'), this.isAuthAndSubscribedApi.bind(this), this.archivePurchaseOrder.bind(this));
         app.get(this.url('dashboard/listpurchaseorders'), this.isAuthAndSubscribedApi.bind(this), this.getDashboardPurchaseOrders.bind(this));
+        app.get(this.url('archived'), this.isAuthAndSubscribedApi.bind(this), this.listArchivedPurchaseOrders.bind(this));       
     },
 
     listPurchaseOrders: function(req, resp) {
@@ -46,6 +48,19 @@ _.extend(api.prototype, baseApi.prototype, {
             return self.sendResultOrError(resp, err, list, "Error listing orders");
         });
     },
+
+    listArchivedPurchaseOrders: function(req, resp) {
+        var self = this;
+        var accountId = parseInt(self.accountId(req));
+        var userId = self.userId(req);
+        self.log.debug(accountId, userId, '>> listArchivedPurchaseOrders');
+
+        poManager.listArchivedPurchaseOrders(accountId, userId, function(err, list){
+            self.log.debug(accountId, userId, '<< listArchivedPurchaseOrders');
+            return self.sendResultOrError(resp, err, list, "Error listing orders");
+        });
+    },
+
 
     getDashboardPurchaseOrders: function(req, resp){
         var self = this;
@@ -171,21 +186,48 @@ _.extend(api.prototype, baseApi.prototype, {
         });
     },
 
-    deleteBulkPurchaseOrders: function (req, res) {
+
+    archivePurchaseOrder: function (req, res) {
 
         var self = this;
-        var purchaseOrders = req.body;
-        console.log(purchaseOrders);
+        var purchaseOrderId = req.params.id;
         var accountId = parseInt(self.accountId(req));
+        var userId = self.userId(req);
+        self.log.debug(accountId, userId, '>> archivePurchaseOrder');
 
         self.checkPermissionForAccount(req, self.sc.privs.MODIFY_ORDER, accountId, function(err, isAllowed) {
             if (isAllowed !== true) {
                 return self.send403(res);
             } else {
+                if (!purchaseOrderId) {
+                    self.wrapError(res, 400, null, "Invalid paramater for ID");
+                }
                 
-                poManager.deleteBulkPurchaseOrders(accountId, purchaseOrders, function(err, value){                                                       
-                    self.log.debug('<< deleteBulkPurchaseOrders');
-                    self.sendResultOrError(res, err, {deleted:true}, "Error deleting PO's");
+                poManager.archivePurchaseOrder(accountId, userId, purchaseOrderId, function(err, value){
+                    self.log.debug('<< archivePurchaseOrder');
+                    self.sendResultOrError(res, err, {deleted:true}, "Error archiving PO");
+                    self.createUserActivity(req, 'UPDATE_PO', null, null, function(){});
+                }); 
+            }
+        });
+    },
+
+    archiveBulkPurchaseOrders: function (req, res) {
+
+        var self = this;
+        var purchaseOrders = req.body;
+        console.log(purchaseOrders);
+        var accountId = parseInt(self.accountId(req));
+        var userId = self.userId(req);
+        self.log.debug(accountId, userId, '>> archiveBulkPurchaseOrders');
+        self.checkPermissionForAccount(req, self.sc.privs.MODIFY_ORDER, accountId, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(res);
+            } else {
+                
+                poManager.archiveBulkPurchaseOrders(accountId, userId, purchaseOrders, function(err, value){                                                       
+                    self.log.debug('<< archiveBulkPurchaseOrders');
+                    self.sendResultOrError(res, err, {deleted:true}, "Error archiving PO's");
                 }); 
             }
         });

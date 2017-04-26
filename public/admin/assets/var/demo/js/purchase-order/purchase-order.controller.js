@@ -2,14 +2,14 @@
 
 app.controller('PurchaseOrderComponentController', purchaseOrderComponentController);
 
-purchaseOrderComponentController.$inject = ['$scope', '$attrs', '$filter', '$modal', '$timeout', '$location', 'SweetAlert', 'toaster', 'pagingConstant', 'PurchaseOrderService'];
+purchaseOrderComponentController.$inject = ['$scope', '$attrs', '$filter', '$modal', '$timeout', '$location', 'SweetAlert', 'toaster', 'pagingConstant', 'PurchaseOrderService', 'UserPermissionsConfig'];
 /* @ngInject */
-function purchaseOrderComponentController($scope, $attrs, $filter, $modal, $timeout, $location, SweetAlert, toaster, pagingConstant, PurchaseOrderService) {
+function purchaseOrderComponentController($scope, $attrs, $filter, $modal, $timeout, $location, SweetAlert, toaster, pagingConstant, PurchaseOrderService, UserPermissionsConfig) {
 
     var vm = this;
 
     vm.state = {
-
+        newPurchaseOrder: {}
     };
     vm.uiState ={
         loading: true
@@ -18,6 +18,7 @@ function purchaseOrderComponentController($scope, $attrs, $filter, $modal, $time
     
     vm.createPurchaseOrder = createPurchaseOrder;
     vm.openModal = openModal;
+    vm.viewArchivedPo = viewArchivedPo; 
     vm.closeModal = closeModal;
     vm.checkIfInValid = checkIfInValid;
     vm.viewPurchaseOrderDetails = viewPurchaseOrderDetails;
@@ -45,46 +46,24 @@ function purchaseOrderComponentController($scope, $attrs, $filter, $modal, $time
         if(values[0] && values[1]){
             vm.state.account = values[0];
             vm.state.user = values[1];
-            vm.state.orgCardAndPermissions = getOrgConfigAndPermissions(vm.state.user, vm.state.account)
+            vm.state.orgCardAndPermissions = UserPermissionsConfig.getOrgConfigAndPermissions(vm.state.user, vm.state.account);
         }
     }, 0), true);
 
-
-    // Need to move this to a service in order to use it globally 
-    function getOrgConfigAndPermissions(user, account){
-
-        var userAccount = _.find(user.accounts, function(acc){
-            return acc.accountId == account._id
-        })
-       
-        var orgConfigAry = user.orgConfig || [];  
-        var orgConfigAndPermissions = {
-            permissions: null,
-            config: null
-        }
-        var orgConfig = _.find(orgConfigAry, function(config){
-            return config.orgId == account.orgId
-        })
-
-        orgConfigAndPermissions.permissions = userAccount.permissions;
-        orgConfigAndPermissions.config = orgConfig;
-
-
-        return orgConfigAndPermissions;
-    };
-
-
     function openModal(size){
-
+        vm.state.newPurchaseOrder = {};
         var templateUrl = 'new-purchase-order-modal';
 
         var isVendor = _.contains(vm.state.orgCardAndPermissions.permissions, 'vendor');
         if(isVendor){
             templateUrl = 'new-vendor-purchase-order-modal';
+            if(vm.state.orgCardAndPermissions.config.cardCodes && vm.state.orgCardAndPermissions.config.cardCodes.length == 1){
+                vm.state.newPurchaseOrder.cardCode = vm.state.orgCardAndPermissions.config.cardCodes[0];
+            }
         }
 
         $scope.modalInstance = $modal.open({
-            templateUrl: 'new-purchase-order-modal',
+            templateUrl: templateUrl,
             size: size,
             keyboard: false,
             backdrop: 'static',
@@ -94,9 +73,23 @@ function purchaseOrderComponentController($scope, $attrs, $filter, $modal, $time
 
 
     function closeModal() {
-        $scope.modalInstance.close();
+        if($scope.modalInstance)
+            $scope.modalInstance.close();
+        vm.uiState.modalLoading = false;
     }
 
+    function viewArchivedPo(size){
+
+        $scope.modalInstance = $modal.open({
+            templateUrl: 'archived-purchase-order-modal',
+            size: size,
+            keyboard: false,
+            backdrop: 'static',
+            scope: $scope
+        });
+
+        getArchivedPurchaseOrders();
+    }
 
     function createPurchaseOrder(po, form){
         vm.uiState.saveLoading = true;
@@ -125,6 +118,7 @@ function purchaseOrderComponentController($scope, $attrs, $filter, $modal, $time
 
 
     function viewPurchaseOrderDetails(order){
+        closeModal();
         $location.path('/purchase-orders/' + order._id);
     }
 
@@ -177,7 +171,7 @@ function purchaseOrderComponentController($scope, $attrs, $filter, $modal, $time
                     _.each(selectedOrders, function(order){
                         _selectedOrdersId.push(order._id);
                     })
-                    PurchaseOrderService.deleteBulkPurchaseOrders(_selectedOrdersId).then(function(response){
+                    PurchaseOrderService.archiveBulkPurchaseOrders(_selectedOrdersId).then(function(response){
                         vm.bulkActionChoice = null;
                         vm.bulkActionChoice = {};
                         toaster.pop('success', 'Purchase orders successfully archived');
@@ -189,6 +183,16 @@ function purchaseOrderComponentController($scope, $attrs, $filter, $modal, $time
               });
         }
     };
+
+
+
+    function getArchivedPurchaseOrders(){       
+        vm.uiState.modalLoading = true;  
+        PurchaseOrderService.getArchivedPurchaseOrders().then(function(response){
+            vm.state.archivedOrders = response.data;
+            vm.uiState.modalLoading = false;
+        })
+    }
 
     function init(element) {
         vm.element = element;

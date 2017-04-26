@@ -264,7 +264,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         templateUrl: "/admin/assets/var/demo/js/purchase-order/purchase-order.html",
         title: 'Purchase Order',
         icon: 'ti-layout-media-left-alt',
-        resolve: loadSequence('PurchaseOrderComponent', 'PurchaseOrderComponentController', 'PurchaseOrderService')
+        resolve: loadSequence('PurchaseOrderComponent', 'PurchaseOrderComponentController', 'PurchaseOrderService', 'userPermissionsConfig')
     }).state('app.purchaseOrderDetails', {
         url: '/purchase-orders/:purchaseOrderId',
         templateUrl: "/admin/assets/var/demo/js/purchase-order/purchase-order-details/purchase-order-details.html",

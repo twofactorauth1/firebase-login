@@ -170,6 +170,9 @@
 
         vm.createUser = function (form) {
             // Admin check
+           
+            $scope.setinvalid = true;
+         
             if ($scope.$parent.vm.state)
                 return;
 
@@ -342,7 +345,7 @@
                             window.location.href = 'http://' + vm.component.redirectUrl;
                         }
                     }
-
+                     $scope.setinvalid = false;
                 }
             });
         };
