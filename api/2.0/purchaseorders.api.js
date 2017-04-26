@@ -32,6 +32,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.post(this.url('po/:id/notes'), this.isAuthAndSubscribedApi.bind(this), this.addPurchaseOrderNotes.bind(this));
         app.post(this.url('po/deletepurchaseorders'), this.isAuthAndSubscribedApi.bind(this), this.deleteBulkPurchaseOrders.bind(this));
         app.delete(this.url('po/:id'), this.isAuthAndSubscribedApi.bind(this), this.deletePurchaseOrder.bind(this));
+        app.put(this.url('po/archive/:id'), this.isAuthAndSubscribedApi.bind(this), this.archivePurchaseOrder.bind(this));
         app.get(this.url('dashboard/listpurchaseorders'), this.isAuthAndSubscribedApi.bind(this), this.getDashboardPurchaseOrders.bind(this));
     },
 
@@ -166,6 +167,32 @@ _.extend(api.prototype, baseApi.prototype, {
                     self.log.debug('<< deletePurchaseOrder');
                     self.sendResultOrError(res, err, {deleted:true}, "Error deleting PO");
                     self.createUserActivity(req, 'DELETE_PO', null, null, function(){});
+                }); 
+            }
+        });
+    },
+
+
+    archivePurchaseOrder: function (req, res) {
+
+        var self = this;
+        var purchaseOrderId = req.params.id;
+        var accountId = parseInt(self.accountId(req));
+        var userId = self.userId(req);
+        self.log.debug(accountId, userId, '>> archivePurchaseOrder');
+
+        self.checkPermissionForAccount(req, self.sc.privs.MODIFY_ORDER, accountId, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(res);
+            } else {
+                if (!purchaseOrderId) {
+                    self.wrapError(res, 400, null, "Invalid paramater for ID");
+                }
+                
+                poManager.archivePurchaseOrder(accountId, userId, purchaseOrderId, function(err, value){
+                    self.log.debug('<< archivePurchaseOrder');
+                    self.sendResultOrError(res, err, {deleted:true}, "Error archiving PO");
+                    self.createUserActivity(req, 'UPDATE_PO', null, null, function(){});
                 }); 
             }
         });

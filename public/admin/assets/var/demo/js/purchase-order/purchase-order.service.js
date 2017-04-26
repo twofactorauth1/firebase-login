@@ -25,6 +25,7 @@
         poService.getPurchaseOrderDetails = getPurchaseOrderDetails;
         poService.addPurchaseOrderNote = addPurchaseOrderNote;
         poService.deletePurchaseOrder = deletePurchaseOrder;
+        poService.archivePurchaseOrder = archivePurchaseOrder;
         poService.deleteBulkPurchaseOrders = deleteBulkPurchaseOrders;
 
         function poRequest(fn) {
@@ -162,6 +163,25 @@
             );
         }
 
+
+        function archivePurchaseOrder(orderId) {
+
+            function success(data) {
+                console.log("purchase order archive");
+                poService.purchaseOrders = _.reject(poService.purchaseOrders, function(c){ return c._id == orderId });                   
+            }
+
+            function error(error) {
+                console.error('PurchaseOrderService archivePurchaseOrder error: ', JSON.stringify(error));
+            }
+
+            return (
+                poRequest($http({
+                    url: [basePoAPIUrlv2, 'po', 'archive', orderId].join('/'),
+                    method: 'PUT'
+                }).success(success).error(error))
+            );
+        }
 
 
 		(function init() {
