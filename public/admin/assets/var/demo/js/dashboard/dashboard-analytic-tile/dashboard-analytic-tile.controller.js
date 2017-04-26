@@ -114,20 +114,21 @@ function dashboardAnalyticTileComponentController($scope, $attrs, $filter, Dashb
                     ret.buttonTitle = 'View Ledger';
                     ret.link = '#/customers'; // Really, this should go to ledger for non-Admin
 
-                    ret.header = [
-                        {label: 'Invoice #'},                        
+                    ret.header = [      
+                        {label: 'Invoice #'},
                         {label: 'Due Date'},
-                        {label: 'Amount'},
+                        {label: 'Amount'}
+
                     ];
                     $scope.$watch(function() { return DashboardService.invoices; }, function(invoices){
-                        ret.data = []
+                        ret.data = [];
 
                         _.each(invoices, function(invoice){
                             ret.data.push({
-                                field1: invoice._CustStatmentDtl_TransId,
-                                field2: $filter('date')(parseValueToDate(invoice._CustStatmentDtl_DueDate), 'M/d/yyyy'),                               
-                                field3: invoice._CustStatmentDtl_Amount,
-                                link: ret.link + "/" + invoice._CustStatmentDtl_TransId
+                                field1: invoice.invoiceNumber,
+                                field2: $filter('date')(parseValueToDate(invoice.dueDate), 'M/d/yyyy'),                               
+                                field3: parseValueToCurrency(invoice.totalInvoice, invoice.currency),
+                                link: ret.link + "/" + invoice.invoiceNumber
                             })
                         })
                     });
@@ -209,6 +210,12 @@ function dashboardAnalyticTileComponentController($scope, $attrs, $filter, Dashb
         if(value){
             var formattedDate = Date.parse(value); // "M/d/yyyy h:mm:ss a"
             return formattedDate;
+        }
+    }
+
+    function parseValueToCurrency(value, symbol){
+        if(value){
+            return $filter('currency')(value, symbol)
         }
     }
 

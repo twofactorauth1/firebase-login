@@ -335,7 +335,19 @@ module.exports = {
             });
         }, function(err){
             //sort by _CustStatmentDtl_DueDate
-            resultAry = _.first(_.sortBy(resultAry, '_CustStatmentDtl_DueDate'), limit);
+
+            var groupResultObject = _.groupBy(resultAry, function(result){ return result._CustStatmentDtl_TransId });
+
+            var groupResultArray =  _(groupResultObject).map(function(g, key) {
+                return { 
+                    invoiceNumber: key,
+                    dueDate: g[0]._CustStatmentDtl_DueDate,
+                    currency: g[0]._CustStatmentHdr_Currency,
+                    totalInvoice: _(g).reduce(function(m,x) { return m + parseFloat(x.INV1_LineTotal) ; }, 0) };
+                });
+
+            resultAry = _.first(_.sortBy(groupResultArray, '_CustStatmentDtl_DueDate'), limit);
+
             self.log.debug(accountId, userId, '<< getLedgerWithLimit');
             fn(err, resultAry);
         });
