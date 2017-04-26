@@ -114,6 +114,7 @@ app.directive('stExport', ['$http', '$timeout', 'OrderService', '$filter', funct
 									row += '\r';
 								}
 							}
+							row += '\n';
 							row += '",';
 		        		}
 		        		else if(index == "customer"){
