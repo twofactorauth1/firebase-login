@@ -114,10 +114,11 @@ function dashboardAnalyticTileComponentController($scope, $attrs, $filter, Dashb
                     ret.buttonTitle = 'View Ledger';
                     //ret.link = '#/customers'; // Really, this should go to ledger for non-Admin
 
-                    ret.header = [      
-                        {label: 'Amount'},
-                        {label: 'Due Date'},
-                        {label: 'Invoice #'}
+                    ret.header = [ 
+
+                        {label: 'Amount'},                        
+                        {label: 'Invoice #'},
+                        {label: 'Due Date'}
 
                     ];
                     $scope.$watch(function() { return DashboardService.invoices; }, function(invoices){
@@ -128,9 +129,10 @@ function dashboardAnalyticTileComponentController($scope, $attrs, $filter, Dashb
                             }
                             ret.data.push({
                                 
-                                field1: $filter('date')(parseValueToDate(invoice.dueDate), 'M/d/yyyy'),                               
-                                field2: parseValueToCurrency(invoice.totalInvoice, invoice.currency),
-                                field3: invoice.invoiceNumber,
+                                
+                                field1: parseValueToCurrency(invoice.totalInvoice, invoice.currency),
+                                field2: invoice.invoiceNumber,
+                                field3: $filter('date')(parseValueToDate(invoice.dueDate), 'M/d/yyyy'),                               
                                 link: "#/invoices/" + invoice.cardCode + "/" + invoice.invoiceNumber
                             })
                         })
