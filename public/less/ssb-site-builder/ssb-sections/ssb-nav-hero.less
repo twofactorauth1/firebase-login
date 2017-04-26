@@ -36,7 +36,18 @@
             }
 
         }
-
+        @media screen and (max-width: 575px) {
+            [ssb-image-component]{
+                background-size: cover !important;
+            }
+            .ssb-nav-hero-text{
+                width: 100%;
+                word-break: break-word;
+                .ssb-text-settings.ssb-element-text span{
+                  display: inline-block;
+               }
+            }
+        }
 
         [navigation-component]{
             flex: inherit !important;
