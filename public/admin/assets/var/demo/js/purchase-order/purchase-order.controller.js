@@ -2,9 +2,9 @@
 
 app.controller('PurchaseOrderComponentController', purchaseOrderComponentController);
 
-purchaseOrderComponentController.$inject = ['$scope', '$attrs', '$filter', '$modal', '$timeout', '$location', 'SweetAlert', 'toaster', 'pagingConstant', 'PurchaseOrderService'];
+purchaseOrderComponentController.$inject = ['$scope', '$attrs', '$filter', '$modal', '$timeout', '$location', 'SweetAlert', 'toaster', 'pagingConstant', 'PurchaseOrderService', 'UserPermissionsConfig'];
 /* @ngInject */
-function purchaseOrderComponentController($scope, $attrs, $filter, $modal, $timeout, $location, SweetAlert, toaster, pagingConstant, PurchaseOrderService) {
+function purchaseOrderComponentController($scope, $attrs, $filter, $modal, $timeout, $location, SweetAlert, toaster, pagingConstant, PurchaseOrderService, UserPermissionsConfig) {
 
     var vm = this;
 
@@ -45,34 +45,9 @@ function purchaseOrderComponentController($scope, $attrs, $filter, $modal, $time
         if(values[0] && values[1]){
             vm.state.account = values[0];
             vm.state.user = values[1];
-            vm.state.orgCardAndPermissions = getOrgConfigAndPermissions(vm.state.user, vm.state.account)
+            vm.state.orgCardAndPermissions = UserPermissionsConfig.getOrgConfigAndPermissions(vm.state.user, vm.state.account);
         }
     }, 0), true);
-
-
-    // Need to move this to a service in order to use it globally 
-    function getOrgConfigAndPermissions(user, account){
-
-        var userAccount = _.find(user.accounts, function(acc){
-            return acc.accountId == account._id
-        })
-       
-        var orgConfigAry = user.orgConfig || [];  
-        var orgConfigAndPermissions = {
-            permissions: null,
-            config: null
-        }
-        var orgConfig = _.find(orgConfigAry, function(config){
-            return config.orgId == account.orgId
-        })
-
-        orgConfigAndPermissions.permissions = userAccount.permissions;
-        orgConfigAndPermissions.config = orgConfig;
-
-
-        return orgConfigAndPermissions;
-    };
-
 
     function openModal(size){
         vm.state.newPurchaseOrder = {};
