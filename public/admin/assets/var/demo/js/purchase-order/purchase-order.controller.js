@@ -9,7 +9,7 @@ function purchaseOrderComponentController($scope, $attrs, $filter, $modal, $time
     var vm = this;
 
     vm.state = {
-
+        newPurchaseOrder: {}
     };
     vm.uiState ={
         loading: true
@@ -75,16 +75,19 @@ function purchaseOrderComponentController($scope, $attrs, $filter, $modal, $time
 
 
     function openModal(size){
-
+        vm.state.newPurchaseOrder = {};
         var templateUrl = 'new-purchase-order-modal';
 
         var isVendor = _.contains(vm.state.orgCardAndPermissions.permissions, 'vendor');
         if(isVendor){
             templateUrl = 'new-vendor-purchase-order-modal';
+            if(vm.state.orgCardAndPermissions.config.cardCodes && vm.state.orgCardAndPermissions.config.cardCodes.length == 1){
+                vm.state.newPurchaseOrder.cardCode = vm.state.orgCardAndPermissions.config.cardCodes[0];
+            }
         }
 
         $scope.modalInstance = $modal.open({
-            templateUrl: 'new-purchase-order-modal',
+            templateUrl: templateUrl,
             size: size,
             keyboard: false,
             backdrop: 'static',
