@@ -155,7 +155,7 @@ function purchaseOrderComponentController($scope, $attrs, $filter, $modal, $time
                     _.each(selectedOrders, function(order){
                         _selectedOrdersId.push(order._id);
                     })
-                    PurchaseOrderService.deleteBulkPurchaseOrders(_selectedOrdersId).then(function(response){
+                    PurchaseOrderService.archiveBulkPurchaseOrders(_selectedOrdersId).then(function(response){
                         vm.bulkActionChoice = null;
                         vm.bulkActionChoice = {};
                         toaster.pop('success', 'Purchase orders successfully archived');

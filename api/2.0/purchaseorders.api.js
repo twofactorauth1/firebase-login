@@ -30,7 +30,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.post(this.url(''), this.isAuthAndSubscribedApi.bind(this), this.createPurchaseOrder.bind(this));
         app.get(this.url('po/:id'), this.isAuthAndSubscribedApi.bind(this), this.getPurchaseOrder.bind(this));
         app.post(this.url('po/:id/notes'), this.isAuthAndSubscribedApi.bind(this), this.addPurchaseOrderNotes.bind(this));
-        app.post(this.url('po/deletepurchaseorders'), this.isAuthAndSubscribedApi.bind(this), this.deleteBulkPurchaseOrders.bind(this));
+        app.post(this.url('po/archivepurchaseorders'), this.isAuthAndSubscribedApi.bind(this), this.archiveBulkPurchaseOrders.bind(this));
         app.delete(this.url('po/:id'), this.isAuthAndSubscribedApi.bind(this), this.deletePurchaseOrder.bind(this));
         app.put(this.url('po/archive/:id'), this.isAuthAndSubscribedApi.bind(this), this.archivePurchaseOrder.bind(this));
         app.get(this.url('dashboard/listpurchaseorders'), this.isAuthAndSubscribedApi.bind(this), this.getDashboardPurchaseOrders.bind(this));
@@ -198,21 +198,22 @@ _.extend(api.prototype, baseApi.prototype, {
         });
     },
 
-    deleteBulkPurchaseOrders: function (req, res) {
+    archiveBulkPurchaseOrders: function (req, res) {
 
         var self = this;
         var purchaseOrders = req.body;
         console.log(purchaseOrders);
         var accountId = parseInt(self.accountId(req));
-
+        var userId = self.userId(req);
+        self.log.debug(accountId, userId, '>> archiveBulkPurchaseOrders');
         self.checkPermissionForAccount(req, self.sc.privs.MODIFY_ORDER, accountId, function(err, isAllowed) {
             if (isAllowed !== true) {
                 return self.send403(res);
             } else {
                 
-                poManager.deleteBulkPurchaseOrders(accountId, purchaseOrders, function(err, value){                                                       
-                    self.log.debug('<< deleteBulkPurchaseOrders');
-                    self.sendResultOrError(res, err, {deleted:true}, "Error deleting PO's");
+                poManager.archiveBulkPurchaseOrders(accountId, userId, purchaseOrders, function(err, value){                                                       
+                    self.log.debug('<< archiveBulkPurchaseOrders');
+                    self.sendResultOrError(res, err, {deleted:true}, "Error archiving PO's");
                 }); 
             }
         });

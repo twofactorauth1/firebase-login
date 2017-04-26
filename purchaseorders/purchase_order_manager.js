@@ -382,7 +382,6 @@ module.exports = {
         });
     },
 
-
     archivePurchaseOrder: function(accountId, userId, purchaseOrderId, fn){
         var self = this;
         log.debug(accountId, userId, '>> archivePurchaseOrder');
@@ -419,19 +418,38 @@ module.exports = {
         });
     },
 
-    deleteBulkPurchaseOrders: function(accountId, orderIds, fn) {
+    archiveBulkPurchaseOrders: function(accountId, userId, orderIds, fn) {
         var self = this;
         self.log = log;
-        self.log.debug('>> deleteBulkPurchaseOrders');
+        self.log.debug('>> archiveBulkPurchaseOrders');
         var query = {
             _id: {'$in': orderIds}
         };
-        purchaseOrderdao.removeByQuery(query, $$.m.PurchaseOrder, function(err, value){
+        purchaseOrderdao.findMany(query, $$.m.PurchaseOrder, function(err, orders){
             if(err) {
-                self.log.error('Error deleting po: ' + err);
-                return fn(err, null);
+                self.log.error(accountId, userId, 'Error finding orders with orderIds:', err);
+                fn(err);
             } else {
-                fn(null, value);
+                async.eachSeries(orders, function(po, callback){
+                    po.set('archived', true);
+                    po.set('modified', {date: new Date(), by: userId});
+                    callback();
+                }, function(err){
+                    if(err) {
+                        fn(err);
+                    } else {
+                        purchaseOrderdao.batchUpdate(orders, $$.m.PurchaseOrder, function(err, updatedOrders){
+                            if(err) {
+                                self.log.error(accountId, userId,'Error saving Purchase Orders:', err);
+                                return fn(err);
+                            }
+                            else{
+                                log.debug(accountId, userId, '<< archiveBulkPurchaseOrders');
+                                fn(null, orderIds);
+                            }
+                        });
+                    }
+                });
             }
         });
     },

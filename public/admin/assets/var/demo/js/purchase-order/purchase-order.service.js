@@ -26,7 +26,7 @@
         poService.addPurchaseOrderNote = addPurchaseOrderNote;
         poService.deletePurchaseOrder = deletePurchaseOrder;
         poService.archivePurchaseOrder = archivePurchaseOrder;
-        poService.deleteBulkPurchaseOrders = deleteBulkPurchaseOrders;
+        poService.archiveBulkPurchaseOrders = archiveBulkPurchaseOrders;
 
         function poRequest(fn) {
             poService.loading.value = poService.loading.value + 1;
@@ -142,7 +142,7 @@
 
 
 
-        function deleteBulkPurchaseOrders(orderArray) {
+        function archiveBulkPurchaseOrders(orderArray) {
 
             function success(data) {
                 console.log("purchase order deleted");                
@@ -152,11 +152,11 @@
             }
 
             function error(error) {
-                console.error('PurchaseOrderService deletePurchaseOrder error: ', JSON.stringify(error));
+                console.error('PurchaseOrderService archiveBulkPurchaseOrders error: ', JSON.stringify(error));
             }
             return (
                 poRequest($http({
-                    url: [basePoAPIUrlv2, 'po', 'deletepurchaseorders'].join('/'),
+                    url: [basePoAPIUrlv2, 'po', 'archivepurchaseorders'].join('/'),
                     method: 'POST',
                     data: orderArray
                 }).success(success).error(error))
