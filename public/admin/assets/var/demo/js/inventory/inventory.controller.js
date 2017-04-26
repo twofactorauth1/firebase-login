@@ -127,19 +127,23 @@ function inventoryComponentController($scope, $attrs, $filter, $modal, $timeout,
     function getDimentions(product){
         var _dimentions = "";
         if(product){
+            if(product.OITB_ItmsGrpNam && product.OITB_ItmsGrpNam.toLowerCase() == 'services'){
+                _dimentions = "NA";
+                return _dimentions;
+            }
+
             var _sum =  parseFloat(product.OITM_SLength1) +
                 parseFloat(product.OITM_SWidth1) +
                 parseFloat(product.OITM_BHeight1)
 
             if(_sum > 0){
                 _dimentions =  parseFloat(product.OITM_SLength1).toFixed(2) + "X" +
-                    parseFloat(product.OITM_SWidth1).toFixed(2) + "X" +
-                    parseFloat(product.OITM_BHeight1).toFixed(2)
+                    parseFloat(product.OITM_BHeight1).toFixed(2) + "X" +
+                    parseFloat(product.OITM_SWidth1).toFixed(2)
             }
 
-
         }
-        return _dimentions
+        return _dimentions;
     }
 
     function getWeight(product){

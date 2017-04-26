@@ -39,7 +39,8 @@ module.exports = {
                     cb('user not found');
                 } else {
                     var query = {
-                        accountId:accountId
+                        accountId:accountId,
+                        archived: {$ne: true}
                     };
                     if(_.contains(user.getPermissionsForAccount(accountId), 'vendor')){
                         var cardCodes = user.get('cardCodes');
@@ -116,7 +117,8 @@ module.exports = {
                     cb('user not found');
                 } else {
                     var query = {
-                        accountId:accountId
+                        accountId:accountId,
+                        archived: {$ne: true}
                     };
                     if(_.contains(user.getPermissionsForAccount(accountId), 'vendor')){
                         var cardCodes = user.get('cardCodes');
@@ -380,25 +382,77 @@ module.exports = {
         });
     },
 
-
-
-    deleteBulkPurchaseOrders: function(accountId, orderIds, fn) {
+    archivePurchaseOrder: function(accountId, userId, purchaseOrderId, fn){
         var self = this;
-        self.log = log;
-        self.log.debug('>> deleteBulkPurchaseOrders');
-        var query = {
-            _id: {'$in': orderIds}
-        };
-        purchaseOrderdao.removeByQuery(query, $$.m.PurchaseOrder, function(err, value){
-            if(err) {
-                self.log.error('Error deleting po: ' + err);
+        log.debug(accountId, userId, '>> archivePurchaseOrder');
+        userManager.getUserById(userId, function(err, user){
+            if(err || !user) {
+                self.log.error('Error archiving po: ' + err);
                 return fn(err, null);
             } else {
-                fn(null, value);
+                var query = {_id:purchaseOrderId};
+                if(_.contains(user.getPermissionsForAccount(accountId), 'vendor')){
+                    var cardCodes = user.get('cardCodes');
+                    query.cardCode = {$in:cardCodes};
+                }
+                purchaseOrderdao.findOne(query, $$.m.PurchaseOrder, function(err, po){
+                    if(err) {
+                        self.log.error('Error getting po: ' + err);
+                        return fn(err, null);
+                    } else {
+                        po.set('archived', true);
+                        po.set('modified', {date: new Date(), by: userId});
+                        purchaseOrderdao.saveOrUpdate(po, function(err, savedPo){
+                            if(err) {
+                                self.log.error(accountId, userId,'Error saving PO:', err);
+                                return fn(err);
+                            }
+                            else{
+                                log.debug(accountId, userId, '<< archivePurchaseOrder');
+                                fn(null, savedPo);
+                            }
+                        })    
+                    }
+                });
             }
         });
     },
 
+    archiveBulkPurchaseOrders: function(accountId, userId, orderIds, fn) {
+        var self = this;
+        self.log = log;
+        self.log.debug('>> archiveBulkPurchaseOrders');
+        var query = {
+            _id: {'$in': orderIds}
+        };
+        purchaseOrderdao.findMany(query, $$.m.PurchaseOrder, function(err, orders){
+            if(err) {
+                self.log.error(accountId, userId, 'Error finding orders with orderIds:', err);
+                fn(err);
+            } else {
+                async.eachSeries(orders, function(po, callback){
+                    po.set('archived', true);
+                    po.set('modified', {date: new Date(), by: userId});
+                    callback();
+                }, function(err){
+                    if(err) {
+                        fn(err);
+                    } else {
+                        purchaseOrderdao.batchUpdate(orders, $$.m.PurchaseOrder, function(err, updatedOrders){
+                            if(err) {
+                                self.log.error(accountId, userId,'Error saving Purchase Orders:', err);
+                                return fn(err);
+                            }
+                            else{
+                                log.debug(accountId, userId, '<< archiveBulkPurchaseOrders');
+                                fn(null, orderIds);
+                            }
+                        });
+                    }
+                });
+            }
+        });
+    },
 
     _sendEmailOnPOCreation: function(po, accountId, adminUrl) {
         var self = this;

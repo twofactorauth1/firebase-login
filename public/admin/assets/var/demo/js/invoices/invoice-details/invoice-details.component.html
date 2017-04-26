@@ -34,7 +34,7 @@
 
                     <div class="description">
                         <span>
-                            {{vm.invoiceDetails[0]._CustStatmentDtl_TransId}}
+                            {{vm.invoiceDetails[0]._CustStatmentDtl_Document_ID}}
                         </span>
                     </div>
                     <hr>
@@ -95,8 +95,9 @@
                 <table class="table table-hover table-striped" ng-class="{'grid': tableView == 'grid', 'bg-white table-list-view': tableView == 'list'}" ng-if="!vm.uiState.loading">
                     <thead ng-class="{'bg-white': tableView == 'grid'}">
                         <tr>
-                            <th>Item</th>
-                            <th colspan="2">Description</th>
+                            <th>Line Number</th>
+                            <th>Product Name</th>
+                            <th>Description</th>
                             <th>Qty</th>
                             <th style="white-space: nowrap;">Unit Price</th>
                             <th class="hidden-xs">Line Total</th>
@@ -112,8 +113,8 @@
                     </thead>
                     <tbody>
                         <tr ng-repeat="order in vm.displayedOrders" class="product-item">
-                            <td><strong>Code: </strong>{{order.INV1_ItemCode}}</td>
-                            <td><strong>Item: </strong><a ng-click="vm.goToInventory(order.INV1_Dscription)"><span style="white-space: nowrap;" ng-text-truncate="order.INV1_Dscription" ng-tt-chars-threshold="25" ng-tt-no-toggling></span></td></a></td>
+                            <td><strong>Line Number: </strong>{{order.INV1_LineNum}}</td>
+                            <td><strong>Product Name: </strong><a ng-click="vm.goToInventory(order.INV1_Dscription)"><span style="white-space: nowrap;" ng-text-truncate="order.INV1_Dscription" ng-tt-chars-threshold="25" ng-tt-no-toggling></span></td></a></td>
                             <td><strong>Description: </strong><span class="hidden-xs" ng-text-truncate="order.INV1_U_dscription" ng-tt-chars-threshold="30" ng-tt-no-toggling title="{{order.INV1_U_dscription}}"></span></td>
                             <td><strong>Qty: </strong>{{vm.parseValueToFloat(order.INV1_Quantity)}}</td>
                             <td><strong>Unit Price: </strong>{{order.INV1_Price | currency : vm.invoiceDetails[0]._CustStatmentHdr_Currency}}</td>
