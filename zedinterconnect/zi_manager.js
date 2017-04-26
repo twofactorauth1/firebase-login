@@ -341,6 +341,7 @@ module.exports = {
             var groupResultArray =  _(groupResultObject).map(function(g, key) {
                 return { 
                     invoiceNumber: key,
+                    cardCode: g[0]._CustStatmentHdr_CardCode,
                     dueDate: g[0]._CustStatmentDtl_DueDate,
                     currency: g[0]._CustStatmentHdr_Currency,
                     totalInvoice: _(g).reduce(function(m,x) { return m + parseFloat(x.INV1_LineTotal) ; }, 0) };
