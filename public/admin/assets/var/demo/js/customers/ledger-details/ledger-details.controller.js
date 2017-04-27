@@ -11,7 +11,7 @@ function ledgerDetailsController($scope, $state, $attrs, $filter, $modal, $timeo
     vm.init = init;
 
     console.log($stateParams.customerId);
-
+    vm.state = {};
     vm.uiState = {loading: true};
 
     vm.backToCustomers = backToCustomers;
@@ -118,6 +118,13 @@ function ledgerDetailsController($scope, $state, $attrs, $filter, $modal, $timeo
         vm.ledgerTotal = _sum;
         return _sum;
     }
+
+
+    $scope.$watch("$parent.orgCardAndPermissions", function(permissions) {
+        if(angular.isDefined(permissions)){
+            vm.state.orgCardAndPermissions = permissions;
+        }
+    });
 }
 
 })();

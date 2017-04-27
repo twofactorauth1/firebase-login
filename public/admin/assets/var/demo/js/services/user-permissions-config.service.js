@@ -4,13 +4,14 @@
 (function (angular) {
   app.service('UserPermissionsConfig', [function () {
 
-    
+
 
     this.orgConfigAndPermissions = {
       isVendor: false,
       ledgerState: "app.customers",
       cardCodes: [],
-      dashbordLedgerUrl: '#/customers'
+      dashbordLedgerUrl: '#/customers',
+      isVendorWithOneCardCode: false
     }
 
     this.getOrgConfigAndPermissions = function (account, user) {
@@ -45,11 +46,13 @@
           if(this.orgConfigAndPermissions.cardCodes.length ==1){
             this.orgConfigAndPermissions.ledgerState = "app.ledgerDetails({customerId: '"+ this.orgConfigAndPermissions.cardCodes[0] + "'})";
             this.orgConfigAndPermissions.dashbordLedgerUrl = "#/ledger/" + this.orgConfigAndPermissions.cardCodes[0];
+            this.orgConfigAndPermissions.isVendorWithOneCardCode = true;
           }
           else if(this.orgConfigAndPermissions.cardCodes.length == 0){
             this.orgConfigAndPermissions.dashbordLedgerUrl = "#";
           }
         }
+
       }
       
       return this.orgConfigAndPermissions;
