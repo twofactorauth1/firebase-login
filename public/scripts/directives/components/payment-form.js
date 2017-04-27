@@ -247,7 +247,7 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
                                     newUser.anonymousId = window.analytics ? window.analytics.user().anonymousId() : null;
                                     newUser.permanent_cookie = ipCookie("permanent_cookie");
                                     newUser.fingerprint = new Fingerprint().get();
-                                    newUser.setupFee = 0;
+                                    newUser.setupFee = 150000;//1500.00
 
 
                                     UserService.initializeUser(newUser, function(err, data) {
