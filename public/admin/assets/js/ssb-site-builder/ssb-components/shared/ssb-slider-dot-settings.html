@@ -10,7 +10,20 @@
         </span>
     </label>
 </div>
-
+<div class="form-group">
+    <label>
+        Slider Dot Shape
+        <span tooltip-placement="top" tooltip-append-to-body="true"  tooltip-append-to-body="true" tooltip="Slider dot Shape.">
+            <i class="fa fa-info-circle" />
+        </span>
+    </label>
+    <div class="col-xs-6 pull-right">
+        <select ng-model= "component.components[0].slider.sliderDotShape"  class="form-control margin-bottom-0">
+                <option value="">Circle</option>
+                <option value="true">Square</option>
+        </select>
+    </div>
+</div>
 <div class="form-group ssb-spectrum-color-picker-small">            
     <div class="ssb-spectrum-color-picker-background-container">
         <spectrum-colorpicker class="ssb-spectrum-color-picker-background" format="'rgb'" options="vm.spectrum.options" ng-model="component.components[0].slider.sliderActiveDotColor"></spectrum-colorpicker>
