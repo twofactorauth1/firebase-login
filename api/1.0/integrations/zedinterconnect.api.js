@@ -225,13 +225,13 @@ _.extend(api.prototype, baseApi.prototype, {
                 //Only the codes in the user prop or whatever is passed in IF it is in the user prop
                 self.getUserProperty(userId, 'cardCodes', function(err, cardCodes){
                     if(cardCodes && cardCodes.length > 0) {
-                        
+                        cardCodes = _.map(cardCodes, function(code){return code.toLowerCase()});
                         if(req.query.cardCodeFrom && req.query.cardCodeTo) {
                             //we have to do the range
                             var cardCodeFrom = req.query.cardCodeFrom;
                             var cardCodeTo = req.query.cardCodeTo;
 
-                            if(_.contains(cardCodes, cardCodeFrom) && _.contains(cardCodes, cardCodeTo)){
+                            if(_.contains(cardCodes, cardCodeFrom.toLowerCase()) && _.contains(cardCodes, cardCodeTo.toLowerCase())){
                                manager.getLedger(accountId, userId, cardCodeFrom, cardCodeTo, dateString, function(err, value){
                                     self.log.debug(accountId, userId, '<< ledger');
                                     return self.sendResultOrError(resp, err, value, "Error calling aging");
@@ -248,13 +248,13 @@ _.extend(api.prototype, baseApi.prototype, {
                             var addAll = true;
                             if(req.query.cardCodeFrom) {
                                 addAll = false;
-                                if(_.contains(cardCodes, req.query.cardCodeFrom)) {
+                                if(_.contains(cardCodes, req.query.cardCodeFrom.toLowerCase())) {
                                     cardCodeAry.push(req.query.cardCodeFrom);
                                 }
                             }
                             if(req.query.cardCodeTo) {
                                 addAll = false;
-                                if(_.contains(cardCodes, req.query.cardCodeTo)) {
+                                if(_.contains(cardCodes, req.query.cardCodeTo.toLowerCase())) {
                                     cardCodeAry.push(req.query.cardCodeTo);
                                 }
                             }
