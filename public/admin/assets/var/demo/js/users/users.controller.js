@@ -151,6 +151,7 @@
             UserService.editUser($scope.editUser, $scope.currentUserId, function(){
                 UserService.updateUserPermisions($scope.currentUserId, _permissions, function(user){                
                     updateUserPermissions(user, $scope.currentUserId);
+                    toaster.pop('info', 'Successfully updated');
                     $scope.closeUserCardModal();
                 })
             })
