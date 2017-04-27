@@ -31,8 +31,10 @@
 	                            'margin-left': vm.component.spacing.ml == 'auto' ? vm.component.spacing.ml: vm.component.spacing.ml + 'px',
 	                            'margin-right': vm.component.spacing.mr == 'auto' ? vm.component.spacing.mr : vm.component.spacing.mr + 'px',
 	                            'max-width': vm.component.spacing.mw == '100%' ? vm.component.spacing.mw : vm.component.spacing.mw  + 'px'}">
-	                        <div data-ng-include
+	                        <div ng-if="vm.component.version==0 || vm.component.version==1" data-ng-include
 	         					data-src="'/admin/assets/js/ssb-site-builder/ssb-components/'+vm.component.type+'/'+vm.component.type+'.component.html'"></div>
+                            <div ng-if="vm.component.version==2" data-ng-include
+	         					data-src="'/admin/assets/js/ssb-site-builder/ssb-components/'+vm.component.type+'/'+vm.component.type+'.v'+vm.component.version+'.component.html'"></div>
 	                    </div>
 	                </div>
 	            </div>
