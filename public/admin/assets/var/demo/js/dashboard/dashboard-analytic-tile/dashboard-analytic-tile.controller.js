@@ -114,20 +114,24 @@ function dashboardAnalyticTileComponentController($scope, $attrs, $filter, Dashb
                     ret.buttonTitle = 'View Ledger';
                     ret.link = '#/customers'; // Really, this should go to ledger for non-Admin
 
-
-                    if(vm.state.orgCardAndPermissions){
-                        if(vm.state.orgCardAndPermissions.isVendor){
-                            if(vm.state.orgCardAndPermissions.config && vm.state.orgCardAndPermissions.config.cardCodes && vm.state.orgCardAndPermissions.config.cardCodes.length == 1){
-                                ret.link = "#/ledger/" + vm.state.orgCardAndPermissions.config.cardCodes[0];
-                            }
-                            else if(vm.state.orgCardAndPermissions.config && vm.state.orgCardAndPermissions.config.cardCodes && vm.state.orgCardAndPermissions.config.cardCodes.length >1){
-                                ret.link = '#/customers';
-                            }
-                            else{
-                                ret.link = '#';
+                    $scope.$watchGroup(["$parent.account", "$parent.currentUser"], _.debounce(function(values) {
+                        if(values[0] && values[1]){
+                            vm.state.orgCardAndPermissions = UserPermissionsConfig.getOrgConfigAndPermissions(values[1], values[0]);
+                            if(vm.state.orgCardAndPermissions){
+                                if(vm.state.orgCardAndPermissions.isVendor){
+                                    if(vm.state.orgCardAndPermissions.config && vm.state.orgCardAndPermissions.config.cardCodes && vm.state.orgCardAndPermissions.config.cardCodes.length == 1){
+                                        ret.link = "#/ledger/" + vm.state.orgCardAndPermissions.config.cardCodes[0];
+                                    }
+                                    else if(vm.state.orgCardAndPermissions.config && vm.state.orgCardAndPermissions.config.cardCodes && vm.state.orgCardAndPermissions.config.cardCodes.length >1){
+                                        ret.link = '#/customers';
+                                    }
+                                    else{
+                                        ret.link = '#';
+                                    }
+                                }
                             }
                         }
-                    }
+                    }, 0), true);
 
                     ret.header = [ 
 
@@ -246,11 +250,7 @@ function dashboardAnalyticTileComponentController($scope, $attrs, $filter, Dashb
     }
 
 
-    $scope.$watchGroup(["$parent.account", "$parent.currentUser"], _.debounce(function(values) {
-        if(values[0] && values[1]){
-            vm.state.orgCardAndPermissions = UserPermissionsConfig.getOrgConfigAndPermissions(values[1], values[0]);
-        }
-    }, 0), true);
+    
 }
 
 })();
