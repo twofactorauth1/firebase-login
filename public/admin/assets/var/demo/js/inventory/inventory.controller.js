@@ -12,7 +12,7 @@ function inventoryComponentController($scope, $attrs, $filter, $modal, $timeout,
 
     vm.state = {};
 
-    vm.showPages = 5;
+    
 
     vm.uiState = {
         loading: true,
@@ -51,7 +51,7 @@ function inventoryComponentController($scope, $attrs, $filter, $modal, $timeout,
 
     ]
 
-
+    vm.showPages = vm.pagingConstant.displayedPages;
     vm.productSelectClickFn = productSelectClickFn;
     vm.bulkActionSelectFn = bulkActionSelectFn;
     
