@@ -40,7 +40,7 @@
         function getCustomers() {
 
             function success(data) {
-                customerService.customers = data.response.payload.querydata.data.row;
+                customerService.customers = data.response.payload.querydata.data.row || null;
             }
 
             function error(error) {

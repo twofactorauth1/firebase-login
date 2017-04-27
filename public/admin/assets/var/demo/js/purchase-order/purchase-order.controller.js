@@ -2,9 +2,9 @@
 
 app.controller('PurchaseOrderComponentController', purchaseOrderComponentController);
 
-purchaseOrderComponentController.$inject = ['$scope', '$attrs', '$filter', '$modal', '$timeout', '$location', 'SweetAlert', 'toaster', 'pagingConstant', 'PurchaseOrderService', 'UserPermissionsConfig'];
+purchaseOrderComponentController.$inject = ['$scope', '$attrs', '$filter', '$modal', '$timeout', '$location', 'SweetAlert', 'toaster', 'pagingConstant', 'PurchaseOrderService'];
 /* @ngInject */
-function purchaseOrderComponentController($scope, $attrs, $filter, $modal, $timeout, $location, SweetAlert, toaster, pagingConstant, PurchaseOrderService, UserPermissionsConfig) {
+function purchaseOrderComponentController($scope, $attrs, $filter, $modal, $timeout, $location, SweetAlert, toaster, pagingConstant, PurchaseOrderService) {
 
     var vm = this;
 
@@ -42,23 +42,22 @@ function purchaseOrderComponentController($scope, $attrs, $filter, $modal, $time
         }        
     }, true);
 
-    $scope.$watchGroup(["$parent.account", "$parent.currentUser"], _.debounce(function(values) {
-        if(values[0] && values[1]){
-            vm.state.account = values[0];
-            vm.state.user = values[1];
-            vm.state.orgCardAndPermissions = UserPermissionsConfig.getOrgConfigAndPermissions(vm.state.user, vm.state.account);
+
+    $scope.$watch("$parent.orgCardAndPermissions", function(permissions) {
+        if(angular.isDefined(permissions)){
+            vm.state.orgCardAndPermissions = permissions;
         }
-    }, 0), true);
+    });
 
     function openModal(size){
         vm.state.newPurchaseOrder = {};
         var templateUrl = 'new-purchase-order-modal';
 
-        var isVendor = _.contains(vm.state.orgCardAndPermissions.permissions, 'vendor');
+        var isVendor = vm.state.orgCardAndPermissions.isVendor;
         if(isVendor){
             templateUrl = 'new-vendor-purchase-order-modal';
-            if(vm.state.orgCardAndPermissions.config.cardCodes && vm.state.orgCardAndPermissions.config.cardCodes.length == 1){
-                vm.state.newPurchaseOrder.cardCode = vm.state.orgCardAndPermissions.config.cardCodes[0];
+            if(vm.state.orgCardAndPermissions.isVendorWithOneCardCode){
+                vm.state.newPurchaseOrder.cardCode = vm.state.orgCardAndPermissions.cardCodes[0];
             }
         }
 

@@ -15,6 +15,8 @@
 		</div>
 	</form>
 </div>
+
+
 <!-- end: SEARCH FORM -->
 <!-- start: MAIN NAVIGATION MENU -->
 <ul class="main-navigation-menu">
@@ -69,7 +71,7 @@
         </a>
     </li>
     <li ng-class="{'active open':$state.includes('app.customers') || $state.includes('app.ledgerDetails') || $state.includes('app.invoiceDetails')}">
-        <a ui-sref="app.customers">
+        <a ui-sref="{{orgCardAndPermissions.ledgerState}}">
             <div class="item-content">
                 <div class="item-media">
                     <i class="ti-receipt"></i>

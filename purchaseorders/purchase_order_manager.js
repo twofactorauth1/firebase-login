@@ -21,8 +21,6 @@ require('./model/purchase_order');
 var accountDao = require('../dao/account.dao');
 
 
-
-
 module.exports = {
 	
     listPurchaseOrders: function (accountId, userId, fn) {

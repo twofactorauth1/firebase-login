@@ -38,7 +38,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
     $stateProvider.state('app', {
         url: "",
         templateUrl: "/admin/assets/var/demo/views/app.html",
-        resolve: loadSequence('modernizr', 'underscore', 'moment', 'angularMoment', 'uiSwitch', 'perfect-scrollbar-plugin', 'toaster', 'ngAside', 'chartjs', 'tc.chartjs', 'oitozero.ngSweetAlert', 'chatCtrl', 'smart-table', 'touchspin-plugin', 'slugifier', 'commonService', 'timeAgoFilter','angularFileUpload', 'ngTextTruncate', 'infinite-scroll', 'ui.select', 'blueimp', 'ngTagsInput', 'titleCase', 'bootstrap-confirmation', 'ladda', 'angular-ladda', 'uuid', 'formatText', 'asideCtrl', 'settingsCtrl', 'assetsService', 'mediaModalCtrl', 'xeditable', 'angular-percentage-filter', 'angular-clipboard', 'google-fonts', 'dashboardService', 'videogular', 'indi-login-modal', 'productTableFilter', 'ngCurrency', 'DashboardAnalyticTileComponent', 'InventoryComponent', 'InventoryDetailsComponent', 'utilService'),
+        resolve: loadSequence('modernizr', 'underscore', 'moment', 'angularMoment', 'uiSwitch', 'perfect-scrollbar-plugin', 'toaster', 'ngAside', 'chartjs', 'tc.chartjs', 'oitozero.ngSweetAlert', 'chatCtrl', 'smart-table', 'touchspin-plugin', 'slugifier', 'commonService', 'timeAgoFilter','angularFileUpload', 'ngTextTruncate', 'infinite-scroll', 'ui.select', 'blueimp', 'ngTagsInput', 'titleCase', 'bootstrap-confirmation', 'ladda', 'angular-ladda', 'uuid', 'formatText', 'asideCtrl', 'settingsCtrl', 'assetsService', 'mediaModalCtrl', 'xeditable', 'angular-percentage-filter', 'angular-clipboard', 'google-fonts', 'dashboardService', 'videogular', 'indi-login-modal', 'productTableFilter', 'ngCurrency', 'DashboardAnalyticTileComponent', 'InventoryComponent', 'InventoryDetailsComponent', 'utilService', 'userPermissionsConfig'),
         abstract: true
     }).state('app.dashboard', {
         url: "/_dashboard",
@@ -264,7 +264,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         templateUrl: "/admin/assets/var/demo/js/purchase-order/purchase-order.html",
         title: 'Purchase Order',
         icon: 'ti-layout-media-left-alt',
-        resolve: loadSequence('PurchaseOrderComponent', 'PurchaseOrderComponentController', 'PurchaseOrderService', 'userPermissionsConfig')
+        resolve: loadSequence('PurchaseOrderComponent', 'PurchaseOrderComponentController', 'PurchaseOrderService')
     }).state('app.purchaseOrderDetails', {
         url: '/purchase-orders/:purchaseOrderId',
         templateUrl: "/admin/assets/var/demo/js/purchase-order/purchase-order-details/purchase-order-details.html",

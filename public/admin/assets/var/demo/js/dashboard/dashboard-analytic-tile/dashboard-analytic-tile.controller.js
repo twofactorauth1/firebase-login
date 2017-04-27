@@ -57,7 +57,7 @@ function dashboardAnalyticTileComponentController($scope, $attrs, $filter, Dashb
                             ret.data.push({
                                 field1: item.OMRC_FirmName,
                                 field2: item.OITM_ItemName,
-                                field3: item.In_Stock ? 0 : '',
+                                field3: item.In_Stock <0 ? '' : item.In_Stock,
                                 link: ret.link + "/" + item["@id"]
                             })
                         })
@@ -112,7 +112,13 @@ function dashboardAnalyticTileComponentController($scope, $attrs, $filter, Dashb
 
                     ret.widgetTitle = 'Invoices';
                     ret.buttonTitle = 'View Ledger';
-                    //ret.link = '#/customers'; // Really, this should go to ledger for non-Admin
+                    ret.link = '#/customers'; // Really, this should go to ledger for non-Admin
+
+                    $scope.$watch("$parent.orgCardAndPermissions", function(permissions) {
+                        if(angular.isDefined(permissions)){
+                            ret.link = permissions.dashbordLedgerUrl;
+                        }
+                    });
 
                     ret.header = [ 
 
@@ -124,11 +130,8 @@ function dashboardAnalyticTileComponentController($scope, $attrs, $filter, Dashb
                     $scope.$watch(function() { return DashboardService.invoices; }, function(invoices){
                         ret.data = [];
                         _.each(invoices, function(invoice){
-                            if(!ret.link){
-                                ret.link = "#/ledger/" + invoice.cardCode;
-                            }
+                            
                             ret.data.push({
-                                
                                 
                                 field1: parseValueToCurrency(invoice.totalInvoice, invoice.currency),
                                 field2: invoice.invoiceNumber,
@@ -233,6 +236,8 @@ function dashboardAnalyticTileComponentController($scope, $attrs, $filter, Dashb
 
     }
 
+
+    
 }
 
 })();

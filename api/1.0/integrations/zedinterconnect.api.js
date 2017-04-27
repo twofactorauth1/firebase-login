@@ -195,19 +195,85 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug(accountId, userId, '>> ledger');
 
         var dateString = req.query.date || moment().format("M/DD/YY");
-        var cardCodeFrom = req.query.cardCodeFrom || 'C1002221';
-        var cardCodeTo = req.query.cardCodeTo || 'C1002221';
-        self.getUserProperty(userId, 'cardCodes', function(err, cardCodes){
-            if(cardCodes) {
-                cardCodeFrom = cardCodes[0];
-                cardCodeTo = cardCodes[0];
+
+        self._isUserAdmin(req, function(err, isAdmin){
+            if(isAdmin && isAdmin === true) {
+                //ALL the CardCodes or whatever is passed in
+                var cardCodeAry = [];
+                if(req.query.cardCodeFrom && req.query.cardCodeTo) {
+                    //we have to do the range
+                    var cardCodeFrom = req.query.cardCodeFrom || 'C1002221';
+                    var cardCodeTo = req.query.cardCodeTo || 'C1002221';
+                    manager.getLedger(accountId, userId, cardCodeFrom, cardCodeTo, dateString, function(err, value){
+                        self.log.debug(accountId, userId, '<< ledger');
+                        return self.sendResultOrError(resp, err, value, "Error calling aging");
+                    });
+                }
+                else{
+                    if(req.query.cardCodeFrom) {
+                        cardCodeAry.push(req.query.cardCodeFrom);
+                    } else if(req.query.cardCodeTo) {
+                        cardCodeAry.push(req.query.cardCodeTo);
+                    }
+                    manager.getLedgerWithLimit(accountId, userId, cardCodeAry, dateString, 0, function(err, value){
+                        self.log.debug(accountId, userId, '<< ledger');
+                        return self.sendResultOrError(resp, err, value, "Error calling aging");
+                    });
+                }
+                
+            } else {
+                //Only the codes in the user prop or whatever is passed in IF it is in the user prop
+                self.getUserProperty(userId, 'cardCodes', function(err, cardCodes){
+                    if(cardCodes && cardCodes.length > 0) {
+                        
+                        if(req.query.cardCodeFrom && req.query.cardCodeTo) {
+                            //we have to do the range
+                            var cardCodeFrom = req.query.cardCodeFrom;
+                            var cardCodeTo = req.query.cardCodeTo;
+
+                            if(_.contains(cardCodes, cardCodeFrom) && _.contains(cardCodes, cardCodeTo)){
+                               manager.getLedger(accountId, userId, cardCodeFrom, cardCodeTo, dateString, function(err, value){
+                                    self.log.debug(accountId, userId, '<< ledger');
+                                    return self.sendResultOrError(resp, err, value, "Error calling aging");
+                                }); 
+                            }
+                            else{
+                                return self.wrapError(resp, 400, 'Bad Request', 'User does not have any matching cardCodes');
+                            }
+                            
+                        }
+
+                        else{
+                            var cardCodeAry = [];
+                            var addAll = true;
+                            if(req.query.cardCodeFrom) {
+                                addAll = false;
+                                if(_.contains(cardCodes, req.query.cardCodeFrom)) {
+                                    cardCodeAry.push(req.query.cardCodeFrom);
+                                }
+                            }
+                            if(req.query.cardCodeTo) {
+                                addAll = false;
+                                if(_.contains(cardCodes, req.query.cardCodeTo)) {
+                                    cardCodeAry.push(req.query.cardCodeTo);
+                                }
+                            }
+                            if(addAll === true){
+                                cardCodeAry = cardCodes;
+                            }
+                            manager.getLedgerWithLimit(accountId, userId, cardCodeAry, dateString, 0, function(err, value){
+                                self.log.debug(accountId, userId, '<< ledger');
+                                return self.sendResultOrError(resp, err, value, "Error calling aging");
+                            });
+                        }
+                        
+                    } else {
+                        return self.wrapError(resp, 400, 'Bad Request', 'User does not have any cardCodes');
+                    }
+                });
             }
-            //TODO: security
-            manager.getLedger(accountId, userId, cardCodeFrom, cardCodeTo, dateString, function(err, value){
-                self.log.debug(accountId, userId, '<< ledger');
-                return self.sendResultOrError(resp, err, value, "Error calling aging");
-            });
         });
+
     },
 
     getTopInvoices: function(req, resp) {
@@ -237,8 +303,6 @@ _.extend(api.prototype, baseApi.prototype, {
                 });
             }
         });
-
-
     },
 
     getCustomers: function(req, resp) {
@@ -247,13 +311,21 @@ _.extend(api.prototype, baseApi.prototype, {
         var userId = self.userId(req);
         self.log.debug(accountId, userId, '>> getCustomers');
 
-        //TODO: security
-        manager.getCustomers(accountId, userId, function(err, value){
-            self.log.debug(accountId, userId, '<< getCustomers');
-            return self.sendResultOrError(resp, err, value, "Error listing customers");
+        self._isUserAdmin(req, function(err, isAdmin){
+            if(isAdmin && isAdmin === true) {
+                manager.getCustomers(accountId, userId, ['admin'], function(err, value){
+                    self.log.debug(accountId, userId, '<< getCustomers');
+                    return self.sendResultOrError(resp, err, value, "Error listing customers");
+                });
+            } else {
+                self.getUserProperty(userId, 'cardCodes', function(err, cardCodes){
+                    manager.getCustomers(accountId, userId, cardCodes, function(err, value){
+                        self.log.debug(accountId, userId, '<< getCustomers');
+                        return self.sendResultOrError(resp, err, value, "Error listing customers");
+                    });
+                });
+            }
         });
-
-
     },
 
     _isUserAdmin: function(req, fn) {
