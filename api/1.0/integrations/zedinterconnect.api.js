@@ -208,40 +208,65 @@ _.extend(api.prototype, baseApi.prototype, {
                         self.log.debug(accountId, userId, '<< ledger');
                         return self.sendResultOrError(resp, err, value, "Error calling aging");
                     });
-                } else if(req.query.cardCodeFrom) {
-                    cardCodeAry.push(req.query.cardCodeFrom);
-                } else if(req.query.cardCodeTo) {
-                    cardCodeAry.push(req.query.cardCodeTo);
                 }
-                manager.getLedgerWithLimit(accountId, userId, cardCodeAry, dateString, 0, function(err, value){
-                    self.log.debug(accountId, userId, '<< ledger');
-                    return self.sendResultOrError(resp, err, value, "Error calling aging");
-                });
+                else{
+                    if(req.query.cardCodeFrom) {
+                        cardCodeAry.push(req.query.cardCodeFrom);
+                    } else if(req.query.cardCodeTo) {
+                        cardCodeAry.push(req.query.cardCodeTo);
+                    }
+                    manager.getLedgerWithLimit(accountId, userId, cardCodeAry, dateString, 0, function(err, value){
+                        self.log.debug(accountId, userId, '<< ledger');
+                        return self.sendResultOrError(resp, err, value, "Error calling aging");
+                    });
+                }
+                
             } else {
                 //Only the codes in the user prop or whatever is passed in IF it is in the user prop
                 self.getUserProperty(userId, 'cardCodes', function(err, cardCodes){
                     if(cardCodes && cardCodes.length > 0) {
-                        var cardCodeAry = [];
-                        var addAll = true;
-                        if(req.query.cardCodeFrom) {
-                            addAll = false;
-                            if(_.contains(cardCodes, req.query.cardCodeFrom)) {
-                                cardCodeAry.push(req.query.cardCodeFrom);
+                        
+                        if(req.query.cardCodeFrom && req.query.cardCodeTo) {
+                            //we have to do the range
+                            var cardCodeFrom = req.query.cardCodeFrom;
+                            var cardCodeTo = req.query.cardCodeTo;
+
+                            if(_.contains(cardCodes, cardCodeFrom) && _.contains(cardCodes, cardCodeTo)){
+                               manager.getLedger(accountId, userId, cardCodeFrom, cardCodeTo, dateString, function(err, value){
+                                    self.log.debug(accountId, userId, '<< ledger');
+                                    return self.sendResultOrError(resp, err, value, "Error calling aging");
+                                }); 
                             }
-                        }
-                        if(req.query.cardCodeTo) {
-                            addAll = false;
-                            if(_.contains(cardCodes, req.query.cardCodeTo)) {
-                                cardCodeAry.push(req.query.cardCodeTo);
+                            else{
+                                return self.wrapError(resp, 400, 'Bad Request', 'User does not have any matching cardCodes');
                             }
+                            
                         }
-                        if(addAll === true){
-                            cardCodeAry = cardCodes;
+
+                        else{
+                            var cardCodeAry = [];
+                            var addAll = true;
+                            if(req.query.cardCodeFrom) {
+                                addAll = false;
+                                if(_.contains(cardCodes, req.query.cardCodeFrom)) {
+                                    cardCodeAry.push(req.query.cardCodeFrom);
+                                }
+                            }
+                            if(req.query.cardCodeTo) {
+                                addAll = false;
+                                if(_.contains(cardCodes, req.query.cardCodeTo)) {
+                                    cardCodeAry.push(req.query.cardCodeTo);
+                                }
+                            }
+                            if(addAll === true){
+                                cardCodeAry = cardCodes;
+                            }
+                            manager.getLedgerWithLimit(accountId, userId, cardCodeAry, dateString, 0, function(err, value){
+                                self.log.debug(accountId, userId, '<< ledger');
+                                return self.sendResultOrError(resp, err, value, "Error calling aging");
+                            });
                         }
-                        manager.getLedgerWithLimit(accountId, userId, cardCodeAry, dateString, 0, function(err, value){
-                            self.log.debug(accountId, userId, '<< ledger');
-                            return self.sendResultOrError(resp, err, value, "Error calling aging");
-                        });
+                        
                     } else {
                         return self.wrapError(resp, 400, 'Bad Request', 'User does not have any cardCodes');
                     }

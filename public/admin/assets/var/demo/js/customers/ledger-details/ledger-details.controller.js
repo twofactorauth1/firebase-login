@@ -30,7 +30,7 @@ function ledgerDetailsController($scope, $state, $attrs, $filter, $modal, $timeo
         vm.element = element;
 
         CustomersService.getLedgerDetails($stateParams.customerId).then(function(response){
-            var ledger = response.data.response.payload.querydata.data;
+            var ledger = response.data.response && response.data.response.payload.querydata.data;
             if(ledger && ledger.row){
                 if(angular.isArray(ledger.row)){
                     vm.ledger = ledger
