@@ -2,9 +2,9 @@
 
 app.controller('DashboardAnalyticTileComponentController', dashboardAnalyticTileComponentController);
 
-dashboardAnalyticTileComponentController.$inject = ['$scope', '$attrs', '$filter', 'DashboardService', '$modal', '$timeout'];
+dashboardAnalyticTileComponentController.$inject = ['$scope', '$attrs', '$filter', 'DashboardService', '$modal', '$timeout', 'UserPermissionsConfig'];
 /* @ngInject */
-function dashboardAnalyticTileComponentController($scope, $attrs, $filter, DashboardService, $modal, $timeout) {
+function dashboardAnalyticTileComponentController($scope, $attrs, $filter, DashboardService, $modal, $timeout, UserPermissionsConfig) {
 
     var vm = this;
 
@@ -113,6 +113,21 @@ function dashboardAnalyticTileComponentController($scope, $attrs, $filter, Dashb
                     ret.widgetTitle = 'Invoices';
                     ret.buttonTitle = 'View Ledger';
                     ret.link = '#/customers'; // Really, this should go to ledger for non-Admin
+
+
+                    if(vm.state.orgCardAndPermissions){
+                        if(vm.state.orgCardAndPermissions.isVendor){
+                            if(vm.state.orgCardAndPermissions.config && vm.state.orgCardAndPermissions.config.cardCodes && vm.state.orgCardAndPermissions.config.cardCodes.length == 1){
+                                ret.link = "#/ledger/" + vm.state.orgCardAndPermissions.config.cardCodes[0];
+                            }
+                            else if(vm.state.orgCardAndPermissions.config && vm.state.orgCardAndPermissions.config.cardCodes && vm.state.orgCardAndPermissions.config.cardCodes.length >1){
+                                ret.link = '#/customers';
+                            }
+                            else{
+                                ret.link = '#';
+                            }
+                        }
+                    }
 
                     ret.header = [ 
 
@@ -230,6 +245,12 @@ function dashboardAnalyticTileComponentController($scope, $attrs, $filter, Dashb
 
     }
 
+
+    $scope.$watchGroup(["$parent.account", "$parent.currentUser"], _.debounce(function(values) {
+        if(values[0] && values[1]){
+            vm.state.orgCardAndPermissions = UserPermissionsConfig.getOrgConfigAndPermissions(values[1], values[0]);
+        }
+    }, 0), true);
 }
 
 })();
