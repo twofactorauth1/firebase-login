@@ -212,34 +212,40 @@
         };
 
         function getOrgConfig(orgId){
-            var orgConfigAry = $scope.editUser.orgConfig || [];
+            // var orgConfigAry = $scope.editUser.orgConfig || [];
 
-            var orgConfig = _.find(orgConfigAry, function(config){
-                return config.orgId == orgId
-            })
-            if(orgConfig){
-                vm.state.cardCodes = orgConfig.cardCodes;
-            }
-            else{
-                vm.state.cardCodes = null;
-            }
+            // var orgConfig = _.find(orgConfigAry, function(config){
+            //     return config.orgId == orgId
+            // })
+            // if(orgConfig){
+            //     vm.state.cardCodes = orgConfig.cardCodes;
+            // }
+            // else{
+            //     vm.state.cardCodes = null;
+            // }
+
+
+            vm.state.cardCodes = $scope.editUser.cardCodes || [];
         };
 
         function setOrgConfig(orgId){
-            var orgConfigAry = $scope.editUser.orgConfig || [];
+            // var orgConfigAry = $scope.editUser.orgConfig || [];
 
-            var orgConfig = _.find(orgConfigAry, function(config){
-                return config.orgId == orgId
-            })
-            if(orgConfig){
-                orgConfig.cardCodes = vm.state.cardCodes;
-            }
-            else{
-                orgConfigAry.push({
-                    orgId: orgId,
-                    cardCodes: vm.state.cardCodes
-                })
-            }
+            // var orgConfig = _.find(orgConfigAry, function(config){
+            //     return config.orgId == orgId
+            // })
+            // if(orgConfig){
+            //     orgConfig.cardCodes = vm.state.cardCodes;
+            // }
+            // else{
+            //     orgConfigAry.push({
+            //         orgId: orgId,
+            //         cardCodes: vm.state.cardCodes
+            //     })
+            // }
+
+
+            $scope.editUser.cardCodes = vm.state.cardCodes;
         };
 
         function getUserPermissions(isAdmin){

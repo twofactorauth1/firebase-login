@@ -4,6 +4,7 @@
 (function (angular) {
   app.service('UserPermissionsConfig', [function () {
 
+    
 
     this.orgConfigAndPermissions = {
       isVendor: false,
@@ -25,9 +26,22 @@
       if(userAccount && userAccount.permissions && userAccount.permissions.length){
         this.orgConfigAndPermissions.isVendor = _.contains(userAccount.permissions, 'vendor')
       }
+      // if(this.orgConfigAndPermissions.isVendor){
+      //   if(orgConfig && orgConfig.cardCodes && orgConfig.cardCodes.length){
+      //     this.orgConfigAndPermissions.cardCodes = orgConfig.cardCodes;
+      //     if(this.orgConfigAndPermissions.cardCodes.length ==1){
+      //       this.orgConfigAndPermissions.ledgerState = "app.ledgerDetails({customerId: '"+ this.orgConfigAndPermissions.cardCodes[0] + "'})";
+      //       this.orgConfigAndPermissions.dashbordLedgerUrl = "#/ledger/" + this.orgConfigAndPermissions.cardCodes[0];
+      //     }
+      //     else if(this.orgConfigAndPermissions.cardCodes.length == 0){
+      //       this.orgConfigAndPermissions.dashbordLedgerUrl = "#";
+      //     }
+      //   }
+      // }
+
       if(this.orgConfigAndPermissions.isVendor){
-        if(orgConfig && orgConfig.cardCodes && orgConfig.cardCodes.length){
-          this.orgConfigAndPermissions.cardCodes = orgConfig.cardCodes;
+        if(user.cardCodes && user.cardCodes.length){
+          this.orgConfigAndPermissions.cardCodes = user.cardCodes;
           if(this.orgConfigAndPermissions.cardCodes.length ==1){
             this.orgConfigAndPermissions.ledgerState = "app.ledgerDetails({customerId: '"+ this.orgConfigAndPermissions.cardCodes[0] + "'})";
             this.orgConfigAndPermissions.dashbordLedgerUrl = "#/ledger/" + this.orgConfigAndPermissions.cardCodes[0];
