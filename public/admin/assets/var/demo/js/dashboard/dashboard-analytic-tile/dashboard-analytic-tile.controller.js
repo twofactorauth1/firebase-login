@@ -2,9 +2,9 @@
 
 app.controller('DashboardAnalyticTileComponentController', dashboardAnalyticTileComponentController);
 
-dashboardAnalyticTileComponentController.$inject = ['$scope', '$attrs', '$filter', 'DashboardService', '$modal', '$timeout', 'UserPermissionsConfig'];
+dashboardAnalyticTileComponentController.$inject = ['$scope', '$attrs', '$filter', 'DashboardService', '$modal', '$timeout'];
 /* @ngInject */
-function dashboardAnalyticTileComponentController($scope, $attrs, $filter, DashboardService, $modal, $timeout, UserPermissionsConfig) {
+function dashboardAnalyticTileComponentController($scope, $attrs, $filter, DashboardService, $modal, $timeout) {
 
     var vm = this;
 
@@ -114,24 +114,11 @@ function dashboardAnalyticTileComponentController($scope, $attrs, $filter, Dashb
                     ret.buttonTitle = 'View Ledger';
                     ret.link = '#/customers'; // Really, this should go to ledger for non-Admin
 
-                    $scope.$watchGroup(["$parent.account", "$parent.currentUser"], _.debounce(function(values) {
-                        if(values[0] && values[1]){
-                            vm.state.orgCardAndPermissions = UserPermissionsConfig.getOrgConfigAndPermissions(values[1], values[0]);
-                            if(vm.state.orgCardAndPermissions){
-                                if(vm.state.orgCardAndPermissions.isVendor){
-                                    if(vm.state.orgCardAndPermissions.config && vm.state.orgCardAndPermissions.config.cardCodes && vm.state.orgCardAndPermissions.config.cardCodes.length == 1){
-                                        ret.link = "#/ledger/" + vm.state.orgCardAndPermissions.config.cardCodes[0];
-                                    }
-                                    else if(vm.state.orgCardAndPermissions.config && vm.state.orgCardAndPermissions.config.cardCodes && vm.state.orgCardAndPermissions.config.cardCodes.length >1){
-                                        ret.link = '#/customers';
-                                    }
-                                    else{
-                                        ret.link = '#';
-                                    }
-                                }
-                            }
+                    $scope.$watch("$parent.orgCardAndPermissions", function(permissions) {
+                        if(angular.isDefined(permissions)){
+                            ret.link = permissions.dashbordLedgerUrl;
                         }
-                    }, 0), true);
+                    });
 
                     ret.header = [ 
 

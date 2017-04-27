@@ -26,13 +26,13 @@
                     <ui-select
                         ng-model="vm.state.newPurchaseOrder.cardCode"
                         theme="bootstrap"
-                        ng-disabled="vm.state.orgCardAndPermissions.config.cardCodes.length <= 1"
+                        ng-disabled="vm.state.orgCardAndPermissions.cardCodes.length <= 1"
                         >
                         <ui-select-match
                             placeholder="Select a card code">
                             {{$select.selected}}
                         </ui-select-match>
-                        <ui-select-choices repeat="code in vm.state.orgCardAndPermissions.config.cardCodes">
+                        <ui-select-choices repeat="code in vm.state.orgCardAndPermissions.cardCodes">
                             <div ng-bind-html="code | highlight: $select.search"></div>
                             
                           </small>
