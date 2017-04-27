@@ -2,9 +2,9 @@
 
 app.controller('LedgerDetailsController', ledgerDetailsController);
 
-ledgerDetailsController.$inject = ['$scope', '$state', '$attrs', '$filter', '$modal', '$timeout', '$stateParams', '$location', 'CustomersService'];
+ledgerDetailsController.$inject = ['$scope', '$state', '$attrs', '$filter', '$modal', '$timeout', '$stateParams', '$location', 'toaster', 'CustomersService'];
 /* @ngInject */
-function ledgerDetailsController($scope, $state, $attrs, $filter, $modal, $timeout, $stateParams, $location, CustomersService) {
+function ledgerDetailsController($scope, $state, $attrs, $filter, $modal, $timeout, $stateParams, $location, toaster, CustomersService) {
 
     var vm = this;
 
@@ -54,6 +54,10 @@ function ledgerDetailsController($scope, $state, $attrs, $filter, $modal, $timeo
                     vm.uiState.loading = false;
                 }, true);
             }
+        }).catch(function(error) {
+            vm.uiState.loading = false;
+            if(error.data && error.data.message)
+                toaster.pop('error', 'Error', error.data.message);
         });
     }
 
