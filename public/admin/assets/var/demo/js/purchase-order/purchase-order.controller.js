@@ -54,7 +54,7 @@ function purchaseOrderComponentController($scope, $attrs, $filter, $modal, $time
         vm.state.newPurchaseOrder = {};
         var templateUrl = 'new-purchase-order-modal';
 
-        var isVendor = _.contains(vm.state.orgCardAndPermissions.permissions, 'vendor');
+        var isVendor = vm.state.orgCardAndPermissions.isVendor;
         if(isVendor){
             templateUrl = 'new-vendor-purchase-order-modal';
             if(vm.state.orgCardAndPermissions.config.cardCodes && vm.state.orgCardAndPermissions.config.cardCodes.length == 1){

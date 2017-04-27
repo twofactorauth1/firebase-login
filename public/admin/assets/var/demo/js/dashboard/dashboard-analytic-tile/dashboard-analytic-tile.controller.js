@@ -112,7 +112,7 @@ function dashboardAnalyticTileComponentController($scope, $attrs, $filter, Dashb
 
                     ret.widgetTitle = 'Invoices';
                     ret.buttonTitle = 'View Ledger';
-                    //ret.link = '#/customers'; // Really, this should go to ledger for non-Admin
+                    ret.link = '#/customers'; // Really, this should go to ledger for non-Admin
 
                     ret.header = [ 
 
@@ -124,11 +124,8 @@ function dashboardAnalyticTileComponentController($scope, $attrs, $filter, Dashb
                     $scope.$watch(function() { return DashboardService.invoices; }, function(invoices){
                         ret.data = [];
                         _.each(invoices, function(invoice){
-                            if(!ret.link){
-                                ret.link = "#/ledger/" + invoice.cardCode;
-                            }
+                            
                             ret.data.push({
-                                
                                 
                                 field1: parseValueToCurrency(invoice.totalInvoice, invoice.currency),
                                 field2: invoice.invoiceNumber,

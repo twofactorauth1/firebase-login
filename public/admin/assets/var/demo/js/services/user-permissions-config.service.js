@@ -7,7 +7,8 @@
 
     this.orgConfigAndPermissions = {
       permissions: null,
-      config: null
+      config: null,
+      isVendor: false,
     }
 
     this.getOrgConfigAndPermissions = function (user, account) {
@@ -22,6 +23,9 @@
 
       this.orgConfigAndPermissions.permissions = userAccount.permissions;
       this.orgConfigAndPermissions.config = orgConfig;
+      if(userAccount.permissions && userAccount.permissions.length){
+        this.orgConfigAndPermissions.isVendor = _.contains(userAccount.permissions, 'vendor')
+      }
       return this.orgConfigAndPermissions;
     };
 
