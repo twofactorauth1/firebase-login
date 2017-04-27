@@ -20,6 +20,7 @@ var contactDao = require('../../../dao/contact.dao');
 var async = require('async');
 var affiliates_manager = require('../../../affiliates/affiliate_manager');
 var moment = require('moment');
+var orgDao = require('../../../organizations/dao/organization.dao');
 
 var api = function () {
     this.init.apply(this, arguments);
@@ -95,7 +96,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url('upcomingInvoice'), this.isAuthApi.bind(this), this.getMyUpcomingInvoice.bind(this));
         app.get(this.url('invoices'), this.isAuthApi.bind(this), this.getMyInvoices.bind(this));
         app.get(this.url('account/invoices'), this.isAuthApi.bind(this), this.getInvoicesForAccount.bind(this));
-        app.get(this.url('account/charges'), this.isAuthApi.bind(this), this.getChargesForAccount.bind(this));
+        app.get(this.url('account/charges'), this.isAuthApi.bind(this), this.getChargesForAccount.bind(this));//TODO this
         app.get(this.url('account/charges/:chargeId'), this.isAuthApi.bind(this), this.getAccountCharge.bind(this));
         app.get(this.url('indigenous/plans'), this.listIndigenousPlans.bind(this));
         app.get(this.url('indigenous/plans/:planId'), this.getIndigenousPlan.bind(this));
@@ -1125,15 +1126,18 @@ _.extend(api.prototype, baseApi.prototype, {
             if (isAllowed !== true) {
                 return self.send403(resp);
             } else {
-                stripeDao.getStripeSubscription(customerId, subscriptionId, null, function(err, value){
-                    self.log.debug('<< getSubscription');
-                    if(err && err.toString().indexOf('does not have a subscription with ID') != -1) {
-                        return self.sendResultOrError(resp, err, value, "Error retrieving subscription", 404);
-                    } else {
-                        return self.sendResultOrError(resp, err, value, "Error retrieving subscription");
-                    }
+                self._getOrgAccessTokenFromAccountId(accountId, function(err, accessToken){
+                    stripeDao.getStripeSubscription(customerId, subscriptionId, accessToken, function(err, value){
+                        self.log.debug('<< getSubscription');
+                        if(err && err.toString().indexOf('does not have a subscription with ID') != -1) {
+                            return self.sendResultOrError(resp, err, value, "Error retrieving subscription", 404);
+                        } else {
+                            return self.sendResultOrError(resp, err, value, "Error retrieving subscription");
+                        }
 
+                    });
                 });
+
             }
         });
 
@@ -1324,13 +1328,8 @@ _.extend(api.prototype, baseApi.prototype, {
                 var accountId = parseInt(self.accountId(req));
 
                 var customerId = req.params.id;
-                self.getStripeTokenFromAccount(req, function(err, accessToken){
-                    /*
-                     * I don't think we need to use the accessToken here.  Right now, the only time we look at a
-                     * customer's cards is from within /admin... and that customer should be on the main account.
-                     */
-
-                    stripeDao.listStripeCards(customerId, null, function(err, value){
+                self._getOrgAccessTokenFromAccountId(accountId, function(err, accessToken){
+                    stripeDao.listStripeCards(customerId, accessToken, function(err, value){
                         self.log.debug('<< listCards');
                         var errCode = 500;
 
@@ -1340,6 +1339,7 @@ _.extend(api.prototype, baseApi.prototype, {
                         return self.sendResultOrError(resp, err, value, "Error listing cards", errCode);
                     });
                 });
+                
             }
         });
 
@@ -1897,10 +1897,21 @@ _.extend(api.prototype, baseApi.prototype, {
             } else {
                 var customerId = account.get('billing').stripeCustomerId;
                 var subscriptionId = account.get('billing').subscriptionId;
-                stripeDao.getUpcomingInvoice(customerId, subscriptionId, null, function(err, value){
-                    self.log.debug(accountId, userId, '<< getMyUpcomingInvoice');
-                    return self.sendResultOrError(resp, err, value, "Error retrieving upcoming invoice.", 404);
-                });
+                if(account.get('orgId') && account.get('orgId')===1 && account.get('billing').stripeParent !== 6) {
+                    self._getOrgAccessToken(account.get('orgId'), function(err, accessToken){
+                        stripeDao.getUpcomingInvoice(customerId, subscriptionId, accessToken, function(err, value){
+                            self.log.debug(accountId, userId, '<< getMyUpcomingInvoice');
+                            return self.sendResultOrError(resp, err, value, "Error retrieving upcoming invoice.", 404);
+                        });
+                    });
+                } else {
+                    stripeDao.getUpcomingInvoice(customerId, subscriptionId, null, function(err, value){
+                        self.log.debug(accountId, userId, '<< getMyUpcomingInvoice');
+                        return self.sendResultOrError(resp, err, value, "Error retrieving upcoming invoice.", 404);
+                    });
+                }
+
+
             }
         });
 
@@ -1920,12 +1931,22 @@ _.extend(api.prototype, baseApi.prototype, {
                 var ending_before = req.body.ending_before;
                 var limit = req.body.limit;
                 var starting_after = req.body.starting_after;
-
-                stripeDao.listInvoices(customerId, dateFilter, ending_before, limit, starting_after, null,
-                    function(err, value){
-                        self.log.debug('<< getMyInvoices');
-                        return self.sendResultOrError(resp, err, value, "Error listing invoices.");
+                if(account.get('orgId') && account.get('orgId') === 1 && account.get('billing').stripeParent !== 6) {
+                    self._getOrgAccessToken(account.get('orgId'), function(err, accessToken){
+                        stripeDao.listInvoices(customerId, dateFilter, ending_before, limit, starting_after, accessToken,
+                            function(err, value){
+                                self.log.debug('<< getMyInvoices');
+                                return self.sendResultOrError(resp, err, value, "Error listing invoices.");
+                            });
                     });
+                } else {
+                    stripeDao.listInvoices(customerId, dateFilter, ending_before, limit, starting_after, null,
+                        function(err, value){
+                            self.log.debug('<< getMyInvoices');
+                            return self.sendResultOrError(resp, err, value, "Error listing invoices.");
+                        });
+                }
+
             }
         });
     },
@@ -1973,10 +1994,22 @@ _.extend(api.prototype, baseApi.prototype, {
             var ending_before = req.query.ending_before;
             var limit = req.query.limit || 100;
             var starting_after = req.query.starting_after;
-            stripeDao.listStripeCharges(created, customerId, ending_before, limit, starting_after, null, function(err, charges){
-                self.log.debug('<< getChargesForAccount');
-                return self.sendResultOrError(resp, err, charges, "Error listing charges.");
-            });
+
+            if(account.get('orgId') && account.get('orgId') === 1 && account.get('billing').stripeParent !== 6) {
+                self._getOrgAccessToken(account.get('orgId'), function(err, accessToken){
+                    stripeDao.listStripeCharges(created, customerId, ending_before, limit, starting_after, accessToken, function(err, charges){
+                        self.log.debug('<< getChargesForAccount');
+                        return self.sendResultOrError(resp, err, charges, "Error listing charges.");
+                    });
+                });
+            } else {
+                stripeDao.listStripeCharges(created, customerId, ending_before, limit, starting_after, null, function(err, charges){
+                    self.log.debug('<< getChargesForAccount');
+                    return self.sendResultOrError(resp, err, charges, "Error listing charges.");
+                });
+            }
+
+
         });
     },
 
@@ -2266,20 +2299,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
     },
 
-    //TODO: this can be removed...
-    trytomakeapayment: function(req, resp) {
-        var self = this;
-        self.log.debug('>> trytomakeapayment?');
-        var receiverEmail = 'kyle+testbusiness@indigenous.io';
-        var amount = '101.01';
-        var memo = 'trytomakeapayment';
-        var cancelUrl = 'http://kyletesting.indigenous.local:3000/nope';
-        var returnUrl = 'http://kyletesting.indigenous.local:3000/yep';
-        paymentsManager.payWithPaypal(receiverEmail, amount, memo, cancelUrl, returnUrl, function(err, value){
-            self.log.debug('<< trytomakeapayment');
-            return self.sendResultOrError(resp, err, value, "Error calling paypal.");
-        });
-    },
+
 
     getStripeAccount: function(req, resp) {
         var self = this;
@@ -2292,6 +2312,51 @@ _.extend(api.prototype, baseApi.prototype, {
             });
         });
 
+    },
+
+    _getOrgAccessToken: function(orgId, fn) {
+        var self = this;
+        orgDao.getById(orgId, $$.m.Organization, function(err, organization){
+            if(organization) {
+                accountDao.getAccountByID(organization.get('adminAccount'), function(err, account){
+                    if(account) {
+                        var credentials = account.get('credentials');
+                        var creds = null;
+                        _.each(credentials, function (cred) {
+                            if (cred.type === 'stripe') {
+                                creds = cred;
+                            }
+                        });
+                        if(creds && creds.accessToken) {
+                            return fn(null, creds.accessToken);
+                        } else {
+                            return fn(null, null);
+                        }
+                    } else {
+                        fn(err);
+                    }
+                });
+            } else {
+                fn(err);
+            }
+        });
+    },
+
+    _getOrgAccessTokenFromAccountId: function(accountId, fn) {
+        var self = this;
+        accountDao.getAccountByID(accountId, function(err, account){
+            if(err || !account) {
+                fn(err);
+            } else {
+                var billing = account.get('billing');
+                var orgId = account.get('orgId');
+                if(orgId && orgId === 1 && billing.stripeParent !== 6) {
+                    self._getOrgAccessToken(orgId, fn);
+                } else {
+                    fn();
+                }
+            }
+        });
     }
 });
 
