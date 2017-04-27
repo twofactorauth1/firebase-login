@@ -2,9 +2,9 @@
 
 app.controller('PurchaseOrderComponentController', purchaseOrderComponentController);
 
-purchaseOrderComponentController.$inject = ['$scope', '$attrs', '$filter', '$modal', '$timeout', '$location', 'SweetAlert', 'toaster', 'pagingConstant', 'PurchaseOrderService', 'UserPermissionsConfig'];
+purchaseOrderComponentController.$inject = ['$scope', '$attrs', '$filter', '$modal', '$timeout', '$location', 'SweetAlert', 'toaster', 'pagingConstant', 'PurchaseOrderService'];
 /* @ngInject */
-function purchaseOrderComponentController($scope, $attrs, $filter, $modal, $timeout, $location, SweetAlert, toaster, pagingConstant, PurchaseOrderService, UserPermissionsConfig) {
+function purchaseOrderComponentController($scope, $attrs, $filter, $modal, $timeout, $location, SweetAlert, toaster, pagingConstant, PurchaseOrderService) {
 
     var vm = this;
 
@@ -18,6 +18,7 @@ function purchaseOrderComponentController($scope, $attrs, $filter, $modal, $time
     
     vm.createPurchaseOrder = createPurchaseOrder;
     vm.openModal = openModal;
+    vm.viewArchivedPo = viewArchivedPo; 
     vm.closeModal = closeModal;
     vm.checkIfInValid = checkIfInValid;
     vm.viewPurchaseOrderDetails = viewPurchaseOrderDetails;
@@ -41,23 +42,22 @@ function purchaseOrderComponentController($scope, $attrs, $filter, $modal, $time
         }        
     }, true);
 
-    $scope.$watchGroup(["$parent.account", "$parent.currentUser"], _.debounce(function(values) {
-        if(values[0] && values[1]){
-            vm.state.account = values[0];
-            vm.state.user = values[1];
-            vm.state.orgCardAndPermissions = UserPermissionsConfig.getOrgConfigAndPermissions(vm.state.user, vm.state.account);
+
+    $scope.$watch("$parent.orgCardAndPermissions", function(permissions) {
+        if(angular.isDefined(permissions)){
+            vm.state.orgCardAndPermissions = permissions;
         }
-    }, 0), true);
+    });
 
     function openModal(size){
         vm.state.newPurchaseOrder = {};
         var templateUrl = 'new-purchase-order-modal';
 
-        var isVendor = _.contains(vm.state.orgCardAndPermissions.permissions, 'vendor');
+        var isVendor = vm.state.orgCardAndPermissions.isVendor;
         if(isVendor){
             templateUrl = 'new-vendor-purchase-order-modal';
-            if(vm.state.orgCardAndPermissions.config.cardCodes && vm.state.orgCardAndPermissions.config.cardCodes.length == 1){
-                vm.state.newPurchaseOrder.cardCode = vm.state.orgCardAndPermissions.config.cardCodes[0];
+            if(vm.state.orgCardAndPermissions.cardCodes.length == 1){
+                vm.state.newPurchaseOrder.cardCode = vm.state.orgCardAndPermissions.cardCodes[0];
             }
         }
 
@@ -72,9 +72,23 @@ function purchaseOrderComponentController($scope, $attrs, $filter, $modal, $time
 
 
     function closeModal() {
-        $scope.modalInstance.close();
+        if($scope.modalInstance)
+            $scope.modalInstance.close();
+        vm.uiState.modalLoading = false;
     }
 
+    function viewArchivedPo(size){
+
+        $scope.modalInstance = $modal.open({
+            templateUrl: 'archived-purchase-order-modal',
+            size: size,
+            keyboard: false,
+            backdrop: 'static',
+            scope: $scope
+        });
+
+        getArchivedPurchaseOrders();
+    }
 
     function createPurchaseOrder(po, form){
         vm.uiState.saveLoading = true;
@@ -103,6 +117,7 @@ function purchaseOrderComponentController($scope, $attrs, $filter, $modal, $time
 
 
     function viewPurchaseOrderDetails(order){
+        closeModal();
         $location.path('/purchase-orders/' + order._id);
     }
 
@@ -167,6 +182,16 @@ function purchaseOrderComponentController($scope, $attrs, $filter, $modal, $time
               });
         }
     };
+
+
+
+    function getArchivedPurchaseOrders(){       
+        vm.uiState.modalLoading = true;  
+        PurchaseOrderService.getArchivedPurchaseOrders().then(function(response){
+            vm.state.archivedOrders = response.data;
+            vm.uiState.modalLoading = false;
+        })
+    }
 
     function init(element) {
         vm.element = element;

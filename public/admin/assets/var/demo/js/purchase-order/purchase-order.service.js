@@ -27,6 +27,7 @@
         poService.deletePurchaseOrder = deletePurchaseOrder;
         poService.archivePurchaseOrder = archivePurchaseOrder;
         poService.archiveBulkPurchaseOrders = archiveBulkPurchaseOrders;
+        poService.getArchivedPurchaseOrders = getArchivedPurchaseOrders;
 
         function poRequest(fn) {
             poService.loading.value = poService.loading.value + 1;
@@ -182,6 +183,23 @@
                 }).success(success).error(error))
             );
         }
+
+        /**
+            * Get list of all po's for the account
+        */
+        function getArchivedPurchaseOrders() {
+
+            function success(data) {
+                
+            }
+
+            function error(error) {
+                console.error('PurchaseOrderService getArchivedPurchaseOrders error: ', JSON.stringify(error));
+            }
+
+            return poRequest($http.get([basePoAPIUrlv2, "archived"].join('/')).success(success).error(error));
+        }
+
 
 
 		(function init() {

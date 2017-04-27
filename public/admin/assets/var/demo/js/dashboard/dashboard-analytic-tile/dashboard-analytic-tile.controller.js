@@ -57,7 +57,7 @@ function dashboardAnalyticTileComponentController($scope, $attrs, $filter, Dashb
                             ret.data.push({
                                 field1: item.OMRC_FirmName,
                                 field2: item.OITM_ItemName,
-                                field3: item.In_Stock,
+                                field3: item.In_Stock <0 ? '' : item.In_Stock,
                                 link: ret.link + "/" + item["@id"]
                             })
                         })
@@ -114,20 +114,29 @@ function dashboardAnalyticTileComponentController($scope, $attrs, $filter, Dashb
                     ret.buttonTitle = 'View Ledger';
                     ret.link = '#/customers'; // Really, this should go to ledger for non-Admin
 
-                    ret.header = [
-                        {label: 'Invoice #'},                        
-                        {label: 'Due Date'},
-                        {label: 'Amount'},
+                    $scope.$watch("$parent.orgCardAndPermissions", function(permissions) {
+                        if(angular.isDefined(permissions)){
+                            ret.link = permissions.dashbordLedgerUrl;
+                        }
+                    });
+
+                    ret.header = [ 
+
+                        {label: 'Amount'},                        
+                        {label: 'Invoice #'},
+                        {label: 'Due Date'}
+
                     ];
                     $scope.$watch(function() { return DashboardService.invoices; }, function(invoices){
-                        ret.data = []
-
+                        ret.data = [];
                         _.each(invoices, function(invoice){
+                            
                             ret.data.push({
-                                field1: invoice._CustStatmentDtl_TransId,
-                                field2: $filter('date')(parseValueToDate(invoice._CustStatmentDtl_DueDate), 'M/d/yyyy'),                               
-                                field3: invoice._CustStatmentDtl_Amount,
-                                link: ret.link + "/" + invoice._CustStatmentDtl_TransId
+                                
+                                field1: parseValueToCurrency(invoice.totalInvoice, invoice.currency),
+                                field2: invoice.invoiceNumber,
+                                field3: $filter('date')(parseValueToDate(invoice.dueDate), 'M/d/yyyy'),                               
+                                link: "#/invoices/" + invoice.cardCode + "/" + invoice.invoiceNumber
                             })
                         })
                     });
@@ -212,6 +221,12 @@ function dashboardAnalyticTileComponentController($scope, $attrs, $filter, Dashb
         }
     }
 
+    function parseValueToCurrency(value, symbol){
+        if(value){
+            return $filter('currency')(value, symbol)
+        }
+    }
+
     function init(element) {
         vm.element = element;
 
@@ -221,6 +236,8 @@ function dashboardAnalyticTileComponentController($scope, $attrs, $filter, Dashb
 
     }
 
+
+    
 }
 
 })();

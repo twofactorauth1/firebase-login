@@ -282,7 +282,8 @@ app.constant('analyticsConstant', {
 });
 
 app.constant('pagingConstant', {
-  numberOfRowsPerPage: 50
+  numberOfRowsPerPage: 50,
+  displayedPages: 11
 })
 
 

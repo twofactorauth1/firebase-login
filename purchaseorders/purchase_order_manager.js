@@ -21,8 +21,6 @@ require('./model/purchase_order');
 var accountDao = require('../dao/account.dao');
 
 
-
-
 module.exports = {
 	
     listPurchaseOrders: function (accountId, userId, fn) {
@@ -100,6 +98,82 @@ module.exports = {
         });
 
 
+    },
+
+
+    listArchivedPurchaseOrders: function (accountId, userId, fn) {
+        log.debug(accountId, userId, '>> listArchivedPurchaseOrders');
+
+        async.waterfall([
+            function(cb) {
+                userManager.getUserById(userId, function(err, user){
+                    cb(err, user);
+                });
+            },
+            function(user, cb) {
+                if(!user) {
+                    cb('user not found');
+                } else {
+                    var query = {
+                        accountId:accountId,
+                        archived: true
+                    };
+                    if(_.contains(user.getPermissionsForAccount(accountId), 'vendor')){
+                        var cardCodes = user.get('cardCodes');
+                        query.cardCode = {$in:cardCodes};
+                    }
+                    cb(null, query);
+                }
+            },
+            function(query, cb) {
+                purchaseOrderdao.findMany(query, $$.m.PurchaseOrder, function (err, orders) {
+                    if(err) {
+                        log.error(accountId, userId, 'Error finding POs:', err);
+                        cb(err);
+                    } else {
+                        /*
+                         * Cache users
+                         */
+                        var userIDMap = {};
+                        async.each(orders, function(order, callback){
+                            if(userIDMap[order.get('userId')]) {
+                                var _user = userIDMap[order.get('userId')];
+                                order.set("submitter", _user);
+                                callback();
+                            } else {
+                                userManager.getUserById(order.get('userId'), function(err, user){
+                                    if(err) {
+                                        log.error(accountId, userId, 'Error getting user:', err);
+                                        //return anyway
+                                        callback();
+                                    } else {
+                                        var _user = {
+                                            _id: user.get("_id"),
+                                            username: user.get("username"),
+                                            first: user.get("first"),
+                                            last: user.get("last")
+                                        };
+                                        userIDMap[order.get('userId')] = _user;
+                                        order.set("submitter", _user);
+                                        callback();
+                                    }
+                                });
+                            }
+                        }, function(err){
+                            cb(err, orders);
+                        });
+                    }
+                });
+            }
+        ], function(err, orders){
+            if (err) {
+                log.error(accountId, userId, 'Error fetching users for orders: ' + err);
+                return fn(err, orders);
+            } else {
+                log.debug(accountId, userId, '<< listArchivedPurchaseOrders');
+                return fn(null, orders);
+            }
+        });
     },
 
 

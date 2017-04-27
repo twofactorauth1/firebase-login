@@ -15,11 +15,11 @@
                     </tr>
                     <tbody>
                         <tr class="content-row" ng-repeat="item in vm.uiDetails.data">
-                            <td ng-if="item.field1"><span ng-text-truncate="item.field1" ng-tt-chars-threshold="8" title="{{item.field1}}" ng-tt-no-toggling></span></td>
-                            <td>
-                                <a href="{{item.link}}"><span ng-text-truncate="item.field2" ng-tt-chars-threshold="20" title="{{item.field2}}"ng-tt-no-toggling></span></a>
+                            <td ng-if="item.field1 !== undefined"><span ng-text-truncate="item.field1" ng-tt-chars-threshold="8" title="{{item.field1}}" ng-tt-no-toggling></span></td>
+                            <td ng-if="item.field2 !== undefined">
+                                <a href="{{item.link}}"><span ng-text-truncate="item.field2" ng-tt-chars-threshold="20" title="{{item.field2}}" ng-tt-no-toggling></span></a>
                             </td>
-                            <td ng-if="item.field3"><span ng-text-truncate="item.field3" ng-tt-chars-threshold="6" ng-tt-no-toggling></span></td>
+                            <td ng-if="item.field3 !== undefined"><span ng-text-truncate="item.field3" ng-tt-chars-threshold="10" ng-tt-no-toggling></span></td>
                         </tr>
                     </tbody>
                 </table>

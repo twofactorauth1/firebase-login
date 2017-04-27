@@ -34,6 +34,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.delete(this.url('po/:id'), this.isAuthAndSubscribedApi.bind(this), this.deletePurchaseOrder.bind(this));
         app.put(this.url('po/archive/:id'), this.isAuthAndSubscribedApi.bind(this), this.archivePurchaseOrder.bind(this));
         app.get(this.url('dashboard/listpurchaseorders'), this.isAuthAndSubscribedApi.bind(this), this.getDashboardPurchaseOrders.bind(this));
+        app.get(this.url('archived'), this.isAuthAndSubscribedApi.bind(this), this.listArchivedPurchaseOrders.bind(this));       
     },
 
     listPurchaseOrders: function(req, resp) {
@@ -47,6 +48,19 @@ _.extend(api.prototype, baseApi.prototype, {
             return self.sendResultOrError(resp, err, list, "Error listing orders");
         });
     },
+
+    listArchivedPurchaseOrders: function(req, resp) {
+        var self = this;
+        var accountId = parseInt(self.accountId(req));
+        var userId = self.userId(req);
+        self.log.debug(accountId, userId, '>> listArchivedPurchaseOrders');
+
+        poManager.listArchivedPurchaseOrders(accountId, userId, function(err, list){
+            self.log.debug(accountId, userId, '<< listArchivedPurchaseOrders');
+            return self.sendResultOrError(resp, err, list, "Error listing orders");
+        });
+    },
+
 
     getDashboardPurchaseOrders: function(req, resp){
         var self = this;

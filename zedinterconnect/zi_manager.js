@@ -335,7 +335,22 @@ module.exports = {
             });
         }, function(err){
             //sort by _CustStatmentDtl_DueDate
-            resultAry = _.first(_.sortBy(resultAry, '_CustStatmentDtl_DueDate'), limit);
+
+            var groupResultObject = _.groupBy(resultAry, function(result){ return result._CustStatmentDtl_TransId });
+
+            var groupResultArray =  _(groupResultObject).map(function(g, key) {
+                return { 
+                    invoiceNumber: key,
+                    cardCode: g[0]._CustStatmentHdr_CardCode,
+                    dueDate: g[0]._CustStatmentDtl_DueDate,
+                    currency: g[0]._CustStatmentHdr_Currency,
+                    totalInvoice: _(g).reduce(function(m,x) { return m + parseFloat(x.INV1_LineTotal) ; }, 0) };
+                });
+            if(limit > 0) {
+                resultAry = _.first(_.sortBy(groupResultArray, '_CustStatmentDtl_DueDate'), limit);
+            }
+
+
             self.log.debug(accountId, userId, '<< getLedgerWithLimit');
             fn(err, resultAry);
         });
@@ -422,7 +437,7 @@ module.exports = {
         });
     },
 
-    getCustomers: function(accountId, userId, fn) {
+    getCustomers: function(accountId, userId, cardCodeAry, fn) {
         var self = this;
         self.log.debug(accountId, userId, '>> getCustomers');
         var path = 'query/Indigenous/CustomerList.aspx?accept=application/json';
@@ -433,6 +448,18 @@ module.exports = {
                 fn(err);
             } else {
                 value = JSON.parse(value);
+                if(cardCodeAry && cardCodeAry.length > 0 && cardCodeAry[0] === 'admin') {
+                    //nothing to filter
+                } else if(value && value.response && value.response.payload && value.response.payload.querydata && value.response.payload.querydata.data) {
+                    var resultAry = value.response.payload.querydata.data.row;
+                    var filteredAry = [];
+                    _.each(resultAry, function(result){
+                        if(_.contains(cardCodeAry, result.OCRD_CardCode)) {
+                            filteredAry.push(result);
+                        }
+                    });
+                    value.response.payload.querydata.data = filteredAry;
+                }
                 self.log.debug(accountId, userId, '<< getCustomers');
                 fn(null, value);
             }
