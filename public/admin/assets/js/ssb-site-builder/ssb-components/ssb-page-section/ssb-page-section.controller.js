@@ -323,7 +323,9 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
         if (index !== undefined) {
           classString += ' ssb-component-index-' + index + ' ';
         }
-
+        if(component.slider && component.slider.sliderDotShape){
+           classString += ' square-dot ';
+        }
         if(vm.section.layoutModifiers && vm.section.layoutModifiers.columns){
             if (angular.isDefined(vm.section.layoutModifiers.columns.columnsNum)) {
                 var _lastCoulmnFullWidth = false;
