@@ -455,10 +455,11 @@ module.exports = {
                     var filteredAry = [];
                     _.each(resultAry, function(result){
                         if(_.contains(cardCodeAry, result.OCRD_CardCode)) {
+                            console.log()
                             filteredAry.push(result);
                         }
                     });
-                    value.response.payload.querydata.data = filteredAry;
+                    value.response.payload.querydata.data.row = filteredAry;
                 }
                 self.log.debug(accountId, userId, '<< getCustomers');
                 fn(null, value);
