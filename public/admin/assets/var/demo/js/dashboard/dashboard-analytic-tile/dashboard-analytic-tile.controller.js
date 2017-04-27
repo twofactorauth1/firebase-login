@@ -57,7 +57,7 @@ function dashboardAnalyticTileComponentController($scope, $attrs, $filter, Dashb
                             ret.data.push({
                                 field1: item.OMRC_FirmName,
                                 field2: item.OITM_ItemName,
-                                field3: item.In_Stock ? 0 : '',
+                                field3: item.In_Stock <0 ? '' : item.In_Stock,
                                 link: ret.link + "/" + item["@id"]
                             })
                         })
