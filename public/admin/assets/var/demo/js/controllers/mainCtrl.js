@@ -221,3 +221,4 @@ app.controller('AppCtrl', ['$rootScope', '$scope', '$state', '$translate', '$win
     };
 
   }
+]);

@@ -2,7 +2,7 @@
 /*global app, moment, angular, window*/
 /*jslint unparam:true*/
 (function (angular) {
-    app.controller('usersCtrl', ['$scope', '$http', "toaster", "$filter", "$modal", "$timeout", "AccountService","UserService", "userConstant", "SweetAlert", function ($scope, $http, toaster, $filter, $modal, $timeout, AccountService,UserService, userConstant, SweetAlert) {
+    app.controller('usersCtrl', ['$scope', '$state', '$http', "toaster", "$filter", "$modal", "$timeout", "AccountService","UserService", "userConstant", "SweetAlert", function ($scope, $state, $http, toaster, $filter, $modal, $timeout, AccountService,UserService, userConstant, SweetAlert) {
 
         var vm = this;
 
@@ -21,10 +21,20 @@
         //vm.addNewUser = addNewUser;
         vm.removeUserFromAccount = removeUserFromAccount;
 
-        AccountService.getUpdatedAccount(function (account) {
-            vm.state.account = account;
-            loadAccountUsers();
-        });
+
+        $scope.$watch("$parent.orgCardAndPermissions", function(orgCardAndPermissions){
+            if(orgCardAndPermissions){
+              if(_.contains(orgCardAndPermissions.userPermissions.vendorRestrictedStates, $state.current.name)){
+                $state.go(orgCardAndPermissions.dashboardState);
+              }
+              else{
+                AccountService.getUpdatedAccount(function (account) {
+                    vm.state.account = account;
+                    loadAccountUsers();
+                });
+              }
+            }
+        })
 
         function loadAccountUsers(){
             UserService.getAccountUsers(function(users){ 

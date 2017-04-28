@@ -116,7 +116,7 @@ function dashboardAnalyticTileComponentController($scope, $attrs, $filter, Dashb
 
                     $scope.$watch("$parent.orgCardAndPermissions", function(permissions) {
                         if(angular.isDefined(permissions)){
-                            ret.link = permissions.dashbordLedgerUrl;
+                            ret.link = permissions.userPermissions.dashbordLedgerUrl;
                         }
                     });
 
