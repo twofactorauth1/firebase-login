@@ -598,6 +598,26 @@ _.extend(apiBase.prototype, {
                 fn(null, user.get(property));
             }
         });
+    },
+
+    _getOrgConfig: function(accountId, userId, fn) {
+        accountDao.getById(accountId, function(err, account){
+            if(err || !account) {
+                fn(err);
+            } else {
+                userDao.getById(userId, $$.m.User, function(err, user){
+                    if(err || !user) {
+                        fn(err);
+                    } else {
+                        fn(null, user.getOrgConfig(account.get('orgId')));
+                    }
+                });
+            }
+        });
+    },
+
+    getOrgConfigByOrgId: function(userId, orgId, fn) {
+
     }
 
 });

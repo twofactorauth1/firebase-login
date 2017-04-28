@@ -223,7 +223,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 
             } else {
                 //Only the codes in the user prop or whatever is passed in IF it is in the user prop
-                self.getUserProperty(userId, 'orgConfig', function(err, orgConfig){
+                self._getOrgConfig(accountId, userId, function(err, orgConfig){
                     if(!orgConfig) {
                         orgConfig = {};
                     }
@@ -297,7 +297,7 @@ _.extend(api.prototype, baseApi.prototype, {
                     return self.sendResultOrError(resp, err, value, "Error calling aging");
                 });
             } else {
-                self.getUserProperty(userId, 'orgConfig', function(err, orgConfig){
+                self._getOrgConfig(accountId, userId, function(err, orgConfig){
                     if(!orgConfig) {
                         orgConfig = {};
                     }
@@ -324,7 +324,7 @@ _.extend(api.prototype, baseApi.prototype, {
                     return self.sendResultOrError(resp, err, value, "Error listing customers");
                 });
             } else {
-                self.getUserProperty(userId, 'orgConfig', function(err, orgConfig){
+                self._getOrgConfig(accountId, userId, function(err, orgConfig){
                     if(!orgConfig){
                         orgConfig = {};
                     }
@@ -334,6 +334,7 @@ _.extend(api.prototype, baseApi.prototype, {
                         return self.sendResultOrError(resp, err, value, "Error listing customers");
                     });
                 });
+
             }
         });
     },
