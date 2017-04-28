@@ -4,18 +4,14 @@
 (function (angular) {
   app.service('UserPermissionsConfig', [function () {
 
-    this.vendorRestrictedStates = ["app.account.users"];
+
 
     this.orgConfigAndPermissions = {
       isVendor: false,
+      ledgerState: "app.customers",
       cardCodes: [],
-      isVendorWithOneCardCode: false,
-      dashboardState: "app.dohy",
-      userPermissions: {
-        ledgerState: "app.customers",
-        dashbordLedgerUrl: '#/customers',
-        vendorRestrictedStates : []
-      }
+      dashbordLedgerUrl: '#/customers',
+      isVendorWithOneCardCode: false
     };
 
     this.getOrgConfigAndPermissions = function (account, user) {
@@ -29,21 +25,22 @@
       });
 
       if(userAccount && userAccount.permissions && userAccount.permissions.length){
-        this.orgConfigAndPermissions.isVendor = _.contains(userAccount.permissions, 'vendor');
+        this.orgConfigAndPermissions.isVendor = _.contains(userAccount.permissions, 'vendor')
       }
       if(this.orgConfigAndPermissions.isVendor){
-        this.orgConfigAndPermissions.userPermissions.vendorRestrictedStates = this.vendorRestrictedStates;
         if(orgConfig && orgConfig.cardCodes && orgConfig.cardCodes.length){
           this.orgConfigAndPermissions.cardCodes = orgConfig.cardCodes;
           if(this.orgConfigAndPermissions.cardCodes.length ==1){
-            this.orgConfigAndPermissions.userPermissions.ledgerState = "app.ledgerDetails({customerId: '"+ this.orgConfigAndPermissions.cardCodes[0] + "'})";
-            this.orgConfigAndPermissions.userPermissions.dashbordLedgerUrl = "#/ledger/" + this.orgConfigAndPermissions.cardCodes[0];
+            this.orgConfigAndPermissions.ledgerState = "app.ledgerDetails({customerId: '"+ this.orgConfigAndPermissions.cardCodes[0] + "'})";
+            this.orgConfigAndPermissions.dashbordLedgerUrl = "#/ledger/" + this.orgConfigAndPermissions.cardCodes[0];
           }
           else if(this.orgConfigAndPermissions.cardCodes.length == 0){
-            this.orgConfigAndPermissions.userPermissions.dashbordLedgerUrl = "#";
+            this.orgConfigAndPermissions.dashbordLedgerUrl = "#";
           }
         }
       }
+
+
       
       return this.orgConfigAndPermissions;
     };

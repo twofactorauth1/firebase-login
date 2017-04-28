@@ -45,36 +45,14 @@ app.controller('AppCtrl', ['$rootScope', '$scope', '$state', '$translate', '$win
 
     $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
       //start loading bar on stateChangeStart
-      event.preventDefault();
       $rootScope.app.layout.isMinimalAdminChrome =  false;
       $rootScope.app.layout.isAnalyticsDashboardMode =  false;
+      if ($scope.account && $scope.account.locked_sub && $state.includes('app.account.billing')) {
+        cfpLoadingBar.complete();
+      } else {
+        cfpLoadingBar.start();
+      }
 
-      $scope.$watch("orgCardAndPermissions", function(orgCardAndPermissions){
-
-        if(orgCardAndPermissions){
-          if(_.contains(orgCardAndPermissions.userPermissions.vendorRestrictedStates, toState.name)){
-            $state.go(orgCardAndPermissions.dashboardState, null, {
-                notify: false
-            })
-            .then(function () {
-              $rootScope.$broadcast('$stateChangeSuccess', orgCardAndPermissions.dashboardState);
-            })
-          } 
-          else{
-            $state.go(toState, toParams, {
-                notify: false
-            })
-            .then(function () {
-                $rootScope.$broadcast('$stateChangeSuccess', toState, toParams, fromState, fromParams);
-            })
-            if ($scope.account && $scope.account.locked_sub && $state.includes('app.account.billing')) {
-              cfpLoadingBar.complete();
-            } else {
-              cfpLoadingBar.start();
-            }
-          } 
-        }
-      })
     });
     $rootScope.$on('$stateChangeSuccess', function (event, toState, toParams, fromState, fromParams) {
       //stop loading bar on stateChangeSuccess
@@ -243,4 +221,3 @@ app.controller('AppCtrl', ['$rootScope', '$scope', '$state', '$translate', '$win
     };
 
   }
-]);
