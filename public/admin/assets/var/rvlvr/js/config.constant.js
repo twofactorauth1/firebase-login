@@ -653,7 +653,7 @@ app.constant('JS_REQUIRES', {
     'DashboardInboxComponentController': 'assets/js/dashboard/dashboard-inbox-widget/dashboard-inbox.controller.js',
 
     
-    'asideCtrl': 'assets/js/controllers/asideCtrl.js',
+    'asideCtrl': 'assets/var/rvlvr/js/controllers/asideCtrl.js',
     'toasterCtrl': 'assets/js/controllers/toasterCtrl.js',
     'sweetAlertCtrl': 'assets/js/controllers/sweetAlertCtrl.js',
     'mapsCtrl': 'assets/js/controllers/mapsCtrl.js',
