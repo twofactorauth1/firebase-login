@@ -227,7 +227,7 @@ _.extend(api.prototype, baseApi.prototype, {
                     if(!orgConfig) {
                         orgConfig = {};
                     }
-                    var cardCodes = orgConfig.cardCodes;
+                    var cardCodes = orgConfig.cardCodes || [];
                     if(cardCodes && cardCodes.length > 0) {
                         cardCodes = _.map(cardCodes, function(code){return code.toLowerCase()});
                         if(req.query.cardCodeFrom && req.query.cardCodeTo) {
@@ -301,7 +301,7 @@ _.extend(api.prototype, baseApi.prototype, {
                     if(!orgConfig) {
                         orgConfig = {};
                     }
-                    var cardCodes = orgConfig.cardCodes;
+                    var cardCodes = orgConfig.cardCodes || [];
                     manager.getLedgerWithLimit(accountId, userId, cardCodes, dateString, limit, function(err, value){
                         self.log.debug(accountId, userId, '<< getTopInvoices');
                         return self.sendResultOrError(resp, err, value, "Error calling aging");
@@ -328,7 +328,7 @@ _.extend(api.prototype, baseApi.prototype, {
                     if(!orgConfig){
                         orgConfig = {};
                     }
-                    var cardCodes = orgConfig.cardCodes;
+                    var cardCodes = orgConfig.cardCodes || [];
                     manager.getCustomers(accountId, userId, cardCodes, function(err, value){
                         self.log.debug(accountId, userId, '<< getCustomers');
                         return self.sendResultOrError(resp, err, value, "Error listing customers");
