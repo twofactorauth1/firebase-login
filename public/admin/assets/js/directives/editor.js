@@ -359,9 +359,9 @@ app.directive("elem", function($rootScope, $timeout, $compile, SimpleSiteBuilder
                         }
 
                     }).on('froalaEditor.focus', function (e, editor) {
-                        
-                       
                        editor.selection.save();
+                       if(checkIfPageEditor(attrs))
+                            UtilService.flyoverhideonclick();
                     })
                     .on('froalaEditor.paste.before', function (e, editor) {
                         editor.selection.restore();                        

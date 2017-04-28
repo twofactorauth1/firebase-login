@@ -99,11 +99,10 @@
                      */
                     var params = {
                         roleAry:['vendor'],
-                        orgConfig:{
-                            orgId:2,
+                        orgConfig:[{
+                            orgId: vm.state.account.orgId,
                             cardCodes:['C111111', 'C111112']
-                        }
-
+                        }]
                     };
                     AccountService.addNewUserWithParams(vm.state.account._id, $scope.newuser.username, $scope.newuser.password, params, function(err, newuser){
                         if(err) {
