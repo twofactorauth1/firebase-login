@@ -2,16 +2,16 @@
 
 app.controller('LedgerDetailsController', ledgerDetailsController);
 
-ledgerDetailsController.$inject = ['$scope', '$state', '$attrs', '$filter', '$modal', '$timeout', '$stateParams', '$location', 'CustomersService'];
+ledgerDetailsController.$inject = ['$scope', '$state', '$attrs', '$filter', '$modal', '$timeout', '$stateParams', '$location', 'toaster', 'CustomersService'];
 /* @ngInject */
-function ledgerDetailsController($scope, $state, $attrs, $filter, $modal, $timeout, $stateParams, $location, CustomersService) {
+function ledgerDetailsController($scope, $state, $attrs, $filter, $modal, $timeout, $stateParams, $location, toaster, CustomersService) {
 
     var vm = this;
 
     vm.init = init;
 
     console.log($stateParams.customerId);
-
+    vm.state = {};
     vm.uiState = {loading: true};
 
     vm.backToCustomers = backToCustomers;
@@ -54,6 +54,10 @@ function ledgerDetailsController($scope, $state, $attrs, $filter, $modal, $timeo
                     vm.uiState.loading = false;
                 }, true);
             }
+        }).catch(function(error) {
+            vm.uiState.loading = false;
+            if(error.data && error.data.message)
+                toaster.pop('error', 'Error', error.data.message);
         });
     }
 
@@ -114,6 +118,13 @@ function ledgerDetailsController($scope, $state, $attrs, $filter, $modal, $timeo
         vm.ledgerTotal = _sum;
         return _sum;
     }
+
+
+    $scope.$watch("$parent.orgCardAndPermissions", function(permissions) {
+        if(angular.isDefined(permissions)){
+            vm.state.orgCardAndPermissions = permissions;
+        }
+    });
 }
 
 })();

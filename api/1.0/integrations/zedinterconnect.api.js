@@ -223,15 +223,19 @@ _.extend(api.prototype, baseApi.prototype, {
                 
             } else {
                 //Only the codes in the user prop or whatever is passed in IF it is in the user prop
-                self.getUserProperty(userId, 'cardCodes', function(err, cardCodes){
+                self.getUserProperty(userId, 'orgConfig', function(err, orgConfig){
+                    if(!orgConfig) {
+                        orgConfig = {};
+                    }
+                    var cardCodes = orgConfig.cardCodes || [];
                     if(cardCodes && cardCodes.length > 0) {
-                        
+                        cardCodes = _.map(cardCodes, function(code){return code.toLowerCase()});
                         if(req.query.cardCodeFrom && req.query.cardCodeTo) {
                             //we have to do the range
                             var cardCodeFrom = req.query.cardCodeFrom;
                             var cardCodeTo = req.query.cardCodeTo;
 
-                            if(_.contains(cardCodes, cardCodeFrom) && _.contains(cardCodes, cardCodeTo)){
+                            if(_.contains(cardCodes, cardCodeFrom.toLowerCase()) && _.contains(cardCodes, cardCodeTo.toLowerCase())){
                                manager.getLedger(accountId, userId, cardCodeFrom, cardCodeTo, dateString, function(err, value){
                                     self.log.debug(accountId, userId, '<< ledger');
                                     return self.sendResultOrError(resp, err, value, "Error calling aging");
@@ -241,20 +245,18 @@ _.extend(api.prototype, baseApi.prototype, {
                                 return self.wrapError(resp, 400, 'Bad Request', 'User does not have any matching cardCodes');
                             }
                             
-                        }
-
-                        else{
+                        } else {
                             var cardCodeAry = [];
                             var addAll = true;
                             if(req.query.cardCodeFrom) {
                                 addAll = false;
-                                if(_.contains(cardCodes, req.query.cardCodeFrom)) {
+                                if(_.contains(cardCodes, req.query.cardCodeFrom.toLowerCase())) {
                                     cardCodeAry.push(req.query.cardCodeFrom);
                                 }
                             }
                             if(req.query.cardCodeTo) {
                                 addAll = false;
-                                if(_.contains(cardCodes, req.query.cardCodeTo)) {
+                                if(_.contains(cardCodes, req.query.cardCodeTo.toLowerCase())) {
                                     cardCodeAry.push(req.query.cardCodeTo);
                                 }
                             }
@@ -295,7 +297,11 @@ _.extend(api.prototype, baseApi.prototype, {
                     return self.sendResultOrError(resp, err, value, "Error calling aging");
                 });
             } else {
-                self.getUserProperty(userId, 'cardCodes', function(err, cardCodes){
+                self.getUserProperty(userId, 'orgConfig', function(err, orgConfig){
+                    if(!orgConfig) {
+                        orgConfig = {};
+                    }
+                    var cardCodes = orgConfig.cardCodes || [];
                     manager.getLedgerWithLimit(accountId, userId, cardCodes, dateString, limit, function(err, value){
                         self.log.debug(accountId, userId, '<< getTopInvoices');
                         return self.sendResultOrError(resp, err, value, "Error calling aging");
@@ -318,7 +324,11 @@ _.extend(api.prototype, baseApi.prototype, {
                     return self.sendResultOrError(resp, err, value, "Error listing customers");
                 });
             } else {
-                self.getUserProperty(userId, 'cardCodes', function(err, cardCodes){
+                self.getUserProperty(userId, 'orgConfig', function(err, orgConfig){
+                    if(!orgConfig){
+                        orgConfig = {};
+                    }
+                    var cardCodes = orgConfig.cardCodes || [];
                     manager.getCustomers(accountId, userId, cardCodes, function(err, value){
                         self.log.debug(accountId, userId, '<< getCustomers');
                         return self.sendResultOrError(resp, err, value, "Error listing customers");

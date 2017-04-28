@@ -453,12 +453,13 @@ module.exports = {
                 } else if(value && value.response && value.response.payload && value.response.payload.querydata && value.response.payload.querydata.data) {
                     var resultAry = value.response.payload.querydata.data.row;
                     var filteredAry = [];
+                    cardCodeAry = _.map(cardCodeAry, function(code){return code.toLowerCase()});
                     _.each(resultAry, function(result){
-                        if(_.contains(cardCodeAry, result.OCRD_CardCode)) {
+                        if(_.contains(cardCodeAry, result.OCRD_CardCode.toLowerCase())) {
                             filteredAry.push(result);
                         }
                     });
-                    value.response.payload.querydata.data = filteredAry;
+                    value.response.payload.querydata.data.row = filteredAry;
                 }
                 self.log.debug(accountId, userId, '<< getCustomers');
                 fn(null, value);

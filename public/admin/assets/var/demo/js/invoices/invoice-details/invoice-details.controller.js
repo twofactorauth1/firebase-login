@@ -2,9 +2,9 @@
 
 app.controller('InvoiceDetailsController', invoiceDetailsController);
 
-invoiceDetailsController.$inject = ['$scope', '$state', '$attrs', '$filter', '$modal', '$timeout', '$stateParams', '$location', 'InvoiceService', 'InventoryService'];
+invoiceDetailsController.$inject = ['$scope', '$state', '$attrs', '$filter', '$modal', '$timeout', '$stateParams', '$location', 'toaster', 'InvoiceService', 'InventoryService'];
 /* @ngInject */
-function invoiceDetailsController($scope, $state, $attrs, $filter, $modal, $timeout, $stateParams, $location, InvoiceService, InventoryService) {
+function invoiceDetailsController($scope, $state, $attrs, $filter, $modal, $timeout, $stateParams, $location, toaster, InvoiceService, InventoryService) {
 
     var vm = this;
 
@@ -48,7 +48,11 @@ function invoiceDetailsController($scope, $state, $attrs, $filter, $modal, $time
             else{
                 vm.uiState.loading = false;
             }
-        })
+        }).catch(function(error) {
+            vm.uiState.loading = false;
+            if(error.data && error.data.message)
+                toaster.pop('error', 'Error', error.data.message);
+        });
     }
 
     function goToInventory(name){

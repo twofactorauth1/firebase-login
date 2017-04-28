@@ -11,6 +11,8 @@ var log = $$.g.getLogger("payments_manager");
 var paypalClient = require('./paypal/paypal.client');
 var async = require('async');
 var appConfig = require('../configs/app.config');
+var accountDao = require('../dao/account.dao');
+var orgDao = require('../organizations/dao/organization.dao');
 
 module.exports = {
     createStripeCustomerForUser: function(cardToken, user, accountId, newAccountId, accessToken, fn) {
@@ -218,32 +220,66 @@ module.exports = {
             self.log.error(accountId, userId, 'No stripe customerId found for account: ' + accountId);
             return fn('No stripe customerId found');
         }
-        stripeDao.listInvoices(customerId, dateFilter, ending_before, limit, starting_after, null, function(err, invoices){
-            //need to filter based on subscriptionId
-            //TODO: if we ever keep track of subscription history, we will need to handle that as well
-            if(err) {
-                self.log.error(accountId, userId, 'Error listing invoices:', err);
-                return fn(err);
-            } else {
-                //self.log.debug('Filtering invoices by [' + subscriptionId + ']', invoices );
-
-                var filteredInvoices = [];
-                invoices = invoices || {};
-                _.each(invoices.data, function(invoice){
-                    //self.log.debug('line:', invoice.lines.data[0]);
-                    if(invoice.lines.data[0].id === subscriptionId || invoice.subscription === subscriptionId) {
-                        filteredInvoices.push(invoice);
+        if(account.get('orgId') && account.get('orgId') === 1 && account.get('billing').stripeParent !== 6) {
+            self._getOrgAccessToken(account.get('orgId'), function(err, accessToken){
+                self.log.debug('using the accessToken:', accessToken);
+                stripeDao.listInvoices(customerId, dateFilter, ending_before, limit, starting_after, accessToken, function(err, invoices){
+                    //need to filter based on subscriptionId
+                    //TODO: if we ever keep track of subscription history, we will need to handle that as well
+                    if(err) {
+                        self.log.error(accountId, userId, 'Error listing invoices:', err);
+                        return fn(err);
                     } else {
-                        //self.log.debug(accountId, userId, 'filtering: ', invoice);
-                    }
-                });
-                invoices.data = filteredInvoices;
-                invoices.count = filteredInvoices.length;
-                self.log.debug(accountId, userId, '<< listInvoicesForAccount');
-                return fn(null, invoices);
-            }
+                        //self.log.debug('Filtering invoices by [' + subscriptionId + ']', invoices );
 
-        });
+                        var filteredInvoices = [];
+                        invoices = invoices || {};
+                        _.each(invoices.data, function(invoice){
+                            //self.log.debug('line:', invoice.lines.data[0]);
+                            if(invoice.lines.data[0].id === subscriptionId || invoice.subscription === subscriptionId) {
+                                filteredInvoices.push(invoice);
+                            } else {
+                                //self.log.debug(accountId, userId, 'filtering: ', invoice);
+                            }
+                        });
+                        invoices.data = filteredInvoices;
+                        invoices.count = filteredInvoices.length;
+                        self.log.debug(accountId, userId, '<< listInvoicesForAccount');
+                        return fn(null, invoices);
+                    }
+
+                });
+            });
+        } else {
+            self.log.debug('No accessToken');
+            stripeDao.listInvoices(customerId, dateFilter, ending_before, limit, starting_after, null, function(err, invoices){
+                //need to filter based on subscriptionId
+                //TODO: if we ever keep track of subscription history, we will need to handle that as well
+                if(err) {
+                    self.log.error(accountId, userId, 'Error listing invoices:', err);
+                    return fn(err);
+                } else {
+                    //self.log.debug('Filtering invoices by [' + subscriptionId + ']', invoices );
+
+                    var filteredInvoices = [];
+                    invoices = invoices || {};
+                    _.each(invoices.data, function(invoice){
+                        //self.log.debug('line:', invoice.lines.data[0]);
+                        if(invoice.lines.data[0].id === subscriptionId || invoice.subscription === subscriptionId) {
+                            filteredInvoices.push(invoice);
+                        } else {
+                            //self.log.debug(accountId, userId, 'filtering: ', invoice);
+                        }
+                    });
+                    invoices.data = filteredInvoices;
+                    invoices.count = filteredInvoices.length;
+                    self.log.debug(accountId, userId, '<< listInvoicesForAccount');
+                    return fn(null, invoices);
+                }
+
+            });
+        }
+
     },
 
     listChargesForAccount: function(account, created, endingBefore, limit, startingAfter, userId, fn) {
@@ -280,6 +316,34 @@ module.exports = {
             } else {
                 self.log.debug(accountId, userId, '<< listChargesForAccount');
                 return fn(null, charges);
+            }
+        });
+    },
+
+    _getOrgAccessToken: function(orgId, fn) {
+        var self = this;
+        orgDao.getById(orgId, $$.m.Organization, function(err, organization){
+            if(organization) {
+                accountDao.getAccountByID(organization.get('adminAccount'), function(err, account){
+                    if(account) {
+                        var credentials = account.get('credentials');
+                        var creds = null;
+                        _.each(credentials, function (cred) {
+                            if (cred.type === 'stripe') {
+                                creds = cred;
+                            }
+                        });
+                        if(creds && creds.accessToken) {
+                            return fn(null, creds.accessToken);
+                        } else {
+                            return fn(null, null);
+                        }
+                    } else {
+                        fn(err);
+                    }
+                });
+            } else {
+                fn(err);
             }
         });
     }

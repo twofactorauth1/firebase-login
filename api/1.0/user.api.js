@@ -408,6 +408,9 @@ _.extend(api.prototype, baseApi.prototype, {
         var campaignId = req.body.campaignId;
         var existingUser = req.body.existingUser;
         var orgId = req.body.orgId;
+        if(orgId && parseInt(orgId) === 1) {
+            setupFee = 150000;//$1500.00
+        }
 
         var cardToken = req.body.cardToken;
         var plan = req.body.plan || 'NO_PLAN_ARGUMENT';
@@ -496,7 +499,6 @@ _.extend(api.prototype, baseApi.prototype, {
                     self.log.debug('got organization:', organization);
                     if(organization && organization.id() !== 0) {
                         accountDao.getAccountByID(organization.get('adminAccount'), function(err, adminAccount){
-                            //TODO access token
                             if(adminAccount) {
                                 self.getStripeTokenFromAccountObject(adminAccount, req, function(err, accessToken){
                                     if(err || !accessToken) {

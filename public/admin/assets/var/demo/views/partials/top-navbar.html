@@ -28,7 +28,7 @@
                 <i class="ti-upload"></i> <span translate="topbar.media.MAIN">Media</span>
             </a>
         </li>
-        <li ng-controller="AsideCtrl">
+        <li ng-controller="AsideCtrl" ng-if="!orgCardAndPermissions.isVendor">
             <a class="topbar-settings" ng-click="openAside('top')">
                 <i class="ti-settings"></i> <span translate="topbar.settings.MAIN">Settings</span>
             </a>
