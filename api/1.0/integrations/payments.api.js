@@ -391,6 +391,7 @@ _.extend(api.prototype, baseApi.prototype, {
             },
             function sendConversionEmail(account, cb){
                 //TODO: if we need a conversion email, add it here
+                cb(null, account);
             },
             function findContactForUser(account, cb){
                 var email = null;
