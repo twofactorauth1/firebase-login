@@ -1475,8 +1475,8 @@
         height = height || $popup.find('input[name="height"]').val() || '';
 
         var regex = /^[\d]+((px)|%)*$/g;
-        if (width.match(regex)) $current_image.css('width', width);
-        if (height.match(regex)) $current_image.css('height', height);
+        $current_image.css('width', width);
+        $current_image.css('height', height);
 
         $popup.find('input:focus').blur();
         _editImg($current_image);
