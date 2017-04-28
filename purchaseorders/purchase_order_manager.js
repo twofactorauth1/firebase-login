@@ -33,6 +33,11 @@ module.exports = {
                 });
             },
             function(user, cb) {
+                accountDao.getAccountByID(accountId, function(err, account){
+                    cb(err, user, account);
+                });
+            },
+            function(user, account, cb) {
                 if(!user) {
                     cb('user not found');
                 } else {
@@ -41,7 +46,11 @@ module.exports = {
                         archived: {$ne: true}
                     };
                     if(_.contains(user.getPermissionsForAccount(accountId), 'vendor')){
-                        var cardCodes = user.get('orgConfig').cardCodes || [];
+                        var orgConfig = user.getOrgConfig(account.get('orgId'));
+                        if(!orgConfig) {
+                            orgConfig = {};
+                        }
+                        var cardCodes = orgConfig.cardCodes || [];
                         query.cardCode = {$in:cardCodes};
                     }
                     cb(null, query);
@@ -110,7 +119,12 @@ module.exports = {
                     cb(err, user);
                 });
             },
-            function(user, cb) {
+            function(user, cb){
+                accountDao.getAccountByID(accountId, function(err,account){
+                    cb(err, user, account);
+                });
+            },
+            function(user, account, cb) {
                 if(!user) {
                     cb('user not found');
                 } else {
@@ -119,7 +133,11 @@ module.exports = {
                         archived: true
                     };
                     if(_.contains(user.getPermissionsForAccount(accountId), 'vendor')){
-                        var cardCodes = user.get('orgConfig').cardCodes || [];
+                        var orgConfig = user.getOrgConfig(account.get('orgId'));
+                        if(!orgConfig) {
+                            orgConfig = {};
+                        }
+                        var cardCodes = orgConfig.cardCodes || [];
                         query.cardCode = {$in:cardCodes};
                     }
                     cb(null, query);
@@ -187,6 +205,11 @@ module.exports = {
                 });
             },
             function(user, cb) {
+                accountDao.getAccountByID(accountId, function(err, account){
+                    cb(err, user, account);
+                });
+            },
+            function(user, account, cb) {
                 if(!user) {
                     cb('user not found');
                 } else {
@@ -195,7 +218,11 @@ module.exports = {
                         archived: {$ne: true}
                     };
                     if(_.contains(user.getPermissionsForAccount(accountId), 'vendor')){
-                        var cardCodes = user.get('orgConfig').cardCodes || [];
+                        var orgConfig = user.getOrgConfig(account.get('orgId'));
+                        if(!orgConfig) {
+                            orgConfig = {};
+                        }
+                        var cardCodes = orgConfig.cardCodes || [];
                         query.cardCode = {$in:cardCodes};
                     }
                     cb(null, query);
@@ -329,7 +356,7 @@ module.exports = {
                                 username: user.get("username"),
                                 first: user.get("first"),
                                 last: user.get("last")
-                            }
+                            };
                             order.set("submitter", _user);
                             self._sendEmailOnPOCreation(order, accountId, adminUrl);
                             fn(null, order, file);
@@ -350,44 +377,57 @@ module.exports = {
                 log.error('Error getting purchase order: ' + err);
                 return fn(err, null);
             } else {
-                userManager.getUserById(userId, function(err, user){
-                    if(err || !user) {
-                        log.error('Error getting user:', err);
+                accountDao.getAccountByID(accountId, function(err, account){
+                    if(err) {
+                        log.error('Error getting account:', err);
                         return fn(err);
                     } else {
-                        if(_.contains(user.getPermissionsForAccount(accountId), 'vendor')){
-                            if(!_.contains(user.get('orgConfig').cardCodes, order.get('cardCode'))) {
-                                return fn();
-                            }
-                        }
-                        async.each(order.get("notes"), function (note, cb) {
-                            userDao.getById(note.userId, function (err, user) {
-                                if (err) {
-                                    log.error(accountId, userId, 'Error getting user: ' + err);
-                                    cb(err);
-                                } else {
-                                    var _user = {
-                                        _id: user.get("_id"),
-                                        username: user.get("username"),
-                                        first: user.get("first"),
-                                        last: user.get("last"),
-                                        profilePhotos: user.get("profilePhotos")
-                                    };
-                                    note.user = _user;
-                                    cb();
-                                }
-                            });
-                        }, function (err) {
-                            if (err) {
-                                log.error(accountId, userId, 'Error getting purchase order: ' + err);
-                                return fn(err, null);
+                        userManager.getUserById(userId, function(err, user){
+                            if(err || !user) {
+                                log.error('Error getting user:', err);
+                                return fn(err);
                             } else {
-                                log.debug('<< getPurchaseOrderById');
-                                return fn(null, order);
+                                if(_.contains(user.getPermissionsForAccount(accountId), 'vendor')){
+                                    var orgConfig = user.getOrgConfig(account.get('orgId'));
+                                    if(!orgConfig) {
+                                        orgConfig = {};
+                                    }
+                                    var cardCodes = orgConfig.cardCodes || [];
+                                    if(!_.contains(user.get('orgConfig').cardCodes, order.get('cardCode'))) {
+                                        return fn();
+                                    }
+                                }
+                                async.each(order.get("notes"), function (note, cb) {
+                                    userDao.getById(note.userId, function (err, user) {
+                                        if (err) {
+                                            log.error(accountId, userId, 'Error getting user: ' + err);
+                                            cb(err);
+                                        } else {
+                                            var _user = {
+                                                _id: user.get("_id"),
+                                                username: user.get("username"),
+                                                first: user.get("first"),
+                                                last: user.get("last"),
+                                                profilePhotos: user.get("profilePhotos")
+                                            };
+                                            note.user = _user;
+                                            cb();
+                                        }
+                                    });
+                                }, function (err) {
+                                    if (err) {
+                                        log.error(accountId, userId, 'Error getting purchase order: ' + err);
+                                        return fn(err, null);
+                                    } else {
+                                        log.debug('<< getPurchaseOrderById');
+                                        return fn(null, order);
+                                    }
+                                });
                             }
                         });
                     }
                 });
+
 
             }
         });
@@ -438,20 +478,32 @@ module.exports = {
                 self.log.error('Error deleting po: ' + err);
                 return fn(err, null);
             } else {
-                var query = {_id:purchaseOrderId};
-                if(_.contains(user.getPermissionsForAccount(accountId), 'vendor')){
-                    var cardCodes = user.get('orgConfig').cardCodes || [];
-                    query.cardCode = {$in:cardCodes};
-                }
-                purchaseOrderdao.removeByQuery(query, $$.m.PurchaseOrder, function(err, value){
-                    if(err) {
-                        self.log.error('Error deleting po: ' + err);
-                        return fn(err, null);
+                accountDao.getAccountByID(accountId, function(err, account){
+                    if(err || !account) {
+                        self.log.error('Error getting account:', err);
+                        return fn(err);
                     } else {
-                        log.debug(accountId, userId, '<< deletePurchaseOrder');
-                        fn(null, value);
+                        var query = {_id:purchaseOrderId};
+                        if(_.contains(user.getPermissionsForAccount(accountId), 'vendor')){
+                            var orgConfig = user.getOrgConfig(account.get('orgId'));
+                            if(!orgConfig) {
+                                orgConfig = {};
+                            }
+                            var cardCodes = orgConfig.cardCodes || [];
+                            query.cardCode = {$in:cardCodes};
+                        }
+                        purchaseOrderdao.removeByQuery(query, $$.m.PurchaseOrder, function(err, value){
+                            if(err) {
+                                self.log.error('Error deleting po: ' + err);
+                                return fn(err, null);
+                            } else {
+                                log.debug(accountId, userId, '<< deletePurchaseOrder');
+                                fn(null, value);
+                            }
+                        });
                     }
                 });
+
             }
         });
     },
@@ -464,30 +516,43 @@ module.exports = {
                 self.log.error('Error archiving po: ' + err);
                 return fn(err, null);
             } else {
-                var query = {_id:purchaseOrderId};
-                if(_.contains(user.getPermissionsForAccount(accountId), 'vendor')){
-                    var cardCodes = user.get('orgConfig').cardCodes || [];
-                    query.cardCode = {$in:cardCodes};
-                }
-                purchaseOrderdao.findOne(query, $$.m.PurchaseOrder, function(err, po){
-                    if(err) {
-                        self.log.error('Error getting po: ' + err);
+                accountDao.getAccountByID(accountId, function(err, account){
+                    if(err || !account) {
+                        self.log.error('Error archiving po', err);
                         return fn(err, null);
                     } else {
-                        po.set('archived', true);
-                        po.set('modified', {date: new Date(), by: userId});
-                        purchaseOrderdao.saveOrUpdate(po, function(err, savedPo){
+                        var query = {_id:purchaseOrderId};
+                        if(_.contains(user.getPermissionsForAccount(accountId), 'vendor')){
+                            var orgConfig = user.getOrgConfig(account.get('orgId'));
+                            if(!orgConfig) {
+                                orgConfig = {};
+                            }
+                            var cardCodes = orgConfig.cardCodes || [];
+                            query.cardCode = {$in:cardCodes};
+                        }
+                        purchaseOrderdao.findOne(query, $$.m.PurchaseOrder, function(err, po){
                             if(err) {
-                                self.log.error(accountId, userId,'Error saving PO:', err);
-                                return fn(err);
+                                self.log.error('Error getting po: ' + err);
+                                return fn(err, null);
+                            } else {
+                                po.set('archived', true);
+                                po.set('modified', {date: new Date(), by: userId});
+                                purchaseOrderdao.saveOrUpdate(po, function(err, savedPo){
+                                    if(err) {
+                                        self.log.error(accountId, userId,'Error saving PO:', err);
+                                        return fn(err);
+                                    }
+                                    else{
+                                        log.debug(accountId, userId, '<< archivePurchaseOrder');
+                                        fn(null, savedPo);
+                                    }
+                                })
                             }
-                            else{
-                                log.debug(accountId, userId, '<< archivePurchaseOrder');
-                                fn(null, savedPo);
-                            }
-                        })    
+                        });
                     }
+
                 });
+
             }
         });
     },
@@ -499,33 +564,56 @@ module.exports = {
         var query = {
             _id: {'$in': orderIds}
         };
-        purchaseOrderdao.findMany(query, $$.m.PurchaseOrder, function(err, orders){
-            if(err) {
+        userManager.getUserById(userId, function(err, user){
+            if(err || !user) {
                 self.log.error(accountId, userId, 'Error finding orders with orderIds:', err);
-                fn(err);
+                return fn(err);
             } else {
-                async.eachSeries(orders, function(po, callback){
-                    po.set('archived', true);
-                    po.set('modified', {date: new Date(), by: userId});
-                    callback();
-                }, function(err){
-                    if(err) {
-                        fn(err);
+                accountDao.getAccountByID(accountId, function(err, account){
+                    if(err || !account) {
+                        self.log.error(accountId, userId, 'Error finding orders with orderIds:', err);
+                        return fn(err);
                     } else {
-                        purchaseOrderdao.batchUpdate(orders, $$.m.PurchaseOrder, function(err, updatedOrders){
-                            if(err) {
-                                self.log.error(accountId, userId,'Error saving Purchase Orders:', err);
-                                return fn(err);
+                        if(_.contains(user.getPermissionsForAccount(accountId), 'vendor')){
+                            var orgConfig = user.getOrgConfig(account.get('orgId'));
+                            if(!orgConfig) {
+                                orgConfig = {};
                             }
-                            else{
-                                log.debug(accountId, userId, '<< archiveBulkPurchaseOrders');
-                                fn(null, orderIds);
+                            var cardCodes = orgConfig.cardCodes || [];
+                            query.cardCode = {$in:cardCodes};
+                        }
+                        purchaseOrderdao.findMany(query, $$.m.PurchaseOrder, function(err, orders){
+                            if(err) {
+                                self.log.error(accountId, userId, 'Error finding orders with orderIds:', err);
+                                fn(err);
+                            } else {
+                                async.eachSeries(orders, function(po, callback){
+                                    po.set('archived', true);
+                                    po.set('modified', {date: new Date(), by: userId});
+                                    callback();
+                                }, function(err){
+                                    if(err) {
+                                        fn(err);
+                                    } else {
+                                        purchaseOrderdao.batchUpdate(orders, $$.m.PurchaseOrder, function(err, updatedOrders){
+                                            if(err) {
+                                                self.log.error(accountId, userId,'Error saving Purchase Orders:', err);
+                                                return fn(err);
+                                            }
+                                            else{
+                                                log.debug(accountId, userId, '<< archiveBulkPurchaseOrders');
+                                                fn(null, orderIds);
+                                            }
+                                        });
+                                    }
+                                });
                             }
                         });
                     }
                 });
             }
         });
+
     },
 
     _sendEmailOnPOCreation: function(po, accountId, adminUrl) {
@@ -564,6 +652,22 @@ module.exports = {
                 console.log(html);
                 emailMessageManager.sendNewPurchaseOrderEmail(fromEmail, fromName, emailTo, null, emailSubject, html, accountId, [], '', null, function(err, result){
                     self.log.debug('result: ', result);
+                });
+            }
+        });
+    },
+
+    _getOrgConfig: function(accountId, userId, fn) {
+        accountDao.getById(accountId, function(err, account){
+            if(err || !account) {
+                fn(err);
+            } else {
+                userDao.getById(userId, $$.m.User, function(err, user){
+                    if(err || !user) {
+                        fn(err);
+                    } else {
+                        fn(null, user.getOrgConfig(account.get('orgId')));
+                    }
                 });
             }
         });
