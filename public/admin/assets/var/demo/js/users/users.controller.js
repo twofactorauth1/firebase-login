@@ -100,7 +100,7 @@
                     var params = {
                         roleAry:['vendor'],
                         orgConfig:[{
-                            orgId: v.state.account.orgId,
+                            orgId: vm.state.account.orgId,
                             cardCodes:['C111111', 'C111112']
                         }]
                     };
