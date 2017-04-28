@@ -41,7 +41,7 @@ module.exports = {
                         archived: {$ne: true}
                     };
                     if(_.contains(user.getPermissionsForAccount(accountId), 'vendor')){
-                        var cardCodes = user.get('orgConfig').cardCodes;
+                        var cardCodes = user.get('orgConfig').cardCodes || [];
                         query.cardCode = {$in:cardCodes};
                     }
                     cb(null, query);
@@ -119,7 +119,7 @@ module.exports = {
                         archived: true
                     };
                     if(_.contains(user.getPermissionsForAccount(accountId), 'vendor')){
-                        var cardCodes = user.get('orgConfig').cardCodes;
+                        var cardCodes = user.get('orgConfig').cardCodes || [];
                         query.cardCode = {$in:cardCodes};
                     }
                     cb(null, query);
@@ -195,7 +195,7 @@ module.exports = {
                         archived: {$ne: true}
                     };
                     if(_.contains(user.getPermissionsForAccount(accountId), 'vendor')){
-                        var cardCodes = user.get('orgConfig').cardCodes;
+                        var cardCodes = user.get('orgConfig').cardCodes || [];
                         query.cardCode = {$in:cardCodes};
                     }
                     cb(null, query);
@@ -440,7 +440,7 @@ module.exports = {
             } else {
                 var query = {_id:purchaseOrderId};
                 if(_.contains(user.getPermissionsForAccount(accountId), 'vendor')){
-                    var cardCodes = user.get('orgConfig').cardCodes;
+                    var cardCodes = user.get('orgConfig').cardCodes || [];
                     query.cardCode = {$in:cardCodes};
                 }
                 purchaseOrderdao.removeByQuery(query, $$.m.PurchaseOrder, function(err, value){
@@ -466,7 +466,7 @@ module.exports = {
             } else {
                 var query = {_id:purchaseOrderId};
                 if(_.contains(user.getPermissionsForAccount(accountId), 'vendor')){
-                    var cardCodes = user.get('orgConfig').cardCodes;
+                    var cardCodes = user.get('orgConfig').cardCodes || [];
                     query.cardCode = {$in:cardCodes};
                 }
                 purchaseOrderdao.findOne(query, $$.m.PurchaseOrder, function(err, po){
