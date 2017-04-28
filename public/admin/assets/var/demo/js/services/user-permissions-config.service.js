@@ -4,55 +4,45 @@
 (function (angular) {
   app.service('UserPermissionsConfig', [function () {
 
-
+    this.vendorRestrictedStates = ["app.account.users"];
 
     this.orgConfigAndPermissions = {
       isVendor: false,
-      ledgerState: "app.customers",
       cardCodes: [],
-      dashbordLedgerUrl: '#/customers',
-      isVendorWithOneCardCode: false
-    }
+      isVendorWithOneCardCode: false,
+      dashboardState: "app.dohy",
+      userPermissions: {
+        ledgerState: "app.customers",
+        dashbordLedgerUrl: '#/customers',
+        vendorRestrictedStates : []
+      }
+    };
 
     this.getOrgConfigAndPermissions = function (account, user) {
       var userAccount = _.find(user.accounts, function(acc){
           return acc.accountId == account._id
-      })
+      });
      
       var orgConfigAry = user.orgConfig || [];
       var orgConfig = _.find(orgConfigAry, function(config){
           return config.orgId == account.orgId
-      })
+      });
 
       if(userAccount && userAccount.permissions && userAccount.permissions.length){
-        this.orgConfigAndPermissions.isVendor = _.contains(userAccount.permissions, 'vendor')
+        this.orgConfigAndPermissions.isVendor = _.contains(userAccount.permissions, 'vendor');
       }
-      // if(this.orgConfigAndPermissions.isVendor){
-      //   if(orgConfig && orgConfig.cardCodes && orgConfig.cardCodes.length){
-      //     this.orgConfigAndPermissions.cardCodes = orgConfig.cardCodes;
-      //     if(this.orgConfigAndPermissions.cardCodes.length ==1){
-      //       this.orgConfigAndPermissions.ledgerState = "app.ledgerDetails({customerId: '"+ this.orgConfigAndPermissions.cardCodes[0] + "'})";
-      //       this.orgConfigAndPermissions.dashbordLedgerUrl = "#/ledger/" + this.orgConfigAndPermissions.cardCodes[0];
-      //     }
-      //     else if(this.orgConfigAndPermissions.cardCodes.length == 0){
-      //       this.orgConfigAndPermissions.dashbordLedgerUrl = "#";
-      //     }
-      //   }
-      // }
-
       if(this.orgConfigAndPermissions.isVendor){
-        if(user.cardCodes && user.cardCodes.length){
-          this.orgConfigAndPermissions.cardCodes = user.cardCodes;
+        this.orgConfigAndPermissions.userPermissions.vendorRestrictedStates = this.vendorRestrictedStates;
+        if(orgConfig && orgConfig.cardCodes && orgConfig.cardCodes.length){
+          this.orgConfigAndPermissions.cardCodes = orgConfig.cardCodes;
           if(this.orgConfigAndPermissions.cardCodes.length ==1){
-            this.orgConfigAndPermissions.ledgerState = "app.ledgerDetails({customerId: '"+ this.orgConfigAndPermissions.cardCodes[0] + "'})";
-            this.orgConfigAndPermissions.dashbordLedgerUrl = "#/ledger/" + this.orgConfigAndPermissions.cardCodes[0];
-            this.orgConfigAndPermissions.isVendorWithOneCardCode = true;
+            this.orgConfigAndPermissions.userPermissions.ledgerState = "app.ledgerDetails({customerId: '"+ this.orgConfigAndPermissions.cardCodes[0] + "'})";
+            this.orgConfigAndPermissions.userPermissions.dashbordLedgerUrl = "#/ledger/" + this.orgConfigAndPermissions.cardCodes[0];
           }
           else if(this.orgConfigAndPermissions.cardCodes.length == 0){
-            this.orgConfigAndPermissions.dashbordLedgerUrl = "#";
+            this.orgConfigAndPermissions.userPermissions.dashbordLedgerUrl = "#";
           }
         }
-
       }
       
       return this.orgConfigAndPermissions;

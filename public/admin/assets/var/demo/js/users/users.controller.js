@@ -2,7 +2,7 @@
 /*global app, moment, angular, window*/
 /*jslint unparam:true*/
 (function (angular) {
-    app.controller('usersCtrl', ['$scope', '$http', "toaster", "$filter", "$modal", "$timeout", "AccountService","UserService", "userConstant", "SweetAlert", function ($scope, $http, toaster, $filter, $modal, $timeout, AccountService,UserService, userConstant, SweetAlert) {
+    app.controller('usersCtrl', ['$scope', '$state', '$http', "toaster", "$filter", "$modal", "$timeout", "AccountService","UserService", "userConstant", "SweetAlert", function ($scope, $state, $http, toaster, $filter, $modal, $timeout, AccountService,UserService, userConstant, SweetAlert) {
 
         var vm = this;
 
@@ -21,10 +21,20 @@
         //vm.addNewUser = addNewUser;
         vm.removeUserFromAccount = removeUserFromAccount;
 
-        AccountService.getUpdatedAccount(function (account) {
-            vm.state.account = account;
-            loadAccountUsers();
-        });
+
+        $scope.$watch("$parent.orgCardAndPermissions", function(orgCardAndPermissions){
+            if(orgCardAndPermissions){
+              if(_.contains(orgCardAndPermissions.userPermissions.vendorRestrictedStates, $state.current.name)){
+                $state.go(orgCardAndPermissions.dashboardState);
+              }
+              else{
+                AccountService.getUpdatedAccount(function (account) {
+                    vm.state.account = account;
+                    loadAccountUsers();
+                });
+              }
+            }
+        })
 
         function loadAccountUsers(){
             UserService.getAccountUsers(function(users){ 
@@ -89,7 +99,10 @@
                      */
                     var params = {
                         roleAry:['vendor'],
-                        cardCodes:['C111111', 'C111112']
+                        orgConfig:[{
+                            orgId: vm.state.account.orgId,
+                            cardCodes:['C111111', 'C111112']
+                        }]
                     };
                     AccountService.addNewUserWithParams(vm.state.account._id, $scope.newuser.username, $scope.newuser.password, params, function(err, newuser){
                         if(err) {
@@ -212,40 +225,37 @@
         };
 
         function getOrgConfig(orgId){
-            // var orgConfigAry = $scope.editUser.orgConfig || [];
+            var orgConfigAry = $scope.editUser.orgConfig || [];
 
-            // var orgConfig = _.find(orgConfigAry, function(config){
-            //     return config.orgId == orgId
-            // })
-            // if(orgConfig){
-            //     vm.state.cardCodes = orgConfig.cardCodes;
-            // }
-            // else{
-            //     vm.state.cardCodes = null;
-            // }
+            var orgConfig = _.find(orgConfigAry, function(config){
+                return config.orgId == orgId
+            });
+            if(orgConfig){
+                vm.state.cardCodes = orgConfig.cardCodes;
+            } else{
+                vm.state.cardCodes = null;
+            }
 
 
-            vm.state.cardCodes = $scope.editUser.cardCodes || [];
+            //vm.state.cardCodes = $scope.editUser.cardCodes || [];
         };
 
         function setOrgConfig(orgId){
-            // var orgConfigAry = $scope.editUser.orgConfig || [];
+            var orgConfigAry = $scope.editUser.orgConfig || [];
 
-            // var orgConfig = _.find(orgConfigAry, function(config){
-            //     return config.orgId == orgId
-            // })
-            // if(orgConfig){
-            //     orgConfig.cardCodes = vm.state.cardCodes;
-            // }
-            // else{
-            //     orgConfigAry.push({
-            //         orgId: orgId,
-            //         cardCodes: vm.state.cardCodes
-            //     })
-            // }
+            var orgConfig = _.find(orgConfigAry, function(config){
+                return config.orgId == orgId
+            });
+            if(orgConfig){
+                orgConfig.cardCodes = vm.state.cardCodes;
+            } else {
+                orgConfigAry.push({
+                    orgId: orgId,
+                    cardCodes: vm.state.cardCodes
+                })
+            }
 
 
-            $scope.editUser.cardCodes = vm.state.cardCodes;
         };
 
         function getUserPermissions(isAdmin){

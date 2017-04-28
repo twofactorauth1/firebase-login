@@ -223,7 +223,11 @@ _.extend(api.prototype, baseApi.prototype, {
                 
             } else {
                 //Only the codes in the user prop or whatever is passed in IF it is in the user prop
-                self.getUserProperty(userId, 'cardCodes', function(err, cardCodes){
+                self._getOrgConfig(accountId, userId, function(err, orgConfig){
+                    if(!orgConfig) {
+                        orgConfig = {};
+                    }
+                    var cardCodes = orgConfig.cardCodes || [];
                     if(cardCodes && cardCodes.length > 0) {
                         cardCodes = _.map(cardCodes, function(code){return code.toLowerCase()});
                         if(req.query.cardCodeFrom && req.query.cardCodeTo) {
@@ -241,9 +245,7 @@ _.extend(api.prototype, baseApi.prototype, {
                                 return self.wrapError(resp, 400, 'Bad Request', 'User does not have any matching cardCodes');
                             }
                             
-                        }
-
-                        else{
+                        } else {
                             var cardCodeAry = [];
                             var addAll = true;
                             if(req.query.cardCodeFrom) {
@@ -295,7 +297,11 @@ _.extend(api.prototype, baseApi.prototype, {
                     return self.sendResultOrError(resp, err, value, "Error calling aging");
                 });
             } else {
-                self.getUserProperty(userId, 'cardCodes', function(err, cardCodes){
+                self._getOrgConfig(accountId, userId, function(err, orgConfig){
+                    if(!orgConfig) {
+                        orgConfig = {};
+                    }
+                    var cardCodes = orgConfig.cardCodes || [];
                     manager.getLedgerWithLimit(accountId, userId, cardCodes, dateString, limit, function(err, value){
                         self.log.debug(accountId, userId, '<< getTopInvoices');
                         return self.sendResultOrError(resp, err, value, "Error calling aging");
@@ -318,12 +324,17 @@ _.extend(api.prototype, baseApi.prototype, {
                     return self.sendResultOrError(resp, err, value, "Error listing customers");
                 });
             } else {
-                self.getUserProperty(userId, 'cardCodes', function(err, cardCodes){
+                self._getOrgConfig(accountId, userId, function(err, orgConfig){
+                    if(!orgConfig){
+                        orgConfig = {};
+                    }
+                    var cardCodes = orgConfig.cardCodes || [];
                     manager.getCustomers(accountId, userId, cardCodes, function(err, value){
                         self.log.debug(accountId, userId, '<< getCustomers');
                         return self.sendResultOrError(resp, err, value, "Error listing customers");
                     });
                 });
+
             }
         });
     },
