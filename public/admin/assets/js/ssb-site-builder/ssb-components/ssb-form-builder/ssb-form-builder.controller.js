@@ -455,22 +455,24 @@
                               this.style.setProperty( 'border-color', vm.originalData.borderColor, 'important' );
                             else
                               this.style.setProperty( 'border-color', originalData.borderColor, 'important' );
-                            var btn=vm.originalData.btn;
-                            if(btn.border && btn.border.show){
-                              if(btn.border.color){
-                                   styleString += ' border-color: '+btn.border.color+ '  !important';
+                              var btn=vm.originalData.btn;
+                               if(btn.border &&
+                                   btn.border.show){
+                                  if(btn.border.color){
+                                      this.style.setProperty( 'border-color', btn.border.color, 'important' );
+                                  }
+                                  if(btn.border.width){
+                                      this.style.setProperty( 'border-width', btn.border.width+ 'px', 'important' );
+                                  }
+                                  if(!btn.border.radius){
+                                      btn.border.radius=0
+                                  }
+                                 this.style.setProperty( 'border-radius', btn.border.radius+'%', 'important' );
+
+                                if(btn.border.style){
+                                      this.style.setProperty( 'border-style', btn.border.style , 'important' );
+                                  }
                               }
-                              if(btn.border.width){
-                                  styleString += ' border-width: '+btn.border.width+ 'px   !important';
-                              }
-                              if(!btn.border.radius){
-                                  btn.border.radius=0;
-                              }
-                              styleString += ' border-radius: '+btn.border.radius+ '%  !important';
-                              if(btn.border.style){
-                                styleString += ' border-style: '+btn.border.style+ '  !important';
-                              }
-                           }
                         });
 
                         element.on("mousedown touchstart", function(){
@@ -524,18 +526,18 @@
                                   if(btn.border &&
                                    btn.border.show){
                                   if(btn.border.color){
-                                      this.style.setProperty( 'border-color', btn.border.color, 'important' );
+                                      elem.style.setProperty( 'border-color', btn.border.color, 'important' );
                                   }
                                   if(btn.border.width){
-                                      this.style.setProperty( 'border-width', btn.border.width+ 'px', 'important' );
+                                      elem.style.setProperty( 'border-width', btn.border.width+ 'px', 'important' );
                                   }
                                   if(!btn.border.radius){
                                       btn.border.radius=0
                                   }
-                                 this.style.setProperty( 'border-radius', btnActiveStyle.border.radius+'%', 'important' );
+                                 elem.style.setProperty( 'border-radius', btn.border.radius+'%', 'important' );
 
                                 if(btn.border.style){
-                                      this.style.setProperty( 'border-style', btnActiveStyle.border.style , 'important' );
+                                      elem.style.setProperty( 'border-style', btn.border.style , 'important' );
                                   }
                               }
                             }, 1000);
