@@ -26,6 +26,9 @@ function ssbBlogPostListComponentController(SimpleSiteBuilderBlogService, $scope
 
     vm.filteredPostView = false;
 
+
+    vm.listArticleStyle = listArticleStyle;
+
     if (path.indexOf("tag/") > -1) {
         vm.blog.currentTag = path.replace('/tag/', '');
         vm.filteredPostView = true;
@@ -78,6 +81,20 @@ function ssbBlogPostListComponentController(SimpleSiteBuilderBlogService, $scope
     function sortBlogPosts(blogpost){
         return Date.parse($filter('date')(blogpost.publish_date || blogpost.created.date, "MM/dd/yyyy"));
     }
+
+    function listArticleStyle(item){
+        var styleString = ' ';
+
+        if(item && item.articleBorder && item.articleBorder.show && item.articleBorder.color){
+            styleString += 'border-color: ' + item.articleBorder.color + ';';
+            styleString += 'border-width: ' + item.articleBorder.width + 'px;';
+            styleString += 'border-style: ' + item.articleBorder.style + ';';
+            styleString += 'border-radius: ' + item.articleBorder.radius + '%;';
+        }
+
+        return styleString;
+    }
+    
 
     function init(element) {
 

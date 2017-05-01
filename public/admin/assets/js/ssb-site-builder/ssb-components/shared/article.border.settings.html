@@ -1,4 +1,4 @@
-<h4 class="ssb-sidebar-sub-heading-separator">{{component.components.length ? 'Section Border': 'Border'}}</h4>
+<h4 class="ssb-sidebar-sub-heading-separator">Article Border</h4>
 
 <div class="row padding-10">
     <div>
@@ -10,12 +10,12 @@
                     <i class="fa fa-info-circle" />
                 </span>
             </label>
-            <switch ng-model="component.border.show" class="pull-right"></switch>
+            <switch ng-model="component.components[0].articleBorder.show" class="pull-right"></switch>
         </div>
-        <div ng-if="component.border.show">
+        <div ng-if="component.components[0].articleBorder.show">
             <div class="form-group ssb-spectrum-color-picker-small">
                 <div class="ssb-spectrum-color-picker-background-container">
-                    <spectrum-colorpicker class="ssb-spectrum-color-picker-background" format="'rgb'" options="vm.spectrum.options" ng-model="component.border.color"></spectrum-colorpicker>
+                    <spectrum-colorpicker class="ssb-spectrum-color-picker-background" format="'rgb'" options="vm.spectrum.options" ng-model="component.components[0].articleBorder.color"></spectrum-colorpicker>
                     <i class="fa fa-eyedropper" />
                 </div>
                 <label for="colorpicker">
@@ -39,7 +39,7 @@
                     <rzslider
                         class="slider-opacity"
                         name="border-width"
-                        rz-slider-model="component.border.width"
+                        rz-slider-model="component.components[0].articleBorder.width"
                         rz-slider-options="{floor: 0, ceil: 100}">
                     </rzslider>
                 </div>
@@ -55,9 +55,9 @@
                     </label>
                 </div>
                 <div class="btn-group ssb-sidebar-btn-group ssb-sidebar-btn-group-small-top margin-bottom-0">
-                    <button type="button" ng-click="component.border.style = 'solid'" ng-model="component.border.style" class="btn text-capitalize" ng-class="{'active': component.border.style === 'solid' }"><span class="line solid"></span></button>
-                    <button type="button" ng-click="component.border.style = 'dotted'" ng-model="component.border.style" class="btn text-capitalize" ng-class="{'active': component.border.style === 'dotted' }"><span class="line dotted"></span></button>
-                    <button type="button" ng-click="component.border.style = 'dashed'" ng-model="component.border.style" class="btn text-capitalize" ng-class="{'active': component.border.style === 'dashed' }"><span class="line dashed"></span></button>
+                    <button type="button" ng-click="component.components[0].articleBorder.style = 'solid'" ng-model="component.components[0].articleBorder.style" class="btn text-capitalize" ng-class="{'active': component.components[0].articleBorder.style === 'solid' }"><span class="line solid"></span></button>
+                    <button type="button" ng-click="component.components[0].articleBorder.style = 'dotted'" ng-model="component.components[0].articleBorder.style" class="btn text-capitalize" ng-class="{'active': component.components[0].articleBorder.style === 'dotted' }"><span class="line dotted"></span></button>
+                    <button type="button" ng-click="component.components[0].articleBorder.style = 'dashed'" ng-model="component.components[0].articleBorder.style" class="btn text-capitalize" ng-class="{'active': component.components[0].articleBorder.style === 'dashed' }"><span class="line dashed"></span></button>
                 </div>
 
             </div>
@@ -75,7 +75,7 @@
                     <rzslider
                         class="slider-opacity"
                         name="border-radius"
-                        rz-slider-model="component.border.radius"
+                        rz-slider-model="component.components[0].articleBorder.radius"
                         rz-slider-options="{floor: 0, ceil: 50}">
                     </rzslider>
                 </div>
