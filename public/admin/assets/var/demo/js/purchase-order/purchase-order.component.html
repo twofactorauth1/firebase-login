@@ -2,14 +2,14 @@
     <div class="row">
         <div class="col-sm-8">
             <h1 class="mainTitle">PURCHASE ORDERS</h1>
-            <span ng-if="vm.state.orders" class="mainDescription">There {{vm.state.orders.length > 1 ? 'are' : 'is'}} currently {{vm.state.orders.length}} purchase order<span ng-if="vm.state.orders.length > 1">s</span>. ({{vm.displayedOrders.length || 0}} in filtered view)</span>
+            <span ng-if="vm.state.orders" class="mainDescription">There {{vm.state.orders.length > 1 ? 'are' : 'is'}} currently {{vm.state.orders.length}} purchase order<span ng-if="vm.state.orders.length > 1">s</span>. <span ng-if="vm.showFilteredRecords()"> ({{filteredCollection.length || 0}} in filtered view)</span></span>
         </div>
     </div>
 </section>
 
 
 <div class="purchase-orders-list" ng-init="tableView='list'">
-	<div st-table="vm.displayedOrders" st-safe-src="vm.state.orders" >
+	<div st-table="vm.displayedOrders" st-safe-src="vm.state.orders" st-filtered-collection>
 	    <div class="container-fluid container-fullw bg-white padding-top-0 padding-bottom-0 margin-bottom-15">
 	        <div class="row">
 	            <div class="col-sm-12">
@@ -21,7 +21,7 @@
 	                                    <div class="form-group">
 	                                        <div class="col-xs-8 col-sm-6">
 	                                            <span class="input-icon">
-	                                        <input type="text" st-search placeholder="Search by name, submitter..." id="form-field-14" class="form-control">
+	                                        <input type="text" st-search ng-model="vm.uiState.globalSearch" placeholder="Search by name, submitter..." id="form-field-14" class="form-control">
 	                                        <i class="ti-search"></i>
 	                                    </span>
 	                                        </div>
@@ -68,7 +68,7 @@
 	                                    <div class="form-group">
 	                                        <div class="col-xs-7">
 	                                            <span class="input-icon">
-	                                        <input type="text" st-search placeholder="Search by list, vendor, sku..." id="form-field-14" class="form-control">
+	                                        <input type="text" st-search ng-model="vm.uiState.globalSearch" placeholder="Search by name, submitter..." id="form-field-14" class="form-control">
 	                                        <i class="ti-search"></i>
 	                                    </span>
 	                                        </div>
@@ -113,7 +113,7 @@
 	            </tr>
 	            <tr ng-if="showFilter">
 	                <th>
-	                    <input st-search="title" placeholder="Name" class="form-control" type="search" />
+	                    <input st-search="title" ng-model="vm.uiState.fieldSearch.title" placeholder="Name" class="form-control" type="search" />
 	                </th>
 	            </tr>
 	        </thead>

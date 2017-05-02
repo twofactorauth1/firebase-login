@@ -16,5 +16,30 @@
        		this.flyoverout.openSidebarPanel = '';
     };
 
+    this.showFilteredRecords = function(globalSearch, fieldSearch){
+      if(globalSearch || checkIfFieldSearch(fieldSearch)){
+          return true;
+      }
+      else{
+          return false;
+      }
+    };
+
+    function checkIfFieldSearch(fieldSearch){
+        var isFieldSearch = false;
+        if(!_.isEmpty(fieldSearch)){
+            for(var i=0; i <= Object.keys(fieldSearch).length - 1; i++){
+                var key = Object.keys(fieldSearch)[i];
+                var value = fieldSearch[key];
+
+                if(value){
+                   isFieldSearch = true;
+                }
+            }
+        }
+        return isFieldSearch;
+    } 
+
+
   }]);
 }(angular));

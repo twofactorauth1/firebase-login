@@ -45,9 +45,11 @@
         /**
             * Get list of all inventories
         */
-        function getInventory() {
+        function getInventory(init) {
             var urlParts = [baseInventoryAPIUrl];
             function success(data) {
+                if(init)
+                    inventoryService.totalInventory = data.total;
                 inventoryService.inventory = data;
             }
 
@@ -157,7 +159,7 @@
 
 		(function init() {
             inventoryService.getUserOrgConfig();
-            inventoryService.getInventory();
+            inventoryService.getInventory(true);
            
 		})();
 

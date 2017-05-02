@@ -610,6 +610,7 @@
                     "fromName": vm.state.email.fromName,
                     "replyTo": vm.state.email.replyTo,
                     "bcc": vm.state.email.bcc,
+                    "cc": vm.state.email.cc,
                     "subject": vm.state.email.subject,
                     "vars": [],
                     "sendAt": {}

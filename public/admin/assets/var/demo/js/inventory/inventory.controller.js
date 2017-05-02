@@ -2,9 +2,9 @@
 
 app.controller('InventoryComponentController', inventoryComponentController);
 
-inventoryComponentController.$inject = ['$scope', '$attrs', '$filter', '$modal', '$timeout', '$location', 'pagingConstant', 'SweetAlert', 'toaster', 'InventoryService'];
+inventoryComponentController.$inject = ['$scope', '$attrs', '$filter', '$modal', '$timeout', '$location', 'pagingConstant', 'SweetAlert', 'toaster', 'InventoryService', 'UtilService'];
 /* @ngInject */
-function inventoryComponentController($scope, $attrs, $filter, $modal, $timeout, $location, pagingConstant, SweetAlert, toaster, InventoryService) {
+function inventoryComponentController($scope, $attrs, $filter, $modal, $timeout, $location, pagingConstant, SweetAlert, toaster, InventoryService, UtilService) {
 
     var vm = this;
 
@@ -54,6 +54,7 @@ function inventoryComponentController($scope, $attrs, $filter, $modal, $timeout,
     vm.showPages = vm.pagingConstant.displayedPages;
     vm.productSelectClickFn = productSelectClickFn;
     vm.bulkActionSelectFn = bulkActionSelectFn;
+    vm.showFilteredRecords = showFilteredRecords;
     
     vm.bulkActionChoice = {};
 
@@ -62,7 +63,8 @@ function inventoryComponentController($scope, $attrs, $filter, $modal, $timeout,
     $scope.$watch(function() { return InventoryService.inventory }, function(inventory) {
         if(angular.isDefined(inventory)){
             vm.state.inventory = inventory.results;
-            vm.state.totalInventory = inventory.total;
+            vm.state.totalInventory = InventoryService.totalInventory;
+            vm.state.totalFilteredInventory = inventory.total;
             vm.uiState.loading = false;
             drawPages();
         }
@@ -93,7 +95,7 @@ function inventoryComponentController($scope, $attrs, $filter, $modal, $timeout,
       var end;
       var i;
       var prevPage = vm.uiState.curPage;
-      var totalItemCount = vm.state.totalInventory;
+      var totalItemCount = vm.state.totalFilteredInventory;
       var currentPage = vm.uiState.curPage;
       var numPages = numberOfPages();
 
@@ -173,7 +175,7 @@ function inventoryComponentController($scope, $attrs, $filter, $modal, $timeout,
 
     function numberOfPages() {
         if (vm.state.inventory) {
-            return Math.ceil(vm.state.totalInventory / vm.uiState.pageSize);
+            return Math.ceil(vm.state.totalFilteredInventory / vm.uiState.pageSize);
         }
         return 0;
     }
@@ -183,7 +185,6 @@ function inventoryComponentController($scope, $attrs, $filter, $modal, $timeout,
         vm.uiState.pageLoading = true;
         InventoryService.getInventory().then(function(response){
             vm.state.inventory = response.data.results;
-            vm.state.totalInventory = response.data.total;
             vm.uiState.pageLoading = false;
         });
     }
@@ -316,6 +317,10 @@ function inventoryComponentController($scope, $attrs, $filter, $modal, $timeout,
               });
         }
     };
+
+    function showFilteredRecords(){
+        return UtilService.showFilteredRecords(vm.uiState.globalSearch, vm.uiState.fieldSearch);
+    }
 
     function init(element) {
         vm.element = element;

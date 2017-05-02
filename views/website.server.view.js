@@ -182,6 +182,11 @@ _.extend(view.prototype, BaseView.prototype, {
                 
                 // self.log.debug('pageHolder:', pageHolder);
                 data.account = value;
+
+                if(!data.account.orgId) {
+                    data.account.orgId = 0;
+                }
+
                 value.website = value.website || {};
                 data.account.website.themeOverrides = data.account.website.themeOverrides ||{};
                 data.account.website.themeOverrides.styles = data.account.website.themeOverrides.styles || {};

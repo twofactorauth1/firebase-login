@@ -2,9 +2,9 @@
 
 app.controller('PurchaseOrderComponentController', purchaseOrderComponentController);
 
-purchaseOrderComponentController.$inject = ['$scope', '$attrs', '$filter', '$modal', '$timeout', '$location', 'SweetAlert', 'toaster', 'pagingConstant', 'PurchaseOrderService'];
+purchaseOrderComponentController.$inject = ['$scope', '$attrs', '$filter', '$modal', '$timeout', '$location', 'SweetAlert', 'toaster', 'pagingConstant', 'PurchaseOrderService', 'UtilService'];
 /* @ngInject */
-function purchaseOrderComponentController($scope, $attrs, $filter, $modal, $timeout, $location, SweetAlert, toaster, pagingConstant, PurchaseOrderService) {
+function purchaseOrderComponentController($scope, $attrs, $filter, $modal, $timeout, $location, SweetAlert, toaster, pagingConstant, PurchaseOrderService, UtilService) {
 
     var vm = this;
 
@@ -12,7 +12,9 @@ function purchaseOrderComponentController($scope, $attrs, $filter, $modal, $time
         newPurchaseOrder: {}
     };
     vm.uiState ={
-        loading: true
+        loading: true,
+        globalSearch: undefined,
+        fieldSearch: {},
     }
 
     
@@ -27,6 +29,7 @@ function purchaseOrderComponentController($scope, $attrs, $filter, $modal, $time
     vm.bulkActionSelectFn = bulkActionSelectFn;
     vm.selectedOrdersFn = selectedOrdersFn;
     vm.pagingConstant = pagingConstant;
+    vm.showFilteredRecords = showFilteredRecords;
 
     vm.bulkActionChoice = {};
 
@@ -191,6 +194,10 @@ function purchaseOrderComponentController($scope, $attrs, $filter, $modal, $time
             vm.state.archivedOrders = response.data;
             vm.uiState.modalLoading = false;
         })
+    }
+
+    function showFilteredRecords(){
+        return UtilService.showFilteredRecords(vm.uiState.globalSearch, vm.uiState.fieldSearch);
     }
 
     function init(element) {

@@ -317,8 +317,8 @@ module.exports = {
                     self.log.error(accountId, userId, 'Error calling zi:', err);
                     callback(err);
                 } else {
-
-                    var response = JSON.parse(value);//response.payload.querydata.data.row
+                    
+                    var response = self.getParsedJson(value);//response.payload.querydata.data.row
 
                     if(response && response.response) {
                         response = response.response;
@@ -366,7 +366,7 @@ module.exports = {
                 self.log.error(0,0, 'Error loading inventory:', err);
                 fn();
             } else {
-                value = JSON.parse(value);
+                value = self.getParsedJson(value);
 
                 var data = value.response.payload.querydata.data.row;
                 _.each(data, function(row){
@@ -447,7 +447,7 @@ module.exports = {
                 self.log.error(accountId, userId, 'Error loading customers:', err);
                 fn(err);
             } else {
-                value = JSON.parse(value);
+                value = self.getParsedJson(value);
                 if(cardCodeAry && cardCodeAry.length > 0 && cardCodeAry[0] === 'admin') {
                     //nothing to filter
                 } else if(value && value.response && value.response.payload && value.response.payload.querydata && value.response.payload.querydata.data) {
@@ -481,6 +481,15 @@ module.exports = {
                 fn(null, body);
             }
         });
+    },
+
+    getParsedJson: function(value) {
+        try {
+            return JSON.parse(value);
+        } catch (e) {
+            return {};
+        }
     }
+
 
 };
