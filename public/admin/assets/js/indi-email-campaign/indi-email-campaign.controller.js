@@ -32,6 +32,7 @@
                 "fromName": '',
                 "replyTo": '',
                 "bcc": '',
+                "cc": '',
                 "subject": '',
                 "vars": [],
                 "sendAt": {}
