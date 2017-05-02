@@ -132,6 +132,14 @@
                         <label>Reply To</label>
                         <input name="replyTo" class="form-control" type="email" ng-model="vm.state.email.replyTo">
                     </div>
+                    <div class="form-group  col-xs-12 col-sm-6 margin-bottom-15" ng-class="{ 'has-error' : emailSettingForm.cc.$invalid && !emailSettingForm.cc.$pristine }">
+                        <label>CC</label>
+                        <input name="cc" class="form-control" type="email" ng-model="vm.state.email.cc">
+                    </div>
+                    <div class="form-group  col-xs-12 col-sm-6 margin-bottom-15" ng-class="{ 'has-error' : emailSettingForm.bcc.$invalid && !emailSettingForm.bcc.$pristine }">
+                        <label>BCC</label>
+                        <input name="bcc" class="form-control" type="email" ng-model="vm.state.email.bcc">
+                    </div>
                 </form>
                 <button type="button" ng-disabled="saveLoading" ng-click='vm.uiState.delete()' class="btn btn-danger btn-0 margin-left-15 margin-bottom-5">
                     <i class="ti-trash"></i>
