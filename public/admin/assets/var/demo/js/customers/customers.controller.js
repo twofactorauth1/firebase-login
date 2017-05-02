@@ -20,8 +20,8 @@ function customersComponentController($scope, $attrs, $filter, $modal, $timeout,
 
     vm.uiState = {
         loading: true,
-        globalSearch: undefined,
-        fieldSearch: {},
+        globalSearch: CustomersService.globalSearch,
+        fieldSearch: CustomersService.fieldSearch,
     };
 
     $scope.$watch(function() { return CustomersService.customers }, function(customers) {
@@ -32,6 +32,32 @@ function customersComponentController($scope, $attrs, $filter, $modal, $timeout,
     }, true);
 
 
+    /********** GLOBAL SEARCH RELATED **********/
+
+    $scope.$watch('vm.uiState.globalSearch', function (term) {
+        if(angular.isDefined(term)){
+            if(!angular.equals(term, CustomersService.globalSearch)){
+                CustomersService.globalSearch = angular.copy(term);
+            }
+            else{
+               // $scope.$broadcast('refreshTableData', term);
+            }
+        }
+    }, true);
+
+
+    /********** FIELD SEARCH RELATED **********/
+
+    $scope.$watch('vm.uiState.fieldSearch', function (search) {
+        if(angular.isDefined(search)){
+            if(!angular.equals(search, CustomersService.fieldSearch)){
+                CustomersService.fieldSearch = angular.copy(search);
+            }
+            else{
+                //$scope.$broadcast('refreshTableData');
+            }
+        }
+    }, true);
 
     function viewCustomerLedger(customer){
         $location.path('/ledger/' + customer.OCRD_CardCode);
