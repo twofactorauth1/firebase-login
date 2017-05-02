@@ -12,7 +12,11 @@ function purchaseOrderComponentController($scope, $attrs, $filter, $modal, $time
         newPurchaseOrder: {}
     };
     vm.uiState ={
-        loading: true
+        loading: true,
+        globalSearch: undefined,
+        fieldSearch: {
+            title: undefined
+        },
     }
 
     
@@ -27,6 +31,7 @@ function purchaseOrderComponentController($scope, $attrs, $filter, $modal, $time
     vm.bulkActionSelectFn = bulkActionSelectFn;
     vm.selectedOrdersFn = selectedOrdersFn;
     vm.pagingConstant = pagingConstant;
+    vm.showFilteredRecords = showFilteredRecords;
 
     vm.bulkActionChoice = {};
 
@@ -191,6 +196,31 @@ function purchaseOrderComponentController($scope, $attrs, $filter, $modal, $time
             vm.state.archivedOrders = response.data;
             vm.uiState.modalLoading = false;
         })
+    }
+
+    function showFilteredRecords(){
+        if(vm.uiState.globalSearch || checkIfFieldSearch()){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+
+    function checkIfFieldSearch(){
+        var isFieldSearch = false;
+        var fieldSearch = vm.uiState.fieldSearch;
+        if(!_.isEmpty(fieldSearch)){
+            for(var i=0; i <= Object.keys(fieldSearch).length - 1; i++){
+                var key = Object.keys(fieldSearch)[i];
+                var value = fieldSearch[key];
+
+                if(value){
+                   isFieldSearch = true;
+                }
+            }
+        }
+        return isFieldSearch;
     }
 
     function init(element) {
