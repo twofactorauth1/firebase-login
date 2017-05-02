@@ -14,10 +14,10 @@
                     <span>Add New User</span>
                 </button>
             </div>
-        </div>    
+        </div>
     </div>
     <div class="padding-top-20">
-        <div class="panel-body panel-white space20 ">            
+        <div class="panel-body panel-white space20 ">
             <table class="table table-primary margin-bottom-0">
                     <thead>
                     <tr class="ng-scope">
@@ -45,16 +45,16 @@
                         <td>{{user.first}} {{user.last}}</td>
                         <td>{{user.username}}</td>
                         <td class="table-action" >
-                            <a ng-if="vm.uiState.isAdminUser || currentUser._id === user._id" ng-click="openEditUserModal(user._id)"><span tooltip-placement="top" tooltip="Edit user"><i class="fa fa-pencil"></i></span></a>
-                            <a ng-if="currentUser._id !== user._id && vm.uiState.isAdminUser" ng-click="vm.removeUserFromAccount(user._id)" class="delete-row"><span tooltip-placement="top" tooltip="Delete user"><i class="fa fa-trash-o"></i></span></a>
-                            <a ng-if="vm.uiState.isAdminUser" ng-click="openEditUserCardModal(user._id)"><span tooltip-placement="top" tooltip="Edit user cards"><i class="fa fa-address-book-o"></i></span></a>
+                            <a ng-if="vm.uiState.isAdminUser || currentUser._id === user._id" ng-click="openEditUserModal(user._id)"><span tooltip-placement="top" tooltip="Change Password"><i class="fa fa-pencil"></i></span></a>
+                            <a ng-if="vm.uiState.isAdminUser" ng-click="openEditUserCardModal(user._id)"><span tooltip-placement="top" tooltip="Edit User's Card Codes"><i class="fa fa-address-book-o"></i></span></a>
+                            <a ng-if="currentUser._id !== user._id && vm.uiState.isAdminUser" ng-click="vm.removeUserFromAccount(user._id)" class="delete-row"><span tooltip-placement="top" tooltip="Delete User"><i class="fa fa-trash-o"></i></span></a>
                         </td>
                     </tr>
                     </tbody>
             </table>
         </div>
     </div>
-</div>    
+</div>
 <div data-ng-include=" 'assets/views/partials/new-user-modal.html' "></div>
 <div data-ng-include=" 'assets/views/partials/edit-password-modal.html' "></div>
 <div data-ng-include=" 'assets/var/demo/views/partials/edit-user-card-modal.html' "></div>
