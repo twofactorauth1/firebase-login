@@ -2,9 +2,9 @@
 
 app.controller('PurchaseOrderComponentController', purchaseOrderComponentController);
 
-purchaseOrderComponentController.$inject = ['$scope', '$attrs', '$filter', '$modal', '$timeout', '$location', 'SweetAlert', 'toaster', 'pagingConstant', 'PurchaseOrderService'];
+purchaseOrderComponentController.$inject = ['$scope', '$attrs', '$filter', '$modal', '$timeout', '$location', 'SweetAlert', 'toaster', 'pagingConstant', 'PurchaseOrderService', 'UtilService'];
 /* @ngInject */
-function purchaseOrderComponentController($scope, $attrs, $filter, $modal, $timeout, $location, SweetAlert, toaster, pagingConstant, PurchaseOrderService) {
+function purchaseOrderComponentController($scope, $attrs, $filter, $modal, $timeout, $location, SweetAlert, toaster, pagingConstant, PurchaseOrderService, UtilService) {
 
     var vm = this;
 
@@ -14,9 +14,7 @@ function purchaseOrderComponentController($scope, $attrs, $filter, $modal, $time
     vm.uiState ={
         loading: true,
         globalSearch: undefined,
-        fieldSearch: {
-            title: undefined
-        },
+        fieldSearch: {},
     }
 
     
@@ -199,28 +197,7 @@ function purchaseOrderComponentController($scope, $attrs, $filter, $modal, $time
     }
 
     function showFilteredRecords(){
-        if(vm.uiState.globalSearch || checkIfFieldSearch()){
-            return true;
-        }
-        else{
-            return false;
-        }
-    }
-
-    function checkIfFieldSearch(){
-        var isFieldSearch = false;
-        var fieldSearch = vm.uiState.fieldSearch;
-        if(!_.isEmpty(fieldSearch)){
-            for(var i=0; i <= Object.keys(fieldSearch).length - 1; i++){
-                var key = Object.keys(fieldSearch)[i];
-                var value = fieldSearch[key];
-
-                if(value){
-                   isFieldSearch = true;
-                }
-            }
-        }
-        return isFieldSearch;
+        return UtilService.showFilteredRecords(vm.uiState.globalSearch, vm.uiState.fieldSearch);
     }
 
     function init(element) {

@@ -2,9 +2,9 @@
 
 app.controller('CustomersComponentController', customersComponentController);
 
-customersComponentController.$inject = ['$scope', '$attrs', '$filter', '$modal', '$timeout', '$location', 'pagingConstant', 'CustomersService'];
+customersComponentController.$inject = ['$scope', '$attrs', '$filter', '$modal', '$timeout', '$location', 'pagingConstant', 'CustomersService', 'UtilService'];
 /* @ngInject */
-function customersComponentController($scope, $attrs, $filter, $modal, $timeout, $location, pagingConstant, CustomersService) {
+function customersComponentController($scope, $attrs, $filter, $modal, $timeout, $location, pagingConstant, CustomersService, UtilService) {
 
     var vm = this;
 
@@ -16,9 +16,12 @@ function customersComponentController($scope, $attrs, $filter, $modal, $timeout,
 
     vm.pagingConstant = pagingConstant;
 
+    vm.showFilteredRecords = showFilteredRecords;
 
     vm.uiState = {
-        loading: true
+        loading: true,
+        globalSearch: undefined,
+        fieldSearch: {},
     };
 
     $scope.$watch(function() { return CustomersService.customers }, function(customers) {
@@ -32,6 +35,10 @@ function customersComponentController($scope, $attrs, $filter, $modal, $timeout,
 
     function viewCustomerLedger(customer){
         $location.path('/ledger/' + customer.OCRD_CardCode);
+    }
+
+    function showFilteredRecords(){
+        return UtilService.showFilteredRecords(vm.uiState.globalSearch, vm.uiState.fieldSearch);
     }
 
     function init(element) {
