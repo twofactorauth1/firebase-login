@@ -771,6 +771,16 @@ module.exports = {
                                             self.log.error('error rendering html: ' + err);
                                             self.log.warn('email will not be sent.');
                                         } else {
+
+                                            // If cc and bcc don't exists for emailSettings
+                                            if(!emailSettings.bcc && email.get("bcc")){
+                                                emailSettings.bcc = email.get("bcc")
+                                            }
+
+                                            if(!emailSettings.cc && email.get("cc")){
+                                                emailSettings.cc = email.get("cc")
+                                            }
+
                                             emailMessageManager.sendBatchedCampaignEmail(fromAddress, fromName, contactAry, subject,
                                                     html, account, campaignId, vars, emailSettings, emailId, userId, function(err, value){
                                                 if(err) {
