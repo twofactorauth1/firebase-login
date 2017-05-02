@@ -313,6 +313,7 @@
             vm.state.email.fromName = vm.state.campaign.emailSettings.fromName;
             vm.state.email.replyTo = vm.state.campaign.emailSettings.replyTo;
             vm.state.email.bcc = vm.state.campaign.emailSettings.bcc;
+            vm.state.email.cc = vm.state.campaign.emailSettings.cc;
             vm.state.email.subject = vm.state.campaign.emailSettings.subject;
 
             EmailCampaignService.sendTestEmail(address, vm.state.email)
@@ -702,6 +703,7 @@
                 vm.state.campaign.emailSettings.fromName = email.fromName;
                 vm.state.campaign.emailSettings.replyTo = email.replyTo;
                 vm.state.campaign.emailSettings.bcc = email.bcc;
+                vm.state.campaign.emailSettings.cc = email.cc;
                 vm.state.campaign.emailSettings.subject = email.subject;
                 vm.state.campaign.emailSettings.vars = email.vars;
                 vm.state.email = angular.copy(email);
