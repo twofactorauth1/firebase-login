@@ -228,6 +228,12 @@
                             </div>
                             <div class="form-group margin-bottom-0">
                                 <label class="control-label text-bold">
+                                    Cc
+                                </label>
+                                <span editable-email="vm.state.campaign.emailSettings.cc" onbeforesave="validateEmail($data)">{{vm.state.campaign.emailSettings.cc || "Cc"}}</span>
+                            </div>
+                            <div class="form-group margin-bottom-0">
+                                <label class="control-label text-bold">
                                     Bcc
                                 </label>
                                 <span editable-email="vm.state.campaign.emailSettings.bcc" onbeforesave="validateEmail($data)">{{vm.state.campaign.emailSettings.bcc || "Bcc"}}</span>
