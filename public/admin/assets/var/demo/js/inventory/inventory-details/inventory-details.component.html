@@ -63,7 +63,12 @@
                 <h4>Qty. On Hand</h4>
 
                 <div class="description">
-                    {{vm.inventory.In_Stock <= 0 ? 'Call to Inquire' : vm.inventory.In_Stock}}
+                    <span ng-if="vm.inventory.In_Stock <= 0">
+                        <a href='#' ng-click='cancel($event);' onclick='Intercom("showNewMessage","")'>Call to Inquire</a>
+                    </span>
+                    <span ng-if="vm.inventory.In_Stock > 0">
+                        {{ vm.inventory.In_Stock }}
+                    </span>
                 </div>
                 <hr>
             </div>
