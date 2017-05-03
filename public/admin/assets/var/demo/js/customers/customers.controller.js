@@ -37,19 +37,7 @@ function customersComponentController($scope, $attrs, $filter, $modal, $timeout,
 
     /********** GLOBAL SEARCH RELATED **********/
 
-    $scope.$watch('vm.uiState.globalSearch', function (term) {
-        if(angular.isDefined(term)){
-            if(!angular.equals(term, CustomersService.globalSearch)){
-                CustomersService.globalSearch = angular.copy(term);
-            }
-            else{
-                var params = {
-                    globalSearch: term
-                }
-                $scope.$broadcast('refreshTableData', params);
-            }
-        }
-    }, true);
+    
 
 
     /********** FIELD SEARCH RELATED **********/
@@ -59,11 +47,14 @@ function customersComponentController($scope, $attrs, $filter, $modal, $timeout,
             if(!angular.equals(search, CustomersService.fieldSearch)){
                 CustomersService.fieldSearch = angular.copy(search);
             }
-            else{
-                var params = {
-                    fieldSearch: search
-                }
-                $scope.$broadcast('refreshTableData', params);
+        }
+    }, true);
+
+
+    $scope.$watch('vm.uiState.globalSearch', function (term) {
+        if(angular.isDefined(term)){
+            if(!angular.equals(term, CustomersService.globalSearch)){
+                CustomersService.globalSearch = angular.copy(term);
             }
         }
     }, true);
@@ -83,6 +74,14 @@ function customersComponentController($scope, $attrs, $filter, $modal, $timeout,
 
     function init(element) {
         vm.element = element;
+
+        $timeout(function() {
+            var params = {
+                globalSearch: vm.uiState.globalSearch,
+                fieldSearch: vm.uiState.fieldSearch
+            }
+            $scope.$broadcast('refreshTableData', params);
+        }, 0);
     }
 
 }

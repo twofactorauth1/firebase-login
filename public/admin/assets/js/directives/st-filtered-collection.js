@@ -1,4 +1,4 @@
-app.directive('stFilteredCollection', function () {
+app.directive('stFilteredCollection', function ($timeout) {
   return {
     require: '^stTable',
     link: function (scope, element, attr, ctrl) {
@@ -27,7 +27,9 @@ app.directive('stFilteredCollection', function () {
                     }
                 }
             }
-			ctrl.pipe(ctrl.tableState());
+            
+            ctrl.pipe(ctrl.tableState());
+			
 		});
     }
   }

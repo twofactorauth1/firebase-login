@@ -55,12 +55,6 @@ function purchaseOrderComponentController($scope, $attrs, $filter, $modal, $time
             if(!angular.equals(term, PurchaseOrderService.globalSearch)){
                 PurchaseOrderService.globalSearch = angular.copy(term);
             }
-            else{
-                var params = {
-                    globalSearch: term
-                }
-                $scope.$broadcast('refreshTableData', params);
-            }
         }
     }, true);
 
@@ -69,12 +63,6 @@ function purchaseOrderComponentController($scope, $attrs, $filter, $modal, $time
         if(angular.isDefined(search)){
             if(!angular.equals(search, PurchaseOrderService.fieldSearch)){
                 PurchaseOrderService.fieldSearch = angular.copy(search);
-            }
-            else{
-                var params = {
-                    fieldSearch: search
-                }
-                $scope.$broadcast('refreshTableData', params);
             }
         }
     }, true);
@@ -241,6 +229,14 @@ function purchaseOrderComponentController($scope, $attrs, $filter, $modal, $time
     
     function init(element) {
         vm.element = element;
+
+        $timeout(function() {
+            var params = {
+                globalSearch: vm.uiState.globalSearch,
+                fieldSearch: vm.uiState.fieldSearch
+            }
+            $scope.$broadcast('refreshTableData', params);
+        }, 0);
     }
 
 }
