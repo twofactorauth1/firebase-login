@@ -322,7 +322,9 @@ module.exports = {
                 } else {
                     
                     var response = self.getParsedJson(value);//response.payload.querydata.data.row
-
+                    if(response === false){
+                        return fn("We are having trouble retrieving results from api. Please try again later")
+                    }
                     if(response && response.response) {
                         response = response.response;
                     }
@@ -370,7 +372,9 @@ module.exports = {
                 fn();
             } else {
                 value = self.getParsedJson(value);
-
+                if(value === false){
+                    return fn("We are having trouble retrieving results from api. Please try again later")
+                }
                 var data = value.response.payload.querydata.data.row;
                 _.each(data, function(row){
                     try {
@@ -451,6 +455,9 @@ module.exports = {
                 fn(err);
             } else {
                 value = self.getParsedJson(value);
+                if(value === false){
+                    return fn("We are having trouble retrieving results from api. Please try again later")
+                }
                 if(cardCodeAry && cardCodeAry.length > 0 && cardCodeAry[0] === 'admin') {
                     //nothing to filter
                 } else if(value && value.response && value.response.payload && value.response.payload.querydata && value.response.payload.querydata.data) {
