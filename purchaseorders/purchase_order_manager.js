@@ -397,6 +397,13 @@ module.exports = {
                                         return fn();
                                     }
                                 }
+                                var _user = {
+                                    _id: user.get("_id"),
+                                    username: user.get("username"),
+                                    first: user.get("first"),
+                                    last: user.get("last")
+                                };
+                                order.set("submitter", _user);
                                 async.each(order.get("notes"), function (note, cb) {
                                     userDao.getById(note.userId, function (err, user) {
                                         if (err) {

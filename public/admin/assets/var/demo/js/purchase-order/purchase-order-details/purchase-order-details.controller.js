@@ -24,6 +24,7 @@ function purchaseOrderDetailsController($scope, $state, $attrs, $filter, $modal,
     vm.getPurchaseOrderDetails = getPurchaseOrderDetails;
     vm.addNote = addNote;
     vm.archivePurchaseOrder = archivePurchaseOrder;
+    vm.getSubmitterName = getSubmitterName;
 
     function backToPurchaseOrders(){
         $state.go("app.purchaseorders");
@@ -96,6 +97,17 @@ function purchaseOrderDetailsController($scope, $state, $attrs, $filter, $modal,
             //var myPDF = new PDFObject({ url: 'https://research.google.com/pubs/archive/44678.pdf' }).embed('pdf-container');
             var myPDF = new PDFObject({ url: po.attachment.url }).embed('pdf-container');
         }
+    }
+
+    function getSubmitterName(user){
+        var _userName = "";
+        if(user.first || user.last){
+            _userName = user.first + " " + user.last;
+        }
+        else{
+            _userName = user.username;
+        }
+        return _userName.trim();
     }
 
     function init(element) {

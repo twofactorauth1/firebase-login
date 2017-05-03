@@ -34,6 +34,22 @@
                 <hr>
             </div>
             <div class="form-group">
+                <h4>Submitter</h4>
+                <div class="description">
+                    <a href="mailto:{{vm.state.purchaseOrder.submitter.username}}">
+                        {{vm.getSubmitterName(vm.state.purchaseOrder.submitter)}}
+                    </a>
+                </div>
+                <hr>
+            </div>
+            <div class="form-group">
+                <h4>Timestamp</h4>
+                <div class="description">
+                    {{vm.state.purchaseOrder.created.date | date:'MMM d yy HH:mm:ss'}}
+                </div>
+                <hr>
+            </div>
+            <div class="form-group">
                 <a class="btn btn-primary btn-success pull-left btn btn-primary btn-wide margin-top-5 margin-bottom-5 margin-left-5" href="{{vm.state.purchaseOrder.attachment.url}}" target="_blank" download="">
                     Download PO Attachment <span class="download-pdf fa fa-file-o"></span>
                 </a>
