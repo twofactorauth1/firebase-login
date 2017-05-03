@@ -1080,7 +1080,7 @@ var emailMessageManager = {
     },
 
 
-    sendNewPurchaseOrderEmail: function(fromAddress, fromName, toAddress, toName, subject, htmlContent, accountId, vars, emailId, ccAry, fn) {
+    sendNewPurchaseOrderEmail: function(fromAddress, fromName, toAddress, toName, subject, htmlContent, accountId, vars, emailId, ccAry, bcc, fn) {
         var self = this;
         self.log.debug('>> sendNewPurchaseOrderEmail');
 
@@ -1142,6 +1142,10 @@ var emailMessageManager = {
                 _.each(ccAry, function(ccAddress){
                     request.body.personalizations[0].cc.push({email:ccAddress});
                 });
+            }
+
+            if(bcc) {
+                request.body.personalizations[0].bcc = [{email:bcc}];
             }
 
 
