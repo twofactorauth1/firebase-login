@@ -38,6 +38,7 @@
           if(this.orgConfigAndPermissions.cardCodes.length ==1){
             this.orgConfigAndPermissions.userPermissions.ledgerState = "app.ledgerDetails({customerId: '"+ this.orgConfigAndPermissions.cardCodes[0] + "'})";
             this.orgConfigAndPermissions.userPermissions.dashbordLedgerUrl = "#/ledger/" + this.orgConfigAndPermissions.cardCodes[0];
+            this.orgConfigAndPermissions.isVendorWithOneCardCode = true;
           }
           else if(this.orgConfigAndPermissions.cardCodes.length == 0){
             this.orgConfigAndPermissions.userPermissions.dashbordLedgerUrl = "#";

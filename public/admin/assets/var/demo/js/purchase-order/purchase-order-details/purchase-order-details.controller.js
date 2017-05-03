@@ -24,6 +24,7 @@ function purchaseOrderDetailsController($scope, $state, $attrs, $filter, $modal,
     vm.getPurchaseOrderDetails = getPurchaseOrderDetails;
     vm.addNote = addNote;
     vm.archivePurchaseOrder = archivePurchaseOrder;
+    vm.getSubmitterName = getSubmitterName;
 
     function backToPurchaseOrders(){
         $state.go("app.purchaseorders");
@@ -98,10 +99,27 @@ function purchaseOrderDetailsController($scope, $state, $attrs, $filter, $modal,
         }
     }
 
+    function getSubmitterName(user){
+        var _userName = "";
+        if(user.first || user.last){
+            _userName = user.first + " " + user.last;
+        }
+        else{
+            _userName = user.username;
+        }
+        return _userName.trim();
+    }
+
     function init(element) {
         vm.element = element;
         vm.getPurchaseOrderDetails($stateParams.purchaseOrderId);
     }
+
+    $scope.$watch("$parent.orgCardAndPermissions", function(permissions) {
+        if(angular.isDefined(permissions)){
+            vm.state.orgCardAndPermissions = permissions;
+        }
+    });
 
 }
 

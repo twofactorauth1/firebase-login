@@ -397,6 +397,13 @@ module.exports = {
                                         return fn();
                                     }
                                 }
+                                var _user = {
+                                    _id: user.get("_id"),
+                                    username: user.get("username"),
+                                    first: user.get("first"),
+                                    last: user.get("last")
+                                };
+                                order.set("submitter", _user);
                                 async.each(order.get("notes"), function (note, cb) {
                                     userDao.getById(note.userId, function (err, user) {
                                         if (err) {
@@ -642,6 +649,7 @@ module.exports = {
         var fromName =  notificationConfig.WELCOME_FROM_NAME;
         var emailSubject = notificationConfig.NEW_PURCHASE_ORDER_EMAIL_SUBJECT;
         var emailTo = notificationConfig.NEW_PURCHASE_ORDER_EMAIL_TO;
+        var emailBcc = notificationConfig.NEW_PURCHASE_ORDER_EMAIL_BCC;
 
         app.render('purchaseorders/new_purchase_order', component, function(err, html){
             if(err) {
@@ -650,7 +658,7 @@ module.exports = {
             } else {
                 self.log.debug('sending email to: ', emailTo);
                 console.log(html);
-                emailMessageManager.sendNewPurchaseOrderEmail(fromEmail, fromName, emailTo, null, emailSubject, html, accountId, [], '', null, function(err, result){
+                emailMessageManager.sendNewPurchaseOrderEmail(fromEmail, fromName, emailTo, null, emailSubject, html, accountId, [], '', null, emailBcc, function(err, result){
                     self.log.debug('result: ', result);
                 });
             }

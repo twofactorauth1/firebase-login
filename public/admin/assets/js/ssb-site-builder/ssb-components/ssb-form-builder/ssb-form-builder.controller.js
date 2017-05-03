@@ -458,7 +458,7 @@
                                 this.style.setProperty( 'border-color', originalData.borderColor, 'important' );
                             
                             var btn=vm.originalData.btn;
-                            if(btn.border && btn.border.show){
+                            if(btn && btn.border && btn.border.show){
                                 if(btn.border.color){
                                     this.style.setProperty( 'border-color', btn.border.color, 'important' );
                                 }

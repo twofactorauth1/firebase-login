@@ -26,7 +26,7 @@
 	                                    </span>
 	                                        </div>
 	                                        <div class="col-xs-4 col-sm-3 padding-right-0" style="margin-left:-15px;">
-	                                            <button type="button" class="btn btn-o btn-info btn-wide btn-scroll btn-scroll-top ti-filter ng-click-active pull-left" ng-click="showFilter = !showFilter">
+	                                            <button type="button" class="btn btn-o btn-info btn-wide btn-scroll btn-scroll-top ti-filter ng-click-active pull-left" ng-click="vm.showFilter()">
 	                                                <span>Filter</span>
 	                                            </button>
 	                                        </div>
@@ -73,7 +73,7 @@
 	                                    </span>
 	                                        </div>
 	                                        <div class="col-xs-5">
-	                                            <button type="button" class="btn btn-o btn-info btn-wide btn-scroll btn-scroll-top ti-filter ng-click-active pull-right" ng-click="showFilter = !showFilter">
+	                                            <button type="button" class="btn btn-o btn-info btn-wide btn-scroll btn-scroll-top ti-filter ng-click-active pull-right" ng-click="vm.showFilter()">
 	                                                <span>Filter</span>
 	                                            </button>
 	                                        </div>
@@ -111,7 +111,7 @@
 	                <th st-sort="vm.getters.created">Date</th>
 	                <th class="hidden-xs">Attachment</th>
 	            </tr>
-	            <tr ng-if="showFilter">
+	            <tr ng-if="vm.uiState.showFilter">
 	                <th>
 	                    <input st-search="title" ng-model="vm.uiState.fieldSearch.title" placeholder="Name" class="form-control" type="search" />
 	                </th>
@@ -120,10 +120,10 @@
 	        <tbody>
 	            <tr ng-repeat="order in vm.displayedOrders" class="product-item" ng-click="vm.viewPurchaseOrderDetails(order)">
                     <td class="hidden-xs" ng-show='vm.displayedOrders.length'><i class="fa fa-2x" ng-click='vm.orderSelectClickFn($event, order)' ng-class='{"fa-check-circle": order.isSelected, "fa-circle-o": !order.isSelected}'></i></td>
-                    <td><strong>Name: </strong><div class="name-block-container"><span class="list-name"></span><span ng-text-truncate="order.title" ng-tt-chars-threshold="25" ng-tt-no-toggling></span></div></td>
+                    <td><strong>Name: </strong><div class="name-block-container"><span class="list-name"></span><span ng-text-truncate="order.title" ng-tt-chars-threshold="25" ng-tt-no-toggling title="{{order.title}}"></span></div></td>
 	                <td class=""><strong>Submitter: </strong>{{order.submitter.first}} {{order.submitter.last}}</td>
 	                <td><strong>Date: </strong>{{order.created.date | date:'MMM d yy HH:mm:ss'}}</td>
-	                <td class="hidden-xs"><strong>Attachment: </strong>{{order.attachment.name}}</td>
+	                <td class="hidden-xs"><strong>Attachment: </strong><span ng-text-truncate="order.attachment.name" ng-tt-chars-threshold="25" ng-tt-no-toggling title="{{order.attachment.name}}"></span></td>
 	            </tr>
 	        </tbody>
 	        <tfoot>

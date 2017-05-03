@@ -258,7 +258,8 @@ $.FroalaEditor.build = _.memoize(function(type) {
             'underline',
             'strikeThrough',
             'fontSize',
-            'color'
+            'color',
+            'insertLink'
         ];
         _.extend($.FroalaEditor.config, {
             toolbarButtons: messageToolbarButtons,

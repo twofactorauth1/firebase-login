@@ -186,6 +186,7 @@ function inventoryComponentController($scope, $attrs, $filter, $modal, $timeout,
         InventoryService.getInventory().then(function(response){
             vm.state.inventory = response.data.results;
             vm.uiState.pageLoading = false;
+            vm.uiState.loadingFilter = false;
         });
     }
 
@@ -228,6 +229,7 @@ function inventoryComponentController($scope, $attrs, $filter, $modal, $timeout,
     $scope.$watch('vm.uiState.globalSearch', function (term) {
         if(angular.isDefined(term)){
             if(!angular.equals(term, InventoryService.globalSearch)){
+                vm.uiState.loadingFilter = true;
                 loadDefaults();
                 InventoryService.globalSearch = angular.copy(term);
                 loadInventory();
@@ -241,6 +243,7 @@ function inventoryComponentController($scope, $attrs, $filter, $modal, $timeout,
     $scope.$watch('vm.uiState.fieldSearch', function (search) {
         if(angular.isDefined(search)){
             if(!angular.equals(search, InventoryService.fieldSearch)){
+                vm.uiState.loadingFilter = true;
                 loadDefaults();
                 InventoryService.fieldSearch = angular.copy(search);
                 loadInventory();
@@ -252,13 +255,14 @@ function inventoryComponentController($scope, $attrs, $filter, $modal, $timeout,
 
     function showFilter(){
         vm.uiState.showFilter = !vm.uiState.showFilter;
+        InventoryService.showFilter = vm.uiState.showFilter;
         if(!vm.uiState.showFilter)
             clearFilter();
     }
 
 
     function clearFilter(){
-        InventoryService.fieldSearch = {};
+        //InventoryService.fieldSearch = {};
         vm.uiState.fieldSearch = {
             OITM_ItemName: undefined,
             OMRC_FirmName: undefined,
@@ -319,7 +323,7 @@ function inventoryComponentController($scope, $attrs, $filter, $modal, $timeout,
     };
 
     function showFilteredRecords(){
-        return UtilService.showFilteredRecords(vm.uiState.globalSearch, vm.uiState.fieldSearch);
+        return !vm.uiState.loadingFilter && UtilService.showFilteredRecords(vm.uiState.globalSearch, vm.uiState.fieldSearch);
     }
 
     function init(element) {
