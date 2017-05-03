@@ -255,6 +255,7 @@ function inventoryComponentController($scope, $attrs, $filter, $modal, $timeout,
 
     function showFilter(){
         vm.uiState.showFilter = !vm.uiState.showFilter;
+        InventoryService.showFilter = vm.uiState.showFilter;
         if(!vm.uiState.showFilter)
             clearFilter();
     }
