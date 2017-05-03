@@ -18,10 +18,13 @@ function customersComponentController($scope, $attrs, $filter, $modal, $timeout,
 
     vm.showFilteredRecords = showFilteredRecords;
 
+    vm.showFilter = showFilter;
+
     vm.uiState = {
         loading: true,
         globalSearch: CustomersService.globalSearch,
         fieldSearch: CustomersService.fieldSearch,
+        showFilter: CustomersService.showFilter
     };
 
     $scope.$watch(function() { return CustomersService.customers }, function(customers) {
@@ -40,7 +43,10 @@ function customersComponentController($scope, $attrs, $filter, $modal, $timeout,
                 CustomersService.globalSearch = angular.copy(term);
             }
             else{
-               // $scope.$broadcast('refreshTableData', term);
+                var params = {
+                    fieldSearch: search
+                }
+                $scope.$broadcast('refreshTableData', params);
             }
         }
     }, true);
@@ -54,7 +60,10 @@ function customersComponentController($scope, $attrs, $filter, $modal, $timeout,
                 CustomersService.fieldSearch = angular.copy(search);
             }
             else{
-                //$scope.$broadcast('refreshTableData');
+                var params = {
+                    fieldSearch: search
+                }
+                $scope.$broadcast('refreshTableData', params);
             }
         }
     }, true);
@@ -65,6 +74,11 @@ function customersComponentController($scope, $attrs, $filter, $modal, $timeout,
 
     function showFilteredRecords(){
         return UtilService.showFilteredRecords(vm.uiState.globalSearch, vm.uiState.fieldSearch);
+    }
+
+    function showFilter(){
+        vm.uiState.showFilter = !vm.uiState.showFilter;
+        CustomersService.showFilter = vm.uiState.showFilter;
     }
 
     function init(element) {

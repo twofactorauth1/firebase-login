@@ -26,7 +26,7 @@
                                                 </span>
 	                                        </div>
 	                                        <div class="col-xs-2 col-sm-4 col-md-4 padding-right-0">
-	                                            <button type="button" class="btn btn-o btn-info btn-wide btn-scroll btn-scroll-top ti-filter ng-click-active pull-left" ng-click="showFilter = !showFilter">
+	                                            <button type="button" class="btn btn-o btn-info btn-wide btn-scroll btn-scroll-top ti-filter ng-click-active pull-left" ng-click="vm.showFilter()">
 	                                                <span>Filter</span>
 	                                            </button>
 	                                        </div>
@@ -62,7 +62,7 @@
 	                                    </span>
 	                                        </div>
 	                                        <div class="col-xs-5">
-	                                            <button type="button" class="btn btn-o btn-info btn-wide btn-scroll btn-scroll-top ti-filter ng-click-active pull-right" ng-click="showFilter = !showFilter">
+	                                            <button type="button" class="btn btn-o btn-info btn-wide btn-scroll btn-scroll-top ti-filter ng-click-active pull-right" ng-click="vm.showFilter()">
 	                                                <span>Filter</span>
 	                                            </button>
 	                                        </div>
@@ -101,7 +101,7 @@
 	                <th class="state-col" st-sort="OCRD_State1" style="white-space: nowrap;">State</th>
 	                <th class="hidden-xs zip-col" st-sort="OCRD_ZipCode" style="white-space: nowrap;">ZipCode</th>
 	            </tr>
-	            <tr ng-if="showFilter">
+	            <tr ng-if="vm.uiState.showFilter">
 	                <th>
 	                    <input st-search="OCRD_CardCode" ng-model="vm.uiState.fieldSearch.OCRD_CardCode" placeholder="Id" class="form-control" type="search" />
 	                </th>

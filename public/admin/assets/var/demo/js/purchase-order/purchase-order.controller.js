@@ -13,8 +13,9 @@ function purchaseOrderComponentController($scope, $attrs, $filter, $modal, $time
     };
     vm.uiState ={
         loading: true,
-        globalSearch: undefined,
-        fieldSearch: {},
+        globalSearch: PurchaseOrderService.globalSearch,
+        fieldSearch: PurchaseOrderService.fieldSearch,
+        showFilter: PurchaseOrderService.showFilter
     }
 
     
@@ -30,6 +31,7 @@ function purchaseOrderComponentController($scope, $attrs, $filter, $modal, $time
     vm.selectedOrdersFn = selectedOrdersFn;
     vm.pagingConstant = pagingConstant;
     vm.showFilteredRecords = showFilteredRecords;
+    vm.showFilter = showFilter;
 
     vm.bulkActionChoice = {};
 
@@ -43,6 +45,38 @@ function purchaseOrderComponentController($scope, $attrs, $filter, $modal, $time
             vm.uiState.loading = false;
             vm.state.orders = data;    
         }        
+    }, true);
+
+
+    /********** GLOBAL SEARCH RELATED **********/
+
+    $scope.$watch('vm.uiState.globalSearch', function (term) {
+        if(angular.isDefined(term)){
+            if(!angular.equals(term, PurchaseOrderService.globalSearch)){
+                PurchaseOrderService.globalSearch = angular.copy(term);
+            }
+            else{
+                var params = {
+                    globalSearch: term
+                }
+                $scope.$broadcast('refreshTableData', params);
+            }
+        }
+    }, true);
+
+
+    $scope.$watch('vm.uiState.fieldSearch', function (search) {
+        if(angular.isDefined(search)){
+            if(!angular.equals(search, PurchaseOrderService.fieldSearch)){
+                PurchaseOrderService.fieldSearch = angular.copy(search);
+            }
+            else{
+                var params = {
+                    fieldSearch: search
+                }
+                $scope.$broadcast('refreshTableData', params);
+            }
+        }
     }, true);
 
 
@@ -200,6 +234,11 @@ function purchaseOrderComponentController($scope, $attrs, $filter, $modal, $time
         return UtilService.showFilteredRecords(vm.uiState.globalSearch, vm.uiState.fieldSearch);
     }
 
+    function showFilter(){
+        vm.uiState.showFilter = !vm.uiState.showFilter;
+        PurchaseOrderService.showFilter = vm.uiState.showFilter;
+    }
+    
     function init(element) {
         vm.element = element;
     }
