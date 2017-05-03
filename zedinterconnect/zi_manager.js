@@ -186,7 +186,25 @@ module.exports = {
         self.log.debug(accountId, userId, '>> inventorySearch');
         var regex = new RegExp('\.*'+term+'\.*', 'i');
         var query = {};
-
+        var orQuery = [
+                    {'@id':regex},
+                    {OITM_ItemCode:parseInt(term)},
+                    {OITM_ItemName:regex},
+                    {OITM_U_dscription:regex},
+                    {OITB_ItmsGrpNam:regex},
+                    {In_Stock:regex},
+                    {Committed:regex},
+                    {Available:regex},
+                    {OMRC_FirmName:regex},
+                    {OLGT_UnitName:regex},
+                    {OITM_SLength1:regex},
+                    {OLGT_UnitName_10:regex},
+                    {OITM_SWidth1:regex},
+                    {OITM_BHeight1:regex},
+                    {OWGT_UnitName:regex},
+                    {OITM_SWeight1:regex},
+                    {OITM_SVolume:regex}
+                ];
         if(fieldSearch){
             var fieldSearchArr = [];
 
@@ -220,27 +238,12 @@ module.exports = {
             if(fieldSearchArr.length){
                 query["$and"] = fieldSearchArr;
             }
+            if(term){
+                query["$or"] = orQuery;
+            }
         } else {
             query = {
-                $or:[
-                    {'@id':regex},
-                    {OITM_ItemCode:parseInt(term)},
-                    {OITM_ItemName:regex},
-                    {OITM_U_dscription:regex},
-                    {OITB_ItmsGrpNam:regex},
-                    {In_Stock:regex},
-                    {Committed:regex},
-                    {Available:regex},
-                    {OMRC_FirmName:regex},
-                    {OLGT_UnitName:regex},
-                    {OITM_SLength1:regex},
-                    {OLGT_UnitName_10:regex},
-                    {OITM_SWidth1:regex},
-                    {OITM_BHeight1:regex},
-                    {OWGT_UnitName:regex},
-                    {OITM_SWeight1:regex},
-                    {OITM_SVolume:regex}
-                ]
+                $or: orQuery
             };
         }
         self.log.debug('query:', query);

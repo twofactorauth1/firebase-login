@@ -163,14 +163,14 @@ _.extend(api.prototype, baseApi.prototype, {
         var sortBy = req.query.sortBy || null;
         var sortDir = parseInt(req.query.sortDir) || null;
         var fieldSearch = req.body;
-
+        var term = req.query.term;
         /*
          * Search across the fields
          */
 
 
         //TODO: security
-        manager.inventorySearch(accountId, userId, null, fieldSearch, skip, limit, sortBy, sortDir, function(err, value){
+        manager.inventorySearch(accountId, userId, term, fieldSearch, skip, limit, sortBy, sortDir, function(err, value){
             self.log.debug(accountId, userId, '<< inventorySearch');
             return self.sendResultOrError(resp, err, value, "Error searching inventory");
         });
