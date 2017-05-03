@@ -85,7 +85,7 @@
                         {{vm.parseValueToFloat(vm.inventory.OITM_SLength1) | number : fractionSize}} {{vm.inventory.OLGT_UnitName_10}}
                     </span>
                     <span ng-if="vm.inventory.OITM_SLength1 <= 0 || vm.checkProductGroup() == vm.uiState.dimNotApplicableText">
-                        {{vm.checkProductGroup() == vm.uiState.dimNotApplicableText ? vm.uiState.dimNotApplicableText : ''}}
+                        {{vm.checkProductGroup() == vm.uiState.dimNotApplicableText ? vm.uiState.dimNotApplicableText : '&nbsp;'}}
                     </span>
                 </div>
                 <hr>
@@ -100,7 +100,7 @@
                         {{vm.parseValueToFloat(vm.inventory.OITM_SWidth1) | number : fractionSize}} {{vm.inventory.OLGT_UnitName_10}}
                     </span>
                     <span ng-if="vm.inventory.OITM_SWidth1 <= 0 || vm.checkProductGroup() == vm.uiState.dimNotApplicableText">
-                        {{vm.checkProductGroup() == vm.uiState.dimNotApplicableText ? vm.uiState.dimNotApplicableText : ''}}
+                        {{vm.checkProductGroup() == vm.uiState.dimNotApplicableText ? vm.uiState.dimNotApplicableText : '&nbsp;'}}
                     </span>
                 </div>
                 <hr>
@@ -113,7 +113,7 @@
                         {{vm.parseValueToFloat(vm.inventory.OITM_BHeight1) | number : fractionSize}} {{vm.inventory.OLGT_UnitName_10}}
                     </span>
                     <span ng-if="vm.inventory.OITM_BHeight1 <= 0 || vm.checkProductGroup() == vm.uiState.dimNotApplicableText">
-                        {{vm.checkProductGroup() == vm.uiState.dimNotApplicableText ? vm.uiState.dimNotApplicableText : ''}}
+                        {{vm.checkProductGroup() == vm.uiState.dimNotApplicableText ? vm.uiState.dimNotApplicableText : '&nbsp;'}}
                     </span>
                 </div>
                 <hr>
