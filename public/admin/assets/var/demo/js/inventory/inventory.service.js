@@ -66,7 +66,9 @@
             }
 
             if(checkIfFieldSearch()){
-                _qString += "&term=" + inventoryService.globalSearch;
+                if(inventoryService.globalSearch){
+                    _qString += "&term=" + inventoryService.globalSearch;
+                }
                 _method = "POST";
                 urlParts.push('search');
             }
