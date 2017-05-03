@@ -64,7 +64,7 @@
 
                 <div class="description">
                     <span ng-if="vm.inventory.In_Stock <= 0">
-                        <a href='#' ng-click='cancel($event);' onclick='Intercom("showNewMessage","")'>Call to Inquire</a>
+                        <a href='#' ng-click='cancel($event);' onclick='Intercom("showNewMessage","")'>Click to Inquire</a>
                     </span>
                     <span ng-if="vm.inventory.In_Stock > 0">
                         {{ vm.inventory.In_Stock }}
