@@ -75,11 +75,14 @@
                         <div class="clearfix"></div>
                     </li>
                 </ul>
-                <label><strong>New Note</strong></label>
-                <textarea id="newNote" rows="5" class="form-control margin-bottom-15" ng-model="vm.newNote.text"></textarea>
-                <button type="button" ng-disabled="!(vm.newNote.text) || vm.uiState.saveLoading" class="btn btn-info btn-block btn-o btn-wide btn-scroll btn-scroll-top ti-plus" ng-click="vm.addNote(vm.newNote.text)">
-                    <span>Add</span>
-                </button>
+                <div class="user-notes-container" ng-if="!vm.state.orgCardAndPermissions.isVendor">
+                    <label><strong>New Note</strong></label>
+                    <textarea id="newNote" rows="5" class="form-control margin-bottom-15" ng-model="vm.newNote.text"></textarea>
+                    <button type="button" ng-disabled="!(vm.newNote.text) || vm.uiState.saveLoading" class="btn btn-info btn-block btn-o btn-wide btn-scroll btn-scroll-top ti-plus" ng-click="vm.addNote(vm.newNote.text)">
+                        <span>Add</span>
+                    </button>
+                </div>
+                
             </div>
         </div>
     </div>
