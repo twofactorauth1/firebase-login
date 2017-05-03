@@ -44,7 +44,7 @@ function customersComponentController($scope, $attrs, $filter, $modal, $timeout,
             }
             else{
                 var params = {
-                    fieldSearch: search
+                    globalSearch: term
                 }
                 $scope.$broadcast('refreshTableData', params);
             }
