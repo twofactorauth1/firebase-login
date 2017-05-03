@@ -55,7 +55,7 @@ function dashboardAnalyticTileComponentController($scope, $attrs, $filter, Dashb
                         ret.data = []
                         _.each(inventory, function(item){
                             ret.data.push({
-                                field1: item.OMRC_FirmName,
+                                field1: item.OMRC_FirmName.split(" ")[0],
                                 field2: item.OITM_ItemName,
                                 field3: item.In_Stock <0 ? '' : item.In_Stock,
                                 link: ret.link + "/" + item["@id"]
@@ -120,9 +120,9 @@ function dashboardAnalyticTileComponentController($scope, $attrs, $filter, Dashb
                         }
                     });
 
-                    ret.header = [ 
+                    ret.header = [
 
-                        {label: 'Amount'},                        
+                        {label: 'Amount'},
                         {label: 'Invoice #'},
                         {label: 'Due Date'}
 
@@ -130,12 +130,12 @@ function dashboardAnalyticTileComponentController($scope, $attrs, $filter, Dashb
                     $scope.$watch(function() { return DashboardService.invoices; }, function(invoices){
                         ret.data = [];
                         _.each(invoices, function(invoice){
-                            
+
                             ret.data.push({
-                                
+
                                 field1: parseValueToCurrency(invoice.totalInvoice, invoice.currency),
                                 field2: invoice.invoiceNumber,
-                                field3: $filter('date')(parseValueToDate(invoice.dueDate), 'M/d/yyyy'),                               
+                                field3: $filter('date')(parseValueToDate(invoice.dueDate), 'M/d/yyyy'),
                                 link: "#/invoices/" + invoice.cardCode + "/" + invoice.invoiceNumber
                             })
                         })
@@ -237,7 +237,7 @@ function dashboardAnalyticTileComponentController($scope, $attrs, $filter, Dashb
     }
 
 
-    
+
 }
 
 })();

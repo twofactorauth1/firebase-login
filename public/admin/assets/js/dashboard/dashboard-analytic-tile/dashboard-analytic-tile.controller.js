@@ -34,7 +34,7 @@ function dashboardAnalyticTileComponentController($scope, $attrs, $filter, Dashb
             }else{
                  $scope.finalrevenuedata = 'loading....';
             }
-            
+
         var analyticsObject = DashboardService.state.analytics;
         if (analyticsObject) {
             switch(vm.analytic.name) {
@@ -124,9 +124,15 @@ function dashboardAnalyticTileComponentController($scope, $attrs, $filter, Dashb
                     ret.buttonTitle = 'View Orders';
                     ret.data = [
                         {
-                            analyticDataLabel: 'YTD New Order Rev.',
-                            analyticDataValue: parseFloat(analyticsObject.revenue.YTDTotalAmount).toFixed(2)
-                        },
+                            analyticDataLabel: 'YTD Revenue (Stripe)',
+                            analyticDataValue: $scope.finalrevenuedata
+                        }
+                        ,
+                        //{
+                        //    analyticDataLabel: 'YTD New Rev (non-Recurring)',
+                        //    analyticDataValue: parseFloat(analyticsObject.revenue.YTDTotalAmount).toFixed(2)
+                        //}
+                        //,
                         // {
                         //     analyticDataLabel: 'YTD Tax Collected',
                         //     analyticDataValue: analyticsObject.revenue.YTDTotalTax
@@ -134,11 +140,6 @@ function dashboardAnalyticTileComponentController($scope, $attrs, $filter, Dashb
                         {
                             analyticDataLabel: 'YTD New Orders',
                             analyticDataValue: analyticsObject.revenue.YTDTotalOrders
-                        }
-                        ,
-                        {
-                           analyticDataLabel: 'YTD Revenue (Stripe)',
-                           analyticDataValue: $scope.finalrevenuedata
                         }
                     ]
 
@@ -163,9 +164,9 @@ function dashboardAnalyticTileComponentController($scope, $attrs, $filter, Dashb
         }
     })
       $scope.$watch(function() { return DashboardService.revenueFromStripe }, function(state, oldState) {
-        
+
             vm.analyticMap();
-        
+
     })
 
     function init(element) {

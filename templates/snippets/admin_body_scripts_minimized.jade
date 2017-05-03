@@ -25,11 +25,15 @@ script.
 if environment == 'local'
 
     script(type="text/javascript").
+        var appId = 'ozyfh8ff';
+        if(window.indigenous && window.indigenous.orgId === 2) {
+            appId = 'we6izefz';//TEST Securematics
+        }
         window.intercomSettings = {
             name: '#{user.first} #{user.last}',
             email: '#{user.email}',
             user_hash: '#{user.intercomHash}',
-            app_id: "ozyfh8ff",
+            app_id: appId,
             'accountId':#{account._id},
             'userId':#{user._id}
         };
@@ -41,11 +45,15 @@ if environment == 'local'
 else if environment == 'test'
 
     script(type="text/javascript").
+        var appId = 'ozyfh8ff';
+        if(window.indigenous && window.indigenous.orgId === 2) {
+            appId = 'we6izefz';//TEST Securematics
+        }
         window.intercomSettings = {
             name: '#{user.first} #{user.last}',
             email: '#{user.email}',
             user_hash: '#{user.intercomHash}',
-            app_id: "ozyfh8ff",
+            app_id: appId,
             'accountId':#{account._id},
             'userId':#{user._id}
         };
@@ -56,11 +64,15 @@ else if environment == 'test'
 
 else
     script(type="text/javascript").
+        var appId = 'b3st2skm';
+        if(window.indigenous && window.indigenous.orgId === 2) {
+            appId = 'ncf278sy';//PROD Securematics
+        }
         window.intercomSettings = {
             name: '#{user.first} #{user.last}',
             email: '#{user.email}',
             user_hash: '#{user.intercomHash}',
-            app_id: "b3st2skm",
+            app_id: appId,
             'accountId':#{account._id},
             'userId':#{user._id}
         };

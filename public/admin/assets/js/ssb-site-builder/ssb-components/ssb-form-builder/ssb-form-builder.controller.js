@@ -128,23 +128,24 @@
               styleString += ' color: ' + btn.txtcolor + "!important;";
               vm.originalData.txtcolor= btn.txtcolor;
             }
-            if(btn.border && btn.border.show){
-              if(btn.border.color){
-                   styleString += ' border-color: '+btn.border.color+ '  !important;';
-                  vm.originalData.btn={};
-                  vm.originalData.btn.border=btn.border;
-              }
-              if(btn.border.width){
-                  styleString += ' border-width: '+btn.border.width+ 'px   !important;';
-              }
-              if(!btn.border.radius ){
-                  btn.border.radius=0;
-              }
-              styleString += ' border-radius: '+btn.border.radius+ '%  !important;';
-            if(btn.border.style){
-                styleString += ' border-style: '+btn.border.style+ ' !important;';
-              }
-           }
+            if(btn && btn.border && btn.border.show){
+                if(btn.border.color){
+                    styleString += ' border-color: '+btn.border.color+ '  !important;';
+                    vm.originalData.btn={};
+                    vm.originalData.btn.border=btn.border;
+                }
+                if(btn.border.width){
+                    styleString += ' border-width: '+btn.border.width+ 'px   !important;';
+                }
+                if(!btn.border.radius ){
+                    btn.border.radius=0;
+                }
+                styleString += ' border-radius: '+btn.border.radius+ '%  !important;';
+
+                if(btn.border.style){
+                    styleString += ' border-style: '+btn.border.style+ ' !important;';
+                }
+            }
             return styleString;
         };
 
@@ -454,25 +455,25 @@
                             if(vm.originalData.borderColor)
                               this.style.setProperty( 'border-color', vm.originalData.borderColor, 'important' );
                             else
-                              this.style.setProperty( 'border-color', originalData.borderColor, 'important' );
-                              var btn=vm.originalData.btn;
-                               if(btn.border &&
-                                   btn.border.show){
-                                  if(btn.border.color){
-                                      this.style.setProperty( 'border-color', btn.border.color, 'important' );
-                                  }
-                                  if(btn.border.width){
-                                      this.style.setProperty( 'border-width', btn.border.width+ 'px', 'important' );
-                                  }
-                                  if(!btn.border.radius){
-                                      btn.border.radius=0
-                                  }
-                                 this.style.setProperty( 'border-radius', btn.border.radius+'%', 'important' );
+                                this.style.setProperty( 'border-color', originalData.borderColor, 'important' );
+                            
+                            var btn=vm.originalData.btn;
+                            if(btn && btn.border && btn.border.show){
+                                if(btn.border.color){
+                                    this.style.setProperty( 'border-color', btn.border.color, 'important' );
+                                }
+                                if(btn.border.width){
+                                    this.style.setProperty( 'border-width', btn.border.width+ 'px', 'important' );
+                                }
+                                if(!btn.border.radius){
+                                    btn.border.radius=0;
+                                }
+                                this.style.setProperty( 'border-radius', btn.border.radius+'%', 'important' );
 
                                 if(btn.border.style){
-                                      this.style.setProperty( 'border-style', btn.border.style , 'important' );
-                                  }
-                              }
+                                    this.style.setProperty( 'border-style', btn.border.style , 'important' );
+                                }
+                            }
                         });
 
                         element.on("mousedown touchstart", function(){
@@ -522,24 +523,24 @@
                                   elem.style.setProperty( 'border-color', vm.originalData.borderColor, 'important' );
                                 else
                                   elem.style.setProperty( 'border-color', originalData.borderColor, 'important' );
-                                 var btn=vm.originalData.btn;
-                                  if(btn.border &&
+                                  var btn=vm.originalData.btn;
+                                  if(btn && btn.border &&
                                    btn.border.show){
-                                  if(btn.border.color){
-                                      elem.style.setProperty( 'border-color', btn.border.color, 'important' );
-                                  }
-                                  if(btn.border.width){
-                                      elem.style.setProperty( 'border-width', btn.border.width+ 'px', 'important' );
-                                  }
-                                  if(!btn.border.radius){
-                                      btn.border.radius=0
-                                  }
-                                 elem.style.setProperty( 'border-radius', btn.border.radius+'%', 'important' );
+                                        if(btn.border.color){
+                                            elem.style.setProperty( 'border-color', btn.border.color, 'important' );
+                                        }
+                                        if(btn.border.width){
+                                            elem.style.setProperty( 'border-width', btn.border.width+ 'px', 'important' );
+                                        }
+                                        if(!btn.border.radius){
+                                            btn.border.radius=0
+                                        }
+                                        elem.style.setProperty( 'border-radius', btn.border.radius+'%', 'important' );
 
-                                if(btn.border.style){
-                                      elem.style.setProperty( 'border-style', btn.border.style , 'important' );
-                                  }
-                              }
+                                        if(btn.border.style){
+                                            elem.style.setProperty( 'border-style', btn.border.style , 'important' );
+                                        }
+                                }
                             }, 1000);
                         })
                     }

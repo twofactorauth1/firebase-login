@@ -120,10 +120,10 @@
 	        <tbody>
 	            <tr ng-repeat="order in vm.displayedOrders" class="product-item" ng-click="vm.viewPurchaseOrderDetails(order)">
                     <td class="hidden-xs" ng-show='vm.displayedOrders.length'><i class="fa fa-2x" ng-click='vm.orderSelectClickFn($event, order)' ng-class='{"fa-check-circle": order.isSelected, "fa-circle-o": !order.isSelected}'></i></td>
-                    <td><strong>Name: </strong><div class="name-block-container"><span class="list-name"></span><span ng-text-truncate="order.title" ng-tt-chars-threshold="25" ng-tt-no-toggling></span></div></td>
+                    <td><strong>Name: </strong><div class="name-block-container"><span class="list-name"></span><span ng-text-truncate="order.title" ng-tt-chars-threshold="25" ng-tt-no-toggling title="{{order.title}}"></span></div></td>
 	                <td class=""><strong>Submitter: </strong>{{order.submitter.first}} {{order.submitter.last}}</td>
 	                <td><strong>Date: </strong>{{order.created.date | date:'MMM d yy HH:mm:ss'}}</td>
-	                <td class="hidden-xs"><strong>Attachment: </strong>{{order.attachment.name}}</td>
+	                <td class="hidden-xs"><strong>Attachment: </strong><span ng-text-truncate="order.attachment.name" ng-tt-chars-threshold="25" ng-tt-no-toggling title="{{order.attachment.name}}"></span></td>
 	            </tr>
 	        </tbody>
 	        <tfoot>
