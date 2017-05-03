@@ -13,6 +13,8 @@ var request = require('request');
 var parseString = require('xml2js').parseString;
 var userDao = require('../dao/user.dao');
 var accountManager = require('../accounts/account.manager');
+var emailMessageManager = require('../emailmessages/emailMessageManager');
+var ERR_MSG = 'We are having trouble retrieving these results.  Please try again later';
 
 module.exports = {
     log: logger,
@@ -295,6 +297,8 @@ module.exports = {
             if (err) {
                 self.log.error(accountId, userId, 'Error calling zed', err);
                 fn(err);
+            } else if(!value){
+                fn(ERR_MSG);
             } else {
                 self.log.debug(accountId, userId, '<< getLedger');
                 fn(null, value);
@@ -321,9 +325,10 @@ module.exports = {
                     callback(err);
                 } else {
                     
-                    var response = self.getParsedJson(value);//response.payload.querydata.data.row
+                    //var response = self.getParsedJson(value);//response.payload.querydata.data.row
+                    var response = value;
                     if(response === false){
-                        return fn("We are having trouble retrieving results from api. Please try again later")
+                        return fn(ERR_MSG)
                     }
                     if(response && response.response) {
                         response = response.response;
@@ -371,9 +376,9 @@ module.exports = {
                 self.log.error(0,0, 'Error loading inventory:', err);
                 fn();
             } else {
-                value = self.getParsedJson(value);
+                //value = self.getParsedJson(value);
                 if(value === false){
-                    return fn("We are having trouble retrieving results from api. Please try again later")
+                    return fn(ERR_MSG);
                 }
                 var data = value.response.payload.querydata.data.row;
                 _.each(data, function(row){
@@ -454,9 +459,9 @@ module.exports = {
                 self.log.error(accountId, userId, 'Error loading customers:', err);
                 fn(err);
             } else {
-                value = self.getParsedJson(value);
+                //value = self.getParsedJson(value);
                 if(value === false){
-                    return fn("We are having trouble retrieving results from api. Please try again later")
+                    return fn(ERR_MSG);
                 }
                 if(cardCodeAry && cardCodeAry.length > 0 && cardCodeAry[0] === 'admin') {
                     //nothing to filter
@@ -483,22 +488,29 @@ module.exports = {
         url += path;
         request(url, function(err, resp, body) {
             if(err) {
-                self.log.error('Error calling url [' + url + ']', err);
-                fn(err);
+                var text = 'Error calling url [' + url + ']';
+                self.log.error(text, err);
+
+                emailMessageManager.notifyAdmin('devops@indigenous.io', 'devops@indigenous.io', null,
+                    'Error calling Zed Interconnect', text, err, function(_err, value){
+                    fn(err);
+                });
+
             } else {
                 //self.log.debug('got this response:', resp);
                 //self.log.debug('got this body:', body);
-                fn(null, body);
+                try {
+                    var parsedJson = JSON.parse(body);
+                    fn(null, parsedJson);
+                } catch(err) {
+                    var text = 'Error parsing response from url [' + url + ']';
+                    emailMessageManager.notifyAdmin('devops@indigenous.io', 'devops@indigenous.io', null,
+                        'Error calling Zed Interconnect', text, err, function(_err, value){
+                            fn(null, {});
+                    });
+                }
             }
         });
-    },
-
-    getParsedJson: function(value) {
-        try {
-            return JSON.parse(value);
-        } catch (e) {
-            return {};
-        }
     }
 
 
