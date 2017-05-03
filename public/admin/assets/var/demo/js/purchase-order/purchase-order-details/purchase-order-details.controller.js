@@ -115,6 +115,12 @@ function purchaseOrderDetailsController($scope, $state, $attrs, $filter, $modal,
         vm.getPurchaseOrderDetails($stateParams.purchaseOrderId);
     }
 
+    $scope.$watch("$parent.orgCardAndPermissions", function(permissions) {
+        if(angular.isDefined(permissions)){
+            vm.state.orgCardAndPermissions = permissions;
+        }
+    });
+
 }
 
 })();
