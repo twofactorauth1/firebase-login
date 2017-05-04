@@ -417,28 +417,33 @@
                               btnHoverStyle = vm.component.formSettings.btnStyle.hover;
                             }
 
-                            if(btnHoverStyle){
-                                if(btnHoverStyle.bg && btnHoverStyle.bg.color){
-                                  this.style.setProperty( 'background-color', btnHoverStyle.bg.color, 'important' );
-                                  this.style.setProperty( 'border-color', btnHoverStyle.bg.color, 'important' );
+                            if (btnHoverStyle) {
+                                if (btnHoverStyle.bg && btnHoverStyle.bg.color) {
+                                    this.style.setProperty('background-color', btnHoverStyle.bg.color, 'important');
+                                    this.style.setProperty('border-color', btnHoverStyle.bg.color, 'important');
                                 }
-                                if(btnHoverStyle.border &&
-                                   btnHoverStyle.border.show){
-                                  if(btnHoverStyle.border.color){
-                                      this.style.setProperty( 'border-color', btnHoverStyle.border.color, 'important' );
-                                  }
-                                  if(btnHoverStyle.border.width){
-                                      this.style.setProperty( 'border-width', btnHoverStyle.border.width+ 'px', 'important' );
-                                  }
-                                  if(!btnHoverStyle.border.radius){
-                                     btnHoverStyle.border.radius=0;
-                                  }
-                                  this.style.setProperty( 'border-radius', btnHoverStyle.border.radius+'%', 'important' );
+                                if (btnHoverStyle.border &&
+                                    btnHoverStyle.border.show) {
+                                    if (btnHoverStyle.border.color) {
+                                        this.style.setProperty('border-color', btnHoverStyle.border.color, 'important');
+                                    }
+                                    if (btnHoverStyle.border.width) {
+                                        this.style.setProperty('border-width', btnHoverStyle.border.width + 'px', 'important');
+                                    }
+                                    if (!btnHoverStyle.border.radius) {
+                                        btnHoverStyle.border.radius = 0;
+                                    }
+                                    this.style.setProperty('border-radius', btnHoverStyle.border.radius + '%', 'important');
 
-                                if(btnHoverStyle.border.style){
-                                      this.style.setProperty( 'border-style', btnHoverStyle.border.style , 'important' );
-                                  }
-                              }
+                                    if (btnHoverStyle.border.style) {
+                                        this.style.setProperty('border-style', btnHoverStyle.border.style, 'important');
+                                    }
+                                } else {
+                                    this.style.setProperty('border-color', "none", 'important');
+                                    this.style.setProperty('border-width', '0px', 'important');
+                                    this.style.setProperty('border-radius', 'none%', 'important');
+                                    this.style.setProperty('border-style', "none", 'important');
+                                }
                             }
                             if(btnHoverStyle && btnHoverStyle.txtcolor)
                               this.style.setProperty( 'color', btnHoverStyle.txtcolor, 'important' );
@@ -486,23 +491,28 @@
                                   this.style.setProperty( 'background-color', btnActiveStyle.bg.color, 'important' );
                                   this.style.setProperty( 'border-color', btnActiveStyle.bg.color, 'important' );
                                 }
-                                if(btnActiveStyle.border &&
-                                   btnActiveStyle.border.show){
-                                  if(btnActiveStyle.border.color){
-                                      this.style.setProperty( 'border-color', btnActiveStyle.border.color, 'important' );
-                                  }
-                                  if(btnActiveStyle.border.width){
-                                      this.style.setProperty( 'border-width', btnActiveStyle.border.width+ 'px', 'important' );
-                                  }
-                                  if(!btnActiveStyle.border.radius){
-                                      btnActiveStyle.border.radius=0
-                                  }
-                                  this.style.setProperty( 'border-radius', btnActiveStyle.border.radius+'%', 'important' );
+                                if (btnActiveStyle.border &&
+                                    btnActiveStyle.border.show) {
+                                    if (btnActiveStyle.border.color) {
+                                        this.style.setProperty('border-color', btnActiveStyle.border.color, 'important');
+                                    }
+                                    if (btnActiveStyle.border.width) {
+                                        this.style.setProperty('border-width', btnActiveStyle.border.width + 'px', 'important');
+                                    }
+                                    if (!btnActiveStyle.border.radius) {
+                                        btnActiveStyle.border.radius = 0
+                                    }
+                                    this.style.setProperty('border-radius', btnActiveStyle.border.radius + '%', 'important');
 
-                                if(btnActiveStyle.border.style){
-                                      this.style.setProperty( 'border-style', btnActiveStyle.border.style , 'important' );
-                                  }
-                              }
+                                    if (btnActiveStyle.border.style) {
+                                        this.style.setProperty('border-style', btnActiveStyle.border.style, 'important');
+                                    }
+                                } else {
+                                    this.style.setProperty('border-color', "none", 'important');
+                                    this.style.setProperty('border-width', '0px', 'important');
+                                    this.style.setProperty('border-radius', 'none%', 'important');
+                                    this.style.setProperty('border-style', "none", 'important');
+                                }
                             }
                             if(btnActiveStyle && btnActiveStyle.txtcolor)
                               this.style.setProperty( 'color', btnActiveStyle.txtcolor, 'important' );

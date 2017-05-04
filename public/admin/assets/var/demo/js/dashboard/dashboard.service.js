@@ -5,9 +5,9 @@
 
 	app.factory('DashboardService', DashboardService);
 
-	DashboardService.$inject = ['$http', '$q', '$timeout'];
+	DashboardService.$inject = ['$http', '$q', '$timeout', 'toaster'];
 	/* @ngInject */
-	function DashboardService($http, $q, $timeout) {
+	function DashboardService($http, $q, $timeout, toaster) {
 
         var dashboardService = {
             state: {
@@ -347,7 +347,12 @@
             dashboardService.getActiveMessages();
             dashboardService.getPurchaseOrders();
             dashboardService.getInventory();
-            dashboardService.getInvoices();
+            dashboardService.getInvoices().then(function(){
+
+            }).catch(function(error) {
+                if(error.data && error.data.message)
+                    toaster.pop('error', 'Error', error.data.message);
+            });
             dashboardService.numberPolling++;
 		})();
 

@@ -24,7 +24,7 @@
     </div>
     <div class="clearfix"></div>
     <div class="modal-footer">
-        <button class="btn btn-primary" ng-disabled="!$parent.newuser.username || !$parent.newuser.password" ng-click="addNewUser()">Add New User</button>
+        <button class="btn btn-primary" ng-disabled="!$parent.newuser.username || !$parent.newuser.password || !checkIfValidUserName($parent.newuser.username)" ng-click="addNewUser()">Add New User</button>
     </div>
 
 </script>

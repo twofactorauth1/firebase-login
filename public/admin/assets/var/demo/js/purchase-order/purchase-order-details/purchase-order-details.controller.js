@@ -101,6 +101,9 @@ function purchaseOrderDetailsController($scope, $state, $attrs, $filter, $modal,
 
     function getSubmitterName(user){
         var _userName = "";
+        if(!user){
+            return _userName;
+        }
         if(user.first || user.last){
             _userName = user.first + " " + user.last;
         }

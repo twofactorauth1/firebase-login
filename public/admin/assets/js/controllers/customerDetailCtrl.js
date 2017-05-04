@@ -2,7 +2,7 @@
 /*global app, moment, angular, $$*/
 /*jslint unparam:true*/
 (function (angular) {
-    app.controller('CustomerDetailCtrl', ["$scope", "$rootScope", "$location", "$modal", "toaster", "$stateParams", "CustomerService", 'ContactService', 'SweetAlert', '$state', '$window', '$timeout', 'UserService', function ($scope, $rootScope, $location, $modal, toaster, $stateParams, customerService, contactService, SweetAlert, $state, $window, $timeout, UserService) {
+    app.controller('CustomerDetailCtrl', ["$scope", "$rootScope", "$location", "$modal", "toaster", "$stateParams", "CustomerService", 'ContactService', 'SweetAlert', '$state', '$window', '$timeout', 'formValidations', 'UserService', function ($scope, $rootScope, $location, $modal, toaster, $stateParams, customerService, contactService, SweetAlert, $state, $window, $timeout, formValidations, UserService) {
         $scope.isDomainChanged = false;
         /*
          * @getCustomer
@@ -484,6 +484,11 @@
 
         $scope.removeTemplateImage = function () {
             $scope.customer.templateImageUrl = null;
+        };
+
+        $scope.checkIfValidUserName = function(userName){
+            var regex = formValidations.email;
+            return regex.test(userName);
         };
 
         (function init() {
