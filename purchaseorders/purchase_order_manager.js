@@ -16,7 +16,7 @@ var userDao = require('../dao/user.dao');
 var emailMessageManager = require('../emailmessages/emailMessageManager');
 var userManager = require('../dao/user.manager');
 require('./model/purchase_order');
-
+var ziManager = require('../zedinterconnect/zi_manager');
 
 var accountDao = require('../dao/account.dao');
 
@@ -340,30 +340,42 @@ module.exports = {
         }
         //create record
         $.when(uploadPromise).done(function(file){
-            purchaseOrderdao.saveOrUpdate(po, function(err, order){
-                if(err) {
-                    self.log.error('Exception during po creation: ' + err);
-                    fn(err, null);
-                } else {
-                    self.log.debug('<< createPO');
-                    userDao.getById(order.get('userId'), function (err, user) {
-                        if (err) {
-                            log.error(accountId, userId, 'Error getting user: ' + err);
-                            fn(err, null);
-                        } else {
-                            var _user = {
-                                _id: user.get("_id"),
-                                username: user.get("username"),
-                                first: user.get("first"),
-                                last: user.get("last")
-                            };
-                            order.set("submitter", _user);
-                            self._sendEmailOnPOCreation(order, accountId, adminUrl);
-                            fn(null, order, file);
-                        }
-                    });
-                }
+            var companyNamePromise = $.Deferred();
+            if(!po.get('companyName') && po.get('cardCode')) {
+                ziManager.getCustomerNameForCardCode(accountId, userId, po.get('cardCode'), function(err, name){
+                    po.set('companyName', name);
+                    companyNamePromise.resolve();
+                });
+            } else {
+                companyNamePromise.resolve();
+            }
+            $.when(companyNamePromise).done(function(){
+                purchaseOrderdao.saveOrUpdate(po, function(err, order){
+                    if(err) {
+                        self.log.error('Exception during po creation: ' + err);
+                        fn(err, null);
+                    } else {
+                        self.log.debug('<< createPO');
+                        userDao.getById(order.get('userId'), function (err, user) {
+                            if (err) {
+                                log.error(accountId, userId, 'Error getting user: ' + err);
+                                fn(err, null);
+                            } else {
+                                var _user = {
+                                    _id: user.get("_id"),
+                                    username: user.get("username"),
+                                    first: user.get("first"),
+                                    last: user.get("last")
+                                };
+                                order.set("submitter", _user);
+                                self._sendEmailOnPOCreation(order, accountId, adminUrl);
+                                fn(null, order, file);
+                            }
+                        });
+                    }
+                });
             });
+
         });
 
     },
@@ -372,72 +384,92 @@ module.exports = {
     getPurchaseOrderById: function (accountId, userId, orderId, fn) {
         var self = this;
         log.debug(accountId, userId, '>> getPurchaseOrderById');
-        purchaseOrderdao.getById(orderId, $$.m.PurchaseOrder, function (err, order) {
-            if (err) {
-                log.error('Error getting purchase order: ' + err);
-                return fn(err, null);
-            } else {
-                accountDao.getAccountByID(accountId, function(err, account){
-                    if(err) {
-                        log.error('Error getting account:', err);
-                        return fn(err);
-                    } else {
-                        userManager.getUserById(userId, function(err, user){
-                            if(err || !user) {
-                                log.error('Error getting user:', err);
-                                return fn(err);
-                            } else {
-                                if(_.contains(user.getPermissionsForAccount(accountId), 'vendor')){
-                                    var orgConfig = user.getOrgConfig(account.get('orgId'));
-                                    if(!orgConfig) {
-                                        orgConfig = {};
-                                    }
-                                    var cardCodes = orgConfig.cardCodes || [];
-                                    if(!_.contains(user.get('orgConfig').cardCodes, order.get('cardCode'))) {
-                                        return fn();
-                                    }
-                                }
-                                var _user = {
-                                    _id: user.get("_id"),
-                                    username: user.get("username"),
-                                    first: user.get("first"),
-                                    last: user.get("last")
-                                };
-                                order.set("submitter", _user);
-                                async.each(order.get("notes"), function (note, cb) {
-                                    userDao.getById(note.userId, function (err, user) {
-                                        if (err) {
-                                            log.error(accountId, userId, 'Error getting user: ' + err);
-                                            cb(err);
-                                        } else {
-                                            var _user = {
-                                                _id: user.get("_id"),
-                                                username: user.get("username"),
-                                                first: user.get("first"),
-                                                last: user.get("last"),
-                                                profilePhotos: user.get("profilePhotos")
-                                            };
-                                            note.user = _user;
-                                            cb();
-                                        }
-                                    });
-                                }, function (err) {
-                                    if (err) {
-                                        log.error(accountId, userId, 'Error getting purchase order: ' + err);
-                                        return fn(err, null);
-                                    } else {
-                                        log.debug('<< getPurchaseOrderById');
-                                        return fn(null, order);
-                                    }
-                                });
-                            }
+        async.waterfall([
+            function(callback) {
+                purchaseOrderdao.getById(orderId, $$.m.PurchaseOrder, callback);
+            },
+            function(order, callback) {
+                if(!order) {
+                    callback('order not found');
+                } else {
+                    if(!order.get('companyName')) {
+                        ziManager.getCustomerNameForCardCode(accountId, userId, order.get('cardCode'), function(err, name){
+                            order.set('companyName', name);
+                            purchaseOrderdao.saveOrUpdate(order, callback);
                         });
+                    } else {
+                        callback(null, order);
+                    }
+                }
+            },
+            function(order, callback) {
+                accountDao.getAccountByID(accountId, function(err, account){
+                   if(err || !account) {
+                       callback(err|| 'account not found');
+                   } else {
+                       callback(null, order, account);
+                   }
+                });
+            },
+            function(order, account, callback) {
+                userManager.getUserById(userId, function(err, user){
+                    if(err || !user) {
+                        log.error('Error getting user:', err);
+                        callback(err || 'Cannot find user');
+                    } else {
+                        if(_.contains(user.getPermissionsForAccount(accountId), 'vendor')){
+                            var orgConfig = user.getOrgConfig(account.get('orgId'));
+                            if(!orgConfig) {
+                                orgConfig = {};
+                            }
+                            var cardCodes = orgConfig.cardCodes || [];
+                            if(!_.contains(cardCodes, order.get('cardCode'))) {
+                                return fn();
+                            }
+                        }
+                        var _user = {
+                            _id: user.get("_id"),
+                            username: user.get("username"),
+                            first: user.get("first"),
+                            last: user.get("last")
+                        };
+                        order.set("submitter", _user);
+                        callback(null, order, account);
                     }
                 });
-
-
+            },
+            function(order, account, callback) {
+                async.each(order.get("notes"), function (note, cb) {
+                    userDao.getById(note.userId, function (err, user) {
+                        if (err) {
+                            log.error(accountId, userId, 'Error getting user: ' + err);
+                            cb(err);
+                        } else {
+                            var _user = {
+                                _id: user.get("_id"),
+                                username: user.get("username"),
+                                first: user.get("first"),
+                                last: user.get("last"),
+                                profilePhotos: user.get("profilePhotos")
+                            };
+                            note.user = _user;
+                            cb();
+                        }
+                    });
+                }, function (err) {
+                    callback(err, order);
+                });
+            }
+        ], function(err, order){
+            if (err) {
+                log.error(accountId, userId, 'Error getting purchase order: ' + err);
+                return fn(err, null);
+            } else {
+                log.debug('<< getPurchaseOrderById');
+                return fn(null, order);
             }
         });
+
     },
 
     addNotesToPurchaseOrder: function(accountId, userId, purchaseOrderId, note, fn){

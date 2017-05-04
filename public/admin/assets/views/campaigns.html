@@ -198,7 +198,7 @@
                                         </span>
                                     </span>
                                 </td>
-                                <td ng-if="tableView != 'grid'" class=""><strong>Title: </strong> <span ng-text-truncate="campaign.name" ng-tt-chars-threshold="20" ng-tt-no-toggling></span></td>
+                                <td ng-if="tableView != 'grid'" class=""><strong>Title: </strong> <span ng-text-truncate="campaign.name" ng-tt-chars-threshold="20" ng-tt-no-toggling tooltip-placement="top" tooltip="{{campaign.name | titleCase}}" ></span></td>
                                 <td ng-if="tableView != 'grid'"><strong>Type: </strong> <span>{{campaign.type | titleCase}}</span></td>
                                 <td ng-if="tableView != 'grid'"><strong>Participants: </strong><span class=" text-bold">{{campaign.statistics.participants || 0}}</span></td>
                                 <td class="hidden-xs"  ng-if="tableView != 'grid'"><strong>Sent: </strong><span class=" text-bold">{{campaign.statistics.emailsSent || 0}}</span><span ng-if="campaign.statistics.participants" class="text-small muted"> ({{percentCalFn(campaign.statistics.emailsSent, campaign.statistics.participants)}}%)</span></td>

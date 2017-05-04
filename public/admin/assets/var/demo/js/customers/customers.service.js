@@ -5,9 +5,9 @@
 
 	app.factory('CustomersService', CustomersService);
 
-	CustomersService.$inject = ['$http', '$q', '$timeout'];
+	CustomersService.$inject = ['$http', '$q', '$timeout', 'toaster'];
 	/* @ngInject */
-	function CustomersService($http, $q, $timeout) {
+	function CustomersService($http, $q, $timeout, toaster) {
 
         var customerService = {
             
@@ -44,6 +44,7 @@
             }
 
             function error(error) {
+                customerService.customers = [];
                 console.error('customerService getCustomers error: ', JSON.stringify(error));
             }
 
@@ -71,7 +72,12 @@
 
 
 		(function init() {
-            customerService.getCustomers();
+            customerService.getCustomers().then(function(){
+
+            }).catch(function(error) {
+                if(error.data && error.data.message)
+                    toaster.pop('error', 'Error', error.data.message);
+            });
 		})();
 
 

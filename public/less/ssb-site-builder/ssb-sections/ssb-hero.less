@@ -263,6 +263,54 @@
 
     }
 
+    /*
+     * responsive layout-hero-v8 and layout-hero-v5 if verticle nav is on
+    */
+
+    .ssb-wrap-fixed-right-nav{
+        .ssb-page-section-layout-hero-v8, .ssb-page-section-layout-hero-v5 {
+            &.ssb-page-section-layout-hero > [ssb-text-component] {
+
+                @media screen and (min-width: 768px){
+
+                    padding: 30px 15px!important;
+
+                    .element-wrap {
+                        width: 80%;
+                        margin: 0 auto;
+                    }
+                };
+
+            }
+
+            &.ssb-page-section-layout-hero [ssb-image-component] {
+
+                @media screen and (min-width: 768px){
+                    background: no-repeat 0 0;
+                    background-size: cover;
+                    min-height: 100%;
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    z-index: 0!important;
+                    img {
+                       display: none;
+                    }
+                }
+
+            }
+
+            .flex-container-absolute-column{
+                @media screen and (min-width: 768px){
+                    position: relative;
+                }
+
+            }
+
+        }
+    }
+
 
 
     .ssb-page-section-layout-hero-v7 [testimonials-component] {

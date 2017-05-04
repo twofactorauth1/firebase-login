@@ -388,8 +388,10 @@ _.extend(api.prototype, baseApi.prototype, {
                     accountId,
                     [],
                     emailDataObj.content._id,
+                    emailDataObj.content.cc,
+                    emailDataObj.content.bcc,
                     function(err, result){
-                      self.log.debug('mandrill return');
+                      self.log.debug('sendgrid return');
                       self.sendResultOrError(resp, err, result, "Error Sending Test Email");
                 });
             }
