@@ -1179,7 +1179,7 @@ var emailMessageManager = {
 
     },
 
-    sendTestEmail: function(fromAddress, fromName, toAddress, toName, subject, htmlContent, accountId, vars, emailId, fn) {
+    sendTestEmail: function(fromAddress, fromName, toAddress, toName, subject, htmlContent, accountId, vars, emailId, cc, bcc, fn) {
         var self = this;
         var contactId = null;
         self.log.debug('>> sendTestEmail');
@@ -1228,6 +1228,14 @@ var emailMessageManager = {
                         }
                         if(toName && toName.length > 0) {
                             request.body.personalizations[0].to[0].name = toName;
+                        }
+
+                        if(cc) {
+                            request.body.personalizations[0].cc = [{email:cc}];
+                        }
+
+                        if(bcc) {
+                            request.body.personalizations[0].bcc = [{email:bcc}];
                         }
 
                         self._safeStoreEmail(request.body, accountId, null, emailId, function(err, emailmessage){
