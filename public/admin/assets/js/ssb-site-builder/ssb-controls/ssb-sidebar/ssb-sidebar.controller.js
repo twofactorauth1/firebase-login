@@ -62,7 +62,8 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
     vm.constructVideoUrl = constructVideoUrl;
     vm.closeSectionPanel = closeSectionPanel;
     vm.initializeMapSlider = initializeMapSlider;
-    vm.addCustomField = addCustomField;
+    vm.addCustomField = addRemoveCustomField;
+   
     vm.checkDuplicateField = checkDuplicateField;
     vm.showSection = showSection;
 
@@ -1060,18 +1061,24 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
         }, 0);
     }
 
-    function addCustomField(type){
-        var cleanType = type.replace(/ /g, '');;
-        var newInfo = {
-            name: cleanType,
-            type: type,
-            label: type,
-            custom: true,
-            optional:true,
-            visible: true
+    function addRemoveCustomField(type, index){
+        if(type){  
+            var cleanType = type.replace(/ /g, '');;
+            var newInfo = {
+                name: cleanType,
+                type: type,
+                label: type,
+                custom: true,
+                optional:true,
+                visible: true
+            }
+            vm.state.page.sections[vm.uiState.activeSectionIndex].components[vm.uiState.activeComponentIndex].contactInfo.push(newInfo);
+            vm.contactInfo = {};
         }
-        vm.state.page.sections[vm.uiState.activeSectionIndex].components[vm.uiState.activeComponentIndex].contactInfo.push(newInfo);
-        vm.contactInfo = {};
+        else{
+            vm.state.page.sections[vm.uiState.activeSectionIndex].components[vm.uiState.activeComponentIndex].contactInfo.splice(index, 1);
+        }
+        
     }
 
     function checkDuplicateField(_type){
