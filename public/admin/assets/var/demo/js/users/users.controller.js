@@ -2,7 +2,7 @@
 /*global app, moment, angular, window*/
 /*jslint unparam:true*/
 (function (angular) {
-    app.controller('usersCtrl', ['$scope', '$state', '$http', "toaster", "$filter", "$modal", "$timeout", "AccountService","UserService", "userConstant", "SweetAlert", function ($scope, $state, $http, toaster, $filter, $modal, $timeout, AccountService,UserService, userConstant, SweetAlert) {
+    app.controller('usersCtrl', ['$scope', '$state', '$http', "toaster", "$filter", "$modal", "$timeout", "AccountService","UserService", "userConstant", "formValidations", "SweetAlert", function ($scope, $state, $http, toaster, $filter, $modal, $timeout, AccountService,UserService, userConstant, formValidations, SweetAlert) {
 
         var vm = this;
 
@@ -285,6 +285,10 @@
 
         }
 
+        $scope.checkIfValidUserName = function(userName){
+            var regex = formValidations.email;
+            return regex.test(userName);
+        };
 
         (function init() {
 
