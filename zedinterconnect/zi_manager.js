@@ -482,6 +482,37 @@ module.exports = {
         });
     },
 
+    getCustomerNameForCardCode: function(accountId, userId, cardCode, fn) {
+        var self = this;
+        self.log.debug(accountId, userId, '>> getCustomerNameForCardCode');
+        var path = 'query/Indigenous/CustomerList.aspx?accept=application/json';
+        self._ziRequest(path, function(err, value){
+            if(err) {
+                self.log.error(accountId, userId, 'Error loading customers:', err);
+                fn(err);
+            } else {
+                //value = self.getParsedJson(value);
+                if(value === false){
+                    return fn(ERR_MSG);
+                }
+                var companyName = '';
+                if(value && value.response && value.response.payload && value.response.payload.querydata && value.response.payload.querydata.data) {
+                    var resultAry = value.response.payload.querydata.data.row;
+                    _.each(resultAry, function(result){
+                        if(result.OCRD_CardCode.toLowerCase() === cardCode.toLowerCase()) {
+                            companyName = result.OCRD_CardName;
+                        }
+                    });
+                }
+                if(companyName === '') {
+                    self.log.warn('Could not match a card code:' + cardCode.toLowerCase(), cardCode);
+                }
+                self.log.debug(accountId, userId, '<< getCustomerNameForCardCode');
+                fn(null, companyName);
+            }
+        });
+    },
+
     _ziRequest: function(path, fn) {
         var self = this;
         var url = ziConfig.ZED_PROTOCOL + ziConfig.ZED_USERNAME + ':' + ziConfig.ZED_PASSWORD + '@' + ziConfig.ZED_ENDPOINT;

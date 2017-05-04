@@ -19,6 +19,7 @@ var purchaseOrder = $$.m.ModelBase.extend({
             attachment: null,
             notes: [],
             cardCode:null,
+            companyName:null,
             archived: false,
             created: {
                 date: new Date(),
