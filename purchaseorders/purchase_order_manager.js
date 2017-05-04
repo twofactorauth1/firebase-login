@@ -423,7 +423,7 @@ module.exports = {
                                 orgConfig = {};
                             }
                             var cardCodes = orgConfig.cardCodes || [];
-                            if(!_.contains(user.get('orgConfig').cardCodes, order.get('cardCode'))) {
+                            if(!_.contains(cardCodes, order.get('cardCode'))) {
                                 return fn();
                             }
                         }
