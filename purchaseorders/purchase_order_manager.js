@@ -427,6 +427,18 @@ module.exports = {
                                 return fn();
                             }
                         }
+                        
+                        callback(null, order, account);
+                    }
+                });
+            },
+            function(order, account, callback){
+                userManager.getUserById(order.get('userId'), function(err, user){
+                    if(err) {
+                        log.error(accountId, userId, 'Error getting user:', err);
+                        //return anyway
+                        callback(err);
+                    } else {
                         var _user = {
                             _id: user.get("_id"),
                             username: user.get("username"),
