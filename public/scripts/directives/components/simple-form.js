@@ -302,18 +302,18 @@ app.directive('simpleFormComponent', ["ipCookie", '$window', '$timeout', 'userSe
                                 var btn=scope.originalData.btn;
                                 if(btn && btn.border && btn.border.show){
                                     if(btn.border.color){
-                                        this.style.setProperty( 'border-color', btn.border.color, 'important' );
+                                        elem.style.setProperty( 'border-color', btn.border.color, 'important' );
                                     }
                                     if(btn.border.width){
-                                        this.style.setProperty( 'border-width', btn.border.width+ 'px', 'important' );
+                                        elem.style.setProperty( 'border-width', btn.border.width+ 'px', 'important' );
                                     }
                                     if(!btn.border.radius){
                                         btn.border.radius=0;
                                     }
-                                    this.style.setProperty( 'border-radius', btn.border.radius+'%', 'important' );
+                                    elem.style.setProperty( 'border-radius', btn.border.radius+'%', 'important' );
 
                                     if(btn.border.style){
-                                        this.style.setProperty( 'border-style', btn.border.style , 'important' );
+                                        elem.style.setProperty( 'border-style', btn.border.style , 'important' );
                                     }
                                 }
                             }, 1000);
