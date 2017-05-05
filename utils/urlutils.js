@@ -85,7 +85,13 @@ var urlutils = {
 
         //check if the subdomain matches a list of globalSubdomains that indicate mainApp
         if(subdomain != null && _.contains(globalSubdomains.toString().split(','), subdomain)){
-            isMainApp = true;
+            _log.trace('setting main app because of globalSubdomains');
+            if(domain === 'indigenous') {
+                isMainApp = true;
+            } else {
+                _log.trace('not setting main app because domain is not indigenous');
+            }
+
         }
         if(subdomain === '' && domain === 'indigenous') {
             isMainApp = true;
