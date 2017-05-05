@@ -6,305 +6,252 @@
 
 <div ng-show="!isFormValid">
     <div ng-class="component.type+'-v'+component.version">
-        <div class="payment-form-header">
-            <div style="max-width:800px!important;margin:0 auto;">
-                <img src="/images/rvlvr_logo_black.png" height="50" class="pull-left hidden-xs" style="display: block;">
-                <img src="/images/rvlvr_logo_black.png" height="35" class="pull-left pull-down visible-xs small-rvlvr-logo" style="display: block;">
-                <p class="pull-right" style="line-height: 65px;">Already have an account? <a href="/login">Log In</a></p>
-            </div>
-            <div class="clearfix"></div>
-        </div>
-        <div class="top-signup account-info-signup">
-            <div class="inner-page">
-                <div class="padding-15 signup-getting-started">
-                    <h2 class="center text-bold margin-bottom-5">Getting Started</h2>
-                    <h3 class="center">We just need some information.</h3>
+        <div class="rvlvr-container">
+            <div class="rvlvr-top-container">
+                <div class="payment-form-header">
+                    <div class="header-logo-container">
+                        <img src="/images/rvlvr/rvlvr-logo-white.png" height="35" class="pull-left hidden-xs" style="display: block;">
+                        <img src="/images/rvlvr/rvlvr-logo-white.png" height="30" class="pull-left pull-down visible-xs small-rvlvr-logo" style="display: block;">
+                        <p class="pull-right already-account-info" style="line-height: 65px;">Already have an account? <a class="btn signup-btn-v3 btn-account" href="/login">Log In</a></p>
+                    </div>
+                    <div class="clearfix"></div>
                 </div>
-
-                <div class="signup-body">
-
-                    <div class="padding-15 rvlvr-securematics-logo-container">
-                        <img src="/images/securematics_logo_black.png" class="rvlvr-securematics-logo">
-                        <h4 class="center rvlvr-securematics-fee">A $1,500 one-time fee is required and will be credited back to your Securematics account after your site is live.</h4>
-                    </div>
-                    <div class="clearfix"></div>
-                    <hr>
-
-                    <div class="features-wrap">
-
-                        <div class="col-sm-6 padding-top-15">
-                            <div class="feature-block" ng-click="newAccount.plan = component.productIds['RVLVRPLAN']" ng-class="{ 'selected-plan': newAccount.plan === component.productIds['RVLVRPLAN'] }">
-                                <div class="">
-                                    <div class="" style="">
-                                        <div>
-                                            <br>
-                                        </div>
-                                        <div class="center">
-                                            <span class="plan-title">
-                                                <span>Monthly Plan
-                                            </span>
-                                        </div>
-                                        <div class="center">
-                                            <span class="plan-subtitle">
-                                                <strong class=""><span></span></strong>
-                                            </span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="feature-content">
-                                    <div class="margin-top-10">
-                                        <div class="center">
-                                            <span class="plan-subtitle">
-                                                <span>All-in-one Digital Platform</span>
-                                            </span>
-                                        </div>
-
-                                        <div class="center">
-                                            <span class="plan-amount">
-                                                <span>$100/<span class="plan-duration">month</span></span>
-                                            </span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                <div class="top-signup account-info-signup">
+                    <div class="top-signup-info">
+                        
+                        <div class="signup-getting-started">
+                            <h2 class="text-bold margin-bottom-5">*Getting Started</h2>
+                            <h3 class="">We just need some information.</h3>
                         </div>
 
-                        <div class="col-sm-6 padding-top-15">
-                            <div class="feature-block" ng-click="newAccount.plan = component.productIds['RVLVRANNUAL']" ng-class="{ 'selected-plan': newAccount.plan === component.productIds['RVLVRANNUAL'] }">
-                                <div class="">
-                                    <div class="" style="">
-                                        <div>
-                                            <br>
-                                        </div>
-                                        <div class="center">
-                                            <span class="plan-title">
-                                                <span>Annual Plan
-                                            </span>
-                                        </div>
-                                        <div class="center">
-                                            <span class="plan-subtitle">
-                                                <strong class=""><span></span></strong>
-                                            </span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="feature-content">
-                                    <div class="margin-top-10">
-                                        <div class="center">
-                                            <span class="plan-subtitle">
-                                                <span>All-in-one Digital Platform</span>
-                                            </span>
-                                        </div>
-
-                                        <div class="center">
-                                            <span class="plan-amount">
-                                                <span>$1000/<span class="plan-duration">year</span></span>
-                                            </span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                         <div class="clearfix"></div>
-                        <div class="form-group padding-top-20 hidden">
 
-                            <div style="display:inline-block" class=" padding-top-10">
-                                <span class="sign-up-small-text">* language here</span>
-                            </div>
+                        <div class="features-wrap center">
 
-                        </div>
+                            <div class="col-sm-6 padding-top-15">
+                                <div class="feature-block" ng-click="newAccount.plan = component.productIds['RVLVRPLAN']" ng-class="{ 'selected-plan': newAccount.plan === component.productIds['RVLVRPLAN'] }">
+                                    <div class="">
+                                        <div class="" style="">
+                                            <div>
+                                                <br>
+                                            </div>
+                                            <div class="center">
+                                                <span class="plan-title">
+                                                    <span>Monthly Plan
+                                                </span>
+                                            </div>
+                                            <div class="center">
+                                                <span class="plan-subtitle">
+                                                    <strong class=""><span></span></strong>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="feature-content">
+                                        <div class="margin-top-10">
+                                            <div class="center">
+                                                <span class="plan-subtitle">
+                                                    <span>All-in-one Digital Platform</span>
+                                                </span>
+                                            </div>
 
-                    </div>
-                    <div class="clearfix"></div>
-                    <hr>
-                    <div class="row margin-top-20" >
-                        <form name="card-details" action="#" class="form-group mb0 has-feedback" data-card-container="#card-container" data-values="cardValues" data-card data-options="cardOptions" data-messages="cardMessages">
-                        <div class="section-title padding-bottom-10">
-                            <span>Basic Information</span>
-                        </div>
-                        <!-- NAME -->
-                        <div id="fullName" class="form-group col-xs-12 padding-left-0 padding-right-0 has-feedback">
-                            <input class="form-control" type="text" ng-model="newAccount.fullName" placeholder="Name" name="fullName"/>
-                            <span class="glyphicon form-control-feedback"></span>
-                            <span class="error help-block" />
-                        </div>
-                        <!-- EMAIL AND PASSWORD -->
-                        <div id="email" class="form-group col-xs-12 padding-left-0 padding-right-0 has-feedback" ng-hide="tmpAccount.tempUser" style="padding-left:0">
-                            <input class="form-control" type="email" ng-model="newAccount.email" ng-pattern="emailValidation" ng-change="checkEmailExists(newAccount)" ng-model-options="{ debounce: 800 }" name="email" placeholder="Email Address"/>
-                            <span class="glyphicon form-control-feedback"></span><span class="error help-block" />
-                        </div>
-                        <div id="password" class="form-group col-xs-12 padding-left-0 padding-right-0 has-feedback" ng-hide="newAccount.hidePassword" style="padding-left:0">
-                            <input class="form-control" type="password" ng-model="newAccount.password" ng-change="checkPasswordLength(newAccount)" ng-model-options="{ debounce: 800 }" placeholder="Password"/>
-                            <span class="help-block" ng-if="passwordIsValid === false">Your password must be at least 6 characters.</span>
-                            <span class="glyphicon form-control-feedback"></span>
-                            <span class="error help-block" />
-                        </div>
-
-
-
-                        <!-- Business Name -->
-                        <div id="business-name"
-                             class="form-group col-xs-12 padding-left-0 padding-right-0 has-feedback"
-                             ng-class="{'has-error': !validBusinessName,
-                              'has-success': domainExistsAlready!==undefined && !domainExistsAlready}" style="padding-left:0">
-                            <div class="row-fluid business-domain">
-
-                                <div class="input-group">
-                                    <span class="input-group-addon">https://</span>
-                                    <input class="form-control"
-                                       type="text"
-                                       ng-model="newAccount.businessName"
-                                       ng-change="checkDomainExists(newAccount)"
-                                       ng-model-options="{ debounce: 800 }"
-                                       placeholder="Business Name"
-                                       style="width:100%"/>
-                                    <span class="input-group-addon">.gorvlvr.com</span>
+                                            <div class="center">
+                                                <span class="plan-amount">
+                                                    <span>$100/<span class="plan-duration">month</span></span>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-
                             </div>
 
+                            <div class="col-sm-6 padding-top-15">
+                                <div class="feature-block" ng-click="newAccount.plan = component.productIds['RVLVRANNUAL']" ng-class="{ 'selected-plan': newAccount.plan === component.productIds['RVLVRANNUAL'] }">
+                                    <div class="">
+                                        <div class="" style="">
+                                            <div>
+                                                <br>
+                                            </div>
+                                            <div class="center">
+                                                <span class="plan-title">
+                                                    <span>Annual Plan
+                                                </span>
+                                            </div>
+                                            <div class="center">
+                                                <span class="plan-subtitle">
+                                                    <strong class=""><span></span></strong>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="feature-content">
+                                        <div class="margin-top-10">
+                                            <div class="center">
+                                                <span class="plan-subtitle">
+                                                    <span>All-in-one Digital Platform</span>
+                                                </span>
+                                            </div>
+
+                                            <div class="center">
+                                                <span class="plan-amount">
+                                                    <span>$1000/<span class="plan-duration">year</span></span>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                             <div class="clearfix"></div>
-                            <span class="error help-block" ng-if="domainExistsAlready">Domain Already Exists</span>
-                            <span class="error help-block" ng-if="emptyBusinessName">Business Name Required</span>
-                            <span class="help-block" ng-show="newAccount.businessName && validBusinessName">Your domain will be <strong>{{newAccount.businessName | urlFilter}}.gorvlvr.com</strong>. You can change it at any time.</span>
-                            <span class="help-block" ng-show="dotComExt">This field is for your gorvlvr account subdomain. You may point the domain of your choosing to your site at any time.</span>
+                            <div class="form-group padding-top-20 hidden">
+
+                                <div style="display:inline-block" class=" padding-top-10">
+                                    <span class="sign-up-small-text">* language here</span>
+                                </div>
+
+                            </div>
+
                         </div>
                         <div class="clearfix"></div>
-                        <hr>
-                        <div class="section-title padding-bottom-10">
-                            <span>Payment Information</span>
-                        </div>
 
-                        <div class="col-sm-5 signup-payment-information">
-
-                            <div class="row">
-                                <div id="card_number" class="form-group small-6">
-                                    <input placeholder="Card number" type="text" name="number" id="number" ng-blur="checkCardNumber()" class="form-control">
-                                    <span class="glyphicon form-control-feedback"></span>
-                                    <span class="error help-block" />
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div id="card_expiry" class="form-group small-3 columns col-xs-6 has-feedback" style="padding-left:0">
-                                    <input placeholder="MM/YYYY" ng-blur="checkCardExpiry()" type="text" id="expiry" name="expiry" class="form-control" style="width:100%;padding-right:0px">
-                                    <span class="glyphicon form-control-feedback"></span>
-                                    <span class="error help-block" />
-                                </div>
-                                <div id="card_cvc" class="form-group small-3 columns col-xs-6 has-feedback" style="padding-right:0">
-                                    <input placeholder="CVC" ng-blur="checkCardCvv()" type="text" id="cvc" name="cvc" class="form-control" style="width:100%; padding-right:0px">
-                                    <span class="glyphicon form-control-feedback"></span>
-                                    <span class="error help-block" />
-                                </div>
-                            </div>
+                        <div class="rvlvr-securematics-logo-container">
+                            <p class="rvlvr-securematics-fee">A $1,500 one-time fee is required and will be credited back to you upon completion of site.</p>
                         </div>
-                        <div class="col-xs-12 col-sm-7 margin-top-20 padding-right-0 padding-left-0">
-                            <div id="card-container"></div>
-                            <div class="center signup-credit-cards-container">
-                                <img class="padding-top-10 signup-credit-cards" src="/images/signup-credit-cards.png" />
-                            </div>
-
-                        </div>
-
-                        <div class="clearfix margin-bottom-10"></div>
-                        <hr>
-                        <div class="padding-bottom-20 center">
-                            <img class="center padding-15" src="/images/signup-lock.png" />
-                            <div class="sign-up-medium-text ">Satisfaction Guaranteed</div>
-                        </div>
-                        <!-- BUY -->
-                        <div class="submit-signup center padding-bottom-20">
-                            <a type="button" class="signup-btn-v2" ng-click="createAccount(newAccount)">SIGN UP</a>
-                            <span class="help-block" ng-show='havingNetworkIssue'>Something went wrong during the creation of your account. Please try again.</span>
-                            <span class="error text-red help-block" ng-if='requiredFieldsFilled === false'>Please fill in all required fields.</span>
-                        </div>
-                        <p class="center margin-top-10">By clicking this button you agree to our <a href="/legal" class="text-nowrap">Terms of Service</a>.</p>
-                        <p class="center margin-top-10"><a href="/legal#privacy-policy" class="text-nowrap">Privacy Policy</a>: We hate SPAM and promise to keep your information safe.</p>
-                    </form>
-                    </div>
+                        <div class="clearfix"></div>
+                    </div>                    
                 </div>
+
             </div>
-        </div>
-        <div class="price-signup hidden">
-            <div class="inner-page">
-                <div class="clearfix mb20"></div>
-                <div ng-repeat="plan in subscriptionPlans" ng-class="{ 'notSelected': newAccount.membership != plan.id , 'selected': newAccount.membership == plan.id  }">
-                    <h4 class="center">{{plan.name}}</h4>
-                    <h2 class="center"><i class="fa fa-usd fa-1"></i>{{(plan.amount/100).toFixed(2)}} <span>/ {{plan.interval}}</span></h2>
-                    <div class="clearfix mb15"></div>
-                    <p class="center"><span ng-show="currentCoupon.created != 1437591986 && paymentFormProduct.product_attributes.stripePlans[0].signup_fee">+ <i class="fa fa-usd fa-1"></i> {{subscriptionPlanOneTimeFee}} One Time Setup Fee</span> <span ng-if="currentCoupon.created == 1437591986">No Setup Fee</span></p>
-                    <div class="col-xs-12">
-                        <a type="button" class="btn ssb-theme-btn btn-success btn-block center" ng-if="newAccount.membership != plan.id" ng-hide="subscriptionPlans.length == 1" ng-click="selectSubscriptionPlanFn(plan.id, plan.amount, plan.interval, planStatus[plan.id].signup_fee)">Choose</a>
-                        <a type="button" class="btn ssb-theme-btn btn-green btn-block center active" ng-hide="subscriptionPlans.length == 1" ng-if="newAccount.membership == plan.id">Selected</a>
-                    </div>
-                    <div class="clearfix"></div>
-                </div>
-            </div>
-        </div>
 
-        <div class="payment-signup hidden">
             <div class="inner-page">
-                <div class="clearfix mb20"></div>
-                <div class="card-wrapper mb20"></div>
-                <h4>Payment Info</h4>
-                <!--
-                <xform name="card-detailsXX" action="#" class="form-group col-xs-12 mb0 has-feedback" >
-                    <div class="row">
-                        <div id="card_number" class="form-group small-6 columns col-sm-6">
-                            <input placeholder="Card number" type="text" name="number" id="number" ng-blur="" class="form-control input-lg">
-                            <span class="glyphicon form-control-feedback"></span>
-                            <span class="error help-block" />
-                        </div>
-                        <div class="visible-xs mb20"></div>
-                        <div id="card_name" class="form-group small-6 columns col-sm-6 has-feedback">
-                            <input placeholder="Full name" type="text" id="name" name="name" ng-blur="checkCardName()" class="form-control input-lg">
-                            <span class="glyphicon form-control-feedback"></span>
-                            <span class="error help-block" />
+                <div class="rvlvr-middle-container">
+                    <div class="signup-body">
+                        <div class="row" >
+                            <form name="card-details" action="#" class="form-group mb0 has-feedback" data-card-container="#card-container" data-values="cardValues" data-card data-options="cardOptions" data-messages="cardMessages">
+                                <div class="section-title center">
+                                    <span>Customer Information</span>
+                                </div>
+                                <!-- NAME -->
+                                <div id="fullName" class="form-group col-xs-12 col-sm-6 has-feedback">
+                                    <input class="form-control" type="text" ng-model="newAccount.fullName" placeholder="Name" name="fullName"/>
+                                    <span class="glyphicon form-control-feedback"></span>
+                                    <span class="error help-block" />
+                                </div>
+                                <!-- EMAIL AND PASSWORD -->
+                                <div id="email" class="form-group col-xs-12 col-sm-6 has-feedback" ng-hide="tmpAccount.tempUser">
+                                    <input class="form-control" type="email" ng-model="newAccount.email" ng-pattern="emailValidation" ng-change="checkEmailExists(newAccount)" ng-model-options="{ debounce: 800 }" name="email" placeholder="Email Address"/>
+                                    <span class="glyphicon form-control-feedback"></span><span class="error help-block" />
+                                </div>
+                                <div id="password" class="form-group col-xs-12 has-feedback" ng-hide="newAccount.hidePassword">
+                                    <input class="form-control" type="password" ng-model="newAccount.password" ng-change="checkPasswordLength(newAccount)" ng-model-options="{ debounce: 800 }" placeholder="Password"/>
+                                    <span class="help-block" ng-if="passwordIsValid === false">Your password must be at least 6 characters.</span>
+                                    <span class="glyphicon form-control-feedback"></span>
+                                    <span class="error help-block" />
+                                </div>
+
+
+
+                                <!-- Business Name -->
+                                <div id="business-name"
+                                     class="form-group col-xs-12 has-feedback"
+                                     ng-class="{'has-error': !validBusinessName,
+                                      'has-success': domainExistsAlready!==undefined && !domainExistsAlready}">
+                                    <div class="row-fluid business-domain">
+
+                                        <div class="input-group">
+                                            <span class="input-group-addon">https://</span>
+                                            <input class="form-control"
+                                               type="text"
+                                               ng-model="newAccount.businessName"
+                                               ng-change="checkDomainExists(newAccount)"
+                                               ng-model-options="{ debounce: 800 }"
+                                               placeholder="Business Name"
+                                               style="width:100%"/>
+                                            <span class="input-group-addon">.gorvlvr.com</span>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="clearfix"></div>
+                                    <span class="error help-block" ng-if="domainExistsAlready">Domain Already Exists</span>
+                                    <span class="error help-block" ng-if="emptyBusinessName">Business Name Required</span>
+                                    <span class="help-block" ng-show="newAccount.businessName && validBusinessName">Your domain will be <strong>{{newAccount.businessName | urlFilter}}.gorvlvr.com</strong>. You can change it at any time.</span>
+                                    <span class="help-block" ng-show="dotComExt">This field is for your gorvlvr account subdomain. You may point the domain of your choosing to your site at any time.</span>
+                                </div>
+                                <div class="clearfix"></div>
+                                <div class="section-title center">
+                                    <span>Payment Information</span>
+                                </div>
+
+                                <div class="col-sm-7 signup-payment-information">
+
+                                    <div class="row">
+                                        <div id="card_number" class="form-group small-6 col-xs-12">
+                                            <input placeholder="Card number" type="text" name="number" id="number" ng-blur="checkCardNumber()" class="form-control">
+                                            <span class="glyphicon form-control-feedback"></span>
+                                            <span class="error help-block" />
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div id="card_expiry" class="form-group small-3 columns col-xs-6 has-feedback">
+                                            <input placeholder="MM/YYYY" ng-blur="checkCardExpiry()" type="text" id="expiry" name="expiry" class="form-control" >
+                                            <span class="glyphicon form-control-feedback"></span>
+                                            <span class="error help-block" />
+                                        </div>
+                                        <div id="card_cvc" class="form-group small-3 columns col-xs-6 has-feedback">
+                                            <input placeholder="CVC" ng-blur="checkCardCvv()" type="text" id="cvc" name="cvc" class="form-control" >
+                                            <span class="glyphicon form-control-feedback"></span>
+                                            <span class="error help-block" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-5">
+                                    <div id="card-container"></div>
+                                    <div class="rvlvr-card-container">
+                                        <img src="/images/rvlvr/credit-card.png" class="">
+                                        
+                                    </div>
+                                    <div class="signup-credit-cards-container">
+                                        <img src="/images/rvlvr/visa.png" />
+                                        <img src="/images/rvlvr/mastercard.png" />
+                                        <img src="/images/rvlvr/american-express.png" />
+                                        <img src="/images/rvlvr/discover.png" />
+                                    </div>
+
+                                </div>
+
+                                <div class="clearfix margin-bottom-10"></div>                            
+                            </form>
                         </div>
                     </div>
-                    <div class="row">
-                        <div id="card_expiry" class="form-group small-3 columns col-xs-6 has-feedback">
-                            <input placeholder="MM/YY" ng-blur="" type="text" id="expiry" name="expiry" class="form-control input-lg">
-                            <span class="glyphicon form-control-feedback"></span>
-                            <span class="error help-block" />
-                        </div>
-                        <div id="card_cvc" class="form-group small-3 columns col-xs-6 has-feedback">
-                            <input placeholder="CVC" ng-blur="" type="text" id="cvc" name="cvc" class="form-control input-lg">
-                            <span class="glyphicon form-control-feedback"></span>
-                            <span class="error help-block" />
-                        </div>
-                    </div>
-                </xform>
-                -->
-                <!-- Coupon DETAILS -->
-                <div class="form-group col-xs-12 has-feedback" ng-class="{'has-error': !couponIsValid && couponChecked && !checkingCoupon && newAccount.coupon, 'has-success': couponIsValid && !checkingCoupon && newAccount.coupon}">
-                    <input class="form-control input-lg" type="text" ng-change="checkCoupon()" ng-model="newAccount.coupon" placeholder="Coupon Code" ng-model-options="{ debounce: 800 }" />
-                    <span class="form-control-feedback" ng-class="{'glyphicon glyphicon-remove': !couponIsValid && couponChecked && !checkingCoupon && newAccount.coupon, 'glyphicon glyphicon-ok': couponIsValid && newAccount.coupon, 'fa fa-spinner fa-spin':checkingCoupon}"></span>
-                    <span class="error help-block" ng-if="!couponIsValid && couponChecked && !checkingCoupon && newAccount.coupon">Invalid Coupon</span>
-                    <span class="success help-block" ng-if="newAccount.coupon && couponIsValid && couponChecked && !checkingCoupon">Coupon Accepted</span>
                 </div>
-                <div class="clearfix mb15"></div>
-                <div>
-                    <img class="center" style="display: block;" src="//s3-us-west-2.amazonaws.com/indigenous-admin/trust-seals-stripe.png">
+                  
+            </div>
+
+
+            <div class="rvlvr-bottom-container">
+                <div class="padding-bottom-30 center">
+                    <div class="rvlvr-sign-up-medium-text">Satisfaction Guaranteed</div>
                 </div>
-                <div class="clearfix mb30"></div>
                 <!-- BUY -->
-                <div class="submit-signup mb10 center">
-                    <a type="button" style="background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #fb8823), color-stop(1, #f86807));background:-moz-linear-gradient(top, #fb8823 5%, #f86807 100%);background:-webkit-linear-gradient(top, #fb8823 5%, #f86807 100%);background:-o-linear-gradient(top, #fb8823 5%, #f86807 100%);background:-ms-linear-gradient(top, #fb8823 5%, #f86807 100%);background:linear-gradient(to bottom, #fb8823 5%, #f86807 100%);filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#fb8823', endColorstr='#f86807',GradientType=0);background-color:#fbb450;-moz-border-radius:7px;-webkit-border-radius:7px;border-radius:7px;border:1px solid #c97e1c;display:inline-block;color:#ffffff;font-family:arial;font-size:18px;font-weight:normal;font-style:%1;padding:14px 45px;text-decoration:none;text-shadow:1px 1px 0px #cc4b14;" ng-click="createAccountWithoutCC(newAccount)"> BECOME AN INDIGENOUS MEMBER NOW</a>
+                <div class="submit-signup center">
+                    <a type="button" class="signup-btn-v3" ng-click="createAccount(newAccount)">SIGN UP</a>
+                    <span class="help-block" ng-show='havingNetworkIssue'>Something went wrong during the creation of your account. Please try again.</span>
+                    <span class="error text-red help-block" ng-if='requiredFieldsFilled === false'>Please fill in all required fields.</span>
                 </div>
-                <p class="center margin-top-10">By clicking this button you agree to our <a href="/legal">Terms of Service</a>.</p>
-                <br>
-                <p class="center">* <span ng-if="subscriptionPlans[0].trial_period_days">{{subscriptionPlans[0].trial_period_days}}-day free trial</span> <span ng-if="currentCoupon.created == 1437591986"> with sign-up fee waived, </span> <span ng-if="!currentCoupon.created && paymentFormProduct.product_attributes.stripePlans[0].signup_fee">then a one time charge for $546.95 ($497 + $49.95), then</span> $49.95/month.
-                    <br> Once payment is processed, there are no refunds and there is no proration.
-                    <br> For cancellations, please contact our support via chat.</p>
-                <div class="clearfix margin-bottom-10"></div>
+                <div class="rvlvr-privacy-policy">
+                    <p class="center margin-top-10">By clicking this button you agree to our terms of service.</p>
+                    <p class="center margin-top-10">Read our privacy policy. We hate SPAM and promise to keep your information safe.</p>
+                </div>
+                
             </div>
-        </div>
+            
+        </div>    
     </div>
 </div>
 <!-- /.modal -->
 <div ng-show="isFormValid" id="overlay">
     <div id="loading">
-        <div class="msg col-sm-12"><img style="margin: 0 auto;width: 100px;display: block;" src="//s3.amazonaws.com/indigenous-digital-assets/account_6/smaller_1430710720590.png"></div>
+        <div class="msg col-sm-12"><img style="margin: 0 auto;width: 100px;display: block;" src="//s3.amazonaws.com/indigenous-digital-assets/account_1301/rvlvr-icon_1489761269532.png"></div>
         <div class="msg col-sm-12">
             <h1 class="text-center">We’re pleased to have you.</h1>
         </div>

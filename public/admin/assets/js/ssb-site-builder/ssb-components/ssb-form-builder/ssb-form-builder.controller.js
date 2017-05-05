@@ -34,7 +34,7 @@
         vm.addPattern = addPattern;
         vm.checkDuplicateEmail = checkDuplicateEmail;
         vm.formValidations = formValidations;
-
+        vm.formFiedlsCHange = formFiedlsCHange;
         vm.nthRow = 'nth-row';
 
         vm.isEditing = $scope.$parent.vm && $scope.$parent.vm.uiState;
@@ -180,6 +180,15 @@
                 return vm.userExists;
             }
         }
+        // on change reset error
+        function formFiedlsCHange(val){
+             if (val.name === "email") {
+                 if(vm.userExists){
+                     $scope.setinvalid =false;
+                 }
+                 vm.userExists=false;
+            }
+        }
 
         function formatString(stringval){
             return stringval.replace(/[^\w-\s]/gi, '');
@@ -188,7 +197,6 @@
 
         vm.createUser = function (form) {
             // Admin check
-           
             $scope.setinvalid = true;
          
             if ($scope.$parent.vm.state)

@@ -108,6 +108,7 @@
 	            	<th class="hidden-xs" ng-click='vm.selectAllClickFn($event)' ng-show='vm.displayedOrders.length'><i class="fa fa-2x" ng-class='{"fa-check-circle": vm.selectAllChecked, "fa-circle-o": !vm.selectAllChecked}'></i></th>
 	                <th st-sort="title">Name</th>
 	                <th st-sort="submitter">Submitter</th>
+	                <th st-sort="companyName" ng-if="!vm.state.orgCardAndPermissions.isVendor">Company</th>
 	                <th st-sort="vm.getters.created">Date</th>
 	                <th class="hidden-xs">Attachment</th>
 	            </tr>
@@ -122,6 +123,11 @@
                     <td class="hidden-xs" ng-show='vm.displayedOrders.length'><i class="fa fa-2x" ng-click='vm.orderSelectClickFn($event, order)' ng-class='{"fa-check-circle": order.isSelected, "fa-circle-o": !order.isSelected}'></i></td>
                     <td><strong>Name: </strong><div class="name-block-container"><span class="list-name"></span><span ng-text-truncate="order.title" ng-tt-chars-threshold="25" ng-tt-no-toggling title="{{order.title}}"></span></div></td>
 	                <td class=""><strong>Submitter: </strong>{{order.submitter.first}} {{order.submitter.last}}</td>
+
+	                <td ng-if="!vm.state.orgCardAndPermissions.isVendor"><strong>Company: </strong><div class="name-block-container"><span class="list-name"></span>
+	                <span ng-text-truncate="order.companyName" ng-tt-chars-threshold="25" ng-tt-no-toggling title="{{order.companyName}}"></span>
+	                </div></td>
+
 	                <td><strong>Date: </strong>{{order.created.date | date:'MMM d yy HH:mm:ss'}}</td>
 	                <td class="hidden-xs"><strong>Attachment: </strong><span ng-text-truncate="order.attachment.name" ng-tt-chars-threshold="25" ng-tt-no-toggling title="{{order.attachment.name}}"></span></td>
 	            </tr>
