@@ -110,6 +110,24 @@ app.directive('simpleFormComponent',["formValidations", "$timeout", function (fo
           styleString += ' color: ' + btn.txtcolor + "!important;";
           scope.originalData.txtcolor= btn.txtcolor;
         }
+       if(btn && btn.border && btn.border.show){
+            if(btn.border.color){
+                styleString += ' border-color: '+btn.border.color+ '  !important;';
+                scope.originalData.btn={};
+                scope.originalData.btn.border=btn.border;
+            }
+            if(btn.border.width){
+                styleString += ' border-width: '+btn.border.width+ 'px   !important;';
+            }
+            if(!btn.border.radius ){
+                btn.border.radius=0;
+            }
+            styleString += ' border-radius: '+btn.border.radius+ '%  !important;';
+
+            if(btn.border.style){
+                styleString += ' border-style: '+btn.border.style+ ' !important;';
+            }
+        }
 
         return styleString;
         
@@ -159,9 +177,33 @@ app.directive('simpleFormComponent',["formValidations", "$timeout", function (fo
                               btnHoverStyle = scope.component.formSettings.btnStyle.hover;
                             }
 
-                            if(btnHoverStyle && btnHoverStyle.bg && btnHoverStyle.bg.color){
-                              this.style.setProperty( 'background-color', btnHoverStyle.bg.color, 'important' );
-                              this.style.setProperty( 'border-color', btnHoverStyle.bg.color, 'important' );
+                            if(btnHoverStyle){
+                                if(btnHoverStyle.bg && btnHoverStyle.bg.color){
+                                  this.style.setProperty( 'background-color', btnHoverStyle.bg.color, 'important' );
+                                  this.style.setProperty( 'border-color', btnHoverStyle.bg.color, 'important' );
+                                }
+                                if (btnHoverStyle.border &&
+                                    btnHoverStyle.border.show) {
+                                    if (btnHoverStyle.border.color) {
+                                        this.style.setProperty('border-color', btnHoverStyle.border.color, 'important');
+                                    }
+                                    if (btnHoverStyle.border.width) {
+                                        this.style.setProperty('border-width', btnHoverStyle.border.width + 'px', 'important');
+                                    }
+                                    if (!btnHoverStyle.border.radius) {
+                                        btnHoverStyle.border.radius = 0;
+                                    }
+                                    this.style.setProperty('border-radius', btnHoverStyle.border.radius + '%', 'important');
+
+                                    if (btnHoverStyle.border.style) {
+                                        this.style.setProperty('border-style', btnHoverStyle.border.style, 'important');
+                                    }
+                                 }else {
+                                    this.style.setProperty('border-color', "none", 'important');
+                                    this.style.setProperty('border-width', '0px', 'important');
+                                    this.style.setProperty('border-radius', 'none%', 'important');
+                                    this.style.setProperty('border-style', "none", 'important');
+                                }
                             }
                             if(btnHoverStyle && btnHoverStyle.txtcolor)
                               this.style.setProperty( 'color', btnHoverStyle.txtcolor, 'important' );
@@ -179,6 +221,24 @@ app.directive('simpleFormComponent',["formValidations", "$timeout", function (fo
                               this.style.setProperty( 'border-color', scope.originalData.borderColor, 'important' );
                             else
                               this.style.setProperty( 'border-color', originalData.borderColor, 'important' );
+
+                            var btn=scope.originalData.btn;
+                                if(btn && btn.border && btn.border.show){
+                                    if(btn.border.color){
+                                        this.style.setProperty( 'border-color', btn.border.color, 'important' );
+                                    }
+                                    if(btn.border.width){
+                                        this.style.setProperty( 'border-width', btn.border.width+ 'px', 'important' );
+                                    }
+                                    if(!btn.border.radius){
+                                        btn.border.radius=0;
+                                    }
+                                    this.style.setProperty( 'border-radius', btn.border.radius+'%', 'important' );
+
+                                    if(btn.border.style){
+                                        this.style.setProperty( 'border-style', btn.border.style , 'important' );
+                                    }
+                                }
                         });
 
                         element.on("mousedown touchstart", function(){
@@ -186,9 +246,33 @@ app.directive('simpleFormComponent',["formValidations", "$timeout", function (fo
                             {
                               btnActiveStyle = scope.component.formSettings.btnStyle.pressed;
                             }
-                            if(btnActiveStyle && btnActiveStyle.bg && btnActiveStyle.bg.color){
-                              this.style.setProperty( 'background-color', btnActiveStyle.bg.color, 'important' );
-                              this.style.setProperty( 'border-color', btnActiveStyle.bg.color, 'important' );
+                            if(btnActiveStyle){
+                               if(btnActiveStyle.bg && btnActiveStyle.bg.color){
+                                  this.style.setProperty( 'background-color', btnActiveStyle.bg.color, 'important' );
+                                  this.style.setProperty( 'border-color', btnActiveStyle.bg.color, 'important' );
+                               }
+                               if (btnActiveStyle.border &&
+                                    btnActiveStyle.border.show) {
+                                    if (btnActiveStyle.border.color) {
+                                        this.style.setProperty('border-color', btnActiveStyle.border.color, 'important');
+                                    }
+                                    if (btnActiveStyle.border.width) {
+                                        this.style.setProperty('border-width', btnActiveStyle.border.width + 'px', 'important');
+                                    }
+                                    if (!btnActiveStyle.border.radius) {
+                                        btnActiveStyle.border.radius = 0;
+                                    }
+                                    this.style.setProperty('border-radius', btnActiveStyle.border.radius + '%', 'important');
+
+                                    if (btnActiveStyle.border.style) {
+                                        this.style.setProperty('border-style', btnActiveStyle.border.style, 'important');
+                                    }
+                                 }else {
+                                    this.style.setProperty('border-color', "none", 'important');
+                                    this.style.setProperty('border-width', '0px', 'important');
+                                    this.style.setProperty('border-radius', 'none%', 'important');
+                                    this.style.setProperty('border-style', "none", 'important');
+                                }
                             }
                             if(btnActiveStyle && btnActiveStyle.txtcolor)
                               this.style.setProperty( 'color', btnActiveStyle.txtcolor, 'important' );
