@@ -55,10 +55,18 @@ function inventoryComponentController($scope, $attrs, $filter, $modal, $timeout,
     vm.productSelectClickFn = productSelectClickFn;
     vm.bulkActionSelectFn = bulkActionSelectFn;
     vm.showFilteredRecords = showFilteredRecords;
+    vm.cancel = cancel;
     
     vm.bulkActionChoice = {};
 
-    vm.bulkActionChoices = [{data: 'watch', label: 'Watch'}];
+    vm.bulkActionChoices = [
+        {
+            data: 'watch',
+            label: 'Watch'
+        },{
+            data: 'unwatch',
+            label: 'Unwatch'
+        }];
 
     $scope.$watch(function() { return InventoryService.inventory }, function(inventory) {
         if(angular.isDefined(inventory)){
@@ -294,37 +302,53 @@ function inventoryComponentController($scope, $attrs, $filter, $modal, $timeout,
         
         var watchMessage = "Do you want to add the selected items in inventory watch list?";
         
-        if (vm.bulkActionChoice.action.data == 'watch') {
-            SweetAlert.swal({
-                title: "Are you sure?",
-                text: watchMessage,
-                type: "warning",
-                showCancelButton: true,
-                confirmButtonColor: "#DD6B55",
-                confirmButtonText: "Yes, add to watch list!",
-                cancelButtonText: "No, do not add to watch list!",
-                closeOnConfirm: true,
-                closeOnCancel: true
-              },
-              function (isConfirm) {
-                if (isConfirm) {
-                    vm.state.userOrgConfig.watchList = vm.uiState.inVentoryWatchList;
-                    InventoryService.updateUserOrgConfig(vm.state.userOrgConfig).then(function(response){
-                        vm.bulkActionChoice = null;
-                        vm.bulkActionChoice = {};
-                        toaster.pop('success', 'Items added to inventory watch list');
-                    });
-                } else {
+        var confirmMessage = "Yes, add to watch list!";
+        var cancelMessage = "No, do not add to watch list!";
+        var toasterMessage = 'Items added to inventory watch list';
+        if (vm.bulkActionChoice.action.data == 'unwatch'){
+            watchMessage = "Do you want to remove all selected items from inventory watch list?";
+            confirmMessage = "Yes, remove from watch list!";
+            cancelMessage = "No, do not remove from watch list!";
+            toasterMessage = 'Items removed from inventory watch list';
+        }
+        
+        SweetAlert.swal({
+            title: "Are you sure?",
+            text: watchMessage,
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#DD6B55",
+            confirmButtonText: confirmMessage,
+            cancelButtonText: cancelMessage,
+            closeOnConfirm: true,
+            closeOnCancel: true
+          },
+          function (isConfirm) {
+            if (isConfirm) {
+                if (vm.bulkActionChoice.action.data == 'unwatch') {
+                    vm.uiState.inVentoryWatchList = [];
+                }
+                vm.state.userOrgConfig.watchList = vm.uiState.inVentoryWatchList;
+                InventoryService.updateUserOrgConfig(vm.state.userOrgConfig).then(function(response){
                     vm.bulkActionChoice = null;
                     vm.bulkActionChoice = {};
-                }
-              });
-        }
+                    toaster.pop('success', toasterMessage);
+                });
+            } else {
+                vm.bulkActionChoice = null;
+                vm.bulkActionChoice = {};
+            }
+        });
+        
     };
 
     function showFilteredRecords(){
         return !vm.uiState.loadingFilter && UtilService.showFilteredRecords(vm.uiState.globalSearch, vm.uiState.fieldSearch);
     }
+
+    function cancel($event) {
+        $event.stopPropagation();
+    };
 
     function init(element) {
         vm.element = element;

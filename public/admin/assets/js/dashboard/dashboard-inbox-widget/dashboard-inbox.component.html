@@ -6,7 +6,7 @@
                 <!-- span class="message-count">2</span -->
             </tab-heading>
 
-            <div class="col-sm-5 message-container message-container-left">
+            <div class="col-sm-5 message-container message-container-left" perfect-scrollbar wheel-propagation="false" suppress-scroll-x="true" >
                 <ul class="message-container-top">
                     <li ng-class="{'active-message': vm.selectedMessageIndex === $index}" ng-repeat="message in vm.inboxMessages" ng-click="vm.setSelectedMessage($index)">
                         <div>
@@ -20,7 +20,7 @@
                     </li>
                 </ul>
             </div>
-            <div class="col-sm-7 message-container message-container-right active-message">
+            <div class="col-sm-7 message-container message-container-right active-message" perfect-scrollbar wheel-propagation="false" suppress-scroll-x="true">
                 <ul class="message-container-top">
                     <li>
                         <div class="message-user">

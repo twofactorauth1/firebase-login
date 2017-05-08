@@ -109,7 +109,7 @@
 	                <th class="vendor-col sort" style="white-space: nowrap;" ng-class="{'st-sort-ascent': vm.uiState.sortData.details['vendor'].direction === 1, 'st-sort-descent': vm.uiState.sortData.details['vendor'].direction === -1}" ng-click="vm.sortInventory('OMRC_FirmName', 'vendor')">Vendor</th>
 	                <th class="sort sku-col" style="white-space: nowrap;" ng-class="{'st-sort-ascent': vm.uiState.sortData.details['sku'].direction === 1, 'st-sort-descent': vm.uiState.sortData.details['sku'].direction === -1}" ng-click="vm.sortInventory('OITM_ItemCode', 'sku')">Sku</th>
 	                <th class="hidden-xs desc-col">Description</th>
-	                <th class="hidden-xs hidden-sm dim-col">Dimension (LxHxW)</th>
+	                <th class="hidden-xs hidden-sm dim-col">Dimension (LxWxH)</th>
 	                <th class="hidden-xs hidden-sm weight-col">Weight</th>
 	                <th class="qty-col sort" style="white-space: nowrap;" width="1%" ng-class="{'st-sort-ascent': vm.uiState.sortData.details['totalQuantity'].direction === 1, 'st-sort-descent': vm.uiState.sortData.details['totalQuantity'].direction === -1}" ng-click="vm.sortInventory('In_Stock', 'totalQuantity')"><span class="hidden-xs">Qty </span>On Hand</th>
 	            </tr>
@@ -143,12 +143,19 @@
 	                <td class="hidden-xs"><strong>Description: </strong><span ng-text-truncate="product.OITM_U_dscription" tooltip="{{product.OITM_U_dscription}}" ng-tt-chars-threshold="25" ng-tt-no-toggling></span></td>
 	                <td class="dimColumn hidden-xs hidden-sm"><strong>Dimension: </strong>{{vm.getDimentions(product)}}</td>
 	                <td class="weightColumn hidden-xs hidden-sm" style="white-space: nowrap;"><strong>Weight: </strong>{{vm.getWeight(product)}}</td>
-	                <td class="qtyColumn" style="white-space: nowrap;"><strong>Qty: </strong>{{product.In_Stock <= 0 ? '' : product.In_Stock}}</td>
+	                <td class="qtyColumn" style="white-space: nowrap;"><strong>Qty: </strong>
+	                <span ng-if="product.In_Stock <= 0">
+                        <a href='#' ng-click='vm.cancel($event);' onclick='Intercom("showNewMessage","")'>Click to Inquire</a>
+                    </span>
+                    <span ng-if="product.In_Stock > 0">
+                        {{ product.In_Stock }}
+                    </span>
+	                </td>
 	            </tr>
 	        </tbody>
 	        <tfoot>
 	            <tr>
-	            	<td colspan="10" class="center">
+	            	<td colspan="10" class="center" ng-if="vm.state.totalInventory">
 		                <div class="pagination pagination-centered hidden" ng-show="vm.state.inventory.length > vm.uiState.curPage">
 	                        <button type="button" class="btn btn-primary" ng-disabled="vm.uiState.curPage == 0" ng-click="vm.previousPage()">
 	                            <span class="fa fa-arrow-left"></span>
@@ -162,8 +169,6 @@
 	                        </button>
 	                    </div>
 
-
-
 	                    <nav ng-if="vm.numberOfPages() && vm.pages.length >= 2">
 	                    	<ul class="pagination">
 	                    		<li ng-repeat="page in vm.pages" ng-class="{active: page == vm.uiState.curPage}">
@@ -171,8 +176,10 @@
 	                    		</li>
 	                    	</ul>
 	                    </nav>
-
 	                </td>
+	                <td ng-if="!vm.state.totalInventory" colspan="6" class="center height-100">
+	            		<h4>There are currently no products</h4>
+	            	</td>
 	            </tr>
 	        </tfoot>
 	    </table>
