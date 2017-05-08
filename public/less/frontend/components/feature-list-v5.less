@@ -9,6 +9,7 @@
 			li{
 				display: inline-block;
 				opacity: 0.7;
+                vertical-align: top;
 				a.feature-heading{
 					padding-left:20px;
 					padding-right:20px;
@@ -17,32 +18,25 @@
 					text-decoration: none;
     				cursor: pointer;
 				}
+                .features-tabs-heading span {
+                    @media screen and (max-width: 767px) {
+                        font-size: 3vw !important;
+                    }
+                }
 				.fetaure-tabs-icon{
 					margin-bottom: 10px;
 				}
 				&.feature-col-5-layout{
 					width:20%;
-					@media screen and (max-width: 767px) {
-				  		width:50%;
-					}
 				}
 				&.feature-col-4-layout{
 					width:25%;
-					@media screen and (max-width: 767px) {
-				  		width:50%;
-					}
 				}
 				&.feature-col-3-layout{
 					width:33.33%;
-					@media screen and (max-width: 767px) {
-				  		width:50%;
-					}
 				}
 				&.feature-col-2-layout{
 					width:50%;
-					@media screen and (max-width: 767px) {
-				  		width:50%;
-					}
 				}
 				&.feature-col-1-layout{
 					width:100%;

@@ -17,7 +17,7 @@
 	                    <div class="panel-body">
 	                        <form role="form" class="ng-pristine ng-valid row">
 	                            <div class="hidden-xs">
-	                                <div class="col-xs-12 col-sm-7 padding-left-0 padding-right-0">
+	                                <div class="col-xs-12 col-sm-6 padding-left-0 padding-right-0">
 	                                    <div class="form-group">
 	                                        <div class="col-xs-8 col-sm-6">
 	                                            <span class="input-icon">
@@ -43,8 +43,8 @@
 	                                    </div>
 	                                </div>
 	                                <div class="visible-xs margin-bottom-15 clearfix"></div>
-	                                <div class="form-group col-xs-12 col-sm-5 row margin-bottom-0 padding-right-30 pull-right">
-	                                    <div class="col-xs-7 col-sm-4 center">
+	                                <div class="form-group col-xs-12 col-sm-6 row margin-bottom-0 padding-right-10 pull-right">
+	                                    <div class="col-xs-7 col-sm-3 center padding-0">
 	                                        <div class="form-group">
 	                                            <div class="btn-group tableView" style="white-space: nowrap;">
 	                                                <button class="btn btn-info" ng-class="{'active': tableView == 'list'}" href="" ng-click="tableView = 'list'" tooltip-placement="top" tooltip="List"> <span class="fa fa-th-list"></span> </button>
@@ -53,7 +53,7 @@
 	                                        </div>
 	                                    </div>
 	                                    <div class="visible-xs margin-bottom-15 clearfix"></div>
-	                                    <div class="col-xs-5 col-xs-offset-6 col-sm-8 center">
+	                                    <div class="col-xs-5 col-xs-offset-6 col-sm-9 center padding-0">
 	                                    	<button type="button" class="btn btn-o btn-info btn-scroll btn-scroll-top ti ti-eye ng-click-active" ng-click="vm.viewArchivedPo('lg')">
 	                                            <span>View archived PO</span>
 	                                        </button>
@@ -128,14 +128,17 @@
 	                <span ng-text-truncate="order.companyName" ng-tt-chars-threshold="25" ng-tt-no-toggling title="{{order.companyName}}"></span>
 	                </div></td>
 
-	                <td><strong>Date: </strong>{{order.created.date | date:'MMM d yy HH:mm:ss'}}</td>
+	                <td><strong>Date: </strong>{{order.created.date | date:'MMM d yy hh:mm a'}}</td>
 	                <td class="hidden-xs"><strong>Attachment: </strong><span ng-text-truncate="order.attachment.name" ng-tt-chars-threshold="25" ng-tt-no-toggling title="{{order.attachment.name}}"></span></td>
 	            </tr>
 	        </tbody>
 	        <tfoot>
 	            <tr>
-	                <td class="text-center" st-custom-pagination="" st-displayed-pages="vm.pagingConstant.displayedPages" st-items-by-page="vm.pagingConstant.numberOfRowsPerPage || 50" colspan="6">
+	                <td class="text-center" ng-if="vm.state.orders.length" st-custom-pagination="" st-displayed-pages="vm.pagingConstant.displayedPages" st-items-by-page="vm.pagingConstant.numberOfRowsPerPage || 50" colspan="6">
 	                </td>
+	                <td ng-if="!vm.state.orders.length" colspan="6" class="center height-100">
+	            		<h4>There are currently no purchase orders</h4>
+	            	</td>
 	            </tr>
 	        </tfoot>
 	    </table>

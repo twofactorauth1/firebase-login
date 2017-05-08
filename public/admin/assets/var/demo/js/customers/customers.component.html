@@ -122,8 +122,11 @@
 	        </tbody>
 	        <tfoot>
 	            <tr>
-	                <td class="text-center" st-custom-pagination="" st-displayed-pages="vm.pagingConstant.displayedPages" st-items-by-page="vm.pagingConstant.numberOfRowsPerPage || 50" colspan="6">
+	                <td ng-if="vm.state.customers.length" class="text-center" st-custom-pagination="" st-displayed-pages="vm.pagingConstant.displayedPages" st-items-by-page="vm.pagingConstant.numberOfRowsPerPage || 50" colspan="6">
 	                </td>
+	                <td ng-if="!vm.state.customers.length" colspan="6" class="center height-100">
+	            		<h4>There are currently no customers</h4>
+	            	</td>
 	            </tr>
 	        </tfoot>
 	    </table>
