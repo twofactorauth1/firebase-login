@@ -143,7 +143,14 @@
 	                <td class="hidden-xs"><strong>Description: </strong><span ng-text-truncate="product.OITM_U_dscription" tooltip="{{product.OITM_U_dscription}}" ng-tt-chars-threshold="25" ng-tt-no-toggling></span></td>
 	                <td class="dimColumn hidden-xs hidden-sm"><strong>Dimension: </strong>{{vm.getDimentions(product)}}</td>
 	                <td class="weightColumn hidden-xs hidden-sm" style="white-space: nowrap;"><strong>Weight: </strong>{{vm.getWeight(product)}}</td>
-	                <td class="qtyColumn" style="white-space: nowrap;"><strong>Qty: </strong>{{product.In_Stock <= 0 ? '' : product.In_Stock}}</td>
+	                <td class="qtyColumn" style="white-space: nowrap;"><strong>Qty: </strong>
+	                <span ng-if="product.In_Stock <= 0">
+                        <a href='#' ng-click='vm.cancel($event);' onclick='Intercom("showNewMessage","")'>Click to Inquire</a>
+                    </span>
+                    <span ng-if="product.In_Stock > 0">
+                        {{ product.In_Stock }}
+                    </span>
+	                </td>
 	            </tr>
 	        </tbody>
 	        <tfoot>
