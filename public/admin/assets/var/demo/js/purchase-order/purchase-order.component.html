@@ -128,7 +128,7 @@
 	                <span ng-text-truncate="order.companyName" ng-tt-chars-threshold="25" ng-tt-no-toggling title="{{order.companyName}}"></span>
 	                </div></td>
 
-	                <td><strong>Date: </strong>{{order.created.date | date:'MMM d yy HH:mm:ss'}}</td>
+	                <td><strong>Date: </strong>{{order.created.date | date:'MMM d yy HH:mm a'}}</td>
 	                <td class="hidden-xs"><strong>Attachment: </strong><span ng-text-truncate="order.attachment.name" ng-tt-chars-threshold="25" ng-tt-no-toggling title="{{order.attachment.name}}"></span></td>
 	            </tr>
 	        </tbody>
