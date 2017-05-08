@@ -55,6 +55,7 @@ function inventoryComponentController($scope, $attrs, $filter, $modal, $timeout,
     vm.productSelectClickFn = productSelectClickFn;
     vm.bulkActionSelectFn = bulkActionSelectFn;
     vm.showFilteredRecords = showFilteredRecords;
+    vm.cancel = cancel;
     
     vm.bulkActionChoice = {};
 
@@ -344,6 +345,10 @@ function inventoryComponentController($scope, $attrs, $filter, $modal, $timeout,
     function showFilteredRecords(){
         return !vm.uiState.loadingFilter && UtilService.showFilteredRecords(vm.uiState.globalSearch, vm.uiState.fieldSearch);
     }
+
+    function cancel($event) {
+        $event.stopPropagation();
+    };
 
     function init(element) {
         vm.element = element;
