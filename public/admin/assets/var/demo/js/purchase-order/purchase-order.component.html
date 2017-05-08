@@ -134,8 +134,11 @@
 	        </tbody>
 	        <tfoot>
 	            <tr>
-	                <td class="text-center" st-custom-pagination="" st-displayed-pages="vm.pagingConstant.displayedPages" st-items-by-page="vm.pagingConstant.numberOfRowsPerPage || 50" colspan="6">
+	                <td class="text-center" ng-if="vm.state.orders.length" st-custom-pagination="" st-displayed-pages="vm.pagingConstant.displayedPages" st-items-by-page="vm.pagingConstant.numberOfRowsPerPage || 50" colspan="6">
 	                </td>
+	                <td ng-if="!vm.state.orders.length" colspan="6" class="center height-100">
+	            		<h4>There are currently no purchase orders</h4>
+	            	</td>
 	            </tr>
 	        </tfoot>
 	    </table>
