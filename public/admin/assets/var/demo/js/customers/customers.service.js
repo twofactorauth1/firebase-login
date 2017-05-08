@@ -16,7 +16,7 @@
         var baseCustomerAPIUrl = '/api/1.0/integrations/zi';
 
         
-        customerService.getCustomers = getCustomers;;
+        customerService.getCustomers = getCustomers;
         customerService.getLedgerDetails = getLedgerDetails;
 
         customerService.loading = {value: 0};

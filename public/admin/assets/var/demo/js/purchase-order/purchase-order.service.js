@@ -15,6 +15,7 @@
 
         
         var basePoAPIUrlv2 = '/api/2.0/purchaseorders';
+        var baseCustomerAPIUrl = '/api/1.0/integrations/zi';
 
         poService.loading = {value: 0};
 
@@ -200,10 +201,27 @@
             return poRequest($http.get([basePoAPIUrlv2, "archived"].join('/')).success(success).error(error));
         }
 
+        /**
+            * Get list of all customers
+        */
+        function getCustomers() {
+
+            function success(data) {
+                poService.customers = data && data.response && data.response.payload ? data.response.payload.querydata.data.row || null : null;
+            }
+
+            function error(error) {
+                poService.customers = [];
+                console.error('poService getCustomers error: ', JSON.stringify(error));
+            }
+
+            return poRequest($http.get([baseCustomerAPIUrl, 'customers'].join('/')).success(success).error(error));
+        }
 
 
 		(function init() {
             getPurchaseOrders();
+            getCustomers();
 		})();
 
 
