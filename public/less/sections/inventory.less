@@ -93,8 +93,12 @@
 		    text-align: center;
 		    color: white;
 		    top: 50%;
-            transform: translateX(-50%);
+            transform: translate(-50%, -50%);
 		    margin-top: 15px;
+		    @media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+     			width: 90%;
+     			transform: translate(0);
+			}
 	    }
 	}
 
