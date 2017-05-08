@@ -188,6 +188,28 @@ function virtualHostSession(req, res, next) {
                 key: 'gorvlvr_connect.sid'
             };
             hostSession = mwCache[host] = express.session(sess);
+        } else if(host.replace(':3000', '').endsWith('videoautoresponder.com')){
+            var sess = {
+                store: mongoStore,
+                secret: 'mys3cr3t',
+                cookie: {
+                    maxAge: 24 * 60 * 60 * 1000,
+                    domain: '.videoautoresponder.com'
+                }, //stay open for 1 day of inactivity across all subdomains
+                key: 'videoautoresponder_connect.sid'
+            };
+            hostSession = mwCache[host] = express.session(sess);
+        } else if(host.replace(':3000', '').endsWith('securematics.com')){
+            var sess = {
+                store: mongoStore,
+                secret: 'mys3cr3t',
+                cookie: {
+                    maxAge: 24 * 60 * 60 * 1000,
+                    domain: '.securematics.com'
+                }, //stay open for 1 day of inactivity across all subdomains
+                key: 'securematics_connect.sid'
+            };
+            hostSession = mwCache[host] = express.session(sess);
         } else {
             //console.log('creating session for ' + appConfig.cookie_subdomain);
             var sess1 = {
