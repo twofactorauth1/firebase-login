@@ -107,7 +107,6 @@
 	                <th class="hidden-xs"></th>
 	                <th class="name-col sort" style="white-space: nowrap;" ng-class="{'st-sort-ascent': vm.uiState.sortData.details['name'].direction === 1, 'st-sort-descent': vm.uiState.sortData.details['name'].direction === -1}" ng-click="vm.sortInventory('OITM_ItemName', 'name')">Product</th>
 	                <th class="vendor-col sort" style="white-space: nowrap;" ng-class="{'st-sort-ascent': vm.uiState.sortData.details['vendor'].direction === 1, 'st-sort-descent': vm.uiState.sortData.details['vendor'].direction === -1}" ng-click="vm.sortInventory('OMRC_FirmName', 'vendor')">Vendor</th>
-	                <th class="sort sku-col" style="white-space: nowrap;" ng-class="{'st-sort-ascent': vm.uiState.sortData.details['sku'].direction === 1, 'st-sort-descent': vm.uiState.sortData.details['sku'].direction === -1}" ng-click="vm.sortInventory('OITM_ItemCode', 'sku')">Sku</th>
 	                <th class="hidden-xs desc-col">Description</th>
 	                <th class="hidden-xs hidden-sm dim-col">Dimension (LxWxH)</th>
 	                <th class="hidden-xs hidden-sm weight-col">Weight</th>
@@ -120,9 +119,6 @@
 	                </th>
 	                <th>
 	                    <input ng-model="vm.uiState.fieldSearch.OMRC_FirmName" ng-model-options="{ debounce: 800 }" placeholder="Vendor" class="form-control" type="search" />
-	                </th>
-	                <th>
-	                    <input ng-model="vm.uiState.fieldSearch.OITM_ItemCode" ng-model-options="{ debounce: 800 }" placeholder="SKU" class="form-control" type="search" />
 	                </th>
 	                <th class="desc-col hidden-xs"></th>
 	                <th class="dim-col hidden-xs hidden-sm"></th>
@@ -139,7 +135,6 @@
 	            	<td class="hidden-xs"><i class="fa fa-2x" ng-click='vm.productSelectClickFn($event, product)' ng-class='{"fa-check-circle": vm.checkIfSelected(product), "fa-circle-o": !vm.checkIfSelected(product)}'></i></td>
 	                <td><strong>Product: </strong><div class="name-block-container"><span ng-text-truncate="product.OITM_ItemName" ng-tt-chars-threshold="25" ng-tt-no-toggling></span></div></td>
 	                <td class="vendorColumn" style="white-space: nowrap;"><strong>Vendor: </strong><span ng-text-truncate="product.OMRC_FirmName" ng-tt-chars-threshold="25" ng-tt-no-toggling></span></td>
-	                <td style="white-space: nowrap;"><strong>Sku: </strong>{{product.OITM_ItemCode}}</td>
 	                <td class="hidden-xs"><strong>Description: </strong><span ng-text-truncate="product.OITM_U_dscription" tooltip="{{product.OITM_U_dscription}}" ng-tt-chars-threshold="25" ng-tt-no-toggling></span></td>
 	                <td class="dimColumn hidden-xs hidden-sm"><strong>Dimension: </strong>{{vm.getDimentions(product)}}</td>
 	                <td class="weightColumn hidden-xs hidden-sm" style="white-space: nowrap;"><strong>Weight: </strong>{{vm.getWeight(product)}}</td>
