@@ -148,7 +148,7 @@
 	        </tbody>
 	        <tfoot>
 	            <tr>
-	            	<td colspan="10" class="center">
+	            	<td colspan="10" class="center" ng-if="vm.state.totalInventory">
 		                <div class="pagination pagination-centered hidden" ng-show="vm.state.inventory.length > vm.uiState.curPage">
 	                        <button type="button" class="btn btn-primary" ng-disabled="vm.uiState.curPage == 0" ng-click="vm.previousPage()">
 	                            <span class="fa fa-arrow-left"></span>
@@ -162,8 +162,6 @@
 	                        </button>
 	                    </div>
 
-
-
 	                    <nav ng-if="vm.numberOfPages() && vm.pages.length >= 2">
 	                    	<ul class="pagination">
 	                    		<li ng-repeat="page in vm.pages" ng-class="{active: page == vm.uiState.curPage}">
@@ -171,8 +169,10 @@
 	                    		</li>
 	                    	</ul>
 	                    </nav>
-
 	                </td>
+	                <td ng-if="!vm.state.totalInventory" colspan="6" class="center height-100">
+	            		<h4>There are currently no products</h4>
+	            	</td>
 	            </tr>
 	        </tfoot>
 	    </table>
