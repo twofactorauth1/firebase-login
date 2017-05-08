@@ -144,6 +144,8 @@
 
                 if(btn.border.style){
                     styleString += ' border-style: '+btn.border.style+ ' !important;';
+                }else{
+                     styleString += ' border-style: none !important;';
                 }
             }
             return styleString;
