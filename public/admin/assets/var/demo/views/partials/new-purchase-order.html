@@ -55,8 +55,8 @@
                         <span class="file-name">{{vm.state.newPurchaseOrder.attachment.name}}</span>
             </div>
         </form>
-        <div ng-if="vm.uiState.loadingNewPoModal">
-            Loading customers..... 
+        <div class="modal-body-loading center" ng-if="vm.uiState.loadingNewPoModal">
+            <h3>Loading customers.....</h3> 
         </div>
     </div>
     <div class="modal-footer">
