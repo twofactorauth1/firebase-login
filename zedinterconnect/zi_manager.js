@@ -484,7 +484,11 @@ module.exports = {
 
     getCustomerNameForCardCode: function(accountId, userId, cardCode, fn) {
         var self = this;
-        self.log.debug(accountId, userId, '>> getCustomerNameForCardCode');
+        self.log.debug(accountId, userId, '>> getCustomerNameForCardCode [' + cardCode + ']');
+        if(!cardCode) {
+            self.log.error(accountId, userId, 'No card code specified');
+            return fn('No card code specified');
+        }
         var path = 'query/Indigenous/CustomerList.aspx?accept=application/json';
         self._ziRequest(path, function(err, value){
             if(err) {
@@ -499,13 +503,13 @@ module.exports = {
                 if(value && value.response && value.response.payload && value.response.payload.querydata && value.response.payload.querydata.data) {
                     var resultAry = value.response.payload.querydata.data.row;
                     _.each(resultAry, function(result){
-                        if(result.OCRD_CardCode.toLowerCase() === cardCode.toLowerCase()) {
+                        if(result && result.OCRD_CardCode && result.OCRD_CardCode.toLowerCase() === cardCode.toLowerCase()) {
                             companyName = result.OCRD_CardName;
                         }
                     });
                 }
                 if(companyName === '') {
-                    self.log.warn('Could not match a card code:' + cardCode.toLowerCase(), cardCode);
+                    self.log.warn('Could not match a card code:' + cardCode, cardCode);
                 }
                 self.log.debug(accountId, userId, '<< getCustomerNameForCardCode');
                 fn(null, companyName);
@@ -530,16 +534,18 @@ module.exports = {
             } else {
                 //self.log.debug('got this response:', resp);
                 //self.log.debug('got this body:', body);
+                var parsedJson;
                 try {
-                    var parsedJson = JSON.parse(body);
-                    fn(null, parsedJson);
+                    parsedJson = JSON.parse(body);
                 } catch(err) {
                     var text = 'Error parsing response from url [' + url + ']';
+                    self.log.error(text, err);
                     emailMessageManager.notifyAdmin('devops@indigenous.io', 'devops@indigenous.io', null,
                         'Error calling Zed Interconnect', text, err, function(_err, value){
                             fn(null, {});
                     });
                 }
+                fn(null, parsedJson);
             }
         });
     }
