@@ -259,6 +259,19 @@ var contact = $$.m.ModelBase.extend({
       return addressValues.join('|');
     },
 
+    getNotes: function() {
+      var notes = this.get('notes');
+      if (notes == null || notes.length == 0) {
+        return '';
+      }
+      var notesArr = []
+      notes.forEach(function(note, index) {
+        if(note.note)
+            notesArr.push(note.note.replace(/,/g, ';'))
+      });
+      return notesArr.join('|');
+    },
+
 
   getPhones: function() {
     var details = this.get("details"),
