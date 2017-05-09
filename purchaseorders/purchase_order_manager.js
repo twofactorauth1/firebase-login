@@ -560,7 +560,13 @@ module.exports = {
                                 orgConfig = {};
                             }
                             var cardCodes = orgConfig.cardCodes || [];
-                            query.cardCode = {$in:cardCodes};
+                            var optRegexp = [];
+
+                            cardCodes.forEach(function(opt){
+                                optRegexp.push(  new RegExp(opt, "i") );
+                            });
+
+                        query.cardCode = {$in:optRegexp};
                         }
                         purchaseOrderdao.removeByQuery(query, $$.m.PurchaseOrder, function(err, value){
                             if(err) {
@@ -598,7 +604,13 @@ module.exports = {
                                 orgConfig = {};
                             }
                             var cardCodes = orgConfig.cardCodes || [];
-                            query.cardCode = {$in:cardCodes};
+                            var optRegexp = [];
+
+                            cardCodes.forEach(function(opt){
+                                optRegexp.push(  new RegExp(opt, "i") );
+                            });
+
+                        query.cardCode = {$in:optRegexp};
                         }
                         purchaseOrderdao.findOne(query, $$.m.PurchaseOrder, function(err, po){
                             if(err) {
@@ -650,7 +662,13 @@ module.exports = {
                                 orgConfig = {};
                             }
                             var cardCodes = orgConfig.cardCodes || [];
-                            query.cardCode = {$in:cardCodes};
+                            var optRegexp = [];
+
+                            cardCodes.forEach(function(opt){
+                                optRegexp.push(  new RegExp(opt, "i") );
+                            });
+
+                        query.cardCode = {$in:optRegexp};
                         }
                         purchaseOrderdao.findMany(query, $$.m.PurchaseOrder, function(err, orders){
                             if(err) {
