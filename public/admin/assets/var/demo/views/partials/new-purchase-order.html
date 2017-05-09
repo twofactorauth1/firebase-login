@@ -40,7 +40,7 @@
                         
                     </ui-select>
 
-                    <ui-select ng-if="vm.state.customers.length < 200"
+                    <ui-select ng-if="vm.state.customers.length < 200 && vm.state.customers.length > 1"
                         ng-model="vm.state.newPurchaseOrder.cardCode"
                         theme="bootstrap"
                         on-select="vm.selectCardCode($select.selected)"
@@ -56,6 +56,9 @@
                         </ui-select-choices>
                         
                     </ui-select>
+                    <label class="block form-control" ng-if="vm.state.customers.length <= 1">
+                        {{vm.state.newPurchaseOrder.companyName}}
+                    </label>
             </div>
             <div class="form-group">
                 <label class="block">

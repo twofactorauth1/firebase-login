@@ -79,7 +79,13 @@ function purchaseOrderComponentController($scope, $attrs, $filter, $modal, $time
     function openModal(size){
         vm.state.newPurchaseOrder = {};
         var templateUrl = 'new-purchase-order-modal';
-
+        var isVendor = vm.state.orgCardAndPermissions && vm.state.orgCardAndPermissions.isVendor;
+        if(isVendor){
+            if(vm.state.customers && vm.state.customers.length == 1){
+                vm.state.newPurchaseOrder.cardCode = vm.state.customers[0].OCRD_CardCode;
+                vm.state.newPurchaseOrder.companyName = vm.state.customers[0].OCRD_CardName;
+            }
+        }
         $scope.modalInstance = $modal.open({
             templateUrl: templateUrl,
             size: size,
@@ -94,6 +100,7 @@ function purchaseOrderComponentController($scope, $attrs, $filter, $modal, $time
         if($scope.modalInstance)
             $scope.modalInstance.close();
         vm.uiState.modalLoading = false;
+        vm.state.newPurchaseOrder = {};
     }
 
     function viewArchivedPo(size){
@@ -230,19 +237,14 @@ function purchaseOrderComponentController($scope, $attrs, $filter, $modal, $time
                     return { OCRD_CardName: customer.OCRD_CardName, OCRD_CardCode: customer.OCRD_CardCode };
                 }
             );
-            vm.uiState.loadingNewPoModal = false;
+            vm.uiState.loadingNewPoModal = false;   
             var isVendor = vm.state.orgCardAndPermissions && vm.state.orgCardAndPermissions.isVendor;
             if(isVendor){
-                if(vm.state.orgCardAndPermissions.isVendorWithOneCardCode){
-                    vm.state.newPurchaseOrder.cardCode = vm.state.orgCardAndPermissions.cardCodes[0];
-                    var customer = _.find(vm.state.customers, function(customer){
-                        return customer.OCRD_CardCode.toLowerCase() == vm.state.newPurchaseOrder.cardCode.toLowerCase()
-                    });
-                    if(customer){
-                        vm.state.newPurchaseOrder.companyName = customer.OCRD_CardName;
-                    }
+                if(vm.state.customers && vm.state.customers.length == 1){
+                    vm.state.newPurchaseOrder.cardCode = vm.state.customers[0].OCRD_CardCode;
+                    vm.state.newPurchaseOrder.companyName = vm.state.customers[0].OCRD_CardName;
                 }
-            }
+            }         
         }
     }, true);
 
