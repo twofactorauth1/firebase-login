@@ -51,7 +51,13 @@ module.exports = {
                             orgConfig = {};
                         }
                         var cardCodes = orgConfig.cardCodes || [];
-                        query.cardCode = {$in:cardCodes};
+                        var optRegexp = [];
+
+                        cardCodes.forEach(function(opt){
+                            optRegexp.push(  new RegExp(opt, "i") );
+                        });
+
+                        query.cardCode = {$in:optRegexp};
                     }
                     cb(null, query);
                 }
@@ -138,7 +144,13 @@ module.exports = {
                             orgConfig = {};
                         }
                         var cardCodes = orgConfig.cardCodes || [];
-                        query.cardCode = {$in:cardCodes};
+                        var optRegexp = [];
+                        
+                        cardCodes.forEach(function(opt){
+                            optRegexp.push(  new RegExp(opt, "i") );
+                        });
+
+                        query.cardCode = {$in:optRegexp};
                     }
                     cb(null, query);
                 }
@@ -223,7 +235,13 @@ module.exports = {
                             orgConfig = {};
                         }
                         var cardCodes = orgConfig.cardCodes || [];
-                        query.cardCode = {$in:cardCodes};
+                        var optRegexp = [];
+                        
+                        cardCodes.forEach(function(opt){
+                            optRegexp.push(  new RegExp(opt, "i") );
+                        });
+
+                        query.cardCode = {$in:optRegexp};
                     }
                     cb(null, query);
                 }
@@ -423,7 +441,8 @@ module.exports = {
                                 orgConfig = {};
                             }
                             var cardCodes = orgConfig.cardCodes || [];
-                            if(!_.contains(cardCodes, order.get('cardCode'))) {
+                            cardCodes = _.map(cardCodes, function(code){return code.toLowerCase()});
+                            if(!_.contains(cardCodes, order.get('cardCode').toLowerCase())) {
                                 return fn();
                             }
                         }
