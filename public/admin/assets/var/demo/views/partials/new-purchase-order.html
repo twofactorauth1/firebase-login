@@ -7,7 +7,7 @@
         <h3 class="modal-title">New Purchase Order</h3>
     </div>
     <div class="modal-body bg-white new-purchase-order-modal" stop-event="touchend">
-        <form name="form" role="form" id="form">
+        <form name="form" role="form" id="form" ng-if="!vm.uiState.loadingNewPoModal">
             <div class="form-group" >
                 <label>
                     Title
@@ -23,8 +23,21 @@
             </div>
             <div class="form-group">
                 <label class="">Card Code<span class="required">*</span></label>
-                    <input type="text" placeholder="Card Code" class="form-control" ng-model="vm.state.newPurchaseOrder.cardCode">
-                    
+                    <ui-select
+                        ng-model="vm.state.newPurchaseOrder.cardCode"
+                        theme="bootstrap"
+                        on-select="vm.selectCardCode($select.selected)"
+                        ng-disabled="vm.state.orgCardAndPermissions.cardCodes.length <= 1 && vm.state.orgCardAndPermissions.isVendor"
+                        >
+                        <ui-select-match
+                            placeholder="Select a card code">
+                            {{$select.selected.OCRD_CardName}}
+                        </ui-select-match>
+                        <ui-select-choices all-choices="vm.state.customers" repeat="customer.OCRD_CardCode as customer in $select.pageOptions.customers | propsFilter: {OCRD_CardName: $select.search}" refresh-delay="0">
+                            <div ng-bind-html="customer.OCRD_CardName | highlight: $select.search"></div>
+                          </small>
+                        </ui-select-choices>
+                    </ui-select>
             </div>
             <div class="form-group">
                 <label class="block">
@@ -42,6 +55,9 @@
                         <span class="file-name">{{vm.state.newPurchaseOrder.attachment.name}}</span>
             </div>
         </form>
+        <div ng-if="vm.uiState.loadingNewPoModal">
+            Loading customers..... 
+        </div>
     </div>
     <div class="modal-footer">
         <button class="btn btn-primary" ng-disabled='form.$invalid || vm.checkIfInValid(vm.state.newPurchaseOrder) || vm.uiState.saveLoading || !vm.state.newPurchaseOrder.cardCode' ng-click="vm.createPurchaseOrder(vm.state.newPurchaseOrder, form)">Submit</button>

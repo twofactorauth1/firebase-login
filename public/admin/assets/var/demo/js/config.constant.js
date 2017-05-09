@@ -764,8 +764,8 @@ app.constant('JS_REQUIRES', {
     'productTableFilter': 'assets/js/filters/productTableFilter.js',
 
     //*** Directives
-    'mediaModal': 'assets/js/directives/mediadirective.js'
-
+    'mediaModal': 'assets/js/directives/mediadirective.js',
+    'uiSelectChoices': 'assets/var/demo/js/directives/uiSelectChoices.js'
 
   },
   //*** angularJS Modules
