@@ -140,7 +140,7 @@
                                                 <label for="form-field-select-1">
                                                     Type
                                                 </label>
-                                                <select ng-model="product.type" class="form-control" ng-options="type.data as type.label for type in productTypes.dp">
+                                                <select ng-change="resetEmailTemplate()" ng-model="product.type" class="form-control" ng-options="type.data as type.label for type in productTypes.dp">
                                                     <option value="">-- choose type --</option>
                                                 </select>
                                                 <p ng-show="productTypeError" class="help-block">Product type is required.</p>

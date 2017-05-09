@@ -1148,7 +1148,11 @@
         }
     });
 
-
+    $scope.resetEmailTemplate = function(){
+        if($scope.product.type == $scope.productTypes.DONATION || $scope.product.type == $scope.productTypes.EXTERNAL){
+            $scope.product.fulfillment_email = false;
+        }
+    }
     
 
     $scope.init = (function(){
