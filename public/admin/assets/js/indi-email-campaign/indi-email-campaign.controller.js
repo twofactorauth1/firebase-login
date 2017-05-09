@@ -56,10 +56,13 @@
         vm.state.recipients = [];
         vm.state.recipientsToRemove = [];
         vm.state.originalRecipients = [];
+        
         vm.uiState.selectedContacts = {
             individuals: [],
             newEmails: []
         };
+
+        vm.uiState.originalNewEmails = [];
         vm.uiState.whenToSend = 'now';
         vm.uiState.watchDeliveryDate = false;
         vm.uiState.delivery = {
@@ -280,6 +283,7 @@
                                 vm.state.campaignOriginal = angular.copy(vm.state.campaign);
                                 vm.state.originalRecipients = angular.copy(vm.state.recipients);
                                 vm.uiState.delivery.originalDate = angular.copy(vm.uiState.delivery.date);
+                                vm.uiState.originalNewEmails = angular.copy(vm.uiState.selectedContacts.newEmails);
                                 vm.uiState.dataLoaded = true;
                                 vm.uiState.disableEditing = false;
                                 if (isActivation) {
@@ -336,6 +340,7 @@
                     vm.state.campaign = angular.extend(vm.state.campaign, res.data);
                     vm.state.campaignOriginal = angular.copy(vm.state.campaign);
                     vm.state.originalRecipients = angular.copy(vm.state.recipients);
+                    vm.uiState.originalNewEmails = angular.copy(vm.uiState.selectedContacts.newEmails);
                     vm.uiState.delivery.originalDate = angular.copy(vm.uiState.delivery.date);
                     vm.uiState.dataLoaded = true;
                     vm.uiState.disableEditing = false;
@@ -671,6 +676,11 @@
             if (!angular.equals(_.pluck(vm.state.recipients, '_id').sort(), _.pluck(vm.state.originalRecipients, '_id').sort())) {
                 isDirty = true;
                 console.info('Dirty vm.state.recipients', _.pluck(vm.state.recipients, '_id').sort(), _.pluck(vm.state.originalRecipients, '_id').sort());
+            }
+
+            if (!angular.equals(vm.uiState.originalNewEmails, vm.uiState.selectedContacts.newEmails)) {
+                isDirty = true;
+                console.info('Dirty vm.uiState.selectedContacts', vm.uiState.selectedContacts, vm.uiState.originalNewEmails);
             }
 
             return isDirty;
