@@ -33,7 +33,7 @@
                             placeholder="Select a card code">
                             {{$select.selected.OCRD_CardName}}
                         </ui-select-match>
-                        <ui-select-choices repeat="customer.OCRD_CardCode as customer in vm.state.customers | filter:$select.search" refresh-delay="0">
+                        <ui-select-choices all-choices="vm.state.customers" repeat="customer.OCRD_CardCode as customer in $select.pageOptions.customers | propsFilter: {OCRD_CardName: $select.search}" refresh-delay="0">
                             <div ng-bind-html="customer.OCRD_CardName | highlight: $select.search"></div>
                           </small>
                         </ui-select-choices>
