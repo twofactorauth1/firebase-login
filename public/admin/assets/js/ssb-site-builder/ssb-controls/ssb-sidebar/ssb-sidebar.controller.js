@@ -1063,7 +1063,7 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
 
     function addRemoveCustomField(type, index){
         if(type){  
-            var cleanType = type.replace(/ /g, '');;
+            var cleanType = type.replace(/[^\w\s]/gi, '').replace(/ /g, '');
             var newInfo = {
                 name: cleanType,
                 type: type,
@@ -1072,7 +1072,8 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
                 optional:true,
                 visible: true
             }
-            vm.state.page.sections[vm.uiState.activeSectionIndex].components[vm.uiState.activeComponentIndex].contactInfo.push(newInfo);
+            if(cleanType)
+                vm.state.page.sections[vm.uiState.activeSectionIndex].components[vm.uiState.activeComponentIndex].contactInfo.push(newInfo);
             vm.contactInfo = {};
         }
         else{

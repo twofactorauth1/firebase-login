@@ -126,6 +126,8 @@ app.directive('simpleFormComponent',["formValidations", "$timeout", function (fo
 
             if(btn.border.style){
                 styleString += ' border-style: '+btn.border.style+ ' !important;';
+            }else{
+                 styleString += ' border-style: none !important;';
             }
         }
 
@@ -237,6 +239,8 @@ app.directive('simpleFormComponent',["formValidations", "$timeout", function (fo
 
                                     if(btn.border.style){
                                         this.style.setProperty( 'border-style', btn.border.style , 'important' );
+                                    }else{
+                                        this.style.setProperty('border-style', "none", 'important');
                                     }
                                 }
                         });

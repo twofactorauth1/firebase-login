@@ -82,7 +82,7 @@ function inventoryComponentController($scope, $attrs, $filter, $modal, $timeout,
     $scope.$watch(function() { return InventoryService.userOrgConfig }, function(config) {
         if(angular.isDefined(config)){
             vm.state.userOrgConfig = config;
-            vm.uiState.inVentoryWatchList = config.watchList || [];
+            //vm.uiState.inVentoryWatchList = config.watchList || [];
         }
     }, true);
 
@@ -294,8 +294,8 @@ function inventoryComponentController($scope, $attrs, $filter, $modal, $timeout,
     };
 
 
-    function checkIfSelected(product){
-        return _.contains(vm.uiState.inVentoryWatchList, product["@id"]);
+    function checkIfSelected(product, list){
+        return _.contains(list, product["@id"]);
     }
 
     function bulkActionSelectFn() {
@@ -326,9 +326,14 @@ function inventoryComponentController($scope, $attrs, $filter, $modal, $timeout,
           function (isConfirm) {
             if (isConfirm) {
                 if (vm.bulkActionChoice.action.data == 'unwatch') {
-                    vm.uiState.inVentoryWatchList = [];
+                    
+                    vm.state.userOrgConfig.watchList = _.difference(vm.state.userOrgConfig.watchList || [], vm.uiState.inVentoryWatchList);
                 }
-                vm.state.userOrgConfig.watchList = vm.uiState.inVentoryWatchList;
+                if (vm.bulkActionChoice.action.data == 'watch') {
+                    vm.state.userOrgConfig.watchList = _.first(_.union(vm.uiState.inVentoryWatchList, vm.state.userOrgConfig.watchList || []), 5);
+                }
+                
+                vm.uiState.inVentoryWatchList = [];
                 InventoryService.updateUserOrgConfig(vm.state.userOrgConfig).then(function(response){
                     vm.bulkActionChoice = null;
                     vm.bulkActionChoice = {};

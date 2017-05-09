@@ -88,6 +88,9 @@ var emailMessageManager = {
                                 "click_tracking": {
                                     "enable": true,
                                     "enable_text": true
+                                },
+                                "subscription_tracking":{
+                                    enable:false
                                 }
                             }
                         };
@@ -712,6 +715,9 @@ var emailMessageManager = {
                             "click_tracking": {
                                 "enable": true,
                                 "enable_text": true
+                            },
+                            "subscription_tracking":{
+                                enable:false
                             }
                         }
                     };
@@ -933,6 +939,9 @@ var emailMessageManager = {
                                     "enable": true,
                                     "enable_text": true
                                 }
+                            },
+                            "subscription_tracking":{
+                                enable:false
                             }
                         };
                         request.method = 'POST';
@@ -1126,6 +1135,9 @@ var emailMessageManager = {
                         "enable": true,
                         "enable_text": true
                     }
+                },
+                "subscription_tracking":{
+                    enable:false
                 }
             };
             request.method = 'POST';
@@ -1218,7 +1230,16 @@ var emailMessageManager = {
                                         }
                                     ]
                                 }
-                            ]
+                            ],
+                            "tracking_settings": {
+                                "click_tracking": {
+                                    "enable": true,
+                                    "enable_text": true
+                                },
+                                "subscription_tracking":{
+                                    enable:false
+                                }
+                            }
                         };
                         request.method = 'POST';
                         request.path = '/v3/mail/send';
@@ -1310,6 +1331,9 @@ var emailMessageManager = {
                 "click_tracking": {
                     "enable": true,
                     "enable_text": true
+                },
+                "subscription_tracking":{
+                    enable:false
                 }
             }
         };
@@ -1416,7 +1440,8 @@ var emailMessageManager = {
                 "click_tracking": {
                     "enable": true,
                     "enable_text": true
-                }
+                },
+                "subscription_tracking":{enable:false}
             }
         };
         request.method = 'POST';
@@ -1497,6 +1522,10 @@ var emailMessageManager = {
                         "click_tracking": {
                             "enable": true,
                             "enable_text": true
+                        },
+                        "subscription_tracking":{
+                            enable:false,
+                            html:'<table border="0" cellpadding="0" cellspacing="0" style="width:100%"><tbody><tr><td style="text-align:center">If you&#39;d like to unsubscribe and stop receiving these emails, <% click here %>.</td></tr></tbody></table>'
                         }
                     }
                 };

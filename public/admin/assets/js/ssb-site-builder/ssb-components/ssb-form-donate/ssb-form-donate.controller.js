@@ -409,6 +409,15 @@
                 });
             });
 
+            
+            if(vm.product.tags){
+                vm.product.tags = _.map(vm.product.tags, function(tag){return tag.toLowerCase()});
+            }
+
+            if(vm.component.tags){
+                vm.component.tags = _.map(vm.component.tags, function(tag){return tag.toLowerCase()});
+            }
+            
             var formatted = {
                 fingerprint: fingerprint,
                 sessionId: sessionId,
@@ -739,6 +748,7 @@
                 }
                 var orderService = $injector.get('orderService');
                 var order = _formattedOrder();
+
                 if (order.customer) {
                     cardInput.name = order.customer.first + ' ' + order.customer.last;
                     // cardInput.address_line1 = order.customer.details[0].addresses.length ? order.customer.details[0].addresses[0].address : '';
