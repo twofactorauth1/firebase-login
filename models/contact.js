@@ -269,7 +269,7 @@ var contact = $$.m.ModelBase.extend({
         if(note.note)
             notesArr.push(note.note.replace(/,/g, ';'))
       });
-      return notesArr.join('|');
+      return notesArr.join(' | ');
     },
 
 
