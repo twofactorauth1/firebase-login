@@ -127,6 +127,8 @@ app.directive('simpleFormComponent', ["ipCookie", '$window', '$timeout', 'userSe
 
             if(btn.border.style){
                 styleString += ' border-style: '+btn.border.style+ ' !important;';
+            }else{
+                 styleString += ' border-style: none !important;';
             }
         }
         return styleString;
@@ -209,6 +211,12 @@ app.directive('simpleFormComponent', ["ipCookie", '$window', '$timeout', 'userSe
                                     this.style.setProperty('border-radius', 'none%', 'important');
                                     this.style.setProperty('border-style', "none", 'important');
                                 }
+                            }else{
+                                    this.style.setProperty('border-color', "none", 'important');
+                                    this.style.setProperty('border-width', '0px', 'important');
+                                    this.style.setProperty('border-radius', 'none%', 'important');
+                                    this.style.setProperty('border-style', "none", 'important');
+
                             }
                             if(btnHoverStyle && btnHoverStyle.txtcolor)
                               this.style.setProperty( 'color', btnHoverStyle.txtcolor, 'important' );
@@ -271,6 +279,8 @@ app.directive('simpleFormComponent', ["ipCookie", '$window', '$timeout', 'userSe
 
                                     if (btnActiveStyle.border.style) {
                                         this.style.setProperty('border-style', btnActiveStyle.border.style, 'important');
+                                    }else{
+                                          this.style.setProperty('border-style', "none", 'important');
                                     }
                                  }else {
                                     this.style.setProperty('border-color', "none", 'important');
@@ -278,6 +288,12 @@ app.directive('simpleFormComponent', ["ipCookie", '$window', '$timeout', 'userSe
                                     this.style.setProperty('border-radius', 'none%', 'important');
                                     this.style.setProperty('border-style', "none", 'important');
                                 }
+                            }else{
+                                    this.style.setProperty('border-color', "none", 'important');
+                                    this.style.setProperty('border-width', '0px', 'important');
+                                    this.style.setProperty('border-radius', 'none%', 'important');
+                                    this.style.setProperty('border-style', "none", 'important');
+
                             }
                             if(btnActiveStyle && btnActiveStyle.txtcolor)
                               this.style.setProperty( 'color', btnActiveStyle.txtcolor, 'important' );
@@ -314,6 +330,8 @@ app.directive('simpleFormComponent', ["ipCookie", '$window', '$timeout', 'userSe
 
                                     if(btn.border.style){
                                         elem.style.setProperty( 'border-style', btn.border.style , 'important' );
+                                    }else{
+                                          elem.style.setProperty('border-style', "none", 'important');
                                     }
                                 }
                             }, 1000);
