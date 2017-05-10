@@ -15,8 +15,9 @@ var userDao = require('../dao/user.dao');
 var accountManager = require('../accounts/account.manager');
 var emailMessageManager = require('../emailmessages/emailMessageManager');
 var ERR_MSG = 'We are having trouble retrieving these results.  Please try again later';
+var scheduledJobsManager = require('../scheduledjobs/scheduledjobs_manager');
 
-module.exports = {
+var ziManager = {
     log: logger,
 
     demo: function(accountId, userId, fn) {
@@ -517,6 +518,35 @@ module.exports = {
         });
     },
 
+    runInventoryJob:function() {
+        var self = this;
+        self.log.debug(0,0,'>> runInventoryJob');
+        self.loadInventoryCollection(function(){
+            //schedule next run
+
+            var code = '$$.u.ziManager.runInventoryJob();';
+            var send_at = moment().minute(0);
+
+            send_at = moment(send_at).add(1, 'hours');
+            self.log.debug('Scheduling ahead an hour');
+
+            var scheduledJob = new $$.m.ScheduledJob({
+                accountId: 0,
+                scheduledAt: moment(send_at).toDate(),
+                runAt: null,
+                job:code
+            });
+            scheduledJobsManager.scheduleJob(scheduledJob, function(err, value){
+                if(err || !value) {
+                    self.log.error(0, 0, 'Error scheduling job with manager:', err);
+                } else {
+                    self.log.debug(0,0, 'scheduled next job:', value.get('scheduledAt'));
+                }
+                self.log.debug(0,0,'<< runInventoryJob');
+            });
+        });
+    },
+
     _ziRequest: function(path, fn) {
         var self = this;
         var url = ziConfig.ZED_PROTOCOL + ziConfig.ZED_USERNAME + ':' + ziConfig.ZED_PASSWORD + '@' + ziConfig.ZED_ENDPOINT;
@@ -552,3 +582,7 @@ module.exports = {
 
 
 };
+$$.u = $$.u || {};
+$$.u.ziManager = ziManager;
+
+module.exports = ziManager;
