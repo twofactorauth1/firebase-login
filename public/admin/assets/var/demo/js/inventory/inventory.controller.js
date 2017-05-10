@@ -12,7 +12,7 @@ function inventoryComponentController($scope, $attrs, $filter, $modal, $timeout,
 
     vm.state = {};
 
-    
+
 
     vm.uiState = {
         loading: true,
@@ -33,6 +33,7 @@ function inventoryComponentController($scope, $attrs, $filter, $modal, $timeout,
     vm.viewSingleInventory = viewSingleInventory;
     vm.getDimentions = getDimentions;
     vm.getWeight = getWeight;
+    vm.getPrice = getPrice;
     vm.numberOfPages = numberOfPages;
 
     vm.sortInventory = sortInventory;
@@ -56,7 +57,7 @@ function inventoryComponentController($scope, $attrs, $filter, $modal, $timeout,
     vm.bulkActionSelectFn = bulkActionSelectFn;
     vm.showFilteredRecords = showFilteredRecords;
     vm.cancel = cancel;
-    
+
     vm.bulkActionChoice = {};
 
     vm.bulkActionChoices = [
@@ -174,6 +175,16 @@ function inventoryComponentController($scope, $attrs, $filter, $modal, $timeout,
         return weight;
     }
 
+    function getPrice(product){
+        var price = "";
+        if(product && product.ITM1_Price > 0){
+            price =  parseFloat(product.ITM1_Price).toFixed(2);
+            if(product.ITM1_Price == 0){
+                price = 0.00;
+            }
+        }
+        return price;
+    }
 
     /********** PAGINATION RELATED **********/
 
@@ -299,9 +310,9 @@ function inventoryComponentController($scope, $attrs, $filter, $modal, $timeout,
     }
 
     function bulkActionSelectFn() {
-        
+
         var watchMessage = "Do you want to add the selected items in inventory watch list?";
-        
+
         var confirmMessage = "Yes, add to watch list!";
         var cancelMessage = "No, do not add to watch list!";
         var toasterMessage = 'Items added to inventory watch list';
@@ -311,7 +322,7 @@ function inventoryComponentController($scope, $attrs, $filter, $modal, $timeout,
             cancelMessage = "No, do not remove from watch list!";
             toasterMessage = 'Items removed from inventory watch list';
         }
-        
+
         SweetAlert.swal({
             title: "Are you sure?",
             text: watchMessage,
@@ -326,13 +337,13 @@ function inventoryComponentController($scope, $attrs, $filter, $modal, $timeout,
           function (isConfirm) {
             if (isConfirm) {
                 if (vm.bulkActionChoice.action.data == 'unwatch') {
-                    
+
                     vm.state.userOrgConfig.watchList = _.difference(vm.state.userOrgConfig.watchList || [], vm.uiState.inVentoryWatchList);
                 }
                 if (vm.bulkActionChoice.action.data == 'watch') {
                     vm.state.userOrgConfig.watchList = _.first(_.union(vm.uiState.inVentoryWatchList, vm.state.userOrgConfig.watchList || []), 5);
                 }
-                
+
                 vm.uiState.inVentoryWatchList = [];
                 InventoryService.updateUserOrgConfig(vm.state.userOrgConfig).then(function(response){
                     vm.bulkActionChoice = null;
@@ -344,7 +355,7 @@ function inventoryComponentController($scope, $attrs, $filter, $modal, $timeout,
                 vm.bulkActionChoice = {};
             }
         });
-        
+
     };
 
     function showFilteredRecords(){

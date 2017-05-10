@@ -110,7 +110,8 @@
 	                <th class="hidden-xs desc-col">Description</th>
 	                <th class="hidden-xs hidden-sm dim-col">Dimension (LxWxH)</th>
 	                <th class="hidden-xs hidden-sm weight-col">Weight</th>
-	                <th class="qty-col sort" style="white-space: nowrap;" width="1%" ng-class="{'st-sort-ascent': vm.uiState.sortData.details['totalQuantity'].direction === 1, 'st-sort-descent': vm.uiState.sortData.details['totalQuantity'].direction === -1}" ng-click="vm.sortInventory('In_Stock', 'totalQuantity')"><span class="hidden-xs">Qty </span>On Hand</th>
+                    <th class="hidden-xs hidden-sm price-col" style="white-space: nowrap;">List Price</th>
+                    <th class="qty-col sort" style="white-space: nowrap;" width="1%" ng-class="{'st-sort-ascent': vm.uiState.sortData.details['totalQuantity'].direction === 1, 'st-sort-descent': vm.uiState.sortData.details['totalQuantity'].direction === -1}" ng-click="vm.sortInventory('In_Stock', 'totalQuantity')"><span class="hidden-xs">Qty </span>On Hand</th>
 	            </tr>
 	            <tr ng-if="vm.uiState.showFilter">
 	            	<th class="hidden-xs"></th>
@@ -123,6 +124,7 @@
 	                <th class="desc-col hidden-xs"></th>
 	                <th class="dim-col hidden-xs hidden-sm"></th>
 	                <th class="weight-col hidden-xs hidden-sm"></th>
+                    <th class="price-col hidden-xs hidden-sm"></th>
 	                <th class="qty-col">
 	                    <select ng-model="vm.uiState.fieldSearch.In_Stock" class="form-control" ng-options="options.value as options.label for options in vm.quantitySearchOptions" ng-change="updateSettings()">
                             <option value=""></option>
@@ -138,7 +140,8 @@
 	                <td class="hidden-xs"><strong>Description: </strong><span ng-text-truncate="product.OITM_U_dscription" tooltip="{{product.OITM_U_dscription}}" ng-tt-chars-threshold="25" ng-tt-no-toggling></span></td>
 	                <td class="dimColumn hidden-xs hidden-sm"><strong>Dimension: </strong>{{vm.getDimentions(product)}}</td>
 	                <td class="weightColumn hidden-xs hidden-sm" style="white-space: nowrap;"><strong>Weight: </strong>{{vm.getWeight(product)}}</td>
-	                <td class="qtyColumn" style="white-space: nowrap;"><strong>Qty: </strong>
+                    <td class="priceColumn hidden-xs hidden-sm" style="white-space: nowrap;"><strong>List Price: </strong>{{vm.getPrice(product) | currency : '$'}}</td>
+                    <td class="qtyColumn" style="white-space: nowrap;"><strong>Qty: </strong>
 	                <span ng-if="product.In_Stock <= 0">
                         <a href='#' ng-click='vm.cancel($event);' onclick='Intercom("showNewMessage","")'>Click to Inquire</a>
                     </span>
