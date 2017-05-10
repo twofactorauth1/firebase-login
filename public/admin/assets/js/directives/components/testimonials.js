@@ -10,16 +10,31 @@ app.directive('testimonialsComponent', ['$timeout', function ($timeout) {
     },
     templateUrl: '/components/component-wrap.html',
     link: function (scope, element, attrs) {
+            // set default values for slider
+        var themeOverridesStyle= angular.copy(scope.$parent.$parent.vm.website.themeOverrides.styles);
         scope.touchMove = false;
         scope.draggable = false;
         scope.autoplay = false;
         scope.isEditing = true;
+        debugger;
 
         if(!scope.component.slider) {
             scope.component.slider = {
                 speed: 300, autoPlay: true, autoPlayInterval: 5000
             };
         }
+        // set default values for slider
+        if(scope.component.slider.sliderDotColorOpacity==undefined){
+           scope.component.slider.sliderDotColorOpacity= themeOverridesStyle.primarySliderDotColorOpacity;
+        }
+        if(scope.component.slider.sliderActiveDotColor==undefined){
+           scope.component.slider.sliderActiveDotColor= themeOverridesStyle.primarySliderActiveDotColor;
+        }
+        if(scope.component.slider.sliderDotColor==undefined){
+           scope.component.slider.sliderDotColor= themeOverridesStyle.primarySliderDotColor;
+        }
+
+
 
         scope.autoplay = false;
         scope.accessibility = false;
