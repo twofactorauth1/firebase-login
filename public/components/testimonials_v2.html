@@ -13,7 +13,7 @@
 }
 
 [testimonials-component]#component_{{component._id}} .slider-dot-color-opacity .slick-dots li button:before{
-    opacity: {{component.slider.sliderDotColorOpacity}} !important;
+    opacity: {{component.slider.sliderDotColorOpacity?component.slider.sliderDotColorOpacity:0.01}} !important;
 }
 
 .carousel-indicators li.active {
@@ -41,7 +41,7 @@
         <div elem ng-model="component.title"></div>
     </div>
     <div class="clearfix"></div>
-    <div class="testimonial-wrap {{isEditing ? 'editing' : ''}}" style="position: relative;" ng-class="{'slider-dot-color': component.slider.sliderDotColor, 'slider-active-dot-color': component.slider.sliderActiveDotColor, 'slider-dot-color-opacity': component.slider.sliderDotColorOpacity}">
+    <div class="testimonial-wrap slider-dot-color-opacity {{isEditing ? 'editing' : ''}}" style="position: relative;" ng-class="{'slider-dot-color': component.slider.sliderDotColor, 'slider-active-dot-color': component.slider.sliderActiveDotColor}">
         <div ng-if="dataLoaded" class="carousel-caption" ind-slider='{ slidesToShow:1, touchMove:{{touchMove}}, draggable:{{draggable}}, dots:true, arrows:false,  speed:{{component.slider.speed}}, slidesToScroll:1, autoplay:{{autoplay}}, autoplaySpeed:{{component.slider.autoPlayInterval}}, fade: true, accessibility:{{accessibility}} }'>
             <div ng-repeat="testimonial in component.testimonials" class="col-sm-12 testimonials single-testimonial" ng-class="{'testimonial-blank-slide': !testimonial.img}">
                 <div ng-if="component.slider.showOverlay" class="bg slider-overlay-bg" ng-style="{'background': component.slider.overlay.color, opacity: component.slider.overlay.opacity === 0 ? component.slider.overlay.opacity : component.slider.overlay.opacity/100 || 0}">                    
