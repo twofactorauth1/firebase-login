@@ -88,9 +88,6 @@ var emailMessageManager = {
                                 "click_tracking": {
                                     "enable": true,
                                     "enable_text": true
-                                },
-                                "subscription_tracking":{
-                                    enable:false
                                 }
                             }
                         };
@@ -938,10 +935,10 @@ var emailMessageManager = {
                                 "click_tracking": {
                                     "enable": true,
                                     "enable_text": true
+                                },
+                                "subscription_tracking":{
+                                    enable:false
                                 }
-                            },
-                            "subscription_tracking":{
-                                enable:false
                             }
                         };
                         request.method = 'POST';
@@ -988,9 +985,11 @@ var emailMessageManager = {
 
     },
 
-    sendBasicEmail: function(fromAddress, fromName, toAddress, toName, subject, htmlContent, accountId, vars, emailId, ccAry, fn) {
+    sendBasicEmail: function(fromAddress, fromName, toAddress, toName, subject, htmlContent, accountId, vars, emailId, ccAry, suppressUnsubscribe, fn) {
         var self = this;
         self.log.debug('>> sendBasicEmail');
+        self.log.trace('subject:' + subject);
+        self.log.trace('suppressUnsubscribe:' + suppressUnsubscribe);
         self._checkForUnsubscribe(accountId, toAddress, function(err, isUnsubscribed) {
             if (isUnsubscribed == true) {
                 fn('skipping email for user on unsubscribed list');
@@ -1036,9 +1035,14 @@ var emailMessageManager = {
                             "click_tracking": {
                                 "enable": true,
                                 "enable_text": true
-                            }
+                            },
+                            "subscription_tracking":{enable:true}
                         }
                     };
+                    if(suppressUnsubscribe && suppressUnsubscribe === true) {
+                        request.body.tracking_settings.subscription_tracking.enable = false;
+                    }
+                    self.log.trace('request.body:', request.body);
                     request.method = 'POST';
                     request.path = '/v3/mail/send';
 

@@ -40,8 +40,34 @@
         vm.isEditing = $scope.$parent.vm && $scope.$parent.vm.uiState;
 
         vm._campaignObj = null;
+        vm.removeBorderStyle=removeBorderStyle;
+        vm.setBorderStyle=setBorderStyle;
+        function setBorderStyle(currentElement,btnStyle){
+            vm.removeBorderStyle(currentElement);
+            if (btnStyle.border &&
+                btnStyle.border.show) {
+                if (btnStyle.border.color) {
+                    currentElement.style.setProperty('border-color', btnStyle.border.color, 'important');
+                }
+                if (btnStyle.border.width) {
+                    currentElement.style.setProperty('border-width', btnStyle.border.width + 'px', 'important');
+                }
+                if (!btnStyle.border.radius) {
+                    btnStyle.border.radius = 0;
+                }
+                currentElement.style.setProperty('border-radius', btnStyle.border.radius + '%', 'important');
 
-
+                if (btnStyle.border.style) {
+                    currentElement.style.setProperty('border-style', btnStyle.border.style, 'important');
+                }
+            }
+        }
+        function removeBorderStyle(currentElement){
+            currentElement.style.setProperty('border-color', "none", 'important');
+            currentElement.style.setProperty('border-width', '0px', 'important');
+            currentElement.style.setProperty('border-radius', 'none%', 'important');
+            currentElement.style.setProperty('border-style', "none", 'important');
+        }
         function fieldClass(field) {
             var classString = 'col-sm-12';
 
@@ -432,28 +458,9 @@
                                     this.style.setProperty('background-color', btnHoverStyle.bg.color, 'important');
                                     this.style.setProperty('border-color', btnHoverStyle.bg.color, 'important');
                                 }
-                                if (btnHoverStyle.border &&
-                                    btnHoverStyle.border.show) {
-                                    if (btnHoverStyle.border.color) {
-                                        this.style.setProperty('border-color', btnHoverStyle.border.color, 'important');
-                                    }
-                                    if (btnHoverStyle.border.width) {
-                                        this.style.setProperty('border-width', btnHoverStyle.border.width + 'px', 'important');
-                                    }
-                                    if (!btnHoverStyle.border.radius) {
-                                        btnHoverStyle.border.radius = 0;
-                                    }
-                                    this.style.setProperty('border-radius', btnHoverStyle.border.radius + '%', 'important');
-
-                                    if (btnHoverStyle.border.style) {
-                                        this.style.setProperty('border-style', btnHoverStyle.border.style, 'important');
-                                    }
-                                } else {
-                                    this.style.setProperty('border-color', "none", 'important');
-                                    this.style.setProperty('border-width', '0px', 'important');
-                                    this.style.setProperty('border-radius', 'none%', 'important');
-                                    this.style.setProperty('border-style', "none", 'important');
-                                }
+                                vm.setBorderStyle(this,btnHoverStyle);
+                            }else {
+                               vm.removeBorderStyle(this);
                             }
                             if(btnHoverStyle && btnHoverStyle.txtcolor)
                               this.style.setProperty( 'color', btnHoverStyle.txtcolor, 'important' );
@@ -473,21 +480,10 @@
                                 this.style.setProperty( 'border-color', originalData.borderColor, 'important' );
                             
                             var btn=vm.originalData.btn;
-                            if(btn && btn.border && btn.border.show){
-                                if(btn.border.color){
-                                    this.style.setProperty( 'border-color', btn.border.color, 'important' );
-                                }
-                                if(btn.border.width){
-                                    this.style.setProperty( 'border-width', btn.border.width+ 'px', 'important' );
-                                }
-                                if(!btn.border.radius){
-                                    btn.border.radius=0;
-                                }
-                                this.style.setProperty( 'border-radius', btn.border.radius+'%', 'important' );
-
-                                if(btn.border.style){
-                                    this.style.setProperty( 'border-style', btn.border.style , 'important' );
-                                }
+                            if(btn){
+                                vm.setBorderStyle(this,btn);
+                            }else{
+                                vm.removeBorderStyle(this);
                             }
                         });
 
@@ -501,28 +497,10 @@
                                   this.style.setProperty( 'background-color', btnActiveStyle.bg.color, 'important' );
                                   this.style.setProperty( 'border-color', btnActiveStyle.bg.color, 'important' );
                                 }
-                                if (btnActiveStyle.border &&
-                                    btnActiveStyle.border.show) {
-                                    if (btnActiveStyle.border.color) {
-                                        this.style.setProperty('border-color', btnActiveStyle.border.color, 'important');
-                                    }
-                                    if (btnActiveStyle.border.width) {
-                                        this.style.setProperty('border-width', btnActiveStyle.border.width + 'px', 'important');
-                                    }
-                                    if (!btnActiveStyle.border.radius) {
-                                        btnActiveStyle.border.radius = 0
-                                    }
-                                    this.style.setProperty('border-radius', btnActiveStyle.border.radius + '%', 'important');
+                                vm.setBorderStyle(this,btnActiveStyle);
 
-                                    if (btnActiveStyle.border.style) {
-                                        this.style.setProperty('border-style', btnActiveStyle.border.style, 'important');
-                                    }
-                                } else {
-                                    this.style.setProperty('border-color', "none", 'important');
-                                    this.style.setProperty('border-width', '0px', 'important');
-                                    this.style.setProperty('border-radius', 'none%', 'important');
-                                    this.style.setProperty('border-style', "none", 'important');
-                                }
+                            } else {
+                               vm.removeBorderStyle(this);
                             }
                             if(btnActiveStyle && btnActiveStyle.txtcolor)
                               this.style.setProperty( 'color', btnActiveStyle.txtcolor, 'important' );
@@ -544,23 +522,11 @@
                                 else
                                   elem.style.setProperty( 'border-color', originalData.borderColor, 'important' );
                                   var btn=vm.originalData.btn;
-                                  if(btn && btn.border &&
-                                   btn.border.show){
-                                        if(btn.border.color){
-                                            elem.style.setProperty( 'border-color', btn.border.color, 'important' );
-                                        }
-                                        if(btn.border.width){
-                                            elem.style.setProperty( 'border-width', btn.border.width+ 'px', 'important' );
-                                        }
-                                        if(!btn.border.radius){
-                                            btn.border.radius=0
-                                        }
-                                        elem.style.setProperty( 'border-radius', btn.border.radius+'%', 'important' );
-
-                                        if(btn.border.style){
-                                            elem.style.setProperty( 'border-style', btn.border.style , 'important' );
-                                        }
-                                }
+                                   if(btn){
+                                       vm.setBorderStyle(elem,btn);
+                                   }else{
+                                       vm.removeBorderStyle(elem);
+                                   }
                             }, 1000);
                         })
                     }
@@ -568,8 +534,5 @@
               }
           });
       })
-
     }
-
-
 })();
