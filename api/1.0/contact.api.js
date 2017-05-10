@@ -672,11 +672,11 @@ _.extend(api.prototype, baseApi.prototype, {
                                     ccAry.push(emails[i].email);
                                 }
                             }
-                            self._sendEmailOnCreateAccount(accountEmail, req.body.activity.contact, value.id(), ccAry, tagSet, accountSubdomain);
+                            self._sendEmailOnCreateAccount(accountEmail, req.body.activity.contact, value.id(), ccAry, tagSet, accountSubdomain, true);
                         } else{
                             userDao.getUserAccount(value.id(), function(err, user){
                                 accountEmail = user.get("email");
-                                self._sendEmailOnCreateAccount(accountEmail, req.body.activity.contact, value.id(), null, tagSet, accountSubdomain);
+                                self._sendEmailOnCreateAccount(accountEmail, req.body.activity.contact, value.id(), null, tagSet, accountSubdomain, false);
                             })
                         }
 
@@ -1241,7 +1241,7 @@ _.extend(api.prototype, baseApi.prototype, {
         });
 
     },
-   _sendEmailOnCreateAccount: function(accountEmail, fields, accountId, ccAry, tagSet, accountSubdomain) {
+   _sendEmailOnCreateAccount: function(accountEmail, fields, accountId, ccAry, tagSet, accountSubdomain, suppressUnsubscribe) {
         var self = this;
         var component = {};
         //component.logourl = 'https://s3.amazonaws.com/indigenous-account-websites/acct_6/logo.png';
@@ -1282,7 +1282,7 @@ _.extend(api.prototype, baseApi.prototype, {
                     emailSubject = emailSubject + " ("+ accountSubdomain +")";
                 }
 
-                emailMessageManager.sendBasicEmail(fields.email, fromName, accountEmail, null, emailSubject, html, accountId, vars, '', ccAry, function(err, result){
+                emailMessageManager.sendBasicEmail(fields.email, fromName, accountEmail, null, emailSubject, html, accountId, vars, '', ccAry, suppressUnsubscribe, function(err, result){
                     self.log.debug('result: ', result);
                 });
             }
