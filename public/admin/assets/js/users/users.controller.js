@@ -6,7 +6,7 @@
 
         var vm = this;
 
-        vm.state = {       
+        vm.state = {
             adminUserName: userConstant.admin_user.userName,
             adminUserEmailFilter: userConstant.admin_user.emailDomain
         };
@@ -14,7 +14,7 @@
         vm.uiState = {
             loading: true
         };
-        
+
         vm.openSimpleModal = openSimpleModal;
         //vm.addNewUser = addNewUser;
         vm.removeUserFromAccount = removeUserFromAccount;
@@ -25,12 +25,12 @@
         });
 
         function loadAccountUsers(){
-            AccountService.getUsersByAccount(vm.state.account._id, function(users){ 
+            AccountService.getUsersByAccount(vm.state.account._id, function(users){
                 // We should not list global admin user
-                users = _.reject(users, function(user){ return user.username == vm.state.adminUserName });               
+                users = _.reject(users, function(user){ return user.username == vm.state.adminUserName });
                 vm.state.users = users;
-                vm.uiState.loading = false;  
-                vm.uiState.isAdminUser =  vm.state.account.ownerUser == $scope.currentUser._id || $scope.currentUser.username == vm.state.adminUserName;             
+                vm.uiState.loading = false;
+                vm.uiState.isAdminUser =  vm.state.account.ownerUser == $scope.currentUser._id || $scope.currentUser.username == vm.state.adminUserName;
             });
         }
 
@@ -88,6 +88,7 @@
                         }
                     });
                 }
+                $scope.newuser = null;
             });
         };
 
@@ -106,7 +107,7 @@
 
         $scope.checkPasswordLength = function() {
             $scope.passwordInValid = false;
-            if ($scope.edituser && $scope.edituser.password1 && $scope.edituser.password1.length < 6) {            
+            if ($scope.edituser && $scope.edituser.password1 && $scope.edituser.password1.length < 6) {
                 $scope.passwordInValid = true;
             } else {
                 $scope.passwordInValid = false;
@@ -128,7 +129,7 @@
             });
         };
 
-        function removeUserFromAccount(userId) {            
+        function removeUserFromAccount(userId) {
             SweetAlert.swal({
               title: "Are you sure?",
               text: "You want to delete this user.",

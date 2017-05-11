@@ -7,10 +7,10 @@
         <h3 class="modal-title">View Archived</h3>
     </div>
     <div class="modal-body bg-white new-purchase-order-modal" style="max-height: 400px;overflow: auto;" stop-event="touchend">
-        <div st-table="vm.archivedOrders" st-safe-src="vm.state.archivedOrders" >        
+        <div st-table="vm.archivedOrders" st-safe-src="vm.state.archivedOrders" >
             <table class="table table-hover table-striped" ng-class="{'grid': tableView == 'grid', 'bg-white table-list-view': tableView == 'list'}" ng-if="!vm.uiState.modalLoading">
                 <thead ng-class="{'bg-white': tableView == 'grid'}">
-                    <tr>                        
+                    <tr>
                         <th st-sort="title">Name</th>
                         <th st-sort="submitter">Submitter</th>
                         <th st-sort="vm.getters.created">Date</th>
@@ -26,7 +26,7 @@
                     <tr ng-repeat="order in vm.archivedOrders" class="product-item" ng-click="vm.viewPurchaseOrderDetails(order)">
                         <td><strong>Name: </strong><div class="name-block-container"><span class="list-name"></span><span ng-text-truncate="order.title" ng-tt-chars-threshold="25" ng-tt-no-toggling></span></div></td>
                         <td class=""><strong>Submitter: </strong>{{order.submitter.first}} {{order.submitter.last}}</td>
-                        <td><strong>Date: </strong>{{order.created.date | date:'MMM d yy HH:mm:ss'}}</td>
+                        <td><strong>Date: </strong>{{order.created.date | date:'MMM d yy hh:mm a'}}</td>
                         <td class="hidden-xs"><strong>Attachment: </strong>{{order.attachment.name}}</td>
                     </tr>
                 </tbody>
