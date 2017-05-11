@@ -6,7 +6,7 @@
 
         var vm = this;
 
-        vm.state = {       
+        vm.state = {
             adminUserName: userConstant.admin_user.userName,
             adminUserEmailFilter: userConstant.admin_user.emailDomain,
             cardCodes: null,
@@ -16,7 +16,7 @@
         vm.uiState = {
             loading: true
         };
-        
+
         vm.openSimpleModal = openSimpleModal;
         //vm.addNewUser = addNewUser;
         vm.removeUserFromAccount = removeUserFromAccount;
@@ -37,12 +37,12 @@
         })
 
         function loadAccountUsers(){
-            UserService.getAccountUsers(function(users){ 
+            UserService.getAccountUsers(function(users){
                 // We should not list global admin user
-                users = _.reject(users, function(user){ return user.username == vm.state.adminUserName });               
+                users = _.reject(users, function(user){ return user.username == vm.state.adminUserName });
                 vm.state.users = users;
-                vm.uiState.loading = false;  
-                vm.uiState.isAdminUser =  vm.state.account.ownerUser == $scope.currentUser._id || $scope.currentUser.username == vm.state.adminUserName;             
+                vm.uiState.loading = false;
+                vm.uiState.isAdminUser =  vm.state.account.ownerUser == $scope.currentUser._id || $scope.currentUser.username == vm.state.adminUserName;
             });
         }
 
@@ -101,7 +101,7 @@
                         roleAry:['vendor'],
                         orgConfig:[{
                             orgId: vm.state.account.orgId,
-                            cardCodes:['C111111', 'C111112']
+                            cardCodes:[ ]
                         }]
                     };
                     AccountService.addNewUserWithParams(vm.state.account._id, $scope.newuser.username, $scope.newuser.password, params, function(err, newuser){
@@ -115,6 +115,8 @@
                         }
                     });
                 }
+
+                $scope.newuser = null;
             });
         };
 
@@ -162,7 +164,7 @@
             setOrgConfig(vm.state.account.orgId);
             var _permissions = getUserPermissions(vm.state.isAdmin);
             UserService.editUser($scope.editUser, $scope.currentUserId, function(){
-                UserService.updateUserPermisions($scope.currentUserId, _permissions, function(user){                
+                UserService.updateUserPermisions($scope.currentUserId, _permissions, function(user){
                     updateUserPermissions(user, $scope.currentUserId);
                     toaster.pop('info', 'Successfully updated');
                     $scope.closeUserCardModal();
@@ -172,7 +174,7 @@
 
         $scope.checkPasswordLength = function() {
             $scope.passwordInValid = false;
-            if ($scope.edituser && $scope.edituser.password1 && $scope.edituser.password1.length < 6) {            
+            if ($scope.edituser && $scope.edituser.password1 && $scope.edituser.password1.length < 6) {
                 $scope.passwordInValid = true;
             } else {
                 $scope.passwordInValid = false;
@@ -195,7 +197,7 @@
             });
         };
 
-        function removeUserFromAccount(userId) {            
+        function removeUserFromAccount(userId) {
             SweetAlert.swal({
               title: "Are you sure?",
               text: "You want to delete this user.",
