@@ -1345,7 +1345,7 @@
                 return angular.isDefined(window.WebFont);
             }, function(newValue, oldValue) {
                 if (newValue) {
-                    var defaultFamilies = ['Roboto', 'Roboto Condensed', 'Roboto Slab', 'Oswald', 'Montserrat', 'Droid Serif', 'Open Sans', 'Open Sans Condensed', 'Lato', 'Raleway', 'Quicksand', 'Ubuntu', 'Merriweather', 'Quattrocento', 'Lora', 'Playfair Display', 'Pacifico', 'Satisfy', 'Parisienne', 'Petit Formal Script', 'Indie Flower', 'Shadows Into Light Two', 'Amatic SC', 'Delius Swash Caps', 'Itim', 'Neucha', 'Patrick Hand SC', 'Schoolbell', 'PT Sans'];
+                    var defaultFamilies = ['Roboto', 'Roboto Condensed', 'Roboto Slab', 'Oswald', 'Montserrat:200,400,700', 'Droid Serif', 'Open Sans', 'Open Sans Condensed', 'Lato', 'Raleway', 'Quicksand', 'Ubuntu', 'Merriweather', 'Quattrocento', 'Lora', 'Playfair Display', 'Pacifico', 'Satisfy', 'Parisienne', 'Petit Formal Script', 'Indie Flower', 'Shadows Into Light Two', 'Amatic SC', 'Delius Swash Caps', 'Itim', 'Neucha', 'Patrick Hand SC', 'Schoolbell', 'PT Sans'];
                     if (theme.name && theme.hasCustomFonts) {
                       var _fontStack = theme.defaultFontStack.split(',')[0].replace(/"/g, '');
                       if(defaultFamilies.indexOf(_fontStack) === -1)
@@ -1437,6 +1437,7 @@
                 "'Lora',serif": 'Lora',
                 "'Merriweather',serif": 'Merriweather',
                 "'Montserrat',sans-serif": 'Montserrat',
+                "'Montserrat:200',sans-serif": 'Montserrat Light',
                 "'Neucha',cursive": 'Neucha',
                 "'Open Sans Condensed',sans-serif": 'Open Sans Condensed',
                 "'Open Sans',sans-serif": 'Open Sans',
