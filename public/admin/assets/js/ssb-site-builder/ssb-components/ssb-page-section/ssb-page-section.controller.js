@@ -597,11 +597,13 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
                     $(window).on('hashchange',function(){
                          adjustAnchor();
                     });
-                    var hashelement=window.location.hash;
-                    window.location.hash="";
-                    $timeout(function() {
-                        $("a[href='"+hashelement+"']").trigger("click");
-                    },1000)
+                    if(window.location.hash){
+                        var hashelement=window.location.hash;
+                        window.location.hash="";
+                        $timeout(function() {
+                            $("a[href='"+hashelement+"']").trigger("click");
+                        },1000);
+                    }
                     //new StickyState(vm.element[0]);
                 }, 1000);
             }
