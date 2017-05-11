@@ -132,7 +132,7 @@ var emailTemplateUtil = {
                 }
 
                 var emailStr = tokenizable.value();
-                emailMessageManager.sendBasicEmail(appConfig.support_email, 'Indigenous Support', to, null, subject, emailStr, 0, [], null, null, function(err, value){
+                emailMessageManager.sendBasicEmail(appConfig.support_email, 'Indigenous Support', to, null, subject, emailStr, 0, [], null, null, false, function(err, value){
                     if (!err) {
                         fn(null, "ok");
                     } else {

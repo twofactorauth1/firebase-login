@@ -63,6 +63,20 @@
             </div>
 
             <div class="form-group">
+                <h4>List Price</h4>
+
+                <div class="description">
+                    <span>
+                        {{vm.inventory.ITM1_Price | currency : '$'}}
+                    </span>
+                </div>
+                <hr>
+            </div>
+        </div>
+
+        <div class="col-sm-5 col-xs-12 inventory-details-panel inventory-details-right-panel">
+
+            <div class="form-group">
                 <h4>Qty. On Hand</h4>
 
                 <div class="description">
@@ -75,10 +89,6 @@
                 </div>
                 <hr>
             </div>
-
-        </div>
-
-        <div class="col-sm-5 col-xs-12 inventory-details-panel inventory-details-right-panel">
 
             <div class="form-group">
                 <h4>Length</h4>
