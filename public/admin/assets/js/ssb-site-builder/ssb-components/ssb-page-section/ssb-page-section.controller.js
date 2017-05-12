@@ -601,7 +601,7 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
                         var hashelement=window.location.hash;
                         window.location.hash="";
                         $timeout(function() {
-                            $("a[href='"+hashelement+"']").trigger("click");
+                            $("a[href*='"+hashelement+"']").trigger("click");
                         },1000);
                     }
                     if(ssbPageSectionService){
