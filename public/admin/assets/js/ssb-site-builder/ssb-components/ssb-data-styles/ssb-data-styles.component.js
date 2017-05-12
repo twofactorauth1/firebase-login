@@ -104,8 +104,6 @@ function ssbDataStyles($timeout, $location, $compile) {
                                     element.attr("target", "_self");
                                 }
                                 if(element.attr("href") && element.attr("href").indexOf("#") === 0 && element.attr("href").length > 1){
-                                    var offSetOnLoad=  element.closest("section").height();
-                                    element.attr("offset", offSetOnLoad);
                                     element.attr("du-smooth-scroll", '');
                                     if(element.hasClass("ssb-theme-btn")){
                                         var _bg = element.css("background-color");
