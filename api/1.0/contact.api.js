@@ -1282,7 +1282,7 @@ _.extend(api.prototype, baseApi.prototype, {
                     emailSubject = emailSubject + " ("+ accountSubdomain +")";
                 }
 
-                emailMessageManager.sendBasicEmail(fields.email, fromName, accountEmail, null, emailSubject, html, accountId, vars, '', ccAry, suppressUnsubscribe, function(err, result){
+                emailMessageManager.sendBasicEmail(fields.email, fromName, accountEmail, null, emailSubject, html, accountId, vars, '', ccAry, null, suppressUnsubscribe, function(err, result){
                     self.log.debug('result: ', result);
                 });
             }

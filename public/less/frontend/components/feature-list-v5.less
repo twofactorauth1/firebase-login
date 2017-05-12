@@ -20,7 +20,24 @@
 				}
                 .features-tabs-heading span {
                     @media screen and (max-width: 767px) {
-                        font-size: 3vw !important;
+                        font-size: 2.5vw!important;
+                        word-break: normal;
+                    }
+                }
+                @media screen and (max-width: 425px) {
+                    .feature-heading img{
+                            height: auto !important;
+                            max-height: 26px;
+                            width: auto !important;
+                    }
+                    .feature-heading span.fa{
+                            height: auto !important;
+                            max-height: 26px;
+                            width: auto !important;
+                    }
+                    .feature-list-v5 .feature-list-container ul.list-features li a.feature-heading {
+                        padding-left: 0px;
+                        padding-right: 0px;
                     }
                 }
 				.fetaure-tabs-icon{

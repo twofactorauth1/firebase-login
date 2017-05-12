@@ -2,9 +2,9 @@
 
 app.directive('ssbDataStyles', ssbDataStyles);
 
-ssbDataStyles.$inject = ['$timeout', '$location', '$compile'];
+ssbDataStyles.$inject = ['$timeout', '$location', '$compile','$window'];
 /* @ngInject */
-function ssbDataStyles($timeout, $location, $compile) {
+function ssbDataStyles($timeout, $location, $compile,$window) {
   return {
     restrict: 'A',
     link: function (scope, element, attrs, ctrl) {
@@ -103,24 +103,28 @@ function ssbDataStyles($timeout, $location, $compile) {
                                 if(element.attr("href") && $location.$$host === "emikagifts.com" && (element.attr("href") === "/shop" || element.attr("href").match("emikagifts.com/shop"))){
                                     element.attr("target", "_self");
                                 }
-                                if(element.attr("href") && element.attr("href").indexOf("#") === 0 && element.attr("href").length > 1){
-                                    var offSetOnLoad=  element.closest("section").height();
-                                    element.attr("offset", offSetOnLoad);
-                                    element.attr("du-smooth-scroll", '');
-                                    if(element.hasClass("ssb-theme-btn")){
-                                        var _bg = element.css("background-color");
-                                        var _txtcolor = element.css("color");
-                                        $compile( element )(scope);
-                                        // Need to rest the text and background color
-                                        $timeout(function() {
-                                            element.css("background-color", _bg);
-                                            element.css("color", _txtcolor);
-                                        }, 0);
-                                    }
-                                    else{
-                                        $compile( element )(scope);
-                                    }
+                                if(element.attr("href") && element.attr("href").indexOf("#") >= 0 && element.attr("href").length > 1){
+                                    var  addSmoothScroll= element.attr("href").indexOf("#") === 0 ;
+                                    if(!addSmoothScroll){
+                                          addSmoothScroll=
+                                     element.attr("href").indexOf( window.location.href)>-1;
 
+                                    }
+                                    if(addSmoothScroll){
+                                        element.attr("du-smooth-scroll", '');
+                                    if(element.hasClass("ssb-theme-btn")){
+                                            var _bg = element.css("background-color");
+                                            var _txtcolor = element.css("color");
+                                            $compile( element )(scope);
+                                            // Need to rest the text and background color
+                                            $timeout(function() {
+                                                element.css("background-color", _bg);
+                                                element.css("color", _txtcolor);
+                                            }, 0);
+                                        }else{
+                                            $compile( element )(scope);
+                                        }
+                                    }
                                 }
                             })
 

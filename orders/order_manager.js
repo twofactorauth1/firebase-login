@@ -19,6 +19,7 @@ var cmsManager = require('../cms/cms_manager');
 var productManager = require('../products/product_manager');
 var emailDao = require('../cms/dao/email.dao');
 var orderConstants = require('./order_constants');
+var campaignManager = require('../campaign/campaign_manager');
 require('moment');
 
 
@@ -216,6 +217,9 @@ module.exports = {
         var self = this;
         var accountId = parseInt(order.get('account_id'));
         log.debug(accountId, userId, '>> createOrder');
+        var customerParam = order.get('customer');
+        log.debug('customerParam:', customerParam);
+        var contactId;
         /*
          * Validation
          *
@@ -397,11 +401,13 @@ module.exports = {
                         } else {
                             validatedOrder.set('customer_id', savedContact.id());
                             validatedOrder.set('customer', null);
+                            contactId = savedContact.id();
                             callback(null, account, validatedOrder, productAry);
                         }
                     });
                 } else {
                     //we have the id.
+                    contactId = validatedOrder.get('customer_id');
                     callback(null, account, validatedOrder, productAry);
                 }
             },
@@ -638,7 +644,7 @@ module.exports = {
                 log.debug(accountId, userId, 'toAddress ', toAddress);
                 log.debug(accountId, userId, 'toName ', toName);
                 log.debug(accountId, userId, 'toAddress ', toAddress);
-                log.debug(accountId, userId, 'is donation ', isDonation)
+                log.debug(accountId, userId, 'is donation ', isDonation);
 
                 accountDao.getAccountByID(accountId, function (err, account) {
                     if (err) {
@@ -781,8 +787,7 @@ module.exports = {
                                 callback(null, order);
                             }
                         });
-                    }
-                    else {
+                    } else {
                         var _ba = order.get('billing_address');
                         var toName = (_ba.first_name || '') + ' ' + (_ba.last_name || '');
                         var accountId = order.get('account_id');
@@ -839,8 +844,50 @@ module.exports = {
                             callback(null, order);
                         });
                     }
+                } else {
+                    callback(null, order);
                 }
-                else {
+            },
+            function(order, callback) {
+                if(customerParam && customerParam.sendEmail === 'true' && customerParam.emailId) {
+                    emailDao.getEmailById(customerParam.emailId, function (err, email) {
+                        if(err || !email) {
+                            callback(err||'Could not find email');
+                        } else {
+                            var fromAddress = email.get('fromEmail');
+                            var fromName = email.get('fromName');
+                            var _ba = order.get('billing_address');
+                            var toName = (_ba.first_name || '') + ' ' + (_ba.last_name || '');
+                            var accountId = order.get('account_id');
+                            var toAddress = _ba.email;
+                            var subject = email.get('subject');
+                            var vars = [];
+                            var emailId = customerParam.emailId;
+                            var ccAry = [];
+                            if(email.get('cc')) {
+                                ccAry.push(email.get('cc'));
+                            }
+                            var bcc = email.get('bcc');
+                            app.render('emails/base_email_v2', emailMessageManager.contentTransformations(email.toJSON()), function (err, html) {
+                                if (err) {
+                                    log.error(accountId, userId, 'Error updating order: ' + err);
+                                    log.warn('email will not be sent.');
+                                    cb(null, order);
+                                } else {
+                                    emailMessageManager.sendBasicEmail(fromAddress, fromName, toAddress, toName, subject, html, accountId, vars, emailId, ccAry, bcc, false, function(err, value){
+                                        callback(err, order);
+                                    });
+                                }
+                            });
+
+                        }
+                    });
+                } else if(customerParam && customerParam.sendEmail !== 'true' && customerParam.campaignId) {
+                    campaignManager.handleCampaignSignupEvent(accountId, customerParam.campaignId, contactId, function(err, value){
+                        callback(err, order);
+                    });
+                } else {
+                    log.debug(accountId, userId, 'Skipping campaign and email');
                     callback(null, order);
                 }
             }
@@ -862,6 +909,7 @@ module.exports = {
         var accountId = parseInt(order.get('account_id'));
         log.debug(accountId, userId, '>> createOrder');
         var orderDiscount = 0;
+        var customerParam = order.get('customer');
         /*
          * Validation
          *
@@ -1517,6 +1565,48 @@ module.exports = {
                     }
                 }
                 else {
+                    callback(null, order);
+                }
+            },
+            function(order, callback) {
+                if(customerParam && customerParam.sendEmail === true && customerParam.emailId) {
+                    emailDao.getEmailById(customerParam.emailId, function (err, email) {
+                        if(err || !email) {
+                            callback(err||'Could not find email');
+                        } else {
+                            var fromAddress = email.get('fromEmail');
+                            var fromName = email.get('fromName');
+                            var _ba = order.get('billing_address');
+                            var toName = (_ba.first_name || '') + ' ' + (_ba.last_name || '');
+                            var accountId = order.get('account_id');
+                            var toAddress = _ba.email;
+                            var subject = email.get('subject');
+                            var vars = [];
+                            var emailId = customerParam.emailId;
+                            var ccAry = [];
+                            if(email.get('cc')) {
+                                ccAry.push(email.get('cc'));
+                            }
+                            var bcc = email.get('bcc');
+                            app.render('emails/base_email_v2', emailMessageManager.contentTransformations(email.toJSON()), function (err, html) {
+                                if (err) {
+                                    log.error(accountId, userId, 'Error updating order: ' + err);
+                                    log.warn('email will not be sent.');
+                                    cb(null, order);
+                                } else {
+                                    emailMessageManager.sendBasicEmail(fromAddress, fromName, toAddress, toName, subject, html, accountId, vars, emailId, ccAry, bcc, false, function(err, value){
+                                        callback(err, order);
+                                    });
+                                }
+                            });
+
+                        }
+                    });
+                } else if(customerParam && customerParam.sendEmail === false && customerParam.campaignId) {
+                    campaignManager.handleCampaignSignupEvent(accountId, customerParam.campaignId, contactId, function(err, value){
+                        callback(err, order);
+                    });
+                } else {
                     callback(null, order);
                 }
             }

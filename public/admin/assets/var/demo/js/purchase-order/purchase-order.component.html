@@ -106,10 +106,10 @@
 	        <thead ng-class="{'bg-white': tableView == 'grid'}">
 	            <tr>
 	            	<th class="hidden-xs" ng-click='vm.selectAllClickFn($event)' ng-show='vm.displayedOrders.length'><i class="fa fa-2x" ng-class='{"fa-check-circle": vm.selectAllChecked, "fa-circle-o": !vm.selectAllChecked}'></i></th>
-	                <th st-sort="title">Name</th>
-	                <th st-sort="submitter">Submitter</th>
-	                <th st-sort="companyName" ng-if="!vm.state.orgCardAndPermissions.isVendor">Company</th>
-	                <th st-sort="vm.getters.created">Date</th>
+	                <th st-sort="title" style="white-space: nowrap">Name</th>
+	                <th st-sort="submitter" style="white-space: nowrap">Submitter</th>
+	                <th st-sort="companyName" ng-if="!vm.state.orgCardAndPermissions.isVendor" style="white-space: nowrap">Company</th>
+	                <th st-sort="vm.getters.created" style="white-space: nowrap">Date</th>
 	                <th class="hidden-xs">Attachment</th>
 	            </tr>
 	            <tr ng-if="vm.uiState.showFilter">

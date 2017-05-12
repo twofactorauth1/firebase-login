@@ -111,15 +111,15 @@
 	                <th class="hidden-xs hidden-sm dim-col">Dimension (LxWxH)</th>
 	                <th class="hidden-xs hidden-sm weight-col">Weight</th>
                     <th class="hidden-xs hidden-sm price-col" style="white-space: nowrap;">List Price</th>
-                    <th class="qty-col sort" style="white-space: nowrap;" width="1%" ng-class="{'st-sort-ascent': vm.uiState.sortData.details['totalQuantity'].direction === 1, 'st-sort-descent': vm.uiState.sortData.details['totalQuantity'].direction === -1}" ng-click="vm.sortInventory('In_Stock', 'totalQuantity')"><span class="hidden-xs">Qty </span>On Hand</th>
+	                <th class="qty-col sort" style="white-space: nowrap;" ng-class="{'st-sort-ascent': vm.uiState.sortData.details['totalQuantity'].direction === 1, 'st-sort-descent': vm.uiState.sortData.details['totalQuantity'].direction === -1}" ng-click="vm.sortInventory('In_Stock', 'totalQuantity')"><span class="hidden-xs">Qty </span>On Hand</th>
 	            </tr>
 	            <tr ng-if="vm.uiState.showFilter">
 	            	<th class="hidden-xs"></th>
-	                <th>
-	                    <input ng-model="vm.uiState.fieldSearch.OITM_ItemName" ng-model-options="{ debounce: 800 }" placeholder="Product" class="form-control" type="search" />
+	                <th class="prod-col">
+	                    <input ng-model="vm.uiState.fieldSearch.OITM_ItemName" ng-model-options="{ debounce: 800 }" placeholder="Product" class="form-control" type="search" size="9" />
 	                </th>
-	                <th>
-	                    <input ng-model="vm.uiState.fieldSearch.OMRC_FirmName" ng-model-options="{ debounce: 800 }" placeholder="Vendor" class="form-control" type="search" />
+	                <th class="vendor-col">
+	                    <input ng-model="vm.uiState.fieldSearch.OMRC_FirmName" ng-model-options="{ debounce: 800 }" placeholder="Vendor" class="form-control" type="search" size="9" />
 	                </th>
 	                <th class="desc-col hidden-xs"></th>
 	                <th class="dim-col hidden-xs hidden-sm"></th>

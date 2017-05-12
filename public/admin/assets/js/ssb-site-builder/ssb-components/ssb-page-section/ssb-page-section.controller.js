@@ -601,8 +601,19 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
                         var hashelement=window.location.hash;
                         window.location.hash="";
                         $timeout(function() {
-                            $("a[href='"+hashelement+"']").trigger("click");
+                            $("a[href*='"+hashelement+"']").trigger("click");
                         },1000);
+                    }
+                    if(ssbPageSectionService){
+                        $scope.$watch(
+                            function () {
+                                return $(vm.element[0]).height();
+                            },
+                            function (value) {
+                                console.log(value)
+                                ssbPageSectionService.setSectionOffset(value);
+                            }
+                        )
                     }
                     //new StickyState(vm.element[0]);
                 }, 1000);
