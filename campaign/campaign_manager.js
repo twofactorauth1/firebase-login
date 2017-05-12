@@ -1540,6 +1540,7 @@ module.exports = {
 
     /**
      * This method will getOrCreate a campaignFlow object, mark the first signupStep as triggered, handle the next.
+     * We ought to rename this method handleCampaignAutoresponder
      * @param accountId
      * @param campaignId
      * @param contactId

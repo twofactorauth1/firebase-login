@@ -839,9 +839,10 @@ var emailMessageManager = {
                         request.body.personalizations[0].to[0].name = toName;
                     }
                     if(bcc && bcc.length > 0) {
-                        request.body.personalizations[0].bcc = {
+                        request.body.personalizations[0].bcc = [];
+                        request.body.personalizations[0].bcc.push({
                             email: bcc
-                        }
+                        });
                     }
 
 
@@ -985,7 +986,8 @@ var emailMessageManager = {
 
     },
 
-    sendBasicEmail: function(fromAddress, fromName, toAddress, toName, subject, htmlContent, accountId, vars, emailId, ccAry, suppressUnsubscribe, fn) {
+    sendBasicEmail: function(fromAddress, fromName, toAddress, toName, subject, htmlContent, accountId, vars, emailId,
+                             ccAry, bcc, suppressUnsubscribe, fn) {
         var self = this;
         self.log.debug('>> sendBasicEmail');
         self.log.trace('subject:' + subject);
@@ -1058,7 +1060,12 @@ var emailMessageManager = {
                             request.body.personalizations[0].cc.push({email:ccAddress});
                         });
                     }
-
+                    if(bcc && bcc.length > 0) {
+                        request.body.personalizations[0].bcc = [];
+                        request.body.personalizations[0].bcc.push({
+                            email: bcc
+                        });
+                    }
 
                     self._safeStoreEmail(request.body, accountId, null, emailId, function(err, emailmessage){
                         //we should not have an err here
