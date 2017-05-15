@@ -28,6 +28,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.post(this.url(''), this.isAuthAndSubscribedApi.bind(this), this.createAsset.bind(this));
         app.get(this.url(':id'), this.isAuthAndSubscribedApi.bind(this), this.getAsset.bind(this));
         app.get(this.url(''), this.isAuthAndSubscribedApi.bind(this), this.listAssets.bind(this));
+        app.get(this.url('paged/list'), this.isAuthAndSubscribedApi.bind(this), this.listPagedAssets.bind(this));
         app.post(this.url(':id'), this.isAuthAndSubscribedApi.bind(this), this.updateAsset.bind(this));
         app.delete(this.url(':id'), this.isAuthAndSubscribedApi.bind(this), this.deleteAsset.bind(this));
 
@@ -261,6 +262,28 @@ _.extend(api.prototype, baseApi.prototype, {
                 var limit = req.query['limit'];
                 assetManager.listAssets(accountId, skip, limit, function(err, value){
                     self.log.debug('<< listAssets');
+                    self.sendResultOrError(res, err, value, "Error listing Asset");
+                });
+            }
+        });
+    },
+
+
+    listPagedAssets: function(req, res) {
+        var self = this;
+        self.log.debug('>> listPagedAssets');
+
+        var accountId = parseInt(self.accountId(req));
+        self.checkPermission(req, self.sc.privs.VIEW_ASSET, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(res);
+            } else {
+                var skip = parseInt(req.query['skip']);
+                var limit = parseInt(req.query['limit']);
+                var filterType = req.query['filterType'];
+                
+                assetManager.listPagedAssets(accountId, skip, limit, filterType, function(err, value){
+                    self.log.debug('<< listPagedAssets');
                     self.sendResultOrError(res, err, value, "Error listing Asset");
                 });
             }

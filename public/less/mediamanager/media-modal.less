@@ -141,4 +141,32 @@
         padding-right: 10px;
         font-size: 13px;
     }
+
+
+
+
+    .media-paging-overlay{
+        height: 100%;
+        width: 100%;
+        opacity: 0.7;
+        top: 0;
+        left: 0;
+        position: absolute;
+        padding: 0;
+        background: #000000;
+        z-index: 9999;
+        h1{
+            position: fixed;
+            display: inline-block;
+            text-align: center;
+            color: white;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            margin-top: 15px;
+            @media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+                width: 90%;
+                transform: translate(0);
+            }
+        }
+    }
 }

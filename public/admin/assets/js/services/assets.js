@@ -12,6 +12,20 @@
         });
     };
 
+
+    this.getPagedAssetsByAccount = function (pagingParams, fn) {
+      var _qString = "?limit="+ pagingParams.limit + "&skip="+ pagingParams.skip;
+      
+      if(pagingParams.filterType && pagingParams.filterType !== 'all'){
+        _qString += "&filterType="+ pagingParams.filterType;
+      }
+      var apiUrl = baseUrl + ['assets', 'paged', 'list'].join('/') + _qString;
+      $http.get(apiUrl)
+        .success(function (data) {
+          fn(data);
+        });
+    };
+
     this.deleteAssets = function (assets, fn) {
       assets.forEach(function (v) {
         this.deleteAssetById(v._id, fn);
