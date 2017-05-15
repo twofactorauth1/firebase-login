@@ -77,14 +77,14 @@
         <div class="col-sm-5 col-xs-12 inventory-details-panel inventory-details-right-panel">
 
             <div class="form-group">
-                <h4>Qty. On Hand</h4>
+                <h4>Qty. Available</h4>
 
                 <div class="description">
-                    <span ng-if="vm.inventory.In_Stock <= 0">
+                    <span ng-if="vm.inventory.Available <= 0">
                         <a href='#' ng-click='cancel($event);' onclick='Intercom("showNewMessage","")'>Click to Inquire</a>
                     </span>
-                    <span ng-if="vm.inventory.In_Stock > 0">
-                        {{ vm.inventory.In_Stock }}
+                    <span ng-if="vm.inventory.Available > 0">
+                        {{ vm.inventory.Available }}
                     </span>
                 </div>
                 <hr>

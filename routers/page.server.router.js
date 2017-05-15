@@ -26,7 +26,7 @@ var router = function() {
 
 var basicAuth = require('express-basic-auth');
 var basicAuthFn = basicAuth({
-    users: {'admin': 'secret'},
+    users: {'d1gital': 'all-in-1'},
     challenge:true
 });
 
@@ -36,6 +36,8 @@ _.extend(router.prototype, BaseRouter.prototype, {
 
     initialize: function() {
         app.get('/simple-interim-page', [basicAuthFn, this.setupForPages.bind(this)], this.optimizedIndex.bind(this));
+        app.get('/investors', [basicAuthFn, this.setupForPages.bind(this)], this.optimizedIndex.bind(this));
+
         app.get("/:page", [sitemigration_middleware.checkForRedirect, this.setupForPages.bind(this)], this.optimizedIndex.bind(this));
         app.get('/preview/:pageId', this.isAuth.bind(this), this.previewIndex.bind(this));
         app.get('/preview/:pageId/:postId', this.isAuth.bind(this), this.previewIndex.bind(this));
