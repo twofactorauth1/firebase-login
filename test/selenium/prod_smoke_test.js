@@ -37,9 +37,9 @@ module.exports = {
             console.log('testing /index');
 
             driver.get('https://www.indigenous.io');
-            driver.wait(until.elementLocated(By.linkText('Get Started')), 20000);
-            var signupLink = driver.isElementPresent(By.linkText('Get Started'));
-            signupLink.then(function(x){test.ok(x, 'Signup Link not present');});
+            driver.wait(until.elementLocated(By.linkText('Request Demo')), 20000);
+            var signupLink = driver.isElementPresent(By.linkText('Request Demo'));
+            signupLink.then(function(x){test.ok(x, 'Demo Link not present');});
             signupLink.finally(function(){
                 test.ok(true);
                 test.done();
