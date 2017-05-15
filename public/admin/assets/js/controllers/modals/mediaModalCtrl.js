@@ -1,7 +1,7 @@
 'use strict';
 /*global app, moment, angular*/
 /*jslint unparam:true*/
-app.controller('MediaModalCtrl', ['$scope', '$injector', '$modalInstance', '$http', '$timeout', 'FileUploader', 'AssetsService', 'ToasterService', 'showInsert', 'insertMedia', 'isSingleSelect', 'SweetAlert', "$window", "AccountService", "editableOptions", function ($scope, $injector, $modalInstance, $http, $timeout, FileUploader, AssetsService, ToasterService, showInsert, insertMedia, isSingleSelect, SweetAlert, $window, AccountService, editableOptions) {
+app.controller('MediaModalCtrl', ['$scope', 'mediaManagerConstant', '$injector', '$modalInstance', '$http', '$timeout', 'FileUploader', 'AssetsService', 'ToasterService', 'showInsert', 'insertMedia', 'isSingleSelect', 'SweetAlert', "$window", "AccountService", "editableOptions", function ($scope, mediaManagerConstant, $injector, $modalInstance, $http, $timeout, FileUploader, AssetsService, ToasterService, showInsert, insertMedia, isSingleSelect, SweetAlert, $window, AccountService, editableOptions) {
   var uploader, footerElement, headerElement, contentElement, mediaElement, mediaModalElement;
 
   $scope.showInsert = showInsert;
@@ -13,6 +13,16 @@ app.controller('MediaModalCtrl', ['$scope', '$injector', '$modalInstance', '$htt
     asset: null
   };
 
+  $scope.numberOfPages = numberOfPages;
+  $scope.selectPage = selectPage;
+  $scope.pagingParams = {
+    limit: mediaManagerConstant.numberOfRowsPerPage,
+    skip: 0,
+    curPage: 1,
+    showPages: mediaManagerConstant.displayedPages,
+    filterType: $scope.insertMediaType || $scope.showType
+  }
+
   /*
      * set editor theme
      */
@@ -20,23 +30,47 @@ app.controller('MediaModalCtrl', ['$scope', '$injector', '$modalInstance', '$htt
 
   AccountService.getAccount(function (account) {
     $scope.account = account;
-    AssetsService.getAssetsByAccount(function (data) {
-      if (data instanceof Array) {
-        $scope.originalAssets = data.slice(0);
-        $scope.assets = data.slice(0);
-        if ($scope.insertMediaType) {
-          $scope.m.selectAll(scope.insertMediaType, true);
-        }
-        else if($scope.showType !== "all"){
-          $scope.m.selectAll($scope.showType, true);
-        }
-        $timeout(function() {
-          $scope.loadingAssets = false;
-        }, 500);
-      }
-    });
+    loadAssets();
   });
   
+
+  function loadAssets(file){
+    $scope.loadingAssets = true;
+    AssetsService.getPagedAssetsByAccount($scope.pagingParams, function (data) {
+      if (data.results instanceof Array) {
+        $scope.originalAssets = data.results;
+        $scope.assets = data.results;
+        $scope.assetsCount = data.total;
+        drawPages();
+        // Keep selected item selected on page
+        if($scope.batch.length == 1 && !file){
+          $scope.assets.forEach(function (v) {
+            if ($scope.batch[0]['_id'] === v._id) {
+              v.checked = true;
+            }
+          });
+        }
+
+        if($scope.selectModel.select_all){
+          $scope.m.selectAll();
+          $scope.singleSelected = false;
+        }
+
+        if(file){
+          var asset = _.find($scope.assets, function(asset){return asset._id == file._id});
+          if(asset){
+            asset.checked = true;
+            $scope.m.singleSelect(asset);
+          }
+        }
+        
+        $scope.pageLoading = false;
+        $timeout(function() {
+          $scope.loadingAssets = false;
+        }, 0);
+      }
+    });
+  }
 
   $scope.successCopy = function () {
       ToasterService.show('success', 'Successfully copied text to your clipboard! Now just paste it wherever you would like.');
@@ -167,10 +201,13 @@ app.controller('MediaModalCtrl', ['$scope', '$injector', '$modalInstance', '$htt
         }
     }
     else{
-      $scope.originalAssets.push(response.files[0]);
-      $scope.assets.push(response.files[0]);  
-      response.files[0].checked = true;
-      $scope.m.singleSelect(response.files[0]);
+      //$scope.originalAssets.push(response.files[0]);
+      //$scope.assets.push(response.files[0]); 
+      if(uploader.queue.length <= 1){
+        loadDefaultsForPaging();
+        loadAssets(response.files[0]);
+      }
+      
     }
 
     
@@ -290,6 +327,24 @@ app.controller('MediaModalCtrl', ['$scope', '$injector', '$modalInstance', '$htt
     $scope.m.selectAllStatus();
   };
 
+  $scope.m.filterAssets = function(showType){
+    if (showType) {
+      $scope.showType = showType;
+    }
+    loadDefaultsForPaging();
+    $scope.pagingParams.filterType = showType;
+    loadAssets();
+  };
+
+
+  function loadDefaultsForPaging(){
+    $scope.pagingParams.curPage = 1;
+    $scope.pagingParams.skip = 0;
+    $scope.pageLoading = true;
+  }
+
+
+
   $scope.m.singleSelect = function (asset) {
     $scope.singleSelected = asset.checked;
     
@@ -360,9 +415,10 @@ app.controller('MediaModalCtrl', ['$scope', '$injector', '$modalInstance', '$htt
           $scope.batch.push(asset);
         if($scope.batch && $scope.batch.length){
           $scope.batch = _.uniq($scope.batch);
+          var refreshList = angular.equals($scope.batch.length, $scope.assets.length);
           AssetsService.deleteAssets($scope.batch, function (resp, status) {
             if (status === 200) {
-              $scope.originalAssets.forEach(function (v, i) {
+                $scope.originalAssets.forEach(function (v, i) {
                   if (v._id === $scope.batch[0]['_id']) {
                     $scope.originalAssets.splice(i, 1);
                   }
@@ -377,6 +433,18 @@ app.controller('MediaModalCtrl', ['$scope', '$injector', '$modalInstance', '$htt
                     $scope.batch.splice(i, 1);
                   }
               });
+              if(!$scope.batch.length){
+                //Check if the all the items of page are deleted
+                if(refreshList){
+                  loadDefaultsForPaging();
+                }              
+                // Else land to the same
+                {
+                  $scope.pageLoading = true;
+                  loadAssets();
+                }
+              }  
+              
               SweetAlert.swal("Saved!", "deleted.", "success");
               angular.element('.modal.in').show();
             }
@@ -454,5 +522,50 @@ app.controller('MediaModalCtrl', ['$scope', '$injector', '$modalInstance', '$htt
       return "Please fill this field";
     }
   }
+
+
+
+  function drawPages(){
+      var start = 1;
+      var end;
+      var i;
+      var prevPage = $scope.pagingParams.curPage;
+      var totalItemCount = $scope.assetsCount;
+      var currentPage = $scope.pagingParams.curPage;
+      var numPages = numberOfPages();
+
+      start = Math.max(start, currentPage - Math.abs(Math.floor($scope.pagingParams.showPages / 2)));
+      end = start + $scope.pagingParams.showPages;
+
+      if (end > numPages) {
+        end = numPages + 1;
+        start = Math.max(1, end - $scope.pagingParams.showPages);
+      }
+
+      $scope.pages = [];
+
+
+      for (i = start; i < end; i++) {
+        $scope.pages.push(i);
+      }
+    }
+
+
+    function numberOfPages() {
+        if ($scope.assets) {
+            return Math.ceil($scope.assetsCount / $scope.pagingParams.limit);
+        }
+        return 0;
+    }
+
+    function selectPage(page){
+        if(page != $scope.pagingParams.curPage){            
+            $scope.pagingParams.curPage = page;
+            $scope.pagingParams.skip = (page - 1) * $scope.pagingParams.limit;
+            $scope.pageLoading = true;
+            loadAssets();
+        }
+
+    }
 
 }]);

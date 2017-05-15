@@ -180,6 +180,44 @@ module.exports = {
             }
         });
     },
+
+
+    listPagedAssets: function(accountId, skip, limit, filterType, fn) {
+        var self = this;
+        self.log = log;
+        var query = {
+            
+        }
+
+        var query = {
+            'accountId': accountId
+        };
+        
+        if(filterType){
+            var typeMimes = {
+                image: ['image/png', 'image/jpeg', 'image/gif', 'image/*'],
+                video: ['video/mpeg', 'video/mp4', 'video/webm', 'video/x-flv', 'video/x-ms-wmv', 'video/*' ],
+                audio: ['audio/mpeg', 'audio/mp3', 'audio/*'],
+                document: ['application/octet-stream', 'application/pdf', 'text/plain']
+            };
+            var mimeTypesArray = typeMimes[filterType];
+
+            query["$and"] = [{'mimeType': {$in: mimeTypesArray}}];
+
+
+        }
+        self.log.debug('>> listPagedAssets');
+        assetDao.findWithFieldsLimitOrderAndTotal(query, skip, limit, 'created.date', null, $$.m.Asset, -1, function(err, list){
+            if(err) {
+                self.log.error('Exception in listPagedAssets: ' + err);
+                fn(err, null);
+            } else {
+                self.log.debug('<< listPagedAssets');
+                fn(null, list);
+            }
+        });
+    },
+
     updateAssetChangeUrl: function(asset, userId, fn) {
      var self = this;
      self.log = log;
