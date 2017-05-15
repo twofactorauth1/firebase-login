@@ -36,11 +36,11 @@ module.exports = {
         testLinks: function(test) {
             console.log('testing /index');
 
-            driver.get('https://www.indigenous.io');
-            driver.wait(until.elementLocated(By.linkText('Request Demo')), 20000);
-            var signupLink = driver.isElementPresent(By.linkText('Request Demo'));
-            signupLink.then(function(x){test.ok(x, 'Demo Link not present');});
-            signupLink.finally(function(){
+            driver.get('https://indigenous.io');
+            driver.wait(until.elementLocated(By.linkText('REQUEST DEMO')), 20000);
+            var demoLink = driver.isElementPresent(By.linkText('REQUEST DEMO'));
+            demoLink.then(function(x){test.ok(x, 'Demo Link not present');});
+            demoLink.finally(function(){
                 test.ok(true);
                 test.done();
             });
