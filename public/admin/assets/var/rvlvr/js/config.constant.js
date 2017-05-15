@@ -575,7 +575,10 @@ app.constant('userConstant', {
 
 });
 
-
+app.constant('mediaManagerConstant', {
+    numberOfRowsPerPage: 6,
+    displayedPages: 7
+});
 
 app.constant('JS_REQUIRES', {
   //*** Scripts
@@ -649,10 +652,10 @@ app.constant('JS_REQUIRES', {
     // 'DashboardAnalyticTileComponent': 'assets/js/dashboard/dashboard-analytic-tile/dashboard-analytic-tile.component.js',
     'DashboardAnalyticTileComponentController': 'assets/js/dashboard/dashboard-analytic-tile/dashboard-analytic-tile.controller.js',
 
-    
+
     'DashboardInboxComponentController': 'assets/js/dashboard/dashboard-inbox-widget/dashboard-inbox.controller.js',
 
-    
+
     'asideCtrl': 'assets/var/rvlvr/js/controllers/asideCtrl.js',
     'toasterCtrl': 'assets/js/controllers/toasterCtrl.js',
     'sweetAlertCtrl': 'assets/js/controllers/sweetAlertCtrl.js',
@@ -698,7 +701,7 @@ app.constant('JS_REQUIRES', {
     'analyticsWidgetStateService': 'assets/js/site-analytics/analytics-widget-state-service.js',
     'broadcastMessagesService': 'assets/js/messages/messages.service.js',
     'utilService': 'assets/js/services/util.js',
-    
+
     //*** Filters
     'htmlToPlaintext': 'assets/js/filters/htmlToPlaintext.js',
     'secTotime': 'assets/js/filters/secTotime.js',
