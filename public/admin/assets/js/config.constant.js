@@ -585,7 +585,7 @@ app.constant('userConstant', {
 
 app.constant('mediaManagerConstant', {
   numberOfRowsPerPage: 6,
-  displayedPages: 11
+  displayedPages: 7
 })
 
 app.constant('JS_REQUIRES', {
@@ -612,7 +612,7 @@ app.constant('JS_REQUIRES', {
     // 'bootstrap': '../js/libs/bootstrap/dist/js/bootstrap.min.js',
     "bootstrap-confirmation": ['../js/libs/bootstrap-confirmation/bootstrap-confirmation.js'],
     'uuid': '../js/libs_misc/uuid.js',
-    
+
     'papaParse': '../js/libs/papaparse/papaparse.min.js',
     'string_score': '../js/libs/string_score/string_score.min.js',
 
@@ -620,11 +620,11 @@ app.constant('JS_REQUIRES', {
     'dashboardCtrl': 'assets/js/controllers/dashboardCtrl.js',
     'helpTopicsCtrl': 'assets/js/controllers/helpTopicsCtrl.js',
     'newHelpTopicsCtrl': 'assets/js/controllers/newHelpTopicsCtrl.js',
-    
+
     'siteAnalyticsCtrl': 'assets/js/controllers/siteAnalyticsCtrl.js',
-    'customerAnalyticsCtrl': 'assets/js/controllers/customerAnalyticsCtrl.js',    
+    'customerAnalyticsCtrl': 'assets/js/controllers/customerAnalyticsCtrl.js',
     'billingCtrl': 'assets/js/controllers/billingCtrl.js',
-    
+
     'socialFeedCtrl': 'assets/js/controllers/socialFeedCtrl.js',
     'contactsCtrl': 'assets/js/controllers/contactsCtrl.js',
     'contactDetailCtrl': 'assets/js/controllers/contactDetailCtrl.js',
@@ -634,7 +634,7 @@ app.constant('JS_REQUIRES', {
     'productsDetailCtrl': 'assets/js/controllers/productsDetailCtrl.js',
     'iconsCtrl': 'assets/js/controllers/iconsCtrl.js',
     'vAccordionCtrl': 'assets/js/controllers/vAccordionCtrl.js',
-    
+
     'laddaCtrl': 'assets/js/controllers/laddaCtrl.js',
     'profileBusinessCtrl': 'assets/js/controllers/profileBusinessCtrl.js',
     'profilePersonalCtrl': 'assets/js/controllers/profilePersonalCtrl.js',
@@ -646,7 +646,7 @@ app.constant('JS_REQUIRES', {
     'settingsCtrl': 'assets/js/controllers/settingsCtrl.js',
     'emailsCtrl': 'assets/js/controllers/emailsCtrl.js',
     'campaignsCtrl': 'assets/js/controllers/campaignsCtrl.js',
-    
+
     'addComponentModalCtrl': 'assets/js/controllers/modals/addComponentModalCtrl.js',
     'componentSettingsModalCtrl': 'assets/js/controllers/modals/componentSettingsModalCtrl.js',
     'ssbComponentSettingsModalCtrl': 'assets/js/controllers/modals/ssbComponentSettingsModalCtrl.js',
@@ -659,7 +659,7 @@ app.constant('JS_REQUIRES', {
     'DashboardWorkstreamTileComponentController': 'assets/js/dashboard/dashboard-workstream-tile/dashboard-workstream-tile.controller.js',
     // 'DashboardAnalyticTileComponent': 'assets/js/dashboard/dashboard-analytic-tile/dashboard-analytic-tile.component.js',
     'DashboardAnalyticTileComponentController': 'assets/js/dashboard/dashboard-analytic-tile/dashboard-analytic-tile.controller.js',
-    
+
     'DashboardInboxComponentController': 'assets/js/dashboard/dashboard-inbox-widget/dashboard-inbox.controller.js',
 
 
