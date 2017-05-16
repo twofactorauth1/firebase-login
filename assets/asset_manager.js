@@ -203,10 +203,9 @@ module.exports = {
         }
 
         if(search){
-            var specialChars = "()[";
-            for (var i = 0; i < specialChars.length; i++) {
-                search = search .replace(new RegExp("\\" + specialChars[i], 'gi'), '');
-            }
+
+            search = search.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+            
             var regex = new RegExp('\\.*'+search+'\.*', 'i');
             var searchQuery = [
                 {filename:regex}
