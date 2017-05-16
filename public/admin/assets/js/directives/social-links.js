@@ -11,6 +11,8 @@ app.directive('socialLinks', ['$modal', '$http', '$timeout', '$q', '$compile', '
     link: function (scope, element, attrs, ctrl) {
       scope.openModal = function (template, index, parentIndex) {
         scope.setEditingComponent(index, parentIndex);
+        if(scope.modalInstance)
+            scope.modalInstance.close();
         scope.modalInstance = $modal.open({
           templateUrl: template,
           scope: scope
@@ -32,7 +34,8 @@ app.directive('socialLinks', ['$modal', '$http', '$timeout', '$q', '$compile', '
       scope.closeModal = function () {
         $timeout(function () {
           console.log('scope.modalInstance ', scope.modalInstance);
-          scope.modalInstance.close();
+          if(scope.modalInstance)
+            scope.modalInstance.close();
           //scope.modalInstance.dismiss('cancel');
         });
       };
