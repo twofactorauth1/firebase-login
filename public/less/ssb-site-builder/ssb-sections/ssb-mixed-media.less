@@ -1,5 +1,5 @@
 .ssb-page-section-media-form-builder{
-	@media screen and (max-width: 767px) {
+	  @media screen and (max-width: 767px) {
         [text-only-component]{
        		width: 100%;
         }
@@ -10,26 +10,34 @@
     @media screen and (min-width: 768px) {
     	.form-builder-layout .form-layout-2 {	    
 	    	width: 75%;
-		}
+		  }
+    }&.section-background-overlay{
+        [text-only-component], [ssb-form-builder-component]{
+          z-index: 2;
+        }
     }
     
 }
 
 .ssb-page-section-video-form-builder{
-	@media screen and (min-width: 768px) {
+	  @media screen and (min-width: 768px) {
     	.form-builder-layout .form-layout-2 {	    
 	    	width: 75%;
-		}
+		  }
     }
 }
 
 .ssb-page-section-media-simple-form{
-	@media screen and (max-width: 767px) {
+	  @media screen and (max-width: 767px) {
         [text-only-component]{
        		width: 100%;
         }
         [simple-form-component]{
        		width: 100%;
+        }
+    }&.section-background-overlay{
+        [text-only-component], [simple-form-component]{
+          z-index: 2;
         }
     }
 }
