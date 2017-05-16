@@ -182,13 +182,10 @@ module.exports = {
     },
 
 
-    listPagedAssets: function(accountId, skip, limit, filterType, fn) {
+    listPagedAssets: function(accountId, skip, limit, filterType, search, fn) {
         var self = this;
         self.log = log;
-        var query = {
-            
-        }
-
+        
         var query = {
             'accountId': accountId
         };
@@ -203,8 +200,14 @@ module.exports = {
             var mimeTypesArray = typeMimes[filterType];
 
             query["$and"] = [{'mimeType': {$in: mimeTypesArray}}];
+        }
 
-
+        if(search){
+            var regex = new RegExp('\.*'+search+'\.*', 'i');
+            var searchQuery = [
+                {filename:regex}
+            ];
+            query["$and"] = searchQuery;
         }
         self.log.debug('>> listPagedAssets');
         assetDao.findWithFieldsLimitOrderAndTotal(query, skip, limit, 'created.date', null, $$.m.Asset, -1, function(err, list){

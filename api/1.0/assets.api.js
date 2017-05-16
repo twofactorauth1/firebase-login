@@ -281,8 +281,9 @@ _.extend(api.prototype, baseApi.prototype, {
                 var skip = parseInt(req.query['skip']);
                 var limit = parseInt(req.query['limit']);
                 var filterType = req.query['filterType'];
-                
-                assetManager.listPagedAssets(accountId, skip, limit, filterType, function(err, value){
+                var search = req.query['search'];
+
+                assetManager.listPagedAssets(accountId, skip, limit, filterType,search, function(err, value){
                     self.log.debug('<< listPagedAssets');
                     self.sendResultOrError(res, err, value, "Error listing Asset");
                 });

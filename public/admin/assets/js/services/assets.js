@@ -19,6 +19,9 @@
       if(pagingParams.filterType && pagingParams.filterType !== 'all'){
         _qString += "&filterType="+ pagingParams.filterType;
       }
+      if(pagingParams.search){
+        _qString += "&search="+ pagingParams.search;
+      }
       var apiUrl = baseUrl + ['assets', 'paged', 'list'].join('/') + _qString;
       $http.get(apiUrl)
         .success(function (data) {
