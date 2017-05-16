@@ -11,6 +11,7 @@ app.directive('socialLinks', ['$modal', '$http', '$timeout', '$q', '$compile', '
     link: function (scope, element, attrs, ctrl) {
       scope.openModal = function (template, index, parentIndex) {
         scope.setEditingComponent(index, parentIndex);
+        angular.element(".modal-backdrop").remove();
         if(scope.modalInstance)
             scope.modalInstance.close();
         scope.modalInstance = $modal.open({
