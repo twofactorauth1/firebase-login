@@ -192,13 +192,16 @@ function ssbSiteBuilderEditControlController($scope, $rootScope, $interval, $att
             vm.uiState.activeElement = previousActiveElement;
         }
 
-        var sectionPanelLoadConfig = {
-            name: vm.uiState.activeElement.name,
-            id: vm.uiState.activeElement.id
-        };
+        if(vm.uiState.activeElement){
+            var sectionPanelLoadConfig = {
+                name: vm.uiState.activeElement.name,
+                id: vm.uiState.activeElement.id
+            };
 
-        vm.uiState.navigation.sectionPanel.loadPanel(sectionPanelLoadConfig);
-        vm.uiState.showSectionPanel = true;
+            vm.uiState.navigation.sectionPanel.loadPanel(sectionPanelLoadConfig);
+            vm.uiState.showSectionPanel = true;
+        }
+        
     }
 
     function moveSection(direction, section, index) {
