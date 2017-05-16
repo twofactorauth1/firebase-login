@@ -643,7 +643,14 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
 
     $scope.$watch("vm.uiState.loaded", function(value){
         if(angular.isDefined(value)){
-            $rootScope.app.layout.editorLoaded = value; 
+            if(value){
+                $timeout(function() {
+                    $rootScope.app.layout.editorLoaded = true; 
+                }, 1000);
+            }
+            else{
+                $rootScope.app.layout.editorLoaded = false;   
+            }
         }
     })
 
