@@ -12,11 +12,10 @@
 	    	width: 75%;
 		  }
     }&.section-background-overlay{
-        [text-only-component], [ssb-form-builder-component]{
-          z-index: 2;
+        .ssb-component{
+          z-index: 2 !important;
         }
     }
-    
 }
 
 .ssb-page-section-video-form-builder{
@@ -24,6 +23,10 @@
     	.form-builder-layout .form-layout-2 {	    
 	    	width: 75%;
 		  }
+    }&.section-background-overlay{
+        .ssb-component{
+          z-index: 2 !important;
+        }
     }
 }
 
@@ -36,8 +39,8 @@
        		width: 100%;
         }
     }&.section-background-overlay{
-        [text-only-component], [simple-form-component]{
-          z-index: 2;
+        .ssb-component{
+          z-index: 2 !important;
         }
     }
 }
