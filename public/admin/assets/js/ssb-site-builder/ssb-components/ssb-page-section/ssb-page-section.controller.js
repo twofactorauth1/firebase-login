@@ -120,6 +120,10 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
                 }
             }
 
+            if(section.filter){
+                classString += " ssb-section-filter-" + section.filter.replace(/[^0-9a-z]/gi, '-');
+            }
+
         }
         // console.debug('section classString')
         // console.debug(classString)

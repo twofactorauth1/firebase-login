@@ -58,6 +58,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         app.get(this.url('reports/visitors'), this.isAuthAndSubscribedApi.bind(this), this.runVisitorsReport.bind(this));
         app.get(this.url('reports/visitorLocations'), this.isAuthAndSubscribedApi.bind(this), this.visitorLocationsReport.bind(this));
+        app.get(this.url('reports/visitorLocationsByCountry'), this.isAuthAndSubscribedApi.bind(this), this.visitorLocationsReportByCountry.bind(this));
         app.get(this.url('reports/visitorDevices'), this.isAuthAndSubscribedApi.bind(this), this.visitorDeviceReport.bind(this));
         app.get(this.url('reports/users'), this.isAuthAndSubscribedApi.bind(this), this.userReport.bind(this));
         app.get(this.url('reports/pageviews'), this.isAuthAndSubscribedApi.bind(this), this.pageviewsReport.bind(this));
@@ -66,8 +67,9 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url('reports/trafficSources'), this.isAuthAndSubscribedApi.bind(this), this.trafficSourcesReport.bind(this));
         app.get(this.url('reports/newVsReturning'), this.isAuthAndSubscribedApi.bind(this), this.newVsReturningReport.bind(this));
         app.get(this.url('reports/pageAnalytics'), this.isAuthAndSubscribedApi.bind(this), this.pageAnalyticsReport.bind(this));
-        app.get(this.url('reports/all'), this.isAuthAndSubscribedApi.bind(this), this.allReports.bind(this));
         app.get(this.url('reports/userAgents'), this.isAuthApi.bind(this), this.getUserAgentsReport.bind(this));
+        app.get(this.url('reports/revenue'), this.isAuthAndSubscribedApi.bind(this), this.getRevenue.bind(this));
+        app.get(this.url('reports/all'), this.isAuthAndSubscribedApi.bind(this), this.allReports.bind(this));
 
         app.get(this.url('admin/reports/dau'), this.isAuthAndSubscribedApi.bind(this), this.getDailyActiveUsers.bind(this));
         app.get(this.url('admin/reports/visitors'), this.isAuthAndSubscribedApi.bind(this), this.runAdminVisitorsReport.bind(this));
@@ -813,7 +815,6 @@ _.extend(api.prototype, baseApi.prototype, {
             start = moment().add(-30, 'days').toDate();
         } else {
             start = moment(start, 'YYYY-MM-DD[T]HH:mm:ss').toDate();
-            self.log.debug('start:', start);
         }
         analyticsManager.getVisitorReports(accountId, userId, start, end, false, null, function(err, value){
             self.log.debug(accountId, userId, '<< runVisitorsReport');
@@ -842,13 +843,42 @@ _.extend(api.prototype, baseApi.prototype, {
             start = moment().add(-30, 'days').toDate();
         } else {
             start = moment(start, 'YYYY-MM-DD[T]HH:mm:ss').toDate();
-            self.log.debug('start:', start);
         }
 
         analyticsManager.getVisitorLocationsReport(accountId, userId, start, end, false, null, function(err, value){
             self.log.debug(accountId, userId, '<< visitorLocationsReport');
             self.sendResultOrError(resp, err, value, 'Error getting report');
         });
+    },
+
+    visitorLocationsReportByCountry: function(req, resp) {
+        var self = this;
+        var userId = self.userId(req);
+        var accountId = self.accountId(req);
+        self.log.debug(accountId, userId, '>> visitorLocationsReport (' + req.query.start + ', ' + req.query.end + ')');
+        var start = req.query.start;
+        var end = req.query.end;
+
+
+        if(!end) {
+            end = moment().toDate();
+        } else {
+            //2016-07-03T00:00:00 05:30
+            end = moment(end, 'YYYY-MM-DD[T]HH:mm:ss').toDate();
+        }
+
+
+        if(!start) {
+            start = moment().add(-30, 'days').toDate();
+        } else {
+            start = moment(start, 'YYYY-MM-DD[T]HH:mm:ss').toDate();
+        }
+
+        analyticsManager.getVisitorLocationsByCountryReport(accountId, userId, start, end, false, null, function(err, results){
+            self.log.debug(accountId, userId, '<< visitorLocationsReport');
+            self.sendResultOrError(resp, err, results, 'Error getting report');
+        });
+
     },
 
     visitorDeviceReport: function(req, resp) {
@@ -872,7 +902,6 @@ _.extend(api.prototype, baseApi.prototype, {
             start = moment().add(-30, 'days').toDate();
         } else {
             start = moment(start, 'YYYY-MM-DD[T]HH:mm:ss').toDate();
-            self.log.debug('start:', start);
         }
 
         analyticsManager.getVisitorDeviceReport(accountId, userId, start, end, false, null, function(err, value){
@@ -902,18 +931,17 @@ _.extend(api.prototype, baseApi.prototype, {
             start = moment().add(-30, 'days').toDate();
         } else {
             start = moment(start, 'YYYY-MM-DD[T]HH:mm:ss').toDate();
-            self.log.debug('start:', start);
         }
 
         var dateDiff = moment(start).diff(end, 'days');
 
         var previousStart = moment(start).add(dateDiff, 'days').toDate();
         var previousEnd = start;
-        self.log.debug('dateDiff:', dateDiff);
-        self.log.debug('start:', start);
-        self.log.debug('end:', end);
-        self.log.debug('previousStart:', previousStart);
-        self.log.debug('previousEnd:', previousEnd);
+        self.log.trace('dateDiff:', dateDiff);
+        self.log.trace('start:', start);
+        self.log.trace('end:', end);
+        self.log.trace('previousStart:', previousStart);
+        self.log.trace('previousEnd:', previousEnd);
 
         analyticsManager.getUserReport(accountId, userId, start, end, previousStart, previousEnd, false, null, function(err, value){
             self.log.debug(accountId, userId, '<< userReport');
@@ -942,18 +970,17 @@ _.extend(api.prototype, baseApi.prototype, {
             start = moment().add(-30, 'days').toDate();
         } else {
             start = moment(start, 'YYYY-MM-DD[T]HH:mm:ss').toDate();
-            self.log.debug('start:', start);
         }
 
         var dateDiff = moment(start).diff(end, 'days');
 
         var previousStart = moment(start).add(dateDiff, 'days').toDate();
         var previousEnd = start;
-        self.log.debug('dateDiff:', dateDiff);
-        self.log.debug('start:', start);
-        self.log.debug('end:', end);
-        self.log.debug('previousStart:', previousStart);
-        self.log.debug('previousEnd:', previousEnd);
+        self.log.trace('dateDiff:', dateDiff);
+        self.log.trace('start:', start);
+        self.log.trace('end:', end);
+        self.log.trace('previousStart:', previousStart);
+        self.log.trace('previousEnd:', previousEnd);
 
         analyticsManager.getPageViewsReport(accountId, userId, start, end, previousStart, previousEnd, false, null, function(err, value){
             self.log.debug(accountId, userId, '<< pageviewsReport');
@@ -982,18 +1009,17 @@ _.extend(api.prototype, baseApi.prototype, {
             start = moment().add(-30, 'days').toDate();
         } else {
             start = moment(start, 'YYYY-MM-DD[T]HH:mm:ss').toDate();
-            self.log.debug('start:', start);
         }
 
         var dateDiff = moment(start).diff(end, 'days');
 
         var previousStart = moment(start).add(dateDiff, 'days').toDate();
         var previousEnd = start;
-        self.log.debug('dateDiff:', dateDiff);
-        self.log.debug('start:', start);
-        self.log.debug('end:', end);
-        self.log.debug('previousStart:', previousStart);
-        self.log.debug('previousEnd:', previousEnd);
+        self.log.trace('dateDiff:', dateDiff);
+        self.log.trace('start:', start);
+        self.log.trace('end:', end);
+        self.log.trace('previousStart:', previousStart);
+        self.log.trace('previousEnd:', previousEnd);
 
         analyticsManager.getSessionsReport(accountId, userId, start, end, previousStart, previousEnd, false, null, function(err, value){
             self.log.debug(accountId, userId, '<< sessionsReport');
@@ -1153,6 +1179,39 @@ _.extend(api.prototype, baseApi.prototype, {
         analyticsManager.getUserAgentReport(accountId, userId, start, end, false, null, function(err, value){
             self.log.debug(accountId, userId, '<< getUserAgentsReport');
             self.sendResultOrError(resp, err, value, 'Error getting report');
+        });
+    },
+
+    getRevenue: function(req, resp) {
+        var self = this;
+        var userId = self.userId(req);
+        var accountId = self.accountId(req);
+        self.log.debug(accountId, userId, '>> getRevenue (' + req.query.start + ', ' + req.query.end + ')');
+        var start = req.query.start;
+        var end = req.query.end;
+
+        if(!end) {
+            end = moment().toDate();
+        } else {
+            //2016-07-03T00:00:00 05:30
+            end = moment(end, 'YYYY-MM-DD[T]HH:mm:ss').toDate();
+        }
+
+        if(!start) {
+            start = moment().add(-30, 'days').toDate();
+        } else {
+            start = moment(start, 'YYYY-MM-DD[T]HH:mm:ss').toDate();
+            self.log.debug('start:', start);
+        }
+
+        var dateDiff = moment(start).diff(end, 'days');
+
+        var previousStart = moment(start).add(dateDiff, 'days').toDate();
+        var previousEnd = start;
+
+        analyticsManager.getRevenueByMonth(accountId, userId, start, end, previousStart, previousEnd, false, null, function(err, results){
+            self.log.debug(accountId, userId, '<< getRevenue');
+            self.sendResultOrError(resp, err, results, 'Error getting report');
         });
     },
 
@@ -1621,7 +1680,6 @@ _.extend(api.prototype, baseApi.prototype, {
             start = moment().add(-30, 'days').toDate();
         } else {
             start = moment(start, 'YYYY-MM-DD[T]HH:mm:ss').toDate();
-            self.log.debug('start:', start);
         }
         var dateDiff = moment(start).diff(end, 'days');
 

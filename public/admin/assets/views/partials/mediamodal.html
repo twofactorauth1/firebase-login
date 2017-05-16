@@ -49,8 +49,13 @@
                 <div class="clearfix"></div>
 
                 <div class="media margin-top-0" id="assets" ng-style="{'max-height':bodyHeight}">
-                    <div colspan="10" class="text-right" ng-if="assetsCount">
-                        
+                    <div class="col-xs-12 col-sm-6 form-group search-media" ng-if="!loadingAssets">
+                        <span class="input-icon">
+                            <input type="text" placeholder="Search by file name" class="form-control" ng-model="pagingParams.search" ng-model-options="{ debounce: 1000 }"/>
+                            <i class="ti-search"></i>
+                        </span>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 form-group paging-media" ng-if="assetsCount">
                         <nav ng-if="numberOfPages() && pages.length >= 2">
                             <ul class="pagination">
                                 <li ng-repeat="page in pages" ng-class="{active: page == pagingParams.curPage}">
@@ -59,6 +64,7 @@
                             </ul>
                         </nav>
                     </div>
+                    <div class="clearfix"></div>
                     <div ng-repeat="asset in assets" class="col-xs-12 col-sm-4" ng-show="assets.length">
                         <div class="thmb checked">
                             <div class="checkbox clip-check check-primary ckbox ckbox-default" style="display: block;z-index:1;">

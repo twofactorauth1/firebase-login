@@ -35,7 +35,6 @@ app.controller('MediaModalCtrl', ['$scope', 'mediaManagerConstant', '$injector',
   
 
   function loadAssets(file){
-    $scope.loadingAssets = true;
     AssetsService.getPagedAssetsByAccount($scope.pagingParams, function (data) {
       if (data.results instanceof Array) {
         $scope.originalAssets = data.results;
@@ -565,7 +564,13 @@ app.controller('MediaModalCtrl', ['$scope', 'mediaManagerConstant', '$injector',
             $scope.pageLoading = true;
             loadAssets();
         }
-
     }
+
+    $scope.$watch('pagingParams.search', function(search){
+      if(angular.isDefined(search)){
+        loadDefaultsForPaging();
+        loadAssets();
+      }
+    })
 
 }]);
