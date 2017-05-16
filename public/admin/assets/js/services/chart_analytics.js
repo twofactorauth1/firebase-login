@@ -381,17 +381,13 @@
                         "result": result.result
                     })
                 }
-            })
+            });
             return trafficSourcesReportData;
         };
 
-        /*
-         * I assume these timeframes are the past 30days and the past 60 days.
-         * .utc().format("YYYY-MM-DDTHH:mm:ss") + "Z"
-         * moment().subtract(29, 'days'), moment()
-         */
-        var timeframePreviousStart = moment().subtract(60, 'days').format(); //TODO: 60d ago
-        var timeframePreviousEnd = moment().subtract(30, 'days').format(); //TODO: 30d ago
+
+        var timeframePreviousStart = moment().subtract(60, 'days').format();
+        var timeframePreviousEnd = moment().subtract(30, 'days').format();
         var interval = "daily";
 
         this.setGraunularity = function(granularity) {
@@ -409,6 +405,13 @@
             return queryData;
         };
 
+        this.runIndividualMongoReports = function(date, account, fn) {
+            SiteAnalyticsService.runIndividualReports(date.startDate, date.endDate, null, false, false, function(data){
+                //console.log('data:', data);
+                fn(data);
+            });
+        };
+
         this.runMongoReports = function(date, account, fn) {
             SiteAnalyticsService.runReports(date.startDate, date.endDate, function(data){
                 //console.log('I got this:', data);
@@ -420,6 +423,13 @@
         this.runCustomerReports = function(date, accountId, fn) {
             SiteAnalyticsService.runCustomerReports(date.startDate, date.endDate, accountId, function(data){
                 //console.log('I got this:', data);
+                fn(data);
+            });
+        };
+
+        this.runIndividualAdminMongoReports = function(date, account, fn) {
+            SiteAnalyticsService.runIndividualReports(date.startDate, date.endDate, null, true, false, function(data){
+                console.log('data:', data);
                 fn(data);
             });
         };

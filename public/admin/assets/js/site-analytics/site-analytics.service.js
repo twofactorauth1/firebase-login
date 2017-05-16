@@ -23,6 +23,7 @@
         saService.runPlatformTraffic = runPlatformTraffic;
         saService.runSiteAnlyticsTraffic = runSiteAnlyticsTraffic;
         saService.getFrontrunnerSitesPageviews = getFrontrunnerSitesPageviews;
+        saService.runIndividualReports = runIndividualReports;
         saService.loading = {value:0};
 
 
@@ -41,6 +42,46 @@
                 console.info('service | loading -1 : ' + saService.loading.value);
             });
             return fn;
+        }
+
+        function runIndividualReports(startDate, endDate, accountId, isAdmin, isCustomer, fn) {
+            var endpointAry = ['users', 'pageviews', 'sessions', 'visitors', 'visitorLocations', 'visitorLocationsByCountry',
+                'visitorDevices', 'sessionLength', 'trafficSources', 'newVsReturning', 'pageAnalytics', 'userAgents', 'revenue'];
+
+            //users, pageviews, dau, sessions
+            var adminEndpointAry = ['pageviews', 'users','sessions', 'dau'];
+
+            var delayedAdminEndpointAry = ['pageAnalytics', 'visitorLocations',
+                'visitorLocationsByCountry', 'visitorDevices', 'sessionLength', 'trafficSources', 'newVsReturning',
+                 'userAgents', 'revenue', 'os', 'emails'];
+
+            function error(error) {
+                console.error('SiteAnalyticsService runReports error:', JSON.stringify(error));
+            }
+
+            var startDateString = moment.utc(startDate).format('YYYY-MM-DD[T]HH:mm:ss');
+            var endDateString = moment.utc(endDate).format('YYYY-MM-DD[T]HH:mm:ss');
+            saService.reports = {};
+
+            if(isAdmin === true) {
+                _.each(adminEndpointAry, function(endpoint){
+                    var path = adminAnalyticsAPIUrl + '/' + endpoint + '?start=' + startDateString + '&end=' + endDateString;
+                    saRequest($http.get(path).success(function(data){saService.reports[endpoint] = data;fn(saService.reports);}).error(error));
+                });
+                _.delay(function(){
+                    _.each(delayedAdminEndpointAry, function(endpoint){
+                        var path = adminAnalyticsAPIUrl + '/' + endpoint + '?start=' + startDateString + '&end=' + endDateString;
+                        saRequest($http.get(path).success(function(data){saService.reports[endpoint] = data;fn(saService.reports);}).error(error));
+                    });
+                }, 6000);
+            } else if(isCustomer === true) {
+                runCustomerReports(startDate, endDate, accountId, fn);
+            } else {
+                _.each(endpointAry, function(endpoint){
+                    var path = baseAnalyticsAPIUrl + '/' + endpoint + '?start=' + startDateString + '&end=' + endDateString;
+                    saRequest($http.get(path).success(function(data){saService.reports[endpoint] = data;fn(saService.reports);}).error(error));
+                });
+            }
         }
 
         /**

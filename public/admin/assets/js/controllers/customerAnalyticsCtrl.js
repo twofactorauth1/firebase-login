@@ -166,87 +166,93 @@
 
         $scope.runAnalyticsReports = function () {
             console.log('runAnalyticsReports');
-            ChartAnalyticsService.runAdminMongoReports($scope.date, $scope.analyticsAccount, function (data) {
-                //console.log('ABOUT TO COMPARE!!!\n\n\n\n\n');
-                //console.log('Legacy Data:', $scope.legacyData);
-                console.log('New Data:', data);
+
+            ChartAnalyticsService.runIndividualAdminMongoReports($scope.date, $scope.analyticsAccount, function (data){
                 var formattedTopPages = [];
                 var pagedformattedTopPages;
-                _.each(data.pageAnalyticsReport, function (singleRow) {
-                    var subObj = {};
-
-                    if (singleRow['url.path']) {
-                        subObj.page = singleRow['url.path'];
-                        subObj.accountId = singleRow['id'];
-                        subObj.pageviews = singleRow.pageviews;
-                        subObj.avgTime = Math.abs(singleRow.avgTimeOnPage) / 1000;
-                        subObj.uniquePageviews = singleRow.uniquePageviews;
-                        //TODO
-                        //subObj.entrances = singleRow['entrances'];
-                        //subObj.bounceRate = singleRow['bounces']/singleRow['pageviews'];
-                        //subObj.exitRate = self.calculatePercentage(singleRow['exits'], currentTotalPageviews);
-                    }
-                    if (subObj) {
-                        formattedTopPages.push(subObj);
-                    }
-                });
-
-                //pagedformattedTopPages = formattedTopPages.slice(0, 15);  // don't bother shortening list (UI does)
-                pagedformattedTopPages = formattedTopPages;
-                data.formattedTopPages = formattedTopPages;
-                data.pagedformattedTopPages = pagedformattedTopPages;
-                $scope.formattedTopPages = _.reject(formattedTopPages, function (analytics) {
-                    return !angular.isDefined(analytics.page)
-                });
-                $scope.pagedformattedTopPages = _.reject(pagedformattedTopPages, function (analytics) {
-                    return !angular.isDefined(analytics.page)
-                });
-
-                //Frontrunner Sites Pageviews
-                var _topFiveAccounts =_.first(_.sortBy($scope.pagedformattedTopPages, function(num){ return -num.pageviews; }), 5);
-
-                var accountIdArray = _.map(_topFiveAccounts, function(account){
-                    return account.accountId;
-                });
-
-                ChartAnalyticsService.getFrontrunnerSitesPageviews($scope.date, $scope.analyticsAccount, accountIdArray, function (data) {
-
-                    var _data = _.object(_.map(data, function (value, key) {
-                        var item = _.find(_topFiveAccounts, function(account){
-                            return account.accountId == key;
-                        });
-                        if(item){
-                            return [item.page, value];
+                if(data.pageAnalytics) {
+                    _.each(data.pageAnalytics, function (singleRow) {
+                        var subObj = {};
+                        if (singleRow['url.path']) {
+                            subObj.page = singleRow['url.path'];
+                            subObj.accountId = singleRow['id'];
+                            subObj.pageviews = singleRow.pageviews;
+                            subObj.avgTime = Math.abs(singleRow.avgTimeOnPage) / 1000;
+                            subObj.uniquePageviews = singleRow.uniquePageviews;
+                            //TODO
+                            //subObj.entrances = singleRow['entrances'];
+                            //subObj.bounceRate = singleRow['bounces']/singleRow['pageviews'];
+                            //subObj.exitRate = self.calculatePercentage(singleRow['exits'], currentTotalPageviews);
                         }
-                    }));
-                    var series = [];
-                    Object.keys(_data).forEach(function(key, index) {
-
-                        var _chartData = [];
-                        var _chartCount = 0;
-                        _.each(_data[key], function (cData) {
-                            var subArr = [];
-                            var value = cData.value || 0;
-                            _chartCount += value;
-                            subArr.push(new Date(cData.timeframe.start.replace(" ", "T")).getTime()+localTimezoneOffset);
-                            subArr.push(value);
-                            _chartData.push(subArr);
-                        });
-                        console.log(_chartCount);
-                        var sData = {
-                            name: key,
-                            data: _chartData
+                        if (subObj) {
+                            formattedTopPages.push(subObj);
                         }
-                        series.push(sData);
+
+
                     });
 
-                    ChartAnalyticsService.frontrunnerSitesPageviews(_data, series, function(data){
-                        $scope.frontrunnerSitesPageviewsConfig = data;
-                    });
-                });
 
-                $scope.setNewReportData(data);
+                    pagedformattedTopPages = formattedTopPages;
+                    data.formattedTopPages = formattedTopPages;
+                    data.pagedformattedTopPages = pagedformattedTopPages;
+                    $scope.formattedTopPages = _.reject(formattedTopPages, function (analytics) {
+                        return !angular.isDefined(analytics.page)
+                    });
+                    $scope.pagedformattedTopPages = _.reject(pagedformattedTopPages, function (analytics) {
+                        return !angular.isDefined(analytics.page)
+                    });
+                    $scope.setNewReportData(data);
+
+                    //Frontrunner Sites Pageviews
+                    var _topFiveAccounts =_.first(_.sortBy($scope.pagedformattedTopPages, function(num){ return -num.pageviews; }), 5);
+
+                    var accountIdArray = _.map(_topFiveAccounts, function(account){
+                        return account.accountId;
+                    });
+
+                    ChartAnalyticsService.getFrontrunnerSitesPageviews($scope.date, $scope.analyticsAccount, accountIdArray, function (data) {
+
+                        var _data = _.object(_.map(data, function (value, key) {
+                            var item = _.find(_topFiveAccounts, function(account){
+                                return account.accountId == key;
+                            });
+                            if(item){
+                                return [item.page, value];
+                            }
+                        }));
+                        var series = [];
+                        Object.keys(_data).forEach(function(key, index) {
+
+                            var _chartData = [];
+                            var _chartCount = 0;
+                            _.each(_data[key], function (cData) {
+                                var subArr = [];
+                                var value = cData.value || 0;
+                                _chartCount += value;
+                                subArr.push(new Date(cData.timeframe.start.replace(" ", "T")).getTime()+localTimezoneOffset);
+                                subArr.push(value);
+                                _chartData.push(subArr);
+                            });
+                            console.log(_chartCount);
+                            var sData = {
+                                name: key,
+                                data: _chartData
+                            };
+                            series.push(sData);
+                        });
+
+                        ChartAnalyticsService.frontrunnerSitesPageviews(_data, series, function(data){
+                            $scope.frontrunnerSitesPageviewsConfig = data;
+                        });
+                    });
+                } else {
+                    $scope.setNewReportData(data);
+                }
+
+
             });
+
+
         };
 
 
@@ -395,153 +401,172 @@
             }
             var desktop = 0;
             var mobile = 0;
-            _.each(results.visitorDeviceReport.result, function(device){
-                var category = device['user_agent.device'];
-                if(category === 'desktop') {
-                    desktop = device.result;
-                } else if (category === 'mobile') {
-                    mobile = device.result;
-                }
-            });
-            $scope.desktop = desktop;
-            $scope.mobile = mobile;
+            if(results.visitorDevices) {
+                _.each(results.visitorDevices.result, function(device){
+                    var category = device['user_agent.device'];
+                    if(category === 'desktop') {
+                        desktop = device.result;
+                    } else if (category === 'mobile') {
+                        mobile = device.result;
+                    }
+                });
+                $scope.desktop = desktop;
+                $scope.mobile = mobile;
 
-            $scope.device_data_loaded = true;
+                $scope.device_data_loaded = true;
+            }
+
 
             // ----------------------------------------
             // Visitors
             // ----------------------------------------
-
-            $scope.visitorDataReport(results.userReport.currentMonth, results.userReport.previousMonth);
+            if(results.users) {
+                $scope.visitorDataReport(results.users.currentMonth, results.users.previousMonth);
+            }
 
             // ----------------------------------------
             // Pageviews Metric
             // ----------------------------------------
+            if(results.pageviews) {
+                var pageviewsData = [];
+                var currentTotalPageviews = 0;
+                _.each(results.pageviews.currentMonth, function (pageView) {
+                    var subArr = [];
+                    var value = pageView.value || 0;
+                    currentTotalPageviews += value;
+                    subArr.push(new Date(pageView.timeframe.start.replace(" ", "T")).getTime()+localTimezoneOffset);
+                    subArr.push(value);
+                    pageviewsData.push(subArr);
+                });
 
-            var pageviewsData = [];
-            var currentTotalPageviews = 0;
-            _.each(results.pageViewsReport.currentMonth, function (pageView) {
-                var subArr = [];
-                var value = pageView.value || 0;
-                currentTotalPageviews += value;
-                subArr.push(new Date(pageView.timeframe.start.replace(" ", "T")).getTime()+localTimezoneOffset);
-                subArr.push(value);
-                pageviewsData.push(subArr);
-            });
+                $scope.pageviews = currentTotalPageviews;
+                $scope.pageviewsData = pageviewsData;
 
-            $scope.pageviews = currentTotalPageviews;
-            $scope.pageviewsData = pageviewsData;
+                var pageviewsPreviousData = 0;
+                _.each(results.pageviews.previousMonth, function (pageView) {
+                    var value = pageView.value || 0;
+                    pageviewsPreviousData += value;
+                });
 
-            var dauData = [];
-            _.each(results.dau, function(dau){
-                var subArr = [];
-                var value = dau.total || 0;
-                subArr.push(new Date(dau.timeframe.start.replace(" ", "T")).getTime()+localTimezoneOffset);
-                subArr.push(value);
-                dauData.push(subArr);
-            });
-            $scope.dauData = dauData;
+                $scope.pageviewsPreviousData = pageviewsPreviousData;
 
-            var pageviewsPreviousData = 0;
-            _.each(results.pageViewsReport.previousMonth, function (pageView) {
-                var value = pageView.value || 0;
-                pageviewsPreviousData += value;
-            });
+                var pageviewsPercent = ChartAnalyticsService.calculatePercentChange(pageviewsPreviousData, currentTotalPageviews);
+                $scope.pageviewsPercent = pageviewsPercent;
+            }
 
-            $scope.pageviewsPreviousData = pageviewsPreviousData;
+            if(results.dau) {
+                var dauData = [];
+                _.each(results.dau, function(dau){
+                    var subArr = [];
+                    var value = dau.total || 0;
+                    subArr.push(new Date(dau.timeframe.start.replace(" ", "T")).getTime()+localTimezoneOffset);
+                    subArr.push(value);
+                    dauData.push(subArr);
+                });
+                $scope.dauData = dauData;
+            }
 
-            var pageviewsPercent = ChartAnalyticsService.calculatePercentChange(pageviewsPreviousData, currentTotalPageviews);
-            $scope.pageviewsPercent = pageviewsPercent;
+
+
 
             // ----------------------------------------
             // Sessions
             // ----------------------------------------
 
+            if(results.sessions) {
+                var _sessionsData = [];
+                var _totalSessions = 0;
+                _.each(results.sessions.currentMonth, function (session) {
+                    var subArr = [];
+                    var value = session.total || session.value || 0;
+                    _totalSessions += value;
+                    subArr.push(new Date(session.timeframe.start.replace(" ", "T")).getTime()+localTimezoneOffset);
+                    subArr.push(value);
+                    _sessionsData.push(subArr);
+                });
+                $scope.sessions = _totalSessions;
+                $scope.sessionsData = _sessionsData;
 
-            var _sessionsData = [];
-            var _totalSessions = 0;
-            _.each(results.sessionsReport.currentMonth, function (session) {
-                var subArr = [];
-                var value = session.total || session.value || 0;
-                _totalSessions += value;
-                subArr.push(new Date(session.timeframe.start.replace(" ", "T")).getTime()+localTimezoneOffset);
-                subArr.push(value);
-                _sessionsData.push(subArr);
-            });
-            $scope.sessions = _totalSessions;
-            $scope.sessionsData = _sessionsData;
+                var sessionsPreviousData = 0;
+                _.each(results.sessions.previousMonth, function (previousSession) {
+                    var value = previousSession.total || previousSession.value || 0;
+                    sessionsPreviousData += value;
+                });
+                console.log('Calculate percent change sessions:');
+                var sessionsPercent = ChartAnalyticsService.calculatePercentChange(sessionsPreviousData, _totalSessions);
+                console.log('total:' + _totalSessions + ', prev:' + sessionsPreviousData + ', percent:' + sessionsPercent);
+                $scope.sessionsPercent = sessionsPercent;
+            }
 
-
-
-            ChartAnalyticsService.analyticsOverview($scope.pageviewsData, $scope.sessionsData, $scope.visitorsData, $scope.dauData, isVisibleLegend, setLegendVisibility, function (data) {
-                //$scope.$apply(function () {
+            if($scope.pageviewsData && $scope.sessionsData && $scope.visitorsData && $scope.dauData) {
+                ChartAnalyticsService.analyticsOverview($scope.pageviewsData, $scope.sessionsData, $scope.visitorsData, $scope.dauData, isVisibleLegend, setLegendVisibility, function (data) {
+                    //$scope.$apply(function () {
                     $scope.analyticsOverviewConfig = data;
-                //});
-                $scope.analyticsOverviewConfig.loading = false;
-            });
-
-            var sessionsPreviousData = 0;
-            _.each(results.sessionsReport.previousMonth, function (previousSession) {
-                var value = previousSession.total || previousSession.value || 0;
-                sessionsPreviousData += value;
-            });
-            console.log('Calculate percent change sessions:');
-            var sessionsPercent = ChartAnalyticsService.calculatePercentChange(sessionsPreviousData, _totalSessions);
-            console.log('total:' + _totalSessions + ', prev:' + sessionsPreviousData + ', percent:' + sessionsPercent);
-            $scope.sessionsPercent = sessionsPercent;
-
-            var slr = results.sessionLengthReport;//slr = SessionLengthReport
-            var secsToConv = 0;
-            if (slr.currentMonthAverage) {
-                secsToConv = (slr.currentMonthAverage / 1000);
+                    //});
+                    $scope.analyticsOverviewConfig.loading = false;
+                });
             }
 
-            var visitDuration = ChartAnalyticsService.secToTime(secsToConv);
 
-            if (slr.previousMonthAverage === null) {
-                slr.previousMonthAverage = 0;
+            if(results.sessionLength) {
+                var slr = results.sessionLength;//slr = SessionLengthReport
+                var secsToConv = 0;
+                if (slr.currentMonthAverage) {
+                    secsToConv = (slr.currentMonthAverage / 1000);
+                }
+
+                var visitDuration = ChartAnalyticsService.secToTime(secsToConv);
+
+                if (slr.previousMonthAverage === null) {
+                    slr.previousMonthAverage = 0;
+                }
+
+                $scope.visitDuration = visitDuration;
+
+                var previousVisitDuration = slr.previousMonthAverage;
+
+                var visitDurationPercent = ChartAnalyticsService.calculatePercentChange(previousVisitDuration, slr.currentMonthAverage);
+                $scope.visitDurationPercent = visitDurationPercent;
+
+                //8 = sessionLengthReport, 10=bounceReport, 11=NOTbouncePreviousReport ... previousMonthBounceCount
+                $scope.contentInteractionsReportData(slr.nonBounceAvg, slr.bounceAvg, slr.previousMonthBounceCount);
             }
 
-            $scope.visitDuration = visitDuration;
-
-            var previousVisitDuration = slr.previousMonthAverage;
-
-            var visitDurationPercent = ChartAnalyticsService.calculatePercentChange(previousVisitDuration, slr.currentMonthAverage);
-            $scope.visitDurationPercent = visitDurationPercent;
-
-            //8 = sessionLengthReport, 10=bounceReport, 11=NOTbouncePreviousReport ... previousMonthBounceCount
-            $scope.contentInteractionsReportData(slr.nonBounceAvg, slr.bounceAvg, slr.previousMonthBounceCount);
 
             // ======================================
             // Traffic Sources
             // ======================================
+            if(results.trafficSources) {
+                $scope.trafficSourceData = ChartAnalyticsService.mergeLiveTrafficData(results.trafficSources);
+            }
 
-            $scope.trafficSourceData = ChartAnalyticsService.mergeLiveTrafficData(results.trafficSourcesReport);
 
             // ======================================
             // New vs. Returning Customers
             // ======================================
+            if(results.newVsReturning) {
+                var newCustomers = ['New'];
+                var returningCustomers = ['Returning'];
+                _.each(results.newVsReturning, function(result){
+                    if(result._id === 'new') {
+                        newCustomers.push(result.count);
+                    } else if(result._id === 'returning') {
+                        returningCustomers.push(result.count);
+                    }
+                });
+                var newVsReturning = [
+                    newCustomers,
+                    returningCustomers
+                ];
 
-            var newCustomers = ['New'];
-            var returningCustomers = ['Returning'];
-            _.each(results.newVsReturningReport, function(result){
-                if(result._id === 'new') {
-                    newCustomers.push(result.count);
-                } else if(result._id === 'returning') {
-                    returningCustomers.push(result.count);
-                }
-            });
-            var newVsReturning = [
-                newCustomers,
-                returningCustomers
-            ];
+                $scope.newVsReturning = newVsReturning;
 
-            $scope.newVsReturning = newVsReturning;
+                ChartAnalyticsService.newVsReturning($scope.newVsReturning, function (data) {
+                    $scope.newVsReturningConfig = data;
+                    $scope.newVsReturningConfig.loading = false;
+                });
 
-            ChartAnalyticsService.newVsReturning($scope.newVsReturning, function (data) {
-                $scope.newVsReturningConfig = data;
-                $scope.newVsReturningConfig.loading = false;
-            });
+            }
 
 
             // ======================================
@@ -551,9 +576,9 @@
 
             var locationData = [];
             var countryLocationData = [];
-            if (results.visitorLocationsReport) {
+            if (results.visitorLocations) {
                 var _formattedLocations = [];
-                _.each(results.visitorLocationsReport, function (loc) {
+                _.each(results.visitorLocations, function (loc) {
                     if (loc['ip_geo_info.province']) {
                         _formattedLocations.push(loc);
                     }
@@ -562,7 +587,7 @@
                     return o.result;
                 });
 
-                _.each(results.visitorLocationsReport, function (location) {
+                _.each(results.visitorLocations, function (location) {
                     var _geo_info = ChartAnalyticsService.stateToAbbr(location['ip_geo_info.province']);
                     if (_geo_info) {
                         var subObj = {};
@@ -577,9 +602,9 @@
                     }
                 });
             }
-            if(results.visitorLocationsByCountryReport) {
+            if(results.visitorLocationsByCountry) {
                 var _formattedCountryLocations = [];
-                _.each(results.visitorLocationsByCountryReport, function(loc){
+                _.each(results.visitorLocationsByCountry, function(loc){
                     if(loc['ip_geo_info.country'] && loc['ip_geo_info.country'] != "Unknown") {
                         _formattedCountryLocations.push(loc);
                     }
@@ -587,7 +612,7 @@
                 $scope.mostPopularCountry = _.max(_formattedCountryLocations, function(o){
                     return o.result;
                 });
-                _.each(results.visitorLocationsByCountryReport, function(location){
+                _.each(results.visitorLocationsByCountry, function(location){
                     var _geo_info = ChartAnalyticsService.countryToAbbr(location['ip_geo_info.country']);
                     if(_geo_info && _geo_info!='Unknown') {
                         var subObj = {};
@@ -601,6 +626,21 @@
                         }
                     }
                 });
+            }
+            if(results.visitorLocations && results.visitorLocationsByCountry) {
+                $scope.locationData = locationData;
+
+                $scope.locationLabel = 'States';
+                $scope.locationsLength = locationData.length;
+                $scope.mostPopularLabel = $scope.mostPopularState['ip_geo_info.province'];
+
+                // Country based
+                $scope.countryLocationData = countryLocationData;
+                $scope.locationLabelCountry = 'Countries';
+                $scope.locationsLengthCountry = $scope.countryLocationData.length;
+                $scope.mostPopularLabelCountry = $scope.mostPopularCountry['ip_geo_info.country'];
+
+                $scope.renderVisitorCharts();
             }
 
             // ======================================
@@ -645,9 +685,9 @@
             // ======================================
             var osData = [];
             var osMap = {};
-            if(results.osReport) {
+            if(results.os) {
                 var osTotal = 0;
-                _.each(results.osReport, function(obj){
+                _.each(results.os, function(obj){
                     var os = obj._id.osName;
                     if(os === 'undefined' || os === undefined) {
                         os = 'Unknown';
@@ -676,48 +716,51 @@
             // ======================================
             // Revenue
             // ======================================
-            var revenueChartData = {
-                xData: [],
-                amountData: [],
-                orderData: []
-            };
-            var currentTotalRevenue = 0;
-            var currentTotalCount = 0;
-            _.each(results.revenueReport.currentMonth, function(rev){
-                revenueChartData.xData.push(new Date(rev.timeframe.start.replace(" ", "T")).getTime()+localTimezoneOffset);
-                var amt = rev.total || 0;
-                var cnt = rev.count || 0;
-                revenueChartData.amountData.push(amt);
-                revenueChartData.orderData.push(cnt);
-                currentTotalRevenue+= amt;
-                currentTotalCount+= cnt;
-            });
+            if(results.revenue) {
+                var revenueChartData = {
+                    xData: [],
+                    amountData: [],
+                    orderData: []
+                };
+                var currentTotalRevenue = 0;
+                var currentTotalCount = 0;
+                _.each(results.revenue.currentMonth, function(rev){
+                    revenueChartData.xData.push(new Date(rev.timeframe.start.replace(" ", "T")).getTime()+localTimezoneOffset);
+                    var amt = rev.total || 0;
+                    var cnt = rev.count || 0;
+                    revenueChartData.amountData.push(amt);
+                    revenueChartData.orderData.push(cnt);
+                    currentTotalRevenue+= amt;
+                    currentTotalCount+= cnt;
+                });
 
-            $scope.revenueData = revenueChartData;
-            $scope.revenue = parseFloat(currentTotalRevenue).toFixed(2);
-            $scope.orderCount = currentTotalCount;
+                $scope.revenueData = revenueChartData;
+                $scope.revenue = parseFloat(currentTotalRevenue).toFixed(2);
+                $scope.orderCount = currentTotalCount;
 
-            var revenuePreviousData = 0;
-            var ordersPreviousData = 0;
-            _.each(results.revenueReport.prevMonth, function (rev) {
-                var value = rev.total || 0;
-                revenuePreviousData += value;
-                var cnt = rev.count || 0;
-                ordersPreviousData += cnt;
-            });
+                var revenuePreviousData = 0;
+                var ordersPreviousData = 0;
+                _.each(results.revenue.prevMonth, function (rev) {
+                    var value = rev.total || 0;
+                    revenuePreviousData += value;
+                    var cnt = rev.count || 0;
+                    ordersPreviousData += cnt;
+                });
 
-            $scope.revenuePreviousData = revenuePreviousData;
+                $scope.revenuePreviousData = revenuePreviousData;
 
-            var revenuePercent = ChartAnalyticsService.calculatePercentChange(revenuePreviousData, currentTotalRevenue);
-            $scope.revenuePercent = revenuePercent;
+                var revenuePercent = ChartAnalyticsService.calculatePercentChange(revenuePreviousData, currentTotalRevenue);
+                $scope.revenuePercent = revenuePercent;
 
-            var ordersPercent = ChartAnalyticsService.calculatePercentChange(ordersPreviousData, currentTotalCount);
-            $scope.ordersPercent = ordersPercent;
+                var ordersPercent = ChartAnalyticsService.calculatePercentChange(ordersPreviousData, currentTotalCount);
+                $scope.ordersPercent = ordersPercent;
 
-            ChartAnalyticsService.revenueOverview($scope.revenueData, function (data) {
-                $scope.revenueConfig = data;
-                $scope.revenueConfig.loading = false;
-            });
+                ChartAnalyticsService.revenueOverview($scope.revenueData, function (data) {
+                    $scope.revenueConfig = data;
+                    $scope.revenueConfig.loading = false;
+                });
+            }
+
 
             // ======================================
             // Emails
@@ -725,75 +768,65 @@
 
             var emailsData = [];
             var totalEmails = 0;
-            _.each(results.emailsReport.emails, function(email){
-                var subArr = [];
-                var value = email.total || 0;
-                subArr.push(new Date(email.timeframe.start.replace(" ", "T")).getTime()+localTimezoneOffset);
-                subArr.push(value);
-                totalEmails += value;
-                emailsData.push(subArr);
-            });
+            if(results.emails) {
+                _.each(results.emails.emails, function(email){
+                    var subArr = [];
+                    var value = email.total || 0;
+                    subArr.push(new Date(email.timeframe.start.replace(" ", "T")).getTime()+localTimezoneOffset);
+                    subArr.push(value);
+                    totalEmails += value;
+                    emailsData.push(subArr);
+                });
 
-            var campaignsData = [];
-            _.each(results.emailsReport.campaigns, function(campaign){
-                var subArr = [];
-                var value = campaign.total || 0;
-                subArr.push(new Date(campaign.timeframe.start.replace(" ", "T")).getTime()+localTimezoneOffset);
-                subArr.push(value);
+                var campaignsData = [];
+                _.each(results.emails.campaigns, function(campaign){
+                    var subArr = [];
+                    var value = campaign.total || 0;
+                    subArr.push(new Date(campaign.timeframe.start.replace(" ", "T")).getTime()+localTimezoneOffset);
+                    subArr.push(value);
 
-                campaignsData.push(subArr);
-            });
+                    campaignsData.push(subArr);
+                });
 
-            var opensData = [];
-            var totalOpens = 0;
-            _.each(results.emailsReport.opens, function(open){
-                var subArr = [];
-                var value = open.total || 0;
-                subArr.push(new Date(open.timeframe.start.replace(" ", "T")).getTime()+localTimezoneOffset);
-                subArr.push(value);
-                totalOpens += value;
-                opensData.push(subArr);
-            });
+                var opensData = [];
+                var totalOpens = 0;
+                _.each(results.emails.opens, function(open){
+                    var subArr = [];
+                    var value = open.total || 0;
+                    subArr.push(new Date(open.timeframe.start.replace(" ", "T")).getTime()+localTimezoneOffset);
+                    subArr.push(value);
+                    totalOpens += value;
+                    opensData.push(subArr);
+                });
 
-            var clicksData = [];
-            var totalClicks = 0;
-            _.each(results.emailsReport.clicks, function(click){
-                var subArr = [];
-                var value = click.total || 0;
-                subArr.push(new Date(click.timeframe.start.replace(" ", "T")).getTime()+localTimezoneOffset);
-                subArr.push(value);
-                totalClicks += value;
-                clicksData.push(subArr);
-            });
+                var clicksData = [];
+                var totalClicks = 0;
+                _.each(results.emails.clicks, function(click){
+                    var subArr = [];
+                    var value = click.total || 0;
+                    subArr.push(new Date(click.timeframe.start.replace(" ", "T")).getTime()+localTimezoneOffset);
+                    subArr.push(value);
+                    totalClicks += value;
+                    clicksData.push(subArr);
+                });
 
-            ChartAnalyticsService.emailsOverview(emailsData, campaignsData, opensData, clicksData, function(data){
-                $scope.emailsOverviewConfig = data;
-                $scope.emailsOverviewConfig.loading = false;
-                $scope.totalEmails = totalEmails;
-                $scope.totalOpens = totalOpens;
-                $scope.totalClicks = totalClicks;
-            });
+                ChartAnalyticsService.emailsOverview(emailsData, campaignsData, opensData, clicksData, function(data){
+                    $scope.emailsOverviewConfig = data;
+                    $scope.emailsOverviewConfig.loading = false;
+                    $scope.totalEmails = totalEmails;
+                    $scope.totalOpens = totalOpens;
+                    $scope.totalClicks = totalClicks;
+                });
+            }
+
 
             //=======================================
             // Cleanup
             //=======================================
 
-            $scope.locationData = locationData;
-
-            $scope.locationLabel = 'States';
-            $scope.locationsLength = locationData.length;
-            $scope.mostPopularLabel = $scope.mostPopularState['ip_geo_info.province'];
-
-            // Country based
-            $scope.countryLocationData = countryLocationData;
-            $scope.locationLabelCountry = 'Countries';
-            $scope.locationsLengthCountry = $scope.countryLocationData.length;
-            $scope.mostPopularLabelCountry = $scope.mostPopularCountry['ip_geo_info.country'];
-
-
             $scope.displayVisitors = $scope.visitors > 0;
 
-            $scope.renderAnalyticsCharts();
+            //$scope.renderAnalyticsCharts();
 
         };
 
@@ -962,6 +995,26 @@
             $scope.displayVisitors = $scope.visitors > 0;
 
             $scope.renderAnalyticsCharts();
+        };
+
+        $scope.renderVisitorCharts = function() {
+            if ($("#visitor_locations").length) {
+                $timeout(function () {
+                    var location_data = angular.copy($scope.locationData);
+                    var countryLocationData = angular.copy($scope.countryLocationData);
+                    ChartAnalyticsService.visitorLocations(location_data, Highcharts.maps['countries/us/us-all'], countryLocationData, Highcharts.maps['custom/world']);
+                    ChartAnalyticsService.visitorLocationsGlobal(location_data, Highcharts.maps['countries/us/us-all'], countryLocationData, Highcharts.maps['custom/world']);
+                }, 200);
+                if (!$scope.displayVisitors) {
+                    console.log('no visitors');
+                    // var deshBlockUI = blockUI.instances.get('deshboardBlock');
+                    // deshBlockUI.start("There haven't been any new visitors to your site yet. Once they do that data will be displayed here. To increase your site visitors you should add a social post.");
+                }
+            } else {
+                $timeout(function () {
+                    $scope.renderVisitorCharts();
+                }, 100);
+            }
         };
 
         $scope.renderAnalyticsCharts = function () {
