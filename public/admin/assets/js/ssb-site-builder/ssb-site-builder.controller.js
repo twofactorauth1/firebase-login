@@ -193,8 +193,9 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
         loadPage: function(pageId) {
             if (pageId && pageId !== vm.state.page._id) {
                 SimpleSiteBuilderService.getPages();
-                if(!vm.state.pendingWebsiteChanges && !vm.state.pendingPageChanges)
+                if(!vm.state.pendingWebsiteChanges && !vm.state.pendingPageChanges){
                     vm.uiState.loaded = false;
+                }
                 $timeout(function() {
                     vm.state.saveAndLoading = false;
                 }, 0);
@@ -635,9 +636,16 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
         if (!vm.uiState.loaded) {
             $timeout(function() {
                 vm.uiState.loaded = true;
+                
             }, 2000);
         }
     }
+
+    $scope.$watch("vm.uiState.loaded", function(value){
+        if(angular.isDefined(value)){
+            $rootScope.app.layout.editorLoaded = value; 
+        }
+    })
 
     function closeModal() {
         vm.modalInstance.close();
