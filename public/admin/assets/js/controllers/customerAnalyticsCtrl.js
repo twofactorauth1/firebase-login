@@ -1232,7 +1232,7 @@
         function isVisibleLegend(name, widget){
             var legend = widget.toLowerCase() + "_" + name.toLowerCase() + "_legend";
             legend = legend.replace(/ /g, "_");
-            return AnalyticsWidgetStateService.plateformAnalyticsWidgetStateConfig[legend];
+            return AnalyticsWidgetStateService.getNamedPlateformAnalyticsWidgetState(legend);
         }
 
         function setLegendVisibility(widget, name, value){

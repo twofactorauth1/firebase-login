@@ -1003,7 +1003,7 @@
         function isVisibleLegend(name, widget){
             var legend = widget.toLowerCase() + "_" + name.toLowerCase() + "_legend";
             legend = legend.replace(/ /g, "_");
-            return AnalyticsWidgetStateService.customerAnalyticsWidgetStateConfig[legend];
+            return AnalyticsWidgetStateService.getNamedCustomerAnalyticsWidgetState(legend);
         }
 
         function setLegendVisibility(widget, name, value){
