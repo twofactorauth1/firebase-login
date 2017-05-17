@@ -510,7 +510,7 @@ var insightsManager = {
                     siteUrl = account.get('subdomain') + suffix;
                     vars.push({name:'ORGLOGO', content:'https://s3.amazonaws.com/indigenous-digital-assets/account_1301/rvlvr_logo_350.png'});
                 } else {
-                    vars.push({name:'ORGLOGO', content:'https://s3.amazonaws.com/indigenous-digital-assets/account_6/Indigenous-Logo_EmailSafe_1495055904662.png'});
+                    vars.push({name:'ORGLOGO', content:'https://s3.amazonaws.com/indigenous-digital-assets/account_6/Indigenous-Logo_EmailSafe_1495057493172.png'});
                 }
                 console.log(siteUrl);
                 app.render('insights/footer', {siteUrl:siteUrl}, function(err, jadeHtml){
