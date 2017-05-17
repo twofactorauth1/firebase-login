@@ -20,7 +20,7 @@
         .navbar-header {
             float: none;
             // min-height: 150px;
-            padding-bottom: 20px;
+            //padding-bottom: 20px;
             .navbar-toggle {
                 margin-top: 50px;
 
@@ -117,6 +117,16 @@
             ul.navbar-nav li > a{
                 min-height: 30px !important;
                 line-height: 20px;
+                padding-top: 4px;
+                padding-bottom: 0;
+            }
+        }
+    }
+
+    @media (max-width: 767px){
+        .navbar.navbar-default{
+            ul.navbar-nav li{
+                display:block !important;
             }
         }
     }
