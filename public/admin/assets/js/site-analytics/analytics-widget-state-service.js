@@ -74,6 +74,10 @@
         analyticService.setSiteAnalyticsWidgetStates = setSiteAnalyticsWidgetStates;
         analyticService.setPlateformAnalyticsWidgetStates = setPlateformAnalyticsWidgetStates;
         analyticService.setCustomerAnalyticsWidgetStates = setCustomerAnalyticsWidgetStates;
+
+        analyticService.getNamedSiteAnalyticsWidgetState = getNamedSiteAnalyticsWidgetState;
+        analyticService.getNamedPlateformAnalyticsWidgetState = getNamedPlateformAnalyticsWidgetState;
+        analyticService.getNamedCustomerAnalyticsWidgetState = getNamedCustomerAnalyticsWidgetState;
         
         function getSiteAnalyticsWidgetStates() {            
             if(ipCookie("siteAnalyticsWidgetState")){
@@ -133,6 +137,33 @@
                 });
                 setCookie(ckAnalyticsWidgetState, "customerAnalyticsWidgetState");
             }
+        }
+
+        function getNamedSiteAnalyticsWidgetState(name){
+            var returnValue = analyticService.siteAnalyticsWidgetStateConfig[name];
+            var ckAnalyticsWidgetState = ipCookie("siteAnalyticsWidgetState");
+            if(ckAnalyticsWidgetState){
+                returnValue = ckAnalyticsWidgetState[name];
+            }
+            return returnValue;
+        }
+
+        function getNamedPlateformAnalyticsWidgetState(name){
+            var returnValue = analyticService.plateformAnalyticsWidgetStateConfig[name];
+            var ckAnalyticsWidgetState = ipCookie("plateformAnalyticsWidgetState");
+            if(ckAnalyticsWidgetState){
+                returnValue = ckAnalyticsWidgetState[name];
+            }
+            return returnValue;            
+        }
+
+        function getNamedCustomerAnalyticsWidgetState(name){
+            var returnValue = analyticService.customerAnalyticsWidgetStateConfig[name];
+            var ckAnalyticsWidgetState = ipCookie("customerAnalyticsWidgetState");
+            if(ckAnalyticsWidgetState){
+                returnValue = ckAnalyticsWidgetState[name];
+            }
+            return returnValue;            
         }
 
         function setCookie(cookie, name){
