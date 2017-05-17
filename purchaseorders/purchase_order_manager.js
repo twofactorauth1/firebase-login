@@ -84,14 +84,16 @@ module.exports = {
                                         //return anyway
                                         callback();
                                     } else {
-                                        var _user = {
-                                            _id: user.get("_id"),
-                                            username: user.get("username"),
-                                            first: user.get("first"),
-                                            last: user.get("last")
-                                        };
-                                        userIDMap[order.get('userId')] = _user;
-                                        order.set("submitter", _user);
+                                        if(user){
+                                            var _user = {
+                                                _id: user.get("_id"),
+                                                username: user.get("username"),
+                                                first: user.get("first"),
+                                                last: user.get("last")
+                                            };
+                                            userIDMap[order.get('userId')] = _user;
+                                            order.set("submitter", _user); 
+                                        } 
                                         callback();
                                     }
                                 });
@@ -177,14 +179,16 @@ module.exports = {
                                         //return anyway
                                         callback();
                                     } else {
-                                        var _user = {
-                                            _id: user.get("_id"),
-                                            username: user.get("username"),
-                                            first: user.get("first"),
-                                            last: user.get("last")
-                                        };
-                                        userIDMap[order.get('userId')] = _user;
-                                        order.set("submitter", _user);
+                                        if(user){
+                                            var _user = {
+                                                _id: user.get("_id"),
+                                                username: user.get("username"),
+                                                first: user.get("first"),
+                                                last: user.get("last")
+                                            };
+                                            userIDMap[order.get('userId')] = _user;
+                                            order.set("submitter", _user);
+                                        }
                                         callback();
                                     }
                                 });
@@ -270,14 +274,16 @@ module.exports = {
                                             //return anyway
                                             callback();
                                         } else {
-                                            var _user = {
-                                                _id: user.get("_id"),
-                                                username: user.get("username"),
-                                                first: user.get("first"),
-                                                last: user.get("last")
-                                            };
-                                            userIDMap[order.get('userId')] = _user;
-                                            order.set("submitter", _user);
+                                            if(user){
+                                                var _user = {
+                                                    _id: user.get("_id"),
+                                                    username: user.get("username"),
+                                                    first: user.get("first"),
+                                                    last: user.get("last")
+                                                };
+                                                userIDMap[order.get('userId')] = _user;
+                                                order.set("submitter", _user);
+                                            }
                                             callback();
                                         }
                                     });
@@ -379,13 +385,15 @@ module.exports = {
                                 log.error(accountId, userId, 'Error getting user: ' + err);
                                 fn(err, null);
                             } else {
-                                var _user = {
-                                    _id: user.get("_id"),
-                                    username: user.get("username"),
-                                    first: user.get("first"),
-                                    last: user.get("last")
-                                };
-                                order.set("submitter", _user);
+                                if(user){
+                                    var _user = {
+                                        _id: user.get("_id"),
+                                        username: user.get("username"),
+                                        first: user.get("first"),
+                                        last: user.get("last")
+                                    };
+                                    order.set("submitter", _user);
+                                }
                                 self._sendEmailOnPOCreation(order, accountId, adminUrl);
                                 fn(null, order, file);
                             }
@@ -458,13 +466,15 @@ module.exports = {
                         //return anyway
                         callback(err);
                     } else {
-                        var _user = {
-                            _id: user.get("_id"),
-                            username: user.get("username"),
-                            first: user.get("first"),
-                            last: user.get("last")
-                        };
-                        order.set("submitter", _user);
+                        if(user){
+                            var _user = {
+                                _id: user.get("_id"),
+                                username: user.get("username"),
+                                first: user.get("first"),
+                                last: user.get("last")
+                            };
+                            order.set("submitter", _user);
+                        }
                         callback(null, order, account);
                     }
                 });
@@ -476,14 +486,16 @@ module.exports = {
                             log.error(accountId, userId, 'Error getting user: ' + err);
                             cb(err);
                         } else {
-                            var _user = {
-                                _id: user.get("_id"),
-                                username: user.get("username"),
-                                first: user.get("first"),
-                                last: user.get("last"),
-                                profilePhotos: user.get("profilePhotos")
-                            };
-                            note.user = _user;
+                            if(user){
+                                var _user = {
+                                    _id: user.get("_id"),
+                                    username: user.get("username"),
+                                    first: user.get("first"),
+                                    last: user.get("last"),
+                                    profilePhotos: user.get("profilePhotos")
+                                };
+                                note.user = _user;
+                            }
                             cb();
                         }
                     });
@@ -522,14 +534,17 @@ module.exports = {
                                 log.error(accountId, userId, 'Error getting user: ' + err);
                                 fn(err, null);
                             } else {
-                                var _user = {
-                                    _id: user.get("_id"),
-                                    username: user.get("username"),
-                                    first: user.get("first"),
-                                    last: user.get("last"),
-                                    profilePhotos: user.get("profilePhotos")
-                                };
-                                note.user = _user;
+                                if(user){
+                                    var _user = {
+                                        _id: user.get("_id"),
+                                        username: user.get("username"),
+                                        first: user.get("first"),
+                                        last: user.get("last"),
+                                        profilePhotos: user.get("profilePhotos")
+                                    };
+                                    note.user = _user;
+                                }
+                                
                                 log.debug(accountId, userId, '<< addNotesToPurchaseOrder');
                                 return fn(null, note);
                             }

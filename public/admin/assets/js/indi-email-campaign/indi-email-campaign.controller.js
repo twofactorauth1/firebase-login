@@ -2,9 +2,9 @@
 
     app.controller('EmailCampaignController', indiEmailCampaignController);
 
-    indiEmailCampaignController.$inject = ['$scope', 'EmailBuilderService', '$stateParams', '$state', 'toaster', 'AccountService', 'WebsiteService', '$modal', '$timeout', '$document', '$window', 'EmailCampaignService', 'ContactService', 'userConstant', 'editableOptions', 'SweetAlert', '$location', '$q', 'formValidations', '$document'];
+    indiEmailCampaignController.$inject = ['$scope', 'EmailBuilderService', '$stateParams', '$state', 'toaster', 'AccountService', 'WebsiteService', '$modal', '$timeout', '$document', '$window', 'EmailCampaignService', 'ContactService', 'userConstant', 'editableOptions', 'SweetAlert', '$location', '$q', 'formValidations'];
     /* @ngInject */
-    function indiEmailCampaignController($scope, EmailBuilderService, $stateParams, $state, toaster, AccountService, WebsiteService, $modal, $timeout, $document, $window, EmailCampaignService, ContactService, userConstant, editableOptions, SweetAlert, $location, $q, formValidations, $document) {
+    function indiEmailCampaignController($scope, EmailBuilderService, $stateParams, $state, toaster, AccountService, WebsiteService, $modal, $timeout, $document, $window, EmailCampaignService, ContactService, userConstant, editableOptions, SweetAlert, $location, $q, formValidations) {
 
         console.info('email-campaign directive init...');
 
@@ -338,7 +338,8 @@
             if(!checkRequiredFields()){
                 toaster.pop('warning', 'Please fill the required fields');
                 var element = document.getElementById("campaign-email-settings-container");
-                $document.scrollToElementAnimated(element, 0, 1000);             
+                $document.scrollToElementAnimated(element, 0, 1000);
+                return;
             }
             else{
                 var fn = EmailCampaignService.activateCampaign;
@@ -357,16 +358,14 @@
                     }, function (err) {
                         vm.uiState.dataLoaded = true;
                         toaster.pop('error', 'Campaign activation failed');
-
                     }
                 );
             }
-            
         }
 
         function checkRequiredFields(){
             var isValidForm = true;
-            if(!vm.state.campaign.emailSettings.fromEmail){                
+            if(!vm.state.campaign.emailSettings.fromEmail){
                 isValidForm = false;
             }
             return isValidForm;
