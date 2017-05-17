@@ -189,6 +189,8 @@ module.exports = {
         var query = {
             'accountId': accountId
         };
+
+        var andQuery = [];
         
         if(filterType){
             var typeMimes = {
@@ -198,22 +200,19 @@ module.exports = {
                 document: ['application/octet-stream', 'application/pdf', 'text/plain']
             };
             var mimeTypesArray = typeMimes[filterType];
-
-            query["$and"] = [{'mimeType': {$in: mimeTypesArray}}];
+            andQuery.push({'mimeType': {$in: mimeTypesArray}});           
         }
 
         if(search){
-            var specialChars = "()[";
-            for (var i = 0; i < specialChars.length; i++) {
-                search = search .replace(new RegExp("\\" + specialChars[i], 'gi'), '');
-            }
+            search = search.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');            
             var regex = new RegExp('\\.*'+search+'\.*', 'i');
-            var searchQuery = [
-                {filename:regex}
-            ];
-            query["$and"] = searchQuery;
+            var searchQuery = {filename:regex};
+            andQuery.push(searchQuery);
         }
         self.log.debug('>> listPagedAssets');
+        if(andQuery.length){
+             query["$and"] = andQuery;
+        }
         assetDao.findWithFieldsLimitOrderAndTotal(query, skip, limit, 'created.date', null, $$.m.Asset, -1, function(err, list){
             if(err) {
                 self.log.error('Exception in listPagedAssets: ' + err);

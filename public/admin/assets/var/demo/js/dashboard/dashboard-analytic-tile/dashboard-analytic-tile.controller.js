@@ -47,7 +47,7 @@ function dashboardAnalyticTileComponentController($scope, $attrs, $filter, Dashb
                     ret.header = [
                         {label: 'Vendor'},
                         {label: 'Product'},
-                        {label: 'Qty OH'}
+                        {label: 'Qty Avail'}
                     ];
 
                     $scope.$watch(function() { return DashboardService.inventory; }, function(inventory){
@@ -57,7 +57,7 @@ function dashboardAnalyticTileComponentController($scope, $attrs, $filter, Dashb
                             ret.data.push({
                                 field1: item.OMRC_FirmName.split(" ")[0],
                                 field2: item.OITM_ItemName,
-                                field3: item.In_Stock <0 ? '' : item.In_Stock,
+                                field3: item.Available <0 ? '' : item.Available,
                                 link: ret.link + "/" + item["@id"]
                             })
                         })

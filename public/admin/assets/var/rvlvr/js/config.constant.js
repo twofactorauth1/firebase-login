@@ -594,7 +594,7 @@ app.constant('JS_REQUIRES', {
     'google-fonts': 'https://ajax.googleapis.com/ajax/libs/webfont/1.5.18/webfont.js',
 
     //*** jQuery Plugins
-    'perfect-scrollbar-plugin': ['../js/libs/perfect-scrollbar/js/min/perfect-scrollbar.jquery.min.js', '../js/libs/perfect-scrollbar/css/perfect-scrollbar.min.css'],
+    'perfect-scrollbar-plugin': ['../js/libs/perfect-scrollbar/js/perfect-scrollbar.jquery.min.js', '../js/libs/perfect-scrollbar/css/perfect-scrollbar.min.css'],
     'ladda': ['../js/libs/ladda/dist/ladda.min.js', '../js/libs/ladda/dist/ladda-themeless.min.css'],
     'chartjs': '../js/libs/chartjs/Chart.min.js',
     'jquery-sparkline': '../js/libs/jquery.sparkline.build/dist/jquery.sparkline.min.js',
