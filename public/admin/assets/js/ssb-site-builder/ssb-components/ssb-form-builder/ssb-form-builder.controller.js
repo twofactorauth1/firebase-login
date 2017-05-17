@@ -63,10 +63,10 @@
             }
         }
         function removeBorderStyle(currentElement){
-            currentElement.style.setProperty('border-color', "none", 'important');
-            currentElement.style.setProperty('border-width', '0px', 'important');
-            currentElement.style.setProperty('border-radius', 'none%', 'important');
-            currentElement.style.setProperty('border-style', "none", 'important');
+            currentElement.style.setProperty('border-color', "transparent", 'important');
+            currentElement.style.setProperty('border-width', '1px', 'important');
+            currentElement.style.setProperty('border-radius', '4px', 'important');// old default is 4px
+            currentElement.style.setProperty('border-style', "solid", 'important');
         }
         function fieldClass(field) {
             var classString = 'col-sm-12';
