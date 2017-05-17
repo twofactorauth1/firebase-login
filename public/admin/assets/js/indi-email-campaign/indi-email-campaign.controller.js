@@ -2,9 +2,9 @@
 
     app.controller('EmailCampaignController', indiEmailCampaignController);
 
-    indiEmailCampaignController.$inject = ['$scope', 'EmailBuilderService', '$stateParams', '$state', 'toaster', 'AccountService', 'WebsiteService', '$modal', '$timeout', '$document', '$window', 'EmailCampaignService', 'ContactService', 'userConstant', 'editableOptions', 'SweetAlert', '$location', '$q', 'formValidations'];
+    indiEmailCampaignController.$inject = ['$scope', 'EmailBuilderService', '$stateParams', '$state', 'toaster', 'AccountService', 'WebsiteService', '$modal', '$timeout', '$document', '$window', 'EmailCampaignService', 'ContactService', 'userConstant', 'editableOptions', 'SweetAlert', '$location', '$q', 'formValidations', '$document'];
     /* @ngInject */
-    function indiEmailCampaignController($scope, EmailBuilderService, $stateParams, $state, toaster, AccountService, WebsiteService, $modal, $timeout, $document, $window, EmailCampaignService, ContactService, userConstant, editableOptions, SweetAlert, $location, $q, formValidations) {
+    function indiEmailCampaignController($scope, EmailBuilderService, $stateParams, $state, toaster, AccountService, WebsiteService, $modal, $timeout, $document, $window, EmailCampaignService, ContactService, userConstant, editableOptions, SweetAlert, $location, $q, formValidations, $document) {
 
         console.info('email-campaign directive init...');
 
@@ -335,25 +335,41 @@
 
         function activateCampaignFn() {
             //vm.saveAsDraftFn(true);
-            var fn = EmailCampaignService.activateCampaign;
-            fn(vm.state.campaign).then(function (res) {
-                    vm.state.campaign = angular.extend(vm.state.campaign, res.data);
-                    vm.state.campaignOriginal = angular.copy(vm.state.campaign);
-                    vm.state.originalRecipients = angular.copy(vm.state.recipients);
-                    vm.uiState.originalNewEmails = angular.copy(vm.uiState.selectedContacts.newEmails);
-                    vm.uiState.delivery.originalDate = angular.copy(vm.uiState.delivery.date);
-                    vm.uiState.dataLoaded = true;
-                    vm.uiState.disableEditing = false;
+            if(!checkRequiredFields()){
+                toaster.pop('warning', 'Please fill the required fields');
+                var element = document.getElementById("campaign-email-settings-container");
+                $document.scrollToElementAnimated(element, 0, 1000);             
+            }
+            else{
+                var fn = EmailCampaignService.activateCampaign;
+                fn(vm.state.campaign).then(function (res) {
+                        vm.state.campaign = angular.extend(vm.state.campaign, res.data);
+                        vm.state.campaignOriginal = angular.copy(vm.state.campaign);
+                        vm.state.originalRecipients = angular.copy(vm.state.recipients);
+                        vm.uiState.originalNewEmails = angular.copy(vm.uiState.selectedContacts.newEmails);
+                        vm.uiState.delivery.originalDate = angular.copy(vm.uiState.delivery.date);
+                        vm.uiState.dataLoaded = true;
+                        vm.uiState.disableEditing = false;
 
-                    vm.uiState.disableEditing = true;
-                    toaster.pop('success', 'Campaign activated');
+                        vm.uiState.disableEditing = true;
+                        toaster.pop('success', 'Campaign activated');
 
-                }, function (err) {
-                    vm.uiState.dataLoaded = true;
-                    toaster.pop('error', 'Campaign activation failed');
+                    }, function (err) {
+                        vm.uiState.dataLoaded = true;
+                        toaster.pop('error', 'Campaign activation failed');
 
-                }
-            );
+                    }
+                );
+            }
+            
+        }
+
+        function checkRequiredFields(){
+            var isValidForm = true;
+            if(!vm.state.campaign.emailSettings.fromEmail){                
+                isValidForm = false;
+            }
+            return isValidForm;
         }
 
         function checkBestEmailFn(contact) {
