@@ -153,7 +153,7 @@
                                                     </div>
                                                     <div class="col-xs-6 text-center border-bottom">
                                                         <div class="rate">
-                                                            <i class="fa fa-caret-up text-green"></i> <span class=" text-bold">{{campaign.statistics.emailsSent || 0 }}</span><span ng-if="campaign.statistics.participants" class="text-small muted"> ({{percentCalFn(campaign.statistics.emailsSent, campaign.statistics.participants)}}%)</span>
+                                                            <i class="fa fa-caret-up text-green"></i> <span class=" text-bold">{{campaign.statistics.emailsSent || 0 }}</span><span ng-if="campaign.statistics.participants && campaign.type !== 'autoresponder'" class="text-small muted"> ({{percentCalFn(campaign.statistics.emailsSent, campaign.statistics.participants)}}%)</span>
                                                         </div>
                                                         Sent
                                                     </div>
@@ -164,13 +164,13 @@
                                                 <div class="col-xs-12">
                                                     <div class="col-xs-6 text-center border-right">
                                                         <div class="rate">
-                                                            <i class="fa fa-caret-up text-green"></i> <span class=" text-bold">{{campaign.statistics.emailsOpened || 0 }}</span><span ng-if="campaign.statistics.participants" class="text-small muted"> ({{percentCalFn(campaign.statistics.emailsOpened, campaign.statistics.emailsSent)}}%)</span>
+                                                            <i class="fa fa-caret-up text-green"></i> <span class=" text-bold">{{campaign.statistics.emailsOpened || 0 }}</span><span ng-if="campaign.statistics.participants && campaign.type !== 'autoresponder'" class="text-small muted"> ({{percentCalFn(campaign.statistics.emailsOpened, campaign.statistics.emailsSent)}}%)</span>
                                                         </div>
                                                         Opened
                                                     </div>
                                                     <div class="col-xs-6 text-center">
                                                         <div class="rate">
-                                                            <i class="fa fa-caret-up text-green"></i> <span class=" text-bold">{{campaign.statistics.emailsClicked || 0}}</span><span ng-if="campaign.statistics.participants" class="text-small muted"> ({{percentCalFn(campaign.statistics.emailsClicked, campaign.statistics.emailsOpened)}}%)</span>
+                                                            <i class="fa fa-caret-up text-green"></i> <span class=" text-bold">{{campaign.statistics.emailsClicked || 0}}</span><span ng-if="campaign.statistics.participants && campaign.type !== 'autoresponder'" class="text-small muted"> ({{percentCalFn(campaign.statistics.emailsClicked, campaign.statistics.emailsOpened)}}%)</span>
                                                         </div>
                                                         Clicked
                                                     </div>
