@@ -186,10 +186,10 @@
                     </div>
 
                     <h4 class="text-u ssb-admin-panel-header no-border">Campaign Email</h4>
-                    <div class="panel panel-white form-group bg-white padding-10 campaign-email-settings-container" id="campaign-email-settings-container">
+                    <div class="panel panel-white form-group bg-white padding-10">
                         <span ng-if="!vm.state.emails.length">Loading... <b class="fa fa-spinner fa-spin"/></span>
 
-                        <div ng-if="vm.state.emails.length" ng-class="{'disabled': vm.uiState.disableEditing}" class="padding-left-5">
+                        <div ng-if="vm.state.emails.length" ng-class="{'disabled': vm.uiState.disableEditing}">
 
                             <ui-select
                                 ng-model="vm.state.campaign.emailSettings.emailId"
@@ -215,11 +215,10 @@
                                 <span editable-text="vm.state.campaign.emailSettings.fromName">{{vm.state.campaign.emailSettings.fromName || "From Name"}}</span>
                             </div>
                             <div class="form-group margin-bottom-0">
-                                <span class="required" class="margin-left-10">*</span>
                                 <label class="control-label text-bold">
                                     From Email
                                 </label>
-                                <span class="email-from-required" editable-email="vm.state.campaign.emailSettings.fromEmail" e-required onbeforesave="validateEmail($data)">{{vm.state.campaign.emailSettings.fromEmail || "From Email"}}</span>
+                                <span editable-email="vm.state.campaign.emailSettings.fromEmail" e-required onbeforesave="validateEmail($data)">{{vm.state.campaign.emailSettings.fromEmail || "From Email"}}</span>
                             </div>
                             <div class="form-group margin-bottom-0">
                                 <label class="control-label text-bold">
