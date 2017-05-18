@@ -2,7 +2,7 @@
 /*global app, moment, angular, window, Highcharts, $$*/
 /*jslint unparam: true*/
 (function (angular) {
-    app.service('ChartAnalyticsService', ['SiteAnalyticsService', function (SiteAnalyticsService) {
+    app.service('ChartAnalyticsService', ['SiteAnalyticsService', '$q', function (SiteAnalyticsService, $q) {
 
         //common functions
 
@@ -530,6 +530,98 @@
             return queryData;
         };
 
+        this.getVisitorOverviewChartData = function(date, account, isAdmin, isCustomer, fn) {
+            var promises = [];
+            var pageviews, users, sessions, dau;
+            promises.push(SiteAnalyticsService.getPageviews(date.startDate, date.endDate, account, isAdmin, isCustomer, function(data){
+                console.log('got pageviews:', data);
+                pageviews = data;
+            }));
+            promises.push(SiteAnalyticsService.getUsers(date.startDate, date.endDate, account, isAdmin, isCustomer, function(data){
+                console.log('got users:', data);
+                users = data;
+            }));
+            promises.push(SiteAnalyticsService.getSessions(date.startDate, date.endDate, account, isAdmin, isCustomer, function(data){
+                console.log('got sessions:', data);
+                sessions = data;
+            }));
+            promises.push(SiteAnalyticsService.getDailyActiveUsers(date.startDate, date.endDate, account, isAdmin, isCustomer, function(data){
+                console.log('got dau:', data);
+                dau = data;
+            }));
+            $q.all(promises).then(function(results){
+                fn(null, pageviews, users, sessions, dau);
+            });
+        };
+
+        this.getPageAnalyticsChartData = function(date, account, isAdmin, isCustomer, fn) {
+            SiteAnalyticsService.getPageAnalytics(date.startDate, date.endDate, account, isAdmin, isCustomer, function(data){
+                fn(data);
+            });
+        };
+
+        this.getVisitorLocationsChartData = function(date, account, isAdmin, isCustomer, fn) {
+            var promises = [];
+            var visitorLocations, visitorLocationsByCountry;
+            promises.push(SiteAnalyticsService.getVisitorLocations(date.startDate, date.endDate, account, isAdmin, isCustomer, function(data){
+                visitorLocations = data;
+            }));
+            promises.push(SiteAnalyticsService.getVisitorLocationsByCountry(date.startDate, date.endDate, account, isAdmin, isCustomer, function(data){
+                visitorLocationsByCountry = data;
+            }));
+            $q.all(promises).then(function(results){
+                fn(null, visitorLocations, visitorLocationsByCountry);
+            });
+        };
+
+        this.getContentInteractionAndTrafficeSourcesChartData = function(date, account, isAdmin, isCustomer, fn) {
+            var promises = [];
+            var sessionLength, trafficSources;
+            promises.push(SiteAnalyticsService.getSessionLength(date.startDate, date.endDate, account, isAdmin, isCustomer, function(data){
+                sessionLength = data;
+            }));
+            promises.push(SiteAnalyticsService.getTrafficSources(date.startDate, date.endDate, account, isAdmin, isCustomer, function(data){
+                trafficSources = data;
+            }));
+            $q.all(promises).then(function(results){
+                fn(null, sessionLength, trafficSources);
+            });
+        };
+
+        this.getDeviceNewReturningChartData = function(date, account, isAdmin, isCustomer, fn) {
+            var promises = [];
+            var visitorDevices, newVsReturning;
+            promises.push(SiteAnalyticsService.getVisitorDevices(date.startDate, date.endDate, account, isAdmin, isCustomer, function(data){
+                visitorDevices = data;
+            }));
+            promises.push(SiteAnalyticsService.getNewVsReturning(date.startDate, date.endDate, account, isAdmin, isCustomer, function(data){
+                newVsReturning = data;
+            }));
+            $q.all(promises).then(function(results){
+                fn(null, visitorDevices, newVsReturning);
+            });
+        };
+
+        this.getUserAgentsOSRevenueEmailsChartData = function(date, account, isAdmin, isCustomer, fn) {
+            var promises = [];
+            var userAgents, os, revenue, emails;
+            promises.push(SiteAnalyticsService.getUserAgents(date.startDate, date.endDate, account, isAdmin, isCustomer, function(data){
+                userAgents = data;
+            }));
+            promises.push(SiteAnalyticsService.getOS(date.startDate, date.endDate, account, isAdmin, isCustomer, function(data){
+                os = data;
+            }));
+            promises.push(SiteAnalyticsService.getRevenue(date.startDate, date.endDate, account, isAdmin, isCustomer, function(data){
+                revenue = data;
+            }));
+            promises.push(SiteAnalyticsService.getEmails(date.startDate, date.endDate, account, isAdmin, isCustomer, function(data){
+                emails = data;
+            }));
+            $q.all(promises).then(function(results){
+                fn(null, userAgents, os, revenue, emails);
+            });
+        };
+
         //charts
 
         this.pageDepth = function () {
@@ -583,6 +675,7 @@
 
             return pageDepthConfig;
         };
+
         this.analyticsOverview = function (readyPageviewsData, sessionsData, readyVisitorsData, dailyActiveUsersData, isVisibleLegend, setLegendVisibility, fn) {
             var _widgetName = "analytics";
             var analyticsOverviewConfig = {

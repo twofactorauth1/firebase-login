@@ -24,6 +24,21 @@
         saService.runSiteAnlyticsTraffic = runSiteAnlyticsTraffic;
         saService.getFrontrunnerSitesPageviews = getFrontrunnerSitesPageviews;
         saService.runIndividualReports = runIndividualReports;
+        saService.getPageviews = getPageviews;
+        saService.getUsers = getUsers;
+        saService.getSessions = getSessions;
+        saService.getDailyActiveUsers = getDailyActiveUsers;
+        saService.getPageAnalytics = getPageAnalytics;
+        saService.getVisitorLocations = getVisitorLocations;
+        saService.getVisitorLocationsByCountry = getVisitorLocationsByCountry;
+        saService.getVisitorDevices = getVisitorDevices;
+        saService.getSessionLength = getSessionLength;
+        saService.getTrafficSources = getTrafficSources;
+        saService.getNewVsReturning = getNewVsReturning;
+        saService.getUserAgents = getUserAgents;
+        saService.getRevenue = getRevenue;
+        saService.getOS = getOS;
+        saService.getEmails = getEmails;
         saService.loading = {value:0};
 
 
@@ -42,6 +57,84 @@
                 console.info('service | loading -1 : ' + saService.loading.value);
             });
             return fn;
+        }
+
+        function getPageviews(startDate, endDate, accountId, isAdmin, isCustomer, fn) {
+            return runSingleReport(startDate, endDate, accountId, isAdmin, isCustomer, 'pageviews', fn);
+        }
+
+        function getUsers(startDate, endDate, accountId, isAdmin, isCustomer, fn) {
+            return runSingleReport(startDate, endDate, accountId, isAdmin, isCustomer, 'users', fn);
+        }
+
+        function getSessions(startDate, endDate, accountId, isAdmin, isCustomer, fn) {
+            return runSingleReport(startDate, endDate, accountId, isAdmin, isCustomer, 'sessions', fn);
+        }
+
+        function getDailyActiveUsers(startDate, endDate, accountId, isAdmin, isCustomer, fn) {
+            return runSingleReport(startDate, endDate, accountId, isAdmin, isCustomer, 'dau', fn);
+        }
+
+        function getPageAnalytics(startDate, endDate, accountId, isAdmin, isCustomer, fn) {
+            return runSingleReport(startDate, endDate, accountId, isAdmin, isCustomer, 'pageAnalytics', fn);
+        }
+
+        function getVisitorLocations(startDate, endDate, accountId, isAdmin, isCustomer, fn) {
+            return runSingleReport(startDate, endDate, accountId, isAdmin, isCustomer, 'visitorLocations', fn);
+        }
+
+        function getVisitorLocationsByCountry(startDate, endDate, accountId, isAdmin, isCustomer, fn) {
+            return runSingleReport(startDate, endDate, accountId, isAdmin, isCustomer, 'visitorLocationsByCountry', fn);
+        }
+
+        function getVisitorDevices(startDate, endDate, accountId, isAdmin, isCustomer, fn) {
+            return runSingleReport(startDate, endDate, accountId, isAdmin, isCustomer, 'visitorDevices', fn);
+        }
+
+        function getSessionLength(startDate, endDate, accountId, isAdmin, isCustomer, fn) {
+            return runSingleReport(startDate, endDate, accountId, isAdmin, isCustomer, 'sessionLength', fn);
+        }
+
+        function getTrafficSources(startDate, endDate, accountId, isAdmin, isCustomer, fn) {
+            return runSingleReport(startDate, endDate, accountId, isAdmin, isCustomer, 'trafficSources', fn);
+        }
+
+        function getNewVsReturning(startDate, endDate, accountId, isAdmin, isCustomer, fn) {
+            return runSingleReport(startDate, endDate, accountId, isAdmin, isCustomer, 'newVsReturning', fn);
+        }
+        function getUserAgents(startDate, endDate, accountId, isAdmin, isCustomer, fn) {
+            return runSingleReport(startDate, endDate, accountId, isAdmin, isCustomer, 'userAgents', fn);
+        }
+        function getRevenue(startDate, endDate, accountId, isAdmin, isCustomer, fn) {
+            return runSingleReport(startDate, endDate, accountId, isAdmin, isCustomer, 'revenue', fn);
+        }
+        function getOS(startDate, endDate, accountId, isAdmin, isCustomer, fn) {
+            return runSingleReport(startDate, endDate, accountId, isAdmin, isCustomer, 'os', fn);
+        }
+        function getEmails(startDate, endDate, accountId, isAdmin, isCustomer, fn) {
+            return runSingleReport(startDate, endDate, accountId, isAdmin, isCustomer, 'emails', fn);
+        }
+
+        function runSingleReport(startDate, endDate, accountId, isAdmin, isCustomer, reportName, fn) {
+            function error(error) {
+                console.error('SiteAnalyticsService ' + reportName + ' error:', JSON.stringify(error));
+            }
+            function success(data) {
+                saService.reports = saService.reports || {};
+                saService.reports[reportName] = data;
+                fn(data);
+            }
+            var startDateString = moment.utc(startDate).format('YYYY-MM-DD[T]HH:mm:ss');
+            var endDateString = moment.utc(endDate).format('YYYY-MM-DD[T]HH:mm:ss');
+            var path = '/' + reportName + '?start=' + startDateString + '&end=' + endDateString;
+            if(isAdmin) {
+                path = adminAnalyticsAPIUrl + path;
+            } else if(isCustomer){
+                path = customerAnalyticsAPIUrl + path + '&accountId=' + accountId;
+            } else {
+                path = baseAnalyticsAPIUrl + path;
+            }
+            return saRequest($http.get(path).success(success).error(error));
         }
 
         function runIndividualReports(startDate, endDate, accountId, isAdmin, isCustomer, fn) {

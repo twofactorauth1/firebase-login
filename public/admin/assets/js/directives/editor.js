@@ -16,13 +16,16 @@ app.directive("elem", function($rootScope, $timeout, $compile, SimpleSiteBuilder
                     '<div ' +
                         'data-edit ' +
                         'class="edit-wrap ssb-edit-wrap ssb-element"> ' +
-                        '<span class="editable-title">{{title | formatText}}</span>' +
+                        '<span class="editable-title">{{component}}</span>' +
                         '<div ' +
                             'ng-class="{{vm.elementClass()}}" ' +
                             'ng-attr-style="{{vm.elementStyle()}}" ' +
-                            'class="editable element-wrap ssb-text-settings {{className}}" ' +
-                            'is-edit="true" ' +
-                            'ng-bind-html="ngModel | unsafe">' +
+                            'class="ssb-text-settings {{className}}" ' +
+                            'is-edit="true" >' +
+                                '<div ng-if="component.isOverlayActive"' +
+                                'class="bg slider-overlay-bg" ng-style ="{\'background\': component.overlayBackground, opacity: component.overlayOpacity === 0 ?  component.overlayOpacity : component.overlayOpacity/100  || 0 , \'height\': component.isOverlayActive ? component.gridHeight+\'px\':\'\' }"> ' +
+                                '</div>'+
+                                '<div class="editable element-wrap" ng-bind-html="ngModel | unsafe"></div>'+
                         '</div>' +
                     '</div>';
 
@@ -45,8 +48,7 @@ app.directive("elem", function($rootScope, $timeout, $compile, SimpleSiteBuilder
                     '<div ' +
                         'class="editable {{className}}" ' +
                         'ng-bind-html="ngModel | unsafe">' +
-                    '</div>';            
-
+                    '</div>';
         var helpTopics = $rootScope.$state && $rootScope.$state.current && $rootScope.$state.current.name === "app.support.singletopic";                    
 
         if(helpTopics){
@@ -74,7 +76,7 @@ app.directive("elem", function($rootScope, $timeout, $compile, SimpleSiteBuilder
     },
     link: function(scope, element, attrs, ngModel) {
       
-    
+        scope.component= scope.$parent.component;
         scope.update = function(e) {
             $timeout(function() {
                 scope.$apply(function() {
