@@ -342,13 +342,14 @@ _.extend(api.prototype, baseApi.prototype, {
         var limit = parseInt(req.query['limit'] || 0);
         var sortBy = req.query.sortBy || "created.date";
         var sortDir = parseInt(req.query.sortDir) || -1;
+        var search = req.query.term;
         self.log.debug('>> listContacts');
 
         self.checkPermissionForAccount(req, self.sc.privs.VIEW_CONTACT, accountId, function(err, isAllowed) {
             if (isAllowed !== true) {
                 return self.send403(res);
             } else {
-                contactDao.listContacts(accountId, skip, limit, sortBy, sortDir, function (err, value) {
+                contactDao.listContacts(accountId, skip, limit, sortBy, sortDir, search, function (err, value) {
                     self.log.debug('<< listContacts');
                     self.sendResultOrError(res, err, value, "Error listing Contacts");
                     self = null;

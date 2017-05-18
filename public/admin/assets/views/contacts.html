@@ -23,7 +23,7 @@
                                         <div class="form-group">
                                             <div class="col-xs-6 col-md-6 padding-left-0 padding-right-30">
                                                 <span class="input-icon">
-                                                    <input type="text" st-search placeholder="Search by name, email, phone..." id="form-field-14" class="form-control">
+                                                    <input type="text" ng-model="pagingParams.globalSearch" ng-model-options="{ debounce: 800 }" placeholder="Search by name, email, phone..." id="form-field-14" class="form-control">
                                                     <i class="ti-search"></i>
                                                 </span>
                                             </div>

@@ -18,6 +18,9 @@
       if(pagingParams.sortBy){
           _qString += "&sortBy=" + pagingParams.sortBy + "&sortDir=" + pagingParams.sortDir;
       }
+      if(pagingParams.globalSearch){
+          _qString += "&term=" + pagingParams.globalSearch;
+      }
       var apiUrl = baseUrl + ['contact'].join('/') + _qString;
       return $http.get(apiUrl)
         .success(function (data) {

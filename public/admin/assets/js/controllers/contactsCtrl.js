@@ -825,6 +825,14 @@
         $scope.getContacts();
     }
 
+    /********** GLOBAL SEARCH RELATED **********/
+
+    $scope.$watch('pagingParams.globalSearch', function (term) {
+        if(angular.isDefined(term)){
+            loadDefaults();
+            $scope.getContacts();
+        }
+    }, true);
 
 
   }]);
