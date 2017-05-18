@@ -15,6 +15,9 @@
 
     this.getContacts = function (pagingParams, fn) {      
       var _qString = "?limit="+ pagingParams.limit + "&skip="+ pagingParams.skip;
+      if(pagingParams.sortBy){
+          _qString += "&sortBy=" + pagingParams.sortBy + "&sortDir=" + pagingParams.sortDir;
+      }
       var apiUrl = baseUrl + ['contact'].join('/') + _qString;
       return $http.get(apiUrl)
         .success(function (data) {

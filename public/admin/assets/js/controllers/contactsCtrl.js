@@ -22,12 +22,20 @@
 
     $scope.numberOfPages = numberOfPages;
     $scope.selectPage = selectPage;
+    $scope.sortContacts = sortContacts;
     $scope.pagingParams = {
       limit: pagingConstant.numberOfRowsPerPage,
       skip: 0,
       curPage: 1,
       showPages: pagingConstant.displayedPages
     }
+
+    $scope.sortData = {
+        column: '',
+        details: {}
+    }
+
+
 
     $scope.filterContactPhotos = function (contacts) {
       _.each(contacts, function (contact) {
@@ -782,6 +790,41 @@
             $scope.getContacts();
         }
     }
+    
+
+    function loadDefaults(){
+        $scope.pagingParams.curPage = 1;
+        $scope.pagingParams.skip = 0;
+        $scope.pageLoading = true;
+    }
+
+    /********** SORTING RELATED **********/
+
+    function sortContacts(col, name){
+        if($scope.sortData.column !== name){
+            $scope.sortData.details = {};
+        }
+        $scope.sortData.column = name;
+        if($scope.sortData.details[name]){
+            if($scope.sortData.details[name].direction === 1){
+                $scope.sortData.details[name].direction = -1;
+            }
+            else{
+                $scope.sortData.details[name].direction = 1;
+            }
+        }
+        else{
+            $scope.sortData.details[name] = {
+                direction: 1,
+                sortColum: col
+            }
+        }
+        $scope.pagingParams.sortBy = col;
+        $scope.pagingParams.sortDir = $scope.sortData.details[name].direction;
+        loadDefaults();
+        $scope.getContacts();
+    }
+
 
 
   }]);

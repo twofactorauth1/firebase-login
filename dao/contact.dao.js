@@ -107,12 +107,12 @@ var dao = {
     },
 
 
-    listContacts: function (accountId, skip, limit, fn) {        
+    listContacts: function (accountId, skip, limit, sortBy, sortDir, fn) {        
         var self = this;
         self.log.debug('>> listContacts');
         var query = {accountId: accountId };
         
-        self.findWithFieldsLimitOrderAndTotal(query, skip, limit, 'created.date', null, $$.m.Contact, -1, fn);
+        self.findWithFieldsLimitOrderAndTotal(query, skip, limit, sortBy, null, $$.m.Contact, sortDir, fn);
     },
 
 

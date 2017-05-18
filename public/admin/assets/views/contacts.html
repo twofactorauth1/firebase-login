@@ -11,7 +11,7 @@
             </div>
         </div>
     </section>
-    <div st-table="displayedContacts" st-sort-table st-safe-src="contacts">
+    <div st-table="displayedContacts" st-safe-src="contacts">
         <div class="container-fluid container-fullw bg-white padding-top-0 padding-bottom-0">
             <div class="row">
                 <div class="col-sm-12">
@@ -183,16 +183,16 @@
                         <thead ng-class="{'bg-white': tableView == 'grid'}">
                             <tr>
                                 <th ng-class="{'column-width': tableView == 'grid'}" ng-click='selectAllClickFn($event)' ng-show='displayedContacts.length'><i class="fa fa-2x" ng-class='{"fa-check-circle": selectAllChecked, "fa-circle-o": !selectAllChecked}'></i></th>
-                                <th class="hidden-xs" st-sort="_id" ng-show="column.name" ng-class="{'column-width': tableView == 'grid'}">ID</th>
+                                <th class="hidden-xs sort" ng-class="{'column-width': tableView == 'grid', 'st-sort-ascent': sortData.details['_id'].direction === 1, 'st-sort-descent': sortData.details['_id'].direction === -1}" ng-click="sortContacts('_id', '_id')">ID</th>
                                 <th ng-show="column.name" style="margin-top: 1px;" ng-class="{'column-width': tableView == 'grid'}">Photo</th>
-                                <th st-sort="first" ng-show="column.name" ng-class="{'column-width': tableView == 'grid'}">First</th>
-                                <th st-sort="last" ng-show="column.name" ng-class="{'column-width': tableView == 'grid'}">Last</th>
-                                <th st-sort="getters.tags" ng-show="column.tags" ng-class="{'column-width': tableView == 'grid', 'tag-width': tableView == 'list'}">Tags</th>
-                                <th st-sort="bestEmail" ng-show="column.email" class="hidden-xs" ng-class="{'column-width': tableView == 'grid'}">Email</th>
-                                <th class="hidden-xs" st-sort="getters.address" ng-show="column.address" ng-class="{'column-width': tableView == 'grid'}">Address</th>
-                                <th class="hidden-xs center" st-sort="getters.phone" ng-show="column.phone" ng-class="{'column-width': tableView == 'grid'}">Phone</th>
-                                <th class="hidden-xs" st-sort="getters.unsubscribed" ng-show="column.unsubscribed" ng-class="{'column-width': tableView == 'grid'}">Unsub</th>
-                                <th class="hidden-xs" st-sort-default="{{order}}" st-sort="getters.created" ng-show="column.created" ng-class="{'column-width': tableView == 'grid'}">Created</th>
+                                <th class="sort" ng-show="column.name" ng-class="{'column-width': tableView == 'grid', 'st-sort-ascent': sortData.details['first'].direction === 1, 'st-sort-descent': sortData.details['first'].direction === -1}" ng-click="sortContacts('first', 'first')">First</th>
+                                <th class="sort" ng-class="{'column-width': tableView == 'grid', 'st-sort-ascent': sortData.details['last'].direction === 1, 'st-sort-descent': sortData.details['last'].direction === -1}" ng-click="sortContacts('last', 'last')">Last</th>
+                                <th ng-show="column.tags" ng-class="{'column-width': tableView == 'grid', 'tag-width': tableView == 'list'}">Tags</th>
+                                <th ng-show="column.email" class="hidden-xs sort" ng-class="{'column-width': tableView == 'grid', 'st-sort-ascent': sortData.details['email'].direction === 1, 'st-sort-descent': sortData.details['email'].direction === -1}" ng-click="sortContacts('details.emails.email', 'email')">Email</th>
+                                <th class="hidden-xs" ng-show="column.address" ng-class="{'column-width': tableView == 'grid'}">Address</th>
+                                <th class="hidden-xs center" ng-show="column.phone" ng-class="{'column-width': tableView == 'grid'}">Phone</th>
+                                <th class="hidden-xs sort" ng-show="column.unsubscribed" ng-class="{'column-width': tableView == 'grid', 'st-sort-ascent': sortData.details['unsubscribed'].direction === 1, 'st-sort-descent': sortData.details['unsubscribed'].direction === -1}" ng-click="sortContacts('unsubscribed', 'unsubscribed')">Unsub</th>
+                                <th class="hidden-xs sort" ng-show="column.created" ng-class="{'column-width': tableView == 'grid', 'st-sort-ascent': sortData.details['created'].direction === 1, 'st-sort-descent': sortData.details['created'].direction === -1}" ng-click="sortContacts('created.date', 'created')">Created</th>
                                 <!-- <th class="hidden-xs" st-sort="getters.modified" ng-show="column.modified">Modified</th> -->
                             </tr>
                             <tr ng-if="showFilter" class="filter-row-header">

@@ -67,6 +67,23 @@
             }
         }
     }
+
+    .table > thead > tr > th.sort {
+        cursor: pointer;
+        &:before{
+            font-family: FontAwesome;
+            content: "\f0dc";
+            display: inline-block;
+            padding-right: 3px;
+            vertical-align: middle;
+        }
+        &.st-sort-descent:before {
+            content: "\f0dd" !important;
+        }
+        &.st-sort-ascent:before {
+            content: "\f0de" !important;
+        }
+    }
     
 }
 
