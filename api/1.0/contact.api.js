@@ -47,6 +47,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url('search/email/:email'), this.isAuthAndSubscribedApi.bind(this), this.search.bind(this));
         app.get(this.url('search/name/:name'), this.isAuthAndSubscribedApi.bind(this), this.search.bind(this));
         app.get(this.url('search/:term'), this.isAuthAndSubscribedApi.bind(this), this.search.bind(this));
+        app.get(this.url('tags'), this.isAuthAndSubscribedApi.bind(this), this.getContactTags.bind(this));
         app.get(this.url(':id'), this.isAuthAndSubscribedApi.bind(this), this.getContactById.bind(this));
         /*
          * Temp remove security for create contact.  Eventually, we will need to move this to a public API.
@@ -403,6 +404,23 @@ _.extend(api.prototype, baseApi.prototype, {
                     self.log.debug('<< contactsFilter');
                     self.sendResultOrError(res, err, value, "Error filtering Contacts");
                     self = null;
+                });
+            }
+        });
+    },
+
+    getContactTags: function(req, resp) {
+        var self = this;
+        var accountId = parseInt(self.accountId(req));
+        var userId = self.userId(req);
+        self.log.debug(accountId, userId, '>> getContactTags');
+        self.checkPermissionForAccount(req, self.sc.privs.VIEW_CONTACT, accountId, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(res);
+            } else {
+                contactDao.getContactTags(accountId, userId, function(err, tagAry){
+                    self.log.debug('<< getContactTags');
+                    self.sendResultOrError(resp, err, tagAry, 'Error getting contact tags');
                 });
             }
         });

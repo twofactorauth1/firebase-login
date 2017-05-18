@@ -1061,6 +1061,20 @@ var dao = {
         this.findOne({'accountId': accountId, "_id": contactId}, fn);
     },
 
+    getContactTags: function(accountId, userId, fn) {
+        var self = this;
+        self.log.debug(accountId, userId, '>> getContactTags');
+        self.distinct('tags', {accountId:accountId}, $$.m.Contact, function(err, tagAry){
+            if(err) {
+                self.log.error(accountId, userId, 'Error getting distinct tags:', err);
+                fn(err);
+            } else {
+                self.log.debug(accountId, userId, '<< getContactTags');
+                fn(null, tagAry);
+            }
+        });
+    }
+
 
 };
 
