@@ -126,7 +126,7 @@ var insightsManager = {
                         return fn(err);
                     } else {
                         self.log.debug(accountId, userId, '<< getActiveBroadcastMessagesWithUser');
-                        
+
                         async.each(list, function (message, cb) {
                             if(message.get("modified") && message.get("modified").by){
                                 userDao.getById(message.get("modified").by, function (err, user) {
@@ -149,7 +149,7 @@ var insightsManager = {
                             else{
                                 cb();
                             }
-                            
+
                         }, function (err) {
                             if (err) {
                                 log.error(accountId, userId, 'Error finding active message users: ' + err);
@@ -510,7 +510,7 @@ var insightsManager = {
                     siteUrl = account.get('subdomain') + suffix;
                     vars.push({name:'ORGLOGO', content:'https://s3.amazonaws.com/indigenous-digital-assets/account_1301/rvlvr_logo_350.png'});
                 } else {
-                    vars.push({name:'ORGLOGO', content:'https://s3.amazonaws.com/indigenous-digital-assets/account_6/Logo_Blog_Template_1455919441097.jpg'});
+                    vars.push({name:'ORGLOGO', content:'https://s3.amazonaws.com/indigenous-digital-assets/account_6/Indigenous-Logo_EmailSafe_1495057493172.png'});
                 }
                 console.log(siteUrl);
                 app.render('insights/footer', {siteUrl:siteUrl}, function(err, jadeHtml){
