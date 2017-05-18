@@ -1095,10 +1095,18 @@ module.exports = {
                 var previousMonth = [];
                 _.each(totalResults, function(result){
                     var resultEnd = moment(result.timeframe.start, "YYYY-MM-DD HH:mm");
-                    if(resultEnd.isBefore(start)) {
-                        previousMonth.push(result);
+                    if(granularity === 'hours') {
+                        if(resultEnd.isAfter(start) || resultEnd.isSame(start, 'hour')) {
+                            currentMonth.push(result);
+                        } else {
+                            previousMonth.push(result);
+                        }
                     } else {
-                        currentMonth.push(result);
+                        if(resultEnd.isAfter(start) || resultEnd.isSame(start, 'day')) {
+                            currentMonth.push(result);
+                        } else {
+                            previousMonth.push(result);
+                        }
                     }
                 });
                 cb(null, currentMonth, previousMonth);
@@ -1192,10 +1200,18 @@ module.exports = {
                 var previousMonth = [];
                 _.each(totalResults, function(result){
                     var resultEnd = moment(result.timeframe.start, "YYYY-MM-DD HH:mm");
-                    if(resultEnd.isBefore(start)) {
-                        previousMonth.push(result);
+                    if(granularity === 'hours') {
+                        if(resultEnd.isAfter(start) || resultEnd.isSame(start, 'hour')) {
+                            currentMonth.push(result);
+                        } else {
+                            previousMonth.push(result);
+                        }
                     } else {
-                        currentMonth.push(result);
+                        if(resultEnd.isAfter(start) || resultEnd.isSame(start, 'day')) {
+                            currentMonth.push(result);
+                        } else {
+                            previousMonth.push(result);
+                        }
                     }
                 });
                 cb(null, currentMonth, previousMonth);
@@ -1383,10 +1399,18 @@ module.exports = {
                 var previousMonth = [];
                 _.each(totalResults, function(result) {
                     var resultEnd = moment(result.timeframe.start, "YYYY-MM-DD HH:mm");
-                    if(resultEnd.isBefore(start)) {
-                        previousMonth.push(result);
+                    if(granularity === 'hours') {
+                        if(resultEnd.isAfter(start) || resultEnd.isSame(start, 'hour')) {
+                            currentMonth.push(result);
+                        } else {
+                            previousMonth.push(result);
+                        }
                     } else {
-                        currentMonth.push(result);
+                        if(resultEnd.isAfter(start) || resultEnd.isSame(start, 'day')) {
+                            currentMonth.push(result);
+                        } else {
+                            previousMonth.push(result);
+                        }
                     }
                 });
                 cb(null, currentMonth, previousMonth);

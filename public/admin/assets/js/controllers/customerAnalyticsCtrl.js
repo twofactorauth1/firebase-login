@@ -60,6 +60,17 @@
                 $scope.locationData = null;
                 $scope.countryLocationData = null;
                 $scope.pagedformattedTopPages = null;
+                /*
+                 * Reset charts
+                 */
+                $scope.trafficSourceData = null;
+                $scope.userAgentData = null;
+                $scope.userAgentTableData = null;
+                $scope.osData = null;
+                $scope.revenueConfig = {};
+                $scope.emailsOverviewConfig = {};
+                $scope.newVsReturning = null;
+                $scope.device_data_loaded = false;
 
                 $scope.runAnalyticsReports($scope.analyticsAccount);
             }
