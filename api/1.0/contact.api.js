@@ -346,14 +346,13 @@ _.extend(api.prototype, baseApi.prototype, {
             if (isAllowed !== true) {
                 return self.send403(res);
             } else {
-                contactDao.getContactsAll(accountId, skip, limit, function (err, value) {
+                contactDao.listContacts(accountId, skip, limit, function (err, value) {
                     self.log.debug('<< listContacts');
                     self.sendResultOrError(res, err, value, "Error listing Contacts");
                     self = null;
                 });
             }
         });
-
     },
 
     getContactsByLetter: function (req, res) {

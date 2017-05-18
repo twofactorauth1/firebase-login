@@ -13,8 +13,9 @@
       return $cacheFactory('ContactService');
     };
 
-    this.getContacts = function (fn) {
-      var apiUrl = baseUrl + ['contact'].join('/');
+    this.getContacts = function (pagingParams, fn) {      
+      var _qString = "?limit="+ pagingParams.limit + "&skip="+ pagingParams.skip;
+      var apiUrl = baseUrl + ['contact'].join('/') + _qString;
       return $http.get(apiUrl)
         .success(function (data) {
           fn(data);

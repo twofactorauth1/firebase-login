@@ -107,6 +107,15 @@ var dao = {
     },
 
 
+    listContacts: function (accountId, skip, limit, fn) {        
+        var self = this;
+        self.log.debug('>> listContacts');
+        var query = {accountId: accountId };
+        
+        self.findWithFieldsLimitOrderAndTotal(query, skip, limit, 'created.date', null, $$.m.Contact, -1, fn);
+    },
+
+
     getContactsBySocialIds: function (accountId, socialType, socialIds, fn) {
         var query = { accountId: accountId, "details.type": socialType, "details.socialId": { $in: socialIds} };
         this.findMany(query, fn);

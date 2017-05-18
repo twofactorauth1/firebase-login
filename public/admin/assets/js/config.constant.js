@@ -586,7 +586,12 @@ app.constant('userConstant', {
 app.constant('mediaManagerConstant', {
   numberOfRowsPerPage: 6,
   displayedPages: 7
-})
+});
+
+app.constant('pagingConstant', {
+  numberOfRowsPerPage: 50,
+  displayedPages: 11
+});
 
 app.constant('JS_REQUIRES', {
   //*** Scripts

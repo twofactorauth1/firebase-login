@@ -1,7 +1,7 @@
 'use strict';
 /*global app, window*/
 (function (angular) {
-  app.controller('ContactsCtrl', ["$scope", "$state", "toaster", "$modal", "$window", "ContactService", "SocialConfigService", "userConstant", "formValidations", "CommonService", '$timeout', 'SweetAlert', "$location", "$q", function ($scope, $state, toaster, $modal, $window, ContactService, SocialConfigService, userConstant, formValidations, CommonService, $timeout, SweetAlert, $location, $q) {
+  app.controller('ContactsCtrl', ["$scope", "$state", "toaster", "$modal", "$window", "ContactService", "SocialConfigService", "userConstant", "formValidations", "CommonService", '$timeout', 'SweetAlert', "$location", "$q", 'pagingConstant', function ($scope, $state, toaster, $modal, $window, ContactService, SocialConfigService, userConstant, formValidations, CommonService, $timeout, SweetAlert, $location, $q, pagingConstant) {
 
     $scope.tableView = 'list';
     $scope.itemPerPage = 100;
@@ -15,8 +15,19 @@
     }
     $scope.formValidations = formValidations;
     $scope.default_image_url = "/admin/assets/images/default-user.png";
+    $scope.pagingConstant = pagingConstant;
 
     $scope.bulkActionChoices = [{data: 'tags', label: 'Tags'}, {data: 'delete', label: 'Delete'}];
+
+
+    $scope.numberOfPages = numberOfPages;
+    $scope.selectPage = selectPage;
+    $scope.pagingParams = {
+      limit: pagingConstant.numberOfRowsPerPage,
+      skip: 0,
+      curPage: 1,
+      showPages: pagingConstant.displayedPages
+    }
 
     $scope.filterContactPhotos = function (contacts) {
       _.each(contacts, function (contact) {
@@ -44,7 +55,9 @@
      */
 
     $scope.getContacts = function () {
-      ContactService.getContacts(function (contacts) {
+      ContactService.getContacts($scope.pagingParams, function (response) {
+        var contacts = response.results;
+        $scope.contactsCount = response.total;
         _.each(contacts, function (contact) {
           contact.bestEmail = $scope.checkBestEmail(contact);
           contact.hasFacebookId = $scope.checkFacebookId(contact);
@@ -69,18 +82,19 @@
             contact.tempTags = _.uniq(tempTags);
         });
         $scope.contacts = contacts;
+        drawPages();
+        $scope.pageLoading = false;
         // In case contact is created from simple form component.
         if($scope.contacts.length > 0){
           $scope.minRequirements = true;
         }
-        if ($state.current.sort) {
-          $scope.setSortOrder($state.current.sort);
-        }
+        // if ($state.current.sort) {
+        //   $scope.setSortOrder($state.current.sort);
+        // }
         $scope.showContacts = true;
         ContactService.getAllContactTags(contacts, function(tags){
           $scope.contactTags = tags;
         });
-
       });
     };
 
@@ -724,5 +738,51 @@
       $scope.clearSelectionFn();
       toaster.pop('success', 'Contact export started.');
     };
+
+    // Paging Related
+
+    function drawPages(){
+      var start = 1;
+      var end;
+      var i;
+      var prevPage = $scope.pagingParams.curPage;
+      var totalItemCount = $scope.assetsCount;
+      var currentPage = $scope.pagingParams.curPage;
+      var numPages = numberOfPages();
+
+      start = Math.max(start, currentPage - Math.abs(Math.floor($scope.pagingParams.showPages / 2)));
+      end = start + $scope.pagingParams.showPages;
+
+      if (end > numPages) {
+        end = numPages + 1;
+        start = Math.max(1, end - $scope.pagingParams.showPages);
+      }
+
+      $scope.pages = [];
+
+
+      for (i = start; i < end; i++) {
+        $scope.pages.push(i);
+      }
+    }
+
+
+    function numberOfPages() {
+        if ($scope.contacts) {
+            return Math.ceil($scope.contactsCount / $scope.pagingParams.limit);
+        }
+        return 0;
+    }
+
+    function selectPage(page){
+        if(page != $scope.pagingParams.curPage){            
+            $scope.pagingParams.curPage = page;
+            $scope.pagingParams.skip = (page - 1) * $scope.pagingParams.limit;
+            $scope.pageLoading = true;
+            $scope.getContacts();
+        }
+    }
+
+
   }]);
 }(angular));
