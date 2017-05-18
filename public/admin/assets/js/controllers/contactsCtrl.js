@@ -63,7 +63,7 @@
      */
 
     $scope.getContacts = function () {
-      ContactService.getContacts($scope.pagingParams, function (response) {
+      ContactService.getContacts($scope.pagingParams, checkIfFieldSearch(), function (response) {
         var contacts = response.results;
         $scope.contactsCount = response.total;
         _.each(contacts, function (contact) {
@@ -322,8 +322,6 @@
     }
     };
     $scope.viewSingle = function (contact) {
-      var tableState = $scope.getSortOrder();
-      $state.current.sort = tableState.sort;
       $location.path('/contacts/' + contact._id);
     };
 
@@ -560,6 +558,14 @@
     $scope.clearFilter = function (event, input, filter) {
       $scope.filterContact[filter] = {};
       $scope.triggerInput(input);
+    };
+
+
+    $scope.clearSearchFilter = function(event, input, filter) {
+      $timeout(function() {
+        $scope.pagingParams.fieldSearch[filter] = null;
+        $('body').click();
+      }, 800);
     };
 
     // $scope.socailType = "";
@@ -834,6 +840,30 @@
         }
     }, true);
 
+
+    $scope.$watch('pagingParams.fieldSearch', function (search) {
+        if(angular.isDefined(search)){
+            loadDefaults();
+            $scope.getContacts();
+        }
+    }, true);
+
+
+    function checkIfFieldSearch(){
+        var isFieldSearch = false;
+        var fieldSearch = $scope.pagingParams.fieldSearch;
+        if(!_.isEmpty(fieldSearch)){
+            for(var i=0; i <= Object.keys(fieldSearch).length - 1; i++){
+                var key = Object.keys(fieldSearch)[i];
+                var value = fieldSearch[key];
+
+                if(value){
+                   isFieldSearch = true;
+                }
+            }
+        }
+        return isFieldSearch;
+    }
 
   }]);
 }(angular));

@@ -13,7 +13,9 @@
       return $cacheFactory('ContactService');
     };
 
-    this.getContacts = function (pagingParams, fn) {      
+    this.getContacts = function (pagingParams, isFieldSearchEnabled, fn) {    
+      var urlParts = ['contact', 'paged', 'list'];  
+      var _method = "GET";
       var _qString = "?limit="+ pagingParams.limit + "&skip="+ pagingParams.skip;
       if(pagingParams.sortBy){
           _qString += "&sortBy=" + pagingParams.sortBy + "&sortDir=" + pagingParams.sortDir;
@@ -21,8 +23,16 @@
       if(pagingParams.globalSearch){
           _qString += "&term=" + pagingParams.globalSearch;
       }
-      var apiUrl = baseUrl + ['contact'].join('/') + _qString;
-      return $http.get(apiUrl)
+      if(isFieldSearchEnabled){
+          _method = "POST";
+          urlParts.push('filter');
+      }
+      var apiUrl = baseUrl + urlParts.join('/') + _qString;
+      return $http({
+          url: apiUrl,
+          method: _method,
+          data: angular.toJson(pagingParams.fieldSearch)
+        })
         .success(function (data) {
           fn(data);
         });

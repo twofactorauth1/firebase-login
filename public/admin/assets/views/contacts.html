@@ -121,7 +121,7 @@
                                     <div class="col-xs-12 padding-0">
                                         <div class="col-xs-7">
                                             <span class="input-icon">
-                                                <input type="text" st-search placeholder="Search by name, email, phone..." id="form-field-14" class="form-control">
+                                                <input type="text" ng-model="pagingParams.globalSearch" ng-model-options="{ debounce: 800 }" placeholder="Search by name, email, phone..." id="form-field-14" class="form-control">
                                                 <i class="ti-search"></i>
                                             </span>
                                         </div>
@@ -200,11 +200,11 @@
 
                                 </th>
                                 <th class="column-width hidden-xs" ng-show="column.name">
-                                    <input st-search="_id" placeholder="ID" class="form-control" type="search" />
+                                    <input ng-model="pagingParams.fieldSearch._id" placeholder="ID" class="form-control" type="search" ng-model-options="{ debounce: 800 }" />
                                 </th>
                                 <th class="column-width" ng-show="column.photo">
-                                    <input st-search="hasPhoto" placeholder="Select Photo" class="form-control hidden" type="search" id="searchPicture" ng-model="filterContact.photo.selected.value" />
-                                    <ui-select ng-model="filterContact.photo.selected" on-select="triggerInput('#searchPicture')" theme="bootstrap">
+                                    <input placeholder="Select Photo" class="form-control hidden" type="search" id="searchPicture" ng-model="filterContact.photo.selected.value" />
+                                    <ui-select class="hidden" ng-model="filterContact.photo.selected" on-select="triggerInput('#searchPicture')" theme="bootstrap">
                                         <ui-select-match placeholder="Select Photo">
                                             <small ng-bind-html="$select.selected.name"></small>
                                             <span class="fa fa-times text-danger" ng-click="clearFilter($event, '#searchPicture', 'photo')"></span>
@@ -216,25 +216,25 @@
                                     </ui-select>
                                 </th>
                                 <th class="column-width" ng-show="column.name">
-                                    <input st-search="first" placeholder="First" class="form-control" type="search" />
+                                    <input ng-model="pagingParams.fieldSearch.first" placeholder="First" class="form-control" type="search" ng-model-options="{ debounce: 800 }"/>
                                 </th>
                                 <th class="column-width" ng-show="column.name">
-                                    <input st-search="last" placeholder="Last" class="form-control" type="search" />
+                                    <input ng-model="pagingParams.fieldSearch.last" placeholder="Last" class="form-control" type="search" ng-model-options="{ debounce: 800 }"/>
                                 </th>
                                 <th class="column-width hidden-xs" ng-show="column.tags">
-                                    <input st-search="tempTags" placeholder="Type" class="form-control hidden" type="search" id="searchType" ng-model="filterContact.type.selected.label" />
-                                    <ui-select ng-model="filterContact.type.selected" on-select="triggerInput('#searchType')" theme="bootstrap">
+                                    
+                                    <ui-select ng-model-options="{ debounce: 800 }" ng-model="pagingParams.fieldSearch.tags" on-select="triggerInput('#searchType')" theme="bootstrap">
                                         <ui-select-match placeholder="Select Type">
                                             <small ng-bind-html="$select.selected.label"></small>
-                                            <span class="fa fa-times text-danger" ng-click="clearFilter($event, '#searchType', 'type')"></span>
+                                            <span class="fa fa-times text-danger" ng-click=" clearSearchFilter($event, '#searchType', 'tags')"></span>
                                         </ui-select-match>
-                                        <ui-select-choices repeat="tag in contactTags |  orderBy:'label' | filter: $select.search">
+                                        <ui-select-choices repeat="tag.data as tag in contactTags |  orderBy:'label' | filter: $select.search">
                                             <small ng-bind-html="tag.label | highlight: $select.search"></small>
                                         </ui-select-choices>
                                     </ui-select>
                                 </th>
                                 <th class="column-width hidden-xs" ng-show="column.email">
-                                    <input st-search="email" placeholder="Email" class="form-control" type="search" />
+                                    <input ng-model="pagingParams.fieldSearch.email" placeholder="Email" class="form-control" type="search" ng-model-options="{ debounce: 800 }"/>
                                 </th>
                                 <!-- Need to add custom filter -->
                                 <th class="column-width hidden-xs" ng-show="column.address">

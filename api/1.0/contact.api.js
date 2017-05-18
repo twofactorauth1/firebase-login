@@ -56,6 +56,8 @@ _.extend(api.prototype, baseApi.prototype, {
         app.put(this.url(''), this.isAuthAndSubscribedApi.bind(this), this.updateContact.bind(this));
         app.delete(this.url(':id'), this.isAuthAndSubscribedApi.bind(this), this.deleteContact.bind(this));
         app.get(this.url(''), this.isAuthAndSubscribedApi.bind(this), this.listContacts.bind(this)); // for all contacts
+        app.get(this.url('paged/list'), this.isAuthAndSubscribedApi.bind(this), this.listPagedContacts.bind(this)); // for paged contacts
+        app.post(this.url('paged/list/filter'), this.isAuthAndSubscribedApi.bind(this), this.filterContacts.bind(this)); // filter contacts
         app.get(this.url('filter/:letter'), this.isAuthAndSubscribedApi.bind(this), this.getContactsByLetter.bind(this)); // for individual letter
 
         app.post(this.url(':id/user'), this.isAuthAndSubscribedApi.bind(this), this.createAccountUserFromContact.bind(this));
@@ -340,18 +342,66 @@ _.extend(api.prototype, baseApi.prototype, {
         var accountId = parseInt(self.accountId(req));
         var skip = parseInt(req.query['skip'] || 0);
         var limit = parseInt(req.query['limit'] || 0);
-        var sortBy = req.query.sortBy || "created.date";
-        var sortDir = parseInt(req.query.sortDir) || -1;
-        var search = req.query.term;
         self.log.debug('>> listContacts');
 
         self.checkPermissionForAccount(req, self.sc.privs.VIEW_CONTACT, accountId, function(err, isAllowed) {
             if (isAllowed !== true) {
                 return self.send403(res);
             } else {
-                contactDao.listContacts(accountId, skip, limit, sortBy, sortDir, search, function (err, value) {
+                contactDao.getContactsAll(accountId, skip, limit, function (err, value) {
                     self.log.debug('<< listContacts');
                     self.sendResultOrError(res, err, value, "Error listing Contacts");
+                    self = null;
+                });
+            }
+        });
+    },
+
+    listPagedContacts: function (req, res) {
+        var self = this;
+        var accountId = parseInt(self.accountId(req));
+        var skip = parseInt(req.query['skip'] || 0);
+        var limit = parseInt(req.query['limit'] || 0);
+        var sortBy = req.query.sortBy || "created.date";
+        var sortDir = parseInt(req.query.sortDir) || -1;
+        var term = req.query.term;
+        self.log.debug('>> listPagedContacts');
+
+        self.checkPermissionForAccount(req, self.sc.privs.VIEW_CONTACT, accountId, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(res);
+            } else {
+                contactDao.listContacts(accountId, skip, limit, sortBy, sortDir, term, null, function (err, value) {
+                    self.log.debug('<< listPagedContacts');
+                    self.sendResultOrError(res, err, value, "Error listing Contacts");
+                    self = null;
+                });
+            }
+        });
+    },
+
+    filterContacts: function(req, res) {
+        var self = this;
+        var accountId = parseInt(self.accountId(req));
+        var userId = self.userId(req);
+        self.log.debug(accountId, userId, '>> contactsFilter');
+        var skip = parseInt(req.query.skip) || 0;
+        var limit = parseInt(req.query.limit) || 0;
+        var sortBy = req.query.sortBy || null;
+        var sortDir = parseInt(req.query.sortDir) || null;
+        var fieldSearch = req.body;
+        var term = req.query.term;
+        /*
+         * Search across the fields
+         */
+
+        self.checkPermissionForAccount(req, self.sc.privs.VIEW_CONTACT, accountId, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(res);
+            } else {
+                contactDao.listContacts(accountId, skip, limit, sortBy, sortDir, term, fieldSearch, function (err, value) {
+                    self.log.debug('<< contactsFilter');
+                    self.sendResultOrError(res, err, value, "Error filtering Contacts");
                     self = null;
                 });
             }

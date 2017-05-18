@@ -107,11 +107,13 @@ var dao = {
     },
 
 
-    listContacts: function (accountId, skip, limit, sortBy, sortDir, term, fn) {        
+    listContacts: function (accountId, skip, limit, sortBy, sortDir, term, fieldSearch, fn) {        
         var self = this;
         self.log.debug('>> listContacts');
+
         var query = {accountId: accountId };
         if(term){
+
             term = term.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');   
             var regex = new RegExp('\.*'+term+'\.*', 'i');
             var orQuery = [
@@ -131,9 +133,26 @@ var dao = {
             ];
             query["$or"] = orQuery;
         }
-
-        
-        
+        if(fieldSearch){
+            var fieldSearchArr = [];
+            for(var i=0; i <= Object.keys(fieldSearch).length - 1; i++){
+                var key = Object.keys(fieldSearch)[i];
+                var value = fieldSearch[key];
+                self.log.debug('value:', value);                
+                var obj = {};
+                value = value.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+                // Filter on email address
+                if(key == 'email'){
+                    key = 'details.emails.email'
+                }
+                obj[key] = new RegExp(value, 'i');
+                fieldSearchArr.push(obj);
+                
+            }
+            if(fieldSearchArr.length){
+                query["$and"] = fieldSearchArr;
+            }
+        }
         self.findWithFieldsLimitOrderAndTotal(query, skip, limit, sortBy, null, $$.m.Contact, sortDir, fn);
     },
 
