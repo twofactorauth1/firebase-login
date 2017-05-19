@@ -10,8 +10,8 @@
             <div class="indi-signup-top-container">
                 <div class="payment-form-header">
                     <div class="header-logo-container">
-                        <img src="/images/indigenous/indi-logo-white.png" height="35" class="pull-left hidden-xs" style="display: block;">
-                        <img src="/images/indigenous/indi-logo-white.png" height="30" class="pull-left pull-down visible-xs small-indi-logo" style="display: block;">
+                        <img src="/images/indigenous/indi-logo-white.png" height="50" class="pull-left hidden-xs" style="display: block;">
+                        <img src="/images/indigenous/indi-logo-white.png" height="50" class="pull-left pull-down visible-xs small-indi-logo" style="display: block;">
                         <p class="pull-right already-account-info" style="line-height: 65px;">Already have an account? <a class="btn signup-btn-v2 btn-account" href="/login">Log In</a></p>
                     </div>
                     <div class="clearfix"></div>
@@ -19,14 +19,14 @@
                 <div class="top-signup account-info-signup">
                     <div class="top-signup-info">
 
-                        <div class="signup-getting-started">
-                            <h2 class="text-bold margin-bottom-5">*Getting Started</h2>
+                        <div class="signup-getting-started center">
+                            <h2 class="text-bold margin-bottom-5">Getting Started</h2>
                             <h3 class="">We just need some information.</h3>
                         </div>
 
                         <div class="clearfix"></div>
 
-                        <div class="features-wrap center">
+                        <div class="features-wrap">
 
                             <div class="col-sm-6 padding-top-15">
                                 <div class="feature-block" ng-click="newAccount.plan = component.productIds['ALLINONE']" ng-class="{ 'selected-plan': newAccount.plan === component.productIds['ALLINONE'] }">
@@ -35,12 +35,12 @@
                                             <div>
                                                 <br>
                                             </div>
-                                            <div class="center">
+                                            <div class="">
                                                 <span class="plan-title">
                                                     <span>Monthly Plan
                                                 </span>
                                             </div>
-                                            <div class="center">
+                                            <div class="">
                                                 <span class="plan-subtitle">
                                                     <strong class=""><span></span></strong>
                                                 </span>
@@ -48,17 +48,20 @@
                                         </div>
                                     </div>
                                     <div class="feature-content">
-                                        <div class="margin-top-10">
-                                            <div class="center">
+                                        <div class="margin-top-0">
+                                            <div class="">
                                                 <span class="plan-subtitle">
                                                     <span>All-in-one Digital Platform</span>
                                                 </span>
                                             </div>
 
-                                            <div class="center">
+                                            <div class="">
                                                 <span class="plan-amount">
-                                                    <span>$100/<span class="plan-duration">month</span></span>
+                                                    <span>$49/<span class="plan-duration">month</span></span>
                                                 </span>
+                                            </div>
+                                            <div class="padding-top-5 hidden">
+                                                <span class="plan-fee">$500 setup fee*&nbsp;</span>
                                             </div>
                                         </div>
                                     </div>
@@ -72,12 +75,12 @@
                                             <div>
                                                 <br>
                                             </div>
-                                            <div class="center">
+                                            <div class="">
                                                 <span class="plan-title">
                                                     <span>Annual Plan
                                                 </span>
                                             </div>
-                                            <div class="center">
+                                            <div class="">
                                                 <span class="plan-subtitle">
                                                     <strong class=""><span></span></strong>
                                                 </span>
@@ -85,22 +88,66 @@
                                         </div>
                                     </div>
                                     <div class="feature-content">
-                                        <div class="margin-top-10">
-                                            <div class="center">
+                                        <div class="margin-top-0">
+                                            <div class="">
                                                 <span class="plan-subtitle">
                                                     <span>All-in-one Digital Platform</span>
                                                 </span>
                                             </div>
 
-                                            <div class="center">
+                                            <div class="">
                                                 <span class="plan-amount">
-                                                    <span>$1000/<span class="plan-duration">year</span></span>
+                                                    <span>$500/<span class="plan-duration">year</span></span>
                                                 </span>
+                                            </div>
+                                            <div class="padding-top-5 hidden">
+                                                <span class="plan-fee">$500 setup fee*&nbsp;</span>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+
+                           <div class="col-sm-12 padding-top-15">
+                                <div class="feature-block" ng-click="newAccount.plan = component.productIds['MANAGEDSERVICES']" ng-class="{ 'selected-plan': newAccount.plan === component.productIds['MANAGEDSERVICES'] }">
+                                    <div class="">
+                                        <div class="" style="">
+                                            <div>
+                                                <br>
+                                            </div>
+                                            <div class="">
+                                                <span class="plan-title">
+                                                    <span>Managed Services
+                                                </span>
+                                            </div>
+                                            <div class="">
+                                                <span class="plan-subtitle">
+                                                    <strong class=""><span></span></strong>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="feature-content">
+                                        <div class="margin-top-0">
+                                            <div class="">
+                                                <span class="plan-subtitle">
+                                                    <span>We Do it For You!</span>
+                                                </span>
+                                            </div>
+
+                                            <div class="">
+                                                <span class="plan-amount">
+                                                    <span>$500/<span class="plan-duration">year</span></span>
+                                                </span>
+                                            </div>
+                                            <div class="padding-top-5 hidden">
+                                                <span class="plan-fee">$500 setup fee*&nbsp;</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
                             <div class="clearfix"></div>
                             <div class="form-group padding-top-20 hidden">
 
@@ -114,7 +161,18 @@
                         <div class="clearfix"></div>
 
                         <div class="indi-signup-securematics-logo-container">
-                            <p class="indi-signup-securematics-fee">A One-Time Fee of $1,500 Will be Charged to Initiate the Design and Build of Your Site. We Will Contact You to Develop a Project Scope After Your Sign-Up.</p>
+                            <p class="indi-signup-securematics-fee">A One-Time Fee of $500 Will be Charged to Initiate the Design and Build of Your Site. We Will Contact You to Develop a Project Scope After Your Sign-Up.</p>
+                        </div>
+
+                        <div class="clearfix"></div>
+                        <div class="form-group padding-top-0 margin-bottom-30">
+                            <label for="signup-plan-checkbox" class="text-normal">
+                                <input id="signup-plan-checkbox" type="checkbox" ng-model="newAccount.addSignupFee">
+                                <span class="sign-up-medium-text margin-left-5">I want the website built, the blog setup and setup of the first email campaign!</span>
+                            </label>
+                            <div style="display:inline-block" class=" padding-top-10">
+                                <span class="sign-up-small-text">* Setup fee includes website build, blog setup and setup of first email campaign!</span>
+                            </div>
                         </div>
                         <div class="clearfix"></div>
                     </div>
