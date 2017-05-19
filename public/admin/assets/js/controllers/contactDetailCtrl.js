@@ -940,7 +940,11 @@
         if (!$scope.contact.tags) {
             $scope.contact.tags = {};
         }
-        ;
+
+        // Load Default tags
+        ContactService.getContactTags(function(tags){
+          $scope.contactTags = tags;
+        });
 
         ContactService.listAllContactTags(function(tags){
             ContactService.fomatContactTags(tags, function(tags){

@@ -110,6 +110,11 @@
         });
       });
     }
+    // Load Default tags
+    ContactService.getContactTags(function(tags){
+      $scope.contactTags = tags;
+    });
+
     loadCustomerTags();
     $scope.getContacts();
     /*
