@@ -1080,6 +1080,20 @@ var dao = {
                 fn(null, tagAry);
             }
         });
+    },
+
+    getContactCount: function(accountId, userId, fn) {
+        var self = this;
+        self.log.debug(accountId, userId, '>> getContactCount');
+        self.findCount({accountId:accountId}, $$.m.Contact, function(err, count){
+            if(err) {
+                self.log.error(accountId, userId, 'Error getting contact count:', err);
+                fn(err);
+            } else {
+                self.log.debug(accountId, userId, '<< getContactCount', count);
+                fn(null, count);
+            }
+        });
     }
 
 
