@@ -15,6 +15,7 @@ $.FroalaEditor.build = _.memoize(function(type) {
             'strikeThrough',
             'fontFamily',
             'fontWeight',
+            'letterSpacingControl',
             'fontSize',
             'color',
             // 'emoticons',
@@ -45,6 +46,7 @@ $.FroalaEditor.build = _.memoize(function(type) {
             'strikeThrough',
             'fontFamily',
             'fontWeight',
+            'letterSpacingControl',
             'fontSize',
             'color',
             'paragraphStyle',
@@ -242,7 +244,7 @@ $.FroalaEditor.build = _.memoize(function(type) {
     }
 
     if (type === 'ssbEmailEditor') {
-        var emailToolbarButtons = _.without(toolbarbuttons, 'fontAwesomeIcons', 'insertVideo');
+        var emailToolbarButtons = _.without(toolbarbuttons, 'fontAwesomeIcons', 'insertVideo','letterSpacingControl');
         _.extend($.FroalaEditor.config, {
             toolbarButtons: emailToolbarButtons,
             toolbarButtonsMD: emailToolbarButtons,
