@@ -1,7 +1,7 @@
 'use strict';
 /*global app, window*/
 (function (angular) {
-  app.controller('ContactsCtrl', ["$scope", "$state", "toaster", "$modal", "$window", "ContactService", "SocialConfigService", "userConstant", "formValidations", "CommonService", '$timeout', 'SweetAlert', "$location", "$q", 'pagingConstant', function ($scope, $state, toaster, $modal, $window, ContactService, SocialConfigService, userConstant, formValidations, CommonService, $timeout, SweetAlert, $location, $q, pagingConstant) {
+  app.controller('ContactsCtrl', ["$scope", "$state", "toaster", "$modal", "$window", "ContactService", "SocialConfigService", "userConstant", "formValidations", "CommonService", '$timeout', 'SweetAlert', "$location", "$q", 'pagingConstant', 'ContactPagingService', function ($scope, $state, toaster, $modal, $window, ContactService, SocialConfigService, userConstant, formValidations, CommonService, $timeout, SweetAlert, $location, $q, pagingConstant, ContactPagingService) {
 
     $scope.tableView = 'list';
     $scope.itemPerPage = 100;
@@ -23,19 +23,23 @@
     $scope.numberOfPages = numberOfPages;
     $scope.selectPage = selectPage;
     $scope.sortContacts = sortContacts;
+
     $scope.pagingParams = {
       limit: pagingConstant.numberOfRowsPerPage,
-      skip: 0,
-      curPage: 1,
-      showPages: pagingConstant.displayedPages
+      skip: ContactPagingService.skip,
+      curPage: ContactPagingService.page,
+      showPages: pagingConstant.displayedPages,
+      globalSearch: ContactPagingService.globalSearch,
+      fieldSearch: ContactPagingService.fieldSearch,
+      showFilter: ContactPagingService.showFilter
     }
+
+    $scope.showFilter = showFilter;
 
     $scope.sortData = {
         column: '',
         details: {}
     }
-
-
 
     $scope.filterContactPhotos = function (contacts) {
       _.each(contacts, function (contact) {
@@ -51,21 +55,17 @@
         }
       });
     };
-
-    $scope.filterContacts = function () {
-      $scope.showFilter = !$scope.showFilter;
-      $scope.filterContactPhotos($scope.contacts);
-    };
-
     /*
      * @getContacts
      * -
      */
 
     $scope.getContacts = function () {
-      ContactService.getContacts($scope.pagingParams, checkIfFieldSearch(), function (response) {
+      ContactService.getPagedContacts($scope.pagingParams, checkIfFieldSearch(), function (response) {
         var contacts = response.results;
         $scope.contactsCount = response.total;
+        ContactPagingService.setTotalCount(response.total);
+        $scope.totalItemCount = ContactPagingService.totalCount;
         _.each(contacts, function (contact) {
           contact.bestEmail = $scope.checkBestEmail(contact);
           contact.hasFacebookId = $scope.checkFacebookId(contact);
@@ -107,7 +107,7 @@
     };
 
     $scope.getContacts();
-
+    
     ContactService.getContactTags(function(tags){
       $scope.contactTags = tags;
     });
@@ -555,7 +555,7 @@
 
     $scope.filterContact = {};
 
-    $scope.clearFilter = function (event, input, filter) {
+    $scope.clearContactFilter = function (event, input, filter) {
       $scope.filterContact[filter] = {};
       $scope.triggerInput(input);
     };
@@ -760,7 +760,7 @@
       var end;
       var i;
       var prevPage = $scope.pagingParams.curPage;
-      var totalItemCount = $scope.assetsCount;
+     
       var currentPage = $scope.pagingParams.curPage;
       var numPages = numberOfPages();
 
@@ -793,8 +793,18 @@
             $scope.pagingParams.curPage = page;
             $scope.pagingParams.skip = (page - 1) * $scope.pagingParams.limit;
             $scope.pageLoading = true;
+            setDefaults();
             $scope.getContacts();
         }
+    }
+
+
+    function setDefaults(){
+      ContactPagingService.skip = angular.copy($scope.pagingParams.skip);
+      ContactPagingService.page = angular.copy($scope.pagingParams.curPage);
+      ContactPagingService.globalSearch = angular.copy($scope.pagingParams.globalSearch);
+      ContactPagingService.fieldSearch = angular.copy($scope.pagingParams.fieldSearch);
+      ContactPagingService.showFilter = angular.copy($scope.pagingParams.showFilter);
     }
     
 
@@ -828,6 +838,7 @@
         $scope.pagingParams.sortBy = col;
         $scope.pagingParams.sortDir = $scope.sortData.details[name].direction;
         loadDefaults();
+        setDefaults();
         $scope.getContacts();
     }
 
@@ -835,18 +846,37 @@
 
     $scope.$watch('pagingParams.globalSearch', function (term) {
         if(angular.isDefined(term)){
-            loadDefaults();
-            $scope.getContacts();
+            if(!angular.equals(term, ContactPagingService.fieldSearch)){
+                loadDefaults();
+                setDefaults();
+                $scope.getContacts();
+            }
         }
     }, true);
 
 
     $scope.$watch('pagingParams.fieldSearch', function (search) {
         if(angular.isDefined(search)){
-            loadDefaults();
-            $scope.getContacts();
+            if(!angular.equals(search, ContactPagingService.fieldSearch)){
+                loadDefaults();
+                setDefaults();
+                $scope.getContacts();
+            }
         }
     }, true);
+
+
+    function showFilter(){
+        $scope.pagingParams.showFilter = !$scope.pagingParams.showFilter;
+        setDefaults();
+        if(!$scope.pagingParams.showFilter)
+            clearFilter();
+    }
+
+
+    function clearFilter(){
+        $scope.pagingParams.fieldSearch = {};
+    }
 
 
     function checkIfFieldSearch(){

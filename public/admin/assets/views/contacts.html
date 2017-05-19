@@ -4,7 +4,7 @@
         <div class="row">
             <div class="col-sm-8">
                 <h1 class="mainTitle" translate="sidebar.nav.contacts.MAIN"></h1>
-                <span ng-if="contacts" class="mainDescription">There are currently {{contacts.length| number : 0}} contacts. ({{displayedContacts.length || 0}} in filtered view)</span>
+                <span ng-if="contacts" class="mainDescription">There are currently {{totalItemCount || 0}} contacts. ({{contactsCount || 0}} in filtered view)</span>
                 <span ng-if="!contacts" class="mainDescription">
                 Loading contacts...
                 </span>
@@ -28,7 +28,7 @@
                                                 </span>
                                             </div>
                                             <div class="col-xs-3 col-md-3 padding-right-0">
-                                                <button type="button" class="btn btn-o btn-info btn-wide btn-scroll btn-scroll-top ti-filter ng-click-active pull-right" ng-click="filterContacts()">
+                                                <button type="button" class="btn btn-o btn-info btn-wide btn-scroll btn-scroll-top ti-filter ng-click-active pull-right" ng-click="showFilter()">
                                                     <span>Filter</span>
                                                 </button>
                                             </div>
@@ -126,7 +126,7 @@
                                             </span>
                                         </div>
                                         <div class="col-xs-5">
-                                            <button type="button" class="btn btn-o btn-info btn-wide btn-scroll btn-scroll-top ti-filter ng-click-active pull-right" ng-click="filterContacts()">
+                                            <button type="button" class="btn btn-o btn-info btn-wide btn-scroll btn-scroll-top ti-filter ng-click-active pull-right" ng-click="showFilter()">
                                                 <span>Filter</span>
                                             </button>
                                         </div>
@@ -195,7 +195,7 @@
                                 <th class="hidden-xs sort" ng-show="column.created" ng-class="{'column-width': tableView == 'grid', 'st-sort-ascent': sortData.details['created'].direction === 1, 'st-sort-descent': sortData.details['created'].direction === -1}" ng-click="sortContacts('created.date', 'created')">Created</th>
                                 <!-- <th class="hidden-xs" st-sort="getters.modified" ng-show="column.modified">Modified</th> -->
                             </tr>
-                            <tr ng-if="showFilter" class="filter-row-header">
+                            <tr ng-if="pagingParams.showFilter" class="filter-row-header">
                                 <th ng-if="displayedContacts.length" class="column-width" ng-show="column.name">
 
                                 </th>

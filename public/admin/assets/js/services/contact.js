@@ -13,7 +13,15 @@
       return $cacheFactory('ContactService');
     };
 
-    this.getContacts = function (pagingParams, isFieldSearchEnabled, fn) {    
+    this.getContacts = function (fn) {    
+      var apiUrl = baseUrl + ['contact'].join('/');
+      $http.get(apiUrl)
+        .success(function (data) {
+          fn(data);
+        })
+    };
+
+    this.getPagedContacts = function (pagingParams, isFieldSearchEnabled, fn) {    
       var urlParts = ['contact', 'paged', 'list'];  
       var _method = "GET";
       var _qString = "?limit="+ pagingParams.limit + "&skip="+ pagingParams.skip;

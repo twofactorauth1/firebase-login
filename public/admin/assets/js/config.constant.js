@@ -713,6 +713,7 @@ app.constant('JS_REQUIRES', {
     'analyticsWidgetStateService': 'assets/js/site-analytics/analytics-widget-state-service.js',
     'broadcastMessagesService': 'assets/js/messages/messages.service.js',
     'utilService': 'assets/js/services/util.js',
+    'contactPagingService': 'assets/js/services/contactPagingService.js',
     //*** Filters
     'htmlToPlaintext': 'assets/js/filters/htmlToPlaintext.js',
     'secTotime': 'assets/js/filters/secTotime.js',
