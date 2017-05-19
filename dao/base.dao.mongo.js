@@ -8,7 +8,8 @@
 var mongoConfig = require('../configs/mongodb.config');
 var mongoskin = require('mongoskin');
 var mongodb = mongoskin.db(mongoConfig.MONGODB_CONNECT, {safe: true});
-//mongodb._emitter.setMaxListeners(100);
+var readonlyMongodb = mongoskin.db(mongoConfig.MONGODB_CONNECT + '&readPreference=secondaryPreferred', {safe: true});
+mongodb._emitter.setMaxListeners(100);
 var async = require('async');
 
 $$.g.mongos = $$.g.monogs || [];
@@ -27,6 +28,10 @@ var mongodao = {
                 }
             }
         }
+    },
+
+    setReadOnlyMongo: function(){
+        this.mongodatabase = readonlyMongodb;
     },
 
 
