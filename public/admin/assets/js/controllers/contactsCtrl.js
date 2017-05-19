@@ -64,8 +64,9 @@
       ContactService.getPagedContacts($scope.pagingParams, checkIfFieldSearch(), function (response) {
         var contacts = response.results;
         $scope.contactsCount = response.total;
-        ContactPagingService.setTotalCount(response.total);
-        $scope.totalItemCount = ContactPagingService.totalCount;
+        //ContactPagingService.setTotalCount(response.total);
+        //$scope.totalItemCount = ContactPagingService.totalCount;
+        $scope.totalItemCount = response.total;
         _.each(contacts, function (contact) {
           contact.bestEmail = $scope.checkBestEmail(contact);
           contact.hasFacebookId = $scope.checkFacebookId(contact);
@@ -96,25 +97,21 @@
         if($scope.contacts.length > 0){
           $scope.minRequirements = true;
         }
-        // if ($state.current.sort) {
-        //   $scope.setSortOrder($state.current.sort);
-        // }
         $scope.showContacts = true;
-        //ContactService.getAllContactTags(contacts, function(tags){
-          //$scope.contactTags = tags;
-        //});
+        
       });
     };
 
     
-    
-    ContactService.listAllContactTags(function(tags){
-      ContactService.fomatContactTags(tags, function(tags){
-          $scope.contactTags = tags;
+    function loadCustomerTags(){
+      ContactService.listAllContactTags(function(tags){
+        ContactService.fomatContactTags(tags, function(tags){
+            $scope.contactTags = tags;
+        });
       });
-      $scope.getContacts();
-    });
-
+    }
+    loadCustomerTags();
+    $scope.getContacts();
     /*
      * @getters
      * - getters for the sort on the table
@@ -414,25 +411,10 @@
         $scope.contact.email = '';
         $scope.duplicateContact = false;
         $scope.closeModal();
-
-
         returnedContact.bestEmail = $scope.checkBestEmail(returnedContact);
-
-        var tempTags = [];
-        var tagLabel = "";
-        _.each(returnedContact.tags, function (tag) {
-           tagLabel = _.findWhere($scope.contactTags, { data: tag });
-            if(tagLabel)
-              tempTags.push(tagLabel.label);
-            else
-              tempTags.push(tag);
-        });
-        if(tempTags)
-          returnedContact.tempTags = _.uniq(tempTags);
-
-
-        $scope.contacts.unshift(returnedContact);
-        $scope.incrementContactTags(returnedContact);
+        loadDefaults();
+        $scope.getContacts();
+        loadCustomerTags();
         toaster.pop('success', 'Contact Successfully Added');
         $scope.minRequirements = true;
 
@@ -624,10 +606,8 @@
 
                     $q.all(contactPromises)
                       .then(function(results) {
-                        selectedContacts.forEach(function(sc, sci) {
-                            $scope.contacts.splice(_.findIndex($scope.contacts, function(c) {return c._id == sc._id; }), 1);
-                            $scope.displayedContacts.splice(_.findIndex($scope.displayedContacts, function(c) {return c._id == sc._id; }), 1);
-                        });
+                        loadDefaults();
+                        $scope.getContacts();
                         $scope.bulkActionChoice = null;
                         $scope.bulkActionChoice = {};
                         $scope.clearSelectionFn();
