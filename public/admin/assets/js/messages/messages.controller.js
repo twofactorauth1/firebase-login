@@ -15,6 +15,7 @@
 
         vm.editMessage = editMessage;
         vm.deleteMessage = deleteMessage;
+        vm.stripHTML = stripHTML;
         function editMessage(id){
             if(!id)
                 id = "new";
@@ -43,6 +44,10 @@
           
         }, true);
 
+        
+        function stripHTML(msg) {
+            return msg.replace(/<\/?[^>]+(>|$)/g, "");
+        }
         (function init() {
 
         })();
