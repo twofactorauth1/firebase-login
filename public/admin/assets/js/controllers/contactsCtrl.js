@@ -31,7 +31,9 @@
       showPages: pagingConstant.displayedPages,
       globalSearch: ContactPagingService.globalSearch,
       fieldSearch: ContactPagingService.fieldSearch,
-      showFilter: ContactPagingService.showFilter
+      showFilter: ContactPagingService.showFilter,
+      sortBy: ContactPagingService.sortBy,
+      sortDir: ContactPagingService.sortDir
     }
 
     $scope.showFilter = showFilter;
@@ -788,17 +790,21 @@
 
 
     function setDefaults(){
-      ContactPagingService.skip = angular.copy($scope.pagingParams.skip);
-      ContactPagingService.page = angular.copy($scope.pagingParams.curPage);
+      ContactPagingService.skip = $scope.pagingParams.skip;
+      ContactPagingService.page = $scope.pagingParams.curPage;
       ContactPagingService.globalSearch = angular.copy($scope.pagingParams.globalSearch);
       ContactPagingService.fieldSearch = angular.copy($scope.pagingParams.fieldSearch);
-      ContactPagingService.showFilter = angular.copy($scope.pagingParams.showFilter);
+      ContactPagingService.showFilter = $scope.pagingParams.showFilter;
+      ContactPagingService.sortBy = $scope.pagingParams.sortBy;
+      ContactPagingService.sortDir = $scope.pagingParams.sortDir;
     }
     
 
     function loadDefaults(){
         $scope.pagingParams.curPage = 1;
         $scope.pagingParams.skip = 0;
+        ContactPagingService.skip = $scope.pagingParams.skip;
+        ContactPagingService.page = $scope.pagingParams.curPage;
         $scope.pageLoading = true;
     }
 
