@@ -286,7 +286,8 @@ module.exports = function(grunt) {
             ssb: ['ssb/test/ssb_manager_test.js'],
             scheduler: ['scheduledjobs/tests/manager_test.js'],
             selenium: ['test/selenium/*_test.js'],
-            mlab:['test/mongo.dao_test.js']
+            mlab:['test/mongo.dao_test.js'],
+            backgroundjob:['backgroundjobs/test/*_test.js']
             //ngparse:['utils/test/ngparser_test.js']
         },
 

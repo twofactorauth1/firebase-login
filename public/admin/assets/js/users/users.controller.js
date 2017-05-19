@@ -30,10 +30,23 @@
                 users = _.reject(users, function(user){ return user.username == vm.state.adminUserName });
                 vm.state.users = users;
                 vm.uiState.loading = false;
-                vm.uiState.isAdminUser =  vm.state.account.ownerUser == $scope.currentUser._id || $scope.currentUser.username == vm.state.adminUserName;
+                vm.uiState.isAdminUser =  vm.state.account.ownerUser == $scope.currentUser._id || $scope.currentUser.username == vm.state.adminUserName || checkIfAdminUser();
             });
         }
 
+        function checkIfAdminUser(){
+            var _isAdmin = false;
+            var _userAccount = _.find($scope.currentUser.accounts, function(account){
+                return account.accountId == vm.state.account._id
+            })
+
+            if(_userAccount && _userAccount.permissions){
+                if(_.contains(_userAccount.permissions, "admin")){
+                    _isAdmin = true;
+                }
+            }
+            return _isAdmin;
+        }
 
         $scope.$watch('vm.state.users', function (users) {
             if(users){

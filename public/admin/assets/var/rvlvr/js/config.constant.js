@@ -580,6 +580,11 @@ app.constant('mediaManagerConstant', {
     displayedPages: 7
 });
 
+app.constant('pagingConstant', {
+  numberOfRowsPerPage: 50,
+  displayedPages: 11
+});
+
 app.constant('JS_REQUIRES', {
   //*** Scripts
   scripts: {
@@ -701,6 +706,7 @@ app.constant('JS_REQUIRES', {
     'analyticsWidgetStateService': 'assets/js/site-analytics/analytics-widget-state-service.js',
     'broadcastMessagesService': 'assets/js/messages/messages.service.js',
     'utilService': 'assets/js/services/util.js',
+    'contactPagingService': 'assets/js/services/contactPagingService.js',
 
     //*** Filters
     'htmlToPlaintext': 'assets/js/filters/htmlToPlaintext.js',
@@ -895,6 +901,7 @@ app.constant('JS_REQUIRES', {
       "../js/libs/froala-wysiwyg-editor/js/plugins/font_size.min.js",
       "../js/libs_misc/froala-wysiwyg-editor/js/plugins/image-manager.js",
       "../js/libs_misc/froala-wysiwyg-editor/js/plugins/font_weight.js",
+      "../js/libs_misc/froala-wysiwyg-editor/js/plugins/letter_spacing_control.js",
       "../js/libs/froala-wysiwyg-editor/js/plugins/inline_style.min.js",
       "../js/libs/froala-wysiwyg-editor/js/plugins/line_breaker.min.js",
       "../js/libs_misc/froala-wysiwyg-editor/js/plugins/link.min.js",

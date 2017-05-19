@@ -60,6 +60,17 @@
                 $scope.locationData = null;
                 $scope.countryLocationData = null;
                 $scope.pagedformattedTopPages = null;
+                /*
+                 * Reset charts
+                 */
+                $scope.trafficSourceData = null;
+                $scope.userAgentData = null;
+                $scope.userAgentTableData = null;
+                $scope.osData = null;
+                $scope.revenueConfig = {};
+                $scope.emailsOverviewConfig = {};
+                $scope.newVsReturning = null;
+                $scope.device_data_loaded = false;
 
                 $scope.runAnalyticsReports($scope.analyticsAccount);
             }
@@ -481,9 +492,16 @@
 
                     $scope.userAgentData = userAgentData;
                     var uadLength = userAgentData.length -1;
-                    $scope.topBrowser = userAgentData[uadLength][0];
-                    var browserPercent = Math.round((userAgentData[uadLength][1] / browserTotal) * 100);
-                    $scope.browserPercent = browserPercent;
+                    if(userAgentData && userAgentData.length > 0) {
+                        $scope.topBrowser = userAgentData[uadLength][0];
+                        var browserPercent = Math.round((userAgentData[uadLength][1] / browserTotal) * 100);
+                        $scope.browserPercent = browserPercent;
+                    } else {
+                        $scope.topBrowser = '--';
+                        var browserPercent = Math.round((userAgentData[uadLength][1] / browserTotal) * 100);
+                        $scope.browserPercent = '--';
+                    }
+
 
                     ChartAnalyticsService.userAgentChart(userAgentData, function(config){
                         $scope.userAgentConfig = config;

@@ -1095,150 +1095,21 @@ module.exports = {
                 var previousMonth = [];
                 _.each(totalResults, function(result){
                     var resultEnd = moment(result.timeframe.start, "YYYY-MM-DD HH:mm");
-                    if(resultEnd.isBefore(start)) {
-                        previousMonth.push(result);
+                    if(granularity === 'hours') {
+                        if(resultEnd.isAfter(start) || resultEnd.isSame(start, 'hour')) {
+                            currentMonth.push(result);
+                        } else {
+                            previousMonth.push(result);
+                        }
                     } else {
-                        currentMonth.push(result);
+                        if(resultEnd.isAfter(start) || resultEnd.isSame(start, 'day')) {
+                            currentMonth.push(result);
+                        } else {
+                            previousMonth.push(result);
+                        }
                     }
                 });
                 cb(null, currentMonth, previousMonth);
-            },
-            function(currentMonth, previousMonth, cb) {
-
-                var result = {
-                    currentMonth:currentMonth,
-                    previousMonth: previousMonth
-                };
-                cb(null, result);
-            }
-        ], function(err, results){
-            var duration = new Date().getTime() - startTime;
-            self.log.debug(accountId, userId, '<< getUserReport [' + duration + ']');
-            fn(err, results);
-        });
-
-    },
-
-    getUserReport_old:function(accountId, userId, start, end, previousStart, previousEnd, isAggregate, orgId, fn) {
-        var self = this;
-        self.log = _log;
-        self.log.debug(accountId, userId, '>> getUserReport');
-        var startTime = new Date().getTime();
-        var granularity = self._determineGranularity(start, end);
-
-        var stageAry = [];
-        var match = {
-            $match:{
-                accountId:accountId,
-                server_time_dt:{
-                    $gte:start,
-                    $lte:end
-                },
-                fingerprint:{$ne:0}
-
-            }
-        };
-        if(isAggregate === true) {
-            delete match.$match.accountId;
-        }
-        if(orgId !== null) {
-            match.$match.orgId = orgId;
-        }
-        stageAry.push(match);
-
-        var group1 = {
-            $group: {
-                _id:{
-                    permanent_tracker:'$permanent_tracker',
-                    yearMonthDay: { $dateToString: { format: "%Y-%m-%d", date: "$server_time_dt" }}
-                }
-            }
-        };
-        if(granularity === 'hours') {
-            group1.$group._id.yearMonthDay.$dateToString.format = '%Y-%m-%d %H:00';
-        }
-        stageAry.push(group1);
-
-        var group2 = {
-            $group: {
-                _id: '$_id.yearMonthDay',
-                total:{$sum:1}
-            }
-        };
-        stageAry.push(group2);
-
-        async.waterfall([
-            function(cb) {
-                var startTime1 = new Date().getTime();
-                dao.aggregateWithCustomStages(stageAry, $$.m.SessionEvent, function(err, value) {
-                    var duration1 = new Date().getTime() - startTime1;
-                    self.log.warn('duration1:', duration1);
-                    if(err) {
-                        self.log.error('Error finding current month:', err);
-                        cb(err);
-                    } else {
-                        var resultAry = [];
-                        _.each(value, function (entry) {
-                            var result = {
-                                value: entry.total,
-                                timeframe: {
-                                    start: entry._id
-                                }
-                            };
-                            if(granularity === 'hours') {
-                                result.timeframe.end = moment(entry._id).add(1, 'hours').format('YYYY-MM-DD HH:mm');
-                            } else {
-                                result.timeframe.end = moment(entry._id).add(1, 'days').format('YYYY-MM-DD');
-                            }
-                            resultAry.push(result);
-                        });
-                        resultAry = _.sortBy(resultAry, function(result){return result.timeframe.start;});
-
-                        if(granularity === 'hours') {
-                            resultAry = self._zeroMissingHours(resultAry, {value:0}, moment(start).format('YYYY-MM-DD HH:mm'), moment(end).format('YYYY-MM-DD HH:mm'));
-                        } else {
-                            resultAry = self._zeroMissingDays(resultAry, {value:0}, moment(start).format('YYYY-MM-DD'), moment(end).format('YYYY-MM-DD'));
-                        }
-                        cb(null, resultAry);
-                    }
-                });
-            },
-            function (currentMonth, cb) {
-                stageAry[0].$match.server_time_dt.$gte = previousStart;
-                stageAry[0].$match.server_time_dt.$lte = previousEnd;
-                var startTime2 = new Date().getTime();
-                dao.aggregateWithCustomStages(stageAry, $$.m.SessionEvent, function(err, value) {
-                    var duration2 = new Date().getTime() - startTime2;
-                    self.log.warn('duration2:', duration2);
-                    if(err) {
-                        self.log.error('Error finding previous month:', err);
-                        cb(err);
-                    } else {
-                        var resultAry = [];
-                        _.each(value, function (entry) {
-                            var result = {
-                                value: entry.total,
-                                timeframe: {
-                                    start: entry._id
-                                }
-                            };
-                            if(granularity === 'hours') {
-                                result.timeframe.end = moment(entry._id).add(1, 'hours').format('YYYY-MM-DD HH:mm');
-                            } else {
-                                result.timeframe.end = moment(entry._id).add(1, 'days').format('YYYY-MM-DD');
-                            }
-                            resultAry.push(result);
-                        });
-                        resultAry = _.sortBy(resultAry, function(result){return result.timeframe.start;});
-
-                        if(granularity === 'hours') {
-                            resultAry = self._zeroMissingHours(resultAry, {value:0}, moment(previousStart).format('YYYY-MM-DD HH:mm'), moment(previousEnd).format('YYYY-MM-DD HH:mm'));
-                        } else {
-                            resultAry = self._zeroMissingDays(resultAry, {value:0}, moment(previousStart).format('YYYY-MM-DD'), moment(previousEnd).format('YYYY-MM-DD'));
-                        }
-                        cb(null, currentMonth, resultAry);
-                    }
-                });
             },
             function(currentMonth, previousMonth, cb) {
 
@@ -1267,7 +1138,7 @@ module.exports = {
             $match:{
                 accountId:accountId,
                 server_time_dt:{
-                    $gte:start,
+                    $gte:previousStart,
                     $lte:end
                 }
 
@@ -1315,49 +1186,37 @@ module.exports = {
                         });
                         resultAry = _.sortBy(resultAry, function(result){return result.timeframe.start;});
                         if(granularity === 'hours') {
-                            resultAry = self._zeroMissingHours(resultAry, {value:0}, moment(start).format('YYYY-MM-DD HH:mm'), moment(end).format('YYYY-MM-DD HH:mm'));
+                            resultAry = self._zeroMissingHours(resultAry, {value:0}, moment(previousStart).format('YYYY-MM-DD HH:mm'), moment(end).format('YYYY-MM-DD HH:mm'));
                         } else {
-                            resultAry = self._zeroMissingDays(resultAry, {value:0}, moment(start).format('YYYY-MM-DD'), moment(end).format('YYYY-MM-DD'));
+                            resultAry = self._zeroMissingDays(resultAry, {value:0}, moment(previousStart).format('YYYY-MM-DD'), moment(end).format('YYYY-MM-DD'));
                         }
 
                         cb(null, resultAry);
                     }
                 });
             },
-            function (currentMonth, cb) {
-                stageAry[0].$match.server_time_dt.$gte = previousStart;
-                stageAry[0].$match.server_time_dt.$lte = previousEnd;
-                dao.aggregateWithCustomStages(stageAry, $$.m.PageEvent, function(err, value) {
-                    if(err) {
-                        self.log.error('Error finding previous month:', err);
-                        cb(err);
-                    } else {
-                        var resultAry = [];
-                        _.each(value, function (entry) {
-                            var result = {
-                                value: entry.count,
-                                timeframe: {
-                                    start: entry._id
-                                }
-                            };
-                            if(granularity === 'hours') {
-                                result.timeframe.end = moment(entry._id).add(1, 'hours').format('YYYY-MM-DD HH:mm');
-                            } else {
-                                result.timeframe.end = moment(entry._id).add(1, 'days').format('YYYY-MM-DD');
-                            }
-                            resultAry.push(result);
-                        });
-                        resultAry = _.sortBy(resultAry, function(result){return result.timeframe.start;});
-
-                        if(granularity === 'hours') {
-                            resultAry = self._zeroMissingHours(resultAry, {value:0}, moment(previousStart).format('YYYY-MM-DD HH:mm'), moment(previousEnd).format('YYYY-MM-DD HH:mm'));
+            function (totalResults, cb) {
+                var currentMonth = [];
+                var previousMonth = [];
+                _.each(totalResults, function(result){
+                    var resultEnd = moment(result.timeframe.start, "YYYY-MM-DD HH:mm");
+                    if(granularity === 'hours') {
+                        if(resultEnd.isAfter(start) || resultEnd.isSame(start, 'hour')) {
+                            currentMonth.push(result);
                         } else {
-                            resultAry = self._zeroMissingDays(resultAry, {value:0}, moment(previousStart).format('YYYY-MM-DD'), moment(previousEnd).format('YYYY-MM-DD'));
+                            previousMonth.push(result);
                         }
-                        cb(null, currentMonth, resultAry);
+                    } else {
+                        if(resultEnd.isAfter(start) || resultEnd.isSame(start, 'day')) {
+                            currentMonth.push(result);
+                        } else {
+                            previousMonth.push(result);
+                        }
                     }
                 });
+                cb(null, currentMonth, previousMonth);
             },
+
             function(currentMonth, previousMonth, cb) {
                 var result = {
                     currentMonth:currentMonth,
@@ -1465,7 +1324,7 @@ module.exports = {
             $match:{
                 accountId:accountId,
                 server_time_dt:{
-                    $gte:start,
+                    $gte:previousStart,
                     $lte:end
                 },
                 fingerprint:{$ne:0}
@@ -1526,49 +1385,37 @@ module.exports = {
                         });
                         resultAry = _.sortBy(resultAry, function(result){return result.timeframe.start;});
                         if(granularity === 'hours') {
-                            resultAry = self._zeroMissingHours(resultAry, {total:0}, moment(start).format('YYYY-MM-DD HH:mm'), moment(end).format('YYYY-MM-DD HH:mm'));
+                            resultAry = self._zeroMissingHours(resultAry, {total:0}, moment(previousStart).format('YYYY-MM-DD HH:mm'), moment(end).format('YYYY-MM-DD HH:mm'));
                         } else {
-                            resultAry = self._zeroMissingDays(resultAry, {total:0}, moment(start).format('YYYY-MM-DD'), moment(end).format('YYYY-MM-DD'));
+                            resultAry = self._zeroMissingDays(resultAry, {total:0}, moment(previousStart).format('YYYY-MM-DD'), moment(end).format('YYYY-MM-DD'));
                         }
 
                         cb(null, resultAry);
                     }
                 });
             },
-            function (currentMonth, cb) {
-                stageAry[0].$match.server_time_dt.$gte = previousStart;
-                stageAry[0].$match.server_time_dt.$lte = previousEnd;
-                dao.aggregateWithCustomStages(stageAry, $$.m.SessionEvent, function(err, value) {
-                    if(err) {
-                        self.log.error('Error finding previous month:', err);
-                        cb(err);
-                    } else {
-                        var resultAry = [];
-                        _.each(value, function (entry) {
-                            var result = {
-                                total: entry.total,
-                                timeframe: {
-                                    start: entry._id
-                                }
-                            };
-                            if(granularity === 'hours') {
-                                result.timeframe.end = moment(entry._id).add(1, 'hours').format('YYYY-MM-DD HH:mm');
-                            } else {
-                                result.timeframe.end = moment(entry._id).add(1, 'days').format('YYYY-MM-DD');
-                            }
-                            resultAry.push(result);
-                        });
-                        resultAry = _.sortBy(resultAry, function(result){return result.timeframe.start;});
-                        if(granularity === 'hours') {
-                            resultAry = self._zeroMissingHours(resultAry, {total:0}, moment(previousStart).format('YYYY-MM-DD HH:mm'), moment(previousEnd).format('YYYY-MM-DD HH:mm'));
+            function (totalResults, cb) {
+                var currentMonth = [];
+                var previousMonth = [];
+                _.each(totalResults, function(result) {
+                    var resultEnd = moment(result.timeframe.start, "YYYY-MM-DD HH:mm");
+                    if(granularity === 'hours') {
+                        if(resultEnd.isAfter(start) || resultEnd.isSame(start, 'hour')) {
+                            currentMonth.push(result);
                         } else {
-                            resultAry = self._zeroMissingDays(resultAry, {total:0}, moment(previousStart).format('YYYY-MM-DD'), moment(previousEnd).format('YYYY-MM-DD'));
+                            previousMonth.push(result);
                         }
-
-                        cb(null, currentMonth, resultAry);
+                    } else {
+                        if(resultEnd.isAfter(start) || resultEnd.isSame(start, 'day')) {
+                            currentMonth.push(result);
+                        } else {
+                            previousMonth.push(result);
+                        }
                     }
                 });
+                cb(null, currentMonth, previousMonth);
             },
+
             function(currentMonth, previousMonth, cb) {
                 var result = {
                     currentMonth:currentMonth,

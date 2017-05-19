@@ -1,7 +1,7 @@
 'use strict';
 /*global app, window*/
 (function (angular) {
-  app.controller('ContactsCtrl', ["$scope", "$state", "toaster", "$modal", "$window", "ContactService", "SocialConfigService", "userConstant", "formValidations", "CommonService", '$timeout', 'SweetAlert', "$location", "$q", function ($scope, $state, toaster, $modal, $window, ContactService, SocialConfigService, userConstant, formValidations, CommonService, $timeout, SweetAlert, $location, $q) {
+  app.controller('ContactsCtrl', ["$scope", "$state", "toaster", "$modal", "$window", "ContactService", "SocialConfigService", "userConstant", "formValidations", "CommonService", '$timeout', 'SweetAlert', "$location", "$q", 'pagingConstant', 'ContactPagingService', function ($scope, $state, toaster, $modal, $window, ContactService, SocialConfigService, userConstant, formValidations, CommonService, $timeout, SweetAlert, $location, $q, pagingConstant, ContactPagingService) {
 
     $scope.tableView = 'list';
     $scope.itemPerPage = 100;
@@ -10,33 +10,36 @@
     $scope.bulkActionChoice = {};
     $scope.tagsBulkAction = {};
 
-    if (!$state.current.sort) {
-      $scope.order = "reverse";
-    }
+    
     $scope.formValidations = formValidations;
     $scope.default_image_url = "/admin/assets/images/default-user.png";
+    $scope.pagingConstant = pagingConstant;
 
     $scope.bulkActionChoices = [{data: 'tags', label: 'Tags'}, {data: 'delete', label: 'Delete'}];
 
-    $scope.filterContactPhotos = function (contacts) {
-      _.each(contacts, function (contact) {
-        if (contact) {
-          contact.hasPhoto = false;
-          if (contact.photo) {
-            if ($("#contact_photo_" + contact._id).attr("src") === $scope.default_image_url) {
-              contact.hasPhoto = false;
-            } else {
-              contact.hasPhoto = true;
-            }
-          }
-        }
-      });
-    };
 
-    $scope.filterContacts = function () {
-      $scope.showFilter = !$scope.showFilter;
-      $scope.filterContactPhotos($scope.contacts);
-    };
+    $scope.numberOfPages = numberOfPages;
+    $scope.selectPage = selectPage;
+    $scope.sortContacts = sortContacts;
+
+    $scope.pagingParams = {
+      limit: pagingConstant.numberOfRowsPerPage,
+      skip: ContactPagingService.skip,
+      curPage: ContactPagingService.page,
+      showPages: pagingConstant.displayedPages,
+      globalSearch: ContactPagingService.globalSearch,
+      fieldSearch: ContactPagingService.fieldSearch,
+      showFilter: ContactPagingService.showFilter,
+      sortBy: ContactPagingService.sortBy,
+      sortDir: ContactPagingService.sortDir
+    }
+
+    $scope.showFilter = showFilter;
+
+    $scope.sortData = {
+        column: '',
+        details: {}
+    }
 
     /*
      * @getContacts
@@ -44,7 +47,12 @@
      */
 
     $scope.getContacts = function () {
-      ContactService.getContacts(function (contacts) {
+      ContactService.getPagedContacts($scope.pagingParams, checkIfFieldSearch(), function (response) {
+        var contacts = response.results;
+        $scope.contactsCount = response.total;
+        //ContactPagingService.setTotalCount(response.total);
+        //$scope.totalItemCount = ContactPagingService.totalCount;
+        $scope.totalItemCount = response.total;
         _.each(contacts, function (contact) {
           contact.bestEmail = $scope.checkBestEmail(contact);
           contact.hasFacebookId = $scope.checkFacebookId(contact);
@@ -69,75 +77,33 @@
             contact.tempTags = _.uniq(tempTags);
         });
         $scope.contacts = contacts;
+        drawPages();
+        $scope.pageLoading = false;
         // In case contact is created from simple form component.
         if($scope.contacts.length > 0){
           $scope.minRequirements = true;
         }
-        if ($state.current.sort) {
-          $scope.setSortOrder($state.current.sort);
-        }
         $scope.showContacts = true;
-        ContactService.getAllContactTags(contacts, function(tags){
-          $scope.contactTags = tags;
-        });
-
+        
       });
     };
 
-    $scope.getContacts();
-
+    
+    function loadCustomerTags(){
+      ContactService.listAllContactTags(function(tags){
+        ContactService.fomatContactTags(tags, function(tags){
+            $scope.contactTags = tags;
+        });
+      });
+    }
+    // Load Default tags
     ContactService.getContactTags(function(tags){
       $scope.contactTags = tags;
     });
 
-    /*
-     * @getters
-     * - getters for the sort on the table
-     */
-
-    $scope.getters = {
-      created: function (value) {
-        return value.created.date || -1;
-      },
-      modified: function (value) {
-        return value.modified.date;
-      },
-      name: function (value) {
-        return [value.first, value.middle, value.last].join(' ').trim();
-      },
-      tags: function (value) {
-        return $scope.contactTagsFn(value);
-      },
-      phone: function (value) {
-        if (value.details[0] && value.details[0].phones && value.details[0].phones[0]) {
-          return value.details[0].phones[0].number.trim();
-        }
-        return "";
-      },
-      address: function (value) {
-        return value.bestAddress
-      },
-      unsubscribed: function (value) {
-        return value.unsubscribed
-      },
-      social: function (value) {
-        if (value.hasLinkedInId) {
-          return 1;
-        }
-        if (value.hasGoogleId) {
-          return 2;
-        }
-        if (value.hasFacebookId) {
-          return 3;
-        }
-        if (value.hasTwitterId) {
-          return 4;
-        }
-
-        return 5;
-      }
-    };
-
+    loadCustomerTags();
+    $scope.getContacts();
+    
     /*
      * @openModal
      * -
@@ -300,8 +266,6 @@
     }
     };
     $scope.viewSingle = function (contact) {
-      var tableState = $scope.getSortOrder();
-      $state.current.sort = tableState.sort;
       $location.path('/contacts/' + contact._id);
     };
 
@@ -346,11 +310,6 @@
       value: false
     }];
 
-    $scope.contactsLimit = 50;
-
-    $scope.addContacts = function () {
-      $scope.contactsLimit += 50;
-    };
 
     $scope.addContact = function () {
 
@@ -391,49 +350,14 @@
         $scope.contact.email = '';
         $scope.duplicateContact = false;
         $scope.closeModal();
-
-
         returnedContact.bestEmail = $scope.checkBestEmail(returnedContact);
-
-        var tempTags = [];
-        var tagLabel = "";
-        _.each(returnedContact.tags, function (tag) {
-           tagLabel = _.findWhere($scope.contactTags, { data: tag });
-            if(tagLabel)
-              tempTags.push(tagLabel.label);
-            else
-              tempTags.push(tag);
-        });
-        if(tempTags)
-          returnedContact.tempTags = _.uniq(tempTags);
-
-
-        $scope.contacts.unshift(returnedContact);
-        $scope.incrementContactTags(returnedContact);
+        loadDefaults();
+        $scope.getContacts();
+        loadCustomerTags();
         toaster.pop('success', 'Contact Successfully Added');
         $scope.minRequirements = true;
 
       });
-    };
-
-    $scope.incrementContactTags = function (contact) {
-      var contactTags = $scope.contactTags || [];
-      if(contact){
-          if (contact.tags) {
-            _.each(contact.tags, function (tag) {
-              var type = _.find(contactTags, function (type) {
-                return type.data === tag;
-              });
-              if (!type) {
-                contactTags.push({
-                  label : tag,
-                  data : tag
-                })
-              }
-            });
-          }
-        $scope.contactTags = _.uniq(contactTags.concat(contactTags), function(w) { return w.label; })
-      }
     };
 
     $scope.setDuplicateUser = function(val){
@@ -535,24 +459,19 @@
 
     $scope.filterContact = {};
 
-    $scope.clearFilter = function (event, input, filter) {
+    $scope.clearContactFilter = function (event, input, filter) {
       $scope.filterContact[filter] = {};
       $scope.triggerInput(input);
     };
 
-    // $scope.socailType = "";
-    // $scope.socailList = false;
-    // $scope.groupList = false;
 
-    // $scope.showSocialAccountSelect = function (socailType) {
-    //   $scope.socailType = socailType;
-    //   $scope.socailList = true;
-    //   if (socailType === userConstant.social_types.GOOGLE) {
-    //     $scope.groupList = true;
-    //   } else {
-    //     $scope.groupList = false;
-    //   }
-    // };
+    $scope.clearSearchFilter = function(event, input, filter) {
+      $timeout(function() {
+        $scope.pagingParams.fieldSearch[filter] = null;
+        $('body').click();
+      }, 800);
+    };
+
 
     $scope.bulkActionSelectFn = function () {
         var selectedContacts = $scope.selectedContactsFn();
@@ -593,10 +512,8 @@
 
                     $q.all(contactPromises)
                       .then(function(results) {
-                        selectedContacts.forEach(function(sc, sci) {
-                            $scope.contacts.splice(_.findIndex($scope.contacts, function(c) {return c._id == sc._id; }), 1);
-                            $scope.displayedContacts.splice(_.findIndex($scope.displayedContacts, function(c) {return c._id == sc._id; }), 1);
-                        });
+                        loadDefaults();
+                        $scope.getContacts();
                         $scope.bulkActionChoice = null;
                         $scope.bulkActionChoice = {};
                         $scope.clearSelectionFn();
@@ -656,6 +573,7 @@
         $scope.exportText = exportContacts.length ? "Export Selected " + exportContacts.length : "Export";
         return exportContacts;
     };
+
     $scope.tagsBulkActionClickFn = function (operation) {
         var tags = _.uniq(_.pluck($scope.tagsBulkAction.tags, 'data'));
         if(operation == 'add' && tags.length<1 && $scope.tagsBulkAction.toReplace){
@@ -715,6 +633,7 @@
             toaster.pop('success', 'Contacts tags updated.');
           });
     };
+    
     $scope.exportContactsFn = function () {
       if (_.pluck($scope.selectedContactsFn().length)) {
         ContactService.exportCsvContacts(_.pluck($scope.selectedContactsFn(), '_id'));
@@ -724,5 +643,153 @@
       $scope.clearSelectionFn();
       toaster.pop('success', 'Contact export started.');
     };
+
+    // Paging Related
+
+    function drawPages(){
+      var start = 1;
+      var end;
+      var i;
+      var prevPage = $scope.pagingParams.curPage;
+     
+      var currentPage = $scope.pagingParams.curPage;
+      var numPages = numberOfPages();
+
+      start = Math.max(start, currentPage - Math.abs(Math.floor($scope.pagingParams.showPages / 2)));
+      end = start + $scope.pagingParams.showPages;
+
+      if (end > numPages) {
+        end = numPages + 1;
+        start = Math.max(1, end - $scope.pagingParams.showPages);
+      }
+
+      $scope.pages = [];
+
+
+      for (i = start; i < end; i++) {
+        $scope.pages.push(i);
+      }
+    }
+
+
+    function numberOfPages() {
+        if ($scope.contacts) {
+            return Math.ceil($scope.contactsCount / $scope.pagingParams.limit);
+        }
+        return 0;
+    }
+
+    function selectPage(page){
+        if(page != $scope.pagingParams.curPage){            
+            $scope.pagingParams.curPage = page;
+            $scope.pagingParams.skip = (page - 1) * $scope.pagingParams.limit;
+            $scope.pageLoading = true;
+            setDefaults();
+            $scope.getContacts();
+        }
+    }
+
+
+    function setDefaults(){
+      ContactPagingService.skip = $scope.pagingParams.skip;
+      ContactPagingService.page = $scope.pagingParams.curPage;
+      ContactPagingService.globalSearch = angular.copy($scope.pagingParams.globalSearch);
+      ContactPagingService.fieldSearch = angular.copy($scope.pagingParams.fieldSearch);
+      ContactPagingService.showFilter = $scope.pagingParams.showFilter;
+      ContactPagingService.sortBy = $scope.pagingParams.sortBy;
+      ContactPagingService.sortDir = $scope.pagingParams.sortDir;
+    }
+    
+
+    function loadDefaults(){
+        $scope.pagingParams.curPage = 1;
+        $scope.pagingParams.skip = 0;
+        ContactPagingService.skip = $scope.pagingParams.skip;
+        ContactPagingService.page = $scope.pagingParams.curPage;
+        $scope.pageLoading = true;
+    }
+
+    /********** SORTING RELATED **********/
+
+    function sortContacts(col, name){
+        if($scope.sortData.column !== name){
+            $scope.sortData.details = {};
+        }
+        $scope.sortData.column = name;
+        if($scope.sortData.details[name]){
+            if($scope.sortData.details[name].direction === 1){
+                $scope.sortData.details[name].direction = -1;
+            }
+            else{
+                $scope.sortData.details[name].direction = 1;
+            }
+        }
+        else{
+            $scope.sortData.details[name] = {
+                direction: 1,
+                sortColum: col
+            }
+        }
+        $scope.pagingParams.sortBy = col;
+        $scope.pagingParams.sortDir = $scope.sortData.details[name].direction;
+        loadDefaults();
+        setDefaults();
+        $scope.getContacts();
+    }
+
+    /********** GLOBAL SEARCH RELATED **********/
+
+    $scope.$watch('pagingParams.globalSearch', function (term) {
+        if(angular.isDefined(term)){
+            if(!angular.equals(term, ContactPagingService.fieldSearch)){
+                loadDefaults();
+                setDefaults();
+                $scope.getContacts();
+            }
+        }
+    }, true);
+
+    /********** FILTER RELATED **********/
+
+    $scope.$watch('pagingParams.fieldSearch', function (search) {
+        if(angular.isDefined(search)){
+            if(!angular.equals(search, ContactPagingService.fieldSearch)){
+                loadDefaults();
+                setDefaults();
+                $scope.getContacts();
+            }
+        }
+    }, true);
+
+
+    function showFilter(){
+        $scope.pagingParams.showFilter = !$scope.pagingParams.showFilter;
+        setDefaults();
+        if(!$scope.pagingParams.showFilter)
+            clearFilter();
+    }
+
+
+    function clearFilter(){
+        $scope.pagingParams.fieldSearch = {};
+    }
+
+
+    function checkIfFieldSearch(){
+        var isFieldSearch = false;
+        var fieldSearch = $scope.pagingParams.fieldSearch;
+        if(!_.isEmpty(fieldSearch)){
+            for(var i=0; i <= Object.keys(fieldSearch).length - 1; i++){
+                var key = Object.keys(fieldSearch)[i];
+                var value = fieldSearch[key];
+
+                if(value){
+                   isFieldSearch = true;
+                }
+            }
+        }
+        return isFieldSearch;
+    }
+
   }]);
 }(angular));
