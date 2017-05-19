@@ -117,7 +117,7 @@ var dao = {
             term = term.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');   
             var regex = new RegExp('\.*'+term+'\.*', 'i');
             var orQuery = [
-                {_id:regex},            
+                {_id:parseInt(term)},            
                 {first:regex},
                 {middle:regex},
                 {last:regex},
@@ -145,9 +145,16 @@ var dao = {
                 if(key == 'email'){
                     key = 'details.emails.email'
                 }
-                obj[key] = new RegExp(value, 'i');
-                fieldSearchArr.push(obj);
-                
+                if(value){
+                    if(key == "_id"){
+                        obj[key] = parseInt(value);    
+                    }
+                    else{
+                        obj[key] = new RegExp(value, 'i');
+                    }
+                    
+                    fieldSearchArr.push(obj);
+                }
             }
             if(fieldSearchArr.length){
                 query["$and"] = fieldSearchArr;
