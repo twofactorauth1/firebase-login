@@ -81,6 +81,6 @@
         </div>
     </div>
     <div class="modal-footer">
-        <button class="btn btn-primary" ng-disabled='form.$invalid || vm.checkIfInValid(vm.state.newPurchaseOrder) || vm.uiState.saveLoading || !vm.state.newPurchaseOrder.cardCode' ng-click="vm.createPurchaseOrder(vm.state.newPurchaseOrder, form)">Submit</button>
+        <button class="btn btn-primary" ng-disabled='form.$invalid || vm.checkIfInValid(vm.state.newPurchaseOrder) || vm.uiState.saveLoading || !vm.state.newPurchaseOrder.cardCode || !vm.state.newPurchaseOrder.text' ng-click="vm.createPurchaseOrder(vm.state.newPurchaseOrder, form)">Submit</button>
     </div>
 </script>
