@@ -4,20 +4,20 @@
     } : a(jQuery)
 }(function(a) {
     "use strict";
-    a.FroalaEditor.DefineIcon('fontWeight', {NAME: 'text-width'});
-    a.FroalaEditor.RegisterCommand('fontWeight', {
-      title: 'Font Weight',
+    var spacingOptions={},spacingIndex=10;
+    for(var op=0;op<30;op++){
+        spacingOptions[op]=op-spacingIndex;
+    }
+    a.FroalaEditor.DefineIcon('letterSpacingControl', {NAME: 'arrows-h'});
+    a.FroalaEditor.RegisterCommand('letterSpacingControl', {
+      title: 'Letter Spacing',
       type: 'dropdown',
       focus: false,
       undo: true,
       refreshAfterCallback: true,
-      options: {
-            "200":"Light",
-            "400":"Normal",
-            "700":"Bold",
-      },
+      options:spacingOptions,
       callback: function (cmd, val) {
-        this.format.applyStyle('font-weight',val)
+        this.format.applyStyle('letter-spacing',(val-spacingIndex)+"px");
       },
       // Callback on refresh.
       refresh: function ($btn) {
