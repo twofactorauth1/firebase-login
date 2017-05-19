@@ -492,9 +492,16 @@
 
                     $scope.userAgentData = userAgentData;
                     var uadLength = userAgentData.length -1;
-                    $scope.topBrowser = userAgentData[uadLength][0];
-                    var browserPercent = Math.round((userAgentData[uadLength][1] / browserTotal) * 100);
-                    $scope.browserPercent = browserPercent;
+                    if(userAgentData && userAgentData.length > 0) {
+                        $scope.topBrowser = userAgentData[uadLength][0];
+                        var browserPercent = Math.round((userAgentData[uadLength][1] / browserTotal) * 100);
+                        $scope.browserPercent = browserPercent;
+                    } else {
+                        $scope.topBrowser = '--';
+                        var browserPercent = Math.round((userAgentData[uadLength][1] / browserTotal) * 100);
+                        $scope.browserPercent = '--';
+                    }
+
 
                     ChartAnalyticsService.userAgentChart(userAgentData, function(config){
                         $scope.userAgentConfig = config;
