@@ -10,9 +10,7 @@
     $scope.bulkActionChoice = {};
     $scope.tagsBulkAction = {};
 
-    if (!$state.current.sort) {
-      $scope.order = "reverse";
-    }
+    
     $scope.formValidations = formValidations;
     $scope.default_image_url = "/admin/assets/images/default-user.png";
     $scope.pagingConstant = pagingConstant;
@@ -43,20 +41,6 @@
         details: {}
     }
 
-    $scope.filterContactPhotos = function (contacts) {
-      _.each(contacts, function (contact) {
-        if (contact) {
-          contact.hasPhoto = false;
-          if (contact.photo) {
-            if ($("#contact_photo_" + contact._id).attr("src") === $scope.default_image_url) {
-              contact.hasPhoto = false;
-            } else {
-              contact.hasPhoto = true;
-            }
-          }
-        }
-      });
-    };
     /*
      * @getContacts
      * -
@@ -119,54 +103,7 @@
 
     loadCustomerTags();
     $scope.getContacts();
-    /*
-     * @getters
-     * - getters for the sort on the table
-     */
-
-    $scope.getters = {
-      created: function (value) {
-        return value.created.date || -1;
-      },
-      modified: function (value) {
-        return value.modified.date;
-      },
-      name: function (value) {
-        return [value.first, value.middle, value.last].join(' ').trim();
-      },
-      tags: function (value) {
-        return $scope.contactTagsFn(value);
-      },
-      phone: function (value) {
-        if (value.details[0] && value.details[0].phones && value.details[0].phones[0]) {
-          return value.details[0].phones[0].number.trim();
-        }
-        return "";
-      },
-      address: function (value) {
-        return value.bestAddress
-      },
-      unsubscribed: function (value) {
-        return value.unsubscribed
-      },
-      social: function (value) {
-        if (value.hasLinkedInId) {
-          return 1;
-        }
-        if (value.hasGoogleId) {
-          return 2;
-        }
-        if (value.hasFacebookId) {
-          return 3;
-        }
-        if (value.hasTwitterId) {
-          return 4;
-        }
-
-        return 5;
-      }
-    };
-
+    
     /*
      * @openModal
      * -
@@ -373,11 +310,6 @@
       value: false
     }];
 
-    $scope.contactsLimit = 50;
-
-    $scope.addContacts = function () {
-      $scope.contactsLimit += 50;
-    };
 
     $scope.addContact = function () {
 
@@ -426,26 +358,6 @@
         $scope.minRequirements = true;
 
       });
-    };
-
-    $scope.incrementContactTags = function (contact) {
-      var contactTags = $scope.contactTags || [];
-      if(contact){
-          if (contact.tags) {
-            _.each(contact.tags, function (tag) {
-              var type = _.find(contactTags, function (type) {
-                return type.data === tag;
-              });
-              if (!type) {
-                contactTags.push({
-                  label : tag,
-                  data : tag
-                })
-              }
-            });
-          }
-        $scope.contactTags = _.uniq(contactTags.concat(contactTags), function(w) { return w.label; })
-      }
     };
 
     $scope.setDuplicateUser = function(val){
@@ -560,19 +472,6 @@
       }, 800);
     };
 
-    // $scope.socailType = "";
-    // $scope.socailList = false;
-    // $scope.groupList = false;
-
-    // $scope.showSocialAccountSelect = function (socailType) {
-    //   $scope.socailType = socailType;
-    //   $scope.socailList = true;
-    //   if (socailType === userConstant.social_types.GOOGLE) {
-    //     $scope.groupList = true;
-    //   } else {
-    //     $scope.groupList = false;
-    //   }
-    // };
 
     $scope.bulkActionSelectFn = function () {
         var selectedContacts = $scope.selectedContactsFn();
@@ -674,6 +573,7 @@
         $scope.exportText = exportContacts.length ? "Export Selected " + exportContacts.length : "Export";
         return exportContacts;
     };
+
     $scope.tagsBulkActionClickFn = function (operation) {
         var tags = _.uniq(_.pluck($scope.tagsBulkAction.tags, 'data'));
         if(operation == 'add' && tags.length<1 && $scope.tagsBulkAction.toReplace){
@@ -733,6 +633,7 @@
             toaster.pop('success', 'Contacts tags updated.');
           });
     };
+    
     $scope.exportContactsFn = function () {
       if (_.pluck($scope.selectedContactsFn().length)) {
         ContactService.exportCsvContacts(_.pluck($scope.selectedContactsFn(), '_id'));
@@ -848,6 +749,7 @@
         }
     }, true);
 
+    /********** FILTER RELATED **********/
 
     $scope.$watch('pagingParams.fieldSearch', function (search) {
         if(angular.isDefined(search)){
