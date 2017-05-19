@@ -148,8 +148,9 @@ var dao = {
                 if(value){
                     if(key == "_id"){
                         obj[key] = parseInt(value);    
-                    }
-                    else{
+                    } else if(key === 'tags'){
+                        obj[key] = value;
+                    } else {
                         obj[key] = new RegExp(value, 'i');
                     }
                     
