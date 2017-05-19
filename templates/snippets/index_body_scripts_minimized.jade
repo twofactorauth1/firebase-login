@@ -8,20 +8,6 @@ script(src="../js/indigenous.js")
 script(src="../js/ng-indigenous.js")
 script(src="../js/libs/ng-text-truncate/ng-text-truncate.js")
 
-if account.accountUrl == 'https://main.indigenous.io'
-    script.
-      (function() {
-        var _fbq = window._fbq || (window._fbq = []);
-        if (!_fbq.loaded) {
-          var fbds = document.createElement('script');
-          fbds.async = true;
-          fbds.src = '//connect.facebook.net/en_US/fbds.js';
-          var s = document.getElementsByTagName('script')[0];
-          s.parentNode.insertBefore(fbds, s);
-          _fbq.loaded = true;
-        }
-      })();
-
 script.
     var tag = document.createElement('script');
     tag.src = "https://www.youtube.com/iframe_api";
