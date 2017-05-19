@@ -32,8 +32,11 @@
           _qString += "&term=" + pagingParams.globalSearch;
       }
       if(isFieldSearchEnabled){
-          _method = "POST";
+          _method = "GET";
           urlParts.push('filter');
+          _.each(pagingParams.fieldSearch, function(value, key){
+              _qString += '&' + key + '=' + value;
+          });
       }
       var apiUrl = baseUrl + urlParts.join('/') + _qString;
       return $http({

@@ -58,7 +58,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.delete(this.url(':id'), this.isAuthAndSubscribedApi.bind(this), this.deleteContact.bind(this));
         app.get(this.url(''), this.isAuthAndSubscribedApi.bind(this), this.listContacts.bind(this)); // for all contacts
         app.get(this.url('paged/list'), this.isAuthAndSubscribedApi.bind(this), this.listPagedContacts.bind(this)); // for paged contacts
-        app.post(this.url('paged/list/filter'), this.isAuthAndSubscribedApi.bind(this), this.filterContacts.bind(this)); // filter contacts
+        app.get(this.url('paged/list/filter'), this.isAuthAndSubscribedApi.bind(this), this.filterContacts.bind(this)); // filter contacts
         app.get(this.url('filter/:letter'), this.isAuthAndSubscribedApi.bind(this), this.getContactsByLetter.bind(this)); // for individual letter
 
         app.post(this.url(':id/user'), this.isAuthAndSubscribedApi.bind(this), this.createAccountUserFromContact.bind(this));
@@ -390,7 +390,12 @@ _.extend(api.prototype, baseApi.prototype, {
         var limit = parseInt(req.query.limit) || 0;
         var sortBy = req.query.sortBy || null;
         var sortDir = parseInt(req.query.sortDir) || null;
-        var fieldSearch = req.body;
+        var fieldSearch = req.query;
+        delete fieldSearch.term;
+        delete fieldSearch.skip;
+        delete fieldSearch.limit;
+        delete fieldSearch.sortBy;
+        delete fieldSearch.sordDir;
         var term = req.query.term;
         /*
          * Search across the fields
