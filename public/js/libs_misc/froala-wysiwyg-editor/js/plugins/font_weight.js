@@ -9,7 +9,7 @@
       title: 'Font Weight',
       type: 'dropdown',
       focus: false,
-      undo: false,
+      undo: true,
       refreshAfterCallback: true,
       options: {
             "200":"Light",
