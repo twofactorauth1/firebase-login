@@ -47,6 +47,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url('search/email/:email'), this.isAuthAndSubscribedApi.bind(this), this.search.bind(this));
         app.get(this.url('search/name/:name'), this.isAuthAndSubscribedApi.bind(this), this.search.bind(this));
         app.get(this.url('search/:term'), this.isAuthAndSubscribedApi.bind(this), this.search.bind(this));
+        app.get(this.url('tags'), this.isAuthAndSubscribedApi.bind(this), this.getContactTags.bind(this));
         app.get(this.url(':id'), this.isAuthAndSubscribedApi.bind(this), this.getContactById.bind(this));
         /*
          * Temp remove security for create contact.  Eventually, we will need to move this to a public API.
@@ -56,6 +57,8 @@ _.extend(api.prototype, baseApi.prototype, {
         app.put(this.url(''), this.isAuthAndSubscribedApi.bind(this), this.updateContact.bind(this));
         app.delete(this.url(':id'), this.isAuthAndSubscribedApi.bind(this), this.deleteContact.bind(this));
         app.get(this.url(''), this.isAuthAndSubscribedApi.bind(this), this.listContacts.bind(this)); // for all contacts
+        app.get(this.url('paged/list'), this.isAuthAndSubscribedApi.bind(this), this.listPagedContacts.bind(this)); // for paged contacts
+        app.post(this.url('paged/list/filter'), this.isAuthAndSubscribedApi.bind(this), this.filterContacts.bind(this)); // filter contacts
         app.get(this.url('filter/:letter'), this.isAuthAndSubscribedApi.bind(this), this.getContactsByLetter.bind(this)); // for individual letter
 
         app.post(this.url(':id/user'), this.isAuthAndSubscribedApi.bind(this), this.createAccountUserFromContact.bind(this));
@@ -353,7 +356,74 @@ _.extend(api.prototype, baseApi.prototype, {
                 });
             }
         });
+    },
 
+    listPagedContacts: function (req, res) {
+        var self = this;
+        var accountId = parseInt(self.accountId(req));
+        var skip = parseInt(req.query['skip'] || 0);
+        var limit = parseInt(req.query['limit'] || 0);
+        var sortBy = req.query.sortBy || "created.date";
+        var sortDir = parseInt(req.query.sortDir) || -1;
+        var term = req.query.term;
+        self.log.debug('>> listPagedContacts');
+
+        self.checkPermissionForAccount(req, self.sc.privs.VIEW_CONTACT, accountId, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(res);
+            } else {
+                contactDao.listContacts(accountId, skip, limit, sortBy, sortDir, term, null, function (err, value) {
+                    self.log.debug('<< listPagedContacts');
+                    self.sendResultOrError(res, err, value, "Error listing Contacts");
+                    self = null;
+                });
+            }
+        });
+    },
+
+    filterContacts: function(req, res) {
+        var self = this;
+        var accountId = parseInt(self.accountId(req));
+        var userId = self.userId(req);
+        self.log.debug(accountId, userId, '>> contactsFilter');
+        var skip = parseInt(req.query.skip) || 0;
+        var limit = parseInt(req.query.limit) || 0;
+        var sortBy = req.query.sortBy || null;
+        var sortDir = parseInt(req.query.sortDir) || null;
+        var fieldSearch = req.body;
+        var term = req.query.term;
+        /*
+         * Search across the fields
+         */
+
+        self.checkPermissionForAccount(req, self.sc.privs.VIEW_CONTACT, accountId, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(res);
+            } else {
+                contactDao.listContacts(accountId, skip, limit, sortBy, sortDir, term, fieldSearch, function (err, value) {
+                    self.log.debug('<< contactsFilter');
+                    self.sendResultOrError(res, err, value, "Error filtering Contacts");
+                    self = null;
+                });
+            }
+        });
+    },
+
+    getContactTags: function(req, resp) {
+        var self = this;
+        var accountId = parseInt(self.accountId(req));
+        var userId = self.userId(req);
+        self.log.debug(accountId, userId, '>> getContactTags');
+        self.checkPermissionForAccount(req, self.sc.privs.VIEW_CONTACT, accountId, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(res);
+            } else {
+                contactDao.getContactTags(accountId, userId, function(err, tagAry){
+                    self.log.debug('<< getContactTags');
+                    self.sendResultOrError(resp, err, tagAry, 'Error getting contact tags');
+                });
+            }
+        });
     },
 
     getContactsByLetter: function (req, res) {

@@ -24,9 +24,11 @@
             <div ng-if="vm.uiState.loading">                
                 <h4 class="text-center margin-top-30 margin-bottom-30">Loading Messages, Please wait....</h4>                
             </div>
-            <ul class="list-unstyled broadcast-message-container-list">                  
+            <ul class="list-unstyled broadcast-message-container-list">
                 <li ng-repeat="message in vm.state.messages | orderBy:'-modified.date'">
-                    <p class="message-title" ng-bind-html="message.message | unsafe"></p>                    
+                    <h3 ng-bind-html="message.subject | unsafe"></h3>
+                    <p ng-text-truncate="vm.stripHTML(message.message)" ng-tt-chars-threshold="100" ng-tt-no-toggling></p>
+
                     <div class="btn-group btn-group-sm" role="group" aria-label="Post Status">
                         <button
                             type="button"

@@ -13,9 +13,34 @@
       return $cacheFactory('ContactService');
     };
 
-    this.getContacts = function (fn) {
+    this.getContacts = function (fn) {    
       var apiUrl = baseUrl + ['contact'].join('/');
-      return $http.get(apiUrl)
+      $http.get(apiUrl)
+        .success(function (data) {
+          fn(data);
+        })
+    };
+
+    this.getPagedContacts = function (pagingParams, isFieldSearchEnabled, fn) {    
+      var urlParts = ['contact', 'paged', 'list'];  
+      var _method = "GET";
+      var _qString = "?limit="+ pagingParams.limit + "&skip="+ pagingParams.skip;
+      if(pagingParams.sortBy){
+          _qString += "&sortBy=" + pagingParams.sortBy + "&sortDir=" + pagingParams.sortDir;
+      }
+      if(pagingParams.globalSearch){
+          _qString += "&term=" + pagingParams.globalSearch;
+      }
+      if(isFieldSearchEnabled){
+          _method = "POST";
+          urlParts.push('filter');
+      }
+      var apiUrl = baseUrl + urlParts.join('/') + _qString;
+      return $http({
+          url: apiUrl,
+          method: _method,
+          data: angular.toJson(pagingParams.fieldSearch)
+        })
         .success(function (data) {
           fn(data);
         });
@@ -492,6 +517,33 @@
         var apiUrl = apiUrl + '?' + params.join('&');
       }
       window.location = apiUrl;
+    };
+
+    this.listAllContactTags = function(fn){
+      var apiUrl = baseUrl + ['contact', 'tags'].join('/');
+      $http.get(apiUrl)
+        .success(function (data) {
+          fn(data);
+        });
+    }
+
+    this.fomatContactTags = function (tags, fn) {
+      var contactTags = contactConstant.contact_tags.dp;
+        var extraContactTags = [];
+        _.each(tags, function (tag) {
+            var type = _.find(contactTags, function (type) {
+              return type.data === tag;
+            });
+            if (!type) {
+              extraContactTags.push({
+                label : tag.replace(/^\s+|\s+$|\s+(?=\s)/g, ""),
+                data : tag.replace(/^\s+|\s+$|\s+(?=\s)/g, ""),
+
+              })
+            }
+        })
+      contactTags = _.uniq(contactTags.concat(extraContactTags), function(c) { return c.label; })
+      fn(contactTags);
     };
 
   }]);

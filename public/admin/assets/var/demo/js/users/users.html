@@ -46,7 +46,7 @@
                         <td>{{user.username}}</td>
                         <td class="table-action" >
                             <a ng-if="vm.uiState.isAdminUser || currentUser._id === user._id" ng-click="openEditUserModal(user._id)"><span tooltip-placement="top" tooltip="Change Password"><i class="fa fa-pencil"></i></span></a>
-                            <a ng-if="vm.uiState.isAdminUser" ng-click="openEditUserCardModal(user._id)"><span tooltip-placement="top" tooltip="Edit User's Card Codes"><i class="fa fa-address-book-o"></i></span></a>
+                            <a  ng-if="currentUser._id !== user._id && vm.uiState.isAdminUser" ng-click="openEditUserCardModal(user._id)"><span tooltip-placement="top" tooltip="Edit User's Card Codes"><i class="fa fa-address-book-o"></i></span></a>
                             <a ng-if="currentUser._id !== user._id && vm.uiState.isAdminUser" ng-click="vm.removeUserFromAccount(user._id)" class="delete-row"><span tooltip-placement="top" tooltip="Delete User"><i class="fa fa-trash-o"></i></span></a>
                         </td>
                     </tr>
