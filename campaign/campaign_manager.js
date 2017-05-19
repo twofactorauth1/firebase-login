@@ -351,7 +351,9 @@ module.exports = {
             'statistics.emailsSent': statistics.sent,
             'statistics.emailsClicked':statistics.clicked,
             'statistics.emailsOpened': statistics.opened,
-            'statistics.emailsBounced':statistics.bounced}
+            'statistics.emailsBounced':statistics.bounced,
+            'statistics.emailsDropped':statistics.dropped,
+            'statistics.unsubscribes': statistics.unsubscribes}
         };
         campaignDao.update(query, modification, $$.m.CampaignV2, function(err, value){
             if(err) {

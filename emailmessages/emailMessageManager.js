@@ -1724,6 +1724,37 @@ var emailMessageManager = {
         });
     },
 
+    markMessageDropped: function(messageId, event, fn) {
+        var self = this;
+        self.log.debug('>> markMessageDropped');
+        dao.findOne({_id:messageId}, $$.m.Emailmessage, function(err, emailMessage){
+            if(err) {
+                self.log.error('Error finding email message:', err);
+                fn(err);
+            } else if(!emailMessage) {
+                self.log.debug('Cannot find emailMessage with ID:' + messageId);
+                fn();
+            } else {
+                var eventDate = moment.unix(event.timestamp).toDate();
+                var modified = {date: new Date(), by:'webhook'};
+                emailMessage.set('droppedDate', eventDate);
+                emailMessage.set('modified', modified);
+                var eventAry = emailMessage.get('events') || [];
+                eventAry.push(event);
+                emailMessage.set('events', eventAry);
+                dao.saveOrUpdate(emailMessage, function(err, value){
+                    if(err) {
+                        self.log.error('Error updating emailmessage:', err);
+                        return fn(err);
+                    } else {
+                        self.log.debug('<< markMessageDropped');
+                        return fn(null, value);
+                    }
+                });
+            }
+        });
+    },
+
     isMessageDelivered: function(messageId, fn) {
         var self = this;
         self.log.debug('>> isMessageDelivered');
