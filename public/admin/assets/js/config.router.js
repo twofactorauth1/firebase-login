@@ -105,7 +105,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         templateUrl: "/admin/assets/views/contacts.html",
         title: 'Contacts',
         icon: 'ti-layout-media-left-alt',
-        resolve: loadSequence('contactsCtrl', 'ImportContactService', "socialConfigService", 'contactService', 'papaParse', 'string_score', 'importContactModalCtrl')
+        resolve: loadSequence('contactsCtrl', 'ImportContactService', "socialConfigService", 'contactService', 'papaParse', 'string_score', 'importContactModalCtrl', 'contactPagingService')
     }).state('app.customers', {
         url: '/customers',
         templateUrl: "/admin/assets/views/customers.html",

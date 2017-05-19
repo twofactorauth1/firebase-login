@@ -586,7 +586,12 @@ app.constant('userConstant', {
 app.constant('mediaManagerConstant', {
   numberOfRowsPerPage: 6,
   displayedPages: 7
-})
+});
+
+app.constant('pagingConstant', {
+  numberOfRowsPerPage: 50,
+  displayedPages: 11
+});
 
 app.constant('JS_REQUIRES', {
   //*** Scripts
@@ -708,6 +713,7 @@ app.constant('JS_REQUIRES', {
     'analyticsWidgetStateService': 'assets/js/site-analytics/analytics-widget-state-service.js',
     'broadcastMessagesService': 'assets/js/messages/messages.service.js',
     'utilService': 'assets/js/services/util.js',
+    'contactPagingService': 'assets/js/services/contactPagingService.js',
     //*** Filters
     'htmlToPlaintext': 'assets/js/filters/htmlToPlaintext.js',
     'secTotime': 'assets/js/filters/secTotime.js',
