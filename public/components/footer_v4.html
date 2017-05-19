@@ -3,40 +3,20 @@
         <div class="container rvlvr-footer-section-container">
             <div class="col-sm-4">
                 <div class="rvlvr-footer-marketing">
-                    <img src="/images/rvlvr/rvlvr-logo-white.png" height="50" class="">
-                    <p class="rvlvr-securematics-fee">* A SHIFT IN VAR MARKETING.</p>
+                    <img src="{{component.logoUrl}}" class="">
+                    <p ng-if="component.logoText" class="rvlvr-securematics-fee">{{component.logoText}}</p>
                 </div>
             </div>
             <div class="col-sm-4 rvlvr-foolter-links">
                 <ul class="col-xs-12">
-                    <li class="col-xs-6">
-                        <a href="javascript:void(0)" class="text-nowrap">What we do</a>
-                    </li>
-                    <li class="col-xs-6">
-                        <a href="/legal" class="text-nowrap">Legal</a>
-                    </li>
-                    <li class="col-xs-6">
-                        <a href="javascript:void(0)" class="text-nowrap">Features</a>
-                    </li>
-                    <li class="col-xs-6">
-                    <a href="/legal#fa01be55-56d2-4eaf-aa68-2ace0edd60cb" class="text-nowrap">Privacy Policy</a>
-                    </li>
-                    <li class="col-xs-6">
-                        <a href="javascript:void(0)" class="text-nowrap">Services</a>
-                    </li>
-                    <li class="col-xs-6">
-                        <a href="javascript:void(0)" class="text-nowrap">Press</a>
-                    </li>
-                    <li class="col-xs-6">
-                        <a href="javascript:void(0)" class="text-nowrap">Sign Up</a>
-                    </li>
-                    <li class="col-xs-6">
-                        <a href="javascript:void(0)" class="text-nowrap">Contact Us</a>
-                    </li>
+                    <li class="col-xs-6" ng-repeat="link in component.footerLinks">
+                        <a href="{{link.url}}" class="text-nowrap">{{link.label}}</a>
+                    </li>                    
                 </ul>
             </div>
             <div class="col-xs-12 text-right">
-                <p>Copyright © {{copyright.year}} RVLVR</p>
+                <p ng-if="component.footerDomainText">{{component.footerDomainText}}</p>
+                <p>Copyright © {{copyright.year}} {{component.footerText}}</p>
             </div>
 
         </div>
