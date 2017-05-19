@@ -100,16 +100,19 @@
         //   $scope.setSortOrder($state.current.sort);
         // }
         $scope.showContacts = true;
-        ContactService.getAllContactTags(contacts, function(tags){
-          $scope.contactTags = tags;
-        });
+        //ContactService.getAllContactTags(contacts, function(tags){
+          //$scope.contactTags = tags;
+        //});
       });
     };
 
-    $scope.getContacts();
     
-    ContactService.getContactTags(function(tags){
-      $scope.contactTags = tags;
+    
+    ContactService.listAllContactTags(function(tags){
+      ContactService.fomatContactTags(tags, function(tags){
+          $scope.contactTags = tags;
+      });
+      $scope.getContacts();
     });
 
     /*

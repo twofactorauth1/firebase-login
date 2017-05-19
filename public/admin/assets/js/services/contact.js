@@ -519,5 +519,32 @@
       window.location = apiUrl;
     };
 
+    this.listAllContactTags = function(fn){
+      var apiUrl = baseUrl + ['contact', 'tags'].join('/');
+      $http.get(apiUrl)
+        .success(function (data) {
+          fn(data);
+        });
+    }
+
+    this.fomatContactTags = function (tags, fn) {
+      var contactTags = contactConstant.contact_tags.dp;
+        var extraContactTags = [];
+        _.each(tags, function (tag) {
+            var type = _.find(contactTags, function (type) {
+              return type.data === tag;
+            });
+            if (!type) {
+              extraContactTags.push({
+                label : tag.replace(/^\s+|\s+$|\s+(?=\s)/g, ""),
+                data : tag.replace(/^\s+|\s+$|\s+(?=\s)/g, ""),
+
+              })
+            }
+        })
+      contactTags = _.uniq(contactTags.concat(extraContactTags), function(c) { return c.label; })
+      fn(contactTags);
+    };
+
   }]);
 }(angular));

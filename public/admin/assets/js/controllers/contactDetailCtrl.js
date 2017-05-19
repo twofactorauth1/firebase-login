@@ -942,8 +942,10 @@
         }
         ;
 
-        ContactService.getContactTags(function (tags) {
-            $scope.contactTags = tags;
+        ContactService.listAllContactTags(function(tags){
+            ContactService.fomatContactTags(tags, function(tags){
+                $scope.contactTags = tags;
+            });
         });
 
         /*
@@ -1070,12 +1072,6 @@
             $scope.originalContact = null;
             $scope.contact = null;
         }
-
-        // ContactService.getContacts(function (contacts) {
-        //     ContactService.getAllContactTags(contacts, function (tags) {
-        //         $scope.contactTags = tags;
-        //     });
-        // });
 
         $scope.tagToContact = function (value) {
             return ContactService.tagToContact(value);
