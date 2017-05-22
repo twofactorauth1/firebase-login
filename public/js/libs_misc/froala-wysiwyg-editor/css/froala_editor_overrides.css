@@ -60,3 +60,12 @@ a.fr-command[data-param1='PRE'] {
 .fr-video-embed-layer.fr-layer.fr-active .fr-input-line textarea.fr-not-empty + label{
   display: none;
 }
+span.fontWeight_200, span.fontWeight_200 a.btn {
+    font-weight: 200 !important;
+}
+span.fontWeight_400 , span.fontWeight_400 a.btn{
+    font-weight: 400 !important;
+}
+span.fontWeight_700, span.fontWeight_700 a.btn{
+    font-weight: 700 !important;
+}
