@@ -87,6 +87,9 @@
                     $scope.minRequirements = true;
                 }
                 $scope.showContacts = true;
+                $("html, body").animate({
+                    scrollTop: 0
+                }, 600);
 
             });
         };
@@ -364,6 +367,7 @@
                 $scope.closeModal();
                 returnedContact.bestEmail = $scope.checkBestEmail(returnedContact);
                 loadDefaults();
+                $scope.getContactCount();            
                 $scope.getContacts();
                 loadCustomerTags();
                 toaster.pop('success', 'Contact Successfully Added');
@@ -524,6 +528,8 @@
                             $q.all(contactPromises)
                                 .then(function (results) {
                                     loadDefaults();
+                                    $scope.getContactCount();
+                                    loadCustomerTags();
                                     $scope.getContacts();
                                     $scope.bulkActionChoice = null;
                                     $scope.bulkActionChoice = {};
