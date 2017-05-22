@@ -364,7 +364,7 @@
                 $scope.closeModal();
                 returnedContact.bestEmail = $scope.checkBestEmail(returnedContact);
                 loadDefaults();
-                getTotalContacts();            
+                $scope.getContactCount();            
                 $scope.getContacts();
                 loadCustomerTags();
                 toaster.pop('success', 'Contact Successfully Added');
@@ -525,7 +525,7 @@
                             $q.all(contactPromises)
                                 .then(function (results) {
                                     loadDefaults();
-                                    getTotalContacts();
+                                    $scope.getContactCount();
                                     loadCustomerTags();
                                     $scope.getContacts();
                                     $scope.bulkActionChoice = null;
