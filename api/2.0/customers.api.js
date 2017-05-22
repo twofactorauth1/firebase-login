@@ -221,11 +221,20 @@ _.extend(api.prototype, baseApi.prototype, {
                 self.log.debug(accountId, userId, '<< updateCustomerTemplateAccount');
                 self.sendResultOrError(resp, err, updatedCustomer, 'Error updating template account');
             });
-        } else {
-            self.wrapError(resp, 400, 'Unsupported Method', 'This method is unsupported');
+        }else {
+            self.isOrgAdmin(accountId, userId, req, function(err, val) {
+                if (val === true) {
+                    var orgDomain = urlUtils.getSubdomainFromRequest(req).orgDomain;
+                    manager.updateCustomerTemplateAccount(accountId, userId, customerId, customerDetails, function(err, updatedCustomer){
+                        self.log.debug(accountId, userId, '<< updateCustomerTemplateAccount');
+                        self.sendResultOrError(resp, err, updatedCustomer, 'Error updating template account');
+                    });
+                } else {
+                    self.wrapError(resp, 400, 'Unsupported Method', 'This method is unsupported');
+                }
+            });
         }
     }
-
 });
 
 module.exports = new api({version:'2.0'});
