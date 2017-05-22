@@ -87,6 +87,9 @@
                     $scope.minRequirements = true;
                 }
                 $scope.showContacts = true;
+                $("html, body").animate({
+                    scrollTop: 0
+                }, 600);
 
             });
         };

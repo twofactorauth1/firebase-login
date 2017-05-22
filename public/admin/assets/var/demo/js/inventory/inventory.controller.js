@@ -131,6 +131,7 @@ function inventoryComponentController($scope, $attrs, $filter, $modal, $timeout,
 
             InventoryService.skip = (page - 1) * InventoryService.limit;
             loadInventory();
+
         }
 
     }
@@ -206,6 +207,9 @@ function inventoryComponentController($scope, $attrs, $filter, $modal, $timeout,
             vm.state.inventory = response.data.results;
             vm.uiState.pageLoading = false;
             vm.uiState.loadingFilter = false;
+            $("html, body").animate({
+              scrollTop: 0
+            }, 600);
         });
     }
 
