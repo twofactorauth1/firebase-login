@@ -48,6 +48,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url('search/name/:name'), this.isAuthAndSubscribedApi.bind(this), this.search.bind(this));
         app.get(this.url('search/:term'), this.isAuthAndSubscribedApi.bind(this), this.search.bind(this));
         app.get(this.url('tags'), this.isAuthAndSubscribedApi.bind(this), this.getContactTags.bind(this));
+        app.get(this.url('count'), this.isAuthAndSubscribedApi.bind(this), this.getContactCount.bind(this));
         app.get(this.url(':id'), this.isAuthAndSubscribedApi.bind(this), this.getContactById.bind(this));
         /*
          * Temp remove security for create contact.  Eventually, we will need to move this to a public API.
@@ -58,7 +59,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.delete(this.url(':id'), this.isAuthAndSubscribedApi.bind(this), this.deleteContact.bind(this));
         app.get(this.url(''), this.isAuthAndSubscribedApi.bind(this), this.listContacts.bind(this)); // for all contacts
         app.get(this.url('paged/list'), this.isAuthAndSubscribedApi.bind(this), this.listPagedContacts.bind(this)); // for paged contacts
-        app.post(this.url('paged/list/filter'), this.isAuthAndSubscribedApi.bind(this), this.filterContacts.bind(this)); // filter contacts
+        app.get(this.url('paged/list/filter'), this.isAuthAndSubscribedApi.bind(this), this.filterContacts.bind(this)); // filter contacts
         app.get(this.url('filter/:letter'), this.isAuthAndSubscribedApi.bind(this), this.getContactsByLetter.bind(this)); // for individual letter
 
         app.post(this.url(':id/user'), this.isAuthAndSubscribedApi.bind(this), this.createAccountUserFromContact.bind(this));
@@ -390,7 +391,12 @@ _.extend(api.prototype, baseApi.prototype, {
         var limit = parseInt(req.query.limit) || 0;
         var sortBy = req.query.sortBy || null;
         var sortDir = parseInt(req.query.sortDir) || null;
-        var fieldSearch = req.body;
+        var fieldSearch = req.query;
+        delete fieldSearch.term;
+        delete fieldSearch.skip;
+        delete fieldSearch.limit;
+        delete fieldSearch.sortBy;
+        delete fieldSearch.sortDir;
         var term = req.query.term;
         /*
          * Search across the fields
@@ -421,6 +427,23 @@ _.extend(api.prototype, baseApi.prototype, {
                 contactDao.getContactTags(accountId, userId, function(err, tagAry){
                     self.log.debug('<< getContactTags');
                     self.sendResultOrError(resp, err, tagAry, 'Error getting contact tags');
+                });
+            }
+        });
+    },
+
+    getContactCount: function(req, resp) {
+        var self = this;
+        var accountId = parseInt(self.accountId(req));
+        var userId = self.userId(req);
+        self.log.debug(accountId, userId, '>> getContactCount');
+        self.checkPermissionForAccount(req, self.sc.privs.VIEW_CONTACT, accountId, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(res);
+            } else {
+                contactDao.getContactCount(accountId, userId, function(err, count){
+                    self.log.debug('<< getContactCount');
+                    self.sendResultOrError(resp, err, {count:count}, 'Error getting contact count');
                 });
             }
         });

@@ -54,7 +54,10 @@ var campaign = $$.m.ModelBase.extend({
                 emailsSent: 0,
                 emailsOpened: 0,
                 emailsClicked: 0,
-                participants: 0
+                emailsBounced: 0,
+                emailsDropped: 0,
+                participants: 0,
+                unsubscribes: 0
             },
 
             contactTags: [],

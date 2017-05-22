@@ -23,7 +23,7 @@
     }
     .inner-page {
         max-width: 768px!important;
-        padding: 30px 0;
+        padding: 0;
         background: transparent;
         border: 0;
         @media (max-width: 768px) {
@@ -34,26 +34,33 @@
     }
     .signup-btn-v2 {
         cursor:pointer;
-        background:linear-gradient(to bottom, #48b1cc 5%, #48b1cc 100%);
-        border-radius:6px;
-        border:1px solid #48b1cc;
+        border-radius: 0 !important;
+        border:none;
         display:inline-block;
         color:#ffffff;
-        font-size:16px;
+        font-size:14px;
         font-weight:bold;
         font-style:%1;
         padding:10px 30px;
         text-decoration:none;
-        text-shadow:0px 1px 1px #48b1cc;
+        background: #85B5E2;
+        color: #fff !important;
     }
     .fa-check {
         color: #27ae60;
     }
     .payment-form-header {
-        height: 90px;
+        height: 80px;
         padding: 15px;
         background-color: #fafafa;
         border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        .small-indi-logo{
+            @media (max-width: 400px) {
+                max-width: 130px;
+            }
+        }
+        max-width:1199px !important;
+        margin:0 auto;
     }
     #terms-of-service {
         p.p1 {
@@ -137,11 +144,7 @@
         }
     }
     .top-signup {
-        @media (min-width: 768px) {
-            background-image: url('https://s3.amazonaws.com/indigenous-digital-assets/account_6/1_1467343920617.jpg');
-            background-attachment: fixed;
-            background-size: cover;
-        }
+
 
         h1 {
             font-size: 55px;
@@ -153,7 +156,6 @@
         }
         h2 {
             font-size: 35px;
-            color: #4bafca;
             font-weight: bold;
             i {
                 font-family: 'FontAwesome'!important
@@ -220,6 +222,14 @@
             display: block;
         }
     }
+    .indi_logo_small_screen{
+        line-height: 65px;
+        font-size: 30px;
+        font-weight: bold;
+        @media (max-width: 767px){
+            display: inline-block !important;
+        }
+    }
     .account-info-signup {
         &:after {
             content: '';
@@ -277,8 +287,9 @@
 
             }
             .signup-credit-cards-container{
+
                 @media (min-width: 768px) {
-                    float: right;
+                    text-align: right;
                 }
                 .signup-credit-cards {
                     @media (max-width: 768px) {
@@ -308,27 +319,31 @@
         }
     }
     .features-wrap{
+
         .feature-block{
-            background: rgb(28, 43, 54);
-            border-radius: 5px;
-            color: rgb(255, 255, 255);
+            color: #ffffff;
             margin-left: -15px;
+            border: 3px solid #ffffff;
+            margin-left: -15px;
+            padding-left: 15px;
+            padding-right: 15px;
 
             @media screen and (max-width: 768px) {
                 margin-right: -15px;
             }
 
             .plan-title{
-                font-size: 28px;
+                font-size: 26px;
+                font-weight: bold;
             }
             .plan-subtitle{
-                font-size: 18px;
+                font-size: 20px;
             }
             .plan-amount{
-                font-size: 30px;
+                font-size: 22px;
             }
             .plan-duration{
-                font-size: 18px;
+                font-size: 16px;
             }
             .plan-fee{
                 font-size: 14px;
@@ -342,21 +357,23 @@
         }
     }
     .selected-plan{
-        border: 3px solid #EFA022;
+        background: #ffffff;
+        color: #000000 !important;
     }
     .section-title{
         span{
             font-family: Raleway, sans-serif;
-            font-size: 28px;
+            font-size: 25px;
+            font-weight: bold;
         }
     }
     .sign-up-medium-text{
-        font-size: 18px !important;
-        color: #a8a8a8;
+        font-size: 16px !important;
+        //color: #a8a8a8;
     }
     .sign-up-small-text{
         font-size: 14px !important;
-        color: #a8a8a8;
+        //color: #a8a8a8;
     }
     .payment-signup {
         &:after {
@@ -576,84 +593,176 @@
 
 
 
-    //    .selected {
-    //      .well {
-    //          border: 1px solid #2ecc71!important;
-    //          box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
-    //      }
-    //    }
-    //    .notSelected {
-    //      .well {
-    //          background: #f0fafb!important;
-    //      }
-    //    }
-    //    .glyphicon-refresh-animate {
-    //        -animation: spin .7s infinite linear;
-    //        -ms-animation: spin .7s infinite linear;
-    //        -webkit-animation: spinw .7s infinite linear;
-    //        -moz-animation: spinm .7s infinite linear;
-    //    }
-    //    @keyframes spin {
-    //        from {
-    //            transform: scale(1) rotate(0deg);
-    //        }
-    //        to {
-    //            transform: scale(1) rotate(360deg);
-    //        }
-    //    }
-    //    @-webkit-keyframes spinw {
-    //        from {
-    //            -webkit-transform: rotate(0deg);
-    //        }
-    //        to {
-    //            -webkit-transform: rotate(360deg);
-    //        }
-    //    }
-    //    @-moz-keyframes spinm {
-    //        from {
-    //            -moz-transform: rotate(0deg);
-    //        }
-    //        to {
-    //            -moz-transform: rotate(360deg);
-    //        }
-    //    }
 
-    //    .certificates {
-    //        padding: 0;
-    //        text-align: center;
-    //        li {
-    //            background: url('https://s3-us-west-2.amazonaws.com/indigenous-components/badge.png') no-repeat;
-    //            width: 132px;
-    //            height: 131px;
-    //            padding: 10px;
-    //            list-style-type: none;
-    //            text-align: center;
-    //            display: inline-block;
-    //            margin-right: 15px;
-    //            vertical-align: top;
-    //            .larger {
-    //                font-size: 24px;
-    //                padding-top: 12px;
-    //                vertical-align: middle;
-    //                line-height: normal;
-    //            }
-    //        }
-    //    }
-    //    @media (max-width: 625px) {
-    // }
-    //    .signup-social-toolbar {
-    //        text-align: center;
-    //        margin-bottom: 20px;
-    //        .btn {
-    //            min-width: 75px;
-    //        }
-    //        i.fa {
-    //            font-size: 36px;
-    //        }
-    //    }
-    //    .profilePhoto {
-    //        margin: 0 auto;
-    //    }
+
+    .indi-signup-container{
+        color: #ffffff;
+        .indi-signup-top-container{
+            padding-top: 15px;
+            text-transform: uppercase;
+            background-image: url('/images/indigenous/indi-top-bg.jpg');
+            background-attachment: fixed;
+            background-size: cover;
+            .payment-form-header{
+                border: none;
+                background-color: transparent;
+            }
+            .already-account-info{
+                a.btn.btn-account{
+                    margin-left: 10px;
+                }
+            }
+            .top-signup-info{
+                padding-top: 100px;
+                padding-left: 15px;
+                padding-right: 15px;
+                max-width: 800px;
+                margin: 0 auto;
+                .signup-getting-started{
+                    background: transparent;
+                    margin-bottom: 50px;
+                    h3{
+                        margin-left: 1em;
+                        margin-top: 15px;
+                        font-size: 28px;
+                    }
+                    h2{
+                        font-size: 40px;
+                        letter-spacing: .2em;
+                    }
+                }
+                .indi-signup-securematics-logo-container{
+                    width: 100%;
+                    margin-bottom: 50px;
+                    .indi-signup-securematics-logo{
+                        max-width: 100%;
+                    }
+                    .indi-signup-securematics-fee{
+                        margin-top: 20px;
+                        color: #fff;
+                        font-size: 15px;
+                        padding: 0px;
+                        font-weight: bold;
+                    }
+                }
+            }
+        }
+        .indi-signup-middle-container{
+            margin-bottom: 30px;
+            text-transform: uppercase;
+            color: #000000 !important;
+            .signup-body{
+                .section-title{
+                    padding-top: 50px;
+                    padding-bottom: 30px
+                }
+            }
+            .jp-card-container{
+                display: none;
+            }
+            .indi-signup-card-container{
+                text-align: right;
+                img{
+                    max-width: 200px;
+                }
+
+            }
+            .signup-credit-cards-container{
+                padding-top: 20px;
+                text-align: right;
+                img{
+                    width: 50px;
+                }
+            }
+            span.input-group-addon {
+                color: #fff;
+                background: #000000;
+                border: 2px solid #000;
+            }
+            .form-group {
+                .form-control{
+                    height: 50px;
+                    border: 2px solid #000;
+                }
+                .form-control-feedback {
+                    top: 5px;
+                    right: 15px;
+                }
+            }
+        }
+
+        .indi-signup-bottom-container{
+            padding-top: 70px;
+            padding-bottom: 70px;
+            text-transform: uppercase;
+            background-image: url('/images/indigenous/indi-bottom-bg.jpg');
+            background-attachment: fixed;
+            background-size: cover;
+            .indi-signup-sign-up-medium-text {
+                font-size: 25px;
+            }
+            .indi-signup-privacy-policy{
+                p{
+                    font-weight: bold;
+                    font-size: 13px;
+                }
+            }
+
+            .submit-signup{
+                padding-bottom: 50px;
+            }
+        }
+
+        @media screen and (max-width: 767px) {
+            .payment-form-header{
+                img{
+                    float: none !important;
+                    margin: auto !important;
+                }
+                p{
+                    float: none !important;
+                    margin: 0 auto !important;
+                    width: 100%;
+                    text-align: center !important;
+                    .btn-account{
+                        padding: 10px 20px !important;
+                    }
+                }
+            }
+            .signup-getting-started{
+                text-align: center !important;
+                h2{
+                    font-size: 25px !important;
+                    letter-spacing: .1em !important;
+                }
+                h3{
+                    font-size: 18px !important;
+                    margin-left: 0.5em !important;
+                }
+            }
+            .indi-signup-securematics-logo-container{
+                .indi-signup-securematics-fee{
+                    line-height: 20px !important;
+                }
+            }
+            .indi-signup-privacy-policy{
+                p{
+                    line-height: 20px !important;
+                }
+            }
+            .indi-signup-card-container{
+                text-align: center !important;
+
+
+            }
+            .signup-credit-cards-container{
+                text-align: center !important;
+            }
+        }
+
+    }
+
+
 }
 
 #overlay {
@@ -676,4 +785,3 @@
         right: 50%;
     }
 }
-

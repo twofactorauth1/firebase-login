@@ -148,8 +148,9 @@ var dao = {
                 if(value){
                     if(key == "_id"){
                         obj[key] = parseInt(value);    
-                    }
-                    else{
+                    } else if(key === 'tags'){
+                        obj[key] = value;
+                    } else {
                         obj[key] = new RegExp(value, 'i');
                     }
                     
@@ -1079,6 +1080,36 @@ var dao = {
                 self.log.debug(accountId, userId, '<< getContactTags');
                 fn(null, tagAry);
             }
+        });
+    },
+
+    getContactCount: function(accountId, userId, fn) {
+        var self = this;
+        self.log.debug(accountId, userId, '>> getContactCount');
+        self.findCount({accountId:accountId}, $$.m.Contact, function(err, count){
+            if(err) {
+                self.log.error(accountId, userId, 'Error getting contact count:', err);
+                fn(err);
+            } else {
+                self.log.debug(accountId, userId, '<< getContactCount', count);
+                fn(null, count);
+            }
+        });
+    },
+
+    setBouncedTag: function(accountId, userId, contactId, fn) {
+        var self = this;
+        self.log.debug(accountId, userId, '>> setBouncedTag');
+        self.findOne({_id:contactId}, $$.m.Contact, function(err, contact){
+
+            if(contact) {
+                contact.set('tags', ['Bounced']);
+                self.saveOrUpdate(contact, fn);
+            } else {
+                self.log.debug('could not find contact');
+                fn();
+            }
+
         });
     }
 

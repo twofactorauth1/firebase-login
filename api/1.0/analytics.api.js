@@ -319,8 +319,18 @@ _.extend(api.prototype, baseApi.prototype, {
                         });
                     }
                 });
+                if(event.campaignId) {
+                    var campaignUpdates = deferredUpdates[event.campaignId] || {};
+                    if(campaignUpdates.unsubscribes) {
+                        campaignUpdates.unsubscribes = campaignUpdates.unsubscribes + 1;
+                    } else {
+                        campaignUpdates.unsubscribes = 1;
+                        deferredUpdates[event.campaignId] = campaignUpdates;
+                    }
+                }
                 cb();
             } else if (event.event === 'bounce'){
+                contactDao.setBouncedTag(event.accountId, null, event.contactId, function(err, value){});
                 emailMessageManager.markMessageBounced(event.emailmessageId, event, function(err, value){
                     if(value) {
                         savedEvents.push(value);
@@ -333,6 +343,27 @@ _.extend(api.prototype, baseApi.prototype, {
                                 campaignUpdates.bounced = campaignUpdates.bounced + 1;
                             } else {
                                 campaignUpdates.bounced = 1;
+                                deferredUpdates[event.campaignId] = campaignUpdates;
+                            }
+                        }
+                        cb(err);
+                    } else {
+                        cb(err);
+                    }
+                });
+            } else if(event.event === 'dropped'){
+                emailMessageManager.markMessageDropped(event.emailmessageId, event, function(err, value){
+                    if(value) {
+                        savedEvents.push(value);
+                        obj.sender = value.get('sender');
+                        obj.activityType = $$.m.ContactActivity.types.EMAIL_BOUNCED;
+                        contactActivitiesJSON.push(obj);
+                        if(event.campaignId) {
+                            var campaignUpdates = deferredUpdates[event.campaignId] || {};
+                            if(campaignUpdates.dropped) {
+                                campaignUpdates.dropped = campaignUpdates.dropped + 1;
+                            } else {
+                                campaignUpdates.dropped = 1;
                                 deferredUpdates[event.campaignId] = campaignUpdates;
                             }
                         }

@@ -473,6 +473,9 @@ _.extend(baseDao.prototype, mongoBaseDao, {
         this._findRawWithFieldsLimitAndOrderMongo(query, skip, limit, sort, fields, collection, order_dir, fn);
     },
 
+    setReadOnly: function() {
+        this.setReadOnlyMongo();
+    },
 
     _isAuthenticationError: function (obj, fn) {
         var error;

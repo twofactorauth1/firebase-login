@@ -1576,6 +1576,30 @@ var copyutil = {
                 );
             }
         });
+    },
+
+    getUnsentContactIDs: function(fn) {
+        var emailMessageQuery = {batchId:'44f26730-11bf-4de7-b1b7-3fc330659df2', events:{$size:0}, sendgridBatchId:{$ne:'M2ZlNzUwMWEtM2NkNS0xMWU3LWEzOGItNTI1NDAwODAzOWJjLTExMThkZmU2Mg'}};
+        var srcDBUrl = mongoConfig.PROD_MONGODB_CONNECT;
+        var srcMongo = mongoskin.db(srcDBUrl, {safe:true});
+        var emailMessagesCollection = srcMongo.collection('emailmessages');
+        console.log('querying emails');
+        emailMessagesCollection.find(emailMessageQuery, {receiver:true}, {skip:0}).toArray(function(err, msgs){
+            console.log('Got ' + msgs.length + ' emails');
+            var count = 0;
+            var contactEmailAry = _.pluck(msgs, 'receiver');
+
+            var contactQuery = {'details.emails.email':{$in:contactEmailAry}, accountId:1320};
+            var contactsCollection = srcMongo.collection('contacts');
+            console.log('finding contacts');
+            contactsCollection.find(contactQuery, {_id:true}).toArray(function(err,contacts){
+                console.log('contact count:', contacts.length);
+                var contactAry = _.pluck(contacts, '_id');
+                console.log('contactAry:', contactAry);
+                fn();
+            });
+
+        });
     }
 };
 

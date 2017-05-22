@@ -4,7 +4,7 @@
         <div class="row">
             <div class="col-sm-8">
                 <h1 class="mainTitle" translate="sidebar.nav.contacts.MAIN"></h1>
-                <span ng-if="contacts" class="mainDescription">There are currently {{totalItemCount || 0}} contacts. ({{contactsCount || 0}} in filtered view)</span>
+                <span ng-if="contacts" class="mainDescription">There are currently {{totalItemCount || 0 | number : fractionSize}} contacts. ({{contactsCount || 0 | number : fractionSize}} in filtered view)</span>
                 <span ng-if="!contacts" class="mainDescription">
                 Loading contacts...
                 </span>
@@ -191,8 +191,8 @@
                                 <th ng-show="column.email" class="hidden-xs sort" ng-class="{'column-width': tableView == 'grid', 'st-sort-ascent': sortData.details['email'].direction === 1, 'st-sort-descent': sortData.details['email'].direction === -1}" ng-click="sortContacts('details.emails.email', 'email')">Email</th>
                                 <th class="hidden-xs" ng-show="column.address" ng-class="{'column-width': tableView == 'grid'}">Address</th>
                                 <th class="hidden-xs center" ng-show="column.phone" ng-class="{'column-width': tableView == 'grid'}">Phone</th>
-                                <th class="hidden-xs sort" ng-show="column.unsubscribed" ng-class="{'column-width': tableView == 'grid', 'st-sort-ascent': sortData.details['unsubscribed'].direction === 1, 'st-sort-descent': sortData.details['unsubscribed'].direction === -1}" ng-click="sortContacts('unsubscribed', 'unsubscribed')">Unsub</th>
-                                <th class="hidden-xs sort" ng-show="column.created" ng-class="{'column-width': tableView == 'grid', 'st-sort-ascent': sortData.details['created'].direction === 1, 'st-sort-descent': sortData.details['created'].direction === -1}" ng-click="sortContacts('created.date', 'created')">Created</th>
+                                <th class="hidden-xs sort" ng-show="column.unsubscribed" ng-class="{'column-width': tableView == 'grid', 'st-sort-ascent': sortData.details['unsubscribed'].direction === 1, 'st-sort-descent': sortData.details['unsubscribed'].direction === -1}" ng-click="sortContacts('unsubscribed', 'unsubscribed')" style="white-space: nowrap;">Unsub</th>
+                                <th class="hidden-xs sort" ng-show="column.created" ng-class="{'column-width': tableView == 'grid', 'st-sort-ascent': sortData.details['created'].direction === 1, 'st-sort-descent': sortData.details['created'].direction === -1}" ng-click="sortContacts('created.date', 'created')" style="white-space: nowrap;">Created</th>
                                 <!-- <th class="hidden-xs" st-sort="getters.modified" ng-show="column.modified">Modified</th> -->
                             </tr>
                             <tr ng-if="pagingParams.showFilter" class="filter-row-header">
@@ -222,7 +222,7 @@
                                     <input ng-model="pagingParams.fieldSearch.last" placeholder="Last" class="form-control" type="search" ng-model-options="{ debounce: 800 }"/>
                                 </th>
                                 <th class="column-width hidden-xs" ng-show="column.tags">
-                                    
+
                                     <ui-select ng-model-options="{ debounce: 800 }" ng-model="pagingParams.fieldSearch.tags" on-select="triggerInput('#searchType')" theme="bootstrap">
                                         <ui-select-match placeholder="Select Type">
                                             <small ng-bind-html="$select.selected.label"></small>
@@ -267,8 +267,8 @@
                                     <span ng-if="!contact.details[0].addresses[0]">--</span>
                                 </td>
                                 <td ng-show="column.phone" class="hidden-xs" ng-class="{'center': tableView != 'grid'}"><strong>Phone: </strong> <a href="tel:{{contact.details[0].phones[0].number || '--'}}">{{contact.details[0].phones[0].number || '--'}}</a></td>
-                                <td ng-show="column.unsubscribed" class="hidden-xs"><strong>Unsub: </strong> <span ng-if="contact.unsubscribed">{{contact.unsubscribed}}</span><span ng-if="!contact.unsubscribed">--</span></td>
-                                <td ng-show="column.created" class="hidden-xs"><strong>Created: </strong> {{contact.created.date | date:'MMM d yy' || '--'}}</td>
+                                <td ng-show="column.unsubscribed" class="hidden-xs"><strong>Unsub: </strong> <span ng-if="contact.unsubscribed" style="white-space: nowrap;">{{contact.unsubscribed}}</span><span ng-if="!contact.unsubscribed">--</span></td>
+                                <td ng-show="column.created" class="hidden-xs" style="white-space: nowrap;"><strong>Created: </strong> {{contact.created.date | date:'MMM d yy' || '--'}}</td>
                             </tr>
                         </tbody>
                         <tfoot>
@@ -287,7 +287,7 @@
                     </table>
                     <div class="load1 csspinner height-400" ng-show="!contacts"></div>
                 </div>
-               
+
             </div>
         </div>
     </div>

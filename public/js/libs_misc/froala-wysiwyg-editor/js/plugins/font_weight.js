@@ -17,7 +17,14 @@
             "700":"Bold",
       },
       callback: function (cmd, val) {
-        this.format.applyStyle('font-weight',val)
+          if(this.format.is('span', {class:'fontWeight_'+val})){
+              this.format.remove('span', {
+                  class:'fontWeight_'+val
+              });
+          }
+          this.format.apply('span', {
+              class:'fontWeight_'+val
+          });
       },
       // Callback on refresh.
       refresh: function ($btn) {

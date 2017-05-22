@@ -8,6 +8,8 @@ require('./dao/analytics.dao.js');
 var _log = $$.g.getLogger("analytics_manager");
 var SEGMENTIO = 'segment.io';
 var dao = require('./dao/analytics.dao.js');
+var readOnlyDao = require('./dao/analytics.dao.js');
+readOnlyDao.setReadOnly();
 //var Analytics = require('analytics-node');
 //var analytics = new Analytics(segmentConfig.SEGMENT_WRITE_KEY);
 var contactDao = require('../dao/contact.dao');
