@@ -2312,9 +2312,9 @@ var emailMessageManager = {
                 //replace merge vars with relevant data
                 regex = new RegExp(map.mergeTag.replace('[', '\\[').replace(']', '\\]'), 'g');
                 var userData = map.data || '';
-                self.log.debug('using the following regex:', regex);
+                self.log.trace('using the following regex:', regex);
                 htmlContent = htmlContent.replace(regex, '%' + map.mergeTag + '%');
-                self.log.debug('after the replace:', htmlContent);
+                self.log.trace('after the replace:', htmlContent);
                 substitutions['%' + map.mergeTag + '%'] =userData;
             }
         });
