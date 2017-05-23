@@ -4,14 +4,14 @@
         <div class="row">
             <div class="col-sm-8">
                 <h1 class="mainTitle" translate="sidebar.nav.emails.MAIN"></h1>
-                <span ng-if="emails" class="mainDescription">There are currently {{emails.length | number : 0}} emails. ({{displayedEmails.length || 0}} in filtered view)</span>
+                <span ng-if="emails" class="mainDescription">There are currently {{emails.length | number : 0}} emails. <span ng-if="showFilteredRecords()"> ({{filteredCollection.length || 0}} in filtered view)</span></span>
                 <span ng-if="!emails" class="mainDescription">Loading emails...</span>
             </div>
         </div>
     </section>
     <!-- end: PAGE TITLE -->
     <!-- start: CONTENT -->
-    <div st-table="displayedEmails" st-safe-src="emails">
+    <div st-table="displayedEmails" st-safe-src="emails" st-filtered-collection>
         <div class="container-fluid container-fullw bg-white padding-top-0 padding-bottom-0">
             <div class="row">
                 <div class="col-sm-12">
