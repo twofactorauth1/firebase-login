@@ -341,6 +341,8 @@ module.exports = {
         statistics.clicked = statistics.clicked || 0;
         statistics.opened = statistics.opened || 0;
         statistics.bounced = statistics.bounced || 0;
+        statistics.dropped = statistics.dropped || 0;
+        statistics.unsubscribes = statistics.unsubscribes || 0;
         self.log.debug(accountId, userId, 'updating with:', statistics);
         var modified = {
             date: new Date(),
