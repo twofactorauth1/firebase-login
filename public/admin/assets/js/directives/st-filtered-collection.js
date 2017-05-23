@@ -31,6 +31,18 @@ app.directive('stFilteredCollection', function ($timeout) {
             ctrl.pipe(ctrl.tableState());
 			
 		});
+
+
+		scope.$watch(function () {
+          return ctrl.tableState().search;
+        }, function (newValue, oldValue) {          
+          if (newValue.predicateObject && Object.keys(newValue.predicateObject).length) {
+            scope.showFilteredRecords = true;
+          }
+          else{
+          	scope.showFilteredRecords = false;
+          }
+        }, true);
     }
   }
 });
