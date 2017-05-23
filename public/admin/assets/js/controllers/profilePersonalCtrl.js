@@ -67,7 +67,7 @@
     };
 
     $scope.insertPhoto = function (asset) {
-      $scope.profileUser.profilePhotos[0] = asset.url;
+      $scope.profileUser.profilePhotos[0] = asset.url.replace(/^http[s]?:/,'');
     };
 
     $scope.removePhoto = function (asset) {
