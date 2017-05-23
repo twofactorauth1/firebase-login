@@ -352,6 +352,9 @@ _.extend(api.prototype, baseApi.prototype, {
                     }
                 });
             } else if(event.event === 'dropped'){
+                if(event.reason === 'Bounced Address') {
+                    contactDao.setBouncedTag(event.accountId, null, event.contactId, function(err, value){});
+                }
                 emailMessageManager.markMessageDropped(event.emailmessageId, event, function(err, value){
                     if(value) {
                         savedEvents.push(value);
