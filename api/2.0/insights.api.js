@@ -9,7 +9,7 @@ var baseApi = require('../base.api.js');
 var dao = require('../../insights/dao/insights.dao');
 var manager = require('../../insights/insights_manager');
 var appConfig = require('../../configs/app.config');
-
+var insightsConfig = require('../../configs/insights.config');
 var api = function () {
     this.init.apply(this, arguments);
 };
@@ -79,9 +79,9 @@ _.extend(api.prototype, baseApi.prototype, {
 
         var customerAccountId = req.body.accountId;
         var sections = ['weeklyreport', 'broadcastmessage'];
-        var destinationAddress = 'account_managers@indigenous.io';
+        var destinationAddress = insightsConfig.ccAry[0] || 'account_managers+customerproxy@indigenous.io';
         if(appConfig.nonProduction === true) {
-            destinationAddress = 'test_account_managers@indigenous.io';
+            destinationAddress = 'test_account_managers+customerproxy@indigenous.io';
         }
         var startDate = moment().subtract(7, 'days').toDate();
         var endDate = moment().toDate();
