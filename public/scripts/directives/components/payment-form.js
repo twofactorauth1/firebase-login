@@ -313,6 +313,16 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
                                                 angular.element("#card_number").addClass('has-error');
                                                 angular.element("#card_number .glyphicon").addClass('glyphicon-remove');
                                             }
+                                            else if(err.message === 'incorrect_cvc'){
+                                                angular.element("#card_cvc .error").html("Your card's security code is incorrect");
+                                                angular.element("#card_cvc").addClass('has-error');
+                                                angular.element("#card_cvc .glyphicon").addClass('glyphicon-remove');
+                                            }
+                                            else{
+                                                angular.element("#card_number .error").html(err.message);
+                                                angular.element("#card_number").addClass('has-error');
+                                                angular.element("#card_number .glyphicon").addClass('glyphicon-remove');
+                                            }
                                             scope.showFooter(true);
                                         }
                                     });
@@ -531,6 +541,16 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
                                             scope.loading = false;
                                             if (err.message === 'card_declined') {
                                                 angular.element("#card_number .error").html('There was an error charging your card.');
+                                                angular.element("#card_number").addClass('has-error');
+                                                angular.element("#card_number .glyphicon").addClass('glyphicon-remove');
+                                            }
+                                            else if(err.message === 'incorrect_cvc'){
+                                                angular.element("#card_cvc .error").html("Your card's security code is incorrect");
+                                                angular.element("#card_cvc").addClass('has-error');
+                                                angular.element("#card_cvc .glyphicon").addClass('glyphicon-remove');
+                                            }
+                                            else{
+                                                angular.element("#card_number .error").html(err.message);
                                                 angular.element("#card_number").addClass('has-error');
                                                 angular.element("#card_number .glyphicon").addClass('glyphicon-remove');
                                             }
