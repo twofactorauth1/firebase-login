@@ -12,6 +12,7 @@ var fs = require('fs');
 var contactDao = require('../dao/contact.dao');
 var accountDao = require('../dao/account.dao');
 var campaignDao = require('../campaign/dao/campaign.dao');
+var campaignManager = require('../campaign/campaign_manager');
 var userDao = require('../dao/user.dao');
 var async = require('async');
 var juice = require('juice');
@@ -38,7 +39,6 @@ var emailMessageManager = {
 
     log:log,
 
-    //TODO: add reply-to
     sendAccountWelcomeEmail: function(fromAddress, fromName, toAddress, toName, subject, htmlContent, accountId, userId,
                                       vars, emailId, contactId, fn) {
         var self = this;
@@ -483,8 +483,10 @@ var emailMessageManager = {
                                     if(err.response && err.response.body) {
                                         self.log.error(err.response.body.errors);
                                     }
+                                    campaignManager.updateCampaignFailures(campaignId, _request.body.personalizations, function(err, value){
+                                        callback(null, response);
+                                    });
 
-                                    callback(err, response);
                                 } else {
                                     callback(null, response);
                                 }

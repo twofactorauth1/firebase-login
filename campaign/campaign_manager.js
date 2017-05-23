@@ -2709,6 +2709,19 @@ module.exports = {
                 fn(null, campaign);
             }
         });
+    },
+
+    updateCampaignFailures: function(campaignId, personalizations, fn) {
+        campaignDao.getById(campaignId, $$.m.Campaign, function(err, campaign){
+            if(err || !campaign) {
+                fn(err || 'campaign not found');
+            } else {
+                var failures = campaign.get("failures") || [];
+                failures.push(personalizations);
+                campaign.set('failures', failures);
+                campaignDao.saveOrUpdate(campaign, fn);
+            }
+        });
     }
 
 };
