@@ -257,30 +257,34 @@ var emailMessageManager = {
                         var i = 0;
                         _.each(contacts, function(contact){
                             var email = contact.getPrimaryEmail();
-                            var name = contact.get('first') + ' ' + contact.get('last');
-                            var p = {
-                                to: [
-                                    {email:email, name:name}
-                                ]
-                            };
-                            var user = null;
-                            var userAccount = null;
-                            if(userAry && userAry[i]) {
-                                user = userAry[i];
+
+                            if(email.indexOf('@') >0) {
+                                var name = contact.get('first') + ' ' + contact.get('last');
+                                var p = {
+                                    to: [
+                                        {email:email, name:name}
+                                    ]
+                                };
+                                var user = null;
+                                var userAccount = null;
+                                if(userAry && userAry[i]) {
+                                    user = userAry[i];
+                                }
+                                if(userAccountAry && userAccountAry[i]) {
+                                    userAccount = userAccountAry[i];
+                                }
+                                sendgridSubsAndHtml = self._convertMergeTagsToSendgridPersonalizations(account, contact, user, userAccount, html, vars);
+                                p.substitutions = sendgridSubsAndHtml.substitutions;
+                                if(emailSettings.cc) {
+                                    p.cc =[{email:emailSettings.cc}];
+                                }
+                                if(emailSettings.bcc) {
+                                    p.bcc = [{email:emailSettings.bcc}];
+                                }
+                                personalizations.push(p);
+                                i++;
                             }
-                            if(userAccountAry && userAccountAry[i]) {
-                                userAccount = userAccountAry[i];
-                            }
-                            sendgridSubsAndHtml = self._convertMergeTagsToSendgridPersonalizations(account, contact, user, userAccount, html, vars);
-                            p.substitutions = sendgridSubsAndHtml.substitutions;
-                            if(emailSettings.cc) {
-                                p.cc =[{email:emailSettings.cc}];
-                            }
-                            if(emailSettings.bcc) {
-                                p.bcc = [{email:emailSettings.bcc}];
-                            }
-                            personalizations.push(p);
-                            i++;
+
                         });
                         cb(null, batchId, personalizations, contacts, sendgridSubsAndHtml.html);
                     }
@@ -1880,7 +1884,11 @@ var emailMessageManager = {
             accountId:accountId,
             batchId:campaignId
         };
-        dao.findMany(query, $$.m.Emailmessage, function(err, messages){
+        var stageAry = [];
+        stageAry.push({$match:query});
+        var project = {$project:{deliveredDate:1, openedDate:1, clickedDate:1, bouncedDate:1, droppedDate:1}};
+        stageAry.push(project);
+        dao.aggregateWithCustomStages(stageAry, $$.m.Emailmessage, function(err, messages){
             if(err) {
                 self.log.error(accountId, userId, 'Error finding campaign emails:', err);
                 return fn(err);
@@ -1889,6 +1897,7 @@ var emailMessageManager = {
                 return fn(err, messages);
             }
         });
+
     },
 
     getCampaignPerformanceReport: function(accountId, campaignId, userId, fn) {
