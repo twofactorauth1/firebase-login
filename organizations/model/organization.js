@@ -17,6 +17,7 @@ var organization = $$.m.ModelBase.extend({
             "adminUser":4,
             "signupSettings":{},
             "orgDomain":'',
+            'defaultSender':'',
             created: {
                 date: new Date(),
                 by: null

@@ -54,9 +54,11 @@ var manager = {
 
             }
         });
+    },
+
+    getOrgById: function(accountId, userId, orgId, fn) {
+        dao.getById(orgId, $$.m.Organization, fn);
     }
-
-
 
 
 };
