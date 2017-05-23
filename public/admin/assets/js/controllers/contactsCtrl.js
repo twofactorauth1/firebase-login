@@ -1,7 +1,7 @@
 'use strict';
 /*global app, window*/
 (function (angular) {
-    app.controller('ContactsCtrl', ["$scope", "$state", "toaster", "$modal", "$window", "ContactService", "SocialConfigService", "userConstant", "formValidations", "CommonService", '$timeout', 'SweetAlert', "$location", "$q", 'pagingConstant', 'ContactPagingService', function ($scope, $state, toaster, $modal, $window, ContactService, SocialConfigService, userConstant, formValidations, CommonService, $timeout, SweetAlert, $location, $q, pagingConstant, ContactPagingService) {
+    app.controller('ContactsCtrl', ["$scope", "$state", "toaster", "$modal", "$window", "ContactService", "SocialConfigService", "userConstant", "formValidations", "CommonService", '$timeout', 'SweetAlert', "$location", "$q", 'pagingConstant', 'ContactPagingService', 'UtilService', function ($scope, $state, toaster, $modal, $window, ContactService, SocialConfigService, userConstant, formValidations, CommonService, $timeout, SweetAlert, $location, $q, pagingConstant, ContactPagingService, UtilService) {
 
         $scope.tableView = 'list';
         $scope.itemPerPage = 100;
@@ -24,6 +24,7 @@
         $scope.numberOfPages = numberOfPages;
         $scope.selectPage = selectPage;
         $scope.sortContacts = sortContacts;
+        $scope.showFilteredRecords = showFilteredRecords;
 
         $scope.pagingParams = {
             limit: pagingConstant.numberOfRowsPerPage,
@@ -87,6 +88,7 @@
                     $scope.minRequirements = true;
                 }
                 $scope.showContacts = true;
+                $scope.loadingFilter = false;
                 $("html, body").animate({
                     scrollTop: 0
                 }, 600);
@@ -761,6 +763,7 @@
         $scope.$watch('pagingParams.globalSearch', function (term) {
             if (angular.isDefined(term)) {
                 if (!angular.equals(term, ContactPagingService.fieldSearch)) {
+                    $scope.loadingFilter = true;
                     loadDefaults();
                     setDefaults();
                     $scope.getContacts();
@@ -773,6 +776,7 @@
         $scope.$watch('pagingParams.fieldSearch', function (search) {
             if (angular.isDefined(search)) {
                 if (!angular.equals(search, ContactPagingService.fieldSearch)) {
+                    $scope.loadingFilter = true;
                     loadDefaults();
                     setDefaults();
                     $scope.getContacts();
@@ -808,6 +812,10 @@
                 }
             }
             return isFieldSearch;
+        }
+
+        function showFilteredRecords(){
+            return !$scope.loadingFilter && UtilService.showFilteredRecords($scope.pagingParams.globalSearch, $scope.pagingParams.fieldSearch);
         }
 
     }]);

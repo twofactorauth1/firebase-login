@@ -4,7 +4,7 @@
         <div class="row">
             <div class="col-sm-8">
                 <h1 class="mainTitle" translate="sidebar.nav.contacts.MAIN"></h1>
-                <span ng-if="contacts" class="mainDescription">There are currently {{totalItemCount || 0 | number : fractionSize}} contacts. ({{contactsCount || 0 | number : fractionSize}} in filtered view)</span>
+                <span ng-if="contacts" class="mainDescription">There are currently {{totalItemCount || 0 | number : fractionSize}} contacts. <span ng-if="showFilteredRecords()">({{contactsCount || 0 | number : fractionSize}} in filtered view)</span></span>
                 <span ng-if="!contacts" class="mainDescription">
                 Loading contacts...
                 </span>
