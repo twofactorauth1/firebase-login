@@ -2670,21 +2670,25 @@ module.exports = {
             "emailsOpened" : 0,
             "emailsClicked" : 0,
             "participants" : 0,
-            "emailsBounced" : 0
+            "emailsBounced" : 0,
+            'emailsDropped' : 0
         };
-        _.each(emailMessages, function(message){
+        _.each(emailMessages, function(msg){
 
-            if(message.get('deliveredDate')) {
+            if(msg['deliveredDate']) {
                 stats.emailsSent += 1;
             }
-            if(message.get('openedDate')) {
+            if(msg['openedDate']) {
                 stats.emailsOpened += 1;
             }
-            if(message.get('clickedDate')) {
+            if(msg['clickedDate']) {
                 stats.emailsClicked += 1;
             }
-            if(message.get('bouncedDate')) {
+            if(msg['bouncedDate']) {
                 stats.emailsBounced += 1;
+            }
+            if(msg['droppedDate']) {
+                stats.emailsDropped += 1;
             }
         });
         campaignDao.findOne({_id:campaignId}, $$.m.Campaign, function(err, campaign){
@@ -2693,14 +2697,16 @@ module.exports = {
                 fn(err);
             } else {
                 self.log.debug('Stats before: ', campaign.get('statistics'));
+                var oldStats = campaign.get('statistics');
+                campaign.set('oldStats', oldStats);
                 stats.participants = emailMessages.length;
-                campaign.set('statistics', stats);
-                self.log.debug('Stats after: ', campaign.get('statistics'));
+                campaign.set('newstats', stats);
+                self.log.debug('Stats after: ', campaign.get('newstats'));
                 self.log.debug('<< reconcileCampaignStatistics');
-                campaignDao.saveOrUpdate(campaign, fn);
+                //campaignDao.saveOrUpdate(campaign, fn);
+                fn(null, campaign);
             }
         });
     }
 
-}
-;
+};

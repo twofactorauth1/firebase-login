@@ -6,7 +6,7 @@ mainApp.filter('generateURLforLinks', function () {
         if(linkToObject)
         {
            switch (linkToObject.type) {
-            case "page":                
+            case "page":
                     _url = '/'+linkToObject.data;
                 return _url;
                 break;
@@ -16,7 +16,7 @@ mainApp.filter('generateURLforLinks', function () {
             case "url":
                 return linkToObject.data;
                 break;
-            case "section":                
+            case "section":
                 if(linkToObject.page && linkToObject.page !== "index")
                     return '/'+linkToObject.page+'/#'+linkToObject.data;
                 else
@@ -30,11 +30,11 @@ mainApp.filter('generateURLforLinks', function () {
                 break;
             case "external":
                 var value = linkToObject.data;
-                if (value && !/http[s]?/.test(value)) {
+                if (value && !/http[s]?/.test(value) && !/tel/.test(value)) {
                     value = 'http://' + value;
                 }
                 _url = value;
-                break;    
+                break;
             default:
                 return "#";
                 break;
