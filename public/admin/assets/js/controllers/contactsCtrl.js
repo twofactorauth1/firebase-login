@@ -25,6 +25,7 @@
         $scope.selectPage = selectPage;
         $scope.sortContacts = sortContacts;
         $scope.showFilteredRecords = showFilteredRecords;
+        $scope.loadContactsWithDefaults = loadContactsWithDefaults;
 
         $scope.pagingParams = {
             limit: pagingConstant.numberOfRowsPerPage,
@@ -101,7 +102,7 @@
                 $scope.totalItemCount = response.count;
             });
         };
-        function loadCustomerTags() {
+        function loadContactTags() {
             ContactService.listAllContactTags(function (tags) {
                 ContactService.fomatContactTags(tags, function (tags) {
                     $scope.contactTags = tags;
@@ -113,9 +114,7 @@
         ContactService.getContactTags(function (tags) {
             $scope.contactTags = tags;
         });
-        $scope.getContactCount();
-        loadCustomerTags();
-        $scope.getContacts();
+        loadContactsWithDefaults();
 
         /*
          * @openModal
@@ -140,7 +139,7 @@
                 size: 'md',
                 resolve: {
                     getContacts: function () {
-                        return $scope.getContacts;
+                        return $scope.loadContactsWithDefaults;
                     }
                 }
             };
@@ -369,14 +368,18 @@
                 $scope.closeModal();
                 returnedContact.bestEmail = $scope.checkBestEmail(returnedContact);
                 loadDefaults();
-                $scope.getContactCount();            
-                $scope.getContacts();
-                loadCustomerTags();
+                loadContactsWithDefaults();
                 toaster.pop('success', 'Contact Successfully Added');
                 $scope.minRequirements = true;
 
             });
         };
+
+        function loadContactsWithDefaults(){
+            $scope.getContactCount();            
+            $scope.getContacts();
+            loadContactTags();
+        }
 
         $scope.setDuplicateUser = function (val) {
             $scope.duplicateContact = val;
@@ -530,9 +533,7 @@
                             $q.all(contactPromises)
                                 .then(function (results) {
                                     loadDefaults();
-                                    $scope.getContactCount();
-                                    loadCustomerTags();
-                                    $scope.getContacts();
+                                    loadContactsWithDefaults();
                                     $scope.bulkActionChoice = null;
                                     $scope.bulkActionChoice = {};
                                     $scope.clearSelectionFn();
