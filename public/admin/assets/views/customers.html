@@ -3,14 +3,14 @@
         <div class="row">
             <div class="col-sm-8">
                 <h1 class="mainTitle" translate="sidebar.nav.customers.MAIN"></h1>
-                <span ng-if="customers" class="mainDescription">There are currently {{customers.length | number : 0}} customers. ({{displayedCustomers.length || 0}} in filtered view)</span>
+                <span ng-if="customers" class="mainDescription">There are currently {{customers.length | number : 0}} customers. <span ng-if="showFilteredRecords()"> ({{filteredCollection.length || 0}} in filtered view)</span></span>
                 <span ng-if="!customers" class="mainDescription">
                 Loading customers...
                 </span>
             </div>
         </div>
     </section>
-    <div st-table="displayedCustomers" st-sort-table st-safe-src="customers">
+    <div st-table="displayedCustomers" st-sort-table st-safe-src="customers" st-filtered-collection>
         <div class="container-fluid container-fullw bg-white padding-top-0 padding-bottom-0">
             <div class="row">
                 <div class="col-sm-12">

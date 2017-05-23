@@ -1,7 +1,7 @@
 'use strict';
 /*global app, window*/
 (function (angular) {
-    app.controller('ContactsCtrl', ["$scope", "$state", "toaster", "$modal", "$window", "ContactService", "SocialConfigService", "userConstant", "formValidations", "CommonService", '$timeout', 'SweetAlert', "$location", "$q", 'pagingConstant', 'ContactPagingService', function ($scope, $state, toaster, $modal, $window, ContactService, SocialConfigService, userConstant, formValidations, CommonService, $timeout, SweetAlert, $location, $q, pagingConstant, ContactPagingService) {
+    app.controller('ContactsCtrl', ["$scope", "$state", "toaster", "$modal", "$window", "ContactService", "SocialConfigService", "userConstant", "formValidations", "CommonService", '$timeout', 'SweetAlert', "$location", "$q", 'pagingConstant', 'ContactPagingService', 'UtilService', function ($scope, $state, toaster, $modal, $window, ContactService, SocialConfigService, userConstant, formValidations, CommonService, $timeout, SweetAlert, $location, $q, pagingConstant, ContactPagingService, UtilService) {
 
         $scope.tableView = 'list';
         $scope.itemPerPage = 100;
@@ -24,6 +24,8 @@
         $scope.numberOfPages = numberOfPages;
         $scope.selectPage = selectPage;
         $scope.sortContacts = sortContacts;
+        $scope.showFilteredRecords = showFilteredRecords;
+        $scope.loadContactsWithDefaults = loadContactsWithDefaults;
 
         $scope.pagingParams = {
             limit: pagingConstant.numberOfRowsPerPage,
@@ -87,6 +89,7 @@
                     $scope.minRequirements = true;
                 }
                 $scope.showContacts = true;
+                $scope.loadingFilter = false;
                 $("html, body").animate({
                     scrollTop: 0
                 }, 600);
@@ -99,7 +102,7 @@
                 $scope.totalItemCount = response.count;
             });
         };
-        function loadCustomerTags() {
+        function loadContactTags() {
             ContactService.listAllContactTags(function (tags) {
                 ContactService.fomatContactTags(tags, function (tags) {
                     $scope.contactTags = tags;
@@ -111,9 +114,7 @@
         ContactService.getContactTags(function (tags) {
             $scope.contactTags = tags;
         });
-        $scope.getContactCount();
-        loadCustomerTags();
-        $scope.getContacts();
+        loadContactsWithDefaults();
 
         /*
          * @openModal
@@ -138,7 +139,7 @@
                 size: 'md',
                 resolve: {
                     getContacts: function () {
-                        return $scope.getContacts;
+                        return $scope.loadContactsWithDefaults;
                     }
                 }
             };
@@ -367,14 +368,18 @@
                 $scope.closeModal();
                 returnedContact.bestEmail = $scope.checkBestEmail(returnedContact);
                 loadDefaults();
-                $scope.getContactCount();            
-                $scope.getContacts();
-                loadCustomerTags();
+                loadContactsWithDefaults();
                 toaster.pop('success', 'Contact Successfully Added');
                 $scope.minRequirements = true;
 
             });
         };
+
+        function loadContactsWithDefaults(){
+            $scope.getContactCount();            
+            $scope.getContacts();
+            loadContactTags();
+        }
 
         $scope.setDuplicateUser = function (val) {
             $scope.duplicateContact = val;
@@ -528,9 +533,7 @@
                             $q.all(contactPromises)
                                 .then(function (results) {
                                     loadDefaults();
-                                    $scope.getContactCount();
-                                    loadCustomerTags();
-                                    $scope.getContacts();
+                                    loadContactsWithDefaults();
                                     $scope.bulkActionChoice = null;
                                     $scope.bulkActionChoice = {};
                                     $scope.clearSelectionFn();
@@ -761,6 +764,7 @@
         $scope.$watch('pagingParams.globalSearch', function (term) {
             if (angular.isDefined(term)) {
                 if (!angular.equals(term, ContactPagingService.fieldSearch)) {
+                    $scope.loadingFilter = true;
                     loadDefaults();
                     setDefaults();
                     $scope.getContacts();
@@ -773,6 +777,7 @@
         $scope.$watch('pagingParams.fieldSearch', function (search) {
             if (angular.isDefined(search)) {
                 if (!angular.equals(search, ContactPagingService.fieldSearch)) {
+                    $scope.loadingFilter = true;
                     loadDefaults();
                     setDefaults();
                     $scope.getContacts();
@@ -808,6 +813,10 @@
                 }
             }
             return isFieldSearch;
+        }
+
+        function showFilteredRecords(){
+            return !$scope.loadingFilter && UtilService.showFilteredRecords($scope.pagingParams.globalSearch, $scope.pagingParams.fieldSearch);
         }
 
     }]);

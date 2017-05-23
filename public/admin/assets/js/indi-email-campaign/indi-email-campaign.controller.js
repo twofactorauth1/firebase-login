@@ -386,10 +386,11 @@
                 });
                 contacts = _.difference(contacts, contactWithoutEmails);
                 vm.state.contacts = contacts;
-                ContactService.getAllContactTags(contacts, function (tags) {
-                    contactTags = tags;
-                    vm.state.contactTags = angular.copy(tags);
-                });
+               // ContactService.getAllContactTags(contacts, function (tags) {
+                  //  contactTags = tags;
+                 //   vm.state.contactTags = angular.copy(tags);
+                //});
+                contactTags = angular.copy(vm.state.contactTags);
                 var _tags = [];
                 vm.state.allContacts = [];
                 _.each(contacts, function (contact) {
@@ -401,12 +402,12 @@
                     if (contact.tags && contact.tags.length > 0) {
                         _.each(contact.tags, function (tag) {
                             var tagLabel = _.findWhere(contactTags, {
-                                data: tag
+                                data: tag.trim()
                             });
                             if (tagLabel)
-                                _tags.push(tagLabel.label);
+                                _tags.push(tagLabel.label.trim());
                             else
-                                _tags.push(tag);
+                                _tags.push(tag.trim());
                         });
                     } else {
                         _tags.push('nt');
@@ -863,8 +864,10 @@
                 vm.state.website = data;
             });
 
-            ContactService.getContactTags(function (tags) {
-                vm.state.contactTags = tags;
+            ContactService.listAllContactTags(function (tags) {
+                ContactService.fomatContactTags(tags, function (tags) {
+                    vm.state.contactTags = tags;
+                });
             });
 
             if (vm.state.campaignId !== 'create') {

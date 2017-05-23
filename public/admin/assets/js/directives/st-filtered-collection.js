@@ -31,6 +31,10 @@ app.directive('stFilteredCollection', function ($timeout) {
             ctrl.pipe(ctrl.tableState());
 			
 		});
+
+		scope.showFilteredRecords = function(){
+			return ctrl.tableState().search && ctrl.tableState().search.predicateObject && Object.keys(ctrl.tableState().search.predicateObject).length 
+		}
     }
   }
 });

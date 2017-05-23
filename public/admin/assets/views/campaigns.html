@@ -4,14 +4,14 @@
         <div class="row">
             <div class="col-sm-8">
                 <h1 class="mainTitle" translate="sidebar.nav.marketing.CAMPAIGNS"></h1>
-                <span ng-if="campaigns" class="mainDescription">There are currently {{campaigns.length| number : 0}} campaigns. ({{displayedCampaigns.length || 0}} in filtered view)</span>
+                <span ng-if="campaigns" class="mainDescription">There are currently {{campaigns.length| number : 0}} campaigns. <span ng-if="showFilteredRecords()"> ({{filteredCollection.length || 0}} in filtered view)</span></span>
                 <span ng-if="!campaigns" class="mainDescription">Loading campaigns...</span>
             </div>
         </div>
     </section>
     <!-- end: PAGE TITLE -->
     <!-- start: CONTENT -->
-    <div st-table="displayedCampaigns" st-safe-src="campaigns">
+    <div st-table="displayedCampaigns" st-safe-src="campaigns" st-filtered-collection>
         <div class="container-fluid container-fullw bg-white padding-top-0 padding-bottom-0">
             <div class="row">
                 <div class="col-sm-12">

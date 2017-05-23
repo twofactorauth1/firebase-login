@@ -245,12 +245,23 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
     function resizeSliderImagesToFullHeight(section){
         if(section){
             var sectionElement = angular.element("#section_"+ section._id)
-            if(sectionElement.hasClass("ssb-page-section-layout-nav-hero-v2")){
+            if(sectionElement.hasClass("ssb-page-section-layout-nav-hero-v2")|| sectionElement.hasClass("ssb-page-section-layout-nav-hero-v3")){
+                var sectionElementTextHeight=120 // 120 is offset
                 var innerSectionHeaderElement = sectionElement.find(".navigation-header");
-                var innerSectionTextElement = sectionElement.find(".ssb-nav-hero-text");
-                if(innerSectionHeaderElement.length && innerSectionTextElement.length){                     
-                    sectionElement.find(".single-testimonial .component-slider-image img").css("min-height", innerSectionHeaderElement.height() + innerSectionTextElement.height() + 120);                    
+                if(innerSectionHeaderElement.length ){
+                    sectionElementTextHeight+=innerSectionHeaderElement.height()
                 }
+                var innerSectionTextElement = sectionElement.find(".ssb-nav-hero-text");
+                if(innerSectionHeaderElement.length ){
+                    sectionElementTextHeight+=innerSectionTextElement.height()
+                }
+                if(sectionElement.hasClass("ssb-page-section-layout-nav-hero-v3")){
+                     var innerSectionText2Element = sectionElement.find(".ssb-nav-hero-text-full-wdith");
+                    if(innerSectionText2Element.length){
+                        sectionElementTextHeight+= innerSectionText2Element.height();
+                    }
+                }
+                sectionElement.find(".single-testimonial .component-slider-image img").css("min-height",  sectionElementTextHeight);
             }
         }
     }

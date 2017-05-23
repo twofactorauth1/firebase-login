@@ -24,7 +24,12 @@
     }
     ;
 }
-
+    div.applyingNewWidth{
+        display: none;
+    }
+    div.applyingNewWidth.slick-current{
+        display: block;
+    }
     @media screen and (min-width: 768px){
         [testimonials-component]#component_{{component._id}} .testimonials-v2 .carousel-caption {
             width: {{component.customWidth}}px !important;
@@ -43,7 +48,7 @@
     <div class="clearfix"></div>
     <div class="testimonial-wrap slider-dot-color-opacity {{isEditing ? 'editing' : ''}}" style="position: relative;" ng-class="{'slider-dot-color': component.slider.sliderDotColor, 'slider-active-dot-color': component.slider.sliderActiveDotColor}">
         <div ng-if="dataLoaded" class="carousel-caption" ind-slider='{ slidesToShow:1, touchMove:{{touchMove}}, draggable:{{draggable}}, dots:true, arrows:false,  speed:{{component.slider.speed}}, slidesToScroll:1, autoplay:{{autoplay}}, autoplaySpeed:{{component.slider.autoPlayInterval}}, fade: true, accessibility:{{accessibility}} }'>
-            <div ng-repeat="testimonial in component.testimonials" class="col-sm-12 testimonials single-testimonial" ng-class="{'testimonial-blank-slide': !testimonial.img}">
+            <div ng-repeat="testimonial in component.testimonials" class="col-sm-12 testimonials single-testimonial" ng-class="{'testimonial-blank-slide': !testimonial.img}" ng-hide="isEditing && $index>0 && applyingNewWidth">
                 <div ng-if="component.slider.showOverlay" class="bg slider-overlay-bg" ng-style="{'background': component.slider.overlay.color, opacity: component.slider.overlay.opacity === 0 ? component.slider.overlay.opacity : component.slider.overlay.opacity/100 || 0}">                    
                 </div>
                 <div class="img component-slider-image" ng-class="{'blank-img': !testimonial.img}">
