@@ -1,6 +1,6 @@
 var app = angular.module('indigenousApp', ['indigenous']);
-app.run(['$rootScope', '$state', '$stateParams', '$injector',
-function ($rootScope, $state, $stateParams, $injector) {
+app.run(['$rootScope', '$state', '$stateParams', '$injector', '$window', 'ENV',
+function ($rootScope, $state, $stateParams, $injector, $window, ENV) {
 
     var $modal;
     var modalInstance;
