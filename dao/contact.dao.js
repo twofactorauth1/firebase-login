@@ -1097,6 +1097,43 @@ var dao = {
         });
     },
 
+    getContactTagCount: function(accountId, userId, fn) {
+        var self = this;
+        self.log.debug(accountId, userId, '>> getContactTagCount');
+        var stageAry = [];
+        var match = {$match:{accountId:accountId}};
+        stageAry.push(match);
+        var project = {$project:{tags:1}};
+        stageAry.push(project);
+        self.aggregateWithCustomStages(stageAry, $$.m.Contact, function(err, results){
+            if(err) {
+                self.log.error(accountId, userId, 'Error finding contact tags:', err);
+                fn(err);
+            } else {
+                var tagCount = {};
+                _.each(results, function(res){
+                    if(res.tags === null || res.tags.length ===0) {
+                        if(tagCount['NOTAG']) {
+                            tagCount['NOTAG'] += 1;
+                        } else {
+                            tagCount['NOTAG'] = 1;
+                        }
+                    } else {
+                        _.each(res.tags, function(tag){
+                            if(tagCount[tag]) {
+                                tagCount[tag] += 1;
+                            } else {
+                                tagCount[tag] = 1;
+                            }
+                        });
+                    }
+                });
+                self.log.debug(accountId, userId, '<< getContactTagCount');
+                fn(null, tagCount);
+            }
+        });
+    },
+
     setBouncedTag: function(accountId, userId, contactId, fn) {
         var self = this;
         self.log.debug(accountId, userId, '>> setBouncedTag');

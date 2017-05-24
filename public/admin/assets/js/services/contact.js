@@ -21,6 +21,14 @@
                 });
         };
 
+        this.getContactsCount = function (fn) {
+            var apiUrl = baseUrl + ['contact', 'count'].join('/');
+            return $http.get(apiUrl)
+                .success(function (data) {
+                    fn(data);
+                });
+        };
+
         this.getPagedContacts = function (pagingParams, isFieldSearchEnabled, fn) {
             var urlParts = ['contact', 'paged', 'list'];
             var _method = "GET";
@@ -544,6 +552,14 @@
                     fn(data);
                 });
         };
+
+        this.getContactTagCounts = function(fn){
+            var apiUrl = baseUrl + ['contact', 'tagcounts'].join('/');
+            $http.get(apiUrl)
+                .success(function (data) {
+                    fn(data);
+                });
+        }
 
         this.fomatContactTags = function (tags, fn) {
             var contactTags = contactConstant.contact_tags.dp;

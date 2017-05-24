@@ -746,19 +746,24 @@ module.exports = {
         var emailSubject = notificationConfig.NEW_PURCHASE_ORDER_EMAIL_SUBJECT;
         var emailTo = notificationConfig.NEW_PURCHASE_ORDER_EMAIL_TO;
         var emailBcc = notificationConfig.NEW_PURCHASE_ORDER_EMAIL_BCC;
-
-        app.render('purchaseorders/new_purchase_order', component, function(err, html){
-            if(err) {
-                self.log.error('error rendering html: ' + err);
-                self.log.warn('email will not be sent to configured email.');
-            } else {
-                self.log.debug('sending email to: ', emailTo);
-                console.log(html);
-                emailMessageManager.sendNewPurchaseOrderEmail(fromEmail, fromName, emailTo, null, emailSubject, html, accountId, [], '', null, emailBcc, function(err, result){
-                    self.log.debug('result: ', result);
-                });
+        accountDao.getAccountByID(accountId, function(err, account){
+            if(account && account.get('business') && account.get('business').name) {
+                fromName = account.get('business').name;
             }
+            app.render('purchaseorders/new_purchase_order', component, function(err, html){
+                if(err) {
+                    self.log.error('error rendering html: ' + err);
+                    self.log.warn('email will not be sent to configured email.');
+                } else {
+                    self.log.debug('sending email to: ', emailTo);
+                    console.log(html);
+                    emailMessageManager.sendNewPurchaseOrderEmail(fromEmail, fromName, emailTo, null, emailSubject, html, accountId, [], '', null, emailBcc, function(err, result){
+                        self.log.debug('result: ', result);
+                    });
+                }
+            });
         });
+
     },
 
     _getOrgConfig: function(accountId, userId, fn) {

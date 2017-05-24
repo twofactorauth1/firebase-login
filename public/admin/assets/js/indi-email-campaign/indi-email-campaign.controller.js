@@ -390,49 +390,15 @@
                   //  contactTags = tags;
                  //   vm.state.contactTags = angular.copy(tags);
                 //});
-                contactTags = angular.copy(vm.state.contactTags);
-                var _tags = [];
+                //contactTags = angular.copy(vm.state.contactTags);
+                //var _tags = [];
                 vm.state.allContacts = [];
                 _.each(contacts, function (contact) {
                     vm.state.allContacts.push({
                         _id: contact._id,
                         first: contact.first
                     });
-                    //contact.fullName = contact.first + " " + contact.last || '';
-                    if (contact.tags && contact.tags.length > 0) {
-                        _.each(contact.tags, function (tag) {
-                            var tagLabel = _.findWhere(contactTags, {
-                                data: tag.trim()
-                            });
-                            if (tagLabel)
-                                _tags.push(tagLabel.label.trim());
-                            else
-                                _tags.push(tag.trim());
-                        });
-                    } else {
-                        _tags.push('nt');
-                    }
                 });
-                var d = _.groupBy(_tags, function (tag) {
-                    return tag;
-                });
-
-                var x = _.map(d, function (tag) {
-                    var returnObj = {
-                        uniqueTag: tag[0],
-                        numberOfTags: tag.length
-                    };
-                    var matchingTagObj = _.find(contactTags, function (matchTag) {
-                        return matchTag.label === tag[0];
-                    });
-                    if (matchingTagObj) {
-                        returnObj.matchingTag = matchingTagObj.label;
-                    } else {
-                        returnObj.matchingTag = 'No Tag';
-                    }
-                    return returnObj;
-                });
-                vm.contactCounts = x;
             });
 
             return promise;
@@ -636,8 +602,8 @@
             vm.uiState.dataLoaded = false;
             EmailCampaignService.getCampaignContacts(vm.state.campaignId)
                 .then(function (res) {
-                    
                     vm.state.recipients = res.data;
+                    vm.state.originalRecipients = angular.copy(vm.state.recipients);
                     var individuals = [];
                     _.each(res.data, function (contact) {
                         individuals.push(
@@ -646,7 +612,6 @@
                     });
                     vm.uiState.selectedContacts.individuals = individuals;
                     vm.uiState.dataLoaded = true;
-
                 });
         }
 
@@ -864,11 +829,44 @@
                 vm.state.website = data;
             });
 
-            ContactService.listAllContactTags(function (tags) {
-                ContactService.fomatContactTags(tags, function (tags) {
-                    vm.state.contactTags = tags;
-                });
+            ContactService.getContactTags(function (tags) {
+                vm.state.contactTags = tags;
             });
+
+            ContactService.getContactTagCounts(function(response){
+                var tags = response.count;
+                var uniqueLabeledTagObject = {};
+                _.map(tags, function (value, key) {
+                    var label = key.trim();
+                    var matchingTagObj = _.find(vm.state.contactTags, function (matchTag) {
+                        return matchTag.data === label;
+                    });
+                    if(matchingTagObj){
+                        label = matchingTagObj.label;
+                    }
+                    if(uniqueLabeledTagObject[label]){
+                        uniqueLabeledTagObject[label] = parseInt(value) + parseInt(uniqueLabeledTagObject[label]);
+                    }
+                    else{
+                        uniqueLabeledTagObject[label] = parseInt(value);
+                    }
+                });
+                var x = _.map(uniqueLabeledTagObject, function (value, key) {
+                    var returnObj = {
+                        uniqueTag: key,
+                        numberOfTags: value
+                    };
+                    if(key === 'NOTAG'){
+                        returnObj.matchingTag = 'No Tag';
+                        returnObj.uniqueTag = 'nt';
+                    }
+                    else {
+                        returnObj.matchingTag = key;
+                    }
+                    return returnObj;
+                });
+                vm.contactCounts = x;
+            })
 
             if (vm.state.campaignId !== 'create') {
                 EmailCampaignService.getCampaign(vm.state.campaignId)
@@ -919,12 +917,19 @@
                                 vm.uiState.whenToSend = localMoment.isAfter() ? 'later' : 'now';
                             }
                         }
-
-                        vm.getContactsFn()
-                            .then(function () {
-                                vm.loadSavedTagsFn();
-                            });
                         vm.getCampaignContactsFn();
+                        ContactService.getContactsCount(function(response){
+                            if(response.count <= userConstant.campaigns.MAX_CONTACT_LIST_COUNT){
+                                vm.getContactsFn()
+                                .then(function () {
+                                    vm.loadSavedTagsFn();
+                                });
+                            }
+                            else{
+                                vm.loadSavedTagsFn();                                
+                                vm.uiState.contactLimitExceeded = true;
+                            }
+                        })
                     }, function (err) {
                         $state.go('app.marketing.campaigns');
                     });

@@ -414,7 +414,7 @@ _.extend(api.prototype, baseApi.prototype, {
                     if (err) {
                         self.log.error('Error updating statistics:', err);
                     }
-                    self.log.debug('<< handleSendgridEvent', savedEvents);
+                    self.log.debug('<< handleSendgridEvent');
                 });
 
             });

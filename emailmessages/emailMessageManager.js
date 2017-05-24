@@ -12,6 +12,7 @@ var fs = require('fs');
 var contactDao = require('../dao/contact.dao');
 var accountDao = require('../dao/account.dao');
 var campaignDao = require('../campaign/dao/campaign.dao');
+
 var userDao = require('../dao/user.dao');
 var async = require('async');
 var juice = require('juice');
@@ -19,6 +20,7 @@ var appConfig = require('../configs/app.config');
 var sendgridConfig = require('../configs/sendgrid.config');
 var dao = require('./dao/emailmessage.dao');
 var scheduledJobsManager = require('../scheduledjobs/scheduledjobs_manager');
+var orgManager = require('../organizations/organization_manager');
 var serialize = require('node-serialize');
 var sanitizeHtml = require('sanitize-html');
 var sg = require('sendgrid')(sendgridConfig.API_KEY);
@@ -37,103 +39,114 @@ var emailMessageManager = {
 
     log:log,
 
-    //TODO: add reply-to
     sendAccountWelcomeEmail: function(fromAddress, fromName, toAddress, toName, subject, htmlContent, accountId, userId,
                                       vars, emailId, contactId, fn) {
         var self = this;
         self.log.debug('>> sendAccountWelcomeEmail');
-        self._checkForUnsubscribe(accountId, toAddress, function(err, isUnsubscribed) {
-            if (isUnsubscribed == true) {
-                fn('skipping email for user on unsubscribed list');
-            } else {
-                vars.push({
-                    "name": "SENDDATE",
-                    "content": moment().format('MMM Do, YYYY')
-                });
-                self._findReplaceMergeTags(accountId, contactId, htmlContent, vars, function(mergedHtml) {
+        self._getFromAdressNameAndReplyTo(accountId, fromAddress, fromName, function(err, senderAddress, senderName, replyTo){
+            self.log.debug('senderAddress:', senderAddress);
+            self.log.debug('senderName:', senderName);
+            self.log.debug('replyTo:', replyTo);
+            self._checkForUnsubscribe(accountId, toAddress, function(err, isUnsubscribed) {
+                if (isUnsubscribed == true) {
+                    fn('skipping email for user on unsubscribed list');
+                } else {
+                    vars.push({
+                        "name": "SENDDATE",
+                        "content": moment().format('MMM Do, YYYY')
+                    });
+                    self._findReplaceMergeTags(accountId, contactId, htmlContent, vars, function(mergedHtml) {
 
-                    juice.juiceResources(mergedHtml, {}, function(err, html){
+                        juice.juiceResources(mergedHtml, {}, function(err, html){
 
-                        var request = sg.emptyRequest();
-                        request.body = {
-                            "categories": [
-                                "welcome"
-                            ],
-                            "content": [
-                                {
-                                    "type": "text/html",
-                                    "value": html
-                                }
-                            ],
-
-                            "from": {
-                                "email": fromAddress
-                            },
-                            "headers": {},
-                            "personalizations": [
-                                {
-                                    "headers": {
-                                        "X-Accept-Language": "en"
-                                    },
-                                    "subject": subjectPrefix + subject,
-
-                                    "to": [
-                                        {
-                                            "email": toAddress
-                                        }
-                                    ]
-                                }
-                            ],
-                            "tracking_settings": {
-                                "click_tracking": {
-                                    "enable": true,
-                                    "enable_text": true
-                                }
-                            }
-                        };
-                        request.method = 'POST';
-                        request.path = '/v3/mail/send';
-
-                        if(fromName && fromName.length > 0) {
-                            request.body.from.name = fromName;
-                        }
-                        if(toName && toName.length > 0) {
-                            request.body.personalizations[0].to[0].name = toName;
-                        }
-
-
-                        self._safeStoreEmail(request.body, accountId, userId, emailId, function(err, emailmessage){
-                            //we should not have an err here
-                            if(err) {
-                                self.log.error('Error storing email (this should not happen):', err);
-                                return fn(err);
-                            } else {
-                                request.body.custom_args = {
-                                    emailmessageId: emailmessage.id(),
-                                    accountId:''+accountId,
-                                    date: moment().toISOString()
-                                };
-
-                                sg.API(request, function (error, response) {
-                                    self.log.debug(response.statusCode);
-                                    self.log.debug(response.body);
-                                    self.log.debug(response.headers);
-                                    if (err) {
-                                        self.log.error('Error sending email:', err);
-                                        return fn(err);
-                                    } else {
-                                        self.log.debug('<< sendAccountWelcomeEmail');
-                                        return fn(null, response);
+                            var request = sg.emptyRequest();
+                            request.body = {
+                                "categories": [
+                                    "welcome"
+                                ],
+                                "content": [
+                                    {
+                                        "type": "text/html",
+                                        "value": html
                                     }
-                                });
+                                ],
 
+                                "from": {
+                                    "email": senderAddress
+                                },
+                                "headers": {},
+                                "personalizations": [
+                                    {
+                                        "headers": {
+                                            "X-Accept-Language": "en"
+                                        },
+                                        "subject": subjectPrefix + subject,
 
+                                        "to": [
+                                            {
+                                                "email": toAddress
+                                            }
+                                        ]
+                                    }
+                                ],
+                                "tracking_settings": {
+                                    "click_tracking": {
+                                        "enable": true,
+                                        "enable_text": true
+                                    }
+                                }
+                            };
+                            request.method = 'POST';
+                            request.path = '/v3/mail/send';
+
+                            if(senderName && senderName.length > 0) {
+                                request.body.from.name = senderName;
                             }
+                            if(toName && toName.length > 0) {
+                                request.body.personalizations[0].to[0].name = toName;
+                            }
+                            request.body.reply_to = {
+                                email: replyTo
+                            };
+                            if(fromName) {
+                                request.body.reply_to.name = fromName;
+                            }
+
+
+                            self._safeStoreEmail(request.body, accountId, userId, emailId, function(err, emailmessage){
+                                //we should not have an err here
+                                if(err) {
+                                    self.log.error('Error storing email (this should not happen):', err);
+                                    return fn(err);
+                                } else {
+                                    request.body.custom_args = {
+                                        emailmessageId: emailmessage.id(),
+                                        accountId:''+accountId,
+                                        date: moment().toISOString()
+                                    };
+
+                                    sg.API(request, function (error, response) {
+                                        self.log.debug(response.statusCode);
+                                        self.log.debug(response.body);
+                                        self.log.debug(response.headers);
+                                        if (err) {
+                                            self.log.error('Error sending email:', err);
+                                            return fn(err);
+                                        } else {
+                                            self.log.debug('<< sendAccountWelcomeEmail');
+                                            return fn(null, response);
+                                        }
+                                    });
+
+
+                                }
+                            });
                         });
                     });
-                });
-            }
+                }
+            });
         });
+
 
     },
 
@@ -176,7 +189,16 @@ var emailMessageManager = {
         var accountId = account.id();
         self.log.debug(accountId, null, '>> sendBatchedCampaignEmail');
         var sendgridBatchID = null;
+        var senderAddress, senderName, replyTo;
         async.waterfall([
+            function(cb) {
+                self._getFromAdressNameAndReplyTo(accountId, fromAddress, fromName, function(err, _senderAddress, _senderName, _replyTo){
+                    senderAddress = _senderAddress;
+                    senderName = _senderName;
+                    replyTo = _replyTo;
+                    cb(null);
+                });
+            },
             function(cb) {
                 var request = sg.emptyRequest();
                 request.method = 'POST';
@@ -300,7 +322,7 @@ var emailMessageManager = {
                     ],
 
                     "from": {
-                        "email": fromAddress
+                        "email": senderAddress
                     },
                     content: [
                         {
@@ -321,8 +343,14 @@ var emailMessageManager = {
                 request.method = 'POST';
                 request.path = '/v3/mail/send';
 
-                if(fromName && fromName.length > 0) {
-                    request.body.from.name = fromName;
+                if(senderName && senderName.length > 0) {
+                    request.body.from.name = senderName;
+                }
+                request.body.reply_to = {
+                    email: replyTo
+                };
+                if(fromName) {
+                    request.body.reply_to.name = fromName;
                 }
                 request.body.batchId = campaignId;
                 request.body.personalizations = personalizations;
@@ -436,7 +464,7 @@ var emailMessageManager = {
 
                 } else {
                     //send the email
-                    self.log.debug('Sending:', JSON.stringify(request.body));
+                    self.log.trace('Sending:', JSON.stringify(request.body));
                     var maxPersonalizations = 1000;
                     if(personalizations.length > maxPersonalizations) {
                         var requestAry = [];
@@ -448,15 +476,18 @@ var emailMessageManager = {
                             requestAry.push(sg.emptyRequest(request));
                         }
                         async.eachSeries(requestAry, function(_request, callback){
-                            self.log.debug('Sending:', JSON.stringify(_request));
+                            self.log.trace('Sending:', JSON.stringify(_request));
                             sg.API(_request, function(err, response){
                                 if(err) {
                                     self.log.error('Error sending email:', err);
                                     if(err.response && err.response.body) {
                                         self.log.error(err.response.body.errors);
                                     }
+                                    var campaignManager = require('../campaign/campaign_manager');
+                                    campaignManager.updateCampaignFailures(campaignId, _request.body.personalizations, function(err, value){
+                                        callback(null, response);
+                                    });
 
-                                    callback(err, response);
                                 } else {
                                     callback(null, response);
                                 }
@@ -518,147 +549,156 @@ var emailMessageManager = {
                 self.log.debug(accountId, null, 'Skipping email for [' + toAddress + '] on campaign [' + campaignId + '] because contact has unsubscribed.' );
                 fn(null, 'skipping email for user on unsubscribed list');
             } else {
-                self._findReplaceMergeTags(accountId, contactId, htmlContent, vars, function(mergedHtml) {
-                    //inline styles
-                    juice.juiceResources(mergedHtml, {}, function(err, html){
+                self._getFromAdressNameAndReplyTo(accountId, fromAddress, fromName, function(err, senderAddress, senderName, replyTo){
+                    self._findReplaceMergeTags(accountId, contactId, htmlContent, vars, function(mergedHtml) {
+                        //inline styles
+                        juice.juiceResources(mergedHtml, {}, function(err, html){
 
 
-                        var request = sg.emptyRequest();
-                        request.body = {
-                            "categories": [
-                                "campaign"
-                            ],
-                            "content": [
-                                {
-                                    "type": "text/html",
-                                    "value": html
+                            var request = sg.emptyRequest();
+                            request.body = {
+                                "categories": [
+                                    "campaign"
+                                ],
+                                "content": [
+                                    {
+                                        "type": "text/html",
+                                        "value": html
+                                    }
+                                ],
+
+                                "from": {
+                                    "email": senderAddress
+                                },
+                                "subject": subjectPrefix + subject,
+                                "headers": {},
+                                "personalizations": [
+                                    {"to": [{"email": toAddress}]}
+                                ],
+                                "tracking_settings": {
+                                    "click_tracking": {
+                                        "enable": true,
+                                        "enable_text": true
+                                    }
                                 }
-                            ],
+                            };
+                            request.method = 'POST';
+                            request.path = '/v3/mail/send';
 
-                            "from": {
-                                "email": fromAddress
-                            },
-                            "subject": subjectPrefix + subject,
-                            "headers": {},
-                            "personalizations": [
-                                {"to": [{"email": toAddress}]}
-                            ],
-                            "tracking_settings": {
-                                "click_tracking": {
-                                    "enable": true,
-                                    "enable_text": true
+                            if(senderName && senderName.length > 0) {
+                                request.body.from.name = senderName;
+                            }
+                            if(toName && toName.length > 0) {
+                                request.body.personalizations[0].to[0].name = toName;
+                            }
+                            if(stepSettings.bcc) {
+                                request.body.personalizations[0].bcc = {
+                                    email: stepSettings.bcc
                                 }
                             }
-                        };
-                        request.method = 'POST';
-                        request.path = '/v3/mail/send';
-
-                        if(fromName && fromName.length > 0) {
-                            request.body.from.name = fromName;
-                        }
-                        if(toName && toName.length > 0) {
-                            request.body.personalizations[0].to[0].name = toName;
-                        }
-                        if(stepSettings.bcc) {
-                            request.body.personalizations[0].bcc = {
-                                email: stepSettings.bcc
+                            request.body.batchId = campaignId;
+                            request.body.reply_to = {
+                                email: replyTo
+                            };
+                            if(fromName) {
+                                request.body.reply_to.name = fromName;
                             }
-                        }
-                        request.body.batchId = campaignId;
 
-                        self._safeStoreEmail(request.body, accountId, null, emailId, function(err, emailmessage){
-                            //we should not have an err here
-                            if(err) {
-                                self.log.error('Error storing email (this should not happen):', err);
-                                return fn(err);
-                            } else {
-                                //Sendgrid doesn't like it when we mess with their chi
-                                delete request.body.batchId;
+                            self._safeStoreEmail(request.body, accountId, null, emailId, function(err, emailmessage){
+                                //we should not have an err here
+                                if(err) {
+                                    self.log.error('Error storing email (this should not happen):', err);
+                                    return fn(err);
+                                } else {
+                                    //Sendgrid doesn't like it when we mess with their chi
+                                    delete request.body.batchId;
 
-                                request.body.custom_args = {
-                                    emailmessageId: emailmessage.id(),
-                                    accountId:''+accountId,
-                                    date: moment().toISOString(),
-                                    emailId: emailId,
-                                    campaignId: campaignId,
-                                    contactId:''+contactId
-                                };
-                                //Figure out when to send it
-                                var send_at = null;
-                                var now_at = null;
-                                if(stepSettings.offset) {
-                                    //the offset is the number of mintues from now to send it at.
-                                    send_at = moment().utc().add('minutes', stepSettings.offset).unix();
-                                    self.log.debug('send_at (offset) ' + send_at);
-                                } else if(stepSettings.scheduled) {
-                                    send_at = self._getSecheduledUTCUnix(stepSettings.scheduled.day,
-                                        stepSettings.scheduled.hour, stepSettings.scheduled.minute, stepSettings.offset||0);
-                                    self.log.debug('send_at (scheduled): ' + send_at);
-                                } else if(stepSettings.sendAt) {
-                                    self.log.debug('send details >>> ', stepSettings.sendAt);
-                                    // send_at = self._getUtcDateTimeIsoString(stepSettings.sendAt.year, stepSettings.sendAt.month-1, stepSettings.sendAt.day, stepSettings.sendAt.hour, stepSettings.sendAt.minute, stepSettings.offset||0);
-                                    // now_at = self._getUtcDateTimeIsoString(moment().year(), moment().month(), moment().date(), moment().hour(), moment().minute(), 0);
-                                    stepSettings.sendAt.month = stepSettings.sendAt.month - 1;
-                                    self.log.debug('moment thinks sendAt is ' + moment(stepSettings.sendAt).toDate());
-                                    send_at = moment.utc(stepSettings.sendAt).unix();
-                                    now_at = moment.utc();
-                                    self.log.debug('send_at formatted >>> ', send_at);
-                                    self.log.debug('now_at formatted >>> ', now_at.unix());
-                                    if(moment.utc(stepSettings.sendAt).isBefore(now_at)) {
-                                        self.log.debug('Sending email now because ' + send_at + ' is in the past.');
+                                    request.body.custom_args = {
+                                        emailmessageId: emailmessage.id(),
+                                        accountId:''+accountId,
+                                        date: moment().toISOString(),
+                                        emailId: emailId,
+                                        campaignId: campaignId,
+                                        contactId:''+contactId
+                                    };
+                                    //Figure out when to send it
+                                    var send_at = null;
+                                    var now_at = null;
+                                    if(stepSettings.offset) {
+                                        //the offset is the number of mintues from now to send it at.
+                                        send_at = moment().utc().add('minutes', stepSettings.offset).unix();
+                                        self.log.debug('send_at (offset) ' + send_at);
+                                    } else if(stepSettings.scheduled) {
+                                        send_at = self._getSecheduledUTCUnix(stepSettings.scheduled.day,
+                                            stepSettings.scheduled.hour, stepSettings.scheduled.minute, stepSettings.offset||0);
+                                        self.log.debug('send_at (scheduled): ' + send_at);
+                                    } else if(stepSettings.sendAt) {
+                                        self.log.debug('send details >>> ', stepSettings.sendAt);
+                                        // send_at = self._getUtcDateTimeIsoString(stepSettings.sendAt.year, stepSettings.sendAt.month-1, stepSettings.sendAt.day, stepSettings.sendAt.hour, stepSettings.sendAt.minute, stepSettings.offset||0);
+                                        // now_at = self._getUtcDateTimeIsoString(moment().year(), moment().month(), moment().date(), moment().hour(), moment().minute(), 0);
+                                        stepSettings.sendAt.month = stepSettings.sendAt.month - 1;
+                                        self.log.debug('moment thinks sendAt is ' + moment(stepSettings.sendAt).toDate());
+                                        send_at = moment.utc(stepSettings.sendAt).unix();
+                                        now_at = moment.utc();
+                                        self.log.debug('send_at formatted >>> ', send_at);
+                                        self.log.debug('now_at formatted >>> ', now_at.unix());
+                                        if(moment.utc(stepSettings.sendAt).isBefore(now_at)) {
+                                            self.log.debug('Sending email now because ' + send_at + ' is in the past.');
+                                            send_at = moment().utc().unix();
+                                        }
+                                    } else {
+                                        //send it now?
+                                        self.log.debug('No scheduled or sendAt specified.');
                                         send_at = moment().utc().unix();
                                     }
-                                } else {
-                                    //send it now?
-                                    self.log.debug('No scheduled or sendAt specified.');
-                                    send_at = moment().utc().unix();
+
+                                    var maxSendTime = moment().add(72, 'hours');
+                                    request.body.send_at = send_at;
+                                    if(maxSendTime.isBefore(moment.unix(send_at))) {
+                                        //schedule the email
+                                        self.log.debug('Scheduling email');
+                                        var code = '';
+                                        code+= 'var emailJSON = ' + serialize.serialize(request.body) + ';';
+                                        code+= 'var uniqueArgs = ' + serialize.serialize(uniqueArgs) + ';';
+                                        code+= 'var send_at = ' + send_at + ';';
+                                        code+= '$$.u.emailMessageManager._sendEmailJSON(emailJSON, uniqueArgs, send_at, function(){});';
+
+                                        var scheduledJob = new $$.m.ScheduledJob({
+                                            accountId: accountId,
+                                            campaignId: campaignId,
+                                            scheduledAt: moment.unix(send_at).toDate(),
+                                            runAt: null,
+                                            job:code
+                                        });
+
+
+                                        scheduledJobsManager.scheduleJob(scheduledJob, function(err, value){
+                                            self.log.debug('<< sendCampaignEmail');
+                                            return fn(err, value);
+                                        });
+
+                                    } else {
+                                        //send the email
+                                        self.log.trace('Sending:', JSON.stringify(request.body));
+                                        sg.API(request, function (error, response) {
+                                            self.log.debug(response.statusCode);
+                                            self.log.debug(response.body);
+                                            self.log.debug(response.headers);
+                                            if (err) {
+                                                self.log.error('Error sending email:', err);
+                                                return fn(err);
+                                            } else {
+                                                self.log.debug(accountId, null, '<< sendCampaignEmail');
+                                                return fn(null, response);
+                                            }
+                                        });
+                                    }
                                 }
-
-                                var maxSendTime = moment().add(72, 'hours');
-                                request.body.send_at = send_at;
-                                if(maxSendTime.isBefore(moment.unix(send_at))) {
-                                    //schedule the email
-                                    self.log.debug('Scheduling email');
-                                    var code = '';
-                                    code+= 'var emailJSON = ' + serialize.serialize(request.body) + ';';
-                                    code+= 'var uniqueArgs = ' + serialize.serialize(uniqueArgs) + ';';
-                                    code+= 'var send_at = ' + send_at + ';';
-                                    code+= '$$.u.emailMessageManager._sendEmailJSON(emailJSON, uniqueArgs, send_at, function(){});';
-
-                                    var scheduledJob = new $$.m.ScheduledJob({
-                                        accountId: accountId,
-                                        campaignId: campaignId,
-                                        scheduledAt: moment.unix(send_at).toDate(),
-                                        runAt: null,
-                                        job:code
-                                    });
-
-
-                                    scheduledJobsManager.scheduleJob(scheduledJob, function(err, value){
-                                        self.log.debug('<< sendCampaignEmail');
-                                        return fn(err, value);
-                                    });
-
-                                } else {
-                                    //send the email
-                                    self.log.debug('Sending:', JSON.stringify(request.body));
-                                    sg.API(request, function (error, response) {
-                                        self.log.debug(response.statusCode);
-                                        self.log.debug(response.body);
-                                        self.log.debug(response.headers);
-                                        if (err) {
-                                            self.log.error('Error sending email:', err);
-                                            return fn(err);
-                                        } else {
-                                            self.log.debug(accountId, null, '<< sendCampaignEmail');
-                                            return fn(null, response);
-                                        }
-                                    });
-                                }
-                            }
+                            });
                         });
                     });
                 });
+
             }
         });
 
@@ -672,254 +712,31 @@ var emailMessageManager = {
             if (isUnsubscribed == true) {
                 fn('skipping email for user on unsubscribed list');
             } else {
-                vars.push({
-                        "name": "SENDDATE",
-                        "content": moment().format('MMM Do, YYYY')
-                    },
-                    {
-                        "name": 'ORDERID',
-                        "content": orderId
-                    }
-                );
-                htmlContent = self._replaceMandrillStyleVars(vars, htmlContent);
-                juice.juiceResources(htmlContent, {}, function(err, html) {
-                    var request = sg.emptyRequest();
-                    request.body = {
-                        "categories": [
-                            "order"
-                        ],
-                        "content": [
-                            {
-                                "type": "text/html",
-                                "value": html
-                            }
-                        ],
-                        "from": {
-                            "email": fromAddress
+                self._getFromAdressNameAndReplyTo(accountId, fromAddress, fromName, function(err, senderAddress, senderName, replyTo){
+                    vars.push({
+                            "name": "SENDDATE",
+                            "content": moment().format('MMM Do, YYYY')
                         },
-                        "headers": {},
-                        "personalizations": [
-                            {
-                                "headers": {
-                                    "X-Accept-Language": "en"
-                                },
-                                "subject": subjectPrefix + subject,
-
-                                "to": [
-                                    {
-                                        "email": toAddress
-                                    }
-                                ]
-                            }
-                        ],
-                        "tracking_settings": {
-                            "click_tracking": {
-                                "enable": true,
-                                "enable_text": true
-                            },
-                            "subscription_tracking":{
-                                enable:false
-                            }
+                        {
+                            "name": 'ORDERID',
+                            "content": orderId
                         }
-                    };
-                    request.method = 'POST';
-                    request.path = '/v3/mail/send';
-
-                    if(fromName && fromName.length > 0) {
-                        request.body.from.name = fromName;
-                    }
-                    if(toName && toName.length > 0) {
-                        request.body.personalizations[0].to[0].name = toName;
-                    }
-                    if(ccAry && ccAry.length > 0) {
-                        request.body.personalizations[0].cc = [];
-                        _.each(ccAry, function(ccAddress){
-                            request.body.personalizations[0].cc.push({email:ccAddress});
-                        });
-                    }
-
-                    self._safeStoreEmail(request.body, accountId, null, emailId, function(err, emailmessage){
-                        //we should not have an err here
-                        if(err) {
-                            self.log.error('Error storing email (this should not happen):', err);
-                            return fn(err);
-                        } else {
-
-                            request.body.custom_args = {
-                                emailmessageId: emailmessage.id(),
-                                accountId:''+accountId,
-                                orderId:orderId,
-                                date: moment().toISOString(),
-                                emailId: emailId
-                            };
-                            sg.API(request, function (error, response) {
-                                self.log.debug(response.statusCode);
-                                self.log.debug(response.body);
-                                self.log.debug(response.headers);
-                                if (err) {
-                                    self.log.error('Error sending email:', err);
-                                    return fn(err);
-                                } else {
-                                    self.log.debug(accountId, null, '<< sendOrderEmail');
-                                    return fn(null, response);
-                                }
-                            });
-                        }
-                    });
-                })
-            }
-        });
-
-    },
-
-    sendFulfillmentEmail: function(fromAddress, fromName, toAddress, toName, subject, htmlContent, accountId, orderId,
-                                   vars, emailId, bcc,  fn) {
-        var self = this;
-        self.log.debug('>> sendFulfillmentEmail');
-        self._checkForUnsubscribe(accountId, toAddress, function(err, isUnsubscribed) {
-            if (isUnsubscribed == true) {
-                fn('skipping email for user on unsubscribed list');
-            } else {
-                vars.push({
-                        "name": "SENDDATE",
-                        "content": moment().format('MMM Do, YYYY')
-                    },
-                    {
-                        "name": 'ORDERID',
-                        "content": orderId
-                    }
-                );
-                htmlContent = self._replaceMandrillStyleVars(vars, htmlContent);
-                juice.juiceResources(htmlContent, {}, function(err, html) {
-                    if (err) {
-                        self.log.error('A juice error occurred. Failed to set styles inline.');
-                        self.log.error(err);
-                        return fn(err, null);
-                    }
-
-                    var request = sg.emptyRequest();
-                    request.body = {
-                        "categories": [
-                            "fulfillment"
-                        ],
-                        "content": [
-                            {
-                                "type": "text/html",
-                                "value": html
-                            }
-                        ],
-                        "from": {
-                            "email": fromAddress
-                        },
-                        "headers": {},
-                        "personalizations": [
-                            {
-                                "headers": {
-                                    "X-Accept-Language": "en"
-                                },
-                                "subject": subjectPrefix + subject,
-
-                                "to": [
-                                    {
-                                        "email": toAddress
-                                    }
-                                ]
-                            }
-                        ],
-                        "tracking_settings": {
-                            "click_tracking": {
-                                "enable": true,
-                                "enable_text": true
-                            }
-                        }
-                    };
-                    request.method = 'POST';
-                    request.path = '/v3/mail/send';
-
-                    if(fromName && fromName.length > 0) {
-                        request.body.from.name = fromName;
-                    }
-                    if(toName && toName.length > 0) {
-                        request.body.personalizations[0].to[0].name = toName;
-                    }
-                    if(bcc && bcc.length > 0) {
-                        request.body.personalizations[0].bcc = [];
-                        request.body.personalizations[0].bcc.push({
-                            email: bcc
-                        });
-                    }
-
-
-                    self._safeStoreEmail(request.body, accountId, null, emailId, function(err, emailmessage){
-                        //we should not have an err here
-                        if(err) {
-                            self.log.error('Error storing email (this should not happen):', err);
-                            return fn(err);
-                        } else {
-
-                            request.body.custom_args = {
-                                emailmessageId: emailmessage.id(),
-                                accountId:''+accountId,
-                                orderId:orderId,
-                                date: moment().toISOString(),
-                                emailId: emailId
-                            };
-                            sg.API(request, function (error, response) {
-                                self.log.debug(response.statusCode);
-                                self.log.debug(response.body);
-                                self.log.debug(response.headers);
-                                if (err) {
-                                    self.log.error('Error sending email:', err);
-                                    return fn(err);
-                                } else {
-                                    self.log.debug(accountId, null, '<< sendFulfillmentEmail');
-                                    return fn(null, response);
-                                }
-                            });
-
-                        }
-                    });
-
-                });
-            }
-        });
-
-    },
-
-    sendNewCustomerEmail: function(toAddress, toName, accountId, vars, ccArray, fn) {
-        var self = this;
-        self.log.debug('>> sendNewCustomerEmail');
-        self._checkForUnsubscribe(accountId, toAddress, function(err, isUnsubscribed) {
-            if (isUnsubscribed == true) {
-                fn('skipping email for user on unsubscribed list');
-            } else {
-                vars.push({
-                    "name": "SENDDATE",
-                    "content": moment().format('MMM Do, YYYY')
-                });
-
-                fs.readFile('templates/emails/new_customer.html', 'utf-8', function(err, htmlContent){
-                    if (err) {
-                        self.log.error('Error getting new customer email file.  Welcome email not sent for accountId ' + accountId, err);
-                    } else {
-                        htmlContent = self._replaceMandrillStyleVars(vars, htmlContent);
-                        var subject = 'You have a new customer!';
-                        var fromAddress = notificationConfig.WELCOME_FROM_EMAIL;
-                        var fromName = notificationConfig.WELCOME_FROM_NAME;
-
+                    );
+                    htmlContent = self._replaceMandrillStyleVars(vars, htmlContent);
+                    juice.juiceResources(htmlContent, {}, function(err, html) {
                         var request = sg.emptyRequest();
                         request.body = {
                             "categories": [
-                                "new_customer"
+                                "order"
                             ],
                             "content": [
                                 {
                                     "type": "text/html",
-                                    "value": htmlContent
+                                    "value": html
                                 }
                             ],
                             "from": {
-                                "email": fromAddress
+                                "email": senderAddress
                             },
                             "headers": {},
                             "personalizations": [
@@ -949,14 +766,26 @@ var emailMessageManager = {
                         request.method = 'POST';
                         request.path = '/v3/mail/send';
 
-                        if(fromName && fromName.length > 0) {
-                            request.body.from.name = fromName;
+                        if(senderName && senderName.length > 0) {
+                            request.body.from.name = senderName;
                         }
                         if(toName && toName.length > 0) {
                             request.body.personalizations[0].to[0].name = toName;
                         }
+                        if(ccAry && ccAry.length > 0) {
+                            request.body.personalizations[0].cc = [];
+                            _.each(ccAry, function(ccAddress){
+                                request.body.personalizations[0].cc.push({email:ccAddress});
+                            });
+                        }
+                        request.body.reply_to = {
+                            email: replyTo
+                        };
+                        if(fromName) {
+                            request.body.reply_to.name = fromName;
+                        }
 
-                        self._safeStoreEmail(request.body, accountId, null, null, function(err, emailmessage){
+                        self._safeStoreEmail(request.body, accountId, null, emailId, function(err, emailmessage){
                             //we should not have an err here
                             if(err) {
                                 self.log.error('Error storing email (this should not happen):', err);
@@ -966,7 +795,9 @@ var emailMessageManager = {
                                 request.body.custom_args = {
                                     emailmessageId: emailmessage.id(),
                                     accountId:''+accountId,
-                                    date: moment().toISOString()
+                                    orderId:orderId,
+                                    date: moment().toISOString(),
+                                    emailId: emailId
                                 };
                                 sg.API(request, function (error, response) {
                                     self.log.debug(response.statusCode);
@@ -976,15 +807,256 @@ var emailMessageManager = {
                                         self.log.error('Error sending email:', err);
                                         return fn(err);
                                     } else {
-                                        self.log.debug(accountId, null, '<< sendNewCustomerEmail');
+                                        self.log.debug(accountId, null, '<< sendOrderEmail');
+                                        return fn(null, response);
+                                    }
+                                });
+                            }
+                        });
+                    });
+                });
+
+            }
+        });
+
+    },
+
+    sendFulfillmentEmail: function(fromAddress, fromName, toAddress, toName, subject, htmlContent, accountId, orderId,
+                                   vars, emailId, bcc,  fn) {
+        var self = this;
+        self.log.debug('>> sendFulfillmentEmail');
+        self._checkForUnsubscribe(accountId, toAddress, function(err, isUnsubscribed) {
+            if (isUnsubscribed == true) {
+                fn('skipping email for user on unsubscribed list');
+            } else {
+                self._getFromAdressNameAndReplyTo(accountId, fromAddress, fromName, function(err, senderAddress, senderName, replyTo){
+                    vars.push({
+                            "name": "SENDDATE",
+                            "content": moment().format('MMM Do, YYYY')
+                        },
+                        {
+                            "name": 'ORDERID',
+                            "content": orderId
+                        }
+                    );
+                    htmlContent = self._replaceMandrillStyleVars(vars, htmlContent);
+                    juice.juiceResources(htmlContent, {}, function(err, html) {
+                        if (err) {
+                            self.log.error('A juice error occurred. Failed to set styles inline.');
+                            self.log.error(err);
+                            return fn(err, null);
+                        }
+
+                        var request = sg.emptyRequest();
+                        request.body = {
+                            "categories": [
+                                "fulfillment"
+                            ],
+                            "content": [
+                                {
+                                    "type": "text/html",
+                                    "value": html
+                                }
+                            ],
+                            "from": {
+                                "email": senderAddress
+                            },
+                            "headers": {},
+                            "personalizations": [
+                                {
+                                    "headers": {
+                                        "X-Accept-Language": "en"
+                                    },
+                                    "subject": subjectPrefix + subject,
+
+                                    "to": [
+                                        {
+                                            "email": toAddress
+                                        }
+                                    ]
+                                }
+                            ],
+                            "tracking_settings": {
+                                "click_tracking": {
+                                    "enable": true,
+                                    "enable_text": true
+                                }
+                            }
+                        };
+                        request.method = 'POST';
+                        request.path = '/v3/mail/send';
+
+                        if(senderName && senderName.length > 0) {
+                            request.body.from.name = senderName;
+                        }
+                        if(toName && toName.length > 0) {
+                            request.body.personalizations[0].to[0].name = toName;
+                        }
+                        if(bcc && bcc.length > 0) {
+                            request.body.personalizations[0].bcc = [];
+                            request.body.personalizations[0].bcc.push({
+                                email: bcc
+                            });
+                        }
+
+                        request.body.reply_to = {
+                            email: replyTo
+                        };
+                        if(fromName) {
+                            request.body.reply_to.name = fromName;
+                        }
+
+                        self._safeStoreEmail(request.body, accountId, null, emailId, function(err, emailmessage){
+                            //we should not have an err here
+                            if(err) {
+                                self.log.error('Error storing email (this should not happen):', err);
+                                return fn(err);
+                            } else {
+
+                                request.body.custom_args = {
+                                    emailmessageId: emailmessage.id(),
+                                    accountId:''+accountId,
+                                    orderId:orderId,
+                                    date: moment().toISOString(),
+                                    emailId: emailId
+                                };
+                                sg.API(request, function (error, response) {
+                                    self.log.debug(response.statusCode);
+                                    self.log.debug(response.body);
+                                    self.log.debug(response.headers);
+                                    if (err) {
+                                        self.log.error('Error sending email:', err);
+                                        return fn(err);
+                                    } else {
+                                        self.log.debug(accountId, null, '<< sendFulfillmentEmail');
                                         return fn(null, response);
                                     }
                                 });
 
                             }
                         });
-                    }
+
+                    });
                 });
+
+            }
+        });
+
+    },
+
+    sendNewCustomerEmail: function(toAddress, toName, fromName, fromAddress, accountId, vars, ccArray, fn) {
+        var self = this;
+        self.log.debug('>> sendNewCustomerEmail', fromName);
+        self._checkForUnsubscribe(accountId, toAddress, function(err, isUnsubscribed) {
+            if (isUnsubscribed == true) {
+                fn('skipping email for user on unsubscribed list');
+            } else {
+                if(!fromAddress) {
+                    fromAddress = notificationConfig.WELCOME_FROM_EMAIL;
+                }
+                if(!fromName) {
+                    fromName = notificationConfig.WELCOME_FROM_NAME;
+                }
+                self._getFromAdressNameAndReplyTo(accountId, fromAddress, fromName, function(err, senderAddress, senderName, replyTo){
+                    vars.push({
+                        "name": "SENDDATE",
+                        "content": moment().format('MMM Do, YYYY')
+                    });
+
+                    fs.readFile('templates/emails/new_customer.html', 'utf-8', function(err, htmlContent){
+                        if (err) {
+                            self.log.error('Error getting new customer email file.  Welcome email not sent for accountId ' + accountId, err);
+                        } else {
+                            htmlContent = self._replaceMandrillStyleVars(vars, htmlContent);
+                            var subject = 'You have a new customer!';
+
+
+                            var request = sg.emptyRequest();
+                            request.body = {
+                                "categories": [
+                                    "new_customer"
+                                ],
+                                "content": [
+                                    {
+                                        "type": "text/html",
+                                        "value": htmlContent
+                                    }
+                                ],
+                                "from": {
+                                    "email": senderAddress
+                                },
+                                "headers": {},
+                                "personalizations": [
+                                    {
+                                        "headers": {
+                                            "X-Accept-Language": "en"
+                                        },
+                                        "subject": subjectPrefix + subject,
+
+                                        "to": [
+                                            {
+                                                "email": toAddress
+                                            }
+                                        ]
+                                    }
+                                ],
+                                "tracking_settings": {
+                                    "click_tracking": {
+                                        "enable": true,
+                                        "enable_text": true
+                                    },
+                                    "subscription_tracking":{
+                                        enable:false
+                                    }
+                                }
+                            };
+                            request.method = 'POST';
+                            request.path = '/v3/mail/send';
+
+                            if(senderName && senderName.length > 0) {
+                                request.body.from.name = fromName;
+                            }
+                            if(toName && toName.length > 0) {
+                                request.body.personalizations[0].to[0].name = toName;
+                            }
+                            request.body.reply_to = {
+                                email: replyTo
+                            };
+                            if(fromName) {
+                                request.body.reply_to.name = fromName;
+                            }
+
+                            self._safeStoreEmail(request.body, accountId, null, null, function(err, emailmessage){
+                                //we should not have an err here
+                                if(err) {
+                                    self.log.error('Error storing email (this should not happen):', err);
+                                    return fn(err);
+                                } else {
+
+                                    request.body.custom_args = {
+                                        emailmessageId: emailmessage.id(),
+                                        accountId:''+accountId,
+                                        date: moment().toISOString()
+                                    };
+                                    sg.API(request, function (error, response) {
+                                        self.log.debug(response.statusCode);
+                                        self.log.debug(response.body);
+                                        self.log.debug(response.headers);
+                                        if (err) {
+                                            self.log.error('Error sending email:', err);
+                                            return fn(err);
+                                        } else {
+                                            self.log.debug(accountId, null, '<< sendNewCustomerEmail');
+                                            return fn(null, response);
+                                        }
+                                    });
+
+                                }
+                            });
+                        }
+                    });
+                });
+
             }
         });
 
@@ -1000,245 +1072,37 @@ var emailMessageManager = {
             if (isUnsubscribed == true) {
                 fn('skipping email for user on unsubscribed list');
             } else {
-                htmlContent = self._replaceMandrillStyleVars(vars, htmlContent);
-                juice.juiceResources(htmlContent, {}, function(err, html) {
-                    if (err) {
-                        self.log.error('A juice error occurred. Failed to set styles inline.');
-                        self.log.error(err);
-                        return fn(err, null);
-                    }
-
-                    var request = sg.emptyRequest();
-                    request.body = {
-                        "categories": [
-                            "basic"
-                        ],
-                        "content": [
-                            {
-                                "type": "text/html",
-                                "value": htmlContent
-                            }
-                        ],
-                        "from": {
-                            "email": fromAddress
-                        },
-                        "headers": {},
-                        "personalizations": [
-                            {
-                                "headers": {
-                                    "X-Accept-Language": "en"
-                                },
-                                "subject": subjectPrefix + subject,
-
-                                "to": [
-                                    {
-                                        "email": toAddress
-                                    }
-                                ]
-                            }
-                        ],
-                        "tracking_settings": {
-                            "click_tracking": {
-                                "enable": true,
-                                "enable_text": true
-                            },
-                            "subscription_tracking":{enable:true}
-                        }
-                    };
-                    if(suppressUnsubscribe && suppressUnsubscribe === true) {
-                        request.body.tracking_settings.subscription_tracking.enable = false;
-                    }
-                    self.log.trace('request.body:', request.body);
-                    request.method = 'POST';
-                    request.path = '/v3/mail/send';
-
-                    if(fromName && fromName.length > 0) {
-                        request.body.from.name = fromName;
-                    }
-                    if(toName && toName.length > 0) {
-                        request.body.personalizations[0].to[0].name = toName;
-                    }
-                    if(ccAry && ccAry.length > 0) {
-                        request.body.personalizations[0].cc = [];
-                        _.each(ccAry, function(ccAddress){
-                            request.body.personalizations[0].cc.push({email:ccAddress});
-                        });
-                    }
-                    if(bcc && bcc.length > 0) {
-                        request.body.personalizations[0].bcc = [];
-                        request.body.personalizations[0].bcc.push({
-                            email: bcc
-                        });
-                    }
-
-                    self._safeStoreEmail(request.body, accountId, null, emailId, function(err, emailmessage){
-                        //we should not have an err here
-                        if(err) {
-                            self.log.error('Error storing email (this should not happen):', err);
-                            return fn(err);
-                        } else {
-                            request.body.custom_args = {
-                                emailmessageId: emailmessage.id(),
-                                accountId:''+accountId,
-                                date: moment().toISOString(),
-                                emailId: emailId
-                            };
-                            sg.API(request, function (error, response) {
-                                self.log.debug(response.statusCode);
-                                self.log.debug(response.body);
-                                self.log.debug(response.headers);
-                                if (err) {
-                                    self.log.error('Error sending email:', err);
-                                    return fn(err);
-                                } else {
-                                    self.log.debug(accountId, null, '<< sendBasicEmail');
-                                    return fn(null, response);
-                                }
-                            });
-                        }
-                    });
-                });
-            }
-        });
-
-    },
-
-
-    sendNewPurchaseOrderEmail: function(fromAddress, fromName, toAddress, toName, subject, htmlContent, accountId, vars, emailId, ccAry, bcc, fn) {
-        var self = this;
-        self.log.debug('>> sendNewPurchaseOrderEmail');
-
-        htmlContent = self._replaceMandrillStyleVars(vars, htmlContent);
-        juice.juiceResources(htmlContent, {}, function(err, html) {
-            if (err) {
-                self.log.error('A juice error occurred. Failed to set styles inline.');
-                self.log.error(err);
-                return fn(err, null);
-            }
-
-            var request = sg.emptyRequest();
-            request.body = {
-                "categories": [
-                    "basic"
-                ],
-                "content": [
-                    {
-                        "type": "text/html",
-                        "value": htmlContent
-                    }
-                ],
-                "from": {
-                    "email": fromAddress
-                },
-                "headers": {},
-                "personalizations": [
-                    {
-                        "headers": {
-                            "X-Accept-Language": "en"
-                        },
-                        "subject": subjectPrefix + subject,
-
-                        "to": [
-                            {
-                                "email": toAddress
-                            }
-                        ]
-                    }
-                ],
-                "tracking_settings": {
-                    "click_tracking": {
-                        "enable": true,
-                        "enable_text": true
-                    }
-                },
-                "subscription_tracking":{
-                    enable:false
-                }
-            };
-            request.method = 'POST';
-            request.path = '/v3/mail/send';
-
-            if(fromName && fromName.length > 0) {
-                request.body.from.name = fromName;
-            }
-            if(toName && toName.length > 0) {
-                request.body.personalizations[0].to[0].name = toName;
-            }
-            if(ccAry && ccAry.length > 0) {
-                request.body.personalizations[0].cc = [];
-                _.each(ccAry, function(ccAddress){
-                    request.body.personalizations[0].cc.push({email:ccAddress});
-                });
-            }
-
-            if(bcc) {
-                request.body.personalizations[0].bcc = [{email:bcc}];
-            }
-
-
-            self._safeStoreEmail(request.body, accountId, null, emailId, function(err, emailmessage){
-                //we should not have an err here
-                if(err) {
-                    self.log.error('Error storing email (this should not happen):', err);
-                    return fn(err);
-                } else {
-                    request.body.custom_args = {
-                        emailmessageId: emailmessage.id(),
-                        accountId:''+accountId,
-                        date: moment().toISOString(),
-                        emailId: emailId
-                    };
-                    sg.API(request, function (error, response) {
-                        self.log.debug(response.statusCode);
-                        self.log.debug(response.body);
-                        self.log.debug(response.headers);
-                        if (err) {
-                            self.log.error('Error sending email:', err);
-                            return fn(err);
-                        } else {
-                            self.log.debug(accountId, null, '<< sendNewPurchaseOrderEmail');
-                            return fn(null, response);
-                        }
-                    });
-                }
-            });
-        });
-
-    },
-
-    sendTestEmail: function(fromAddress, fromName, toAddress, toName, subject, htmlContent, accountId, vars, emailId, cc, bcc, fn) {
-        var self = this;
-        var contactId = null;
-        self.log.debug('>> sendTestEmail');
-        self._checkForUnsubscribe(accountId, toAddress, function(err, isUnsubscribed) {
-            if (isUnsubscribed == true) {
-                fn('skipping email for user on unsubscribed list');
-            } else {
-                self._findReplaceMergeTags(accountId, contactId, htmlContent, vars, function(mergedHtml) {
-                    juice.juiceResources(mergedHtml, {}, function(err, html) {
+                self._getFromAdressNameAndReplyTo(accountId, fromAddress, fromName, function(err, senderAddress, senderName, replyTo){
+                    htmlContent = self._replaceMandrillStyleVars(vars, htmlContent);
+                    juice.juiceResources(htmlContent, {}, function(err, html) {
                         if (err) {
                             self.log.error('A juice error occurred. Failed to set styles inline.');
                             self.log.error(err);
                             return fn(err, null);
                         }
+
                         var request = sg.emptyRequest();
                         request.body = {
                             "categories": [
-                                "test"
+                                "basic"
                             ],
                             "content": [
                                 {
                                     "type": "text/html",
-                                    "value": html
+                                    "value": htmlContent
                                 }
                             ],
                             "from": {
-                                "email": fromAddress
+                                "email": senderAddress
                             },
-                            "subject": subjectPrefix + subject,
                             "headers": {},
                             "personalizations": [
                                 {
+                                    "headers": {
+                                        "X-Accept-Language": "en"
+                                    },
+                                    "subject": subjectPrefix + subject,
+
                                     "to": [
                                         {
                                             "email": toAddress
@@ -1251,27 +1115,39 @@ var emailMessageManager = {
                                     "enable": true,
                                     "enable_text": true
                                 },
-                                "subscription_tracking":{
-                                    enable:false
-                                }
+                                "subscription_tracking":{enable:true}
                             }
                         };
+                        if(suppressUnsubscribe && suppressUnsubscribe === true) {
+                            request.body.tracking_settings.subscription_tracking.enable = false;
+                        }
+                        self.log.trace('request.body:', request.body);
                         request.method = 'POST';
                         request.path = '/v3/mail/send';
 
-                        if(fromName && fromName.length > 0) {
-                            request.body.from.name = fromName;
+                        if(senderName && senderName.length > 0) {
+                            request.body.from.name = senderName;
                         }
                         if(toName && toName.length > 0) {
                             request.body.personalizations[0].to[0].name = toName;
                         }
-
-                        if(cc) {
-                            request.body.personalizations[0].cc = [{email:cc}];
+                        if(ccAry && ccAry.length > 0) {
+                            request.body.personalizations[0].cc = [];
+                            _.each(ccAry, function(ccAddress){
+                                request.body.personalizations[0].cc.push({email:ccAddress});
+                            });
                         }
-
-                        if(bcc) {
-                            request.body.personalizations[0].bcc = [{email:bcc}];
+                        if(bcc && bcc.length > 0) {
+                            request.body.personalizations[0].bcc = [];
+                            request.body.personalizations[0].bcc.push({
+                                email: bcc
+                            });
+                        }
+                        request.body.reply_to = {
+                            email: replyTo
+                        };
+                        if(fromName) {
+                            request.body.reply_to.name = fromName;
                         }
 
                         self._safeStoreEmail(request.body, accountId, null, emailId, function(err, emailmessage){
@@ -1280,14 +1156,12 @@ var emailMessageManager = {
                                 self.log.error('Error storing email (this should not happen):', err);
                                 return fn(err);
                             } else {
-
-                                request.body.personalizations[0].custom_args = {
+                                request.body.custom_args = {
                                     emailmessageId: emailmessage.id(),
                                     accountId:''+accountId,
                                     date: moment().toISOString(),
                                     emailId: emailId
                                 };
-                                self.log.debug('Sending:', JSON.stringify(request));
                                 sg.API(request, function (error, response) {
                                     self.log.debug(response.statusCode);
                                     self.log.debug(response.body);
@@ -1296,7 +1170,7 @@ var emailMessageManager = {
                                         self.log.error('Error sending email:', err);
                                         return fn(err);
                                     } else {
-                                        self.log.debug(accountId, null, '<< sendTestEmail');
+                                        self.log.debug(accountId, null, '<< sendBasicEmail');
                                         return fn(null, response);
                                     }
                                 });
@@ -1304,6 +1178,229 @@ var emailMessageManager = {
                         });
                     });
                 });
+
+            }
+        });
+
+    },
+
+
+    sendNewPurchaseOrderEmail: function(fromAddress, fromName, toAddress, toName, subject, htmlContent, accountId, vars, emailId, ccAry, bcc, fn) {
+        var self = this;
+        self.log.debug('>> sendNewPurchaseOrderEmail');
+        self._getFromAdressNameAndReplyTo(accountId, fromAddress, fromName, function(err, senderAddress, senderName, replyTo){
+            htmlContent = self._replaceMandrillStyleVars(vars, htmlContent);
+            juice.juiceResources(htmlContent, {}, function(err, html) {
+                if (err) {
+                    self.log.error('A juice error occurred. Failed to set styles inline.');
+                    self.log.error(err);
+                    return fn(err, null);
+                }
+
+                var request = sg.emptyRequest();
+                request.body = {
+                    "categories": [
+                        "basic"
+                    ],
+                    "content": [
+                        {
+                            "type": "text/html",
+                            "value": htmlContent
+                        }
+                    ],
+                    "from": {
+                        "email": senderAddress
+                    },
+                    "headers": {},
+                    "personalizations": [
+                        {
+                            "headers": {
+                                "X-Accept-Language": "en"
+                            },
+                            "subject": subjectPrefix + subject,
+
+                            "to": [
+                                {
+                                    "email": toAddress
+                                }
+                            ]
+                        }
+                    ],
+                    "tracking_settings": {
+                        "click_tracking": {
+                            "enable": true,
+                            "enable_text": true
+                        }
+                    },
+                    "subscription_tracking":{
+                        enable:false
+                    }
+                };
+                request.method = 'POST';
+                request.path = '/v3/mail/send';
+
+                if(senderName && senderName.length > 0) {
+                    request.body.from.name = senderName;
+                }
+                if(toName && toName.length > 0) {
+                    request.body.personalizations[0].to[0].name = toName;
+                }
+                if(ccAry && ccAry.length > 0) {
+                    request.body.personalizations[0].cc = [];
+                    _.each(ccAry, function(ccAddress){
+                        request.body.personalizations[0].cc.push({email:ccAddress});
+                    });
+                }
+
+                if(bcc) {
+                    request.body.personalizations[0].bcc = [{email:bcc}];
+                }
+                request.body.reply_to = {
+                    email: replyTo
+                };
+                if(fromName) {
+                    request.body.reply_to.name = fromName;
+                }
+
+                self._safeStoreEmail(request.body, accountId, null, emailId, function(err, emailmessage){
+                    //we should not have an err here
+                    if(err) {
+                        self.log.error('Error storing email (this should not happen):', err);
+                        return fn(err);
+                    } else {
+                        request.body.custom_args = {
+                            emailmessageId: emailmessage.id(),
+                            accountId:''+accountId,
+                            date: moment().toISOString(),
+                            emailId: emailId
+                        };
+                        sg.API(request, function (error, response) {
+                            self.log.debug(response.statusCode);
+                            self.log.debug(response.body);
+                            self.log.debug(response.headers);
+                            if (err) {
+                                self.log.error('Error sending email:', err);
+                                return fn(err);
+                            } else {
+                                self.log.debug(accountId, null, '<< sendNewPurchaseOrderEmail');
+                                return fn(null, response);
+                            }
+                        });
+                    }
+                });
+            });
+        });
+
+
+    },
+
+    sendTestEmail: function(fromAddress, fromName, toAddress, toName, subject, htmlContent, accountId, vars, emailId, cc, bcc, fn) {
+        var self = this;
+        var contactId = null;
+        self.log.debug('>> sendTestEmail');
+        self._checkForUnsubscribe(accountId, toAddress, function(err, isUnsubscribed) {
+            if (isUnsubscribed == true) {
+                fn('skipping email for user on unsubscribed list');
+            } else {
+                self._getFromAdressNameAndReplyTo(accountId, fromAddress, fromName, function(err, senderAddress, senderName, replyTo){
+                    self._findReplaceMergeTags(accountId, contactId, htmlContent, vars, function(mergedHtml) {
+                        juice.juiceResources(mergedHtml, {}, function(err, html) {
+                            if (err) {
+                                self.log.error('A juice error occurred. Failed to set styles inline.');
+                                self.log.error(err);
+                                return fn(err, null);
+                            }
+                            var request = sg.emptyRequest();
+                            request.body = {
+                                "categories": [
+                                    "test"
+                                ],
+                                "content": [
+                                    {
+                                        "type": "text/html",
+                                        "value": html
+                                    }
+                                ],
+                                "from": {
+                                    "email": senderAddress
+                                },
+                                "subject": subjectPrefix + subject,
+                                "headers": {},
+                                "personalizations": [
+                                    {
+                                        "to": [
+                                            {
+                                                "email": toAddress
+                                            }
+                                        ]
+                                    }
+                                ],
+                                "tracking_settings": {
+                                    "click_tracking": {
+                                        "enable": true,
+                                        "enable_text": true
+                                    },
+                                    "subscription_tracking":{
+                                        enable:false
+                                    }
+                                }
+                            };
+                            request.method = 'POST';
+                            request.path = '/v3/mail/send';
+
+                            if(senderName && senderName.length > 0) {
+                                request.body.from.name = senderName;
+                            }
+                            if(toName && toName.length > 0) {
+                                request.body.personalizations[0].to[0].name = toName;
+                            }
+
+                            if(cc) {
+                                request.body.personalizations[0].cc = [{email:cc}];
+                            }
+
+                            if(bcc) {
+                                request.body.personalizations[0].bcc = [{email:bcc}];
+                            }
+                            request.body.reply_to = {
+                                email: replyTo
+                            };
+                            if(fromName) {
+                                request.body.reply_to.name = fromName;
+                            }
+
+                            self._safeStoreEmail(request.body, accountId, null, emailId, function(err, emailmessage){
+                                //we should not have an err here
+                                if(err) {
+                                    self.log.error('Error storing email (this should not happen):', err);
+                                    return fn(err);
+                                } else {
+
+                                    request.body.personalizations[0].custom_args = {
+                                        emailmessageId: emailmessage.id(),
+                                        accountId:''+accountId,
+                                        date: moment().toISOString(),
+                                        emailId: emailId
+                                    };
+                                    self.log.trace('Sending:', JSON.stringify(request));
+                                    sg.API(request, function (error, response) {
+                                        self.log.debug(response.statusCode);
+                                        self.log.debug(response.body);
+                                        self.log.debug(response.headers);
+                                        if (err) {
+                                            self.log.error('Error sending email:', err);
+                                            return fn(err);
+                                        } else {
+                                            self.log.debug(accountId, null, '<< sendTestEmail');
+                                            return fn(null, response);
+                                        }
+                                    });
+                                }
+                            });
+                        });
+                    });
+                });
+
             }
         });
 
@@ -1598,6 +1695,22 @@ var emailMessageManager = {
             });
         });
     },
+
+
+    /* ********************************************************************
+     *
+     *
+     * Non-Sending methods to follow
+     *
+     *
+     * ********************************************************************
+     */
+
+
+
+
+
+
 
     getMessageInfo: function(messageId, fn) {
         //TODO: this
@@ -3042,6 +3155,40 @@ var emailMessageManager = {
                 fn(null, results);
             }
         });
+    },
+
+    _getFromAdressNameAndReplyTo: function(accountId, fromAddress, fromName, fn) {
+        var self = this;
+        var senderAddress = notificationConfig.DEFAULT_SENDER_ADDRESS;
+        var senderName = fromName + ' via Indigenous';
+        var replyTo = fromAddress;
+        accountDao.getAccountByID(accountId, function(err, account){
+            if(err || !account) {
+                self.log.error(accountId, null, 'Error getting account:', err);
+                fn(null, senderAddress, senderName, replyTo);
+            } else {
+                if(account.get('email_preferences') && account.get('email_preferences').senderAddress) {
+                    senderAddress = account.get('email_preferences').senderAddress;
+                    senderName = fromName;
+                    fn(null, senderAddress, senderName, replyTo);
+                } else {
+                    orgManager.getOrgById(accountId, null, account.get('orgId') || 0, function(err, org){
+                        if(err || !org) {
+                            self.log.error(accountId, null, 'Error getting organization:', err);
+                            fn(null, senderAddress, senderName, replyTo);
+                        } else {
+                            if(org.get('defaultSender')) {
+                                senderAddress = org.get('defaultSender');
+                            }
+                            if(org.get('defaultSenderNameSuffix')) {
+                                senderName = fromName + ' ' + org.get('defaultSenderNameSuffix');
+                            }
+                            fn(null, senderAddress, senderName, replyTo);
+                        }
+                    });
+                }
+            }
+        });
     }
 
 };
@@ -3051,5 +3198,4 @@ $$.u.emailMessageManager = emailMessageManager;
 
 $$.g.mailer = $$.g.mailer || {};
 $$.g.mailer.sendMail = emailMessageManager.sendMailReplacement;
-
 module.exports = emailMessageManager;

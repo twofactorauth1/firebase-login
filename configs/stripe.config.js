@@ -9,6 +9,7 @@
 var appConfig =  require('./app.config');
 
 var stripeSecretKey = process.env.STRIPE_SECRET_KEY || 'sk_test_iXKiJJ80BnXlAXnOqCX4FxjQ';
+//var stripeSecretKey = 'sk_live_dtI4g8wdtGIpjtBVzNgiP3gT';
 var stripePublishableKey = process.env.STRIPE_PUBLISHABLE_KEY || 'pk_test_EuZhZHVourE3RaRxELJaYEya';
 var stripeClientId = process.env.STRIPE_CLIENT_ID || 'ca_4BwvfmpoZxIz6vzaDgezIj9kWSKRn9Gh';
 var rvlvrStripeSecretKey = process.env.RVLVR_STRIPE_SECRET_KEY || 'sk_test_cU10NcwS2g4ojaaokcYuldkl';

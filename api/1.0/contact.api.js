@@ -48,7 +48,8 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url('search/name/:name'), this.isAuthAndSubscribedApi.bind(this), this.search.bind(this));
         app.get(this.url('search/:term'), this.isAuthAndSubscribedApi.bind(this), this.search.bind(this));
         app.get(this.url('tags'), this.isAuthAndSubscribedApi.bind(this), this.getContactTags.bind(this));
-        app.get(this.url('count'), this.isAuthAndSubscribedApi.bind(this), this.getContactCount.bind(this));
+        app.get(this.url('count'), this.isAuthAndSubscribedApi.bind(this), this.getContactCount.bind(this))
+        app.get(this.url('tagcounts'), this.isAuthAndSubscribedApi.bind(this), this.getContactTagCounts.bind(this));
         app.get(this.url(':id'), this.isAuthAndSubscribedApi.bind(this), this.getContactById.bind(this));
         /*
          * Temp remove security for create contact.  Eventually, we will need to move this to a public API.
@@ -449,6 +450,23 @@ _.extend(api.prototype, baseApi.prototype, {
         });
     },
 
+    getContactTagCounts: function(req, resp) {
+        var self = this;
+        var accountId = parseInt(self.accountId(req));
+        var userId = self.userId(req);
+        self.log.debug(accountId, userId, '>> getContactTagCounts');
+        self.checkPermissionForAccount(req, self.sc.privs.VIEW_CONTACT, accountId, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(res);
+            } else {
+                contactDao.getContactTagCount(accountId, userId, function(err, count){
+                    self.log.debug('<< getContactTagCounts');
+                    self.sendResultOrError(resp, err, {count:count}, 'Error getting contact count');
+                });
+            }
+        });
+    },
+
     getContactsByLetter: function (req, res) {
         var self = this;
         var accountId = parseInt(self.accountId(req));
@@ -742,13 +760,16 @@ _.extend(api.prototype, baseApi.prototype, {
                          * Asynchronously send to each email in business.emails
                          */
                         var ccAry = [];
-                        var emails = value.get('business').emails;
+                        var business = value.get('business') || {};
+                        var emails = business.emails;
                         if(emails.length > 1) {
                             for(var i=1; i<emails.length; i++) {
                                 ccAry.push(emails[i].email);
                             }
                         }
-                        emailMessageManager.sendNewCustomerEmail(toAddress, toName, accountId, vars, ccAry, function(err, value){
+                        var fromAddress = null;
+                        var fromName = business.name;
+                        emailMessageManager.sendNewCustomerEmail(toAddress, toName, fromName, fromAddress, accountId, vars, ccAry, function(err, value){
                             self.log.debug('email sent');
                         });
 
@@ -765,11 +786,13 @@ _.extend(api.prototype, baseApi.prototype, {
                                     ccAry.push(emails[i].email);
                                 }
                             }
-                            self._sendEmailOnCreateAccount(accountEmail, req.body.activity.contact, value.id(), ccAry, tagSet, accountSubdomain, true);
+                            var fromName = value.get('business').name;
+                            self._sendEmailOnCreateAccount(accountEmail, req.body.activity.contact, value.id(), ccAry, tagSet, accountSubdomain, true, fromName);
                         } else{
+                            var fromName = value.get('business').name;
                             userDao.getUserAccount(value.id(), function(err, user){
                                 accountEmail = user.get("email");
-                                self._sendEmailOnCreateAccount(accountEmail, req.body.activity.contact, value.id(), null, tagSet, accountSubdomain, false);
+                                self._sendEmailOnCreateAccount(accountEmail, req.body.activity.contact, value.id(), null, tagSet, accountSubdomain, false, fromName);
                             })
                         }
 
@@ -1334,7 +1357,7 @@ _.extend(api.prototype, baseApi.prototype, {
         });
 
     },
-   _sendEmailOnCreateAccount: function(accountEmail, fields, accountId, ccAry, tagSet, accountSubdomain, suppressUnsubscribe) {
+   _sendEmailOnCreateAccount: function(accountEmail, fields, accountId, ccAry, tagSet, accountSubdomain, suppressUnsubscribe, fromName) {
         var self = this;
         var component = {};
         //component.logourl = 'https://s3.amazonaws.com/indigenous-account-websites/acct_6/logo.png';
@@ -1368,7 +1391,9 @@ _.extend(api.prototype, baseApi.prototype, {
                 self.log.debug('sending email to: ', accountEmail);
 
                 var fromEmail = notificationConfig.FROM_EMAIL;
-                var fromName =  notificationConfig.WELCOME_FROM_NAME;
+                if(!fromName) {
+                    fromName =  notificationConfig.WELCOME_FROM_NAME;
+                }
                 var emailSubject = notificationConfig.NEW_CUSTOMER_EMAIL_SUBJECT;
                 var vars = [];
                 if(accountSubdomain){

@@ -79,7 +79,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         var customerAccountId = req.body.accountId;
         var sections = ['weeklyreport', 'broadcastmessage'];
-        var destinationAddress = insightsConfig.ccAry[0] || 'account_managers+customerproxy@indigenous.io';
+        var destinationAddress = 'account_managers+customerproxy@indigenous.io';
         if(appConfig.nonProduction === true) {
             destinationAddress = 'test_account_managers+customerproxy@indigenous.io';
         }

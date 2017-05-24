@@ -251,7 +251,6 @@ _.extend(api.prototype, baseApi.prototype, {
         });
     },
 
-
     updateCurrentAccountBilling: function(req, res) {
         var self = this;
         var accountId = self.accountId(req);
@@ -279,17 +278,34 @@ _.extend(api.prototype, baseApi.prototype, {
                             } else {
                                 if(billingObj.cardToken && billingObj.stripeCustomerId) {
                                     //we need to add a cardToken to a customer
-                                    paymentManager.addCardUpdateDefaultAndAttemptPayment(accountId, userId, billingObj.cardToken, billingObj.stripeCustomerId, null, function(err, value){
-                                        if(err) {
-                                            self.log.error(accountId, userId, 'Error updating Stripe');
-                                            return self.wrapError(res, 500, null, err.message, err.message);
-                                        } else {
-                                            self.log.debug(accountId, userId, '<< updateCurrentAccountBilling');
-                                            updatedAccount.set('invoice', value);
-                                            res.send(updatedAccount);
-                                            self.createUserActivity(req, 'MODIFY_ACCOUNT_BILLING', null, null, function(){});
-                                        }
-                                    });
+                                    if(account.get('orgId') > 0) {
+                                        self._getOrgAccessToken(accountId, userId, account.get('orgId'), function(err, accessToken){
+                                            paymentManager.addCardUpdateDefaultAndAttemptPayment(accountId, userId, billingObj.cardToken, billingObj.stripeCustomerId, accessToken, function(err, value){
+                                                if(err) {
+                                                    self.log.error(accountId, userId, 'Error updating Stripe');
+                                                    return self.wrapError(res, 500, null, err.message, err.message);
+                                                } else {
+                                                    self.log.debug(accountId, userId, '<< updateCurrentAccountBilling');
+                                                    updatedAccount.set('invoice', value);
+                                                    res.send(updatedAccount);
+                                                    self.createUserActivity(req, 'MODIFY_ACCOUNT_BILLING', null, null, function(){});
+                                                }
+                                            });
+                                        });
+                                    } else {
+                                        paymentManager.addCardUpdateDefaultAndAttemptPayment(accountId, userId, billingObj.cardToken, billingObj.stripeCustomerId, null, function(err, value){
+                                            if(err) {
+                                                self.log.error(accountId, userId, 'Error updating Stripe');
+                                                return self.wrapError(res, 500, null, err.message, err.message);
+                                            } else {
+                                                self.log.debug(accountId, userId, '<< updateCurrentAccountBilling');
+                                                updatedAccount.set('invoice', value);
+                                                res.send(updatedAccount);
+                                                self.createUserActivity(req, 'MODIFY_ACCOUNT_BILLING', null, null, function(){});
+                                            }
+                                        });
+                                    }
+
 
                                 } else {
                                     //we're done here.
@@ -802,6 +818,34 @@ _.extend(api.prototype, baseApi.prototype, {
         userManager.addUserToAccount(accountId, userId, roleAry, callingUser, function(err, user){
             self.log.debug('<< addUserToAccount');
             return self.sendResultOrError(resp, err, user, 'Error adding user to account', null);
+        });
+    },
+
+    _getOrgAccessToken: function(accountId, userId, orgId, fn) {
+        var self = this;
+        orgManager.getOrgById(accountId, userId, orgId, function(err, organization){
+            if(organization) {
+                accountDao.getAccountByID(organization.get('adminAccount'), function(err, account){
+                    if(account) {
+                        var credentials = account.get('credentials');
+                        var creds = null;
+                        _.each(credentials, function (cred) {
+                            if (cred.type === 'stripe') {
+                                creds = cred;
+                            }
+                        });
+                        if(creds && creds.accessToken) {
+                            return fn(null, creds.accessToken);
+                        } else {
+                            return fn(null, null);
+                        }
+                    } else {
+                        fn(err);
+                    }
+                });
+            } else {
+                fn(err);
+            }
         });
     }
 });

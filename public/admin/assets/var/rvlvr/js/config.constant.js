@@ -571,6 +571,10 @@ app.constant('userConstant', {
   admin_user: {
     userName: 'admin@indigenous.io',
     emailDomain: '@indigenous.io'
+  },
+
+  campaigns:{
+    MAX_CONTACT_LIST_COUNT: 1000
   }
 
 });

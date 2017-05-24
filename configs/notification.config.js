@@ -19,6 +19,7 @@ var newCustomerEmailSubject = process.env.NEW_CUSTOMER_EMAIL_SUBJECT || 'New con
 var newPurchaseOrderEmailSubject = process.env.NEW_PURCHASE_ORDER_EMAIL_SUBJECT || 'New purchase order created';
 var notificationPurchaseOrderToEmail = process.env.NEW_PURCHASE_ORDER_EMAIL_TO || 'smaticsdemo-portal@indigenous.io';
 var notificationPurchaseOrderBccEmail = process.env.NEW_PURCHASE_ORDER_EMAIL_BCC || '';
+var defaulSenderAddress = process.env.DEFAULT_SENDER_ADDRESS || 'messages-noreply-bounce@indigenous.io';
 /*
  * Override the connection string with an environment variable
  */
@@ -51,5 +52,6 @@ module.exports = {
     NEW_PURCHASE_ORDER_EMAIL_SUBJECT: newPurchaseOrderEmailSubject,
     NEW_PURCHASE_ORDER_EMAIL_TO : notificationPurchaseOrderToEmail,
     NEW_PURCHASE_ORDER_EMAIL_BCC : notificationPurchaseOrderBccEmail,
-    THANKS_HTML: thanksForInterest
+    THANKS_HTML: thanksForInterest,
+    DEFAULT_SENDER_ADDRESS: defaulSenderAddress
 };
