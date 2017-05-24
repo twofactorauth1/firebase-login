@@ -545,6 +545,14 @@
                 });
         };
 
+        this.getContactTagCounts = function(fn){
+            var apiUrl = baseUrl + ['contact', 'tagcounts'].join('/');
+            $http.get(apiUrl)
+                .success(function (data) {
+                    fn(data);
+                });
+        }
+
         this.fomatContactTags = function (tags, fn) {
             var contactTags = contactConstant.contact_tags.dp;
             var extraContactTags = [];
