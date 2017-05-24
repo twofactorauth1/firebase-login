@@ -127,6 +127,11 @@ if(process.env.ROOT_HOST === 'indigenous.io') {
     nonProduction = false;
 }
 
+var cluster = false;
+if(nonProduction === true) {
+    cluster = true;
+}
+
 //---------------------------------------------------------
 //  GROUP ADMIN USERS
 //---------------------------------------------------------
@@ -143,7 +148,7 @@ module.exports = {
     www_url: wwwUrl,
     subdomain_suffix: subdomainSuffix,
     support_email: "support@indigenous.io",
-    cluster: false,
+    cluster: cluster,
     freeCpus: 2,
     xdhost_whitelist: XDHosts,
     mainAccountID: MAIN_ACCOUNT_ID,
