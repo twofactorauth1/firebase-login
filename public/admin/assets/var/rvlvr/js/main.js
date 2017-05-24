@@ -8,6 +8,11 @@ function ($rootScope, $state, $stateParams, $injector) {
 
     // Attach Fastclick for eliminating the 300ms delay between a physical tap and the firing of a click event on mobile browsers
     FastClick.attach(document.body);
+    /*
+     * Setup some org specific settings
+     */
+    $rootScope.orgId = $window.indigenous.orgId;
+    ENV.stripeKey = ENV.stripeKey[$rootScope.orgId];
 
     // Set some reference to access them from any scope
     $rootScope.$state = $state;
