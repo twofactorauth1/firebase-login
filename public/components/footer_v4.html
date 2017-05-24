@@ -1,22 +1,36 @@
 <div id="footer" class="footer-container">
     <div class="footer-after section rvlvr-footer-after">
         <div class="container rvlvr-footer-section-container">
-            <div class="col-sm-4">
+            <div class="col-md-3 center inner-page">
                 <div class="rvlvr-footer-marketing">
                     <img src="{{component.logoUrl}}" class="">
                     <p ng-if="component.logoText" class="rvlvr-securematics-fee">{{component.logoText}}</p>
                 </div>
             </div>
-            <div class="col-sm-4 rvlvr-foolter-links">
-                <ul class="col-xs-12">
-                    <li class="col-xs-6" ng-repeat="link in component.footerLinks">
-                        <a href="{{link.url}}" class="text-nowrap">{{link.label}}</a>
-                    </li>                    
-                </ul>
+            
+
+            <div class="col-md-3 inner-page footer-even-links" ng-class="{'no-space-links': component.footerLinks.length == 2}">
+                <div class="rvlvr-foolter-links" ng-repeat="link in component.footerLinks">
+                    <div ng-if="$even">
+                        <div class="ssb-editor-style-line-height-5">
+                            <a href="{{link.url}}" class="text-nowrap"><span>{{link.label}}</span></a>
+                        </div> 
+                    </div>
+                </div>
             </div>
-            <div class="col-xs-12 text-right">
-                <p ng-if="component.footerDomainText">{{component.footerDomainText}}</p>
-                <p>Copyright © {{copyright.year}} {{component.footerText}}</p>
+            <div class="col-md-3 inner-page footer-odd-links" ng-class="{'no-space-links': component.footerLinks.length == 2}">
+                <div class="rvlvr-foolter-links" ng-repeat="link in component.footerLinks">
+                    <div ng-if="$odd">
+                        <div class="ssb-editor-style-line-height-5">
+                            <a href="{{link.url}}" class="text-nowrap"><span>{{link.label}}</span></a>
+                        </div> 
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-3 center inner-page">
+                
+                <span>Copyright © {{copyright.year}} {{component.footerText}}</span>
             </div>
 
         </div>
