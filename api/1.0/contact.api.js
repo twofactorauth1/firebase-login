@@ -48,7 +48,8 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url('search/name/:name'), this.isAuthAndSubscribedApi.bind(this), this.search.bind(this));
         app.get(this.url('search/:term'), this.isAuthAndSubscribedApi.bind(this), this.search.bind(this));
         app.get(this.url('tags'), this.isAuthAndSubscribedApi.bind(this), this.getContactTags.bind(this));
-        app.get(this.url('count'), this.isAuthAndSubscribedApi.bind(this), this.getContactCount.bind(this));
+        app.get(this.url('count'), this.isAuthAndSubscribedApi.bind(this), this.getContactCount.bind(this))
+        app.get(this.url('tagcounts'), this.isAuthAndSubscribedApi.bind(this), this.getContactTagCounts.bind(this));
         app.get(this.url(':id'), this.isAuthAndSubscribedApi.bind(this), this.getContactById.bind(this));
         /*
          * Temp remove security for create contact.  Eventually, we will need to move this to a public API.
@@ -443,6 +444,23 @@ _.extend(api.prototype, baseApi.prototype, {
             } else {
                 contactDao.getContactCount(accountId, userId, function(err, count){
                     self.log.debug('<< getContactCount');
+                    self.sendResultOrError(resp, err, {count:count}, 'Error getting contact count');
+                });
+            }
+        });
+    },
+
+    getContactTagCounts: function(req, resp) {
+        var self = this;
+        var accountId = parseInt(self.accountId(req));
+        var userId = self.userId(req);
+        self.log.debug(accountId, userId, '>> getContactTagCounts');
+        self.checkPermissionForAccount(req, self.sc.privs.VIEW_CONTACT, accountId, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(res);
+            } else {
+                contactDao.getContactTagCount(accountId, userId, function(err, count){
+                    self.log.debug('<< getContactTagCounts');
                     self.sendResultOrError(resp, err, {count:count}, 'Error getting contact count');
                 });
             }
