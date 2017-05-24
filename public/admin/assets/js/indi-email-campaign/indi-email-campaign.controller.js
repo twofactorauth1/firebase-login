@@ -602,8 +602,8 @@
             vm.uiState.dataLoaded = false;
             EmailCampaignService.getCampaignContacts(vm.state.campaignId)
                 .then(function (res) {
-                    
                     vm.state.recipients = res.data;
+                    vm.state.originalRecipients = angular.copy(vm.state.recipients);
                     var individuals = [];
                     _.each(res.data, function (contact) {
                         individuals.push(
@@ -612,7 +612,6 @@
                     });
                     vm.uiState.selectedContacts.individuals = individuals;
                     vm.uiState.dataLoaded = true;
-
                 });
         }
 
@@ -918,12 +917,19 @@
                                 vm.uiState.whenToSend = localMoment.isAfter() ? 'later' : 'now';
                             }
                         }
-
-                        vm.getContactsFn()
-                            .then(function () {
-                                vm.loadSavedTagsFn();
-                            });
                         vm.getCampaignContactsFn();
+                        ContactService.getContactsCount(function(response){
+                            if(response.count <= userConstant.campaigns.MAX_CONTACT_LIST_COUNT){
+                                vm.getContactsFn()
+                                .then(function () {
+                                    vm.loadSavedTagsFn();
+                                });
+                            }
+                            else{
+                                vm.loadSavedTagsFn();                                
+                                vm.uiState.contactLimitExceeded = true;
+                            }
+                        })
                     }, function (err) {
                         $state.go('app.marketing.campaigns');
                     });

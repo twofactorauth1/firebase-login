@@ -288,7 +288,7 @@
                                             </label>
                                         </div>
                                     </tab>
-                                    <tab heading="by Contact" disable='vm.uiState.disableEditing'>
+                                    <tab heading="by Contact" disable='vm.uiState.disableEditing' ng-if="!vm.uiState.contactLimitExceeded">
                                         <label class="text-muted">Select individuals from your contact list</label>
                                         <div class="well well-sm">
                                             <ui-select class="contact-list" multiple ng-model="vm.uiState.selectedContacts.individuals" on-select="vm.contactSelectedFn($select)" on-remove="vm.contactRemovedFn($select, $item)" theme="bootstrap" ng-disabled="vm.uiState.disableEditing" close-on-select="false" style="min-width:100%" search-enabled="true">
@@ -321,7 +321,7 @@
                                         </div>
                                     </tab>
                                 </tabset>
-                                <button type="button" ng-click='vm.openModalFn("campaign-contacts-list-modal")' class="btn btn-primary margin-left-15 margin-bottom-15">
+                                <button type="button" ng-click='vm.openModalFn("campaign-contacts-list-modal")' class="btn btn-primary margin-left-15 margin-bottom-15" ng-if="!vm.uiState.contactLimitExceeded">
                                     <i class="fa fa-users"></i>
                                     <span>View full contact list</span>
                                 </button>
