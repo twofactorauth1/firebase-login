@@ -12,7 +12,7 @@ var fs = require('fs');
 var contactDao = require('../dao/contact.dao');
 var accountDao = require('../dao/account.dao');
 var campaignDao = require('../campaign/dao/campaign.dao');
-var campaignManager = require('../campaign/campaign_manager');
+
 var userDao = require('../dao/user.dao');
 var async = require('async');
 var juice = require('juice');
@@ -483,6 +483,7 @@ var emailMessageManager = {
                                     if(err.response && err.response.body) {
                                         self.log.error(err.response.body.errors);
                                     }
+                                    var campaignManager = require('../campaign/campaign_manager');
                                     campaignManager.updateCampaignFailures(campaignId, _request.body.personalizations, function(err, value){
                                         callback(null, response);
                                     });
@@ -943,15 +944,19 @@ var emailMessageManager = {
 
     },
 
-    sendNewCustomerEmail: function(toAddress, toName, accountId, vars, ccArray, fn) {
+    sendNewCustomerEmail: function(toAddress, toName, fromName, fromAddress, accountId, vars, ccArray, fn) {
         var self = this;
-        self.log.debug('>> sendNewCustomerEmail');
+        self.log.debug('>> sendNewCustomerEmail', fromName);
         self._checkForUnsubscribe(accountId, toAddress, function(err, isUnsubscribed) {
             if (isUnsubscribed == true) {
                 fn('skipping email for user on unsubscribed list');
             } else {
-                var fromAddress = notificationConfig.WELCOME_FROM_EMAIL;
-                var fromName = notificationConfig.WELCOME_FROM_NAME;
+                if(!fromAddress) {
+                    fromAddress = notificationConfig.WELCOME_FROM_EMAIL;
+                }
+                if(!fromName) {
+                    fromName = notificationConfig.WELCOME_FROM_NAME;
+                }
                 self._getFromAdressNameAndReplyTo(accountId, fromAddress, fromName, function(err, senderAddress, senderName, replyTo){
                     vars.push({
                         "name": "SENDDATE",
@@ -3193,5 +3198,4 @@ $$.u.emailMessageManager = emailMessageManager;
 
 $$.g.mailer = $$.g.mailer || {};
 $$.g.mailer.sendMail = emailMessageManager.sendMailReplacement;
-
 module.exports = emailMessageManager;

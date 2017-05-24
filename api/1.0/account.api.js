@@ -251,7 +251,7 @@ _.extend(api.prototype, baseApi.prototype, {
         });
     },
 
-
+    //TODO: handle RVLVR
     updateCurrentAccountBilling: function(req, res) {
         var self = this;
         var accountId = self.accountId(req);

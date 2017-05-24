@@ -760,13 +760,16 @@ _.extend(api.prototype, baseApi.prototype, {
                          * Asynchronously send to each email in business.emails
                          */
                         var ccAry = [];
-                        var emails = value.get('business').emails;
+                        var business = value.get('business') || {};
+                        var emails = business.emails;
                         if(emails.length > 1) {
                             for(var i=1; i<emails.length; i++) {
                                 ccAry.push(emails[i].email);
                             }
                         }
-                        emailMessageManager.sendNewCustomerEmail(toAddress, toName, accountId, vars, ccAry, function(err, value){
+                        var fromAddress = null;
+                        var fromName = business.name;
+                        emailMessageManager.sendNewCustomerEmail(toAddress, toName, fromName, fromAddress, accountId, vars, ccAry, function(err, value){
                             self.log.debug('email sent');
                         });
 
@@ -783,11 +786,13 @@ _.extend(api.prototype, baseApi.prototype, {
                                     ccAry.push(emails[i].email);
                                 }
                             }
-                            self._sendEmailOnCreateAccount(accountEmail, req.body.activity.contact, value.id(), ccAry, tagSet, accountSubdomain, true);
+                            var fromName = value.get('business').name;
+                            self._sendEmailOnCreateAccount(accountEmail, req.body.activity.contact, value.id(), ccAry, tagSet, accountSubdomain, true, fromName);
                         } else{
+                            var fromName = value.get('business').name;
                             userDao.getUserAccount(value.id(), function(err, user){
                                 accountEmail = user.get("email");
-                                self._sendEmailOnCreateAccount(accountEmail, req.body.activity.contact, value.id(), null, tagSet, accountSubdomain, false);
+                                self._sendEmailOnCreateAccount(accountEmail, req.body.activity.contact, value.id(), null, tagSet, accountSubdomain, false, fromName);
                             })
                         }
 
@@ -1352,7 +1357,7 @@ _.extend(api.prototype, baseApi.prototype, {
         });
 
     },
-   _sendEmailOnCreateAccount: function(accountEmail, fields, accountId, ccAry, tagSet, accountSubdomain, suppressUnsubscribe) {
+   _sendEmailOnCreateAccount: function(accountEmail, fields, accountId, ccAry, tagSet, accountSubdomain, suppressUnsubscribe, fromName) {
         var self = this;
         var component = {};
         //component.logourl = 'https://s3.amazonaws.com/indigenous-account-websites/acct_6/logo.png';
@@ -1386,7 +1391,9 @@ _.extend(api.prototype, baseApi.prototype, {
                 self.log.debug('sending email to: ', accountEmail);
 
                 var fromEmail = notificationConfig.FROM_EMAIL;
-                var fromName =  notificationConfig.WELCOME_FROM_NAME;
+                if(!fromName) {
+                    fromName =  notificationConfig.WELCOME_FROM_NAME;
+                }
                 var emailSubject = notificationConfig.NEW_CUSTOMER_EMAIL_SUBJECT;
                 var vars = [];
                 if(accountSubdomain){
