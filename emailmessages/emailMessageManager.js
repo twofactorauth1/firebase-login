@@ -3161,6 +3161,9 @@ var emailMessageManager = {
         var self = this;
         var senderAddress = notificationConfig.DEFAULT_SENDER_ADDRESS;
         var senderName = fromName + ' via Indigenous';
+        if(fromName === 'Indigenous') {
+            senderName = 'Indigenous';
+        }
         var replyTo = fromAddress;
         accountDao.getAccountByID(accountId, function(err, account){
             if(err || !account) {
