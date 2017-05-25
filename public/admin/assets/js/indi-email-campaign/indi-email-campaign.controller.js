@@ -921,7 +921,12 @@
                                 vm.uiState.whenToSend = localMoment.isAfter() ? 'later' : 'now';
                             }
                         }
-                        vm.getCampaignContactsFn();
+                        if(campaign.contacts && campaign.contacts.length <= userConstant.campaigns.MAX_CONTACT_LIST_COUNT){
+                            vm.getCampaignContactsFn();
+                        }
+                        else{
+                            vm.uiState.contactLimitExceeded = true;
+                        }
                         ContactService.getContactsCount(function(response){
                             if(response.count <= userConstant.campaigns.MAX_CONTACT_LIST_COUNT){
                                 vm.getContactsFn()
