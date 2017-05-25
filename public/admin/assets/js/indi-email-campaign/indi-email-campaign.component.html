@@ -14,7 +14,7 @@
     <section id="page-title" class="padding-top-15 padding-bottom-15">
         <div class="row">
             <div class="col-sm-12">
-                <h1 class="mainTitle">Campaign Configuration</h1>
+                <h1 class="mainTitle">{{vm.state.campaign.name}}</h1>
                 <div class="mainDescription">
                     <span ng-if="!vm.uiState.disableEditing">Edit this <b>{{vm.state.campaign.status.toLowerCase()}}</b> campaign before activating it</span>
                     <span ng-if="vm.uiState.disableEditing">This <b>{{vm.state.campaign.status.toLowerCase()}}</b> campaign was activated on {{vm.state.campaign.modified.date | date : 'medium'}}</span>
