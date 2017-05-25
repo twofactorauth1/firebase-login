@@ -46,6 +46,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.post(this.url(':id/running/contact/:contactid/steps/:stepNumber'), this.setup.bind(this), this.triggerCampaignStep.bind(this));
 
         app.get(this.url(':id/contacts'), this.isAuthAndSubscribedApi.bind(this), this.getContactsForCampaign.bind(this));
+        app.get(this.url(':id/recipients/statistics'), this.isAuthAndSubscribedApi.bind(this), this.getCampaignRecipientStatistics.bind(this));
 
 
 
@@ -542,6 +543,28 @@ _.extend(api.prototype, baseApi.prototype, {
             }
         });
 
+    },
+
+
+    getCampaignRecipientStatistics: function(req, resp) {
+        var self = this;
+        self.log.debug('>> getCampaignRecipientStatistics');
+        var accountId = parseInt(self.accountId(req));
+        var campaignId = req.params.id;
+        var skip = parseInt(req.query.skip) || 0;
+        var limit = parseInt(req.query.limit) || 0;
+        var sortBy = req.query.sortBy || null;
+        var sortDir = parseInt(req.query.sortDir) || null;
+        self.checkPermission(req, self.sc.privs.VIEW_CAMPAIGN, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(resp);
+            } else {
+                emailMessageManager.getCampaignRecipientStatistics(accountId, campaignId, skip, limit, sortBy, sortDir, function(err, contacts){
+                    self.log.debug('<< getCampaignRecipientStatistics');
+                    self.sendResultOrError(resp, err, contacts, 'Error getting contacts');
+                });
+            }
+        });
     },
 
     duplicateCampaign: function(req, resp) {
