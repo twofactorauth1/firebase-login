@@ -3161,6 +3161,9 @@ var emailMessageManager = {
         var self = this;
         var senderAddress = notificationConfig.DEFAULT_SENDER_ADDRESS;
         var senderName = fromName + ' via Indigenous';
+        if(fromName === 'Indigenous') {
+            senderName = 'Indigenous';
+        }
         var replyTo = fromAddress;
         accountDao.getAccountByID(accountId, function(err, account){
             if(err || !account) {
@@ -3189,7 +3192,26 @@ var emailMessageManager = {
                 }
             }
         });
+    },
+
+
+    getCampaignRecipientStatistics: function(accountId, campaignId, skip, limit, sortBy, sortDir, fn) {
+        var self = this;
+
+        var query = {
+            accountId: accountId,
+            batchId: campaignId
+        };
+
+        self.log.debug('>> getCampaignRecipientStatistics');
+        console.log(accountId);
+        console.log(campaignId);
+        self.log.debug('>> getCampaignRecipientStatistics');
+        
+        dao.findWithFieldsLimitOrderAndTotal(query, skip, limit, sortBy, null, $$.m.Emailmessage, sortDir, fn);   
+        
     }
+
 
 };
 

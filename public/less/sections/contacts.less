@@ -41,49 +41,6 @@
     .two-letter-label {
         display: inline-block;
     }
-
-    .contacts-paging-overlay{
-        height: 100%;
-        width: 100%;
-        opacity: 0.6;
-        top: 0;
-        left: 0;
-        position: absolute;
-        padding: 0;
-        background: #000000;
-        z-index: 5;
-        min-height: 800px;
-        h1{
-            position: fixed;
-            display: inline-block;
-            text-align: center;
-            color: white;
-            top: 50%;
-            transform: translate(-50%, -50%);
-            margin-top: 15px;
-            @media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
-                width: 90%;
-                transform: translate(0);
-            }
-        }
-    }
-
-    .table > thead > tr > th.sort {
-        cursor: pointer;
-        &:before{
-            font-family: FontAwesome;
-            content: "\f0dc";
-            display: inline-block;
-            padding-right: 3px;
-            vertical-align: middle;
-        }
-        &.st-sort-descent:before {
-            content: "\f0dd" !important;
-        }
-        &.st-sort-ascent:before {
-            content: "\f0de" !important;
-        }
-    }
     
 }
 

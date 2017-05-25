@@ -690,6 +690,10 @@ app.constant('JS_REQUIRES', {
     'MessagesCtrl': 'assets/js/messages/messages.controller.js',
     'BroadcastMessageEditorCtrl': 'assets/js/messages/broadcast-message-editor/broadcast-message-editor.controller.js',
 
+    // Campaign Recipient Details
+
+    'CampaignRecipientDetailsController': 'assets/js/indi-email-campaign/campaign-recipient-details/campaign-recipient.controller.js',    
+
     //*** Services
     'accountService': 'assets/js/services/account.js',
     'productService': 'assets/js/services/product.js',

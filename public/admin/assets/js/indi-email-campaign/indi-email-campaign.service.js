@@ -26,6 +26,7 @@
         campaignService.deleteCampaign = deleteCampaign;
         campaignService.cancelCampaign = cancelCampaign;
         campaignService.checkIfDuplicateCampaign = checkIfDuplicateCampaign;
+        campaignService.getCampaignRecipientDetails = getCampaignRecipientDetails;
 
         /**
          * Get get email by ID
@@ -187,6 +188,21 @@
                 console.info('service | loading -1 : ' + campaignService.loading.value);
             });
             return fn;
+        }
+
+
+        function getCampaignRecipientDetails(id, params) {
+            var _qString = "?limit="+params.limit+"&skip="+ params.skip;
+            if (params.sortBy) {
+                _qString += "&sortBy=" + params.sortBy + "&sortDir=" + params.sortDir;
+            }
+            function success(data) {}
+
+            function error(error) {
+                console.error('EmailCampaignService getCampaignRecipientDetails error: ', JSON.stringify(error));
+            }
+
+            return campaignRequest($http.get([baseCampaignAPIv1, id, 'recipients', 'statistics'].join('/') + _qString).success(success).error(error));
         }
 
         (function init() {
