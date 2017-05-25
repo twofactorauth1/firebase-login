@@ -40,13 +40,12 @@
         </div>
     </section>
 
-    <div ng-class="{
-                'load1 csspinner':
-          !vm.uiState.dataLoaded
-            }">
-        <!-- end: PAGE TITLE -->
-        <tabset class="tabbable campaign-top-tab-bar">
-            <tab heading="Configuration">
+    
+    <!-- end: PAGE TITLE -->
+    <tabset class="tabbable campaign-top-tab-bar">
+        <tab heading="Configuration">
+            <div ng-class="{
+            'load1 csspinner':!vm.uiState.dataLoaded}">
                 <div class="container-fluid container-fullw bg-white padding-top-15 padding-bottom-15">
                     <div class='row'>
                         <div class="col-sm-5 col-md-4 col-xs-12">
@@ -361,12 +360,13 @@
 
                     </div>
                 </div>
-            </tab>
-            <tab heading="Recipients" ng-ig="vm.state.campaign.status === 'COMPLETED'">
-                <div data-ng-include=" 'assets/js/indi-email-campaign/campaign-recipient-details/campaign-recipient.html' "></div>
-            </tab>
-        </tabset>    
-    </div>
+            </div>    
+        </tab>
+        <tab heading="Recipients" ng-if="vm.state.campaign.status === 'COMPLETED'">
+            <div data-ng-include=" 'assets/js/indi-email-campaign/campaign-recipient-details/campaign-recipient.html' "></div>
+        </tab>
+    </tabset>    
+    
 </div>
 <div data-ng-include data-src=" 'assets/views/partials/campaign-contacts-list-modal.html' "></div>
 <div data-ng-include data-src=" 'assets/views/partials/send-test-email-modal.html' "></div>
