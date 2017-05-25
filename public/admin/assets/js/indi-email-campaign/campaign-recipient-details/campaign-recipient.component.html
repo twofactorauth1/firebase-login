@@ -94,10 +94,10 @@
         <table class="table table-hover table-striped" ng-class="{'grid': tableView == 'grid', 'bg-white table-list-view': tableView == 'list'}" ng-if="!vm.uiState.loading">
             <thead ng-class="{'bg-white': tableView == 'grid'}">
                 <tr>                    
-                    <th>Recipient</th>
-                    <th class="">Delivered</th>
-                    <th class="">Opened</th>
-                    <th class="">Clicked</th>
+                    <th class="sort" ng-class="{'st-sort-ascent': vm.sortData.details['receiver'].direction === 1, 'st-sort-descent': vm.sortData.details['receiver'].direction === -1}" ng-click="vm.sortCampaignRecipientList('receiver', 'receiver')">Recipient</th>
+                    <th class="sort" ng-class="{'st-sort-ascent': vm.sortData.details['deliveredDate'].direction === 1, 'st-sort-descent': vm.sortData.details['deliveredDate'].direction === -1}" ng-click="vm.sortCampaignRecipientList('deliveredDate', 'deliveredDate')">Delivered</th>
+                    <th class="sort" ng-class="{'st-sort-ascent': vm.sortData.details['openedDate'].direction === 1, 'st-sort-descent': vm.sortData.details['openedDate'].direction === -1}" ng-click="vm.sortCampaignRecipientList('openedDate', 'openedDate')">Opened</th>
+                    <th class="sort" ng-class="{'st-sort-ascent': vm.sortData.details['clickedDate'].direction === 1, 'st-sort-descent': vm.sortData.details['clickedDate'].direction === -1}" ng-click="vm.sortCampaignRecipientList('clickedDate', 'clickedDate')">Clicked</th>
                     <th class="hidden">Unsubscribed</th>
                 </tr>
                 <tr ng-if="vm.uiState.showFilter">

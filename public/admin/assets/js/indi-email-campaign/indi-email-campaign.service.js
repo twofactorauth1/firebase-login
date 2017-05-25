@@ -193,6 +193,9 @@
 
         function getCampaignRecipientDetails(id, params) {
             var _qString = "?limit="+params.limit+"&skip="+ params.skip;
+            if (params.sortBy) {
+                _qString += "&sortBy=" + params.sortBy + "&sortDir=" + params.sortDir;
+            }
             function success(data) {}
 
             function error(error) {
