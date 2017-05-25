@@ -13,7 +13,7 @@
     <!-- start: PAGE TITLE -->
     <section id="page-title" class="padding-top-15 padding-bottom-15">
         <div class="row">
-            <div class="col-sm-8">
+            <div class="col-sm-12">
                 <h1 class="mainTitle">Campaign Configuration</h1>
                 <div class="mainDescription">
                     <span ng-if="!vm.uiState.disableEditing">Edit this <b>{{vm.state.campaign.status.toLowerCase()}}</b> campaign before activating it</span>
@@ -40,7 +40,7 @@
         </div>
     </section>
 
-    
+
     <!-- end: PAGE TITLE -->
     <tabset class="tabbable campaign-top-tab-bar">
         <tab heading="Configuration">
@@ -360,13 +360,13 @@
 
                     </div>
                 </div>
-            </div>    
+            </div>
         </tab>
         <tab heading="Recipients" ng-if="vm.state.campaign.status === 'COMPLETED'">
             <div data-ng-include=" 'assets/js/indi-email-campaign/campaign-recipient-details/campaign-recipient.html' "></div>
         </tab>
-    </tabset>    
-    
+    </tabset>
+
 </div>
 <div data-ng-include data-src=" 'assets/views/partials/campaign-contacts-list-modal.html' "></div>
 <div data-ng-include data-src=" 'assets/views/partials/send-test-email-modal.html' "></div>
