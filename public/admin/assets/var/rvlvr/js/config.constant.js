@@ -664,6 +664,9 @@ app.constant('JS_REQUIRES', {
 
     'DashboardInboxComponentController': 'assets/js/dashboard/dashboard-inbox-widget/dashboard-inbox.controller.js',
 
+     // Campaign Recipient Details
+
+    'CampaignRecipientDetailsController': 'assets/js/indi-email-campaign/campaign-recipient-details/campaign-recipient.controller.js',
 
     'asideCtrl': 'assets/var/rvlvr/js/controllers/asideCtrl.js',
     'toasterCtrl': 'assets/js/controllers/toasterCtrl.js',

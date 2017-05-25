@@ -692,8 +692,6 @@ app.constant('JS_REQUIRES', {
 
     // Campaign Recipient Details
 
-    
-    'CampaignRecipientDetailsComponent': 'assets/js/indi-email-campaign/campaign-recipient-details/campaign-recipient.component.js',
     'CampaignRecipientDetailsController': 'assets/js/indi-email-campaign/campaign-recipient-details/campaign-recipient.controller.js',    
 
     //*** Services
