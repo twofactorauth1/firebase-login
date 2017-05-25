@@ -258,6 +258,10 @@
 
 
             vm.state.campaign.contactTags = vm.getSelectedTagsFn();
+            vm.state.campaign.contactTagData = [];
+            _.each(vm.state.campaign.contactTags, function(label){
+                vm.state.campaign.contactTagData.push(ContactService.getTagFromLabel(label));
+            });
             vm.removeContactsFromCampaignFn();
 
             //processing custom emails for contact
@@ -769,7 +773,7 @@
             var dataIsLoaded = vm.uiState.dataLoaded;
             var campaignHasId = vm.state.campaign && angular.isDefined(vm.state.campaign._id);
             var campaignNotCancelled = vm.state.campaign.status.toLowerCase() !== 'cancelled';
-            var campaignHasContacts = (vm.state.recipients.length + vm.uiState.selectedContacts.newEmails.length) > 0;
+            var campaignHasContacts = (vm.state.recipients.length + vm.uiState.selectedContacts.newEmails.length + getSelectedTagsFn().length) > 0;
             var campaignIsOneTime = (vm.state.campaign.type === 'onetime');
             var isDirty = checkIfDirtyFn();
             return dataIsLoaded && campaignHasId && campaignNotCancelled && (campaignIsOneTime ? campaignHasContacts : true) && !isDirty;
@@ -866,7 +870,7 @@
                     return returnObj;
                 });
                 vm.contactCounts = x;
-            })
+            });
 
             if (vm.state.campaignId !== 'create') {
                 EmailCampaignService.getCampaign(vm.state.campaignId)
@@ -924,8 +928,7 @@
                                 .then(function () {
                                     vm.loadSavedTagsFn();
                                 });
-                            }
-                            else{
+                            } else {
                                 vm.loadSavedTagsFn();                                
                                 vm.uiState.contactLimitExceeded = true;
                             }

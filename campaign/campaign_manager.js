@@ -731,86 +731,95 @@ module.exports = {
             }
             var contactsArray = campaign.get('contacts');
             var campaignType = campaign.get("type");
-            // We need not to check contacts length in autoresponder campaign
-            if(campaignType !== 'autoresponder' && (!contactsArray || !Array.isArray(contactsArray) || contactsArray.length <1)) {
-                self.log.error('Expected at least one contact id in contacts array');
-                return fn('Campaign must have at least one contact id in contacts array');
-            }
-            if(contactsArray && !_.every(contactsArray, function(id){return !isNaN(parseFloat(id)) && isFinite(id);})) {
-                self.log.error('Expected all contact ids to be numeric:', contactsArray);
-                return fn('Campaign contacts must be numeric');
-            }
-            campaign.set('status', $$.m.Campaign.status.RUNNING);
-            if(campaign.get('type') === 'autoresponder') {
-                campaign.set('status', $$.m.Campaign.status.COMPLETED);
-            }
-            var participants = campaign.get('contacts').length;
-            campaign.get('statistics').participants = participants;
-            campaignDao.saveOrUpdate(campaign, function (err, updatedCampaign) {
-                self.log.debug(accountId, userId, '<< activateCampaign');
-                fn(err, updatedCampaign);
-                /*
-                 * let's send some emails!!!
-                 */
-                if(updatedCampaign.get('type') !== 'autoresponder') {
-                    contactDao.getContactsByIDs(accountId, contactsArray, function(err, contactAry){
-                        var emailSettings = campaign.get('emailSettings');
-                        var fromName = emailSettings.fromName;
-                        var fromAddress = emailSettings.fromEmail;
-                        var subject = emailSettings.subject;
-                        var vars = emailSettings.vars;
-                        var emailId = emailSettings.emailId;
-                        accountDao.getAccountByID(accountId, function(err, account){
-                            if(err || !account) {
-                                self.log.error('Error getting account:', err);
-                                return fn(err);
-                            } else {
-                                emailDao.getEmailById(emailId, function(err, email){
-                                    if(err || !email) {
-                                        self.log.error('Error getting email to render: ' + err);
-                                        return fn(err, null);
-                                    }
-                                    app.render('emails/base_email_v2', emailMessageManager.contentTransformations(email.toJSON()), function(err, html) {
-                                        if (err) {
-                                            self.log.error('error rendering html: ' + err);
-                                            self.log.warn('email will not be sent.');
-                                        } else {
-
-                                            // If cc and bcc don't exists for emailSettings
-                                            if(!emailSettings.bcc && email.get("bcc")){
-                                                emailSettings.bcc = email.get("bcc")
-                                            }
-
-                                            if(!emailSettings.cc && email.get("cc")){
-                                                emailSettings.cc = email.get("cc")
-                                            }
-
-                                            emailMessageManager.sendBatchedCampaignEmail(fromAddress, fromName, contactAry, subject,
-                                                    html, account, campaignId, vars, emailSettings, emailId, userId, function(err, value){
-                                                if(err) {
-                                                    self.log.error('Error sending campaign:', err);
-                                                } else {
-                                                    self.log.debug('Sent batched campaign:', value);
-                                                }
-                                                campaignDao.patch({_id:campaignId}, {status:$$.m.Campaign.status.COMPLETED}, $$.m.CampaignV2, function(err, value){
-                                                    self.log.debug('Patched campaign:', value);
-                                                    if(err) {
-                                                        self.log.error('Error patching campaign:',err);
-                                                    }
-                                                });
-                                            });
+            var contactTags = campaign.get('contactTagData') || [];
+            contactDao.getContactsByTagArray(accountId, userId, contactTags, function(err, contacts){
+                if(contacts) {
+                    _.each(contacts, function(contact){
+                        contactsArray.push(contact.id());
+                    });
+                }
+                // We need not to check contacts length in autoresponder campaign
+                if(campaignType !== 'autoresponder' && (!contactsArray || !Array.isArray(contactsArray) || contactsArray.length <1)) {
+                    self.log.error('Expected at least one contact id in contacts array');
+                    return fn('Campaign must have at least one contact id in contacts array');
+                }
+                if(contactsArray && !_.every(contactsArray, function(id){return !isNaN(parseFloat(id)) && isFinite(id);})) {
+                    self.log.error('Expected all contact ids to be numeric:', contactsArray);
+                    return fn('Campaign contacts must be numeric');
+                }
+                campaign.set('status', $$.m.Campaign.status.RUNNING);
+                if(campaign.get('type') === 'autoresponder') {
+                    campaign.set('status', $$.m.Campaign.status.COMPLETED);
+                }
+                var participants = campaign.get('contacts').length;
+                campaign.get('statistics').participants = participants;
+                campaignDao.saveOrUpdate(campaign, function (err, updatedCampaign) {
+                    self.log.debug(accountId, userId, '<< activateCampaign');
+                    fn(err, updatedCampaign);
+                    /*
+                     * let's send some emails!!!
+                     */
+                    if(updatedCampaign.get('type') !== 'autoresponder') {
+                        contactDao.getContactsByIDs(accountId, contactsArray, function(err, contactAry){
+                            var emailSettings = campaign.get('emailSettings');
+                            var fromName = emailSettings.fromName;
+                            var fromAddress = emailSettings.fromEmail;
+                            var subject = emailSettings.subject;
+                            var vars = emailSettings.vars;
+                            var emailId = emailSettings.emailId;
+                            accountDao.getAccountByID(accountId, function(err, account){
+                                if(err || !account) {
+                                    self.log.error('Error getting account:', err);
+                                    return fn(err);
+                                } else {
+                                    emailDao.getEmailById(emailId, function(err, email){
+                                        if(err || !email) {
+                                            self.log.error('Error getting email to render: ' + err);
+                                            return fn(err, null);
                                         }
+                                        app.render('emails/base_email_v2', emailMessageManager.contentTransformations(email.toJSON()), function(err, html) {
+                                            if (err) {
+                                                self.log.error('error rendering html: ' + err);
+                                                self.log.warn('email will not be sent.');
+                                            } else {
+
+                                                // If cc and bcc don't exists for emailSettings
+                                                if(!emailSettings.bcc && email.get("bcc")){
+                                                    emailSettings.bcc = email.get("bcc")
+                                                }
+
+                                                if(!emailSettings.cc && email.get("cc")){
+                                                    emailSettings.cc = email.get("cc")
+                                                }
+
+                                                emailMessageManager.sendBatchedCampaignEmail(fromAddress, fromName, contactAry, subject,
+                                                    html, account, campaignId, vars, emailSettings, emailId, userId, function(err, value){
+                                                        if(err) {
+                                                            self.log.error('Error sending campaign:', err);
+                                                        } else {
+                                                            self.log.debug('Sent batched campaign:', value);
+                                                        }
+                                                        campaignDao.patch({_id:campaignId}, {status:$$.m.Campaign.status.COMPLETED}, $$.m.CampaignV2, function(err, value){
+                                                            self.log.debug('Patched campaign:', value);
+                                                            if(err) {
+                                                                self.log.error('Error patching campaign:',err);
+                                                            }
+                                                        });
+                                                    });
+                                            }
+                                        });
                                     });
-                                });
-                            }
+                                }
+                            });
+
+
                         });
 
+                    }
 
-                    });
-
-                }
-
+                });
             });
+
         });
     },
 
