@@ -16,13 +16,20 @@ function campaignRecipientDetailsController($scope, $state, $attrs, $filter, $mo
         loading: true,
         curPage: 1,
         limit: pagingConstant.numberOfRowsPerPage,
-        skip: 0
+        skip: 0,
+        sortBy: null,
+        sortDir: null
     };
     vm.showFilter = showFilter;
     vm.numberOfPages = numberOfPages;
     vm.pagingConstant = pagingConstant;
     vm.selectPage = selectPage;
-
+    vm.sortCampaignRecipientList = sortCampaignRecipientList;
+    
+    vm.sortData = {
+        column: '',
+        details: {}
+    };
 
     function showFilter(){
         vm.uiState.showFilter = !vm.uiState.showFilter;
@@ -66,6 +73,39 @@ function campaignRecipientDetailsController($scope, $state, $attrs, $filter, $mo
         vm.uiState.curPage = page;
         vm.uiState.skip = (page - 1) * vm.uiState.limit;
         loadCampaignRecipientList();
+    }
+
+    /********** SORTING RELATED **********/
+
+    function sortCampaignRecipientList(col, name) {
+        if (vm.sortData.column !== name) {
+            vm.sortData.details = {};
+        }
+        vm.sortData.column = name;
+        if (vm.sortData.details[name]) {
+            if (vm.sortData.details[name].direction === 1) {
+                vm.sortData.details[name].direction = -1;
+            }
+            else {
+                vm.sortData.details[name].direction = 1;
+            }
+        }
+        else {
+            vm.sortData.details[name] = {
+                direction: 1,
+                sortColum: col
+            }
+        }
+        vm.uiState.sortBy = col;
+        vm.uiState.sortDir = vm.sortData.details[name].direction;
+        loadDefaults();
+        loadCampaignRecipientList();
+    }
+
+    function loadDefaults() {
+        vm.uiState.curPage = 1;
+        vm.uiState.skip = 0;
+        vm.uiState.pageLoading = true;
     }
 
     function loadCampaignRecipientList(){
