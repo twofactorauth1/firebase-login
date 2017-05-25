@@ -362,6 +362,9 @@
                     </div>
                 </div>
             </tab>
+            <tab heading="Recipients" ng-ig="vm.state.campaign.status === 'COMPLETED'">
+                <div data-ng-include=" 'assets/js/indi-email-campaign/campaign-recipient-details/campaign-recipient.html' "></div>
+            </tab>
         </tabset>    
     </div>
 </div>
