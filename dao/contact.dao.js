@@ -1137,6 +1137,7 @@ var dao = {
     setBouncedTag: function(accountId, userId, contactId, fn) {
         var self = this;
         self.log.debug(accountId, userId, '>> setBouncedTag');
+        contactId = parseInt(contactId);
         self.findOne({_id:contactId}, $$.m.Contact, function(err, contact){
 
             if(contact) {
