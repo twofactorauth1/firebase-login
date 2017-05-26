@@ -803,7 +803,7 @@ module.exports = {
                                                             self.log.debug('Sent batched campaign:', value);
                                                         }
                                                         campaignDao.patch({_id:campaignId}, {status:$$.m.Campaign.status.COMPLETED}, $$.m.CampaignV2, function(err, value){
-                                                            self.log.debug('Patched campaign:', value);
+                                                            self.log.trace('Patched campaign:', value);
                                                             if(err) {
                                                                 self.log.error('Error patching campaign:',err);
                                                             }
