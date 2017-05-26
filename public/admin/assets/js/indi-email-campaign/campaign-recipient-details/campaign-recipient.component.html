@@ -110,7 +110,7 @@
             </thead>
             <tbody>
                 <tr ng-repeat="recipient in vm.state.recipients" class="product-item">
-                    <td class=""><strong>Recipient: </strong>{{recipient.receiver}}</td>
+                    <td class=""><strong>Recipient: </strong><a href="javascript:void(0)" ng-click="vm.viewSingleContact(recipient)">{{recipient.receiver}}</a></td>
                     <td class=""><strong>Delivered: </strong>{{recipient.deliveredDate ? true : false}}</td>
                     <td class=""><strong>Opened: </strong>{{recipient.openedDate ? true : false}}</td>
                     <td class=""><strong>Clicked: </strong>{{recipient.clickedDate ? true : false}}</td>

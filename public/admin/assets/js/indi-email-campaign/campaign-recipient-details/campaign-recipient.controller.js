@@ -25,7 +25,8 @@ function campaignRecipientDetailsController($scope, $state, $attrs, $filter, $mo
     vm.pagingConstant = pagingConstant;
     vm.selectPage = selectPage;
     vm.sortCampaignRecipientList = sortCampaignRecipientList;
-    
+    vm.viewSingleContact = viewSingleContact;
+
     vm.sortData = {
         column: '',
         details: {}
@@ -123,6 +124,19 @@ function campaignRecipientDetailsController($scope, $state, $attrs, $filter, $mo
             }, 600);
         })
     }
+
+    function viewSingleContact(recipient){
+        var _email = recipient.receiver
+        var _event = _.findWhere(recipient.events, function(item){
+            return item.email === _email
+        })
+        if(_event){
+            $state.go('app.singleContact', {
+                contactId: _event.contactId
+            });
+        }
+    }
+
 
     function init(element) {
         vm.element = element;
