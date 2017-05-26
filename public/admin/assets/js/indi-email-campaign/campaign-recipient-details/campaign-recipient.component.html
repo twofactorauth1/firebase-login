@@ -102,10 +102,24 @@
                 </tr>
                 <tr ng-if="vm.uiState.showFilter">
                     
-                    <th class="prod-col">
+                    <th class="">
                         <input ng-model="vm.uiState.fieldSearch.receiver" ng-model-options="{ debounce: 800 }" placeholder="Recipient" class="form-control" type="search" size="9" />
                     </th>
-                    
+                    <th class="">
+                        <select ng-model="vm.uiState.fieldSearch.deliveredDate" class="form-control" ng-options="options.value as options.label for options in vm.booleanSearchOptions">
+                            <option value=""></option>
+                        </select>
+                    </th>
+                    <th class="">
+                        <select ng-model="vm.uiState.fieldSearch.openedDate" class="form-control" ng-options="options.value as options.label for options in vm.booleanSearchOptions">
+                            <option value=""></option>
+                        </select>
+                    </th>
+                    <th class="">
+                        <select ng-model="vm.uiState.fieldSearch.clickedDate" class="form-control" ng-options="options.value as options.label for options in vm.booleanSearchOptions">
+                            <option value=""></option>
+                        </select>
+                    </th>
                 </tr>
             </thead>
             <tbody>
@@ -118,7 +132,7 @@
             </tbody>
             <tfoot>
                 <tr>
-                    <td colspan="10" class="center" ng-if="vm.state.totalRecipients">
+                    <td colspan="10" class="center" ng-if="vm.state.totalFilteredRecipients">
                         <nav ng-if="vm.numberOfPages() && vm.pages.length >= 2">
                             <ul class="pagination">
                                 <li ng-repeat="page in vm.pages" ng-class="{active: page == vm.uiState.curPage}">
@@ -127,7 +141,7 @@
                             </ul>
                         </nav>
                     </td>
-                    <td ng-if="!vm.state.totalRecipients" colspan="6" class="center height-100">
+                    <td ng-if="!vm.state.totalFilteredRecipients" colspan="6" class="center height-100">
                         <h4>There are currently no recipients</h4>
                     </td>
                 </tr>

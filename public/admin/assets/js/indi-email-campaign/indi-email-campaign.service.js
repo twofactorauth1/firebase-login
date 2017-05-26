@@ -192,12 +192,20 @@
 
 
         function getCampaignRecipientDetails(id, params) {
+            var urlParts = [baseCampaignAPIv1, id, 'recipients', 'statistics'];
             var _qString = "?limit="+params.limit+"&skip="+ params.skip;
             if (params.sortBy) {
                 _qString += "&sortBy=" + params.sortBy + "&sortDir=" + params.sortDir;
             }
             if (params.globalSearch) {
                 _qString += "&term=" + params.globalSearch;
+            }
+            if(params.isFieldSearchEnabled) {
+                
+                urlParts.push('filter');
+                _.each(params.fieldSearch, function (value, key) {
+                    _qString += '&' + key + '=' + value;
+                });
             }
             function success(data) {
                 if(!campaignService.totalRecipients){
@@ -209,7 +217,7 @@
                 console.error('EmailCampaignService getCampaignRecipientDetails error: ', JSON.stringify(error));
             }
 
-            return campaignRequest($http.get([baseCampaignAPIv1, id, 'recipients', 'statistics'].join('/') + _qString).success(success).error(error));
+            return campaignRequest($http.get(urlParts.join('/') + _qString).success(success).error(error));
         }
 
         (function init() {

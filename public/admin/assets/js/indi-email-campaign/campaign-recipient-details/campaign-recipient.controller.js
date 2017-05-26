@@ -33,6 +33,16 @@ function campaignRecipientDetailsController($scope, $state, $attrs, $filter, $mo
         details: {}
     };
 
+    vm.booleanSearchOptions =[
+        {
+           "label": "true",
+           "value":  'true'
+        },{
+           "label": "false",
+           "value":  'false'
+        }
+    ]
+
     EmailCampaignService.totalRecipients = null;
 
     function showFilter(){
@@ -115,17 +125,28 @@ function campaignRecipientDetailsController($scope, $state, $attrs, $filter, $mo
         vm.uiState.curPage = 1;
         vm.uiState.skip = 0;
         vm.uiState.pageLoading = true;
+        vm.uiState.isFieldSearchEnabled = checkIfFieldSearch();
     }
 
     /********** GLOBAL SEARCH RELATED **********/
 
-        $scope.$watch('vm.uiState.globalSearch', function (term) {
-            if (angular.isDefined(term)) {
-                vm.uiState.loadingFilter = true;
-                loadDefaults();
-                loadCampaignRecipientList();
-            }
-        }, true);
+    $scope.$watch('vm.uiState.globalSearch', function (term) {
+        if (angular.isDefined(term)) {
+            vm.uiState.loadingFilter = true;
+            loadDefaults();
+            loadCampaignRecipientList();
+        }
+    }, true);
+
+    /********** FILTER RELATED **********/
+
+    $scope.$watch('vm.uiState.fieldSearch', function (search) {
+        if (angular.isDefined(search)) {
+            vm.uiState.loadingFilter = true;
+            loadDefaults();
+            loadCampaignRecipientList();
+        }
+    }, true);
 
     function loadCampaignRecipientList(){
         EmailCampaignService.getCampaignRecipientDetails($stateParams.id, vm.uiState).then(function(response){
@@ -159,6 +180,9 @@ function campaignRecipientDetailsController($scope, $state, $attrs, $filter, $mo
         }
     }
 
+    function checkIfFieldSearch(){
+        return UtilService.checkIfFieldSearch(vm.uiState.fieldSearch);
+    }
 
     function init(element) {
         vm.element = element;

@@ -6,7 +6,8 @@
 
 
     this.flyoverout = '';
-
+    this.checkIfFieldSearch = checkIfFieldSearch;
+    
     this.flyoverhide = function (util) {
        this.flyoverout = util;
     };
