@@ -38,7 +38,7 @@ function campaignRecipientDetailsController($scope, $state, $attrs, $filter, $mo
 
     function numberOfPages() {
         if (vm.state.recipients) {
-            return Math.ceil(vm.state.totalRecipients / vm.uiState.limit);
+            return Math.ceil(vm.state.totalFilteredRecipients / vm.uiState.limit);
         }
         return 0;
     }
@@ -48,7 +48,7 @@ function campaignRecipientDetailsController($scope, $state, $attrs, $filter, $mo
       var end;
       var i;
       var prevPage = vm.uiState.curPage;
-      var totalItemCount = vm.state.totalRecipients;
+      var totalItemCount = vm.state.totalFilteredRecipients;
       var currentPage = vm.uiState.curPage;
       var numPages = numberOfPages();
 
@@ -111,7 +111,8 @@ function campaignRecipientDetailsController($scope, $state, $attrs, $filter, $mo
     function loadCampaignRecipientList(){
         EmailCampaignService.getCampaignRecipientDetails($stateParams.id, vm.uiState).then(function(response){
             vm.state.recipients = response.data.results;
-            vm.state.totalRecipients = response.data.total;
+            vm.state.totalFilteredRecipients = response.data.total;
+            vm.state.totalRecipients = EmailCampaignService.totalRecipients;
             drawPages();
             vm.uiState.loading = false;
             vm.uiState.pageLoading = false;

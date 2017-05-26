@@ -196,7 +196,11 @@
             if (params.sortBy) {
                 _qString += "&sortBy=" + params.sortBy + "&sortDir=" + params.sortDir;
             }
-            function success(data) {}
+            function success(data) {
+                if(!campaignService.totalRecipients){
+                    campaignService.totalRecipients = data.total;
+                }
+            }
 
             function error(error) {
                 console.error('EmailCampaignService getCampaignRecipientDetails error: ', JSON.stringify(error));
