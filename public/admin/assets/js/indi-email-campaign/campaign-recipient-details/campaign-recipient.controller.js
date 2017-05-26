@@ -157,7 +157,7 @@ function campaignRecipientDetailsController($scope, $state, $attrs, $filter, $mo
             vm.uiState.loading = false;
             vm.uiState.pageLoading = false;
             vm.uiState.loadingFilter = false;
-
+            vm.uiState.widgetRecordsLengthMessage = UtilService.getWidgetRecordsLengthMessage(vm.state.totalRecipients, "recipient");
             $("html, body").animate({
               scrollTop: 0
             }, 600);
