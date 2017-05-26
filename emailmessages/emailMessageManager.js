@@ -1798,8 +1798,10 @@ var emailMessageManager = {
                 eventAry.push(event);
                 emailMessage.set('events', eventAry);
 
+                var addOpenEvent = null;
                 if(!emailMessage.get('openedDate')) {
                     emailMessage.set('openedDate', eventDate);
+                    addOpenEvent = true;
                 }
 
                 dao.saveOrUpdate(emailMessage, function(err, value){
@@ -1808,7 +1810,7 @@ var emailMessageManager = {
                         return fn(err);
                     } else {
                         self.log.debug('<< markMessageClicked');
-                        return fn(null, value);
+                        return fn(null, value, addOpenEvent);
                     }
                 });
             }
