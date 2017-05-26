@@ -735,7 +735,10 @@ module.exports = {
             contactDao.getContactsByTagArray(accountId, userId, contactTags, function(err, contacts){
                 if(contacts) {
                     _.each(contacts, function(contact){
-                        contactsArray.push(contact.id());
+                        if(!_.contains(contacts, contact.id())) {
+                            contactsArray.push(contact.id());
+                        }
+
                     });
                 }
                 // We need not to check contacts length in autoresponder campaign
