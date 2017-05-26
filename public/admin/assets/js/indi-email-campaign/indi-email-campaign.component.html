@@ -57,6 +57,7 @@
                                     ng-model="vm.state.campaign.name"
                                     ng-disabled="!vm.uiState.dataLoaded || vm.state.campaign.status.toLowerCase() !== 'draft'"/>
                                 <button
+                                    ng-hide="vm.state.campaign.status === 'COMPLETED'"
                                     type="button"
                                     ng-disabled="!vm.uiState.dataLoaded"
                                     ng-if="vm.uiState.disableEditing || vm.state.campaign.status.toLowerCase() !== 'cancelled'"
