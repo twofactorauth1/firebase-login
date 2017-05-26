@@ -48,7 +48,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url('search/name/:name'), this.isAuthAndSubscribedApi.bind(this), this.search.bind(this));
         app.get(this.url('search/:term'), this.isAuthAndSubscribedApi.bind(this), this.search.bind(this));
         app.get(this.url('tags'), this.isAuthAndSubscribedApi.bind(this), this.getContactTags.bind(this));
-        app.get(this.url('count'), this.isAuthAndSubscribedApi.bind(this), this.getContactCount.bind(this))
+        app.get(this.url('count'), this.isAuthAndSubscribedApi.bind(this), this.getContactCount.bind(this));
         app.get(this.url('tagcounts'), this.isAuthAndSubscribedApi.bind(this), this.getContactTagCounts.bind(this));
         app.get(this.url(':id'), this.isAuthAndSubscribedApi.bind(this), this.getContactById.bind(this));
         /*

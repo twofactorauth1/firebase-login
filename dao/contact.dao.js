@@ -1134,17 +1134,24 @@ var dao = {
         });
     },
 
+    getContactTagCountByTag: function(accountId, userId, tagAry, fn) {
+        var self = this;
+        self.log.debug(accountId, userId, '>> getContactTagCount');
+
+    },
+
     setBouncedTag: function(accountId, userId, contactId, fn) {
         var self = this;
-        self.log.debug(accountId, userId, '>> setBouncedTag');
+        self.log.debug(accountId, userId, '>> setBouncedTag (' + contactId + ')');
         contactId = parseInt(contactId);
+
         self.findOne({_id:contactId}, $$.m.Contact, function(err, contact){
 
             if(contact) {
                 contact.set('tags', ['Bounced']);
                 self.saveOrUpdate(contact, fn);
             } else {
-                self.log.debug('could not find contact');
+                self.log.warn('could not find contact', contactId);
                 fn();
             }
 
