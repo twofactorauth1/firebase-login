@@ -1361,7 +1361,7 @@ module.exports = {
      */
     deleteCampaign: function(campaignId, accountId, fn) {
         var self = this;
-        self.log.debug('>> deleteCampaign');
+        self.log.debug(accountId, null, '>> deleteCampaign');
         var query = {
             accountId: accountId,
             campaignId: campaignId
@@ -1372,20 +1372,43 @@ module.exports = {
                 self.log.error('Error deleting campaign flow: ' + err);
                 return fn(err, null);
             } else {
-                self.log.debug('<< delete Campaign');
                 query = {
                     accountId: accountId,
                     _id: campaignId
                 };
-                campaignDao.removeByQuery(query, $$.m.Campaign, function(err, value){
-                    if(err) {
-                        self.log.error('Error deleting campaign: ' + err);
-                        return fn(err, null);
+                var userId = 0;
+                campaignDao.findOne(query, $$.m.Campaign, function(err, campaign){
+                    if(campaign.get('sendgridBatchId')) {
+                        emailMessageManager.cancelSendgridBatch(accountId, userId, campaign.get('sendgridBatchId'), campaignId, function(err, value){
+                            if(err) {
+                                self.log.error('Error cancelling Sendgrid Batch:', err);
+                                return fn(err);
+                            } else {
+                                campaignDao.removeByQuery(query, $$.m.Campaign, function(err, value){
+                                    if(err) {
+                                        self.log.error('Error deleting campaign: ' + err);
+                                        return fn(err, null);
+                                    } else{
+                                        self.log.debug(accountId, null, '<< delete Campaign');
+                                        fn(null, value);
+                                    }
+                                });
+                            }
+                        });
+                    } else {
+                        campaignDao.removeByQuery(query, $$.m.Campaign, function(err, value){
+                            if(err) {
+                                self.log.error('Error deleting campaign: ' + err);
+                                return fn(err, null);
+                            } else{
+                                self.log.debug(accountId, null, '<< delete Campaign');
+                                fn(null, value);
+                            }
+                        });
                     }
-                    else{
-                        fn(null, value);
-                    }
-                })
+                });
+
+
 
             }
         });
