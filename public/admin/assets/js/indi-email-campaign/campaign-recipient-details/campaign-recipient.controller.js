@@ -2,9 +2,9 @@
 
 app.controller('CampaignRecipientDetailsController', campaignRecipientDetailsController);
 
-campaignRecipientDetailsController.$inject = ['$scope', '$state', '$attrs', '$filter', '$modal', '$timeout', '$stateParams', '$location', 'pagingConstant', 'EmailCampaignService', 'UtilService'];
+campaignRecipientDetailsController.$inject = ['$scope', '$state', '$attrs', '$filter', '$modal', '$timeout', '$stateParams', '$location', 'pagingConstant', 'EmailCampaignService', 'UtilService', "CampaignService", 'toaster'];
 /* @ngInject */
-function campaignRecipientDetailsController($scope, $state, $attrs, $filter, $modal, $timeout, $stateParams, $location, pagingConstant, EmailCampaignService, UtilService) {
+function campaignRecipientDetailsController($scope, $state, $attrs, $filter, $modal, $timeout, $stateParams, $location, pagingConstant, EmailCampaignService, UtilService, CampaignService, toaster) {
 
     var vm = this;
 
@@ -27,6 +27,7 @@ function campaignRecipientDetailsController($scope, $state, $attrs, $filter, $mo
     vm.sortCampaignRecipientList = sortCampaignRecipientList;
     vm.viewSingleContact = viewSingleContact;
     vm.showFilteredRecords = showFilteredRecords;
+    vm.downloadReport = downloadReport;
 
     vm.sortData = {
         column: '',
@@ -182,6 +183,11 @@ function campaignRecipientDetailsController($scope, $state, $attrs, $filter, $mo
 
     function checkIfFieldSearch(){
         return UtilService.checkIfFieldSearch(vm.uiState.fieldSearch);
+    }
+
+    function downloadReport(){
+      CampaignService.downloadReport($stateParams.id);
+      toaster.pop('success', 'Please wait while report is downloading...');
     }
 
     function init(element) {
