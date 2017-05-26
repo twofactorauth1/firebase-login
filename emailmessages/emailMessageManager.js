@@ -3202,14 +3202,22 @@ var emailMessageManager = {
     },
 
 
-    getCampaignRecipientStatistics: function(accountId, campaignId, skip, limit, sortBy, sortDir, fn) {
+    getCampaignRecipientStatistics: function(accountId, campaignId, skip, limit, sortBy, sortDir, term, fn) {
         var self = this;
 
         var query = {
             accountId: accountId,
             batchId: campaignId
         };
-
+        if(term){
+            term = term.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');   
+            var regex = new RegExp('\.*'+term+'\.*', 'i');
+            var orQuery = [
+                {subject:regex},
+                {receiver:regex}
+            ];
+            query["$or"] = orQuery;
+        }
         self.log.debug('>> getCampaignRecipientStatistics');
         console.log(accountId);
         console.log(campaignId);
@@ -3218,7 +3226,6 @@ var emailMessageManager = {
         dao.findWithFieldsLimitOrderAndTotal(query, skip, limit, sortBy, null, $$.m.Emailmessage, sortDir, fn);   
         
     }
-
 
 };
 

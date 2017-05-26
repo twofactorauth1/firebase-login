@@ -2,9 +2,9 @@
 
 app.controller('CampaignRecipientDetailsController', campaignRecipientDetailsController);
 
-campaignRecipientDetailsController.$inject = ['$scope', '$state', '$attrs', '$filter', '$modal', '$timeout', '$stateParams', '$location', 'pagingConstant', 'EmailCampaignService'];
+campaignRecipientDetailsController.$inject = ['$scope', '$state', '$attrs', '$filter', '$modal', '$timeout', '$stateParams', '$location', 'pagingConstant', 'EmailCampaignService', 'UtilService'];
 /* @ngInject */
-function campaignRecipientDetailsController($scope, $state, $attrs, $filter, $modal, $timeout, $stateParams, $location, pagingConstant, EmailCampaignService) {
+function campaignRecipientDetailsController($scope, $state, $attrs, $filter, $modal, $timeout, $stateParams, $location, pagingConstant, EmailCampaignService, UtilService) {
 
     var vm = this;
 
@@ -26,16 +26,24 @@ function campaignRecipientDetailsController($scope, $state, $attrs, $filter, $mo
     vm.selectPage = selectPage;
     vm.sortCampaignRecipientList = sortCampaignRecipientList;
     vm.viewSingleContact = viewSingleContact;
+    vm.showFilteredRecords = showFilteredRecords;
 
     vm.sortData = {
         column: '',
         details: {}
     };
 
+    EmailCampaignService.totalRecipients = null;
+
     function showFilter(){
         vm.uiState.showFilter = !vm.uiState.showFilter;
+        if (!vm.uiState.showFilter)
+            clearFilter();
     }
 
+    function clearFilter() {
+        vm.uiState.fieldSearch = {};
+    }
 
     function numberOfPages() {
         if (vm.state.recipients) {
@@ -109,6 +117,16 @@ function campaignRecipientDetailsController($scope, $state, $attrs, $filter, $mo
         vm.uiState.pageLoading = true;
     }
 
+    /********** GLOBAL SEARCH RELATED **********/
+
+        $scope.$watch('vm.uiState.globalSearch', function (term) {
+            if (angular.isDefined(term)) {
+                vm.uiState.loadingFilter = true;
+                loadDefaults();
+                loadCampaignRecipientList();
+            }
+        }, true);
+
     function loadCampaignRecipientList(){
         EmailCampaignService.getCampaignRecipientDetails($stateParams.id, vm.uiState).then(function(response){
             vm.state.recipients = response.data.results;
@@ -123,6 +141,10 @@ function campaignRecipientDetailsController($scope, $state, $attrs, $filter, $mo
               scrollTop: 0
             }, 600);
         })
+    }
+
+    function showFilteredRecords(){
+        return !vm.uiState.loadingFilter && UtilService.showFilteredRecords(vm.uiState.globalSearch, vm.uiState.fieldSearch);
     }
 
     function viewSingleContact(recipient){

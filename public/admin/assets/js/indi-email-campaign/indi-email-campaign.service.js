@@ -196,6 +196,9 @@
             if (params.sortBy) {
                 _qString += "&sortBy=" + params.sortBy + "&sortDir=" + params.sortDir;
             }
+            if (params.globalSearch) {
+                _qString += "&term=" + params.globalSearch;
+            }
             function success(data) {
                 if(!campaignService.totalRecipients){
                     campaignService.totalRecipients = data.total;

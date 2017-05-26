@@ -555,11 +555,12 @@ _.extend(api.prototype, baseApi.prototype, {
         var limit = parseInt(req.query.limit) || 0;
         var sortBy = req.query.sortBy || null;
         var sortDir = parseInt(req.query.sortDir) || null;
+        var term = req.query.term;
         self.checkPermission(req, self.sc.privs.VIEW_CAMPAIGN, function(err, isAllowed) {
             if (isAllowed !== true) {
                 return self.send403(resp);
             } else {
-                emailMessageManager.getCampaignRecipientStatistics(accountId, campaignId, skip, limit, sortBy, sortDir, function(err, contacts){
+                emailMessageManager.getCampaignRecipientStatistics(accountId, campaignId, skip, limit, sortBy, sortDir, term, function(err, contacts){
                     self.log.debug('<< getCampaignRecipientStatistics');
                     self.sendResultOrError(resp, err, contacts, 'Error getting contacts');
                 });
