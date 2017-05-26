@@ -97,7 +97,7 @@
         vm.getCampaignContactsFn = getCampaignContactsFn;
         vm.loadSavedTagsFn = loadSavedTagsFn;
         vm.checkAndCreateContactFn = checkAndCreateContactFn;
-        vm.updateTagsFn = updateTagsFn;
+        //vm.updateTagsFn = updateTagsFn;
         vm.addContactsFn = addContactsFn;
         vm.removeContactsFromCampaignFn = removeContactsFromCampaignFn;
         vm.resetDirtyFn = resetDirtyFn;
@@ -130,34 +130,6 @@
             }
         });
 
-        function updateTagsFn(recipients) {
-            if (angular.isDefined(vm.state.campaign.searchTags.tags) && vm.state.campaign.searchTags.tags.length) {
-
-                ContactService.getContacts(function (contacts) {
-                    $scope.contacts = contacts;
-                    var tags = _.uniq(_.pluck(vm.state.campaign.searchTags.tags, 'data'));
-                    recipients.forEach(function (id, index) {
-                        var c = _.findWhere($scope.contacts, {
-                            _id: id
-                        });
-                        if (c) {
-                            if (vm.state.campaign.searchTags.operation == 'add') {
-                                if (c.tags) {
-                                    c.tags = c.tags.concat(tags);
-                                } else {
-                                    c.tags = tags;
-                                }
-                            } else if (vm.state.campaign.searchTags.operation == 'set') {
-                                c.tags = tags;
-                            }
-                            c.tags = _.uniq(c.tags);
-                            ContactService.saveContact(c, function () {});
-                        }
-                    });
-                });
-            }
-        }
-
         function addContactsFn(createdContactsArr) {
             //get an array of contact Ids from recipients
             var recipientsIdArr = [];
@@ -180,7 +152,7 @@
             var contactsArr = recipientsIdArr;
 
             vm.state.campaign.contacts = contactsArr;
-            vm.updateTagsFn(vm.state.campaign.contacts);
+            //vm.updateTagsFn(vm.state.campaign.contacts);
         }
 
         function removeContactsFromCampaignFn() {
