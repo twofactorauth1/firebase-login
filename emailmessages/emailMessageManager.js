@@ -1797,6 +1797,11 @@ var emailMessageManager = {
                 var eventAry = emailMessage.get('events') || [];
                 eventAry.push(event);
                 emailMessage.set('events', eventAry);
+
+                if(!emailMessage.get('openedDate')) {
+                    emailMessage.set('openedDate', eventDate);
+                }
+
                 dao.saveOrUpdate(emailMessage, function(err, value){
                     if(err) {
                         self.log.error('Error updating emailmessage:', err);
