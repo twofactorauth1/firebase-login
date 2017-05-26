@@ -3202,23 +3202,58 @@ var emailMessageManager = {
     },
 
 
-    getCampaignRecipientStatistics: function(accountId, campaignId, skip, limit, sortBy, sortDir, fn) {
+    getCampaignRecipientStatistics: function(accountId, campaignId, skip, limit, sortBy, sortDir, term, fieldSearch, fn) {
         var self = this;
 
         var query = {
             accountId: accountId,
             batchId: campaignId
         };
-
+        if(term){
+            term = term.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');   
+            var regex = new RegExp('\.*'+term+'\.*', 'i');
+            var orQuery = [
+                {subject:regex},
+                {receiver:regex}
+            ];
+            query["$or"] = orQuery;
+        }
+        if(fieldSearch){
+            var fieldSearchArr = [];
+            for(var i=0; i <= Object.keys(fieldSearch).length - 1; i++){
+                var key = Object.keys(fieldSearch)[i];
+                var value = fieldSearch[key];
+                self.log.debug('value:', value);                
+                var obj = {};
+                value = value.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+                console.log(value);
+                if(value){ 
+                    if(key == 'deliveredDate' || key == 'openedDate' || key == 'clickedDate'){
+                        if(value == "true"){                           
+                            obj[key] = {$ne:null};
+                            fieldSearchArr.push(obj);
+                        } else{                            
+                            obj[key] = null;
+                            fieldSearchArr.push(obj);
+                        }
+                    } 
+                    else{
+                        obj[key] = new RegExp(value, 'i');                    
+                        fieldSearchArr.push(obj);
+                    } 
+                }
+            }
+            if(fieldSearchArr.length){
+                query["$and"] = fieldSearchArr;
+            }
+        }
         self.log.debug('>> getCampaignRecipientStatistics');
-        console.log(accountId);
-        console.log(campaignId);
+        console.log(query);
         self.log.debug('>> getCampaignRecipientStatistics');
         
         dao.findWithFieldsLimitOrderAndTotal(query, skip, limit, sortBy, null, $$.m.Emailmessage, sortDir, fn);   
         
     }
-
 
 };
 

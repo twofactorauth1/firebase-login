@@ -742,6 +742,39 @@ module.exports = {
                 }
                 //uniqueify contacts
                 contactsArray = _.uniq(contactsArray);
+                campaign.set('contacts', contactsArray || []);
+                // Add OR Update contact tags
+                if(campaign.get("searchTags").tags.length){
+                    
+                    var tags = campaign.get("searchTags").tags;
+                    var operation = campaign.get("searchTags").operation;
+                    var contactIds = campaign.get('contacts');
+                    var query = { _id: { $in: contactIds} };
+                    var tags = _.pluck(tags, 'data');
+                    console.log(contactIds)
+                    contactDao.findMany(query, $$.m.Contact, function(err, contacts){
+                        if(err) {
+                            self.log.error('Error getting contacts for campaign: ' + err);
+                            return fn(err, null);
+                        }
+                        else{
+                            _.each(contacts, function(contact){
+                                if(operation === 'add'){
+                                   var contactTags =  contact.get("tags") || [];
+                                   contactTags = contactTags.concat(tags);
+                                   contact.set("tags", _.uniq(contactTags));
+                                }
+                                if(operation === 'set'){
+                                   contact.set("tags", _.uniq(tags));
+                                }
+                            });
+                            
+                            campaignDao.batchUpdate(contacts, $$.m.Contact, function(err, updatedContacts){
+
+                            })
+                        }
+                    });
+                } 
                 // We need not to check contacts length in autoresponder campaign
                 if(campaignType !== 'autoresponder' && (!contactsArray || !Array.isArray(contactsArray) || contactsArray.length <1)) {
                     self.log.error('Expected at least one contact id in contacts array');
