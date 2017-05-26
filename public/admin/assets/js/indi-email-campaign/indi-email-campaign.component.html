@@ -182,97 +182,13 @@
                                 <div class="clearfix"></div>
                             </div>
 
-                            <h4 class="text-u ssb-admin-panel-header no-border">Campaign Email</h4>
-                            <div class="panel panel-white form-group bg-white padding-10 campaign-email-settings-container" id="campaign-email-settings-container">
-                                <span ng-if="!vm.state.emails.length">Loading... <b class="fa fa-spinner fa-spin"/></span>
-
-                                <div ng-if="vm.state.emails.length" ng-class="{'disabled': vm.uiState.disableEditing}" class="padding-left-5">
-
-                                    <ui-select
-                                        ng-model="vm.state.campaign.emailSettings.emailId"
-                                        theme="bootstrap"
-                                        on-select="vm.updateCampaignEmailSettingsFn(true)"
-                                        ng-disabled="vm.uiState.disableEditing">
-                                        <ui-select-match
-                                            placeholder="Select an email template">
-                                            {{$select.selected.title}} (subject:{{vm.state.campaign.emailSettings.subject}})
-                                        </ui-select-match>
-                                        <ui-select-choices repeat="email._id as email in vm.state.emails | propsFilter: {title: $select.search}">
-                                            <div ng-bind-html="email.title | highlight: $select.search"></div>
-                                            <small>
-                                            subject: <span ng-bind-html="''+email.subject | highlight: $select.search"></span>
-                                          </small>
-                                        </ui-select-choices>
-                                    </ui-select>
-
-                                    <div class="form-group margin-bottom-0">
-                                        <label class="control-label text-bold">
-                                            From Name
-                                        </label>
-                                        <span editable-text="vm.state.campaign.emailSettings.fromName">{{vm.state.campaign.emailSettings.fromName || "From Name"}}</span>
-                                    </div>
-                                    <div class="form-group margin-bottom-0">
-                                        <span class="required" class="margin-left-10">*</span>
-                                        <label class="control-label text-bold">
-                                            From Email
-                                        </label>
-                                        <span class="email-from-required" editable-email="vm.state.campaign.emailSettings.fromEmail" e-required onbeforesave="validateEmail($data)">{{vm.state.campaign.emailSettings.fromEmail || "From Email"}}</span>
-                                    </div>
-                                    <div class="form-group margin-bottom-0">
-                                        <label class="control-label text-bold">
-                                            Reply To
-                                        </label>
-                                        <span editable-email="vm.state.campaign.emailSettings.replyTo" onbeforesave="validateEmail($data)">{{vm.state.campaign.emailSettings.replyTo || "Reply To"}}</span>
-                                    </div>
-                                    <div class="form-group margin-bottom-0">
-                                        <label class="control-label text-bold">
-                                            Cc
-                                        </label>
-                                        <span editable-email="vm.state.campaign.emailSettings.cc" onbeforesave="validateEmail($data)">{{vm.state.campaign.emailSettings.cc || "Cc"}}</span>
-                                    </div>
-                                    <div class="form-group margin-bottom-0">
-                                        <label class="control-label text-bold">
-                                            Bcc
-                                        </label>
-                                        <span editable-email="vm.state.campaign.emailSettings.bcc" onbeforesave="validateEmail($data)">{{vm.state.campaign.emailSettings.bcc || "Bcc"}}</span>
-                                    </div>
-                                    <div class="form-group margin-bottom-0">
-                                        <label class="control-label text-bold">
-                                            Subject
-                                        </label>
-                                        <span editable-text="vm.state.campaign.emailSettings.subject" onbeforesave="analyzeSubject($data)">{{vm.state.campaign.emailSettings.subject || "Subject"}}</span>
-                                        <div class="clearfix"></div>
-                                    </div>
-                                    <div class="form-group margin-bottom-10" ng-if="vm.state.campaign.emailSettings.subject" ng-show="subjectScore">
-                                        <label> <a href="#" style="color:#858585" ng-click="openModal('subject-score-modal')">Subject Strength <span class="fa fa-info-circle"></span></a></label>
-                                        <label class="pull-right text-bold" ng-class="{'text-danger': subjectScore<25, 'text-warning': subjectScore>=25 && subjectScore<50, 'text-info': subjectScore>=50 && subjectScore<75, 'text-nephritis': subjectScore>=75}">
-                                            <span ng-if="subjectScore<30">Weak</span>
-                                            <span ng-if="subjectScore>=30 && subjectScore<=50">Fair</span>
-                                            <span ng-if="subjectScore>50 && subjectScore<80">Good</span>
-                                            <span ng-if="subjectScore>=80">Strong</span> {{subjectScore}}%</label>
-                                        <progressbar value="subjectScore" animate="true" type="{{getProgressType(subjectScore)}}" class="progress-xs margin-bottom-0"></progressbar>
-                                    </div>
-
-                                    <a
-                                        ui-sref='app.emailEditor({id: vm.state.campaign.emailSettings.emailId})'
-                                        class="btn btn-primary margin-top-15"
-                                        tooltip-placement="top"
-                                        tooltip="Make changes to this email in the editor."
-                                        ng-disabled="vm.uiState.disableEditing || !vm.state.campaign.emailSettings.emailId">
-                                        <i class="fa fa-pencil-square-o"></i>
-                                        <span> Edit email content</span>
-                                    </a>
-
-                                </div>
-                            </div>
+                            <div ng-if="vm.state.campaign.status !== 'COMPLETED'" data-ng-include=" 'assets/js/indi-email-campaign/campaign-email-template/email-template.html' "></div>
 
                         </div>
 
-
-
                         <div class="col-md-4">
 
-                            <div ng-if="vm.state.campaign.type === 'onetime'">
+                            <div ng-if="vm.state.campaign.type === 'onetime' && vm.state.campaign.status !== 'COMPLETED'">
                                 <h4 class="text-u ssb-admin-panel-header no-border">Recipient list</h4>
                                 <div class="panel panel-white">
                                     <div class="panel-body no-padding">
@@ -325,7 +241,7 @@
                                     </div>
                                 </div>
                             </div>
-
+                            <div ng-if="vm.state.campaign.status === 'COMPLETED'" data-ng-include=" 'assets/js/indi-email-campaign/campaign-email-template/email-template.html' "></div>
                         </div>
 
                         <div class="col-md-4">
