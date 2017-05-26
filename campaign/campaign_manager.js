@@ -742,6 +742,7 @@ module.exports = {
                 }
                 //uniqueify contacts
                 contactsArray = _.uniq(contactsArray);
+                campaign.set('contacts', contactsArray || []);
                 // We need not to check contacts length in autoresponder campaign
                 if(campaignType !== 'autoresponder' && (!contactsArray || !Array.isArray(contactsArray) || contactsArray.length <1)) {
                     self.log.error('Expected at least one contact id in contacts array');
