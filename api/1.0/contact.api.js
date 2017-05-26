@@ -423,7 +423,7 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug(accountId, userId, '>> getContactTags');
         self.checkPermissionForAccount(req, self.sc.privs.VIEW_CONTACT, accountId, function(err, isAllowed) {
             if (isAllowed !== true) {
-                return self.send403(res);
+                return self.send403(resp);
             } else {
                 contactDao.getContactTags(accountId, userId, function(err, tagAry){
                     self.log.debug('<< getContactTags');
@@ -440,7 +440,7 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug(accountId, userId, '>> getContactCount');
         self.checkPermissionForAccount(req, self.sc.privs.VIEW_CONTACT, accountId, function(err, isAllowed) {
             if (isAllowed !== true) {
-                return self.send403(res);
+                return self.send403(resp);
             } else {
                 contactDao.getContactCount(accountId, userId, function(err, count){
                     self.log.debug('<< getContactCount');
@@ -457,12 +457,26 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug(accountId, userId, '>> getContactTagCounts');
         self.checkPermissionForAccount(req, self.sc.privs.VIEW_CONTACT, accountId, function(err, isAllowed) {
             if (isAllowed !== true) {
-                return self.send403(res);
+                return self.send403(resp);
             } else {
-                contactDao.getContactTagCount(accountId, userId, function(err, count){
-                    self.log.debug('<< getContactTagCounts');
-                    self.sendResultOrError(resp, err, {count:count}, 'Error getting contact count');
-                });
+                if(req.query.tags) {
+                    var tagAry = [];
+                    if(_.isArray(req.query.tags)){
+                        tagAry = req.query.tags;
+                    } else {
+                        tagAry = req.query.tags.split(',');
+                    }
+                    contactDao.getContactTagCountByTag(accountId, userId, tagAry, function(err, count){
+                        self.log.debug('<< getContactTagCounts');
+                        self.sendResultOrError(resp, err, {count:count}, 'Error getting contact count');
+                    });
+                } else {
+                    contactDao.getContactTagCount(accountId, userId, function(err, count){
+                        self.log.debug('<< getContactTagCounts');
+                        self.sendResultOrError(resp, err, {count:count}, 'Error getting contact count');
+                    });
+                }
+
             }
         });
     },

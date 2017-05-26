@@ -1138,6 +1138,22 @@ var dao = {
         var self = this;
         self.log.debug(accountId, userId, '>> getContactTagCount');
 
+        var query = {accountId:accountId};
+        if(_.contains(tagAry, 'NOTAG')) {
+            query['$or'] = [{tags:{$in:tagAry}},{tags:null}];
+        } else {
+            query.tags = {$in:tagAry};
+        }
+        self.findCount(query, $$.m.Contact, function(err, count){
+            if(err) {
+                self.log.error(accountId, userId, 'Error getting count:', err);
+                fn(err);
+            } else {
+                self.log.debug(accountId, userId, '<< getContactTagCount');
+                fn(null, count);
+            }
+        });
+
     },
 
     setBouncedTag: function(accountId, userId, contactId, fn) {
