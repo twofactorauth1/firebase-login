@@ -2,7 +2,7 @@
     <div class="row">
         <div class="col-sm-8">
             <h1 class="mainTitle">RECIPIENTS</h1>
-            <span ng-if="vm.state.recipients" class="mainDescription">There {{vm.state.totalRecipients > 1 ? 'are' : 'is'}} currently {{vm.state.totalRecipients | number : fractionSize}} recipient<span ng-if="vm.state.totalRecipients > 1">s</span>. <span ng-if="vm.showFilteredRecords()"> ({{vm.state.totalFilteredRecipients || 0}} in filtered view)</span></span>
+            <span ng-if="vm.state.recipients" class="mainDescription">{{vm.uiState.widgetRecordsLengthMessage}}. <span ng-if="vm.showFilteredRecords()"> ({{vm.state.totalFilteredRecipients || 0}} in filtered view)</span></span>
         </div>
     </div>
 </section>
@@ -21,7 +21,7 @@
                                         <div class="form-group">
                                             <div class="col-xs-8 col-sm-6 padding-right-0">
                                                 <span class="input-icon">
-                                                    <input type="text" ng-model="vm.uiState.globalSearch" ng-model-options="{ debounce: 800 }" placeholder="Search by email..." id="form-field-14" class="form-control">
+                                                    <input type="text" ng-model="vm.uiState.globalSearch" ng-model-options="{ debounce: 800 }" placeholder="Search by email, subject..." id="form-field-14" class="form-control">
                                                     <i class="ti-search"></i>
                                                 </span>
                                             </div>
@@ -39,8 +39,9 @@
                                                 <span>Import</span>
                                             </button>
                                         </div>
-                                        <div class="col-xs-6 col-sm-6 center">
-                                            <button type="button" class="btn btn-o btn-wide btn-info btn-scroll btn-scroll-top ti ti-export ng-click-active hidden">
+                                        <div class="col-xs-6 col-sm-6 pull-right">
+
+                                            <button type="button" class="btn btn-o btn-wide btn-info btn-scroll btn-scroll-top ti ti-export ng-click-active pull-right" ng-click="vm.downloadReport()">
                                                 <span>Export</span>
                                             </button>
                                             <div class="form-group">
@@ -79,8 +80,8 @@
                                             </div>
                                         </div>
                                         <div class="col-xs-6">
-                                            <button type="button" class="btn btn-o btn-wide btn-info btn-scroll btn-scroll-top ti ti-plus ng-click-active pull-right" ng-click="openProductModal()">
-                                                <span>New</span>
+                                            <button type="button" class="btn btn-o btn-wide btn-info btn-scroll btn-scroll-top ti ti-export ng-click-active pull-right" ng-click="vm.downloadReport()">
+                                                <span>Export</span>
                                             </button>
                                         </div>
                                     </div>
@@ -102,15 +103,29 @@
                 </tr>
                 <tr ng-if="vm.uiState.showFilter">
                     
-                    <th class="prod-col">
+                    <th class="">
                         <input ng-model="vm.uiState.fieldSearch.receiver" ng-model-options="{ debounce: 800 }" placeholder="Recipient" class="form-control" type="search" size="9" />
                     </th>
-                    
+                    <th class="">
+                        <select ng-model="vm.uiState.fieldSearch.deliveredDate" class="form-control" ng-options="options.value as options.label for options in vm.booleanSearchOptions">
+                            <option value=""></option>
+                        </select>
+                    </th>
+                    <th class="">
+                        <select ng-model="vm.uiState.fieldSearch.openedDate" class="form-control" ng-options="options.value as options.label for options in vm.booleanSearchOptions">
+                            <option value=""></option>
+                        </select>
+                    </th>
+                    <th class="">
+                        <select ng-model="vm.uiState.fieldSearch.clickedDate" class="form-control" ng-options="options.value as options.label for options in vm.booleanSearchOptions">
+                            <option value=""></option>
+                        </select>
+                    </th>
                 </tr>
             </thead>
             <tbody>
                 <tr ng-repeat="recipient in vm.state.recipients" class="product-item">
-                    <td class=""><strong>Recipient: </strong>{{recipient.receiver}}</td>
+                    <td class=""><strong>Recipient: </strong><a href="javascript:void(0)" ng-click="vm.viewSingleContact(recipient)">{{recipient.receiver}}</a></td>
                     <td class=""><strong>Delivered: </strong>{{recipient.deliveredDate ? true : false}}</td>
                     <td class=""><strong>Opened: </strong>{{recipient.openedDate ? true : false}}</td>
                     <td class=""><strong>Clicked: </strong>{{recipient.clickedDate ? true : false}}</td>
@@ -118,7 +133,7 @@
             </tbody>
             <tfoot>
                 <tr>
-                    <td colspan="10" class="center" ng-if="vm.state.totalRecipients">
+                    <td colspan="10" class="center" ng-if="vm.state.totalFilteredRecipients">
                         <nav ng-if="vm.numberOfPages() && vm.pages.length >= 2">
                             <ul class="pagination">
                                 <li ng-repeat="page in vm.pages" ng-class="{active: page == vm.uiState.curPage}">
@@ -127,7 +142,7 @@
                             </ul>
                         </nav>
                     </td>
-                    <td ng-if="!vm.state.totalRecipients" colspan="6" class="center height-100">
+                    <td ng-if="!vm.state.totalFilteredRecipients" colspan="6" class="center height-100">
                         <h4>There are currently no recipients</h4>
                     </td>
                 </tr>

@@ -2,9 +2,9 @@
 
 app.controller('CampaignRecipientDetailsController', campaignRecipientDetailsController);
 
-campaignRecipientDetailsController.$inject = ['$scope', '$state', '$attrs', '$filter', '$modal', '$timeout', '$stateParams', '$location', 'pagingConstant', 'EmailCampaignService'];
+campaignRecipientDetailsController.$inject = ['$scope', '$state', '$attrs', '$filter', '$modal', '$timeout', '$stateParams', '$location', 'pagingConstant', 'EmailCampaignService', 'UtilService', "CampaignService", 'toaster'];
 /* @ngInject */
-function campaignRecipientDetailsController($scope, $state, $attrs, $filter, $modal, $timeout, $stateParams, $location, pagingConstant, EmailCampaignService) {
+function campaignRecipientDetailsController($scope, $state, $attrs, $filter, $modal, $timeout, $stateParams, $location, pagingConstant, EmailCampaignService, UtilService, CampaignService, toaster) {
 
     var vm = this;
 
@@ -25,20 +25,40 @@ function campaignRecipientDetailsController($scope, $state, $attrs, $filter, $mo
     vm.pagingConstant = pagingConstant;
     vm.selectPage = selectPage;
     vm.sortCampaignRecipientList = sortCampaignRecipientList;
-    
+    vm.viewSingleContact = viewSingleContact;
+    vm.showFilteredRecords = showFilteredRecords;
+    vm.downloadReport = downloadReport;
+
     vm.sortData = {
         column: '',
         details: {}
     };
 
+    vm.booleanSearchOptions =[
+        {
+           "label": "true",
+           "value":  'true'
+        },{
+           "label": "false",
+           "value":  'false'
+        }
+    ]
+
+    EmailCampaignService.totalRecipients = null;
+
     function showFilter(){
         vm.uiState.showFilter = !vm.uiState.showFilter;
+        if (!vm.uiState.showFilter)
+            clearFilter();
     }
 
+    function clearFilter() {
+        vm.uiState.fieldSearch = {};
+    }
 
     function numberOfPages() {
         if (vm.state.recipients) {
-            return Math.ceil(vm.state.totalRecipients / vm.uiState.limit);
+            return Math.ceil(vm.state.totalFilteredRecipients / vm.uiState.limit);
         }
         return 0;
     }
@@ -48,7 +68,7 @@ function campaignRecipientDetailsController($scope, $state, $attrs, $filter, $mo
       var end;
       var i;
       var prevPage = vm.uiState.curPage;
-      var totalItemCount = vm.state.totalRecipients;
+      var totalItemCount = vm.state.totalFilteredRecipients;
       var currentPage = vm.uiState.curPage;
       var numPages = numberOfPages();
 
@@ -106,21 +126,68 @@ function campaignRecipientDetailsController($scope, $state, $attrs, $filter, $mo
         vm.uiState.curPage = 1;
         vm.uiState.skip = 0;
         vm.uiState.pageLoading = true;
+        vm.uiState.isFieldSearchEnabled = checkIfFieldSearch();
     }
+
+    /********** GLOBAL SEARCH RELATED **********/
+
+    $scope.$watch('vm.uiState.globalSearch', function (term) {
+        if (angular.isDefined(term)) {
+            vm.uiState.loadingFilter = true;
+            loadDefaults();
+            loadCampaignRecipientList();
+        }
+    }, true);
+
+    /********** FILTER RELATED **********/
+
+    $scope.$watch('vm.uiState.fieldSearch', function (search) {
+        if (angular.isDefined(search)) {
+            vm.uiState.loadingFilter = true;
+            loadDefaults();
+            loadCampaignRecipientList();
+        }
+    }, true);
 
     function loadCampaignRecipientList(){
         EmailCampaignService.getCampaignRecipientDetails($stateParams.id, vm.uiState).then(function(response){
             vm.state.recipients = response.data.results;
-            vm.state.totalRecipients = response.data.total;
+            vm.state.totalFilteredRecipients = response.data.total;
+            vm.state.totalRecipients = EmailCampaignService.totalRecipients;
             drawPages();
             vm.uiState.loading = false;
             vm.uiState.pageLoading = false;
             vm.uiState.loadingFilter = false;
-
+            vm.uiState.widgetRecordsLengthMessage = UtilService.getWidgetRecordsLengthMessage(vm.state.totalRecipients, "recipient");
             $("html, body").animate({
               scrollTop: 0
             }, 600);
         })
+    }
+
+    function showFilteredRecords(){
+        return !vm.uiState.loadingFilter && UtilService.showFilteredRecords(vm.uiState.globalSearch, vm.uiState.fieldSearch);
+    }
+
+    function viewSingleContact(recipient){
+        var _email = recipient.receiver
+        var _event = _.findWhere(recipient.events, function(item){
+            return item.email === _email
+        })
+        if(_event){
+            $state.go('app.singleContact', {
+                contactId: _event.contactId
+            });
+        }
+    }
+
+    function checkIfFieldSearch(){
+        return UtilService.checkIfFieldSearch(vm.uiState.fieldSearch);
+    }
+
+    function downloadReport(){
+      CampaignService.downloadReport($stateParams.id);
+      toaster.pop('success', 'Please wait while report is downloading...');
     }
 
     function init(element) {

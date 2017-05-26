@@ -242,7 +242,7 @@ _.extend(api.prototype, baseApi.prototype, {
                             cb(err);
                         });
                     } else {
-                        emailMessageManager.markMessageClicked(event.emailmessageId, event, function(err, value){
+                        emailMessageManager.markMessageClicked(event.emailmessageId, event, function(err, value, addOpenEvent){
                             if(value) {
                                 savedEvents.push(value);
                                 obj.sender = value.get('sender');
@@ -259,6 +259,14 @@ _.extend(api.prototype, baseApi.prototype, {
                                     } else {
                                         campaignUpdates.clicked = 1;
                                         deferredUpdates[event.campaignId] = campaignUpdates;
+                                    }
+                                    if(addOpenEvent) {
+                                        if(campaignUpdates.opened) {
+                                            campaignUpdates.opened = campaignUpdates.opened + 1;
+                                        } else {
+                                            campaignUpdates.opened = 1;
+                                            deferredUpdates[event.campaignId] = campaignUpdates;
+                                        }
                                     }
                                 }
                                 cb(err);

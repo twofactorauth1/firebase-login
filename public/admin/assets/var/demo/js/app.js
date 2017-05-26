@@ -17,7 +17,6 @@ angular.module("indigenous", [
     'autocomplete',
     'config',
     'angular-parallax',
-    'google.places',
     'ng-sortable',
     'http-auth-interceptor'
 ]);

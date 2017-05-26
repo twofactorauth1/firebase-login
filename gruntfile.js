@@ -677,6 +677,12 @@ module.exports = function(grunt) {
         dbCopyUtil.getUnsentContactIDs(done);
     });
 
+    grunt.registerTask('getBouncedContactIDs', 'getBouncedContactIDs', function(){
+        var done = this.async();
+        var dbCopyUtil = require('./utils/dbcopyutil');
+        dbCopyUtil.getBouncedContactIDs(done);
+    });
+
     // grunt.registerTask('serve', 'Start a custom web server.', function() {
     //     grunt.log.writeln('Starting web server on port 80.');
     //     require('./app.js');

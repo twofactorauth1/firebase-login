@@ -735,9 +735,14 @@ module.exports = {
             contactDao.getContactsByTagArray(accountId, userId, contactTags, function(err, contacts){
                 if(contacts) {
                     _.each(contacts, function(contact){
-                        contactsArray.push(contact.id());
+                        if(!_.contains(contacts, contact.id())) {
+                            contactsArray.push(contact.id());
+                        }
                     });
                 }
+                //uniqueify contacts
+                contactsArray = _.uniq(contactsArray);
+                campaign.set('contacts', contactsArray || []);
                 // We need not to check contacts length in autoresponder campaign
                 if(campaignType !== 'autoresponder' && (!contactsArray || !Array.isArray(contactsArray) || contactsArray.length <1)) {
                     self.log.error('Expected at least one contact id in contacts array');
@@ -800,7 +805,7 @@ module.exports = {
                                                             self.log.debug('Sent batched campaign:', value);
                                                         }
                                                         campaignDao.patch({_id:campaignId}, {status:$$.m.Campaign.status.COMPLETED}, $$.m.CampaignV2, function(err, value){
-                                                            self.log.debug('Patched campaign:', value);
+                                                            self.log.trace('Patched campaign:', value);
                                                             if(err) {
                                                                 self.log.error('Error patching campaign:',err);
                                                             }
