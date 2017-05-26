@@ -34,24 +34,16 @@
                                     </div>
                                     <div class="visible-xs margin-bottom-15 clearfix"></div>
                                     <div class="form-group col-xs-12 col-sm-6 row margin-bottom-0 padding-right-30 pull-right">
-                                        <div class="col-xs-6 col-sm-6 center">
-                                            <button type="button" class="btn btn-o btn-wide btn-info btn-scroll btn-scroll-top ti ti-import ng-click-active hidden" ng-click="openImportModal()">
-                                                <span>Import</span>
-                                            </button>
-                                        </div>
-                                        <div class="col-xs-6 col-sm-6 pull-right">
-
-                                            <button type="button" class="btn btn-o btn-wide btn-info btn-scroll btn-scroll-top ti ti-export ng-click-active pull-right" ng-click="vm.downloadReport()">
-                                                <span>Export</span>
-                                            </button>
-                                            <div class="form-group">
-                                                <div class="btn-group tableView">
-                                                    <button class="btn btn-info" ng-class="{'active': tableView == 'list'}" href="" ng-click="tableView = 'list'" tooltip-placement="top" tooltip="List"> <span class="fa fa-th-list"></span> </button>
-                                                    <button class="btn btn-info" ng-class="{'active': tableView == 'grid'}" href="" ng-click="tableView = 'grid'" tooltip-placement="top" tooltip="Grid"> <span class="fa fa-th"></span> </button>
-                                                </div>
+                                        <button type="button" class="btn btn-o btn-wide btn-info btn-scroll btn-scroll-top ti ti-export ng-click-active pull-right" ng-click="vm.downloadReport()">
+                                            <span>Export</span>
+                                        </button>
+                                        <div class="form-group">
+                                            <div class="btn-group tableView">
+                                                <button class="btn btn-info" ng-class="{'active': tableView == 'list'}" href="" ng-click="tableView = 'list'" tooltip-placement="top" tooltip="List"> <span class="fa fa-th-list"></span> </button>
+                                                <button class="btn btn-info" ng-class="{'active': tableView == 'grid'}" href="" ng-click="tableView = 'grid'" tooltip-placement="top" tooltip="Grid"> <span class="fa fa-th"></span> </button>
                                             </div>
                                         </div>
-                                            </div>
+                                    </div>
                                 </div>
                                 <div class="visible-xs">
                                     <div class="col-xs-12">
@@ -94,7 +86,7 @@
         </div>
         <table class="table table-hover table-striped" ng-class="{'grid': tableView == 'grid', 'bg-white table-list-view': tableView == 'list'}" ng-if="!vm.uiState.loading">
             <thead ng-class="{'bg-white': tableView == 'grid'}">
-                <tr>                    
+                <tr>
                     <th class="sort" ng-class="{'st-sort-ascent': vm.sortData.details['receiver'].direction === 1, 'st-sort-descent': vm.sortData.details['receiver'].direction === -1}" ng-click="vm.sortCampaignRecipientList('receiver', 'receiver')">Recipient</th>
                     <th class="sort" ng-class="{'st-sort-ascent': vm.sortData.details['deliveredDate'].direction === 1, 'st-sort-descent': vm.sortData.details['deliveredDate'].direction === -1}" ng-click="vm.sortCampaignRecipientList('deliveredDate', 'deliveredDate')">Delivered</th>
                     <th class="sort" ng-class="{'st-sort-ascent': vm.sortData.details['openedDate'].direction === 1, 'st-sort-descent': vm.sortData.details['openedDate'].direction === -1}" ng-click="vm.sortCampaignRecipientList('openedDate', 'openedDate')">Opened</th>
@@ -102,7 +94,7 @@
                     <th class="hidden">Unsubscribed</th>
                 </tr>
                 <tr ng-if="vm.uiState.showFilter">
-                    
+
                     <th class="">
                         <input ng-model="vm.uiState.fieldSearch.receiver" ng-model-options="{ debounce: 800 }" placeholder="Recipient" class="form-control" type="search" size="9" />
                     </th>
