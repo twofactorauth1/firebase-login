@@ -201,10 +201,11 @@
                 _qString += "&term=" + params.globalSearch;
             }
             if(params.isFieldSearchEnabled) {
-                
                 urlParts.push('filter');
                 _.each(params.fieldSearch, function (value, key) {
-                    _qString += '&' + key + '=' + value;
+                    if(value != null){
+                        _qString += '&' + key + '=' + value;
+                    }
                 });
             }
             function success(data) {

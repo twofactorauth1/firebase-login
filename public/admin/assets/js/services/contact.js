@@ -43,7 +43,9 @@
                 _method = "GET";
                 urlParts.push('filter');
                 _.each(pagingParams.fieldSearch, function (value, key) {
-                    _qString += '&' + key + '=' + value;
+                    if(value != null){
+                        _qString += '&' + key + '=' + value;
+                    }
                 });
             }
             var apiUrl = baseUrl + urlParts.join('/') + _qString;
