@@ -2,7 +2,7 @@
     <div class="row">
         <div class="col-sm-8">
             <h1 class="mainTitle">RECIPIENTS</h1>
-            <span ng-if="vm.state.recipients" class="mainDescription">{{vm.uiState.widgetRecordsLengthMessage}}. <span ng-if="vm.showFilteredRecords()"> ({{vm.state.totalFilteredRecipients || 0}} in filtered view)</span></span>
+            <span ng-if="vm.state.recipients" class="mainDescription">{{vm.uiState.widgetRecordsLengthMessage}}. <span ng-if="vm.showFilteredRecords()"> ({{vm.state.totalFilteredRecipients || 0 | number : 0}} in filtered view)</span></span>
         </div>
     </div>
 </section>

@@ -20,7 +20,7 @@
 
                 </div>
                 <div class="analytic-data-value" ng-if="mydata.analyticDataLabel != 'YTD New Order Rev.' && mydata.analyticDataLabel != 'YTD Revenue (Stripe)'">
-                    <span class="pull-right">{{mydata.analyticDataValue | number : fractionSize}}</span>
+                    <span class="pull-right">{{mydata.analyticDataValue | number : 0}}</span>
                 </div>
 
 
