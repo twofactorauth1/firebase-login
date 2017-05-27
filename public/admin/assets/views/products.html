@@ -12,7 +12,7 @@
         <div class="row">
             <div class="col-sm-8">
                 <h1 class="mainTitle" translate="sidebar.nav.commerce.PRODUCTS"></h1>
-                <span class="mainDescription" ng-if="products.length">You currently have {{products.length| number : 0}} products in your store. <span ng-if="showFilteredRecords()"> ({{filteredCollection.length || 0}} in filtered view)</span></span>
+                <span class="mainDescription" ng-if="products.length"><widget-header-label count="{{products.length}}" item="product"></widget-header-label>. <span ng-if="showFilteredRecords()"> ({{filteredCollection.length || 0 | number : 0}} in filtered view)</span></span>
                 <span class="mainDescription" ng-if="!products">Loading products..</span>
             </div>
         </div>

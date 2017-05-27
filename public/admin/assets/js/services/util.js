@@ -2,7 +2,7 @@
 /*jslint unparam: true*/
 'use strict';
 (function (angular) {
-  app.service('UtilService', ["$filter", function ($filter) {
+  app.service('UtilService', [function () {
 
 
     this.flyoverout = '';
@@ -40,20 +40,5 @@
         }
         return isFieldSearch;
     }
-
-    this.getWidgetRecordsLengthMessage = function(count, item){
-      var str = "";
-      if(count === 1){
-        str = "There is 1 " + item;
-      }
-      else if(count > 1){
-         str = "There are " + $filter('number')(count, 0) + " " + item + "s";
-      }
-      else{
-        str = "There are no " + item + "s";
-      }
-      return str;
-    }
-
   }]);
 }(angular));

@@ -6,7 +6,7 @@
                 <h1 class="mainTitle" ng-if="orders" ><indigeweb-transaction-label plural=true upper=true></indigeweb-transaction-label>
                 </h1>
                 <h1 ng-if="!orders">&nbsp;</h1>
-                <span ng-if="orders" class="mainDescription">There are currently {{orders.length | number : 0}} orders. <span ng-if="showFilteredRecords()"> ({{filteredCollection.length || 0}} in filtered view)</span></span>
+                <span ng-if="orders" class="mainDescription"><widget-header-label count="{{orders.length}}" item="order"></widget-header-label>. <span ng-if="showFilteredRecords()"> ({{filteredCollection.length || 0 | number : 0}} in filtered view)</span></span>
                 <span ng-if="!orders" class="mainDescription">
                 Loading orders...
                 </span>
