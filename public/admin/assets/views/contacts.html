@@ -24,7 +24,7 @@
                                             <i class="ti-search"></i>
                                         </span>
                                     </div>
-                                    <div class="col-lg-5 col-sm-5 col-xs-3 padding-0">
+                                    <div class="col-lg-5 col-sm-5 col-xs-3 padding-0 text-align-center">
                                         <button type="button" class="libtn btn btn-o btn-info btn-wide btn-scroll btn-scroll-top ti-filter ng-click-active pull-right" ng-click="showFilter()">
                                             <span>Filter</span>
                                         </button>
@@ -49,13 +49,13 @@
                                         <button class="btn btn-info" ng-class="{'active': tableView == 'grid'}" href="" ng-click="tableView = 'grid'" tooltip-placement="top" tooltip="Grid"> <span class="fa fa-th"></span> </button>
                                     </div>
                                 </div>
-                                 <div class="bord col-lg-4 col-md-4 col-sm-4 col-xs-6 padding-0 " ng-hide="(selectedContactsFn()).length">
+                                 <div class="bord col-lg-4 col-md-4 col-sm-4 col-xs-6 padding-0 addnewbtn" ng-hide="(selectedContactsFn()).length">
                                     <button type="button" class="libtn btn btn-warning ti ti-plus" ng-click="openSimpleModal('new-contact-modal')">
                                         <span class="desktop">New Contact</span>
                                         <span class="mobile-text">New</span>
                                     </button>
                                 </div>
-                                <div class="col-xs-4 col-md-4 col-xs-6 padding-0" ng-hide="!(selectedContactsFn()).length">
+                                <div class="col-xs-4 col-md-4 col-xs-6 padding-0 addnewbtn" ng-hide="!(selectedContactsFn()).length">
                                         <ui-select ng-model="bulkActionChoice.action" on-select="bulkActionSelectFn()" theme="bootstrap" ng-disabled='!(selectedContactsFn()).length'>
                                             <ui-select-match placeholder="Actions">
                                                 <small ng-bind-html="$select.selected.label"></small>
