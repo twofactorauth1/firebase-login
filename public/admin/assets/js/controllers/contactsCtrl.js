@@ -99,7 +99,7 @@
 
         $scope.getContactCount = function(){
             ContactService.getTotalContacts(function(response){
-                $scope.totalItemCount = response.count;
+                $scope.totalItemCount = response.count;                
             });
         };
         function loadContactTags() {

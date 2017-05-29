@@ -40,21 +40,5 @@
         }
         return isFieldSearch;
     }
-
-    this.getWidgetRecordsLengthMessage = function(count, item){
-      var str = "";
-      if(count === 1){
-        str = "There is 1 " + item;
-      }
-      else if(count > 1){
-         str = "There are " + count + " " + item + "s";
-      }
-      else{
-        str = "There are no " + item + "s";
-      }
-      return str;
-    }
-
-
   }]);
 }(angular));
