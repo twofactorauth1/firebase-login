@@ -305,6 +305,11 @@ var emailMessageManager = {
                                 if(emailSettings.bcc) {
                                     p.bcc = [{email:emailSettings.bcc}];
                                 }
+                                p.custom_args = {
+                                    contactId: contact.id(),
+                                    contactFirstName: contact.get('first'),
+                                    contactLastName: contact.get('last')
+                                };
                                 personalizations.push(p);
                                 i++;
                             } else {
@@ -2865,9 +2870,17 @@ var emailMessageManager = {
             if(sendgridRequestBody.personalizations[0].content) {
                 emailmessage.set('content', sendgridRequestBody.personalizations[0].content[0].value);
             }
-
             if(sendgridRequestBody.batch_id) {
                 emailmessage.set('sendgridBatchId', sendgridRequestBody.batch_id);
+            }
+            if(p.custom_args && p.custom_args.contactId) {
+                emailmessage.set('contactId', p.custom_args.contactId);
+            }
+            if(p.custom_args && p.custom_args.contactFirstName) {
+                emailmessage.set('contactFirstName', p.custom_args.contactFirstName);
+            }
+            if(p.custom_args && p.custom_args.contactLastName) {
+                emailmessage.set('contactLastName', p.custom_args.contactLastName);
             }
             dao.saveOrUpdate(emailmessage, function(err, value){
                 if(err) {

@@ -565,7 +565,7 @@ _.extend(api.prototype, baseApi.prototype, {
             } else {
                 emailMessageManager.getCampaignRecipientStatistics(accountId, campaignId, skip, limit, sortBy, sortDir, term, null, function(err, contacts){
                     self.log.debug('<< getCampaignRecipientStatistics');
-                    self.sendResultOrError(resp, err, contacts, 'Error getting contacts');
+                    self.sendResultOrError(resp, err, contacts, 'Error getting campaign recipients');
                 });
             }
         });
