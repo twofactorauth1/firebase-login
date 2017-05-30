@@ -67,7 +67,7 @@
                                             
                                         </div>
                                     </div>
-                                    <div class="col-xs-8d">
+                                    <div class="col-xs-8 campaign-btn-container" >
                                         <div class='pull-right'>
                                             <button
                                                 ng-hide="vm.state.campaign.status === 'COMPLETED'"
@@ -96,12 +96,13 @@
                                                 <i class="ti-save"></i>
                                                 <span>Save</span>
                                             </button>
-                                            <button type="button" ng-disabled="!vm.uiState.dataLoaded" ng-click='vm.duplicateFn()' class="btn btn-primary campaign-btn-wide">
+                                            <button type="button" ng-disabled="!vm.uiState.dataLoaded" ng-click='vm.duplicateFn()' class="btn btn-primary campaign-btn-wide" tooltip-placement="bottom"
+                                                tooltip="Duplicate this campaign.">
                                                 <i class="ti-files"></i>
                                                 <span>Duplicate</span>
                                             </button>
                                             <button type="button" ng-disabled="!vm.uiState.dataLoaded || !vm.state.email || vm.state.campaign.status.toLowerCase() === 'cancelled'" ng-click='vm.openModalFn("send-test-email-modal")' class="btn btn-primary campaign-btn-wide" tooltip-placement="bottom"
-                                                tooltip="Duplicate this campaign.">
+                                                tooltip="Send test email.">
                                                 <i class="ti-location-arrow"></i>
                                                 <span>Send Test</span>
                                             </button>
