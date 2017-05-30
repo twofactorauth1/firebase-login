@@ -549,8 +549,10 @@ _.extend(api.prototype, baseApi.prototype, {
 
     getCampaignRecipientStatistics: function(req, resp) {
         var self = this;
-        self.log.debug('>> getCampaignRecipientStatistics');
         var accountId = parseInt(self.accountId(req));
+        var userId = self.userId(req);
+        self.log.debug(accountId, userId, '>> getCampaignRecipientStatistics');
+
         var campaignId = req.params.id;
         var skip = parseInt(req.query.skip) || 0;
         var limit = parseInt(req.query.limit) || 0;
