@@ -308,7 +308,7 @@ var emailMessageManager = {
                                 personalizations.push(p);
                                 i++;
                             } else {
-                                contactDao.setInvalidEmailTag(accountId, userId, contact.id(), function(err, value){});
+                                //contactDao.setInvalidEmailTag(accountId, userId, contact.id(), function(err, value){});
                             }
 
                         });
