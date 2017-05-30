@@ -288,6 +288,17 @@ app.directive("elem", function($rootScope, $timeout, $compile, SimpleSiteBuilder
                             var _src = $img.attr("src").replace(/^(http|https):/i, "");
                             $img.attr("src" , _src);
                         }
+                    })
+                    .on('froalaEditor.link.beforeInsert', function (e, editor, href, text) {
+                        if(attrs.ssbEmailEditor && href && href.indexOf('mailto:') !== 0 && href.indexOf('tel:') !== 0){
+                            var regex = /^(f|ht)tps?:\/\//i;
+                            if(!regex.test(href)){
+                                var $popup = editor.popups.get('link.insert');
+                                $popup.find('input[name="href"]').addClass('fr-error');
+                                editor.events.trigger('link.bad', []);
+                                return false;
+                            }
+                        }
                     }).on('froalaEditor.commands.after', function (e, editor, cmd, param1, param2) {
 
                         if (editor.popups.areVisible()) {
