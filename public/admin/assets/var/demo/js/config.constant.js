@@ -253,6 +253,11 @@ app.constant('postConstant', {
   }
 });
 
+app.constant('mediaManagerConstant', {
+  numberOfRowsPerPage: 6,
+  displayedPages: 7
+});
+
 app.constant('pageConstant', {
   page_handles: {
     BLOG: 'blog',
