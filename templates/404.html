@@ -11,6 +11,14 @@
     <head>
         <meta charset="utf-8">
         <title>Page Not Found :(</title>
+        <script type="text/javascript">
+            function setTextContent() {
+                var home = document.getElementById("homeName")
+                if (home) {
+                    home.innerText = document.location.hostname;
+                }
+            }
+        </script>
         <style>
 
             @font-face {
@@ -104,12 +112,12 @@
 
         </style>
     </head>
-    <body class="notfound">
+    <body class="notfound" onload="setTextContent();">
         <div class="notfoundpanel">
             <h1>404!</h1>
             <h3>The page you are looking for has not been found!</h3>
             <h4>The page you are looking for might have been removed, had its name changed, or be unavailable.</h4>
-            <a href="/" class="btn btn-success btn-lg">Back to Home</a>
+            <a href="/" class="btn btn-success btn-lg">Back to <span id="homeName">Home</span></a>
         </div>
     </body>
 </html>
