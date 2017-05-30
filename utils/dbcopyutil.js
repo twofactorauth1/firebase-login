@@ -15,6 +15,7 @@ var PROD_STRIPE_PLAN_ID = 'EVERGREEN';
 var utils = require('./commonutils');
 require('../configs/log4js.config').configure();
 var UUID = require('node-uuid');
+var moment = require('moment');
 
 var defaultSubscriptionPrivs = [
     'integrations/payments',
@@ -1603,7 +1604,7 @@ var copyutil = {
     },
 
     getBouncedContactIDs: function(fn) {
-        var emailMessageQuery = {batchId:'44f26730-11bf-4de7-b1b7-3fc330659df2', 'events.event':{$in:['bounce', 'dropped']}};
+        var emailMessageQuery = {$or:[{'events.event':'bounce'}, {'events.event':'dropped', 'events.reason':'Bounced Address'}]};
         var srcDBUrl = mongoConfig.PROD_MONGODB_CONNECT;
         var srcMongo = mongoskin.db(srcDBUrl, {safe:true});
         var emailMessagesCollection = srcMongo.collection('emailmessages');
@@ -1612,17 +1613,46 @@ var copyutil = {
             var count = 0;
             var contactEmailAry = _.pluck(msgs, 'receiver');
 
-            var contactQuery = {'details.emails.email':{$in:contactEmailAry}, accountId:1320};
+            var contactQuery = {'details.emails.email':{$in:contactEmailAry}, 'tags':{$ne:'Bounced'}};
             var contactsCollection = srcMongo.collection('contacts');
             console.log('finding contacts');
             contactsCollection.find(contactQuery, {_id:true}).toArray(function(err,contacts){
                 console.log('contact count:', contacts.length);
                 var contactAry = _.pluck(contacts, '_id');
                 console.log('contactAry:', contactAry);
-                fn();
+                async.eachLimit(contactAry, 10, function(contactId, cb){
+                    contactsCollection.update({_id:contactId}, {$set:{tags:['Bounced']}});
+                    cb();
+                }, function(err){
+                    console.log('Done with err:', err);
+                    fn();
+
+                });
+                //console.log('contactAry:', contactAry);
+
             });
         });
 
+    },
+
+    updateContactActivityTypes: function(fn) {
+        var srcDBUrl = mongoConfig.PROD_MONGODB_CONNECT;
+        var srcMongo = mongoskin.db(srcDBUrl, {safe:true});
+        var contactActivitesCollection = srcMongo.collection('contactactivities');
+        var date = new Date(2017, 6, 1, 0, 0, 0, 0);
+        var query = {accountId:{$type:2, $ne:0}, contactId:{$ne:null, $type:2}, start:{$lt:date}};
+        console.log('query:', query);
+        contactActivitesCollection.find(query, {_id:true, accountId:true, contactId:true}).toArray(function(err, activities){
+            console.log('activity count:', activities.length);
+            async.eachLimit(activities, 10, function(act, cb){
+                act.accountId = parseInt(act.accountId);
+                act.contactId = parseInt(act.contactId);
+                contactActivitesCollection.save(act, function(err, val){cb();});
+            }, function(err){
+                console.log('err?', err);
+                fn();
+            });
+        });
     }
 };
 
