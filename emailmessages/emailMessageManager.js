@@ -277,10 +277,12 @@ var emailMessageManager = {
                         //build personalizations
                         var personalizations = [];
                         var i = 0;
+                        var filteredContacts = [];
                         _.each(contacts, function(contact){
                             var email = contact.getPrimaryEmail();
 
                             if(email.indexOf('@') >0) {
+                                filteredContacts.push(contact);
                                 var name = contact.get('first') + ' ' + contact.get('last');
                                 var p = {
                                     to: [
@@ -305,10 +307,14 @@ var emailMessageManager = {
                                 }
                                 personalizations.push(p);
                                 i++;
+                            } else {
+                                contactDao.setInvalidEmailTag(accountId, userId, contact.id(), function(err, value){});
                             }
 
                         });
-                        cb(null, batchId, personalizations, contacts, sendgridSubsAndHtml.html);
+
+
+                        cb(null, batchId, personalizations, filteredContacts, sendgridSubsAndHtml.html);
                     }
                 });
             },
@@ -373,7 +379,7 @@ var emailMessageManager = {
                         campaignId: campaignId,
                         contactId: ''+contact.id()
                     };
-                    request.body.personalizations[i].custom_args = custom_args;
+                    request.body.personalizations[i].custom_args = custom_args;//TODO: defense
                     i++;
                 });
                 //Figure out when to send it
@@ -3204,7 +3210,7 @@ var emailMessageManager = {
 
     getCampaignRecipientStatistics: function(accountId, campaignId, skip, limit, sortBy, sortDir, term, fieldSearch, fn) {
         var self = this;
-
+        self.log.debug(accountId, null, '>> getCampaignRecipientStatistics');
         var query = {
             accountId: accountId,
             batchId: campaignId
@@ -3247,8 +3253,8 @@ var emailMessageManager = {
                 query["$and"] = fieldSearchArr;
             }
         }
-        self.log.debug('>> getCampaignRecipientStatistics');
-        console.log(query);
+
+        //console.log(query);
         self.log.debug('>> getCampaignRecipientStatistics');
         
         dao.findWithFieldsLimitOrderAndTotal(query, skip, limit, sortBy, null, $$.m.Emailmessage, sortDir, fn);   

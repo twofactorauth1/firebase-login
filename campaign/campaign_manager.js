@@ -751,13 +751,12 @@ module.exports = {
                     var contactIds = campaign.get('contacts');
                     var query = { _id: { $in: contactIds} };
                     var tags = _.pluck(tags, 'data');
-                    console.log(contactIds)
+                    console.log(contactIds);
                     contactDao.findMany(query, $$.m.Contact, function(err, contacts){
                         if(err) {
                             self.log.error('Error getting contacts for campaign: ' + err);
                             return fn(err, null);
-                        }
-                        else{
+                        } else {
                             _.each(contacts, function(contact){
                                 if(operation === 'add'){
                                    var contactTags =  contact.get("tags") || [];
@@ -771,7 +770,7 @@ module.exports = {
                             
                             campaignDao.batchUpdate(contacts, $$.m.Contact, function(err, updatedContacts){
 
-                            })
+                            });
                         }
                     });
                 } 
