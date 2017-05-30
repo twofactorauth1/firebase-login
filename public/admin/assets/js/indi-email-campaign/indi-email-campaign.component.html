@@ -120,7 +120,7 @@
                             </div>
                             <div class="container-fluid container-fullw margin-bottom-15 padding-top-15 padding-bottom-15 border-bottom-0">
                                 <div class="row email-campaign-main" ng-hide="!vm.uiState.dataLoaded">
-                                    <div class="col-md-4">
+                                    <div ng-class="vm.showSelectTagsPane() ? 'col-md-4': 'col-md-6'">
                                         <h4 class="text-u ssb-admin-panel-header no-border">Campaign type</h4>
                                         <div class="panel panel-white form-group bg-white padding-10">
                                             <!-- <select class='form-control' ng-model='vm.state.campaign.type' ng-disabled="vm.uiState.disableEditing">
@@ -173,7 +173,7 @@
 
                                     </div>
 
-                                    <div class="col-md-4">
+                                    <div ng-class="vm.showSelectTagsPane() ? 'col-md-4': 'col-md-6'">
 
                                         <div ng-if="vm.state.campaign.type === 'onetime' && vm.state.campaign.status !== 'COMPLETED'">
                                             <h4 class="text-u ssb-admin-panel-header no-border">Recipient list</h4>
@@ -246,11 +246,11 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        
+
                                         <div ng-if="vm.state.campaign.status === 'COMPLETED'" data-ng-include=" 'assets/js/indi-email-campaign/campaign-email-template/email-template.html' "></div>
                                     </div>
 
-                                    <div class="col-md-4">
+                                    <div class="col-md-4" ng-if="vm.showSelectTagsPane()">
                                         <h4 class="text-u ssb-admin-panel-header no-border">Select tags</h4>
                                         <div class="panel panel-white form-group bg-white padding-10">
                                             <p>Tags selected will be applied to the recipient contacts.</p>
