@@ -17,8 +17,8 @@
                 <h1 class="mainTitle">{{vm.state.campaign.name}}</h1>
                 <div class="mainDescription">
                     <span ng-if="!vm.uiState.disableEditing">Edit this <b>{{vm.state.campaign.status.toLowerCase()}}</b> campaign before activating it</span>
-                    <span ng-if="vm.uiState.disableEditing">This <b>{{vm.state.campaign.status.toLowerCase()}}</b> campaign was activated on {{vm.state.campaign.modified.date | date : 'medium'}}</span>
-                    <span class="fa-stack fa-lg text-large margin-left-5">
+                    <span ng-if="vm.uiState.disableEditing" ng-show="vm.uiState.dataLoaded">This <b>{{vm.state.campaign.status.toLowerCase()}}</b> campaign was activated on {{vm.state.campaign.modified.date | date : 'medium'}}</span>
+                    <span class="fa-stack fa-lg text-large margin-left-5" ng-show="vm.uiState.dataLoaded">
                         <span class="fa fa-circle-thin fa-stack-2x"
                             ng-class="{
                                 'text-muted': vm.state.campaign.status.toLowerCase() == 'draft',
