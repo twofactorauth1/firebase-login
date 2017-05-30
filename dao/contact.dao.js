@@ -1174,6 +1174,27 @@ var dao = {
         });
     },
 
+    setInvalidEmailTag: function(accountId, userId, contactId, fn) {
+        var self = this;
+        self.log.debug(accountId, userId, '>> setInvalidEmailTag (' + contactId + ')');
+        contactId = parseInt(contactId);
+
+        self.findOne({_id:contactId}, $$.m.Contact, function(err, contact){
+
+            if(contact) {
+                var tags = contact.get('tags') || [];
+                tags.push('Invalid Email');
+                contact.set('tags', tags);
+                self.log.debug(accountId, userId, '<< setInvalidEmailTag (' + contactId + ')');
+                self.saveOrUpdate(contact, fn);
+            } else {
+                self.log.warn('could not find contact', contactId);
+                fn();
+            }
+
+        });
+    },
+
     getContactsByTagArray: function(accountId, userId, tagAry, fn) {
         var self = this;
         self.log.debug(accountId, userId, '>> getContactsByTagArray');

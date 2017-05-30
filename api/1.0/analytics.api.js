@@ -135,6 +135,17 @@ _.extend(api.prototype, baseApi.prototype, {
                 contactId: event.contactId
             };
 
+            if(obj.accountId) {
+                try {
+                    obj.accountId = parseInt(obj.accountId);
+                } catch(e){}
+            }
+            if(obj.contactId) {
+                try {
+                    obj.contactId = parseInt(obj.contactId);
+                } catch(e){}
+            }
+
             if(event.event === 'delivered') {
                 emailMessageManager.isMessageDelivered(event.emailmessageId, function(err, value){
                     if(err) {
