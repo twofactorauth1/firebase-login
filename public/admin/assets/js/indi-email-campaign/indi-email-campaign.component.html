@@ -40,9 +40,14 @@
         </div>
     </section>
 
+    <div class="col-xs-12">
+        <button type="button" class="btn btn-primary btn-o pull-right btn btn-primary btn-o margin-top-5 margin-bottom-5" ng-click="vm.backToCampaigns()" ng-disabled = '!vm.uiState.dataLoaded'>
+            Back to Campaigns
+        </button>                    
+    </div>
 
     <!-- end: PAGE TITLE -->
-    <div class="container-fluid container-fullw">
+    <div class="container-fluid container-fullw margin-top-20">
         <div class="row">
             <div class="col-md-12">
                 <tabset class="tabbable campaign-top-tab-bar">
@@ -51,61 +56,62 @@
                         'load1 csspinner':!vm.uiState.dataLoaded}">
                             <div class="container-fluid container-fullw bg-white padding-top-15 padding-bottom-15">
                                 <div class='row'>
-                                    <div class="col-sm-5 col-md-4 col-xs-12">
+                                    <div class="col-xs-4">
                                         <div class='form-group flex'>
                                             <input
-                                                class="form-control inline width-400"
+                                                class="form-control inline"
                                                 type="text"
                                                 placeholder="Untitled Campaign"
                                                 ng-model="vm.state.campaign.name"
                                                 ng-disabled="!vm.uiState.dataLoaded || vm.state.campaign.status.toLowerCase() !== 'draft'"/>
+                                            
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-8d">
+                                        <div class='pull-right'>
                                             <button
                                                 ng-hide="vm.state.campaign.status === 'COMPLETED'"
                                                 type="button"
                                                 ng-disabled="!vm.uiState.dataLoaded"
                                                 ng-if="vm.uiState.disableEditing || vm.state.campaign.status.toLowerCase() !== 'cancelled'"
                                                 ng-click='vm.cancelCampaignFn()'
-                                                class="btn btn-o btn-danger margin-left-5"
+                                                class="btn btn-primary campaign-btn-wide btn-warning"
                                                 tooltip-placement="bottom"
                                                 tooltip="Cancel this campaign.">
                                                 <i class="ti-na"></i>
+                                                <span>Cancel</span>
                                             </button>
                                             <button
                                                 type="button"
                                                 ng-disabled="!vm.uiState.dataLoaded"
                                                 ng-click='vm.deleteCampaignFn()'
-                                                class="btn btn-o btn-danger margin-left-5"
+                                                class="btn btn-primary campaign-btn-wide btn-danger"
                                                 tooltip-placement="bottom"
                                                 tooltip="Delete this campaign.">
                                                 <i class="ti-trash"></i>
+                                                <span>Delete</span>
                                             </button>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-7 col-md-8 col-xs-12">
-                                        <div class='pull-right'>
-                                            <button type="button" ng-if="!vm.uiState.disableEditing" ng-disabled="!vm.uiState.dataLoaded || vm.state.campaign.status.toLowerCase() === 'cancelled' || !vm.state.campaign.name" ng-click='vm.saveAsDraftFn()' class="btn btn-primary padding-right-10 margin-bottom-5 margin-right-mobile">
+                                            <button type="button" ng-if="!vm.uiState.disableEditing" ng-disabled="!vm.uiState.dataLoaded || vm.state.campaign.status.toLowerCase() === 'cancelled' || !vm.state.campaign.name" ng-click='vm.saveAsDraftFn()' class="btn btn-primary campaign-btn-wide" tooltip-placement="bottom"
+                                                tooltip="Save this campaign.">
                                                 <i class="ti-save"></i>
                                                 <span>Save</span>
                                             </button>
-                                            <button type="button" ng-disabled="!vm.uiState.dataLoaded" ng-click='vm.duplicateFn()' class="btn btn-primary padding-right-10 margin-bottom-5 margin-right-mobile">
+                                            <button type="button" ng-disabled="!vm.uiState.dataLoaded" ng-click='vm.duplicateFn()' class="btn btn-primary campaign-btn-wide">
                                                 <i class="ti-files"></i>
                                                 <span>Duplicate</span>
                                             </button>
-                                            <button type="button" ng-disabled="!vm.uiState.dataLoaded || !vm.state.email || vm.state.campaign.status.toLowerCase() === 'cancelled'" ng-click='vm.openModalFn("send-test-email-modal")' class="btn btn-primary padding-right-10 margin-bottom-5 margin-right-mobile">
+                                            <button type="button" ng-disabled="!vm.uiState.dataLoaded || !vm.state.email || vm.state.campaign.status.toLowerCase() === 'cancelled'" ng-click='vm.openModalFn("send-test-email-modal")' class="btn btn-primary campaign-btn-wide" tooltip-placement="bottom"
+                                                tooltip="Duplicate this campaign.">
                                                 <i class="ti-location-arrow"></i>
                                                 <span>Send Test</span>
                                             </button>
                                             <div style="display: inline-block;" tooltip="Campaign must have all changes saved before activation.">
-                                                <button type="button" ng-if="!vm.uiState.disableEditing" ng-disabled="!vm.canActivateFn() || !vm.state.campaign.name" ng-click='vm.activateCampaignFn()' class="btn btn-success padding-right-10 margin-bottom-5">
+                                                <button type="button" ng-if="!vm.uiState.disableEditing" ng-disabled="!vm.canActivateFn() || !vm.state.campaign.name" ng-click='vm.activateCampaignFn()' class="btn btn-success campaign-btn-wide">
                                                     <i class="ti-power-off"></i>
-                                                    <span>Activate Campaign</span>
+                                                    <span>Activate</span>
                                                 </button>
                                             </div>
-                                            <div class="inline-block" tooltip-placement="bottom" tooltip="Back to Campaigns">
-                                                <button class="btn btn-primary padding-right-10 margin-bottom-5 margin-right-mobile" ng-click="vm.backToCampaigns()">
-                                                    <span>Back to Campaigns</span>
-                                                </button>
-                                            </div>
+                                            
                                         </div>
                                     </div>
                                 </div>
