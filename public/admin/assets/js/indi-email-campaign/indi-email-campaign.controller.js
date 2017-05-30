@@ -113,6 +113,18 @@
         vm.formValidations = formValidations;
         vm.backToCampaigns = backToCampaigns;
         vm.customTagFilter=customTagFilter;
+        vm.showSelectTagsPane = showSelectTagsPane;
+
+        function showSelectTagsPane(){
+            var showTagPane = true;
+            if(vm.state.campaign && vm.uiState.dataLoaded && vm.state.campaign.status === 'COMPLETED'){
+                if(!vm.state.campaign.searchTags || !vm.state.campaign.searchTags.tags.length){
+                    showTagPane = false;
+                }
+            }
+            return showTagPane;
+        }
+
         $scope.$watch('vm.state.campaign.type', function () {
             console.debug('vm.state.campaign.type', vm.state.campaign.type);
             if(vm.state.campaign.emailSettings && vm.state.campaign.status !== 'COMPLETED') {
