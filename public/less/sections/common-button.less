@@ -1,14 +1,4 @@
-.btn-area {
-    .export_btn {
-        background-color: #f1c32f;
-        border-color: #f1c32f;
-        color: white;
-    }
-    .export_btn:hover {
-        background-color: #efd06d;
-        border-color: #efd06d;
-        color: white;
-    }
+.btn-area-res {
     .btn {
         position: relative;
         overflow: hidden;
@@ -18,50 +8,102 @@
         -ms-transition: all 0.3s ease 0s;
         -o-transition: all 0.3s ease 0s;
         font-size: 14px;
-    }
-    .btn span:not(.fa) {
-        font-family: "Raleway", sans-serif !important;
-        line-height: inherit !important;
-    }
-    .start-padding,
-    .start-padding-fr-mobile {
-        padding-left: 0px
-    }
-    .top-padding {
-        padding-top: 0px;
-    }
-    .import-export,
-    .grp_btn {
-        text-align: center;
-    }
-    .btn .desktop {
-        display: inline-block;
-    }
-    .btn .mobile-text {
-        display: none;
-    }
-     @media (min-width: 1025px) and (max-width: 1439px){
-        .text-align-center{
-            text-align: center;
         }
-        .text-align-center button.ti-filter{
-            float: none !important;
+        .btn span:not(.fa) {
+            font-family: "Raleway", sans-serif !important;
+            line-height: inherit !important;
+        }
+        .libtn {
+            width: 100px;
+        }
+        .fix-btn-1{
+            width: 20%;
+            display: inline-block;
+        }
+        .fix-btn {
+            display: inline-block;
+            margin: 0px 1rem;
+        }
+        .text-right .fix-btn{
+            margin-right: 0px;
+            margin-left: 2rem;
+        }
+        .input-icon {
+            width: 90%;
+        }
+        @media (min-width: 992px) {
+            .libtn {
+                 width: 100px;
+                 min-width: 100px;
+            }
+            .btn-group .btn {
+                width: 50px;
+            }
+        }
+        @media (min-width: 769px) and (max-width: 1024px) {
+            .libtn {
+                min-width: 84px;
+                width: 84px;
+            }
+            .btn-group .btn {
+                width: 40px;
+            }
+        }
+        @media (max-width: 820px) {
+            .fix-btn {
+                display: inline-block;
+                margin: 0px .8rem;
+            }
+            .libtn {
+                min-width: 84px;
+                width: 84px;
+            }
+            .btn-group .btn {
+                width: 40px;
+            }
 
         }
-        .import-export{
-            text-align: left;
+        @media (min-width: 1200px) {
+            .libtn {
+                min-width: 100px;
+                width: 100px;
+            }
+            .btn-group .btn {
+                width: 50px;
+            }
         }
-        .export_btn, .addnewbtn {
-            margin-left: 8%;
+        @media  (min-width: 20px) and (max-width: 425px) {
+            .fix-btn{
+                width: 20%;
+                display: inline-block;
+            }
+            .fix-btn:nth-child(2){
+                margin-left: 0px;
+            }
+            .fix-btn-1{
+                width: 70%;
+                display: inline-block;
+            }
+            .libtn {
+                width: 78px;
+                min-width: 58px;
+                font-size: 12px;
+                padding: 8px 6px 6px 2px;
+                font-weight: bold;
+            }
+           .btn-group .btn {
+               width: 35px;
+            }
+           .btn .desktop {
+                display: none;
+            }
+           .btn .mobile-text {
+               display: inline-block;
+            }
+            .text-right .fix-btn {
+                margin-right: 0px;
+                margin-left: .8rem;
+                width: 50%;
+            }
         }
-
-    }
-    @media (min-width: 1440px){
-        .export_btn{
-            margin-left: 10%;
-        }
-        .addnewbtn{
-            margin-left: 7%;
-        }
-    }
 }
