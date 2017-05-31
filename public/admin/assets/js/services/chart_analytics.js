@@ -622,6 +622,45 @@
             });
         };
 
+        this.getUserAgentsAndOSChartData = function(date, account, isAdmin, isCustomer, fn) {
+            var promises = [];
+            var userAgents, os;
+            promises.push(SiteAnalyticsService.getUserAgents(date.startDate, date.endDate, account, isAdmin, isCustomer, function(data){
+                userAgents = data;
+            }));
+            promises.push(SiteAnalyticsService.getOS(date.startDate, date.endDate, account, isAdmin, isCustomer, function(data){
+                os = data;
+            }));
+            $q.all(promises).then(function(results){
+                fn(null, userAgents, os);
+            });
+        };
+
+        this.getRevenueChartData = function(date, account, isAdmin, isCustomer, fn) {
+            var promises = [];
+            var revenue;
+
+            promises.push(SiteAnalyticsService.getRevenue(date.startDate, date.endDate, account, isAdmin, isCustomer, function(data){
+                revenue = data;
+            }));
+
+            $q.all(promises).then(function(results){
+                fn(null, revenue);
+            });
+        };
+
+        this.getEmailChartData = function(date, account, isAdmin, isCustomer, fn) {
+            var promises = [];
+            var emails;
+
+            promises.push(SiteAnalyticsService.getEmails(date.startDate, date.endDate, account, isAdmin, isCustomer, function(data){
+                emails = data;
+            }));
+            $q.all(promises).then(function(results){
+                fn(null, emails);
+            });
+        };
+
         //charts
 
         this.pageDepth = function () {

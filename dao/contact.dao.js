@@ -1174,10 +1174,36 @@ var dao = {
         });
     },
 
+    setInvalidEmailTag: function(accountId, userId, contactId, fn) {
+        var self = this;
+        self.log.debug(accountId, userId, '>> setInvalidEmailTag (' + contactId + ')');
+        contactId = parseInt(contactId);
+
+        self.findOne({_id:contactId}, $$.m.Contact, function(err, contact){
+
+            if(contact) {
+                var tags = contact.get('tags') || [];
+                tags.push('Invalid Email');
+                contact.set('tags', tags);
+                self.log.debug(accountId, userId, '<< setInvalidEmailTag (' + contactId + ')');
+                self.saveOrUpdate(contact, fn);
+            } else {
+                self.log.warn('could not find contact', contactId);
+                fn();
+            }
+
+        });
+    },
+
     getContactsByTagArray: function(accountId, userId, tagAry, fn) {
         var self = this;
         self.log.debug(accountId, userId, '>> getContactsByTagArray');
-        var query = {accountId:accountId, tags:{$in:tagAry}};
+        var query = {accountId:accountId};
+        if(_.contains(tagAry, 'NOTAG')) {
+            query['$or'] = [{tags:{$in:tagAry}},{tags:null}];
+        } else {
+            query.tags = {$in:tagAry};
+        }        
         self.findMany(query, $$.m.Contact, function(err, contacts){
             self.log.debug(accountId, userId, '<< getContactsByTagArray');
             fn(err, contacts);

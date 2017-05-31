@@ -305,6 +305,11 @@ var emailMessageManager = {
                                 if(emailSettings.bcc) {
                                     p.bcc = [{email:emailSettings.bcc}];
                                 }
+                                p.custom_args = {
+                                    contactId: contact.id(),
+                                    contactFirstName: contact.get('first'),
+                                    contactLastName: contact.get('last')
+                                };
                                 personalizations.push(p);
                                 i++;
                             } else {
@@ -1951,6 +1956,37 @@ var emailMessageManager = {
         });
     },
 
+    markMessageUnsubscribed: function(messageId, event, fn) {
+        var self = this;
+        self.log.debug('>> markMessageUnsubscribed');
+        dao.findOne({_id:messageId}, $$.m.Emailmessage, function(err, emailMessage){
+            if(err) {
+                self.log.error('Error finding email message:', err);
+                fn(err);
+            } else if(!emailMessage) {
+                self.log.debug('Cannot find emailMessage with ID:' + messageId);
+                fn();
+            } else {
+                var eventDate = moment.unix(event.timestamp).toDate();
+                var modified = {date: new Date(), by:'webhook'};
+                emailMessage.set('unsubscribedDate', eventDate);
+                emailMessage.set('modified', modified);
+                var eventAry = emailMessage.get('events') || [];
+                eventAry.push(event);
+                emailMessage.set('events', eventAry);
+                dao.saveOrUpdate(emailMessage, function(err, value){
+                    if(err) {
+                        self.log.error('Error updating emailmessage:', err);
+                        return fn(err);
+                    } else {
+                        self.log.debug('<< markMessageUnsubscribed');
+                        return fn(null, value);
+                    }
+                });
+            }
+        });
+    },
+
     handleUnsubscribe: function(event, fn) {
         var self = this;
         self.log.debug('>> handleUnsubscribe');
@@ -2865,9 +2901,17 @@ var emailMessageManager = {
             if(sendgridRequestBody.personalizations[0].content) {
                 emailmessage.set('content', sendgridRequestBody.personalizations[0].content[0].value);
             }
-
             if(sendgridRequestBody.batch_id) {
                 emailmessage.set('sendgridBatchId', sendgridRequestBody.batch_id);
+            }
+            if(p.custom_args && p.custom_args.contactId) {
+                emailmessage.set('contactId', p.custom_args.contactId);
+            }
+            if(p.custom_args && p.custom_args.contactFirstName) {
+                emailmessage.set('contactFirstName', p.custom_args.contactFirstName);
+            }
+            if(p.custom_args && p.custom_args.contactLastName) {
+                emailmessage.set('contactLastName', p.custom_args.contactLastName);
             }
             dao.saveOrUpdate(emailmessage, function(err, value){
                 if(err) {
@@ -3219,8 +3263,10 @@ var emailMessageManager = {
             term = term.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');   
             var regex = new RegExp('\.*'+term+'\.*', 'i');
             var orQuery = [
-                {subject:regex},
-                {receiver:regex}
+                {contactId:parseInt(term)},
+                {receiver:regex},
+                {contactFirstName:regex},
+                {contactLastName:regex}
             ];
             query["$or"] = orQuery;
         }
@@ -3234,7 +3280,7 @@ var emailMessageManager = {
                 value = value.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
                 console.log(value);
                 if(value){ 
-                    if(key == 'deliveredDate' || key == 'openedDate' || key == 'clickedDate'){
+                    if(key == 'deliveredDate' || key == 'openedDate' || key == 'clickedDate' || key == 'unsubscribedDate'){
                         if(value == "true"){                           
                             obj[key] = {$ne:null};
                             fieldSearchArr.push(obj);
@@ -3242,6 +3288,10 @@ var emailMessageManager = {
                             obj[key] = null;
                             fieldSearchArr.push(obj);
                         }
+                    }
+                    else if (key == 'contactId') {
+                        obj[key] = parseInt(value);
+                        fieldSearchArr.push(obj);
                     } 
                     else{
                         obj[key] = new RegExp(value, 'i');                    

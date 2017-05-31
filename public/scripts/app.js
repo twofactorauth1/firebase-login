@@ -64,7 +64,11 @@ var mainApp = angular
                 */
                 template: function(urlattr) {
                     var s = '<div class="main-include" ssb-data-styles data-ng-include="';
-                    s += " '/template/index";
+                    if(window.indigenous.defaultBlog === 1) {
+                        s += " '/template/blog-list";
+                    } else {
+                        s += " '/template/index";
+                    }
                     if(urlattr.cachebuster) {
                         s+='?cachebuster=' + urlattr.cachebuster;
                     }

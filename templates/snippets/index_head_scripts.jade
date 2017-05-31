@@ -51,6 +51,7 @@ script(type="text/javascript").
 script(type="text/javascript").
     window.indigenous = window.indigenous || {};
     window.indigenous.orgId = #{account.orgId};
+    window.indigenous.defaultBlog = #{account.website.settings.defaultBlog | ''};
 
 if (typeof account.website.theme !== 'undefined' && typeof account.website.themeOverrides !== 'undefined')
     style.
