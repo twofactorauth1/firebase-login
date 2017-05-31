@@ -67,6 +67,7 @@
                                 <th class="hidden-xs" st-sort="statistics.emailsSent" translate="campaign.SENTRATE">Sent</th>
                                 <th class="hidden-xs" st-sort="statistics.emailsOpened" translate="campaign.OPENRATE">Opens</th>
                                 <th class="hidden-xs" st-sort="statistics.emailsClicked" translate="campaign.CLICKRATE">Clicks</th>
+                                <th class="hidden-xs" st-sort="statistics.unsubscribes" translate="campaign.UNSUBSCRIBES">Unsubscribes</th>
                                 <th class="hidden-xs" st-sort-default="reverse" st-sort="created.date" ng-class="{'center': tableView != 'grid'}" translate="tableFields.CREATED">Created</th>
                                 <th ng-class="{'center': tableView != 'grid'}">
                                     
@@ -163,17 +164,30 @@
 
                                             <div class="row">
                                                 <div class="col-xs-12">
-                                                    <div class="col-xs-6 text-center border-right">
+                                                    <div class="col-xs-6 text-center border-right border-bottom">
                                                         <div class="rate">
                                                             <i class="fa fa-caret-up text-green"></i> <span class=" text-bold">{{campaign.statistics.emailsOpened || 0 }}</span><span ng-if="campaign.statistics.participants && campaign.type !== 'autoresponder'" class="text-small muted"> ({{percentCalFn(campaign.statistics.emailsOpened, campaign.statistics.emailsSent)}}%)</span>
                                                         </div>
                                                         Opened
                                                     </div>
-                                                    <div class="col-xs-6 text-center">
+                                                    <div class="col-xs-6 text-center border-bottom">
                                                         <div class="rate">
                                                             <i class="fa fa-caret-up text-green"></i> <span class=" text-bold">{{campaign.statistics.emailsClicked || 0}}</span><span ng-if="campaign.statistics.participants && campaign.type !== 'autoresponder'" class="text-small muted"> ({{percentCalFn(campaign.statistics.emailsClicked, campaign.statistics.emailsOpened)}}%)</span>
                                                         </div>
                                                         Clicked
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-xs-12">
+                                                    <div class="col-xs-6 text-center border-right">
+                                                        <div class="rate">
+                                                            <i class="fa fa-caret-up text-green"></i> <span class=" text-bold">{{campaign.statistics.unsubscribes || 0 }}</span>
+                                                        </div>
+                                                        Unsubscribes
+                                                    </div>
+                                                    <div class="col-xs-6 text-center">
+                                                        <div class="padding-top-10"><a ng-click="downloadReport(campaign._id)" href="javascript:void(0);"><span class="hidden-xs no-redirect-link">Download Report</span><span class="ti-export visible-xs no-redirect-link"></span></a></div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -205,8 +219,9 @@
                                 <td class="hidden-xs"  ng-if="tableView != 'grid'"><strong>Sent: </strong><span class=" text-bold">{{campaign.statistics.emailsSent || 0}}</span><span ng-if="campaign.statistics.participants && campaign.type !== 'autoresponder'" class="text-small muted"> ({{percentCalFn(campaign.statistics.emailsSent, campaign.statistics.participants)}}%)</span></td>
                                 <td class="hidden-xs" ng-if="tableView != 'grid'"><strong>Opened: </strong><span class=" text-bold">{{campaign.statistics.emailsOpened || 0}}</span><span ng-if="campaign.statistics.participants && campaign.type !== 'autoresponder'" class="text-small muted"> ({{percentCalFn(campaign.statistics.emailsOpened, campaign.statistics.emailsSent)}}%)</span></td>
                                 <td class="hidden-xs" ng-if="tableView != 'grid'"><strong>Clicked: </strong><span class=" text-bold">{{campaign.statistics.emailsClicked || 0}}</span><span ng-if="campaign.statistics.participants && campaign.type !== 'autoresponder'" class="text-small muted"> ({{percentCalFn(campaign.statistics.emailsClicked, campaign.statistics.emailsOpened)}}%)</span></td>
+                                <td class="hidden-xs" ng-if="tableView != 'grid'"><strong>Unsubscribes: </strong><span class=" text-bold">{{campaign.statistics.unsubscribes || 0}}</span></td>
                                 <td ng-if="tableView != 'grid'" class="hidden-xs" ng-class="{'center': tableView != 'grid'}"><strong>Created: </strong> {{campaign.created.date | date:'MMM d yy'}}</td>
-                                <td class="">
+                                <td ng-if="tableView != 'grid'">
                                     <div class=""><a ng-click="downloadReport(campaign._id)" href="javascript:void(0);"><span class="hidden-xs no-redirect-link">Download Report</span><span class="ti-export visible-xs no-redirect-link"></span></a></div>
                                 </td>
                                 <!-- <td ng-if="tableView != 'grid'" class="center">

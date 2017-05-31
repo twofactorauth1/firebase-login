@@ -159,6 +159,7 @@
     "PARTICIPANTS": "Participants",
     "SENTRATE": "Sent",
     "CLICKRATE": "Clicks",
+    "UNSUBSCRIBES": "Unsubscribes",
     "DESCRIPTION": "Create a new campaign to reach a group of contacts",
     "EDIT_DESCRIPTION": "Edit this campaign before kicking it off"
   }
