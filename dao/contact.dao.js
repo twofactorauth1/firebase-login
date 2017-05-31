@@ -1198,7 +1198,12 @@ var dao = {
     getContactsByTagArray: function(accountId, userId, tagAry, fn) {
         var self = this;
         self.log.debug(accountId, userId, '>> getContactsByTagArray');
-        var query = {accountId:accountId, tags:{$in:tagAry}};
+        var query = {accountId:accountId};
+        if(_.contains(tagAry, 'NOTAG')) {
+            query['$or'] = [{tags:{$in:tagAry}},{tags:null}];
+        } else {
+            query.tags = {$in:tagAry};
+        }        
         self.findMany(query, $$.m.Contact, function(err, contacts){
             self.log.debug(accountId, userId, '<< getContactsByTagArray');
             fn(err, contacts);

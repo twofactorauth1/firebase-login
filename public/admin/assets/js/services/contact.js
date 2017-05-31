@@ -461,11 +461,16 @@
         this.getTagFromLabel = function(label) {
             var tag = label;
             var contactTags = contactConstant.contact_tags.dp;
-            _.each(contactTags, function(contactTag){
-                if(contactTag.label === label) {
-                    tag = contactTag.data;
-                }
-            });
+            if(label === 'No Tag'){
+                tag = "NOTAG"
+            }
+            else{
+                _.each(contactTags, function(contactTag){
+                    if(contactTag.label === label) {
+                        tag = contactTag.data;
+                    }
+                });
+            }
             return tag;
         };
 
