@@ -1956,6 +1956,37 @@ var emailMessageManager = {
         });
     },
 
+    markMessageUnsubscribed: function(messageId, event, fn) {
+        var self = this;
+        self.log.debug('>> markMessageUnsubscribed');
+        dao.findOne({_id:messageId}, $$.m.Emailmessage, function(err, emailMessage){
+            if(err) {
+                self.log.error('Error finding email message:', err);
+                fn(err);
+            } else if(!emailMessage) {
+                self.log.debug('Cannot find emailMessage with ID:' + messageId);
+                fn();
+            } else {
+                var eventDate = moment.unix(event.timestamp).toDate();
+                var modified = {date: new Date(), by:'webhook'};
+                emailMessage.set('unsubscribedDate', eventDate);
+                emailMessage.set('modified', modified);
+                var eventAry = emailMessage.get('events') || [];
+                eventAry.push(event);
+                emailMessage.set('events', eventAry);
+                dao.saveOrUpdate(emailMessage, function(err, value){
+                    if(err) {
+                        self.log.error('Error updating emailmessage:', err);
+                        return fn(err);
+                    } else {
+                        self.log.debug('<< markMessageUnsubscribed');
+                        return fn(null, value);
+                    }
+                });
+            }
+        });
+    },
+
     handleUnsubscribe: function(event, fn) {
         var self = this;
         self.log.debug('>> handleUnsubscribe');
