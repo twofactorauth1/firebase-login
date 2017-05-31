@@ -1956,6 +1956,28 @@ var emailMessageManager = {
         });
     },
 
+    isMessageUnsubscribed: function(messageId, fn) {
+        var self = this;
+        self.log.debug('>> isMessageUnsubscribed');
+        dao.findOne({_id:messageId}, $$.m.Emailmessage, function(err, emailMessage) {
+            if (err) {
+                self.log.error('Error finding email message:', err);
+                fn(err);
+            } else if (!emailMessage) {
+                self.log.debug('Cannot find emailMessage with ID:' + messageId);
+                fn();
+            } else {
+                if(emailMessage.get('unsubscribedDate') !== null) {
+                    self.log.debug('<< isMessageUnsubscribed(true)');
+                    return fn(null, true);
+                } else {
+                    self.log.debug('<< isMessageUnsubscribed(false)');
+                    return fn(null, false);
+                }
+            }
+        });
+    },
+
     markMessageUnsubscribed: function(messageId, event, fn) {
         var self = this;
         self.log.debug('>> markMessageUnsubscribed');

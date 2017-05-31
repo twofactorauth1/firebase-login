@@ -289,20 +289,54 @@ _.extend(api.prototype, baseApi.prototype, {
                 });
 
             } else if (event.event === 'unsubscribe') {
+
                 emailMessageManager.handleUnsubscribe(event, function(err, value){});
-                emailMessageManager.markMessageUnsubscribed(event.emailmessageId, event, function(err, value){
-                    contactDao.findContactsByEmail(event.accountId, event.email, function(err, contactAry){
-                        if(err) {
-                            self.log.error('Error finding contact for [' + event.email + '] and [' + event.accountId + ']');
-                            return;
-                        } else if(contactAry === null || contactAry.length ===0){
-                            //this might be a user and contact on main account
-                            contactDao.findContactsByEmail(appConfig.mainAccountID, event.email, function(err, contacts){
-                                if(err || contacts === null || contacts.length===0) {
-                                    self.log.error('Error finding contact for [' + event.email + '] and [' + appConfig.mainAccountID + ']');
+
+                emailMessageManager.isMessageUnsubscribed(event.emailmessageId, function(err, value){
+                    if(err) {
+                        self.log.error('Error while processing [' + event.emailmessageId + ']', err);
+                        cb();//continue if possible.
+                    } else if(value) {
+                        //this message is already marked as opened.  Add another event but don't update stats.
+                        emailMessageManager.addEvent(event.emailmessageId, event, function(err, value){
+                            if(value) {
+                                savedEvents.push(value);
+                            }
+                            cb(err);
+                        });
+                    } else {
+                        emailMessageManager.markMessageUnsubscribed(event.emailmessageId, event, function(err, value){
+                            contactDao.findContactsByEmail(event.accountId, event.email, function(err, contactAry){
+                                if(err) {
+                                    self.log.error('Error finding contact for [' + event.email + '] and [' + event.accountId + ']');
                                     return;
+                                } else if(contactAry === null || contactAry.length ===0){
+                                    //this might be a user and contact on main account
+                                    contactDao.findContactsByEmail(appConfig.mainAccountID, event.email, function(err, contacts){
+                                        if(err || contacts === null || contacts.length===0) {
+                                            self.log.error('Error finding contact for [' + event.email + '] and [' + appConfig.mainAccountID + ']');
+                                            return;
+                                        } else {
+                                            var contact = contacts[0];
+                                            contact.set('unsubscribed', true);
+                                            contactDao.saveOrUpdateContact(contact, function(err, updatedContact){
+                                                if(err) {
+                                                    self.log.error('Error marking contact unsubscribed', err);
+                                                    return;
+                                                } else {
+                                                    var activity = new $$.m.ContactActivity({
+                                                        accountId: contact.get('accountId'),
+                                                        contactId: contact.id(),
+                                                        activityType: $$.m.ContactActivity.types.EMAIL_UNSUB,
+                                                        start: new Date()
+                                                    });
+                                                    contactActivityManager.createActivity(activity, function(err, value){});
+                                                }
+                                            });
+                                        }
+                                    });
                                 } else {
-                                    var contact = contacts[0];
+                                    var contact = contactAry[0];
                                     contact.set('unsubscribed', true);
                                     contactDao.saveOrUpdateContact(contact, function(err, updatedContact){
                                         if(err) {
@@ -320,37 +354,19 @@ _.extend(api.prototype, baseApi.prototype, {
                                     });
                                 }
                             });
-                        } else {
-                            var contact = contactAry[0];
-                            contact.set('unsubscribed', true);
-                            contactDao.saveOrUpdateContact(contact, function(err, updatedContact){
-                                if(err) {
-                                    self.log.error('Error marking contact unsubscribed', err);
-                                    return;
+                            if(event.campaignId) {
+                                var campaignUpdates = deferredUpdates[event.campaignId] || {};
+                                if(campaignUpdates.unsubscribes) {
+                                    campaignUpdates.unsubscribes = campaignUpdates.unsubscribes + 1;
                                 } else {
-                                    var activity = new $$.m.ContactActivity({
-                                        accountId: contact.get('accountId'),
-                                        contactId: contact.id(),
-                                        activityType: $$.m.ContactActivity.types.EMAIL_UNSUB,
-                                        start: new Date()
-                                    });
-                                    contactActivityManager.createActivity(activity, function(err, value){});
+                                    campaignUpdates.unsubscribes = 1;
+                                    deferredUpdates[event.campaignId] = campaignUpdates;
                                 }
-                            });
-                        }
-                    });
-                    if(event.campaignId) {
-                        var campaignUpdates = deferredUpdates[event.campaignId] || {};
-                        if(campaignUpdates.unsubscribes) {
-                            campaignUpdates.unsubscribes = campaignUpdates.unsubscribes + 1;
-                        } else {
-                            campaignUpdates.unsubscribes = 1;
-                            deferredUpdates[event.campaignId] = campaignUpdates;
-                        }
+                            }
+                            cb();
+                        });
                     }
-                    cb();
-                });
-
+                })    
             } else if (event.event === 'bounce'){
                 contactDao.setBouncedTag(event.accountId, null, event.contactId, function(err, value){});
                 emailMessageManager.markMessageBounced(event.emailmessageId, event, function(err, value){
