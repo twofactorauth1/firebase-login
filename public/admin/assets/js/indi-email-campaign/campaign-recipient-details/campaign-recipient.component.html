@@ -87,6 +87,9 @@
         <table class="table table-hover table-striped" ng-class="{'grid': tableView == 'grid', 'bg-white table-list-view': tableView == 'list'}" ng-if="!vm.uiState.loading">
             <thead ng-class="{'bg-white': tableView == 'grid'}">
                 <tr>
+                    <th class="sort" ng-class="{'st-sort-ascent': vm.sortData.details['contactId'].direction === 1, 'st-sort-descent': vm.sortData.details['contactId'].direction === -1}" ng-click="vm.sortCampaignRecipientList('contactId', 'contactId')">ID</th>
+                    <th class="sort" ng-class="{'st-sort-ascent': vm.sortData.details['contactFirstName'].direction === 1, 'st-sort-descent': vm.sortData.details['contactFirstName'].direction === -1}" ng-click="vm.sortCampaignRecipientList('contactFirstName', 'contactFirstName')">First</th>
+                    <th class="sort" ng-class="{'st-sort-ascent': vm.sortData.details['contactLastName'].direction === 1, 'st-sort-descent': vm.sortData.details['contactLastName'].direction === -1}" ng-click="vm.sortCampaignRecipientList('contactLastName', 'contactLastName')">Last</th>
                     <th class="sort" ng-class="{'st-sort-ascent': vm.sortData.details['receiver'].direction === 1, 'st-sort-descent': vm.sortData.details['receiver'].direction === -1}" ng-click="vm.sortCampaignRecipientList('receiver', 'receiver')">Recipient</th>
                     <th class="sort" ng-class="{'st-sort-ascent': vm.sortData.details['deliveredDate'].direction === 1, 'st-sort-descent': vm.sortData.details['deliveredDate'].direction === -1}" ng-click="vm.sortCampaignRecipientList('deliveredDate', 'deliveredDate')">Delivered</th>
                     <th class="sort" ng-class="{'st-sort-ascent': vm.sortData.details['openedDate'].direction === 1, 'st-sort-descent': vm.sortData.details['openedDate'].direction === -1}" ng-click="vm.sortCampaignRecipientList('openedDate', 'openedDate')">Opened</th>
@@ -94,7 +97,15 @@
                     <th class="sort" ng-class="{'st-sort-ascent': vm.sortData.details['unsubscribedDate'].direction === 1, 'st-sort-descent': vm.sortData.details['unsubscribedDate'].direction === -1}" ng-click="vm.sortCampaignRecipientList('unsubscribedDate', 'unsubscribedDate')">Unsubscribed</th>
                 </tr>
                 <tr ng-if="vm.uiState.showFilter">
-
+                    <th class="">
+                        <input ng-model="vm.uiState.fieldSearch.contactId" ng-model-options="{ debounce: 800 }" placeholder="Contact Id" class="form-control" type="search" size="9" />
+                    </th>
+                    <th class="">
+                        <input ng-model="vm.uiState.fieldSearch.contactFirstName" ng-model-options="{ debounce: 800 }" placeholder="First Name" class="form-control" type="search" size="9" />
+                    </th>
+                    <th class="">
+                        <input ng-model="vm.uiState.fieldSearch.contactLastName" ng-model-options="{ debounce: 800 }" placeholder="Last Name" class="form-control" type="search" size="9" />
+                    </th>
                     <th class="">
                         <input ng-model="vm.uiState.fieldSearch.receiver" ng-model-options="{ debounce: 800 }" placeholder="Recipient" class="form-control" type="search" size="9" />
                     </th>
@@ -122,6 +133,9 @@
             </thead>
             <tbody>
                 <tr ng-repeat="recipient in vm.state.recipients" class="product-item">
+                    <td class=""><strong>ID: </strong>{{recipient.contactId}}</td>
+                    <td class=""><strong>ID: </strong>{{recipient.contactFirstName}}</td>
+                    <td class=""><strong>ID: </strong>{{recipient.contactLastName}}</td>
                     <td class=""><strong>Recipient: </strong><a href="javascript:void(0)" ng-click="vm.viewSingleContact(recipient)">{{recipient.receiver}}</a></td>
                     <td class=""><strong>Delivered: </strong>{{recipient.deliveredDate | date:'MMM d, yyyy h:mm a' || false}}</td>
                     <td class=""><strong>Opened: </strong>{{recipient.openedDate | date:'MMM d, yyyy h:mm a' || false}}</td>
