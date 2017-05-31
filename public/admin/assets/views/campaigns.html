@@ -13,46 +13,40 @@
     <!-- start: CONTENT -->
     <div st-table="displayedCampaigns" st-safe-src="campaigns" st-filtered-collection>
         <div class="container-fluid container-fullw bg-white padding-top-0 padding-bottom-0">
-            <div class="row">
-                <div class="col-sm-12">
-                    <div class="panel panel-transparent row margin-bottom-0 btn-area">
-                        <div class="panel-body">
-                            <form role="form" class="ng-pristine ng-valid row">
-                                <div class="bord col-lg-4 col-md-4 col-sm-4 col-xs-12 padding-0 start-padding">
-                                    <div class="form-group">
-                                        <div class="col-lg-7  col-md-6 col-sm-7 col-xs-9 padding-0">
-                                            <span class="input-icon">
-                                                <input type="text" st-search placeholder="Search by title, handle, date..." id="form-field-14" class="form-control">
-                                                <i class="ti-search"></i>
-                                            </span>
-                                        </div>
-                                        <div class="col-lg-5 col-sm-5 col-xs-3 padding-0 text-align-center">
-                                            <button type="button" class="libtn btn btn-o btn-info btn-wide btn-scroll btn-scroll-top ti-filter ng-click-active pull-right" ng-click="showFilter = !showFilter">
-                                                    <span>Filter</span>
-                                                </button>
-                                        </div>
+             <div class="col-sm-12">
+                <div class="panel panel-transparent row margin-bottom-0 btn-area-res">
+                    <div class="panel-body padding-left-0 padding-right-0">
+                        <div class="mob-row">
+                            <div class="fix-btn-1 padding-0">
+                                <span class="input-icon">
+                                    <input type="text" st-search placeholder="Search by title, handle, date..." id="form-field-14" class="form-control">
+                                        <i class="ti-search"></i>
+                                </span>
+                            </div>
+                             <div class="fix-btn padding-0 mob-sub-right">
+                                <button type="button" class="libtn btn btn-o btn-info btn-wide btn-scroll btn-scroll-top ti-filter ng-click-active " ng-click="showFilter = !showFilter">
+                                    <span>Filter</span>
+                                 </button>
+                            </div>
+                        </div>
+                        <div class="mob-row">
+                            <div class="mob-sub-row padding-0 text-right  padding-top-5 text-right " style="display: inline-block;float: right;">
+                                <div class="fix-btn grp padding-0 " >
+                                     <div class="btn-group ">
+                                         <button class="btn btn-info" ng-class="{'active': tableView == 'list'}" href="" ng-click="tableView = 'list'" tooltip-placement="top" tooltip="List"> <span class="fa fa-th-list"></span> </button>
+                                         <button class="btn btn-info" ng-class="{'active': tableView == 'grid'}" href="" ng-click="tableView = 'grid'" tooltip-placement="top" tooltip="Grid"> <span class="fa fa-th"></span> </button>
                                     </div>
                                 </div>
-                                <div class="bord col-lg-8 col-md-8 col-sm-8 col-xs-12 start-padding-fr-mobile padding-0 top-padding">
-                                    <div class="bord col-xs-6 col-lg-5 col-md-6 col-sm-6  padding-0 pull-right pull-left-sm">
-                                        <div class="bord col-lg-5 col-md-4 col-sm-4 col-xs-6 padding-0 grp_btn " >
-                                            <div class="btn-group ">
-                                                <button class="btn btn-info" ng-class="{'active': tableView == 'list'}" href="" ng-click="tableView = 'list'" tooltip-placement="top" tooltip="List"> <span class="fa fa-th-list"></span> </button>
-                                                <button class="btn btn-info" ng-class="{'active': tableView == 'grid'}" href="" ng-click="tableView = 'grid'" tooltip-placement="top" tooltip="Grid"> <span class="fa fa-th"></span> </button>
-                                            </div>
-                                        </div>
-                                        <div class="bord col-lg-4 col-md-4 col-sm-4 col-xs-6 padding-0 addnewbtn"  >
-                                            <button type="button" class="libtn btn btn-warning ti ti-plus" ng-click="openCampaignModal('new-email-modal')">
-                                                <span class="desktop"  translate="sidebar.nav.marketing.NEWCAMPAIGN">New Campaign</span>
-                                                <span class="mobile-text"  >New</span>
-                                            </button>
-                                        </div>
-                                    </div>
+                                <div class="fix-btn padding-0"  >
+                                    <button type="button" class="libtn btn btn-warning ti ti-plus addnew"  ng-click="openCampaignModal('new-email-modal')">
+                                         <span class="desktop-text"  translate="sidebar.nav.marketing.NEWCAMPAIGN">New Campaign</span>
+                                         <span class="mobile-text"  >New</span>
+                                    </button>
                                 </div>
-                            </form>
+                            </div>
                         </div>
                     </div>
-                </div>
+                    </div>
             </div>
         </div>
         <div class="container-fluid container-fullw padding-top-0 padding-bottom-0">
