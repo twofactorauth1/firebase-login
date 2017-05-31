@@ -3278,7 +3278,7 @@ var emailMessageManager = {
                 value = value.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
                 console.log(value);
                 if(value){ 
-                    if(key == 'deliveredDate' || key == 'openedDate' || key == 'clickedDate'){
+                    if(key == 'deliveredDate' || key == 'openedDate' || key == 'clickedDate' || key == 'unsubscribedDate'){
                         if(value == "true"){                           
                             obj[key] = {$ne:null};
                             fieldSearchArr.push(obj);

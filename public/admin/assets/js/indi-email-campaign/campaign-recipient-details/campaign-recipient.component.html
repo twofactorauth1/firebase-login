@@ -91,7 +91,7 @@
                     <th class="sort" ng-class="{'st-sort-ascent': vm.sortData.details['deliveredDate'].direction === 1, 'st-sort-descent': vm.sortData.details['deliveredDate'].direction === -1}" ng-click="vm.sortCampaignRecipientList('deliveredDate', 'deliveredDate')">Delivered</th>
                     <th class="sort" ng-class="{'st-sort-ascent': vm.sortData.details['openedDate'].direction === 1, 'st-sort-descent': vm.sortData.details['openedDate'].direction === -1}" ng-click="vm.sortCampaignRecipientList('openedDate', 'openedDate')">Opened</th>
                     <th class="sort" ng-class="{'st-sort-ascent': vm.sortData.details['clickedDate'].direction === 1, 'st-sort-descent': vm.sortData.details['clickedDate'].direction === -1}" ng-click="vm.sortCampaignRecipientList('clickedDate', 'clickedDate')">Clicked</th>
-                    <th class="hidden">Unsubscribed</th>
+                    <th class="sort" ng-class="{'st-sort-ascent': vm.sortData.details['unsubscribedDate'].direction === 1, 'st-sort-descent': vm.sortData.details['unsubscribedDate'].direction === -1}" ng-click="vm.sortCampaignRecipientList('unsubscribedDate', 'unsubscribedDate')">Unsubscribed</th>
                 </tr>
                 <tr ng-if="vm.uiState.showFilter">
 
@@ -113,6 +113,11 @@
                             <option value=""></option>
                         </select>
                     </th>
+                    <th class="">
+                        <select ng-model="vm.uiState.fieldSearch.unsubscribedDate" class="form-control" ng-options="options.value as options.label for options in vm.booleanSearchOptions">
+                            <option value=""></option>
+                        </select>
+                    </th>
                 </tr>
             </thead>
             <tbody>
@@ -121,6 +126,7 @@
                     <td class=""><strong>Delivered: </strong>{{recipient.deliveredDate | date:'MMM d, yyyy h:mm a' || false}}</td>
                     <td class=""><strong>Opened: </strong>{{recipient.openedDate | date:'MMM d, yyyy h:mm a' || false}}</td>
                     <td class=""><strong>Clicked: </strong>{{recipient.clickedDate | date:'MMM d, yyyy h:mm a' || false}}</td>
+                    <td class=""><strong>Unsubscribed: </strong>{{recipient.unsubscribedDate | date:'MMM d, yyyy h:mm a' || false}}</td>
                 </tr>
             </tbody>
             <tfoot>
