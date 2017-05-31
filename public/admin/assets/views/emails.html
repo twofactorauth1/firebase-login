@@ -13,41 +13,37 @@
     <!-- start: CONTENT -->
     <div st-table="displayedEmails" st-safe-src="emails" st-filtered-collection>
         <div class="container-fluid container-fullw bg-white padding-top-0 padding-bottom-0">
-            <div class="row">
-                <div class="col-sm-12">
-                    <div class="panel panel-transparent row margin-bottom-0">
-                        <div class="panel-body">
-                            <form role="form" class="ng-pristine ng-valid row">
-                                <div class="col-xs-12 col-sm-6 padding-left-0">
-                                    <div class="form-group">
-                                        <div class="col-xs-7 col-sm-9">
-                                            <span class="input-icon">
-                                                <input type="text" st-search placeholder="Search by title, handle, date..." id="form-field-14" class="form-control">
-                                                <i class="ti-search"></i>
-                                            </span>
-                                        </div>
-                                        <div class="col-xs-5 col-sm-3 padding-right-0">
-                                            <button type="button" class="btn btn-o btn-info btn-wide btn-scroll btn-scroll-top ti-filter ng-click-active pull-right" ng-click="filterTemplates()">
-                                                <span>Filter</span>
-                                            </button>
-                                        </div>
+            <div class="col-sm-12">
+                <div class="panel panel-transparent row margin-bottom-0 btn-area-res">
+                    <div class="panel-body padding-left-0 padding-right-0">
+                        <div class="mob-row">
+                            <div class="fix-btn-1 padding-0">
+                                <span class="input-icon">
+                                    <input type="text" st-search placeholder="Search by title, handle, date..." id="form-field-14" class="form-control">
+                                    <i class="ti-search"></i>
+                                </span>
+                            </div>
+                            <div class="fix-btn padding-0 mob-sub-right">
+                                <button type="button" class="libtn btn btn-o btn-info btn-wide btn-scroll btn-scroll-top ti-filter ng-click-active " ng-click="filterTemplates()">
+                                    <span>Filter</span>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="mob-row">
+                            <div class="mob-sub-row padding-0 text-right  padding-top-5 text-right " style="display: inline-block;float: right;">
+                                <div class="fix-btn grp padding-0 " >
+                                    <div class="btn-group ">
+                                        <button class="btn btn-info" ng-class="{'active': tableView == 'list'}" href="" ng-click="tableView = 'list'" tooltip-placement="top" tooltip="List"> <span class="fa fa-th-list"></span> </button>
+                                        <button class="btn btn-info" ng-class="{'active': tableView == 'grid'}" href="" ng-click="tableView = 'grid'" tooltip-placement="top" tooltip="Grid"> <span class="fa fa-th"></span> </button>
                                     </div>
                                 </div>
-                                <div class="visible-xs margin-bottom-15 clearfix"></div>
-                                <div class="col-xs-12 col-sm-6">
-                                    <div class="form-group margin-bottom-0 pull-right">
-                                        <button type="button" class="btn btn-warning btn-wide btn-scroll btn-scroll-top ti ti-plus ng-click-active" ng-click="openModal('new-email-modal')">
-                                            <span>New Email</span>
-                                        </button>
-                                    </div>
-                                    <div class="form-group margin-bottom-0 pull-left">
-                                        <div class="btn-group tableView">
-                                            <button class="btn btn-info" ng-class="{'active': tableView == 'list'}" href="" ng-click="tableView = 'list'" tooltip-placement="top" tooltip="List"> <span class="fa fa-th-list"></span> </button>
-                                            <button class="btn btn-info" ng-class="{'active': tableView == 'grid'}" href="" ng-click="tableView = 'grid'" tooltip-placement="top" tooltip="Grid"> <span class="fa fa-th"></span> </button>
-                                        </div>
-                                    </div>
+                                <div class="fix-btn padding-0" ng-hide="(selectedContactsFn()).length">
+                                    <button type="button" class="libtn btn btn-warning ti ti-plus addnew" ng-click="openModal('new-email-modal')">
+                                        <span class="desktop-text">New Email</span>
+                                        <span class="mobile-text">New</span>
+                                    </button>
                                 </div>
-                            </form>
+                            </div>
                         </div>
                     </div>
                 </div>
