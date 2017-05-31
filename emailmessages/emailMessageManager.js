@@ -3263,8 +3263,10 @@ var emailMessageManager = {
             term = term.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');   
             var regex = new RegExp('\.*'+term+'\.*', 'i');
             var orQuery = [
-                {subject:regex},
-                {receiver:regex}
+                {contactId:parseInt(term)},
+                {receiver:regex},
+                {contactFirstName:regex},
+                {contactLastName:regex}
             ];
             query["$or"] = orQuery;
         }
@@ -3286,6 +3288,10 @@ var emailMessageManager = {
                             obj[key] = null;
                             fieldSearchArr.push(obj);
                         }
+                    }
+                    else if (key == 'contactId') {
+                        obj[key] = parseInt(value);
+                        fieldSearchArr.push(obj);
                     } 
                     else{
                         obj[key] = new RegExp(value, 'i');                    
