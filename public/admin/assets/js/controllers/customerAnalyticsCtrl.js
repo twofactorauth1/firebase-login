@@ -471,7 +471,7 @@
                 //User Agents / User Agents / OS
                 //New Revenue Overview
                 //Campaigns and Email
-                ChartAnalyticsService.getUserAgentsOSRevenueEmailsChartData($scope.date, $scope.analyticsAccount, true, false, function(err, userAgents, os, revenue, emails){
+                ChartAnalyticsService.getUserAgentsAndOSChartData($scope.date, $scope.analyticsAccount, true, false, function(err, userAgents, os){
                     var userAgentData = [];
                     var browserMap = {};
                     var browserTotal = 0;
@@ -542,6 +542,8 @@
                         $scope.osConfig = config;
                         $scope.osConfig.loading = false;
                     });
+                });
+                ChartAnalyticsService.getRevenueChartData($scope.date, $scope.analyticsAccount, true, false, function(err, revenue){
                     // ======================================
                     // Revenue
                     // ======================================
@@ -587,8 +589,8 @@
                         $scope.revenueConfig = data;
                         $scope.revenueConfig.loading = false;
                     });
-
-
+                });
+                ChartAnalyticsService.getEmailChartData($scope.date, $scope.analyticsAccount, true, false, function(err, emails){
                     // ======================================
                     // Emails
                     // ======================================
@@ -644,13 +646,13 @@
                         $scope.totalClicks = totalClicks;
                     });
 
-
                     //=======================================
                     // Cleanup
                     //=======================================
 
                     $scope.displayVisitors = $scope.visitors > 0;
                 });
+                
 
             });
 
