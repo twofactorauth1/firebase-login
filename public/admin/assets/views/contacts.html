@@ -11,58 +11,67 @@
             </div>
         </div>
     </section>
+    <style>
+
+
+    </style>
     <div st-table="displayedContacts" st-safe-src="contacts">
         <div class="container-fluid container-fullw bg-white padding-top-0 padding-bottom-0">
             <div class="col-sm-12">
                 <div class="panel panel-transparent row margin-bottom-0 btn-area-res">
                     <div class="panel-body padding-left-0 padding-right-0">
-                        <div class="fix-btn-1 padding-0">
-                                <span class="input-icon">
-                                    <input type="text" ng-model="pagingParams.globalSearch" ng-model-options="{ debounce: 800 }" placeholder="Search " id="form-field-14" class="form-control">
-                                    <i class="ti-search"></i>
-                                </span>
-                        </div>
-                        <div class="fix-btn padding-0 ">
-                            <button type="button" class="libtn btn btn-o btn-info btn-wide btn-scroll btn-scroll-top ti-filter ng-click-active " ng-click="showFilter()">
-                                <span>Filter</span>
-                            </button>
-                        </div>
-                        <div class="fix-btn padding-0 ">
-                            <button type="button" class="libtn btn btn-danger ti-import" ng-click="openModal('import-contact-modal', 'importContactModalCtrl','md')">
-                                <span>Import</span>
-                            </button>
-                        </div>
-                        <div class="fix-btn padding-0 ">
-                            <button type="button" class="libtn btn export_btn ti-import" ng-click="exportContactsFn()">
-                                       <!--span class="desktop" ng-bind-html='exportText'></span-->
-                                       <span class="mobile-text">Export</span>
-                           </button>
-                        </div>
-                        <div class="padding-0 text-right" style="display: inline-block;float: right;">
-                            <div class="fix-btn padding-0 " >
-                                <div class="btn-group ">
-                                    <button class="btn btn-info" ng-class="{'active': tableView == 'list'}" href="" ng-click="tableView = 'list'" tooltip-placement="top" tooltip="List"> <span class="fa fa-th-list"></span> </button>
-                                    <button class="btn btn-info" ng-class="{'active': tableView == 'grid'}" href="" ng-click="tableView = 'grid'" tooltip-placement="top" tooltip="Grid"> <span class="fa fa-th"></span> </button>
-                                </div>
+                        <div class="mob-row">
+                            <div class="fix-btn-1 padding-0">
+                                    <span class="input-icon">
+                                        <input type="text" ng-model="pagingParams.globalSearch" ng-model-options="{ debounce: 800 }" placeholder="Search " id="form-field-14" class="form-control">
+                                        <i class="ti-search"></i>
+                                    </span>
                             </div>
-                            <div class="fix-btn padding-0" ng-hide="(selectedContactsFn()).length">
-                                <button type="button" class="libtn btn btn-warning ti ti-plus" ng-click="openSimpleModal('new-contact-modal')">
-                                    <span class="desktop">New Contact</span>
-                                    <!--span class="mobile-text">New</span-->
+                            <div class="fix-btn padding-0 mob-sub-right">
+                                <button type="button" class="libtn btn btn-o btn-info btn-wide btn-scroll btn-scroll-top ti-filter ng-click-active " ng-click="showFilter()">
+                                    <span>Filter</span>
                                 </button>
                             </div>
-                            <div class="col-lg-3 col-xs-4 col-md-6 col-xs-6 padding-0 addnewbtn text-right" ng-hide="!(selectedContactsFn()).length">
-                                <ui-select ng-model="bulkActionChoice.action" on-select="bulkActionSelectFn()" theme="bootstrap" ng-disabled='!(selectedContactsFn()).length'>
-                                    <ui-select-match placeholder="Actions">
-                                        <small ng-bind-html="$select.selected.label"></small>
-                                    </ui-select-match>
-                                    <ui-select-choices repeat="action in bulkActionChoices |  orderBy:'label' | filter: $select.search">
-                                        <small ng-bind-html="action.label | highlight: $select.search"></small>
-                                    </ui-select-choices>
-                                </ui-select>
+                        </div>
+                        <div class="mob-row">
+                            <div class="mob-sub-row">
+                                <div class="fix-btn padding-0 ">
+                                    <button type="button" class="libtn btn btn-danger ti-import" ng-click="openModal('import-contact-modal', 'importContactModalCtrl','md')">
+                                        <span>Import</span>
+                                    </button>
+                                </div>
+                                <div class="fix-btn padding-0 ">
+                                    <button type="button" class="libtn btn export_btn ti-export" ng-click="exportContactsFn()">
+                                               <span class="desktop-text" ng-bind-html='exportText'></span>
+                                               <span class="mobile-text">Export</span>
+                                   </button>
+                                </div>
                             </div>
-                         </div>
-
+                            <div class="mob-sub-row padding-0 text-right  padding-top-5 text-right " style="display: inline-block;float: right;">
+                                <div class="fix-btn grp padding-0 " >
+                                    <div class="btn-group ">
+                                        <button class="btn btn-info" ng-class="{'active': tableView == 'list'}" href="" ng-click="tableView = 'list'" tooltip-placement="top" tooltip="List"> <span class="fa fa-th-list"></span> </button>
+                                        <button class="btn btn-info" ng-class="{'active': tableView == 'grid'}" href="" ng-click="tableView = 'grid'" tooltip-placement="top" tooltip="Grid"> <span class="fa fa-th"></span> </button>
+                                    </div>
+                                </div>
+                                <div class="fix-btn padding-0" ng-hide="(selectedContactsFn()).length">
+                                    <button type="button" class="libtn btn btn-warning ti ti-plus addnew" ng-click="openSimpleModal('new-contact-modal')">
+                                        <span class="desktop-text">New Contact</span>
+                                        <span class="mobile-text">New</span>
+                                    </button>
+                                </div>
+                                <div class="fix-btn padding-0" ng-hide="!(selectedContactsFn()).length">
+                                    <ui-select ng-model="bulkActionChoice.action" on-select="bulkActionSelectFn()" theme="bootstrap" ng-disabled='!(selectedContactsFn()).length'>
+                                        <ui-select-match placeholder="Actions">
+                                            <small ng-bind-html="$select.selected.label"></small>
+                                        </ui-select-match>
+                                        <ui-select-choices repeat="action in bulkActionChoices |  orderBy:'label' | filter: $select.search">
+                                            <small ng-bind-html="action.label | highlight: $select.search"></small>
+                                        </ui-select-choices>
+                                    </ui-select>
+                                </div>
+                             </div>
+                        </div>
                         <div class="form-group  hidden">
                             <button type="button" class="btn btn-o btn-info btn-wide btn-scroll btn-scroll-top ti-import" ng-click="openModal('contact-templates')">
                             <span>Templates</span>
