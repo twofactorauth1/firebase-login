@@ -6,7 +6,12 @@
     app.service('PaymentService', ['$http', 'ToasterService','ENV',
         function($http, ToasterService, ENV) {
             var baseUrl = '/api/1.0/';
-            Stripe.setPublishableKey(ENV.stripeKey);
+            try {
+                Stripe.setPublishableKey(ENV.stripeKey);
+            }
+            catch(err) {
+                
+            }
 
             this.getStripeCardToken = function(cardInput, fn, suppressToastSuccessMessage) {
                 Stripe.card.createToken(cardInput, function(status, response) {
