@@ -489,7 +489,8 @@
         $scope.clearSearchFilter = function (event, input, filter) {
             $timeout(function () {
                 $scope.pagingParams.fieldSearch[filter] = null;
-                $('body').click();
+                //$('body').click(); //comment due to #8897
+                clearFilter();
             }, 800);
         };
 
