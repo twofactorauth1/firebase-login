@@ -2,7 +2,7 @@
     .btn {
         position: relative;
         overflow: hidden;
-        line-height: initial !important;
+        line-height: inherit !important;
         -webkit-transition: all 0.3s ease 0s;
         -moz-transition: all 0.3s ease 0s;
         -ms-transition: all 0.3s ease 0s;
@@ -21,11 +21,13 @@
         width: 100px;
     }
     .fix-btn-1{
+        float:left;
         width: 20%;
         display: inline-block;
         margin-left: .4rem;
     }
     .fix-btn {
+        float:left;
         display: inline-block;
         margin-left: .4rem;
     }
@@ -116,6 +118,8 @@
         }
         .mob-row {
             display: block;
+            float: left;
+            width: 100%;
         }
         .mob-row:nth-child(2){
             margin-top: 1rem;
@@ -128,6 +132,7 @@
             margin-left: auto;
             margin-right: 0px;
             text-align: right;
+            width: auto;
         }
         .fix-btn-1{
             width: 70%;
@@ -161,15 +166,9 @@
         .mobile-text{
             display:inline-block;
         }
-        .padding-top-5{
-            padding-top: 0px !important;
-        }
         .mob-sub-row{
             width: 50%;
             display: inline-block;
-        }
-       .padding-top-5{
-            padding-top: 0px !important;
         }
        .mob-sub-row .fix-btn{
             width: 48%;
