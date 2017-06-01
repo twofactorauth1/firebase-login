@@ -63,27 +63,29 @@ function inventoryDetailsController($scope, $state, $attrs, $filter, $modal, $ti
 
 
     function unWatchInventoryItem() {
-        vm.uiState.loadingWatchInventory = true;
+        vm.uiState.savingWatchInventory = true;
         var toasterMessage = 'Item removed from inventory watch list';
         vm.uiState.inVentoryWatchList = _.without(vm.uiState.inVentoryWatchList, $stateParams.inventoryId);
         vm.state.userOrgConfig.watchList = vm.uiState.inVentoryWatchList;
+
         InventoryService.updateUserOrgConfig(vm.state.userOrgConfig).then(function(response){                    
             toaster.pop('success', toasterMessage);
             vm.uiState.watched  = checkIfSelected();
-            vm.uiState.loadingWatchInventory = false;
+            vm.uiState.savingWatchInventory = false;
         });
     };
 
 
     function watchInventoryItem() {
-        vm.uiState.loadingWatchInventory = true;
+        vm.uiState.savingWatchInventory = true;
         var toasterMessage = 'Item add to inventory watch list';
         vm.uiState.inVentoryWatchList = _.first(_.union([$stateParams.inventoryId], vm.uiState.inVentoryWatchList), 5);
         vm.state.userOrgConfig.watchList = vm.uiState.inVentoryWatchList;
+        vm.uiState.loadingWatchInventory = true;
         InventoryService.updateUserOrgConfig(vm.state.userOrgConfig).then(function(response){                    
             toaster.pop('success', toasterMessage);
             vm.uiState.watched  = checkIfSelected();
-            vm.uiState.loadingWatchInventory = false;
+            vm.uiState.savingWatchInventory = false;
         });
     };
 
