@@ -17,8 +17,7 @@
                 OITM_ItemName: undefined,
                 OMRC_FirmName: undefined,
                 OITM_ItemCode: undefined
-            },
-            showFilter: true
+            }
         };
 
         var baseInventoryAPIUrl = '/api/1.0/integrations/zi/inventory';

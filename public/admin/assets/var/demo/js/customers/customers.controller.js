@@ -17,14 +17,12 @@ function customersComponentController($scope, $attrs, $filter, $modal, $timeout,
     vm.pagingConstant = pagingConstant;
 
     vm.showFilteredRecords = showFilteredRecords;
-
-    vm.showFilter = showFilter;
+    
 
     vm.uiState = {
         loading: true,
         globalSearch: CustomersService.globalSearch,
-        fieldSearch: CustomersService.fieldSearch,
-        showFilter: CustomersService.showFilter
+        fieldSearch: CustomersService.fieldSearch
     };
 
     $scope.$watch(function() { return CustomersService.customers }, function(customers) {
@@ -67,10 +65,6 @@ function customersComponentController($scope, $attrs, $filter, $modal, $timeout,
         return UtilService.showFilteredRecords(vm.uiState.globalSearch, vm.uiState.fieldSearch);
     }
 
-    function showFilter(){
-        vm.uiState.showFilter = !vm.uiState.showFilter;
-        CustomersService.showFilter = vm.uiState.showFilter;
-    }
 
     function init(element) {
         vm.element = element;

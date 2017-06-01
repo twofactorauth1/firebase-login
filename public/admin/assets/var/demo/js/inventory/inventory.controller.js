@@ -25,8 +25,7 @@ function inventoryComponentController($scope, $attrs, $filter, $modal, $timeout,
             OITM_ItemName: InventoryService.fieldSearch.OITM_ItemName,
             OMRC_FirmName: InventoryService.fieldSearch.OMRC_FirmName,
             OITM_ItemCode: InventoryService.fieldSearch.OITM_ItemCode
-        },
-        showFilter: InventoryService.showFilter,
+        },        
         inVentoryWatchList: []
     };
 
@@ -36,8 +35,7 @@ function inventoryComponentController($scope, $attrs, $filter, $modal, $timeout,
     vm.getPrice = getPrice;
     vm.numberOfPages = numberOfPages;
 
-    vm.sortInventory = sortInventory;
-    vm.showFilter = showFilter;
+    vm.sortInventory = sortInventory;    
     vm.pagingConstant = pagingConstant;
     vm.selectPage = selectPage;
     vm.checkIfSelected = checkIfSelected;
@@ -273,16 +271,6 @@ function inventoryComponentController($scope, $attrs, $filter, $modal, $timeout,
             }
         }
     }, true);
-
-
-
-    function showFilter(){
-        vm.uiState.showFilter = !vm.uiState.showFilter;
-        InventoryService.showFilter = vm.uiState.showFilter;
-        if(!vm.uiState.showFilter)
-            clearFilter();
-    }
-
 
     function clearFilter(){
         //InventoryService.fieldSearch = {};
