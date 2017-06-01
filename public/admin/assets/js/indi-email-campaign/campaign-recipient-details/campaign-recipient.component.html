@@ -134,8 +134,8 @@
             <tbody>
                 <tr ng-repeat="recipient in vm.state.recipients" class="product-item">
                     <td class=""><strong>ID: </strong>{{recipient.contactId}}</td>
-                    <td class=""><strong>ID: </strong>{{recipient.contactFirstName}}</td>
-                    <td class=""><strong>ID: </strong>{{recipient.contactLastName}}</td>
+                    <td class=""><strong>First: </strong>{{recipient.contactFirstName}}</td>
+                    <td class=""><strong>Last: </strong>{{recipient.contactLastName}}</td>
                     <td class=""><strong>Recipient: </strong><a href="javascript:void(0)" ng-click="vm.viewSingleContact(recipient)">{{recipient.receiver}}</a></td>
                     <td class=""><strong>Delivered: </strong>{{recipient.deliveredDate | date:'MMM d, yyyy h:mm a' || false}}</td>
                     <td class=""><strong>Opened: </strong>{{recipient.openedDate | date:'MMM d, yyyy h:mm a' || false}}</td>
