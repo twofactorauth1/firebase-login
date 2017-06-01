@@ -2,9 +2,9 @@
 
 app.controller('InventoryComponentController', inventoryComponentController);
 
-inventoryComponentController.$inject = ['$scope', '$attrs', '$filter', '$modal', '$timeout', '$location', 'pagingConstant', 'SweetAlert', 'toaster', 'InventoryService', 'UtilService'];
+inventoryComponentController.$inject = ['$scope', '$attrs', '$filter', '$modal', '$timeout', '$location', 'pagingConstant', 'toaster', 'InventoryService', 'UtilService'];
 /* @ngInject */
-function inventoryComponentController($scope, $attrs, $filter, $modal, $timeout, $location, pagingConstant, SweetAlert, toaster, InventoryService, UtilService) {
+function inventoryComponentController($scope, $attrs, $filter, $modal, $timeout, $location, pagingConstant, toaster, InventoryService, UtilService) {
 
     var vm = this;
 
@@ -303,49 +303,25 @@ function inventoryComponentController($scope, $attrs, $filter, $modal, $timeout,
 
     function bulkActionSelectFn() {
 
-        var watchMessage = "Do you want to add the selected items in inventory watch list?";
-
-        var confirmMessage = "Yes, add to watch list!";
-        var cancelMessage = "No, do not add to watch list!";
+       
         var toasterMessage = 'Items added to inventory watch list';
         if (vm.bulkActionChoice.action.data == 'unwatch'){
-            watchMessage = "Do you want to remove all selected items from inventory watch list?";
-            confirmMessage = "Yes, remove from watch list!";
-            cancelMessage = "No, do not remove from watch list!";
             toasterMessage = 'Items removed from inventory watch list';
         }
 
-        SweetAlert.swal({
-            title: "Are you sure?",
-            text: watchMessage,
-            type: "warning",
-            showCancelButton: true,
-            confirmButtonColor: "#DD6B55",
-            confirmButtonText: confirmMessage,
-            cancelButtonText: cancelMessage,
-            closeOnConfirm: true,
-            closeOnCancel: true
-          },
-          function (isConfirm) {
-            if (isConfirm) {
-                if (vm.bulkActionChoice.action.data == 'unwatch') {
+        if (vm.bulkActionChoice.action.data == 'unwatch') {
 
-                    vm.state.userOrgConfig.watchList = _.difference(vm.state.userOrgConfig.watchList || [], vm.uiState.inVentoryWatchList);
-                }
-                if (vm.bulkActionChoice.action.data == 'watch') {
-                    vm.state.userOrgConfig.watchList = _.first(_.union(vm.uiState.inVentoryWatchList, vm.state.userOrgConfig.watchList || []), 5);
-                }
+            vm.state.userOrgConfig.watchList = _.difference(vm.state.userOrgConfig.watchList || [], vm.uiState.inVentoryWatchList);
+        }
+        if (vm.bulkActionChoice.action.data == 'watch') {
+            vm.state.userOrgConfig.watchList = _.first(_.union(vm.uiState.inVentoryWatchList, vm.state.userOrgConfig.watchList || []), 5);
+        }
 
-                vm.uiState.inVentoryWatchList = [];
-                InventoryService.updateUserOrgConfig(vm.state.userOrgConfig).then(function(response){
-                    vm.bulkActionChoice = null;
-                    vm.bulkActionChoice = {};
-                    toaster.pop('success', toasterMessage);
-                });
-            } else {
-                vm.bulkActionChoice = null;
-                vm.bulkActionChoice = {};
-            }
+        vm.uiState.inVentoryWatchList = [];
+        InventoryService.updateUserOrgConfig(vm.state.userOrgConfig).then(function(response){
+            vm.bulkActionChoice = null;
+            vm.bulkActionChoice = {};
+            toaster.pop('success', toasterMessage);
         });
 
     };
