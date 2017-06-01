@@ -428,6 +428,20 @@ var ziManager = {
                     } catch(e) {
                         self.log.error('Error parsing row [' + row['@id'] + '.OITM_SVolume', e);
                     }
+                    if(row.OITM_ItemName) {
+                        row._itemName = row.OITM_ItemName.toLowerCase();
+                    }
+                    if(row.OITM_U_dscription) {
+                        row._description = row.OITM_U_dscription.toLowerCase();
+                    }
+                    if(row.OMRC_FirmName) {
+                        if(row.OMRC_FirmName === 'Juniper Hardware') {
+                            row._firmName = '_' + row.OMRC_FirmName.toLowerCase();
+                        } else {
+                            row._firmName = row.OMRC_FirmName.toLowerCase();
+                        }
+
+                    }
 
                 });
                 self.log.debug(0,0, 'Bulk inserting [' + data.length + '] records');

@@ -2062,6 +2062,10 @@ var emailMessageManager = {
 
     },
 
+    getAsyncCampaignPerformanceReport: function(accountId, userId, campaignId, fn) {
+
+    },
+
     getCampaignPerformanceReport: function(accountId, campaignId, userId, fn) {
         var self = this;
         self.log.debug(accountId, userId, '>> getCampaignPerformanceReport');
@@ -2909,9 +2913,11 @@ var emailMessageManager = {
             }
             if(p.custom_args && p.custom_args.contactFirstName) {
                 emailmessage.set('contactFirstName', p.custom_args.contactFirstName);
+                emailmessage.set('_contactFirstName', p.custom_args.contactFirstName.toLowerCase());
             }
             if(p.custom_args && p.custom_args.contactLastName) {
                 emailmessage.set('contactLastName', p.custom_args.contactLastName);
+                emailmessage.set('_contactLastName', p.custom_args.contactLastName.toLowerCase());
             }
             dao.saveOrUpdate(emailmessage, function(err, value){
                 if(err) {
