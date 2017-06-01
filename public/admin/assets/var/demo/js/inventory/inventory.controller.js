@@ -147,13 +147,18 @@ function inventoryComponentController($scope, $attrs, $filter, $modal, $timeout,
                 parseFloat(product.OITM_BHeight1)
 
             if(_sum > 0){
-                _dimentions =  parseFloat(product.OITM_SLength1).toFixed(2) + "X" +
-                    parseFloat(product.OITM_BHeight1).toFixed(2) + "X" +
-                    parseFloat(product.OITM_SWidth1).toFixed(2)
+                _dimentions =  roundToNumber(parseFloat(product.OITM_SLength1)) + "X" +
+                    roundToNumber(parseFloat(product.OITM_BHeight1)) + "X" +
+                    roundToNumber(parseFloat(product.OITM_SWidth1))
             }
 
         }
         return _dimentions;
+    }
+
+
+    function roundToNumber(value){
+        return $filter('number')(value, 0);
     }
 
     function getWeight(product){
