@@ -41,7 +41,7 @@
                                     </button>
                                 </div>
                                 <div class="fix-btn padding-0 ">
-                                    <button type="button" class="libtn btn export_btn ti-export" ng-click="exportContactsFn()">
+                                    <button type="button" class="libtn btn export_btn ti-export" ng-class="{'export_btn_select':(selectedContactsFn()).length}" ng-click="exportContactsFn()">
                                                <span class="desktop-text" ng-bind-html='exportText'></span>
                                                <span class="mobile-text">Export</span>
                                    </button>
