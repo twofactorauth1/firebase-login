@@ -190,7 +190,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         resolve: loadSequence('profileBusinessCtrl', 'toasterService', 'assetsService')
     }).state('app.account.profilepersonal', {
         url: '/profile-personal',
-        templateUrl: "/admin/assets/views/profile-personal.html",
+        templateUrl: "/admin/assets/var/demo/views/profile-personal.html",
         title: 'Profile Personal',
         icon: 'ti-layout-media-left-alt',
         resolve: loadSequence('profilePersonalCtrl', 'toasterService', 'assetsService', 'offset')

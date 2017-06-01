@@ -25,7 +25,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url('demo'), this.isAuthAndSubscribedApi.bind(this), this.demo.bind(this));
         app.get(this.url('inventory'), this.isAuthAndSubscribedApi.bind(this), this.inventory.bind(this));
         app.get(this.url('inventory/filter'), this.isAuthAndSubscribedApi.bind(this), this.inventoryFilter.bind(this));
-        app.post(this.url('inventory/search'), this.isAuthAndSubscribedApi.bind(this), this.inventorySearch.bind(this));
+        app.get(this.url('inventory/search'), this.isAuthAndSubscribedApi.bind(this), this.inventorySearch.bind(this));
 
         app.get(this.url('inventory/:id'), this.isAuthAndSubscribedApi.bind(this), this.inventoryItem.bind(this));
         app.get(this.url('inventory/name/:id'), this.isAuthAndSubscribedApi.bind(this), this.inventoryItemByName.bind(this));
@@ -162,7 +162,14 @@ _.extend(api.prototype, baseApi.prototype, {
         var limit = parseInt(req.query.limit) || 0;
         var sortBy = req.query.sortBy || null;
         var sortDir = parseInt(req.query.sortDir) || null;
-        var fieldSearch = req.body;
+        var fieldSearch = req.query;
+
+        var fieldSearch = req.query;
+        delete fieldSearch.term;
+        delete fieldSearch.skip;
+        delete fieldSearch.limit;
+        delete fieldSearch.sortBy;
+        delete fieldSearch.sortDir;
         var term = req.query.term;
         /*
          * Search across the fields
