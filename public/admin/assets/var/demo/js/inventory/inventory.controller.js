@@ -2,9 +2,9 @@
 
 app.controller('InventoryComponentController', inventoryComponentController);
 
-inventoryComponentController.$inject = ['$scope', '$attrs', '$filter', '$modal', '$timeout', '$location', 'pagingConstant', 'SweetAlert', 'toaster', 'InventoryService', 'UtilService'];
+inventoryComponentController.$inject = ['$scope', '$attrs', '$filter', '$modal', '$timeout', '$location', 'pagingConstant', 'toaster', 'InventoryService', 'UtilService'];
 /* @ngInject */
-function inventoryComponentController($scope, $attrs, $filter, $modal, $timeout, $location, pagingConstant, SweetAlert, toaster, InventoryService, UtilService) {
+function inventoryComponentController($scope, $attrs, $filter, $modal, $timeout, $location, pagingConstant, toaster, InventoryService, UtilService) {
 
     var vm = this;
 
@@ -25,8 +25,7 @@ function inventoryComponentController($scope, $attrs, $filter, $modal, $timeout,
             OITM_ItemName: InventoryService.fieldSearch.OITM_ItemName,
             OMRC_FirmName: InventoryService.fieldSearch.OMRC_FirmName,
             OITM_ItemCode: InventoryService.fieldSearch.OITM_ItemCode
-        },
-        showFilter: InventoryService.showFilter,
+        },        
         inVentoryWatchList: []
     };
 
@@ -36,8 +35,7 @@ function inventoryComponentController($scope, $attrs, $filter, $modal, $timeout,
     vm.getPrice = getPrice;
     vm.numberOfPages = numberOfPages;
 
-    vm.sortInventory = sortInventory;
-    vm.showFilter = showFilter;
+    vm.sortInventory = sortInventory;    
     vm.pagingConstant = pagingConstant;
     vm.selectPage = selectPage;
     vm.checkIfSelected = checkIfSelected;
@@ -149,13 +147,18 @@ function inventoryComponentController($scope, $attrs, $filter, $modal, $timeout,
                 parseFloat(product.OITM_BHeight1)
 
             if(_sum > 0){
-                _dimentions =  parseFloat(product.OITM_SLength1).toFixed(2) + "X" +
-                    parseFloat(product.OITM_BHeight1).toFixed(2) + "X" +
-                    parseFloat(product.OITM_SWidth1).toFixed(2)
+                _dimentions =  roundToNumber(parseFloat(product.OITM_SLength1)) + "X" +
+                    roundToNumber(parseFloat(product.OITM_BHeight1)) + "X" +
+                    roundToNumber(parseFloat(product.OITM_SWidth1))
             }
 
         }
         return _dimentions;
+    }
+
+
+    function roundToNumber(value){
+        return $filter('number')(value, 0);
     }
 
     function getWeight(product){
@@ -274,16 +277,6 @@ function inventoryComponentController($scope, $attrs, $filter, $modal, $timeout,
         }
     }, true);
 
-
-
-    function showFilter(){
-        vm.uiState.showFilter = !vm.uiState.showFilter;
-        InventoryService.showFilter = vm.uiState.showFilter;
-        if(!vm.uiState.showFilter)
-            clearFilter();
-    }
-
-
     function clearFilter(){
         //InventoryService.fieldSearch = {};
         vm.uiState.fieldSearch = {
@@ -315,49 +308,25 @@ function inventoryComponentController($scope, $attrs, $filter, $modal, $timeout,
 
     function bulkActionSelectFn() {
 
-        var watchMessage = "Do you want to add the selected items in inventory watch list?";
-
-        var confirmMessage = "Yes, add to watch list!";
-        var cancelMessage = "No, do not add to watch list!";
+       
         var toasterMessage = 'Items added to inventory watch list';
         if (vm.bulkActionChoice.action.data == 'unwatch'){
-            watchMessage = "Do you want to remove all selected items from inventory watch list?";
-            confirmMessage = "Yes, remove from watch list!";
-            cancelMessage = "No, do not remove from watch list!";
             toasterMessage = 'Items removed from inventory watch list';
         }
 
-        SweetAlert.swal({
-            title: "Are you sure?",
-            text: watchMessage,
-            type: "warning",
-            showCancelButton: true,
-            confirmButtonColor: "#DD6B55",
-            confirmButtonText: confirmMessage,
-            cancelButtonText: cancelMessage,
-            closeOnConfirm: true,
-            closeOnCancel: true
-          },
-          function (isConfirm) {
-            if (isConfirm) {
-                if (vm.bulkActionChoice.action.data == 'unwatch') {
+        if (vm.bulkActionChoice.action.data == 'unwatch') {
 
-                    vm.state.userOrgConfig.watchList = _.difference(vm.state.userOrgConfig.watchList || [], vm.uiState.inVentoryWatchList);
-                }
-                if (vm.bulkActionChoice.action.data == 'watch') {
-                    vm.state.userOrgConfig.watchList = _.first(_.union(vm.uiState.inVentoryWatchList, vm.state.userOrgConfig.watchList || []), 5);
-                }
+            vm.state.userOrgConfig.watchList = _.difference(vm.state.userOrgConfig.watchList || [], vm.uiState.inVentoryWatchList);
+        }
+        if (vm.bulkActionChoice.action.data == 'watch') {
+            vm.state.userOrgConfig.watchList = _.first(_.union(vm.uiState.inVentoryWatchList, vm.state.userOrgConfig.watchList || []), 5);
+        }
 
-                vm.uiState.inVentoryWatchList = [];
-                InventoryService.updateUserOrgConfig(vm.state.userOrgConfig).then(function(response){
-                    vm.bulkActionChoice = null;
-                    vm.bulkActionChoice = {};
-                    toaster.pop('success', toasterMessage);
-                });
-            } else {
-                vm.bulkActionChoice = null;
-                vm.bulkActionChoice = {};
-            }
+        vm.uiState.inVentoryWatchList = [];
+        InventoryService.updateUserOrgConfig(vm.state.userOrgConfig).then(function(response){
+            vm.bulkActionChoice = null;
+            vm.bulkActionChoice = {};
+            toaster.pop('success', toasterMessage);
         });
 
     };

@@ -51,7 +51,9 @@ function dashboardAnalyticTileComponentController($scope, $attrs, $filter, Dashb
                     ];
 
                     $scope.$watch(function() { return DashboardService.inventory; }, function(inventory){
-
+                        if(angular.isDefined(inventory)){
+                            ret.widgetLoaded = true;
+                        }
                         ret.data = []
                         _.each(inventory, function(item){
                             ret.data.push({
@@ -96,7 +98,9 @@ function dashboardAnalyticTileComponentController($scope, $attrs, $filter, Dashb
 
                     $scope.$watch(function() { return DashboardService.purchaseOrders; }, function(purchaseOrders){
                         ret.data = []
-
+                        if(angular.isDefined(purchaseOrders)){
+                            ret.widgetLoaded = true;
+                        }
                         _.each(purchaseOrders, function(order){
                             ret.data.push({
                                 field1: order.title,
@@ -129,6 +133,9 @@ function dashboardAnalyticTileComponentController($scope, $attrs, $filter, Dashb
                     ];
                     $scope.$watch(function() { return DashboardService.invoices; }, function(invoices){
                         ret.data = [];
+                        if(angular.isDefined(invoices)){
+                            ret.widgetLoaded = true;
+                        }
                         _.each(invoices, function(invoice){
 
                             ret.data.push({

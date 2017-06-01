@@ -15,7 +15,6 @@ function purchaseOrderComponentController($scope, $attrs, $filter, $modal, $time
         loading: true,
         globalSearch: PurchaseOrderService.globalSearch,
         fieldSearch: PurchaseOrderService.fieldSearch,
-        showFilter: PurchaseOrderService.showFilter,
         loadingNewPoModal: true
     }
 
@@ -31,8 +30,7 @@ function purchaseOrderComponentController($scope, $attrs, $filter, $modal, $time
     vm.bulkActionSelectFn = bulkActionSelectFn;
     vm.selectedOrdersFn = selectedOrdersFn;
     vm.pagingConstant = pagingConstant;
-    vm.showFilteredRecords = showFilteredRecords;
-    vm.showFilter = showFilter;
+    vm.showFilteredRecords = showFilteredRecords;    
     vm.selectCardCode = selectCardCode;
 
     vm.bulkActionChoice = {};
@@ -222,12 +220,6 @@ function purchaseOrderComponentController($scope, $attrs, $filter, $modal, $time
     function showFilteredRecords(){
         return UtilService.showFilteredRecords(vm.uiState.globalSearch, vm.uiState.fieldSearch);
     }
-
-    function showFilter(){
-        vm.uiState.showFilter = !vm.uiState.showFilter;
-        PurchaseOrderService.showFilter = vm.uiState.showFilter;
-    }
-    
 
     $scope.$watch(function() { return PurchaseOrderService.customers }, function(customers) {
         if(angular.isDefined(customers)){

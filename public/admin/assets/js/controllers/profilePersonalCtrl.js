@@ -4,8 +4,8 @@
  */
 (function (angular) {
   app.controller('ProfilePersonalCtrl',
-      ["$scope", "$modal", "$timeout", "toaster", "$stateParams", "UserService", "PaymentService", "CommonService", "userConstant", "formValidations",
-        function ($scope, $modal, $timeout, toaster, $stateParams, UserService, PaymentService, CommonService, userConstant, formValidations) {
+      ["$scope", "$rootScope", "$modal", "$timeout", "toaster", "$stateParams", "UserService", "PaymentService", "CommonService", "userConstant", "formValidations",
+        function ($scope, $rootScope, $modal, $timeout, toaster, $stateParams, UserService, PaymentService, CommonService, userConstant, formValidations) {
     console.log('profile personal >>> ');
 
     //account API call for object population
@@ -136,6 +136,7 @@
         toaster.pop('success', 'Profile Saved.');
         angular.copy($scope.profileUser, $scope.originalprofileUser);
         $scope.pageSaving = false;
+        $rootScope.$broadcast('$personalProfileChanged');
       });
 
       // check if password needs to be changed

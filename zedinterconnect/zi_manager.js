@@ -216,7 +216,7 @@ var ziManager = {
                 var value = fieldSearch[key];
                 self.log.debug('value:', value);
                 if(value){
-                    if(key == 'In_Stock'){
+                    if(key == 'Available'){
                         if(value == -1){
                             var obj = {};
                             obj[key] = 0;

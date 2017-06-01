@@ -2531,9 +2531,65 @@ module.exports = {
             self.log.debug(accountId, userId, '<< getCampaignEmailsReport');
             return fn(err, results);
         });
+    },
+
+    get404sReport: function(accountId, userId, start, end, isAggregate, orgId, fn) {
+        var self = this;
+        self.log = _log;
+        self.log.debug(accountId, userId, '>> get404sReport');
+        var granularity = self._determineGranularity(start, end);
+
+        var stageAry = [];
+        var match = {
+            $match:{
+                accountId:accountId,
+                server_time_dt:{
+                    $gte:start,
+                    $lte:end
+                },
+                'url.path':'/404'
+            }
+        };
+        if(isAggregate === true) {
+            delete match.$match.accountId;
+        }
+        if(orgId !== null) {
+            match.$match.orgId = orgId;
+        }
+        stageAry.push(match);
+
+        var group1 = {
+            $group: {
+                _id:{
+                    yearMonthDay: { $dateToString: { format: "%Y-%m-%d", date: "$server_time_dt" }}
+                }
+            }
+        };
+        if(granularity === 'hours') {
+            group1.$group._id.yearMonthDay.$dateToString.format = '%Y-%m-%d %H:00';
+        }
+        stageAry.push(group1);
+
+        var group2 = {
+            $group: {
+                _id: '$_id.yearMonthDay',
+                total:{$sum:1}
+            }
+        };
+        stageAry.push(group2);
 
 
 
+        dao.aggregateWithCustomStages(stageAry, $$.m.PageEvent, function(err, value) {
+            var sortedResults = _.sortBy(value, function(result){return result.total;});
+            if(granularity === 'hours') {
+                sortedResults = self._zeroMissingHours(sortedResults, {total:0}, moment(start).format('YYYY-MM-DD HH:mm'), moment(end).format('YYYY-MM-DD HH:mm'));
+            } else {
+                sortedResults = self._zeroMissingDays(sortedResults, {total:0}, moment(start).format('YYYY-MM-DD'), moment(end).format('YYYY-MM-DD'));
+            }
+            self.log.debug(accountId, userId, '<< get404sReport');
+            fn(err, sortedResults);
+        });
     },
 
     /*

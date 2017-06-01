@@ -5,9 +5,9 @@
 
 	app.factory('PurchaseOrderService', PurchaseOrderService);
 
-	PurchaseOrderService.$inject = ['$http', '$q', '$timeout', '$location'];
+	PurchaseOrderService.$inject = ['$rootScope', '$http', '$q', '$timeout', '$location'];
 	/* @ngInject */
-	function PurchaseOrderService($http, $q, $timeout, $location) {
+	function PurchaseOrderService($rootScope, $http, $q, $timeout, $location) {
 
 
         var poService = {
@@ -218,6 +218,10 @@
             return poRequest($http.get([baseCustomerAPIUrl, 'customers'].join('/')).success(success).error(error));
         }
 
+        $rootScope.$on('$personalProfileChanged', function(event, account) {
+            poService.purchaseOrders = null;
+            getPurchaseOrders();
+        });
 
 		(function init() {
             getPurchaseOrders();

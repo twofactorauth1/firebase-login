@@ -17,8 +17,7 @@
                 OITM_ItemName: undefined,
                 OMRC_FirmName: undefined,
                 OITM_ItemCode: undefined
-            },
-            showFilter: true
+            }
         };
 
         var baseInventoryAPIUrl = '/api/1.0/integrations/zi/inventory';
@@ -57,8 +56,6 @@
                 console.error('inventoryService getInventory error: ', JSON.stringify(error));
             }
 
-            var _method = "GET";
-
             var _qString = "?limit="+inventoryService.limit+"&skip="+ inventoryService.skip;
 
             if(inventoryService.sortBy){
@@ -69,7 +66,11 @@
                 if(inventoryService.globalSearch){
                     _qString += "&term=" + inventoryService.globalSearch;
                 }
-                _method = "POST";
+                _.each(inventoryService.fieldSearch, function (value, key) {
+                    if(value != null){
+                        _qString += '&' + key + '=' + value;
+                    }
+                });
                 urlParts.push('search');
             }
             else if(inventoryService.globalSearch){
@@ -79,8 +80,7 @@
             return (
                 inventoryRequest($http({
                   url: urlParts.join('/') + _qString,
-                  method: _method,
-                  data: angular.toJson(inventoryService.fieldSearch)
+                  method: "GET"
                 }).success(success).error(error))
             );
 
