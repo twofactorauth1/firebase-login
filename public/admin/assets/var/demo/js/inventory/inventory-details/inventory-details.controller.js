@@ -16,7 +16,8 @@ function inventoryDetailsController($scope, $state, $attrs, $filter, $modal, $ti
 
     vm.uiState = {
         loading: true,
-        dimNotApplicableText: 'NA'
+        dimNotApplicableText: 'NA',
+        loadingWatchInventory: true
     };
 
     vm.backToInventory = backToInventory;
@@ -27,11 +28,12 @@ function inventoryDetailsController($scope, $state, $attrs, $filter, $modal, $ti
 
     vm.unWatchInventoryItem = unWatchInventoryItem;
 
+    vm.watchInventoryItem = watchInventoryItem;
+
     function backToInventory(){
         $state.go("app.inventory");
     }
-
-            
+  
 
     function parseValueToFloat(value){
         if(value){
@@ -50,6 +52,7 @@ function inventoryDetailsController($scope, $state, $attrs, $filter, $modal, $ti
             vm.state.userOrgConfig = config;
             vm.uiState.inVentoryWatchList = config.watchList || [];
             vm.uiState.watched  = checkIfSelected();
+            vm.uiState.loadingWatchInventory = false;
         }
     }, true);
 
@@ -60,35 +63,28 @@ function inventoryDetailsController($scope, $state, $attrs, $filter, $modal, $ti
 
 
     function unWatchInventoryItem() {
-        
-        var watchMessage = "Do you want to remove this item from inventory watch list?";
-        var confirmMessage = "Yes, remove from watch list!";
-        var cancelMessage = "No, do not remove from watch list!";
+        vm.uiState.loadingWatchInventory = true;
         var toasterMessage = 'Item removed from inventory watch list';
-        
-        
-        SweetAlert.swal({
-            title: "Are you sure?",
-            text: watchMessage,
-            type: "warning",
-            showCancelButton: true,
-            confirmButtonColor: "#DD6B55",
-            confirmButtonText: confirmMessage,
-            cancelButtonText: cancelMessage,
-            closeOnConfirm: true,
-            closeOnCancel: true
-          },
-          function (isConfirm) {
-            if (isConfirm) {
-                vm.uiState.inVentoryWatchList = _.without(vm.uiState.inVentoryWatchList, $stateParams.inventoryId);
-                vm.state.userOrgConfig.watchList = vm.uiState.inVentoryWatchList;
-                InventoryService.updateUserOrgConfig(vm.state.userOrgConfig).then(function(response){                    
-                    toaster.pop('success', toasterMessage);
-                    vm.uiState.watched  = checkIfSelected();
-                });
-            }
+        vm.uiState.inVentoryWatchList = _.without(vm.uiState.inVentoryWatchList, $stateParams.inventoryId);
+        vm.state.userOrgConfig.watchList = vm.uiState.inVentoryWatchList;
+        InventoryService.updateUserOrgConfig(vm.state.userOrgConfig).then(function(response){                    
+            toaster.pop('success', toasterMessage);
+            vm.uiState.watched  = checkIfSelected();
+            vm.uiState.loadingWatchInventory = false;
         });
-        
+    };
+
+
+    function watchInventoryItem() {
+        vm.uiState.loadingWatchInventory = true;
+        var toasterMessage = 'Item add to inventory watch list';
+        vm.uiState.inVentoryWatchList = _.first(_.union([$stateParams.inventoryId], vm.uiState.inVentoryWatchList), 5);
+        vm.state.userOrgConfig.watchList = vm.uiState.inVentoryWatchList;
+        InventoryService.updateUserOrgConfig(vm.state.userOrgConfig).then(function(response){                    
+            toaster.pop('success', toasterMessage);
+            vm.uiState.watched  = checkIfSelected();
+            vm.uiState.loadingWatchInventory = false;
+        });
     };
 
     function init(element) {
