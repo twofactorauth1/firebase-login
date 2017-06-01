@@ -239,7 +239,7 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
                                             angular.element("#card_number .error").html(error.message);
                                             angular.element("#card_number").addClass('has-error');
                                             angular.element("#card_number .glyphicon").addClass('glyphicon-remove');
-                                            break; 
+                                            break;
                                     }
                                 } else {
                                     newUser.cardToken = token;
@@ -466,7 +466,7 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
                                             angular.element("#card_number .error").html(error.message);
                                             angular.element("#card_number").addClass('has-error');
                                             angular.element("#card_number .glyphicon").addClass('glyphicon-remove');
-                                            break;     
+                                            break;
                                     }
                                 } else {
                                     scope.buttonDisabled=false;
@@ -477,7 +477,7 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
                                     newUser.fingerprint = new Fingerprint().get();
                                     newUser.setupFee = 0;
                                     if(newAccount.addSignupFee === true) {
-                                        newUser.setupFee = 50000;//$500.00
+                                        newUser.setupFee = 150000;//$1500.00
                                     }
 
                                     UserService.initializeUser(newUser, function(err, data) {
@@ -570,7 +570,7 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
                     }
 
                 });
-                
+
             };
 
             scope.validateFormVersion2 = function() {
@@ -622,7 +622,7 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
                     checkIfFormValid = false;
                 }
 
-                if(checkIfFormValid){                    
+                if(checkIfFormValid){
                     return true;
                 }
                 else{
