@@ -293,6 +293,9 @@ _.extend(api.prototype, baseApi.prototype, {
             } else if (event.event === 'unsubscribe') {
                 emailMessageManager.handleUnsubscribe(event, function(err, value){});
                 emailMessageManager.markMessageUnsubscribed(event.emailmessageId, event, function(err, value){
+                    savedEvents.push(value);
+                    obj.sender = value.get('sender');
+                    obj.activityType = $$.m.ContactActivity.types.EMAIL_UNSUB;
                     contactDao.findContactsByEmail(event.accountId, event.email, function(err, contactAry){
                         if(err) {
                             self.log.error('Error finding contact for [' + event.email + '] and [' + event.accountId + ']');
@@ -310,14 +313,6 @@ _.extend(api.prototype, baseApi.prototype, {
                                         if(err) {
                                             self.log.error('Error marking contact unsubscribed', err);
                                             return;
-                                        } else {
-                                            var activity = new $$.m.ContactActivity({
-                                                accountId: contact.get('accountId'),
-                                                contactId: contact.id(),
-                                                activityType: $$.m.ContactActivity.types.EMAIL_UNSUB,
-                                                start: new Date()
-                                            });
-                                            contactActivityManager.createActivity(activity, function(err, value){});
                                         }
                                     });
                                 }
@@ -329,14 +324,6 @@ _.extend(api.prototype, baseApi.prototype, {
                                 if(err) {
                                     self.log.error('Error marking contact unsubscribed', err);
                                     return;
-                                } else {
-                                    var activity = new $$.m.ContactActivity({
-                                        accountId: contact.get('accountId'),
-                                        contactId: contact.id(),
-                                        activityType: $$.m.ContactActivity.types.EMAIL_UNSUB,
-                                        start: new Date()
-                                    });
-                                    contactActivityManager.createActivity(activity, function(err, value){});
                                 }
                             });
                         }
