@@ -746,13 +746,22 @@
                 .message-title{
                     font-size: 16px;
                     color: #2C3030;
+                    display: inline-block;
+                    width: 75%;
                     :after{
                         content: "\00a0";
+                    }
+                    @media screen and (max-width: 767px){
+                        width: 67%;
+                    }
+                    @media (min-width: 768px) and (max-width: 1439px) {
+                        width: 68%;
                     }
                 }
                 .message-date{
                     float: right;
                     color: #48b1cc;
+                    padding-top: 3px;
                 }
                 .btn.btn-message{
                     border-radius: 0;
