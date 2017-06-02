@@ -1956,6 +1956,29 @@ var emailMessageManager = {
         });
     },
 
+
+    isMessageUnsubscribed: function(messageId, fn) {
+        var self = this;
+        self.log.debug('>> isMessageUnsubscribed');
+        dao.findOne({_id:messageId}, $$.m.Emailmessage, function(err, emailMessage) {
+            if (err) {
+                self.log.error('Error finding email message:', err);
+                fn(err);
+            } else if (!emailMessage) {
+                self.log.debug('Cannot find emailMessage with ID:' + messageId);
+                fn();
+            } else {
+                if(emailMessage.get('unsubscribedDate') !== null) {
+                    self.log.debug('<< isMessageUnsubscribed(true)');
+                    return fn(null, true);
+                } else {
+                    self.log.debug('<< isMessageUnsubscribed(false)');
+                    return fn(null, false);
+                }
+            }
+        });
+    },
+
     markMessageUnsubscribed: function(messageId, event, fn) {
         var self = this;
         self.log.debug('>> markMessageUnsubscribed');
@@ -2059,6 +2082,10 @@ var emailMessageManager = {
                 return fn(err, messages);
             }
         });
+
+    },
+
+    getAsyncCampaignPerformanceReport: function(accountId, userId, campaignId, fn) {
 
     },
 
@@ -2909,9 +2936,11 @@ var emailMessageManager = {
             }
             if(p.custom_args && p.custom_args.contactFirstName) {
                 emailmessage.set('contactFirstName', p.custom_args.contactFirstName);
+                emailmessage.set('_contactFirstName', p.custom_args.contactFirstName.toLowerCase());
             }
             if(p.custom_args && p.custom_args.contactLastName) {
                 emailmessage.set('contactLastName', p.custom_args.contactLastName);
+                emailmessage.set('_contactLastName', p.custom_args.contactLastName.toLowerCase());
             }
             dao.saveOrUpdate(emailmessage, function(err, value){
                 if(err) {

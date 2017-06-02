@@ -11,11 +11,14 @@
         <button type="button" class="btn btn-primary btn-o pull-right btn btn-primary btn-o margin-top-5 margin-bottom-5 margin-left-5" ng-click="vm.backToInventory()">
             Back to Inventory
         </button>
-        <button ng-if="vm.uiState.watched" ng-hide="vm.uiState.loadingWatchInventory || vm.uiState.savingWatchInventory" type="button" class="btn btn-primary btn-o pull-right btn btn-primary btn-o margin-top-5 margin-bottom-5 margin-left-5" ng-click="vm.unWatchInventoryItem()">
-            Unwatch
-        </button>
-        <button ng-if="!vm.uiState.watched" ng-hide="vm.uiState.loadingWatchInventory || vm.uiState.savingWatchInventory" type="button" class="btn btn-primary btn-o pull-right btn btn-primary btn-o margin-top-5 margin-bottom-5 margin-left-5" ng-click="vm.watchInventoryItem()">
-            Watch
+        
+        <button ng-if="!vm.uiState.loadingWatchInventory && !vm.uiState.savingWatchInventory" type="button" class="btn btn-primary btn-o pull-right btn btn-primary btn-o margin-top-5 margin-bottom-5 margin-left-5" ng-click="vm.watchInventoryItem()">
+            <span ng-show="!vm.uiState.watched">
+                Watch
+            </span>
+            <span ng-show="vm.uiState.watched">
+                Unwatch
+            </span>
         </button>
     </div>
 </div>

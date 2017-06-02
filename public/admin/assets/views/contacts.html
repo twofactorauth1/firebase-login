@@ -34,13 +34,13 @@
                             </div>
                         </div>
                         <div class="mob-row">
-                            <div class="mob-sub-row">
+                            <div class="mob-sub-row row-1">
                                 <div class="fix-btn padding-0 ">
                                     <button type="button" class="libtn btn btn-danger ti-import" ng-click="openModal('import-contact-modal', 'importContactModalCtrl','md')">
                                         <span>Import</span>
                                     </button>
                                 </div>
-                                <div class="fix-btn padding-0 ">
+                                <div class="fix-btn padding-0 btn-2">
                                     <button type="button" class="libtn btn export_btn ti-export" ng-class="{'export_btn_select':(selectedContactsFn()).length}" ng-click="exportContactsFn()">
                                                <span class="desktop-text" ng-bind-html='exportText'></span>
                                                <span class="mobile-text">Export</span>
@@ -51,7 +51,7 @@
                                 <div class="fix-btn grp padding-0 " >
                                     <div class="btn-group ">
                                         <button class="btn btn-info" ng-class="{'active': tableView == 'list'}" href="" ng-click="tableView = 'list'" tooltip-placement="top" tooltip="List"> <span class="fa fa-th-list"></span> </button>
-                                        <button class="btn btn-info" ng-class="{'active': tableView == 'grid'}" href="" ng-click="tableView = 'grid'" tooltip-placement="top" tooltip="Grid"> <span class="fa fa-th"></span> </button>
+                                        <button class="btn btn-info right-round" ng-class="{'active': tableView == 'grid'}" href="" ng-click="tableView = 'grid'" tooltip-placement="top" tooltip="Grid"> <span class="fa fa-th"></span> </button>
                                     </div>
                                 </div>
                                 <div class="fix-btn padding-0" ng-hide="(selectedContactsFn()).length">

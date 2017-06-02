@@ -61,7 +61,9 @@
             if(inventoryService.sortBy){
                 _qString += "&sortBy=" + inventoryService.sortBy + "&sortDir=" + inventoryService.sortDir;
             }
-
+            else{
+                _qString += "&sortBy=_firmName&sortDir=1";   
+            }
             if(checkIfFieldSearch()){
                 if(inventoryService.globalSearch){
                     _qString += "&term=" + inventoryService.globalSearch;

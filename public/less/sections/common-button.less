@@ -17,7 +17,9 @@
         font-family: "Raleway", sans-serif !important;
         line-height: inherit !important;
     }
-    .btn-group>.btn:nth-child(2) {
+    .btn-group>.btn:nth-child(2),.btn-group>.btn:nth-child(2):hover ,
+    .right-round,right-round:hover {
+
         border-top-right-radius: 4px!important;
         border-bottom-right-radius: 4px !important;
     }
@@ -138,6 +140,11 @@
         .mob-row .fix-btn:nth-child(1){
             margin-left: 0px;
         }
+        .btn-2{
+            float: none;
+            text-align: left;
+            padding-left: 10px!important;
+        }
         .mob-row .fix-btn.mob-sub-right{
             float: right;
             margin-left: auto;
@@ -181,12 +188,10 @@
             width: 50%;
             display: inline-block;
         }
-        .mob-sub-row.text-right .fix-btn:nth-child(2){
+        .mob-sub-row.text-right .fix-btn{
             float: inherit;
-        }
-        .mob-sub-row:first-child .fix-btn:nth-child(2),
-        .mob-sub-row.text-right .fix-btn:not(:nth-child(2)){
-            text-align: center;
+            text-align: left;
+            width: auto;
         }
        .mob-sub-row .fix-btn{
             width: 48%;
@@ -194,8 +199,12 @@
             margin: 0px;
         }
         .fix-btn.grp.padding-0 {
-            float: left;
-            padding-left: 0px !important;
+            float: none;
+            text-align: left;
+            padding-right: 10px!important;
+        }
+        .row-1 .fix-btn{
+            width: auto!important;
         }
     }
     @media (min-width: 375px) and (max-width: 710px){
@@ -209,11 +218,6 @@
     @media (min-width: 425px) and (max-width: 710px) {
         .mob-sub-row .fix-btn {
             width: 49%;
-        }
-        .fix-btn.grp.padding-0 {
-            float: left;
-            text-align: left;
-            padding-left: 15px !important;
         }
     }
 }

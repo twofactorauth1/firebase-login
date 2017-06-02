@@ -26,8 +26,6 @@ function inventoryDetailsController($scope, $state, $attrs, $filter, $modal, $ti
 
     vm.checkProductGroup = checkProductGroup;
 
-    vm.unWatchInventoryItem = unWatchInventoryItem;
-
     vm.watchInventoryItem = watchInventoryItem;
 
     function backToInventory(){
@@ -61,31 +59,24 @@ function inventoryDetailsController($scope, $state, $attrs, $filter, $modal, $ti
         return _.contains(vm.uiState.inVentoryWatchList, $stateParams.inventoryId);
     }
 
-
-    function unWatchInventoryItem() {
-        vm.uiState.savingWatchInventory = true;
-        var toasterMessage = 'Item removed from inventory watch list';
-        vm.uiState.inVentoryWatchList = _.without(vm.uiState.inVentoryWatchList, $stateParams.inventoryId);
-        vm.state.userOrgConfig.watchList = vm.uiState.inVentoryWatchList;
-
-        InventoryService.updateUserOrgConfig(vm.state.userOrgConfig).then(function(response){                    
-            toaster.pop('success', toasterMessage);
-            vm.uiState.watched  = checkIfSelected();
-            vm.uiState.savingWatchInventory = false;
-        });
-    };
-
-
     function watchInventoryItem() {
         vm.uiState.savingWatchInventory = true;
-        var toasterMessage = 'Item add to inventory watch list';
-        vm.uiState.inVentoryWatchList = _.first(_.union([$stateParams.inventoryId], vm.uiState.inVentoryWatchList), 5);
+        if(vm.uiState.watched){
+            var toasterMessage = 'Item removed from inventory watch list';
+            vm.uiState.inVentoryWatchList = _.without(vm.uiState.inVentoryWatchList, $stateParams.inventoryId);            
+        }
+        else{
+            var toasterMessage = 'Item add to inventory watch list';
+            vm.uiState.inVentoryWatchList = _.first(_.union([$stateParams.inventoryId], vm.uiState.inVentoryWatchList), 5);    
+        }
+        
         vm.state.userOrgConfig.watchList = vm.uiState.inVentoryWatchList;
         vm.uiState.loadingWatchInventory = true;
         InventoryService.updateUserOrgConfig(vm.state.userOrgConfig).then(function(response){                    
             toaster.pop('success', toasterMessage);
             vm.uiState.watched  = checkIfSelected();
             vm.uiState.savingWatchInventory = false;
+            vm.uiState.loadingWatchInventory = false;
         });
     };
 
