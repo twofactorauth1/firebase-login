@@ -440,7 +440,7 @@ var ziManager = {
                         } else {
                             row._firmName = row.OMRC_FirmName.toLowerCase();
                         }
-
+                        row._vendorName = row.OMRC_FirmName.toLowerCase();
                     }
 
                 });
