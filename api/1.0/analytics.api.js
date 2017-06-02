@@ -310,7 +310,8 @@ _.extend(api.prototype, baseApi.prototype, {
                             obj.sender = value.get('sender');
                             obj.activityType = $$.m.ContactActivity.types.EMAIL_UNSUB;
                             contactActivitiesJSON.push(obj);
-                            contactDao.findContactsByEmail(event.accountId, event.email, function(err, contactAry){
+                            var accountId = event.accountId ? parseInt(event.accountId) : event.accountId
+                            contactDao.findContactsByEmail(accountId, event.email, function(err, contactAry){
                                 if(err) {
                                     self.log.error('Error finding contact for [' + event.email + '] and [' + event.accountId + ']');
                                     return;
