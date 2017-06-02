@@ -893,7 +893,10 @@
 
                         var sendAtDateISOString = null;
                         if(campaign.emailSettings) {
-                            sendAtDateISOString = moment.utc(campaign.emailSettings.sendAt).subtract('months', 1).toISOString();
+                            var sendAt = campaign.emailSettings.sendAt;
+                            //sendAtDateISOString = moment.utc(campaign.emailSettings.sendAt).subtract('months', 1).toISOString();
+                            var _dateString = sendAt.month + "/" + sendAt.day + "/" + sendAt.year + " " + sendAt.hour + ":" + sendAt.minute;                                                                                    
+                            sendAtDateISOString =  moment.utc(_dateString).toISOString();
                         }
 
                         var localMoment = moment(sendAtDateISOString);
