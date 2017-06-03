@@ -697,6 +697,9 @@ module.exports = {
             } else if(campaign.get('status') === $$.m.Campaign.status.RUNNING){
                 self.log.warn(accountId, userId, 'Attempted to activate a running campaign');
                 return fn('Attempted to activate a running campaign');
+            } else if(campaign.get('status') === $$.m.Campaign.status.PENDING_ACTIVATION){
+                self.log.warn(accountId, userId, 'Attempted to activate a campaign that was already activated');
+                return fn('Attempted to activate a campaign that was already activated');
             } else {
                 if(campaign.get('_v') === '0.1') {
                     campaign.set('status', $$.m.Campaign.status.RUNNING);
@@ -720,7 +723,8 @@ module.exports = {
         self.log.debug(accountId, userId, '>> activateCampaign');
         var query = {
             _id: campaignId,
-            accountId: accountId
+            accountId: accountId,
+            status:$$.m.CampaignV2.status.DRAFT
         };
 
         campaignDao.findOne(query, $$.m.CampaignV2, function(err, campaign) {
@@ -729,107 +733,114 @@ module.exports = {
                 self.log.error(accountId, userId, 'Error finding campaign:', err);
                 return fn(err);
             }
-            var contactsArray = campaign.get('contacts');
-            var campaignType = campaign.get("type");
-            var contactTags = campaign.get('contactTagData') || [];
-            contactDao.getContactsByTagArray(accountId, userId, contactTags, function(err, contacts){
-                if(contacts) {
-                    _.each(contacts, function(contact){
-                        if(!_.contains(contacts, contact.id())) {
-                            contactsArray.push(contact.id());
-                        }
-                    });
+            campaign.set('status', $$.m.CampaignV2.status.PENDING_ACTIVATION);
+            campaignDao.saveOrUpdate(campaign, function(err, campaign){
+                if (err || !campaign) {
+                    //we totally just checked for this but whatever
+                    self.log.error(accountId, userId, 'Error updating campaign:', err);
+                    return fn(err);
                 }
-                //uniqueify contacts
-                contactsArray = _.uniq(contactsArray);
-                campaign.set('contacts', contactsArray || []);
-                // Add OR Update contact tags
-                if(campaign.get("searchTags").tags.length){
-                    
-                    var tags = campaign.get("searchTags").tags;
-                    var operation = campaign.get("searchTags").operation;
-                    var contactIds = campaign.get('contacts');
-                    var query = { _id: { $in: contactIds} };
-                    var tags = _.pluck(tags, 'data');
-                    console.log(contactIds);
-                    contactDao.findMany(query, $$.m.Contact, function(err, contacts){
-                        if(err) {
-                            self.log.error('Error getting contacts for campaign: ' + err);
-                            return fn(err, null);
-                        } else {
-                            _.each(contacts, function(contact){
-                                if(operation === 'add'){
-                                   var contactTags =  contact.get("tags") || [];
-                                   contactTags = contactTags.concat(tags);
-                                   contact.set("tags", _.uniq(contactTags));
-                                }
-                                if(operation === 'set'){
-                                   contact.set("tags", _.uniq(tags));
-                                }
-                            });
-                            
-                            campaignDao.batchUpdate(contacts, $$.m.Contact, function(err, updatedContacts){
+                var contactsArray = campaign.get('contacts');
+                var campaignType = campaign.get("type");
+                var contactTags = campaign.get('contactTagData') || [];
+                contactDao.getContactsByTagArray(accountId, userId, contactTags, function(err, contacts){
+                    if(contacts) {
+                        _.each(contacts, function(contact){
+                            if(!_.contains(contacts, contact.id())) {
+                                contactsArray.push(contact.id());
+                            }
+                        });
+                    }
+                    //uniqueify contacts
+                    contactsArray = _.uniq(contactsArray);
+                    campaign.set('contacts', contactsArray || []);
+                    // Add OR Update contact tags
+                    if(campaign.get("searchTags").tags.length){
 
-                            });
-                        }
-                    });
-                } 
-                // We need not to check contacts length in autoresponder campaign
-                if(campaignType !== 'autoresponder' && (!contactsArray || !Array.isArray(contactsArray) || contactsArray.length <1)) {
-                    self.log.error('Expected at least one contact id in contacts array');
-                    return fn('Campaign must have at least one contact id in contacts array');
-                }
-                if(contactsArray && !_.every(contactsArray, function(id){return !isNaN(parseFloat(id)) && isFinite(id);})) {
-                    self.log.error('Expected all contact ids to be numeric:', contactsArray);
-                    return fn('Campaign contacts must be numeric');
-                }
-                campaign.set('status', $$.m.Campaign.status.RUNNING);
-                if(campaign.get('type') === 'autoresponder') {
-                    campaign.set('status', $$.m.Campaign.status.COMPLETED);
-                }
-                var participants = campaign.get('contacts').length;
-                campaign.get('statistics').participants = participants;
-                campaignDao.saveOrUpdate(campaign, function (err, updatedCampaign) {
-                    self.log.debug(accountId, userId, '<< activateCampaign');
-                    fn(err, updatedCampaign);
-                    /*
-                     * let's send some emails!!!
-                     */
-                    if(updatedCampaign.get('type') !== 'autoresponder') {
-                        contactDao.getContactsByIDs(accountId, contactsArray, function(err, contactAry){
-                            var emailSettings = campaign.get('emailSettings');
-                            var fromName = emailSettings.fromName;
-                            var fromAddress = emailSettings.fromEmail;
-                            var subject = emailSettings.subject;
-                            var vars = emailSettings.vars;
-                            var emailId = emailSettings.emailId;
-                            accountDao.getAccountByID(accountId, function(err, account){
-                                if(err || !account) {
-                                    self.log.error('Error getting account:', err);
-                                    return fn(err);
-                                } else {
-                                    emailDao.getEmailById(emailId, function(err, email){
-                                        if(err || !email) {
-                                            self.log.error('Error getting email to render: ' + err);
-                                            return fn(err, null);
-                                        }
-                                        app.render('emails/base_email_v2', emailMessageManager.contentTransformations(email.toJSON()), function(err, html) {
-                                            if (err) {
-                                                self.log.error('error rendering html: ' + err);
-                                                self.log.warn('email will not be sent.');
-                                            } else {
+                        var tags = campaign.get("searchTags").tags;
+                        var operation = campaign.get("searchTags").operation;
+                        var contactIds = campaign.get('contacts');
+                        var query = { _id: { $in: contactIds} };
+                        var tags = _.pluck(tags, 'data');
+                        console.log(contactIds);
+                        contactDao.findMany(query, $$.m.Contact, function(err, contacts){
+                            if(err) {
+                                self.log.error('Error getting contacts for campaign: ' + err);
+                                return fn(err, null);
+                            } else {
+                                _.each(contacts, function(contact){
+                                    if(operation === 'add'){
+                                        var contactTags =  contact.get("tags") || [];
+                                        contactTags = contactTags.concat(tags);
+                                        contact.set("tags", _.uniq(contactTags));
+                                    }
+                                    if(operation === 'set'){
+                                        contact.set("tags", _.uniq(tags));
+                                    }
+                                });
 
-                                                // If cc and bcc don't exists for emailSettings
-                                                if(!emailSettings.bcc && email.get("bcc")){
-                                                    emailSettings.bcc = email.get("bcc")
-                                                }
+                                campaignDao.batchUpdate(contacts, $$.m.Contact, function(err, updatedContacts){
+                                    
+                                });
+                            }
+                        });
+                    }
+                    // We need not to check contacts length in autoresponder campaign
+                    if(campaignType !== 'autoresponder' && (!contactsArray || !Array.isArray(contactsArray) || contactsArray.length <1)) {
+                        self.log.error('Expected at least one contact id in contacts array');
+                        return fn('Campaign must have at least one contact id in contacts array');
+                    }
+                    if(contactsArray && !_.every(contactsArray, function(id){return !isNaN(parseFloat(id)) && isFinite(id);})) {
+                        self.log.error('Expected all contact ids to be numeric:', contactsArray);
+                        return fn('Campaign contacts must be numeric');
+                    }
+                    campaign.set('status', $$.m.Campaign.status.RUNNING);
+                    if(campaign.get('type') === 'autoresponder') {
+                        campaign.set('status', $$.m.Campaign.status.COMPLETED);
+                    }
+                    var participants = campaign.get('contacts').length;
+                    campaign.get('statistics').participants = participants;
+                    campaignDao.saveOrUpdate(campaign, function (err, updatedCampaign) {
+                        self.log.debug(accountId, userId, '<< activateCampaign');
+                        fn(err, updatedCampaign);
+                        /*
+                         * let's send some emails!!!
+                         */
+                        if(updatedCampaign.get('type') !== 'autoresponder') {
+                            contactDao.getContactsByIDs(accountId, contactsArray, function(err, contactAry){
+                                var emailSettings = campaign.get('emailSettings');
+                                var fromName = emailSettings.fromName;
+                                var fromAddress = emailSettings.fromEmail;
+                                var subject = emailSettings.subject;
+                                var vars = emailSettings.vars;
+                                var emailId = emailSettings.emailId;
+                                accountDao.getAccountByID(accountId, function(err, account){
+                                    if(err || !account) {
+                                        self.log.error('Error getting account:', err);
+                                        return fn(err);
+                                    } else {
+                                        emailDao.getEmailById(emailId, function(err, email){
+                                            if(err || !email) {
+                                                self.log.error('Error getting email to render: ' + err);
+                                                return fn(err, null);
+                                            }
+                                            app.render('emails/base_email_v2', emailMessageManager.contentTransformations(email.toJSON()), function(err, html) {
+                                                if (err) {
+                                                    self.log.error('error rendering html: ' + err);
+                                                    self.log.warn('email will not be sent.');
+                                                } else {
 
-                                                if(!emailSettings.cc && email.get("cc")){
-                                                    emailSettings.cc = email.get("cc")
-                                                }
+                                                    // If cc and bcc don't exists for emailSettings
+                                                    if(!emailSettings.bcc && email.get("bcc")){
+                                                        emailSettings.bcc = email.get("bcc")
+                                                    }
 
-                                                emailMessageManager.sendBatchedCampaignEmail(fromAddress, fromName, contactAry, subject,
-                                                    html, account, campaignId, vars, emailSettings, emailId, userId, function(err, value){
+                                                    if(!emailSettings.cc && email.get("cc")){
+                                                        emailSettings.cc = email.get("cc")
+                                                    }
+
+                                                    emailMessageManager.sendBatchedCampaignEmail(fromAddress, fromName, contactAry, subject,
+                                                            html, account, campaignId, vars, emailSettings, emailId, userId, function(err, value){
                                                         if(err) {
                                                             self.log.error('Error sending campaign:', err);
                                                         } else {
@@ -842,19 +853,20 @@ module.exports = {
                                                             }
                                                         });
                                                     });
-                                            }
+                                                }
+                                            });
                                         });
-                                    });
-                                }
+                                    }
+                                });
+
                             });
 
+                        }
 
-                        });
-
-                    }
-
+                    });
                 });
             });
+
 
         });
     },
