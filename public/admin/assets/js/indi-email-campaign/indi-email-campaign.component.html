@@ -53,7 +53,7 @@
                 <tabset class="tabbable campaign-top-tab-bar">
                     <tab heading="Configuration">
                         <div ng-class="{
-                        'load1 csspinner':!vm.uiState.dataLoaded}">
+                        'load1 csspinner':!vm.uiState.dataLoaded || vm.uiState.saveLoading}">
                             <div class="container-fluid container-fullw bg-white padding-top-15 padding-bottom-15">
                                 <div class='row'>
                                     <div class="col-xs-4">
@@ -107,7 +107,7 @@
                                                 <span>Send Test</span>
                                             </button>
                                             <div class="btn-activate-campaign" ng-class="{'disable-btn-tooltip': vm.uiState.disableEditing}" style="display: inline-block;" tooltip="Campaign must have all changes saved before activation.">
-                                                <button type="button" ng-if="!vm.uiState.disableEditing" ng-disabled="!vm.canActivateFn() || !vm.state.campaign.name" ng-click='vm.activateCampaignFn()' class="btn btn-success campaign-btn-wide">
+                                                <button type="button" ng-if="!vm.uiState.disableEditing" ng-disabled="!vm.canActivateFn() || !vm.state.campaign.name || vm.uiState.saveLoading" ng-click='vm.activateCampaignFn()' class="btn btn-success campaign-btn-wide">
                                                     <i class="ti-power-off"></i>
                                                     <span>Activate</span>
                                                 </button>

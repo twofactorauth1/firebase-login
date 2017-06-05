@@ -67,6 +67,7 @@ var campaignV2 = $$.m.ModelBase.extend({
     },
     status: {
         DRAFT:'DRAFT',
+        PENDING_ACTIVATION: 'PENDING_ACTIVATION',
         RUNNING:'RUNNING',
         COMPLETED:'COMPLETED',
         CANCELLED:'CANCELLED'

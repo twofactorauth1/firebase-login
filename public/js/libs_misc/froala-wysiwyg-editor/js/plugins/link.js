@@ -317,6 +317,8 @@
       else {
         $popup.find('.fr-link-attr[name="text"]').parent().show();
       }
+
+      $popup.find('input[name="href"]').removeClass('fr-error');
     }
 
     function _showInsertPopup () {
@@ -339,6 +341,8 @@
           editor.popups.show('link.insert');
         }
       }
+
+      $popup.find('input[name="href"]').removeClass('fr-error');
     }
 
     function _initInsertPopup (delayed) {

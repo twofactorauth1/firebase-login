@@ -440,10 +440,11 @@ html
                                                 td(colspan="3", class="text-right")
                                                   strong Subtotal
                                                 td $ !{email.order.subtotal}
-                                              tr
-                                                td(colspan="3", class="text-right")
-                                                  strong Tax
-                                                td $ !{email.order.total_tax}
+                                              if email.order.total_tax && email.order.line_items[0].type !== 'DONATION'    
+                                                  tr
+                                                    td(colspan="3", class="text-right")
+                                                      strong Tax
+                                                    td $ !{email.order.total_tax}
                                               tr
                                                 td(colspan="3", class="text-right")
                                                   strong Total
