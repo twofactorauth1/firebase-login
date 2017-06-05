@@ -184,7 +184,7 @@
                                                     <switch ng-model="product.on_sale" type="checkbox" switch-label="OnSale"></switch>
                                                 </div>
                                             </div>
-                                            <div class="form-group" ng-if="product.on_sale" ng-class="{ 'has-error' : productDetail.sale_price.$invalid && !productDetail.sale_price.$pristine }">
+                                            <div class="form-group" ng-hide='product.type == productTypes.DONATION' ng-if="product.on_sale" ng-class="{ 'has-error' : productDetail.sale_price.$invalid && !productDetail.sale_price.$pristine }">
                                                 <label tooltip-placement="top" tooltip="The price the customer sees while a sale is enabled">
                                                     Sale Price <i class="fa fa-info-circle" />
                                                 </label>
@@ -194,7 +194,7 @@
                                                 </div>
                                                 <p ng-show="productDetail.sale_price.$invalid && !productDetail.sale_price.$pristine" class="help-block">Sale Price cannot be more than regular price</p>
                                             </div>
-                                            <div class="form-group" ng-if="product.on_sale">
+                                            <div class="form-group" ng-hide='product.type == productTypes.DONATION' ng-if="product.on_sale">
                                                 <label tooltip-placement="top" tooltip="The dates of the sale">
                                                     Sale Dates <i class="fa fa-info-circle" />
                                                 </label>
