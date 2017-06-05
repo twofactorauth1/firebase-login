@@ -69,6 +69,7 @@
             date: moment(),
             minDate: new Date()
         };
+        vm.uiState.delivery.originalDate = angular.copy(vm.uiState.delivery.date);
         vm.uiState.hstep = 1;
         vm.uiState.mstep = 1;
         vm.uiState.tableView = 'list';
