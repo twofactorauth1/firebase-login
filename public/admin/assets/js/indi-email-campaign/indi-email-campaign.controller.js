@@ -330,6 +330,7 @@
                 return;
             }
             else{
+                vm.uiState.saveLoading = true;
                 var fn = EmailCampaignService.activateCampaign;
                 fn(vm.state.campaign).then(function (res) {
                         vm.state.campaign = angular.extend(vm.state.campaign, res.data);
@@ -339,13 +340,14 @@
                         vm.uiState.delivery.originalDate = angular.copy(vm.uiState.delivery.date);
                         vm.uiState.dataLoaded = true;
                         vm.uiState.disableEditing = false;
-
+                        vm.uiState.saveLoading = false;
                         vm.uiState.disableEditing = true;
                         toaster.pop('success', 'Campaign activated');
 
                     }, function (err) {
                         vm.uiState.dataLoaded = true;
                         toaster.pop('error', 'Campaign activation failed');
+                        vm.uiState.saveLoading = false;
                     }
                 );
             }
