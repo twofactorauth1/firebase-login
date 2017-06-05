@@ -15,7 +15,7 @@ app.directive('widgetHeaderLabel', ['$filter',  function($filter) {
 
             function getWidgetRecordsLengthMessage(count, item){
                 var str = "";
-                if(count === 1){
+                if(count == 1){
                     str = "There is 1 " + item;
                 }
                 else if(count > 1){
