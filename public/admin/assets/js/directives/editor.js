@@ -290,17 +290,19 @@ app.directive("elem", function($rootScope, $timeout, $compile, SimpleSiteBuilder
                         }
                     })
                     .on('froalaEditor.link.beforeInsert', function (e, editor, href, text) {
-                        if(attrs.ssbEmailEditor && href && href.indexOf('mailto:') !== 0 && href.indexOf('tel:') !== 0){
-                            var regex = /^(f|ht)tps?:\/\//i;
-                            if(!regex.test(href)){
-                                var $popup = editor.popups.get('link.insert');
-                                $popup.find('input[name="href"]').addClass('fr-error');
-                                editor.events.trigger('link.bad', []);
-                                toaster.clear('*');
-                                toaster.pop('warning', 'Protocol is required');
-                                return false;
-                            }
-                        }
+                        if(attrs.ssbEmailEditor || attrs.broadcastMessageEditor){
+                           if(href && href.indexOf('mailto:') !== 0 && href.indexOf('tel:') !== 0){
+                                var regex = /^(f|ht)tps?:\/\//i;
+                                if(!regex.test(href)){
+                                    var $popup = editor.popups.get('link.insert');
+                                    $popup.find('input[name="href"]').addClass('fr-error');
+                                    editor.events.trigger('link.bad', []);
+                                    toaster.clear('*');
+                                    toaster.pop('warning', 'Protocol is required');
+                                    return false;
+                                }
+                            } 
+                        }                        
                     }).on('froalaEditor.commands.after', function (e, editor, cmd, param1, param2) {
 
                         if (editor.popups.areVisible()) {
