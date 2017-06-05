@@ -1,7 +1,7 @@
 
 /*global app, moment, angular, window*/
 /*jslint unparam:true*/
-app.directive("elem", function($rootScope, $timeout, $compile, SimpleSiteBuilderService, $window, UtilService) {
+app.directive("elem", function($rootScope, $timeout, $compile, SimpleSiteBuilderService, $window, UtilService, toaster) {
   return {
     require: '?ngModel',
     replace: true,
@@ -296,6 +296,8 @@ app.directive("elem", function($rootScope, $timeout, $compile, SimpleSiteBuilder
                                 var $popup = editor.popups.get('link.insert');
                                 $popup.find('input[name="href"]').addClass('fr-error');
                                 editor.events.trigger('link.bad', []);
+                                toaster.clear('*');
+                                toaster.pop('warning', 'Protocol is required');
                                 return false;
                             }
                         }
