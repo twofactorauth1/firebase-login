@@ -709,7 +709,7 @@ var dao = {
 
                     userDao.saveOrUpdate(user, function (err, value) {
                         if (!err) {
-                            var userActivity = new $$.m.UserActivity({accountId:accountId, userId:user.id(), type:'RESET_PASSWORD'});
+                            var userActivity = new $$.m.UserActivity({accountId:accountId, userId:user.id(), type:'RESET_PASSWORD', activityType: 'RESET_PASSWORD'});
                             userActivityManager.createUserActivity(userActivity, function(){});
                             fn(null, value);
                         } else {
