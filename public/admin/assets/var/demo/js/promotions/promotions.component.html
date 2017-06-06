@@ -1,0 +1,87 @@
+<section id="page-title" class="padding-top-15 padding-bottom-15 securematics-promotions-section" >
+    <div class="row">
+        <div class="col-sm-8">
+            <h1 class="mainTitle">PROMOTIONS</h1>
+            <span ng-if="vm.state.promotions" class="mainDescription">There {{vm.state.promotions.length > 1 ? 'are' : 'is'}}  currently {{vm.state.promotions.length | number : 0}} promotion<span ng-if="vm.state.promotions.length > 1">s</span>. <span ng-if="vm.showFilteredRecords()"> ({{filteredCollection.length || 0}} in filtered view)</span></span>
+        </div>
+    </div>
+    <div ng-if="$parent.isAdminUser" data-ng-include=" 'assets/var/demo/js/promotions/promotions.statistics.html' "></div>
+</section>
+
+
+<div class="securematics-promotions-list" ng-init="tableView='list'">
+	<div st-table="vm.displayedPromotions" st-safe-src="vm.state.promotions" st-filtered-collection>
+	    <div class="container-fluid container-fullw bg-white padding-top-0 padding-bottom-0 margin-bottom-15">
+	        <div class="row">
+	            <div class="col-sm-12">
+	                <div class="panel panel-transparent row margin-bottom-0">
+	                    <div class="panel-body">
+	                        <form role="form" class="ng-pristine ng-valid row">
+	                            <div>
+	                                <div class="col-xs-12 col-sm-12 padding-left-0">
+	                                    <div class="form-group">
+	                                        <div class="col-xs-8 col-sm-6 col-md-6 padding-right-0">
+	                                            <span class="input-icon">
+                                                    <input type="text" st-search ng-model="vm.uiState.globalSearch" placeholder="Search by name, vendor..." id="form-field-14" class="form-control">
+                                                    <i class="ti-search"></i>
+                                                </span>
+	                                        </div>
+	                                        <div class="btn-group pull-right">
+		                                        <button class="btn btn-info" ng-class="{'active': tableView == 'list'}" href="" ng-click="tableView = 'list'" tooltip-placement="top" tooltip="List"> <span class="fa fa-th-list"></span> </button>
+		                                        <button class="btn btn-info" ng-class="{'active': tableView == 'grid'}" href="" ng-click="tableView = 'grid'" tooltip-placement="top" tooltip="Grid"> <span class="fa fa-th"></span> </button>
+                                    		</div>
+	                                    </div>
+	                                </div>
+	                            </div>
+	                        </form>
+	                    </div>
+	                </div>
+	            </div>
+	        </div>
+	    </div>
+	    <table class="table table-hover table-striped" ng-class="{'grid': tableView == 'grid', 'bg-white table-list-view': tableView == 'list'}" ng-if="!vm.uiState.loading">
+	        <thead ng-class="{'bg-white': tableView == 'grid'}">
+	            <tr>
+	                <th class="" st-sort="name" style="white-space: nowrap;">Name</th>
+	                <th class="" st-sort="vendor" style="white-space: nowrap;">Vendor</th>
+	                <th class="" style="white-space: nowrap;">Promo Code</th>
+	                <th class="hidden-xs" st-sort="products" style="white-space: nowrap;">Products</th>
+	                <th class="hidden-xs" st-sort="startDate" style="white-space: nowrap;">Start Date</th>
+	                <th class="hidden-xs zip-col" st-sort="exprirationDate" style="white-space: nowrap;">Expriration Date</th>
+	                <th class="" st-sort="shipments" style="white-space: nowrap;">Shipments</th>
+	            </tr>
+	            <tr>
+	                <th>
+	                    <input st-search="name" ng-model="vm.uiState.fieldSearch.name" placeholder="Name" class="form-control" type="search" />
+	                </th>
+	                <th>
+	                    <input st-search="vendor" ng-model="vm.uiState.fieldSearch.vendor" placeholder="Vendor" class="form-control" type="search" />
+	                </th>
+	            </tr>
+	        </thead>
+	        <tbody>
+	            <tr ng-repeat="promotion in vm.displayedPromotions" class="product-item" ng-click="vm.viewPromotionDetails(promotion)">
+	                <td><strong>Name: </strong>{{promotion.name}}</td>
+	                <td><strong>Vendor: </strong><div class="name-block-container"><span class="list-name"></span><span ng-text-truncate="promotion.vendor" ng-tt-chars-threshold="25" ng-tt-no-toggling tooltip="{{promotion.vendor}}"></span></div></td>	                
+	                <td><strong>Promo Code: </strong>{{promotion.promoCode}}</td>
+	                <td class="hidden-xs"><strong>Products: </strong><div class="name-block-container"><span class="list-name"></span><span ng-text-truncate="promotion.products" ng-tt-chars-threshold="25" ng-tt-no-toggling tooltip="{{promotion.products}}"></span></div></td>
+	                <td class="hidden-xs"><strong>Start Date: </strong>{{promotion.startDate}}</td>
+	                <td class="hidden-xs"><strong>Expriration Date: </strong>{{promotion.exprirationDate}}</td>
+	                <td><strong>Shipments: </strong>{{promotion.shipments}}</td>
+	            </tr>
+	        </tbody>
+	        <tfoot>
+	            <tr>
+	                <td ng-if="vm.state.promotions.length" class="text-center" st-custom-pagination="" st-displayed-pages="vm.pagingConstant.displayedPages" st-items-by-page="vm.pagingConstant.numberOfRowsPerPage || 50" colspan="6">
+	                </td>
+	                <td ng-if="!vm.state.promotions.length" colspan="6" class="center height-100">
+	            		<h4>There are currently no promotions</h4>
+	            	</td>
+	            </tr>
+	        </tfoot>
+	    </table>
+	    <div class="load1 csspinner height-400" ng-show="vm.uiState.loading"></div>
+	</div>
+</div>
+
+

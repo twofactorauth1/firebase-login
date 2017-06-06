@@ -866,6 +866,9 @@
 
 
     $scope.getEmails = function() {
+        if($scope.product.type == $scope.productTypes.DONATION) {
+            $scope.product.on_sale = false;
+        }
       if(!$scope.product.emailSettings){
         setProductEmailSettings($scope.product);
       }
@@ -1151,6 +1154,9 @@
     $scope.resetEmailTemplate = function(){
         if($scope.product.type == $scope.productTypes.DONATION || $scope.product.type == $scope.productTypes.EXTERNAL){
             $scope.product.fulfillment_email = false;
+        }
+        if($scope.product.type == $scope.productTypes.DONATION) {
+            $scope.product.on_sale = false;
         }
     }
     
