@@ -274,6 +274,16 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         templateUrl: "/admin/assets/var/demo/views/under-construction.html",
         title: 'View Quotes',
         icon: 'ti-layout-media-left-alt'
+    }).state('app.promotions', {
+        url: '/promotions',
+        templateUrl: "/admin/assets/var/demo/views/under-construction.html",
+        title: 'Promotions',
+        icon: 'ti-layout-media-left-alt'
+    }).state('app.rmas', {
+        url: '/rmas',
+        templateUrl: "/admin/assets/var/demo/views/under-construction.html",
+        title: 'RMAs',
+        icon: 'ti-layout-media-left-alt'
     }).state('app.purchaseorders', {
         url: '/purchase-orders',
         templateUrl: "/admin/assets/var/demo/js/purchase-order/purchase-order.html",

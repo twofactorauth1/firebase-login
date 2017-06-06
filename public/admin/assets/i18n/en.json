@@ -134,6 +134,14 @@
         "MANAGE": "Manage Quotes",
         "NOTIFICATIONS": "Notifications",
         "VIEW": "View Quotes"
+      },
+      "promotions": {
+        "MAIN": "Promotions",
+        "MANAGE": "Manage Promotions"
+      },
+      "rmas": {
+        "MAIN": "RMAs",
+        "SUBMIT": "Submit RMA"
       }
     }
   },
