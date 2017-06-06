@@ -43,21 +43,7 @@
             promotionsService.promotions = promotions;
             
         }
-
-        function getUserOrgConfig(){
-            function success(data) {
-                console.log(data);
-                promotionsService.userOrgConfig = data;
-            }
-
-            function error(error) {
-                console.error('promotionsService getUserOrgConfig error: ', JSON.stringify(error));
-            }
-
-            return promotionsRequest($http.get([baseOrgConfigAPIUrl].join('/')).success(success).error(error));
-
-        }
-
+        
 		(function init() {
             promotionsService.getUserOrgConfig();
             promotionsService.getPromotions();
