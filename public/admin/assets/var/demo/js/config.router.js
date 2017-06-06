@@ -276,9 +276,10 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         icon: 'ti-layout-media-left-alt'
     }).state('app.promotions', {
         url: '/promotions',
-        templateUrl: "/admin/assets/var/demo/views/under-construction.html",
+        templateUrl: "/admin/assets/var/demo/js/promotions/promotions.html",
         title: 'Promotions',
-        icon: 'ti-layout-media-left-alt'
+        icon: 'ti-layout-media-left-alt',
+        resolve: loadSequence('PromotionsComponent', 'PromotionsComponentController', 'PromotionsService')
     }).state('app.rmas', {
         url: '/rmas',
         templateUrl: "/admin/assets/var/demo/views/under-construction.html",

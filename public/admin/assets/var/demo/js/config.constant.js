@@ -701,6 +701,16 @@ app.constant('JS_REQUIRES', {
     'LedgerDetailsComponent': 'assets/var/demo/js/customers/ledger-details/ledger-details.component.js',
     'LedgerDetailsController': 'assets/var/demo/js/customers/ledger-details/ledger-details.controller.js',
 
+
+    // Promotions
+
+
+    'PromotionsComponent': 'assets/var/demo/js/promotions/promotions.component.js',
+    'PromotionsComponentController': 'assets/var/demo/js/promotions/promotions.controller.js',
+    'PromotionsService': 'assets/var/demo/js/promotions/promotions.service.js',
+
+
+
     'asideCtrl': 'assets/var/demo/js/controllers/asideCtrl.js',
     'UsersCtrl': 'assets/var/demo/js/users/users.controller.js',
 
