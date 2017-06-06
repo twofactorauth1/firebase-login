@@ -30,6 +30,7 @@
 
       if(userAccount && userAccount.permissions && userAccount.permissions.length){
         this.orgConfigAndPermissions.isVendor = _.contains(userAccount.permissions, 'vendor');
+        this.orgConfigAndPermissions.isAdmin = _.contains(userAccount.permissions, 'admin');
       }
       if(this.orgConfigAndPermissions.isVendor){
         this.orgConfigAndPermissions.userPermissions.vendorRestrictedStates = this.vendorRestrictedStates;
