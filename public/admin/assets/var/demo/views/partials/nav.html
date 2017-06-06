@@ -46,17 +46,36 @@
         </a>
     </li>
 
-    <li ng-class="{'active open':$state.includes('app.quotes')}" class="hidden">
+    <li ng-class="{'active open':$state.includes('app.managequotes') || $state.includes('app.quotesnotifications') || $state.includes('app.viewquotes')}">
         <a href="javascript:void(0)">
-            <div class="item-content inactive">
+            <div class="item-content">
                 <div class="item-media">
                     <i class="ti-quote-right"></i>
                 </div>
-                <div class="item-inner-inactive">
-                    <span class="title"> Quotes </span><i class="icon-desktop"></i>
+                <div class="item-inner">
+                    <span class="title" translate="sidebar.nav.quotes.MAIN"> Quotes </span>
                 </div>
             </div>
         </a>
+        <ul class="sub-menu">
+            <li ui-sref-active="active" ng-class="{'active': $state.includes('app.managequotes')}" ng-if="isAdminUser">
+                <a ui-sref="app.managequotes">
+                    <span class="title" translate="sidebar.nav.quotes.MANAGE"> Manage Quotes </span>
+                </a>                
+            </li>
+            <li ui-sref-active="active" ng-class="{'active': $state.includes('app.quotesnotifications')}" ng-if="isAdminUser">
+                <a ui-sref="app.quotesnotifications">
+                    <span class="title" translate="sidebar.nav.quotes.NOTIFICATIONS"> Notifications </span>
+                </a>                
+            </li>
+            <li ui-sref-active="active" ng-class="{'active': $state.includes('app.viewquotes')}">
+                <a ui-sref="app.viewquotes">
+                    <span class="title" translate="sidebar.nav.quotes.VIEW"> View Quotes </span>
+                </a>
+                
+            </li>
+                
+        </ul>
     </li>
     <li ng-class="{'active open':$state.includes('app.purchaseorders')}">
         <a ui-sref="app.purchaseorders">
@@ -69,6 +88,25 @@
                 </div>
             </div>
         </a>
+    </li>
+    <li ng-class="{'active open':$state.includes('app.rmas')}">
+        <a href="javascript:void(0)">
+            <div class="item-content">
+                <div class="item-media">
+                    <i class="ti-reload"></i>
+                </div>
+                <div class="item-inner">
+                    <span class="title" translate="sidebar.nav.rmas.MAIN"> RMAs </span>
+                </div>
+            </div>
+        </a>
+        <ul class="sub-menu">
+            <li ui-sref-active="active" ng-class="{'active': $state.includes('app.rmas')}">
+                <a ui-sref="app.rmas">
+                    <span class="title" translate="sidebar.nav.rmas.SUBMIT"> Submit RMA </span>
+                </a>                
+            </li>
+        </ul>
     </li>
     <li ng-class="{'active open':$state.includes('app.customers') || $state.includes('app.ledgerDetails') || $state.includes('app.invoiceDetails')}">
         <a ui-sref="{{orgCardAndPermissions.userPermissions.ledgerState}}">
@@ -94,18 +132,27 @@
             </div>
         </a>
     </li>
-    <li ng-class="{'active open':$state.includes('app.promotions')}" class="hidden">
+
+    <li ng-class="{'active open':$state.includes('app.promotions')}">
         <a href="javascript:void(0)">
             <div class="item-content">
                 <div class="item-media">
                     <i class="ti-medall"></i>
                 </div>
                 <div class="item-inner">
-                    <span class="title"> Promotions </span><i class="icon-desktop"></i>
+                    <span class="title" translate="sidebar.nav.promotions.MAIN"> Promotions </span>
                 </div>
             </div>
         </a>
+        <ul class="sub-menu">
+            <li ui-sref-active="active" ng-class="{'active': $state.includes('app.promotions')}">
+                <a ui-sref="app.promotions">
+                    <span class="title" translate="sidebar.nav.promotions.MANAGE"> Manage Promotions </span>
+                </a>                
+            </li>
+        </ul>
     </li>
+
 	<li ng-class="{'active open':$state.includes('app.marketing')}" class="hidden">
 		<a href="javascript:void(0)">
 			<div class="item-content">
@@ -164,7 +211,7 @@
 			</li>
 		</ul>
 	</li>
-    <li ng-class="{'active open':$state.includes('app.broadcastmessage') || $state.includes('app.singlebroadcastmessage')}" ng-if="showPlatform == true">
+    <li ng-class="{'active open':$state.includes('app.broadcastmessage') || $state.includes('app.singlebroadcastmessage')}" ng-if="isAdminUser">
         <a href="javascript:void(0)">
             <div class="item-content">
                 <div class="item-media">
