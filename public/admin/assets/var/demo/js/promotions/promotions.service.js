@@ -11,7 +11,6 @@
         var promotionsService = {};
         promotionsService.loading = {value: 0};
         var baseOrgConfigAPIUrl = '/api/1.0/user/orgConfig';
-        promotionsService.getUserOrgConfig = getUserOrgConfig;
         promotionsService.getPromotions = getPromotions;
 
         function promotionsRequest(fn) {
@@ -45,7 +44,6 @@
         }
         
 		(function init() {
-            promotionsService.getUserOrgConfig();
             promotionsService.getPromotions();
 		})();
 
