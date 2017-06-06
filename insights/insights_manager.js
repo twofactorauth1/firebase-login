@@ -426,7 +426,7 @@ var insightsManager = {
 
                 rows.push(buildRow('revenueReport', 'Revenue', 'currentRevenue', 'previousRevenue', data, '$', ''));
                 self.log.debug('data:', JSON.stringify(data));
-                rows.push(buildRow('sentCount', 'Emails Sent', 'current', 'previous', data.emailReports, '', ''));
+                rows.push(buildRow('sentCount', 'Emails Delivered', 'current', 'previous', data.emailReports, '', ''));
                 rows.push(buildRow('openCount', 'Emails Opened', 'current', 'previous', data.emailReports, '', ''));
                 rows.push(buildRow('clickCount', 'Emails Clicked', 'current', 'previous', data.emailReports, '', ''));
                 self.log.debug('rows:', rows);

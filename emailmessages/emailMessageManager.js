@@ -3139,7 +3139,7 @@ var emailMessageManager = {
         self.log.debug(accountId, userId, '>> getMessagesSentOpenedClicked');
         var sentQuery = {
             accountId:accountId,
-            sendDate:{
+            deliveredDate:{
                 $gte:startDate,
                 $lte:endDate
             }
