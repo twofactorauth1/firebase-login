@@ -83,6 +83,8 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
                 }
                 if(section.layoutModifiers.grid && section.layoutModifiers.grid.isActive){
                    classString += ' ssb-page-section-layout-' + section.layout + '-grid';
+                    if(!section.layoutModifiers.grid.height || section.layoutModifiers.grid.height<0)
+                    section.layoutModifiers.grid.height=350//defalut
                 }
                 if(section.layoutModifiers.columns && angular.isDefined(section.layoutModifiers.columns.columnsNum)){
                     var _col = section.layoutModifiers.columns.columnsNum || 1;

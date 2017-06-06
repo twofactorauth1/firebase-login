@@ -24,7 +24,8 @@ function inventoryComponentController($scope, $attrs, $filter, $modal, $timeout,
         fieldSearch: {
             OITM_ItemName: InventoryService.fieldSearch.OITM_ItemName,
             OMRC_FirmName: InventoryService.fieldSearch.OMRC_FirmName,
-            OITM_ItemCode: InventoryService.fieldSearch.OITM_ItemCode
+            OITM_ItemCode: InventoryService.fieldSearch.OITM_ItemCode,
+            Available: InventoryService.fieldSearch.Available
         },        
         inVentoryWatchList: []
     };
@@ -282,7 +283,8 @@ function inventoryComponentController($scope, $attrs, $filter, $modal, $timeout,
         vm.uiState.fieldSearch = {
             OITM_ItemName: undefined,
             OMRC_FirmName: undefined,
-            OITM_ItemCode: undefined
+            OITM_ItemCode: undefined,
+            Available: undefined
         }
     }
 

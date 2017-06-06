@@ -188,13 +188,9 @@ app.controller('AppCtrl', ['$rootScope', '$scope', '$state', '$translate', '$win
         UserService.getUser(function (user) {
             $scope.currentUser = user;
             if($scope.currentUser) {
-                $scope.showPlatform = true;
+                $scope.isAdminUser = false;
                 if($scope.currentUser.accounts && $scope.currentUser.accounts[0] && $scope.currentUser.accounts[0].permissions) {
-                    _.each($scope.currentUser.accounts[0].permissions, function(perm){
-                        if(perm === 'vendor') {
-                            $scope.showPlatform = false;
-                        }
-                    });
+                   $scope.isAdminUser = _.contains($scope.currentUser.accounts[0].permissions, 'admin');                    
                 }
             }
         });

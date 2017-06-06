@@ -573,6 +573,8 @@
             if (vm.uiState.whenToSend !== 'later') {
                 vm.uiState.delivery.date = moment();
             }
+
+            vm.state.campaign.emailSettings.whenToSend = vm.uiState.whenToSend;
         }
 
         function openModalFn(template) {
@@ -908,7 +910,12 @@
                             if (localMoment.isValid()) {
                                 vm.uiState.delivery.date = localMoment;
                                 vm.uiState.delivery.originalDate = angular.copy(localMoment);
-                                vm.uiState.whenToSend = localMoment.isAfter() ? 'later' : 'now';
+                                if(campaign.emailSettings.whenToSend){
+                                    vm.uiState.whenToSend = campaign.emailSettings.whenToSend;
+                                }
+                                else{
+                                    vm.uiState.whenToSend = localMoment.isAfter() ? 'later' : 'now';
+                                }
                             }
                         }
                         if(campaign.contacts && campaign.contacts.length <= userConstant.campaigns.MAX_CONTACT_LIST_COUNT){
