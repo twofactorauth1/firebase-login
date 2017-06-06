@@ -46,17 +46,36 @@
         </a>
     </li>
 
-    <li ng-class="{'active open':$state.includes('app.quotes')}" class="hidden">
+    <li ng-class="{'active open':$state.includes('app.managequotes') || $state.includes('app.quotesnotifications') || $state.includes('app.viewquotes')}">
         <a href="javascript:void(0)">
-            <div class="item-content inactive">
+            <div class="item-content">
                 <div class="item-media">
                     <i class="ti-quote-right"></i>
                 </div>
-                <div class="item-inner-inactive">
-                    <span class="title"> Quotes </span><i class="icon-desktop"></i>
+                <div class="item-inner">
+                    <span class="title" translate="sidebar.nav.quotes.MAIN"> Quotes </span>
                 </div>
             </div>
         </a>
+        <ul class="sub-menu">
+            <li ui-sref-active="active" ng-class="{'active': $state.includes('app.managequotes')}">
+                <a ui-sref="app.managequotes">
+                    <span class="title" translate="sidebar.nav.quotes.MANAGE"> Manage Quotes </span>
+                </a>                
+            </li>
+            <li ui-sref-active="active" ng-class="{'active': $state.includes('app.quotesnotifications')}">
+                <a ui-sref="app.quotesnotifications">
+                    <span class="title" translate="sidebar.nav.quotes.NOTIFICATIONS"> Notifications </span>
+                </a>                
+            </li>
+            <li ui-sref-active="active" ng-class="{'active': $state.includes('app.viewquotes')}">
+                <a ui-sref="app.viewquotes">
+                    <span class="title" translate="sidebar.nav.quotes.VIEW"> View Quotes </span>
+                </a>
+                
+            </li>
+                
+        </ul>
     </li>
     <li ng-class="{'active open':$state.includes('app.purchaseorders')}">
         <a ui-sref="app.purchaseorders">
