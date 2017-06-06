@@ -16,7 +16,8 @@
             fieldSearch:{
                 OITM_ItemName: undefined,
                 OMRC_FirmName: undefined,
-                OITM_ItemCode: undefined
+                OITM_ItemCode: undefined,
+                Available: undefined
             }
         };
 
