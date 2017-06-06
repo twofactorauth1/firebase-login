@@ -58,12 +58,12 @@
             </div>
         </a>
         <ul class="sub-menu">
-            <li ui-sref-active="active" ng-class="{'active': $state.includes('app.managequotes')}">
+            <li ui-sref-active="active" ng-class="{'active': $state.includes('app.managequotes')}" ng-if="isAdminUser">
                 <a ui-sref="app.managequotes">
                     <span class="title" translate="sidebar.nav.quotes.MANAGE"> Manage Quotes </span>
                 </a>                
             </li>
-            <li ui-sref-active="active" ng-class="{'active': $state.includes('app.quotesnotifications')}">
+            <li ui-sref-active="active" ng-class="{'active': $state.includes('app.quotesnotifications')}" ng-if="isAdminUser">
                 <a ui-sref="app.quotesnotifications">
                     <span class="title" translate="sidebar.nav.quotes.NOTIFICATIONS"> Notifications </span>
                 </a>                
@@ -211,7 +211,7 @@
 			</li>
 		</ul>
 	</li>
-    <li ng-class="{'active open':$state.includes('app.broadcastmessage') || $state.includes('app.singlebroadcastmessage')}" ng-if="showPlatform == true">
+    <li ng-class="{'active open':$state.includes('app.broadcastmessage') || $state.includes('app.singlebroadcastmessage')}" ng-if="isAdminUser">
         <a href="javascript:void(0)">
             <div class="item-content">
                 <div class="item-media">
