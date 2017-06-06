@@ -11,6 +11,7 @@ var cmsDao = require('../cms/dao/cms.dao.js');
 var fs = require('fs');
 var async = require('async');
 var ssbManager = require('../ssb/ssb_manager');
+var analyticsManager = require('../analytics/analytics_manager');
 
 var view = function (req, resp, options) {
     this.init.apply(this, arguments);
@@ -521,6 +522,48 @@ _.extend(view.prototype, BaseView.prototype, {
         ], function done(err){
             if(err) {
                 self.log.error('Error during rendering:', err);
+                //can we get a session id here?
+                var sessionCookie = $$.u.cookies.getCookie(self.req, 'session_cookie');
+                var sessionId = $$.u.idutils.generateUUID();
+                if(sessionCookie) {
+                    try {
+                        sessionCookie = JSON.parse(sessionCookie);
+                        sessionId = sessionCookie.id;
+                    } catch(e){
+
+                    }
+
+                }
+                var pageProperties = {
+                    url: {
+                        source: self.req.protocol + '://' + self.req.host + '/404',
+                        protocol: self.req.protocol,
+                        domain: self.req.host,
+                        port: '',
+                        path: '/404',
+                        anchor: ''
+                    },
+                    requestedUrl:{
+                        source: self.req.protocol + '://' + self.req.host + self.req.url,
+                        protocol: self.req.protocol,
+                        domain: self.req.host,
+                        port: '',
+                        path: self.req.path,
+                        anchor: ''
+                    },
+                    pageActions: [],
+                    start_time: new Date().getTime(),
+                    end_time: 0,
+                    session_id: sessionId,
+                    entrance: false
+                };
+
+                var pageEvent = new $$.m.PageEvent(pageProperties);
+                pageEvent.set('server_time', new Date().getTime());
+                pageEvent.set('server_time_dt', new Date());
+
+                pageEvent.set('accountId', accountId);
+                analyticsManager.storePageEvent(pageEvent, function(err){});
                 app.render('404.html', {}, function(err, html){
                     if(err) {
                         self.log.error('Error during render:', err);
