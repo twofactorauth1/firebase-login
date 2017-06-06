@@ -1,6 +1,6 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.12.0/codemirror.min.css">
 <div ng-controller="broadcastMessageEditorCtrl as vm">
-	<div class="ssb-topbar message-topbar">
+	<div class="ssb-topbar message-topbar" ng-if="vm.uiState.showMessageEditor">
 		<div class="ssb-topbar-inner">		    
 
 		    <div id="ssb-froala-scrollable-container"></div>

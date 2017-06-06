@@ -2,7 +2,7 @@
 /*global app, moment, angular, window*/
 /*jslint unparam:true*/
 (function (angular) {
-    app.controller('broadcastMessageEditorCtrl', ['$scope', "$location", "toaster", "$stateParams", "BroadcastMessagesService", function ($scope, $location, toaster, $stateParams, BroadcastMessagesService) {
+    app.controller('broadcastMessageEditorCtrl', ['$scope', "$timeout", "$location", "toaster", "$stateParams", "BroadcastMessagesService", function ($scope, $timeout, $location, toaster, $stateParams, BroadcastMessagesService) {
 
         var vm = this;
 
@@ -77,12 +77,15 @@
                 vm.state.message = _.find(messages, function(message){
                     return message._id == $stateParams.id
                 })    
-            }            
+            }
+            $timeout(function() {
+                vm.uiState.showMessageEditor = true;
+            }, 1500);            
           }
         }, true);
 
         (function init() {
-            
+
         })();
 
     }]);
