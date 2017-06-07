@@ -90,7 +90,6 @@
                     <thead ng-class="{'bg-white': tableView == 'grid'}" sticky offset="65" sticky-class="sticky-header-class">
                         <tr>
                             <th st-sort="_CustStatmentDtl_Document_ID" style="white-space: nowrap;">Invoice</th>
-                            <th class="hidden-xs" st-sort="lineItems" style="white-space: nowrap;">Lines</th>
                             <th class="hidden-xs" st-sort="OINV_U_VARPO">Var PO</th>
                             <th style="white-space: nowrap;" st-sort="vm.getters.invoiceDate"><span class="hidden-xs">Invoice </span>Date</th>
                             <th style="white-space: nowrap;" st-sort="vm.getters.dueDate">Due <span class="hidden-xs">Date</span></th>
@@ -108,7 +107,6 @@
                     <tbody>
                         <tr ng-repeat="ledger in vm.displayedCustomerLedger" class="product-item" ng-click="vm.viewInventoryDetails(ledger._CustStatmentDtl_TransId)">
                             <td><strong>Invoice : </strong>{{ledger._CustStatmentDtl_Document_ID}}</td>
-                            <td class="hidden-xs"><strong>Lines: </strong>{{ledger.lineItems}}</td>
                             <td class="hidden-xs"><strong>Var PO : </strong>{{ledger.OINV_U_VARPO}}</td>
                             <td><strong>Invoice Date: </strong>{{vm.parseValueToDate(ledger._CustStatmentDtl_RefDate) | date:'M/d/yyyy'}}</td>
                             <td><strong>Due Date: </strong>{{vm.parseValueToDate(ledger._CustStatmentDtl_DueDate) | date:'M/d/yyyy'}}</td>
