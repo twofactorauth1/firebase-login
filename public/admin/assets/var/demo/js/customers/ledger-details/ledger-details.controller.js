@@ -61,6 +61,15 @@ function ledgerDetailsController($scope, $state, $attrs, $filter, $modal, $timeo
         });
     }
 
+    vm.getters = {
+        dueDate: function (value) {
+            return value._CustStatmentDtl_DueDate ? parseValueToDate(value._CustStatmentDtl_DueDate) : -1;
+        },
+        invoiceDate: function (value) {
+            return value._CustStatmentDtl_RefDate ? parseValueToDate(value._CustStatmentDtl_RefDate) : -1;
+        }
+    };
+
     $scope.$watch('vm.ledger.row', function(ledgerDetails) {
         if(angular.isDefined(ledgerDetails)){
             vm.ledgerDetails = _.uniq(ledgerDetails, function(ld){
