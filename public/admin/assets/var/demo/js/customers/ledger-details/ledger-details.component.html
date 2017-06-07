@@ -87,13 +87,13 @@
         <div class="inner-ledger-details bg-white col-xs-12 margin-top-30 purchase-orders-list">
             <div ng-init="tableView='list'">
                 <table class="table table-hover table-striped" ng-class="{'grid': tableView == 'grid', 'bg-white table-list-view': tableView == 'list'}" ng-if="!vm.uiState.loading">
-                    <thead ng-class="{'bg-white': tableView == 'grid'}">
+                    <thead ng-class="{'bg-white': tableView == 'grid'}" sticky offset="65" sticky-class="sticky-header-class">
                         <tr>
                             <th st-sort="_CustStatmentDtl_Document_ID" style="white-space: nowrap;">Invoice</th>
                             <th class="hidden-xs" st-sort="lineItems" style="white-space: nowrap;">Lines</th>
-                            <th class="hidden-xs">Var PO</th>
-                            <th style="white-space: nowrap;"><span class="hidden-xs">Invoice </span>Date</th>
-                            <th style="white-space: nowrap;">Due <span class="hidden-xs">Date</span></th>
+                            <th class="hidden-xs" st-sort="OINV_U_VARPO">Var PO</th>
+                            <th style="white-space: nowrap;" st-sort="vm.getters.invoiceDate"><span class="hidden-xs">Invoice </span>Date</th>
+                            <th style="white-space: nowrap;" st-sort="vm.getters.dueDate">Due <span class="hidden-xs">Date</span></th>
                             <th st-sort="invoiceTotal" style="white-space: nowrap;"><span class="hidden-xs">Invoice </span>Total</th>
                         </tr>
                         <tr ng-if="showFilter">

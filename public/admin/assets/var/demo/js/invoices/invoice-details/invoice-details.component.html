@@ -103,13 +103,13 @@
         <div class="inner-invoice-details bg-white col-xs-12 margin-top-30 purchase-orders-list">
             <div ng-init="tableView='list'">
                 <table class="table table-hover table-striped" ng-class="{'grid': tableView == 'grid', 'bg-white table-list-view': tableView == 'list'}" ng-if="!vm.uiState.loading">
-                    <thead ng-class="{'bg-white': tableView == 'grid'}">
+                    <thead ng-class="{'bg-white': tableView == 'grid'}" sticky offset="65" sticky-class="sticky-header-class">
                         <tr>
-                            <th>Product Name</th>
-                            <th>Description</th>
-                            <th>Qty</th>
-                            <th style="white-space: nowrap;">Unit Price</th>
-                            <th class="hidden-xs">Line Total</th>
+                            <th class="name-col">Product Name</th>
+                            <th class="desc-col">Description</th>
+                            <th class="qty-col">Qty</th>
+                            <th class="price-col" style="white-space: nowrap;">Unit Price</th>
+                            <th class="hidden-xs total-col">Line Total</th>
                         </tr>
                         <tr ng-if="showFilter">
                             <th>
@@ -122,11 +122,11 @@
                     </thead>
                     <tbody>
                         <tr ng-repeat="order in vm.displayedOrders" class="product-item">
-                            <td><strong>Product Name: </strong><a ng-click="vm.goToInventory(order.INV1_Dscription)"><span style="white-space: nowrap;" ng-text-truncate="order.INV1_Dscription" ng-tt-chars-threshold="25" ng-tt-no-toggling></span></td></a></td>
-                            <td><strong>Description: </strong><span class="hidden-xs" ng-text-truncate="order.INV1_U_dscription" ng-tt-chars-threshold="30" ng-tt-no-toggling title="{{order.INV1_U_dscription}}"></span></td>
-                            <td><strong>Qty: </strong>{{vm.parseValueToFloat(order.INV1_Quantity)}}</td>
-                            <td><strong>Unit Price: </strong>{{order.INV1_Price | currency : vm.invoiceDetails[0]._CustStatmentHdr_Currency}}</td>
-                            <td class="hidden-xs"><strong>Line Total: </strong>{{order.INV1_LineTotal | currency : vm.invoiceDetails[0]._CustStatmentHdr_Currency}}</td>
+                            <td class="name-col"><strong>Product Name: </strong><a ng-click="vm.goToInventory(order.INV1_Dscription)"><span style="white-space: nowrap;" ng-text-truncate="order.INV1_Dscription" ng-tt-chars-threshold="25" ng-tt-no-toggling></span></td></a></td>
+                            <td class="desc-col"><strong>Description: </strong><span class="hidden-xs" ng-text-truncate="order.INV1_U_dscription" ng-tt-chars-threshold="30" ng-tt-no-toggling title="{{order.INV1_U_dscription}}"></span></td>
+                            <td class="qty-col"><strong>Qty: </strong>{{vm.parseValueToFloat(order.INV1_Quantity)}}</td>
+                            <td class="price-col"><strong>Unit Price: </strong>{{order.INV1_Price | currency : vm.invoiceDetails[0]._CustStatmentHdr_Currency}}</td>
+                            <td class="hidden-xs total-col"><strong>Line Total: </strong>{{order.INV1_LineTotal | currency : vm.invoiceDetails[0]._CustStatmentHdr_Currency}}</td>
                         </tr>
                     </tbody>
                     <tfoot>

@@ -186,18 +186,13 @@ app.controller('AppCtrl', ['$rootScope', '$scope', '$state', '$translate', '$win
         // Top Bar User
         // -----------------------------------
         UserService.getUser(function (user) {
-            $scope.currentUser = user;
-            if($scope.currentUser) {
-                $scope.isAdminUser = false;
-                if($scope.currentUser.accounts && $scope.currentUser.accounts[0] && $scope.currentUser.accounts[0].permissions) {
-                   $scope.isAdminUser = _.contains($scope.currentUser.accounts[0].permissions, 'admin');                    
-                }
-            }
+            $scope.currentUser = user;            
         });
-
+        $scope.userPermissions = {};
         $scope.$watchGroup(["account", "currentUser"], _.debounce(function (values) {
             if (values[0] && values[1]) {
                 $scope.orgCardAndPermissions = UserPermissionsConfig.getOrgConfigAndPermissions(values[0], values[1]);
+                $scope.userPermissions = angular.copy($scope.orgCardAndPermissions);
             }
         }, 0), true);
 
