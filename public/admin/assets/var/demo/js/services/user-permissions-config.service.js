@@ -30,7 +30,7 @@
 
       if(userAccount && userAccount.permissions && userAccount.permissions.length){
         this.orgConfigAndPermissions.isVendor = _.contains(userAccount.permissions, 'vendor');
-        this.orgConfigAndPermissions.isAdmin = _.contains(userAccount.permissions, 'admin');
+        this.orgConfigAndPermissions.isAdminUser = _.contains(userAccount.permissions, 'admin');
       }
       if(this.orgConfigAndPermissions.isVendor){
         this.orgConfigAndPermissions.userPermissions.vendorRestrictedStates = this.vendorRestrictedStates;
@@ -43,6 +43,9 @@
           }
           else if(this.orgConfigAndPermissions.cardCodes.length == 0){
             this.orgConfigAndPermissions.userPermissions.dashbordLedgerUrl = "#";
+          }
+          if(this.orgConfigAndPermissions.cardCodes.length > 0){
+            this.orgConfigAndPermissions.isVendorWithCardCodes = true;
           }
         }
       }
