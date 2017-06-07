@@ -89,9 +89,10 @@ _.extend(view.prototype, BaseView.prototype, {
 
     resetByToken: function(token, email) {
         var self = this;
-
+        console.log('resetByToken:');
         authenticationDao.verifyPasswordResetToken(this.accountId(), token, function(err, value) {
-            if (!err) {
+            if (value) {
+                console.log('We have the user:', value);
                 //we have the user value, now lets load the
                 var data = self.baseData({
                     reset:true,
@@ -101,7 +102,6 @@ _.extend(view.prototype, BaseView.prototype, {
 
                 self.resp.render('forgotpassword', data);
                 self.cleanUp();
-                data = self = null;
             } else {
                 var data = self.baseData({
                     errorMsg: err
@@ -109,7 +109,6 @@ _.extend(view.prototype, BaseView.prototype, {
 
                 self.resp.render('forgotpassword', data);
                 self.cleanUp();
-                data = self = null;
             }
         });
     },
@@ -140,27 +139,7 @@ _.extend(view.prototype, BaseView.prototype, {
                 self.req.flash("info", "Password changed successfully");
                 self.resp.redirect("/login");
                 self.cleanUp();
-                data = self = null;
 
-                /*
-                self.req.login(value, function(err) {
-                    if (err) {
-                        var data = self.baseData({
-                            reset:true,
-                            token:true,
-                            errorMsg: "An error occurred changing your password"
-                        });
-                        self.resp.redirect("forgotpassword", data);
-                        self.cleanUp();
-                        data = self = null;
-                    } else {
-                        self.req.flash("info", "Password changed successfully");
-                        self.resp.redirect("/login");
-                        self.cleanUp();
-                        data = self = null;
-                    }
-                });
-                */
             } else {
                 var data = self.baseData({
                     reset:true,

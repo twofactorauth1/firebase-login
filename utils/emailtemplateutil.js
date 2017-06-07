@@ -66,13 +66,13 @@ var emailTemplateUtil = {
 
 
     //region PUBLIC
-    resetPassword: function(accountId, resetPasswordToken, user, toEmail, props, fn) {
+    resetPassword: function(accountId, resetPasswordToken, user, toEmail, props, orgId, fn) {
         var self = this;       
         if(accountId === appConfig.mainAccountID) {
             // we don't want the actual URL for 'main'... instead, we want www.
             accountId = 0;
         }
-        this._getServerUrl(accountId, function(err, value) {
+        this._getServerUrl(accountId, orgId, function(err, value) {
             if (err) {
                 return fn(err, value);
             }
@@ -84,7 +84,7 @@ var emailTemplateUtil = {
             tokens[self.tokens.SYSTEM_INFO] = "Date: "+ props.date + "<br/>" +
                                               "Browser: "+ props.browser + "<br/>" +
                                               "Operating System: "+ props.os + "<br/>" +
-                                              "IP Address: "+ props.ip
+                                              "IP Address: "+ props.ip;
 
             var options = {};
             if (user != null) {
@@ -106,9 +106,9 @@ var emailTemplateUtil = {
 
 
     //region PRIVATE
-    _getServerUrl: function(accountId, fn) {
+    _getServerUrl: function(accountId, orgId, fn) {
         if (accountId > 0) {
-            return accountDao.getServerUrlByAccount(accountId, fn);
+            return accountDao.getServerUrlByAccountAndOrg(accountId, orgId, fn);
         } else {
             return fn(null, this.wwwUrl);
         }
