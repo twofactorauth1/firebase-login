@@ -52,6 +52,8 @@
             <div class="col-md-12">
                 <tabset class="tabbable campaign-top-tab-bar">
                     <tab heading="Configuration">
+                        <h2 ng-show="vm.uiState.saveLoading" class="loadSavingMessage
+                            ">Activating..</h2>
                         <div ng-class="{
                         'load1 csspinner':!vm.uiState.dataLoaded || vm.uiState.saveLoading}">
                             <div class="container-fluid container-fullw bg-white padding-top-15 padding-bottom-15">
@@ -125,8 +127,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <h2 ng-if="vm.uiState.saveLoading" class="loadSavingMessage
-                            ">Activating..</h2>
+                            
                             <div class="container-fluid container-fullw margin-bottom-15 padding-top-15 padding-bottom-15 border-bottom-0">
                                 <div class="row email-campaign-main" ng-hide="!vm.uiState.dataLoaded">
                                     <div ng-class="vm.showSelectTagsPane() ? 'col-md-4': 'col-md-6'">
