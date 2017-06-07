@@ -39,7 +39,7 @@
 	        </div>
 	    </div>
 	    <table class="table table-hover table-striped" ng-class="{'grid': tableView == 'grid', 'bg-white table-list-view': tableView == 'list'}" ng-if="!vm.uiState.loading">
-	        <thead ng-class="{'bg-white': tableView == 'grid'}">
+	        <thead ng-class="{'bg-white': tableView == 'grid'}" sticky offset="65" sticky-class="sticky-header-class">
 	            <tr>
 	                <th class="code-col" st-sort="OCRD_CardCode" style="white-space: nowrap;">Id</th>
 	                <th class="name-col" st-sort="OCRD_CardName" style="white-space: nowrap;">Name</th>
@@ -59,12 +59,12 @@
 	        </thead>
 	        <tbody>
 	            <tr ng-repeat="customer in vm.displayedCustomers" class="product-item" ng-click="vm.viewCustomerLedger(customer)">
-	                <td width="1%"><strong>Id: </strong>{{customer.OCRD_CardCode}}</td>
-	                <td><strong>Name: </strong><div class="name-block-container"><span class="list-name"></span><span ng-text-truncate="customer.OCRD_CardName" ng-tt-chars-threshold="25" ng-tt-no-toggling title="{{customer.OCRD_CardName}}"></span></div></td>
-	                <td class="hidden-xs"><strong>Address: </strong><div class="name-block-container"><span class="list-name"></span><span ng-text-truncate="customer.OCRD_Address" ng-tt-chars-threshold="25" ng-tt-no-toggling title="{{customer.OCRD_Address}}"></span></div></td>
-	                <td><strong>City: </strong>{{customer.OCRD_City}}</td>
-	                <td><strong>State: </strong>{{customer.OCRD_State1}}</td>
-	                <td class="hidden-xs"><strong>ZipCode: </strong>{{customer.OCRD_ZipCode}}</td>
+	                <td class="code-col"><strong>Id: </strong>{{customer.OCRD_CardCode}}</td>
+	                <td class="name-col"><strong>Name: </strong><div class="name-block-container"><span class="list-name"></span><span ng-text-truncate="customer.OCRD_CardName" ng-tt-chars-threshold="25" ng-tt-no-toggling title="{{customer.OCRD_CardName}}"></span></div></td>
+	                <td class="hidden-xs address-col"><strong>Address: </strong><div class="name-block-container"><span class="list-name"></span><span ng-text-truncate="customer.OCRD_Address" ng-tt-chars-threshold="25" ng-tt-no-toggling title="{{customer.OCRD_Address}}"></span></div></td>
+	                <td class="city-col"><strong>City: </strong>{{customer.OCRD_City}}</td>
+	                <td class="state-col"><strong>State: </strong>{{customer.OCRD_State1}}</td>
+	                <td class="hidden-xs zip-col"><strong>ZipCode: </strong>{{customer.OCRD_ZipCode}}</td>
 	            </tr>
 	        </tbody>
 	        <tfoot>

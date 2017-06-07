@@ -17,7 +17,6 @@ function purchaseOrderComponentController($scope, $attrs, $filter, $modal, $time
         fieldSearch: PurchaseOrderService.fieldSearch,
         loadingNewPoModal: true
     }
-
     
     vm.createPurchaseOrder = createPurchaseOrder;
     vm.openModal = openModal;
@@ -126,6 +125,9 @@ function purchaseOrderComponentController($scope, $attrs, $filter, $modal, $time
     vm.getters = {
         created: function (value) {
             return value.created.date;
+        },
+        submitter: function (value) {
+            return value.submitter ? value.submitter.first || '' + value.submitter.last || '' : '';
         }
     };
 

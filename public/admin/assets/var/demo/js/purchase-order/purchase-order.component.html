@@ -106,17 +106,18 @@
 	            </div>
 	        </div>
 	    </div>
-	    <table class="table table-hover table-striped" ng-class="{'grid': tableView == 'grid', 'bg-white table-list-view': tableView == 'list'}" ng-if="!vm.uiState.loading">
-	        <thead ng-class="{'bg-white': tableView == 'grid'}">
+	    <table class="table table-hover table-striped table-po-list" ng-class="{'grid': tableView == 'grid', 'bg-white table-list-view': tableView == 'list'}" ng-if="!vm.uiState.loading">
+	        <thead ng-class="{'bg-white': tableView == 'grid'}" sticky offset="65" sticky-class="sticky-header-class">
 	            <tr>
-	            	<th class="hidden-xs" ng-click='vm.selectAllClickFn($event)' ng-show='vm.displayedOrders.length'><i class="fa fa-2x" ng-class='{"fa-check-circle": vm.selectAllChecked, "fa-circle-o": !vm.selectAllChecked}'></i></th>
+	            	<th class="hidden-xs select-po" ng-click='vm.selectAllClickFn($event)' ng-show='vm.displayedOrders.length'><i class="fa fa-2x" ng-class='{"fa-check-circle": vm.selectAllChecked, "fa-circle-o": !vm.selectAllChecked}'></i></th>
 	                <th st-sort="title" style="white-space: nowrap">Name</th>
-	                <th st-sort="submitter" style="white-space: nowrap">Submitter</th>
+	                <th st-sort="vm.getters.submitter" style="white-space: nowrap">Submitter</th>
 	                <th st-sort="companyName" ng-if="!vm.state.orgCardAndPermissions.isVendor" style="white-space: nowrap">Company</th>
 	                <th st-sort="vm.getters.created" style="white-space: nowrap">Date</th>
 	                <th class="hidden-xs">Attachment</th>
 	            </tr>
 	            <tr>
+	            	<th class="hidden-xs select-po"></th>
 	                <th>
 	                    <input st-search="title" ng-model="vm.uiState.fieldSearch.title" placeholder="Name" class="form-control" type="search" />
 	                </th>
@@ -124,7 +125,7 @@
 	        </thead>
 	        <tbody>
 	            <tr ng-repeat="order in vm.displayedOrders" class="product-item" ng-click="vm.viewPurchaseOrderDetails(order)">
-                    <td class="hidden-xs" ng-show='vm.displayedOrders.length'><i class="fa fa-2x" ng-click='vm.orderSelectClickFn($event, order)' ng-class='{"fa-check-circle": order.isSelected, "fa-circle-o": !order.isSelected}'></i></td>
+                    <td class="hidden-xs select-po" ng-show='vm.displayedOrders.length'><i class="fa fa-2x" ng-click='vm.orderSelectClickFn($event, order)' ng-class='{"fa-check-circle": order.isSelected, "fa-circle-o": !order.isSelected}'></i></td>
                     <td><strong>Name: </strong><div class="name-block-container"><span class="list-name"></span><span ng-text-truncate="order.title" ng-tt-chars-threshold="25" ng-tt-no-toggling title="{{order.title}}"></span></div></td>
 	                <td class=""><strong>Submitter: </strong>{{order.submitter.first}} {{order.submitter.last}}</td>
 

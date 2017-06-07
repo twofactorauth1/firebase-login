@@ -50,7 +50,7 @@
 	        </div>
 	    </div>
 	    <table class="table table-hover table-striped" ng-class="{'grid': tableView == 'grid', 'bg-white table-list-view': tableView == 'list'}" ng-if="!vm.uiState.loading">
-	        <thead ng-class="{'bg-white': tableView == 'grid'}">
+	        <thead ng-class="{'bg-white': tableView == 'grid'}" sticky offset="65" sticky-class="sticky-header-class">
 	            <tr>
 	                <th class="hidden-xs"></th>
 	                <th class="name-col sort" style="white-space: nowrap;" ng-class="{'st-sort-ascent': vm.uiState.sortData.details['name'].direction === 1, 'st-sort-descent': vm.uiState.sortData.details['name'].direction === -1}" ng-click="vm.sortInventory('_itemName', 'name')">Product</th>
@@ -83,13 +83,13 @@
 	        <tbody>
 	            <tr ng-repeat="product in vm.displayedProducts" class="product-item" ng-click="vm.viewSingleInventory(product)" ng-class='{"inventory-watch-row": vm.checkIfSelected(product, vm.state.userOrgConfig.watchList)}'>
 	            	<td class="hidden-xs"><i class="fa fa-2x" ng-click='vm.productSelectClickFn($event, product)' ng-class='{"fa-check-circle": vm.checkIfSelected(product, vm.uiState.inVentoryWatchList), "fa-circle-o": !vm.checkIfSelected(product, vm.uiState.inVentoryWatchList)}'></i></td>
-	                <td><strong>Product: </strong><div class="name-block-container"><span ng-text-truncate="product.OITM_ItemName" ng-tt-chars-threshold="25" ng-tt-no-toggling></span></div></td>
-	                <td class="vendorColumn" style="white-space: nowrap;"><strong>Vendor: </strong><span ng-text-truncate="product.OMRC_FirmName" ng-tt-chars-threshold="25" ng-tt-no-toggling></span></td>
-	                <td class="hidden-xs"><strong>Description: </strong><span ng-text-truncate="product.OITM_U_dscription" tooltip="{{product.OITM_U_dscription}}" ng-tt-chars-threshold="25" ng-tt-no-toggling></span></td>
-	                <td class="dimColumn hidden-xs hidden-sm"><strong>Dimension: </strong>{{vm.getDimentions(product)}}</td>
-	                <td class="weightColumn hidden-xs hidden-sm" style="white-space: nowrap;"><strong>Weight: </strong>{{vm.getWeight(product)}}</td>
-                    <td class="priceColumn hidden-xs hidden-sm" style="white-space: nowrap;"><strong>List Price: </strong>{{vm.getPrice(product) | currency : '$'}}</td>
-                    <td class="qtyColumn" style="white-space: nowrap;"><strong>Qty: </strong>
+	                <td class="name-col"><strong>Product: </strong><div class="name-block-container"><span ng-text-truncate="product.OITM_ItemName" ng-tt-chars-threshold="25" ng-tt-no-toggling></span></div></td>
+	                <td class="vendor-col" style="white-space: nowrap;"><strong>Vendor: </strong><span ng-text-truncate="product.OMRC_FirmName" ng-tt-chars-threshold="25" ng-tt-no-toggling></span></td>
+	                <td class="hidden-xs desc-col"><strong>Description: </strong><span ng-text-truncate="product.OITM_U_dscription" tooltip="{{product.OITM_U_dscription}}" ng-tt-chars-threshold="25" ng-tt-no-toggling></span></td>
+	                <td class="hidden-xs hidden-sm dim-col"><strong>Dimension: </strong>{{vm.getDimentions(product)}}</td>
+	                <td class="weight-col hidden-xs hidden-sm" style="white-space: nowrap;"><strong>Weight: </strong>{{vm.getWeight(product)}}</td>
+                    <td class="price-col hidden-xs hidden-sm" style="white-space: nowrap;"><strong>List Price: </strong>{{vm.getPrice(product) | currency : '$'}}</td>
+                    <td class="qtyColumn qty-col" style="white-space: nowrap;"><strong>Qty: </strong>
 	                <span ng-if="product.Available <= 0">
                         <a href='#' ng-click='vm.cancel($event);' onclick='Intercom("showNewMessage","")'>Click to Inquire</a>
                     </span>
