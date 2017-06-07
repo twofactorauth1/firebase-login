@@ -50,7 +50,7 @@
 	        </div>
 	    </div>
 	    <table class="table table-hover table-striped" ng-class="{'grid': tableView == 'grid', 'bg-white table-list-view': tableView == 'list'}" ng-if="!vm.uiState.loading">
-	        <thead ng-class="{'bg-white': tableView == 'grid'}">
+	        <thead ng-class="{'bg-white': tableView == 'grid'}" sticky offset="65" sticky-class="sticky-header-class">
 	            <tr>
 	                <th class="hidden-xs"></th>
 	                <th class="name-col sort" style="white-space: nowrap;" ng-class="{'st-sort-ascent': vm.uiState.sortData.details['name'].direction === 1, 'st-sort-descent': vm.uiState.sortData.details['name'].direction === -1}" ng-click="vm.sortInventory('_itemName', 'name')">Product</th>
