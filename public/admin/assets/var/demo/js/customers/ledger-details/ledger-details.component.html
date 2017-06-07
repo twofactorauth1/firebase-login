@@ -87,7 +87,7 @@
         <div class="inner-ledger-details bg-white col-xs-12 margin-top-30 purchase-orders-list">
             <div ng-init="tableView='list'">
                 <table class="table table-hover table-striped" ng-class="{'grid': tableView == 'grid', 'bg-white table-list-view': tableView == 'list'}" ng-if="!vm.uiState.loading">
-                    <thead ng-class="{'bg-white': tableView == 'grid'}">
+                    <thead ng-class="{'bg-white': tableView == 'grid'}" sticky offset="65" sticky-class="sticky-header-class">
                         <tr>
                             <th st-sort="_CustStatmentDtl_Document_ID" style="white-space: nowrap;">Invoice</th>
                             <th class="hidden-xs" st-sort="lineItems" style="white-space: nowrap;">Lines</th>
