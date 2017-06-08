@@ -162,5 +162,22 @@ module.exports = {
                 });
             }
         });
+    },
+
+    getProductByStripePlan: function(accountId, userId, planId, fn) {
+        var self = this;
+        self.log = log;
+        self.log.debug(accountId, userId, '>> getProductByStripePlan [' + planId + ']');
+        var query = {accountId:accountId, 'product_attributes.stripePlans.id':planId};
+        productDao.findOne(query, $$.m.Product, function(err, product){
+            if(err) {
+                self.log.error(accountId, userId, 'Error getting product:', err);
+                fn(err);
+            } else {
+                self.log.debug(accountId, userId, '<< getProductByStripePlan', product);
+                fn(null, product);
+            }
+        });
+
     }
 };
