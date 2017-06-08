@@ -72,18 +72,13 @@
           } else {
               this.orgConfigAndPermissions.quotes = false;
           }
-          if(m.purchaseorders !== undefined) {
-              this.orgConfigAndPermissions.purchaseorders = m.quotes;
-          } else {
-              this.orgConfigAndPermissions.purchaseorders = false;
-          }
           if(m.rmas !== undefined) {
-              this.orgConfigAndPermissions.rmas = m.quotes;
+              this.orgConfigAndPermissions.rmas = m.rmas;
           } else {
               this.orgConfigAndPermissions.rmas = false;
           }
-          if(m.rmas !== undefined) {
-              this.orgConfigAndPermissions.promotions = m.quotes;
+          if(m.promotions !== undefined) {
+              this.orgConfigAndPermissions.promotions = m.promotions;
           } else {
               this.orgConfigAndPermissions.promotions = false;
           }
