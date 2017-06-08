@@ -46,7 +46,7 @@
         </a>
     </li>
 
-    <li ng-class="{'active open':$state.includes('app.managequotes') || $state.includes('app.quotesnotifications') || $state.includes('app.viewquotes')}">
+    <li ng-class="{'active open':$state.includes('app.managequotes') || $state.includes('app.quotesnotifications') || $state.includes('app.viewquotes')}" ng-if="userPermissions.quotes">
         <a href="javascript:void(0)">
             <div class="item-content">
                 <div class="item-media">
@@ -61,20 +61,20 @@
             <li ui-sref-active="active" ng-class="{'active': $state.includes('app.managequotes')}" ng-if="userPermissions.isAdminUser">
                 <a ui-sref="app.managequotes">
                     <span class="title" translate="sidebar.nav.quotes.MANAGE"> Manage Quotes </span>
-                </a>                
+                </a>
             </li>
             <li ui-sref-active="active" ng-class="{'active': $state.includes('app.quotesnotifications')}" ng-if="userPermissions.isAdminUser">
                 <a ui-sref="app.quotesnotifications">
                     <span class="title" translate="sidebar.nav.quotes.NOTIFICATIONS"> Notifications </span>
-                </a>                
+                </a>
             </li>
             <li ui-sref-active="active" ng-class="{'active': $state.includes('app.viewquotes')}" ng-if="userPermissions.isVendorWithCardCodes">
                 <a ui-sref="app.viewquotes">
                     <span class="title" translate="sidebar.nav.quotes.VIEW"> View Quotes </span>
                 </a>
-                
+
             </li>
-                
+
         </ul>
     </li>
     <li ng-class="{'active open':$state.includes('app.purchaseorders')}" ng-if="userPermissions.purchaseorders">
@@ -89,7 +89,7 @@
             </div>
         </a>
     </li>
-    <li ng-class="{'active open':$state.includes('app.rmas')}">
+    <li ng-class="{'active open':$state.includes('app.rmas')}" ng-if="userPermissions.rmas">
         <a href="javascript:void(0)">
             <div class="item-content">
                 <div class="item-media">
@@ -104,7 +104,7 @@
             <li ui-sref-active="active" ng-class="{'active': $state.includes('app.rmas')}">
                 <a ui-sref="app.rmas">
                     <span class="title" translate="sidebar.nav.rmas.SUBMIT"> Submit RMA </span>
-                </a>                
+                </a>
             </li>
         </ul>
     </li>
@@ -133,7 +133,7 @@
         </a>
     </li>
 
-    <li ng-class="{'active open':$state.includes('app.promotions')}">
+    <li ng-class="{'active open':$state.includes('app.promotions')}" ng-if="userPermissions.promotions">
         <a href="javascript:void(0)">
             <div class="item-content">
                 <div class="item-media">
@@ -148,7 +148,7 @@
             <li ui-sref-active="active" ng-class="{'active': $state.includes('app.promotions')}">
                 <a ui-sref="app.promotions">
                     <span class="title" translate="sidebar.nav.promotions.MANAGE"> Manage Promotions </span>
-                </a>                
+                </a>
             </li>
         </ul>
     </li>

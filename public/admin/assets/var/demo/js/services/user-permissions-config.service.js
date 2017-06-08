@@ -22,7 +22,7 @@
       var userAccount = _.find(user.accounts, function(acc){
           return acc.accountId == account._id
       });
-     
+
       var orgConfigAry = user.orgConfig || [];
       var orgConfig = _.find(orgConfigAry, function(config){
           return config.orgId == account.orgId
@@ -67,12 +67,36 @@
           } else {
               this.orgConfigAndPermissions.ledger = true;
           }
+          if(m.quotes !== undefined) {
+              this.orgConfigAndPermissions.quotes = m.quotes;
+          } else {
+              this.orgConfigAndPermissions.quotes = false;
+          }
+          if(m.purchaseorders !== undefined) {
+              this.orgConfigAndPermissions.purchaseorders = m.quotes;
+          } else {
+              this.orgConfigAndPermissions.purchaseorders = false;
+          }
+          if(m.rmas !== undefined) {
+              this.orgConfigAndPermissions.rmas = m.quotes;
+          } else {
+              this.orgConfigAndPermissions.rmas = false;
+          }
+          if(m.rmas !== undefined) {
+              this.orgConfigAndPermissions.promotions = m.quotes;
+          } else {
+              this.orgConfigAndPermissions.promotions = false;
+          }
       } else {
           this.orgConfigAndPermissions.inventory = true;
           this.orgConfigAndPermissions.purchaseorders = true;
           this.orgConfigAndPermissions.ledger = true;
+          this.orgConfigAndPermissions.quotes = false;
+          this.orgConfigAndPermissions.purchaseorders = false;
+          this.orgConfigAndPermissions.rmas = false;
+          this.orgConfigAndPermissions.promotions = false;
       }
-      
+
       return this.orgConfigAndPermissions;
     };
 
