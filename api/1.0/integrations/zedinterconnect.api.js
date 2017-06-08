@@ -10,6 +10,7 @@ var appConfig = require('../../../configs/app.config');
 var ziDao = require('../../../zedinterconnect/dao/zi.dao');
 var manager = require('../../../zedinterconnect/zi_manager');
 var userManager = require('../../../dao/user.manager');
+var orgManager = require('../../../organizations/organization_manager');
 
 var api = function () {
     this.init.apply(this, arguments);
@@ -59,12 +60,24 @@ _.extend(api.prototype, baseApi.prototype, {
         var sortBy = req.query.sortBy || null;
         var sortDir = parseInt(req.query.sortDir) || null;
 
-
-        //TODO: security
-        manager.cachedInventory(accountId, userId, skip, limit, sortBy, sortDir, function(err, value){
-            self.log.debug(accountId, userId, '<< inventory');
-            return self.sendResultOrError(resp, err, value, "Error calling inventory");
+        self._checkAccess(accountId, userId, 'inventory', function(err, isAllowed){
+            if(isAllowed) {
+                manager.cachedInventory(accountId, userId, skip, limit, sortBy, sortDir, function(err, value){
+                    self.log.debug(accountId, userId, '<< inventory');
+                    return self.sendResultOrError(resp, err, value, "Error calling inventory");
+                });
+            } else {
+                var value = {
+                    "skip": null,
+                    "limit": null,
+                    "total": 0,
+                    "results": []
+                };
+                self.log.debug(accountId, userId, '<< inventory [' + isAllowed + ']');
+                return self.sendResultOrError(resp, err, value, "Error calling inventory");
+            }
         });
+
 
     },
 
@@ -79,11 +92,24 @@ _.extend(api.prototype, baseApi.prototype, {
         var sortDir = null;
 
 
-        //TODO: security
-        manager.getDashboardInventory(accountId, userId, function(err, value){
-            self.log.debug(accountId, userId, '<< getDashboardInventory');
-            return self.sendResultOrError(resp, err, value, "Error calling getDashboardInventory");
+        self._checkAccess(accountId, userId, 'inventory', function(err, isAllowed){
+            if(isAllowed) {
+                manager.getDashboardInventory(accountId, userId, function(err, value){
+                    self.log.debug(accountId, userId, '<< getDashboardInventory');
+                    return self.sendResultOrError(resp, err, value, "Error calling getDashboardInventory");
+                });
+            } else {
+                self.log.debug(accountId, userId, '<< getDashboardInventory [' + isAllowed + ']');
+                var value = {
+                    "skip": null,
+                    "limit": null,
+                    "total": 0,
+                    "results": []
+                };
+                return self.sendResultOrError(resp, err, value, "Error calling getDashboardInventory");
+            }
         });
+
 
     },
 
@@ -203,85 +229,93 @@ _.extend(api.prototype, baseApi.prototype, {
 
         var dateString = req.query.date || moment().format("M/DD/YY");
 
-        self._isUserAdmin(req, function(err, isAdmin){
-            if(isAdmin && isAdmin === true) {
-                //ALL the CardCodes or whatever is passed in
-                var cardCodeAry = [];
-                if(req.query.cardCodeFrom && req.query.cardCodeTo) {
-                    //we have to do the range
-                    var cardCodeFrom = req.query.cardCodeFrom || 'C1002221';
-                    var cardCodeTo = req.query.cardCodeTo || 'C1002221';
-                    manager.getLedger(accountId, userId, cardCodeFrom, cardCodeTo, dateString, function(err, value){
-                        self.log.debug(accountId, userId, '<< ledger');
-                        return self.sendResultOrError(resp, err, value, "Error calling aging");
-                    });
-                }
-                else{
-                    if(req.query.cardCodeFrom) {
-                        cardCodeAry.push(req.query.cardCodeFrom);
-                    } else if(req.query.cardCodeTo) {
-                        cardCodeAry.push(req.query.cardCodeTo);
-                    }
-                    manager.getLedgerWithLimit(accountId, userId, cardCodeAry, dateString, 0, function(err, value){
-                        self.log.debug(accountId, userId, '<< ledger');
-                        return self.sendResultOrError(resp, err, value, "Error calling aging");
-                    });
-                }
-                
+        self._checkAccess(accountId, userId, 'ledger', function(err, isAllowed){
+            if(!isAllowed) {
+                self.log.debug(accountId, userId, '<< ledger [' + isAllowed + ']');
+                return self.sendResultOrError(resp, err, [], "Error calling aging");
             } else {
-                //Only the codes in the user prop or whatever is passed in IF it is in the user prop
-                self._getOrgConfig(accountId, userId, function(err, orgConfig){
-                    if(!orgConfig) {
-                        orgConfig = {};
-                    }
-                    var cardCodes = orgConfig.cardCodes || [];
-                    if(cardCodes && cardCodes.length > 0) {
-                        cardCodes = _.map(cardCodes, function(code){return code.toLowerCase()});
+                self._isUserAdmin(req, function(err, isAdmin){
+                    if(isAdmin && isAdmin === true) {
+                        //ALL the CardCodes or whatever is passed in
+                        var cardCodeAry = [];
                         if(req.query.cardCodeFrom && req.query.cardCodeTo) {
                             //we have to do the range
-                            var cardCodeFrom = req.query.cardCodeFrom;
-                            var cardCodeTo = req.query.cardCodeTo;
-
-                            if(_.contains(cardCodes, cardCodeFrom.toLowerCase()) && _.contains(cardCodes, cardCodeTo.toLowerCase())){
-                               manager.getLedger(accountId, userId, cardCodeFrom, cardCodeTo, dateString, function(err, value){
-                                    self.log.debug(accountId, userId, '<< ledger');
-                                    return self.sendResultOrError(resp, err, value, "Error calling aging");
-                                }); 
-                            }
-                            else{
-                                return self.wrapError(resp, 400, 'Bad Request', 'User does not have any matching cardCodes');
-                            }
-                            
-                        } else {
-                            var cardCodeAry = [];
-                            var addAll = true;
+                            var cardCodeFrom = req.query.cardCodeFrom || 'C1002221';
+                            var cardCodeTo = req.query.cardCodeTo || 'C1002221';
+                            manager.getLedger(accountId, userId, cardCodeFrom, cardCodeTo, dateString, function(err, value){
+                                self.log.debug(accountId, userId, '<< ledger');
+                                return self.sendResultOrError(resp, err, value, "Error calling aging");
+                            });
+                        }
+                        else{
                             if(req.query.cardCodeFrom) {
-                                addAll = false;
-                                if(_.contains(cardCodes, req.query.cardCodeFrom.toLowerCase())) {
-                                    cardCodeAry.push(req.query.cardCodeFrom);
-                                }
-                            }
-                            if(req.query.cardCodeTo) {
-                                addAll = false;
-                                if(_.contains(cardCodes, req.query.cardCodeTo.toLowerCase())) {
-                                    cardCodeAry.push(req.query.cardCodeTo);
-                                }
-                            }
-                            if(addAll === true){
-                                cardCodeAry = cardCodes;
+                                cardCodeAry.push(req.query.cardCodeFrom);
+                            } else if(req.query.cardCodeTo) {
+                                cardCodeAry.push(req.query.cardCodeTo);
                             }
                             manager.getLedgerWithLimit(accountId, userId, cardCodeAry, dateString, 0, function(err, value){
                                 self.log.debug(accountId, userId, '<< ledger');
                                 return self.sendResultOrError(resp, err, value, "Error calling aging");
                             });
                         }
-                        
+
                     } else {
-                        return self.wrapError(resp, 400, 'Bad Request', 'User does not have any cardCodes');
+                        //Only the codes in the user prop or whatever is passed in IF it is in the user prop
+                        self._getOrgConfig(accountId, userId, function(err, orgConfig){
+                            if(!orgConfig) {
+                                orgConfig = {};
+                            }
+                            var cardCodes = orgConfig.cardCodes || [];
+                            if(cardCodes && cardCodes.length > 0) {
+                                cardCodes = _.map(cardCodes, function(code){return code.toLowerCase()});
+                                if(req.query.cardCodeFrom && req.query.cardCodeTo) {
+                                    //we have to do the range
+                                    var cardCodeFrom = req.query.cardCodeFrom;
+                                    var cardCodeTo = req.query.cardCodeTo;
+
+                                    if(_.contains(cardCodes, cardCodeFrom.toLowerCase()) && _.contains(cardCodes, cardCodeTo.toLowerCase())){
+                                        manager.getLedger(accountId, userId, cardCodeFrom, cardCodeTo, dateString, function(err, value){
+                                            self.log.debug(accountId, userId, '<< ledger');
+                                            return self.sendResultOrError(resp, err, value, "Error calling aging");
+                                        });
+                                    }
+                                    else{
+                                        return self.wrapError(resp, 400, 'Bad Request', 'User does not have any matching cardCodes');
+                                    }
+
+                                } else {
+                                    var cardCodeAry = [];
+                                    var addAll = true;
+                                    if(req.query.cardCodeFrom) {
+                                        addAll = false;
+                                        if(_.contains(cardCodes, req.query.cardCodeFrom.toLowerCase())) {
+                                            cardCodeAry.push(req.query.cardCodeFrom);
+                                        }
+                                    }
+                                    if(req.query.cardCodeTo) {
+                                        addAll = false;
+                                        if(_.contains(cardCodes, req.query.cardCodeTo.toLowerCase())) {
+                                            cardCodeAry.push(req.query.cardCodeTo);
+                                        }
+                                    }
+                                    if(addAll === true){
+                                        cardCodeAry = cardCodes;
+                                    }
+                                    manager.getLedgerWithLimit(accountId, userId, cardCodeAry, dateString, 0, function(err, value){
+                                        self.log.debug(accountId, userId, '<< ledger');
+                                        return self.sendResultOrError(resp, err, value, "Error calling aging");
+                                    });
+                                }
+
+                            } else {
+                                return self.wrapError(resp, 400, 'Bad Request', 'User does not have any cardCodes');
+                            }
+                        });
                     }
                 });
             }
         });
+
 
     },
 
@@ -369,6 +403,25 @@ _.extend(api.prototype, baseApi.prototype, {
             } else {
                 fn(null, false);
             }
+        });
+    },
+
+    _checkAccess: function(accountId, userId, module, fn) {
+        var self = this;
+        userManager.getUserById(userId, function(err, user){
+            orgManager.getOrgByAccountId(accountId, userId, function(err, organization){
+                if(user && organization && user.getOrgConfig(organization.id()).modules) {
+                    var modules = user.getOrgConfig(organization.id()).modules;
+                    if(modules[module] !== undefined && modules[module] === false) {
+                        fn(null, false);
+                    } else {
+                        fn(null, true);
+                    }
+                } else {
+                    fn(null, true);
+                }
+            });
+
         });
     }
 });

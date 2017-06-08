@@ -10,6 +10,7 @@ var poDao = require('../../purchaseorders/dao/purchase_order.dao');
 var poManager = require('../../purchaseorders/purchase_order_manager');
 var formidable = require('formidable');
 var userManager = require('../../dao/user.manager');
+var orgManager = require('../../organizations/organization_manager');
 require('../../purchaseorders/model/purchase_order');
 
 var api = function () {
@@ -42,11 +43,18 @@ _.extend(api.prototype, baseApi.prototype, {
         var accountId = parseInt(self.accountId(req));
         var userId = self.userId(req);
         self.log.debug(accountId, userId, '>> listPurchaseOrders');
-
-        poManager.listPurchaseOrders(accountId, userId, function(err, list){
-            self.log.debug(accountId, userId, '<< listPurchaseOrders');
-            return self.sendResultOrError(resp, err, list, "Error listing orders");
+        self._checkAccess(accountId, userId, 'purchaseorders', function(err, isAllowed){
+            if(!isAllowed) {
+                self.log.debug(accountId, userId, '<< listPurchaseOrders [' + isAllowed + ']');
+                return self.sendResultOrError(resp, err, [], "Error listing orders");
+            } else {
+                poManager.listPurchaseOrders(accountId, userId, function(err, list){
+                    self.log.debug(accountId, userId, '<< listPurchaseOrders');
+                    return self.sendResultOrError(resp, err, list, "Error listing orders");
+                });
+            }
         });
+
     },
 
     listArchivedPurchaseOrders: function(req, resp) {
@@ -256,6 +264,25 @@ _.extend(api.prototype, baseApi.prototype, {
             } else {
                 fn(null, false);
             }
+        });
+    },
+
+    _checkAccess: function(accountId, userId, module, fn) {
+        var self = this;
+        userManager.getUserById(userId, function(err, user){
+            orgManager.getOrgByAccountId(accountId, userId, function(err, organization){
+                if(user && organization && user.getOrgConfig(organization.id()).modules) {
+                    var modules = user.getOrgConfig(organization.id()).modules;
+                    if(modules[module] !== undefined && modules[module] === false) {
+                        fn(null, false);
+                    } else {
+                        fn(null, true);
+                    }
+                } else {
+                    fn(null, true);
+                }
+            });
+
         });
     }
     
