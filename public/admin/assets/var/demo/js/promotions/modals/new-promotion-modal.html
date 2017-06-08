@@ -1,0 +1,71 @@
+<script type="text/ng-template" id="new-promotion-modal">
+    <div class="modal-header">
+        <button type="button" class="close" ng-click="vm.closeModal()">
+            <span aria-hidden="true">&times;</span>
+            <span class="sr-only">Close</span>
+        </button>
+        <h3 class="modal-title">New Promotion</h3>
+    </div>
+    <form name="form" role="form" id="form">
+        <div class="modal-body bg-white new-promotion-modal" stop-event="touchend">
+           
+                <div class="form-group" >
+                    <label>
+                        Promo Title
+                        <span class="required">*</span>
+                    </label>
+                    <input type="text" placeholder="Promo Title" class="form-control" ng-model="vm.state.promotion.title" name="title" required>
+                </div>
+                <div class="form-group">
+                    <label>
+                        Description                    
+                    </label>
+                    <textarea placeholder="Description" class="form-control" ng-model="vm.state.promotion.description"></textarea>
+                </div>
+                
+
+                <div class="form-group">
+                    <label>Start Date:</label>
+                    <indi-datepicker ng-model="vm.state.promotion.startDate" popup="MM/dd/yyyy"></indi-datepicker>
+                </div>
+
+                <div class="form-group">
+                    <label>Expiration:</label>
+                    <indi-datepicker ng-model="vm.state.promotion.expirationDate" popup="MM/dd/yyyy"></indi-datepicker>
+                </div>
+
+
+                <div class="form-group">
+                    <label>Promo Image:</label>
+                    <div class="promo-image-container">
+                        <img ng-src="{{ vm.state.promotion.image }}" err-src="/admin/assets/images/default-media.png">
+                        <div class="promotion-image-buttons-edit">
+                            <span class="btn btn-primary" ng-click="vm.openMediaModal('media-modal', 'MediaModalCtrl', 'lg')"><i class="fa fa-pencil"></i></span>
+                            <span class="btn btn-danger" ng-click="vm.removeImage()"><i class="fa fa-times"></i> </span>
+                        </div>
+                    </div>    
+                </div>
+                                    
+
+                <div class="form-group">
+                    <label class="block">
+                        Attachment
+                        <span class="required">*</span>
+                    </label>
+                    <label for="upload_image" class="btn btn-primary">
+                        <span>Choose File</span>
+                        <input type="file"
+                               id="upload_image"
+                               class="hidden"
+                               file-model='vm.state.promotion.attachment'
+                               accept=".pdf">
+                    </label>
+                    <span class="file-name">{{vm.state.promotion.attachment.name}}</span>
+                </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-primary" ng-disabled='form.$invalid || vm.checkIfInValid(vm.state.promotion) || vm.uiState.saveLoading' ng-click="vm.createPromotion(vm.state.promotion, form)">Submit</button>
+            
+        </div>
+    </form>    
+</script>

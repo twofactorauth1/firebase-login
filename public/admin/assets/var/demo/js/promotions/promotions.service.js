@@ -5,13 +5,16 @@
 
 	app.factory('PromotionsService', PromotionsService);
 
-	PromotionsService.$inject = ['$http'];
+	PromotionsService.$inject = ['$http', '$location'];
 	/* @ngInject */
-	function PromotionsService($http) {
+	function PromotionsService($http, $location) {
         var promotionsService = {};
         promotionsService.loading = {value: 0};
-        var baseOrgConfigAPIUrl = '/api/1.0/user/orgConfig';
+        
+        var basePromotionAPIUrlv2 = '/api/2.0/promotions';
+
         promotionsService.getPromotions = getPromotions;
+        promotionsService.createPromotion = createPromotion;
 
         function promotionsRequest(fn) {
             promotionsService.loading.value = promotionsService.loading.value + 1;
@@ -24,23 +27,43 @@
         }
 
 
-        function getPromotions(){
-            var promotions = [];
-            
-            for(var i = 1; i<=4; i++){
-                promotions.push({
-                    name: "Promo #" + i,
-                    vendor: "Juniper",
-                    promoCode: "1234567890",
-                    products: "Product #1, Product #2, Product #3, Product #4",
-                    startDate: "05/31/2017",
-                    exprirationDate: "09/31/2017",
-                    shipments: 4
-                })
+        /**
+            * Get list of all po's for the account
+        */
+        function getPromotions() {
+
+            function success(data) {
+                promotionsService.promotions = data;
             }
 
-            promotionsService.promotions = promotions;
-            
+            function error(error) {
+                console.error('PurchaseOrderService getPromotions error: ', JSON.stringify(error));
+            }
+
+            return promotionsRequest($http.get([basePromotionAPIUrlv2].join('/')).success(success).error(error));
+        }
+
+        /**
+            * Create new Promotion
+        */
+        function createPromotion(promotion) {
+
+            function success(data) {                
+                promotionsService.promotions.splice(0, 0, data);
+            }
+
+            function error(error) {
+                console.error('PromotionService getPromotions error: ', JSON.stringify(error));
+            }
+
+            var _formData = new FormData();
+            _formData.append('file', promotion.attachment);
+            _formData.append('promotion', angular.toJson(promotion));
+            _formData.append('adminUrl', $location.$$absUrl.split("#")[0]);
+            return promotionsRequest($http.post(basePromotionAPIUrlv2, _formData, {
+                transformRequest: angular.identity,
+                headers: {'Content-Type': undefined}
+            }).success(success).error(error));
         }
         
 		(function init() {
