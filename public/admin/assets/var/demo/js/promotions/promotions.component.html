@@ -33,7 +33,7 @@
                                     			</div>
 	                                        </div>
 	                                        
-                                    		<div class="col-xs-4 col-sm-3 padding-0">
+                                    		<div ng-if="$parent.userPermissions.isAdminUser" class="col-xs-4 col-sm-3 padding-0">
 		                                        <button type="button" class="btn btn-o btn-info btn-scroll btn-scroll-top ti ti-plus ng-click-active pull-right btn-wide" ng-click="vm.openModal()">
 		                                            <span>New</span>
 		                                        </button>
