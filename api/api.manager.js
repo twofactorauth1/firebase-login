@@ -61,6 +61,7 @@ var componentdata2Api = require('./2.0/componentdata.api');
 var customers2Api = require('./2.0/customers.api');
 var insights2Api = require('./2.0/insights.api');
 var purchaseorders2Api = require('./2.0/purchaseorders.api');
+var promotions2Api = require('./2.0/promotions.api');
 
 module.exports = {
 

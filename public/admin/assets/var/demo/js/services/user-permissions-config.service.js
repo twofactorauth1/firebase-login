@@ -49,6 +49,29 @@
           }
         }
       }
+      if(orgConfig.modules) {
+          var m = orgConfig.modules;
+          if(m.inventory !== undefined) {
+              this.orgConfigAndPermissions.inventory = m.inventory;
+          } else {
+              this.orgConfigAndPermissions.inventory = true;
+          }
+
+          if(m.purchaseorders !== undefined) {
+              this.orgConfigAndPermissions.purchaseorders = m.purchaseorders;
+          } else {
+              this.orgConfigAndPermissions.purchaseorders = true;
+          }
+          if(m.ledger !== undefined) {
+              this.orgConfigAndPermissions.ledger = m.ledger;
+          } else {
+              this.orgConfigAndPermissions.ledger = true;
+          }
+      } else {
+          this.orgConfigAndPermissions.inventory = true;
+          this.orgConfigAndPermissions.purchaseorders = true;
+          this.orgConfigAndPermissions.ledger = true;
+      }
       
       return this.orgConfigAndPermissions;
     };

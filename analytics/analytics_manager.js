@@ -2581,7 +2581,22 @@ module.exports = {
 
 
         dao.aggregateWithCustomStages(stageAry, $$.m.PageEvent, function(err, value) {
-            var sortedResults = _.sortBy(value, function(result){return result.total;});
+            var resultAry = [];
+            _.each(value, function (entry) {
+                var result = {
+                    total: entry.total,
+                    timeframe: {
+                        start: entry._id
+                    }
+                };
+                if(granularity === 'hours') {
+                    result.timeframe.end = moment(entry._id).add(1, 'hours').format('YYYY-MM-DD HH:mm');
+                } else {
+                    result.timeframe.end = moment(entry._id).add(1, 'days').format('YYYY-MM-DD');
+                }
+                resultAry.push(result);
+            });
+            var sortedResults = _.sortBy(resultAry, function(result){return result.total;});
             if(granularity === 'hours') {
                 sortedResults = self._zeroMissingHours(sortedResults, {total:0}, moment(start).format('YYYY-MM-DD HH:mm'), moment(end).format('YYYY-MM-DD HH:mm'));
             } else {

@@ -33,7 +33,7 @@
 			</div>
 		</a>
 	</li>
-    <li ng-class="{'active open':$state.includes('app.inventory') || $state.includes('app.singleInventory')}">
+    <li ng-class="{'active open':$state.includes('app.inventory') || $state.includes('app.singleInventory')}" ng-if="userPermissions.inventory">
         <a ui-sref="app.inventory">
             <div class="item-content">
                 <div class="item-media">
@@ -77,7 +77,7 @@
                 
         </ul>
     </li>
-    <li ng-class="{'active open':$state.includes('app.purchaseorders')}">
+    <li ng-class="{'active open':$state.includes('app.purchaseorders')}" ng-if="userPermissions.purchaseorders">
         <a ui-sref="app.purchaseorders">
             <div class="item-content">
                 <div class="item-media">
@@ -108,7 +108,7 @@
             </li>
         </ul>
     </li>
-    <li ng-class="{'active open':$state.includes('app.customers') || $state.includes('app.ledgerDetails') || $state.includes('app.invoiceDetails')}">
+    <li ng-class="{'active open':$state.includes('app.customers') || $state.includes('app.ledgerDetails') || $state.includes('app.invoiceDetails')}" ng-if="userPermissions.ledger">
         <a ui-sref="{{orgCardAndPermissions.userPermissions.ledgerState}}">
             <div class="item-content">
                 <div class="item-media">

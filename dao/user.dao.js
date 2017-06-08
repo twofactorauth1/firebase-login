@@ -35,7 +35,10 @@ var dao = {
             return fn(null, null);
         }
         var query = { username:username };
-        return this.findOne( query, $$.m.User, fn);
+        return this.findOne( query, $$.m.User, function(err, value){
+            self.log.debug('<< getUserByUsername:', value);
+            fn(err, value);
+        });
     },
 
 

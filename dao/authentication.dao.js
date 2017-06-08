@@ -15,6 +15,7 @@ var appConfig = require('../configs/app.config');
 var urlUtils = require('../utils/urlutils');
 var userActivityManager = require('../useractivities/useractivity_manager');
 var orgDao = require('../organizations/dao/organization.dao');
+var orgManager = require('../organizations/organization_manager');
 var async = require('async');
 
 var dao = {
@@ -553,38 +554,65 @@ var dao = {
         var self = this;
         self.log.debug(accountId, null, '>> sendForgotPasswordEmailByUsernameOrEmail');
         var _email = email, promise = $.Deferred();
-
+        var orgId = 0;
         if (accountId !== appConfig.mainAccountID) {//TODO: != mainApp
-            userDao.getUserForAccount(accountId, email, function(err, value) {
-                if (err) {
-                    promise.reject();
-                    return fn(err, value);
-                }
-
-                if (value == null) {
-                    userDao.getUserByUsername(email, function(err, value) {
-                        if (err) {
-                            promise.reject();
-                            return fn(err, value);
-                        }
-
-                        if (value == null) {
-                            promise.reject();
-                            self.log.debug(accountId, null, '<< senForgotPasswordEmailByUsernameOrEmail (null)');
-                            return fn("No user found with username or email: " + _email);
-                        }
-
-                        if (value.getUserAccount(accountId) == null) {
-                            promise.reject();
-                            return fn("No user found for this account with username or email: " + _email);
-                        }
-
-                        promise.resolve(value);
-                    });
+            //check if we are under a different organization
+            orgManager.getOrgByAccountId(accountId, null, function(err, organization){
+                if(err) {
+                    self.log.error(accountId, null, 'Error checking organization:', err);
+                    fn(err);
                 } else {
-                    promise.resolve(value);
+                    if(organization && organization.id() !== 0 && organization.get('adminAccount') === accountId) {
+                        orgId = organization.id();
+                        //proceed as if mainApp
+                        userDao.getUserByUsername(email, function(err, value) {
+                            if (err) {
+                                promise.reject();
+                                return fn(err, value);
+                            }
+
+                            if (value == null) {
+                                promise.reject();
+                                return fn("No user found with username or email: " + _email);
+                            }
+                            self.log.debug('resolving with:', value);
+                            promise.resolve(value);
+                        });
+                    } else {
+                        userDao.getUserForAccount(accountId, email, function(err, value) {
+                            if (err) {
+                                promise.reject();
+                                return fn(err, value);
+                            }
+
+                            if (value == null) {
+                                userDao.getUserByUsername(email, function(err, value) {
+                                    if (err) {
+                                        promise.reject();
+                                        return fn(err, value);
+                                    }
+
+                                    if (value == null) {
+                                        promise.reject();
+                                        self.log.debug(accountId, null, '<< senForgotPasswordEmailByUsernameOrEmail (null)');
+                                        return fn("No user found with username or email: " + _email);
+                                    }
+
+                                    if (value.getUserAccount(accountId) == null) {
+                                        promise.reject();
+                                        return fn("No user found for this account with username or email: " + _email);
+                                    }
+
+                                    promise.resolve(value);
+                                });
+                            } else {
+                                promise.resolve(value);
+                            }
+                        });
+                    }
                 }
             });
+
         } else {
             userDao.getUserByUsername(email, function(err, value) {
                 if (err) {
@@ -596,7 +624,7 @@ var dao = {
                     promise.reject();
                     return fn("No user found with username or email: " + _email);
                 }
-
+                self.log.debug('resolving with:', value);
                 promise.resolve(value);
             });
         }
@@ -623,7 +651,7 @@ var dao = {
                 userDao.saveOrUpdate(user, function (err, value) {
                     if (!err) {
                         //Send Email based on the current token
-                        EmailTemplateUtil.resetPassword(accountId, token, value, email, requestorProps, fn);
+                        EmailTemplateUtil.resetPassword(accountId, token, value, email, requestorProps, orgId, fn);
                     } else {
                         return fn("An error occurred: " + err);
                     }
@@ -633,6 +661,8 @@ var dao = {
 
 
     verifyPasswordResetToken: function (accountId, token, fn) {
+        var self = this;
+        self.log.debug(accountId, null, '>> verifyPasswordResetToken');
         userDao.findOne({passRecover: token}, function (err, value) {
             if (!err) {
                 if (value == null) {
@@ -640,19 +670,40 @@ var dao = {
                 }
 
                 if (accountId !== appConfig.mainAccountID) {
-                    if (value.getUserAccount(accountId) == null) {
-                        console.log('Could not find user for accountId: ' + accountId);
-                        console.dir(value);
-                        return fn("No user found for this account", "No user found for this account");
+                    orgManager.getOrgByAccountId(accountId, null, function(err, organization){
+                        if(organization && organization.id() !== 0 && organization.get('adminAccount') === accountId) {
+                            var passRecoverExp = value.get("passRecoverExp");
+                            if (new Date(passRecoverExp) < new Date()) {
+                                return fn("Password recovery token is expired, please resubmit the form below.");
+                            }
+
+                            return fn(null, value);
+                        } else {
+                            if (value.getUserAccount(accountId) == null) {
+                                console.log('Could not find user for accountId: ' + accountId);
+                                console.dir(value);
+                                return fn("No user found for this account", "No user found for this account");
+                            } else {
+                                var passRecoverExp = value.get("passRecoverExp");
+                                if (new Date(passRecoverExp) < new Date()) {
+                                    return fn("Password recovery token is expired, please resubmit the form below.");
+                                }
+
+                                return fn(null, value);
+                            }
+                        }
+                    });
+
+                } else {
+                    var passRecoverExp = value.get("passRecoverExp");
+                    if (new Date(passRecoverExp) < new Date()) {
+                        return fn("Password recovery token is expired, please resubmit the form below.");
                     }
+
+                    return fn(null, value);
                 }
 
-                var passRecoverExp = value.get("passRecoverExp");
-                if (new Date(passRecoverExp) < new Date()) {
-                    return fn("Password recovery token is expired, please resubmit the form below.");
-                }
 
-                return fn(null, value);
             } else {
                 return fn(err, value);
             }
@@ -668,17 +719,37 @@ var dao = {
                 }
 
                 if (accountId !== appConfig.mainAccountID) {
-                    if (value.getUserAccount(accountId) == null) {
-                        return fn("No user found for this account", "No user found for this account");
+                    orgManager.getOrgByAccountId(accountId, null, function(err, organization){
+                        if(organization && organization.id() !== 0 && organization.get('adminAccount') === accountId) {
+                            var passRecoverExp = value.get("passRecoverExp");
+                            if (new Date(passRecoverExp) < new Date()) {
+                                return fn("Password recovery token is expired, please resubmit the form below.");
+                            }
+
+                            return fn(null, value);
+                        } else {
+                            if (value.getUserAccount(accountId) == null) {
+                                return fn("No user found for this account", "No user found for this account");
+                            }
+                            var passRecoverExp = value.get("passRecoverExp");
+                            if (new Date(passRecoverExp) < new Date()) {
+                                return fn("Password recovery token is expired, please resubmit the form below.");
+                            }
+
+                            return fn(null, value);
+                        }
+                    });
+
+                } else {
+                    var passRecoverExp = value.get("passRecoverExp");
+                    if (new Date(passRecoverExp) < new Date()) {
+                        return fn("Password recovery token is expired, please resubmit the form below.");
                     }
+
+                    return fn(null, value);
                 }
 
-                var passRecoverExp = value.get("passRecoverExp");
-                if (new Date(passRecoverExp) < new Date()) {
-                    return fn("Password recovery token is expired, please resubmit the form below.");
-                }
 
-                return fn(null, value);
             } else {
                 return fn(err, value);
             }

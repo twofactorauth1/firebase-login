@@ -460,9 +460,7 @@ _.extend(router.prototype, BaseRouter.prototype, {
             // req.flash("error", "Passwords do not match");
             // self.log.error('Passwords do not match');
             // return resp.redirect("/forgotpassword/reset/" + token);
-        }else
-        {
-           
+        } else {
             new ForgotPasswordView(req, resp).handleResetByToken(token, password, email); 
         }
        

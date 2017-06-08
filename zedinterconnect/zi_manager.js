@@ -16,6 +16,7 @@ var accountManager = require('../accounts/account.manager');
 var emailMessageManager = require('../emailmessages/emailMessageManager');
 var ERR_MSG = 'We are having trouble retrieving these results.  Please try again later';
 var scheduledJobsManager = require('../scheduledjobs/scheduledjobs_manager');
+var orgManager = require('../organizations/organization_manager');
 
 var ziManager = {
     log: logger,
@@ -65,16 +66,18 @@ var ziManager = {
         var fields = null;
         var collection = 'inventory';
 
-
-        ziDao.findRawWithFieldsLimitAndOrder(query, skip, limit, sortBy, fields, collection, sortDir, function(err, value){
-            if(err) {
-                self.log.error(accountId, userId, 'Error getting cached inventory:', err);
-                fn(err);
-            } else {
-                self.log.debug(accountId, userId, '<< cachedInventory');
-                fn(null, value);
-            }
+        self._addUserInventoryFilter(accountId, userId, query, function(err, query){
+            ziDao.findRawWithFieldsLimitAndOrder(query, skip, limit, sortBy, fields, collection, sortDir, function(err, value){
+                if(err) {
+                    self.log.error(accountId, userId, 'Error getting cached inventory:', err);
+                    fn(err);
+                } else {
+                    self.log.debug(accountId, userId, '<< cachedInventory');
+                    fn(null, value);
+                }
+            });
         });
+
     },
 
 
@@ -103,16 +106,18 @@ var ziManager = {
                         query = {
                             '@id': {'$in': watchList} 
                         };
-
-                        ziDao.findRawWithFieldsLimitAndOrder(query, null, null, null, fields, collection, null, function(err, value){
-                            if(err) {
-                                self.log.error(accountId, userId, 'Error getting dashboard inventory:', err);
-                                fn(err);
-                            } else {
-                                self.log.debug(accountId, userId, '<< getDashboardInventory');
-                                fn(null, value);
-                            }
+                        self._addUserInventoryFilter(accountId, userId, query, function(err, query){
+                            ziDao.findRawWithFieldsLimitAndOrder(query, null, null, null, fields, collection, null, function(err, value){
+                                if(err) {
+                                    self.log.error(accountId, userId, 'Error getting dashboard inventory:', err);
+                                    fn(err);
+                                } else {
+                                    self.log.debug(accountId, userId, '<< getDashboardInventory');
+                                    fn(null, value);
+                                }
+                            });
                         });
+
                     }
                 });
             }
@@ -173,15 +178,18 @@ var ziManager = {
         var collection = 'inventory';
         var _skip = skip || 0;
         var _limit = limit || 0;
-        ziDao.findRawWithFieldsLimitAndOrder(query, _skip, _limit, sortBy, fields, collection, sortDir, function(err, value){
-            if(err) {
-                self.log.error(accountId, userId, 'Error searching cached inventory:', err);
-                fn(err);
-            } else {
-                self.log.debug(accountId, userId, '<< inventoryFilter');
-                fn(null, value);
-            }
+        self._addUserInventoryFilter(accountId, userId, query, function(err, query){
+            ziDao.findRawWithFieldsLimitAndOrder(query, _skip, _limit, sortBy, fields, collection, sortDir, function(err, value){
+                if(err) {
+                    self.log.error(accountId, userId, 'Error searching cached inventory:', err);
+                    fn(err);
+                } else {
+                    self.log.debug(accountId, userId, '<< inventoryFilter');
+                    fn(null, value);
+                }
+            });
         });
+
     },
 
     inventorySearch: function(accountId, userId, term, fieldSearch, skip, limit, sortBy, sortDir, fn) {
@@ -256,16 +264,18 @@ var ziManager = {
         var _skip = skip || 0;
         var _limit = limit || 0;
 
-
-        ziDao.findRawWithFieldsLimitAndOrder(query, _skip, _limit, sortBy, fields, collection, sortDir, function(err, value){
-            if(err) {
-                self.log.error(accountId, userId, 'Error searching cached inventory:', err);
-                fn(err);
-            } else {
-                self.log.debug(accountId, userId, '<< inventorySearch');
-                fn(null, value);
-            }
+        self._addUserInventoryFilter(accountId, userId, query, function(err, query){
+            ziDao.findRawWithFieldsLimitAndOrder(query, _skip, _limit, sortBy, fields, collection, sortDir, function(err, value){
+                if(err) {
+                    self.log.error(accountId, userId, 'Error searching cached inventory:', err);
+                    fn(err);
+                } else {
+                    self.log.debug(accountId, userId, '<< inventorySearch');
+                    fn(null, value);
+                }
+            });
         });
+
     },
 
     inventoryFieldSearch: function(accountId, userId, field, value, skip, limit, sortBy, sortDir, fn) {
@@ -277,16 +287,20 @@ var ziManager = {
         var collection = 'inventory';
         var _skip = skip || 0;
         var _limit = limit || 0;
-        self.log.debug('Using query:', query);
-        ziDao.findRawWithFieldsLimitAndOrder(query, _skip, _limit, sortBy, fields, collection, sortDir, function(err, value){
-            if(err) {
-                self.log.error(accountId, userId, 'Error searching cached inventory:', err);
-                fn(err);
-            } else {
-                self.log.debug(accountId, userId, '<< inventoryFieldSearch');
-                fn(null, value);
-            }
+        self._addUserInventoryFilter(accountId, userId, query, function(err, query){
+            self.log.debug('Using query:', query);
+
+            ziDao.findRawWithFieldsLimitAndOrder(query, _skip, _limit, sortBy, fields, collection, sortDir, function(err, value){
+                if(err) {
+                    self.log.error(accountId, userId, 'Error searching cached inventory:', err);
+                    fn(err);
+                } else {
+                    self.log.debug(accountId, userId, '<< inventoryFieldSearch');
+                    fn(null, value);
+                }
+            });
         });
+
     },
 
     getLedger: function(accountId, userId, cardCodeFrom, cardCodeTo, dateString, fn) {
@@ -591,6 +605,23 @@ var ziManager = {
                 }
                 fn(null, parsedJson);
             }
+        });
+    },
+
+    _addUserInventoryFilter: function(accountId, userId, query, fn) {
+
+        userDao.getById(userId, $$.m.User, function(err, user) {
+            orgManager.getOrgByAccountId(accountId, userId, function (err, organization) {
+                if (!user || !organization) {
+                    fn(err);
+                } else {
+                    var orgConfig = user.getOrgConfig(organization.id());
+                    if (orgConfig.inventoryFilter) {
+                        query = _.extend(query, orgConfig.inventoryFilter);
+                    }
+                    fn(null, query);
+                }
+            });
         });
     }
 
