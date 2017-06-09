@@ -72,23 +72,32 @@
 
             // vm.state.completeWorkstreams = completeWorkstreams;
             // vm.state.incompleteWorksreams = incompleteWorkstreams;
-
-            vm.state.analyticsWidgets = [{
-               'completed': false,
-               'link': "#",
-               'name': 'Inventory'
-            },
-            {
-               'completed': false,
-               'link': "#",
-               'name': 'PurchaseOrders'
-            },
-            {
-               'completed': false,
-               'link': "#",
-               'name': 'Invoices'
-            }]
-
+            $scope.$watch("$parent.orgCardAndPermissions", function(permissions) {
+                if(angular.isDefined(permissions)){
+                    vm.state.analyticsWidgets = [];
+                    if(permissions.inventory){
+                        vm.state.analyticsWidgets.push({
+                           'completed': false,
+                           'link': "#",
+                           'name': 'Inventory'
+                        })                            
+                    }
+                    if(permissions.purchaseorders){
+                        vm.state.analyticsWidgets.push({
+                           'completed': false,
+                            'link': "#",
+                            'name': 'PurchaseOrders'
+                        })                            
+                    }
+                    if(permissions.ledger){
+                        vm.state.analyticsWidgets.push({
+                           'completed': false,
+                            'link': "#",
+                            'name': 'Invoices'
+                        })                            
+                    }
+                }    
+            })
         }
 
 
