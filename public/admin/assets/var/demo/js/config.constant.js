@@ -779,7 +779,8 @@ app.constant('JS_REQUIRES', {
 
     //*** Directives
     'mediaModal': 'assets/js/directives/mediadirective.js',
-    'uiSelectChoices': 'assets/var/demo/js/directives/uiSelectChoices.js'
+    'uiSelectChoices': 'assets/var/demo/js/directives/uiSelectChoices.js',
+    'fixedHeaderTable': 'assets/js/directives/fixed-header-table.js'
 
   },
   //*** angularJS Modules

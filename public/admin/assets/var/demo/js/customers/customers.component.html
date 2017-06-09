@@ -38,7 +38,7 @@
 	            </div>
 	        </div>
 	    </div>
-	    <table class="table table-hover table-striped" ng-class="{'grid': tableView == 'grid', 'bg-white table-list-view': tableView == 'list'}" ng-if="!vm.uiState.loading">
+	    <table class="table table-hover table-striped" ng-class="{'grid': tableView == 'grid', 'bg-white table-list-view': tableView == 'list'}" ng-if="!vm.uiState.loading" fixed-header-table>
 	        <thead ng-class="{'bg-white': tableView == 'grid'}" sticky offset="65" sticky-class="sticky-header-class">
 	            <tr>
 	                <th class="code-col" st-sort="OCRD_CardCode" style="white-space: nowrap;">Id</th>
