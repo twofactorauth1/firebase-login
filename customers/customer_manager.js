@@ -126,7 +126,7 @@ module.exports = {
 
             },
             function(account, cb) {
-                userManager.getUserAccounts(customerId, function(err, users){
+                userManager.getUserAccounts(customerId, false, function(err, users){
                     if(err) {
                         cb(err);
                     } else {
@@ -237,7 +237,7 @@ module.exports = {
                 });
             },
             function(account, cb) {
-                userManager.getUserAccounts(customerId, function(err, users){
+                userManager.getUserAccounts(customerId, false, function(err, users){
                     if(err) {
                         cb(err);
                     } else {

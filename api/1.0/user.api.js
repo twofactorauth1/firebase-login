@@ -935,7 +935,7 @@ _.extend(api.prototype, baseApi.prototype, {
             if (isAllowed !== true || !_.contains(req.user.getAllAccountIds(), accountId) || !_.contains(req.user.getPermissionsForAccount(accountId), 'admin')) {
                 return self.send403(resp);
             } else {
-                userManager.getUserAccounts(accountId, function(err, userAry){
+                userManager.getUserAccounts(accountId, true, function(err, userAry){
                     if(err) {
                         self.log.error('Error finding user accounts: ' + err);
                         return self.wrapError(resp, 500, null, 'Error finding account');

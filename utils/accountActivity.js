@@ -344,7 +344,7 @@ var accountActivity = {
                         }
                     });
                 } else {
-                    userManager.getUserAccounts(account.id(), function(err, users){
+                    userManager.getUserAccounts(account.id(), false, function(err, users){
                         if(err) {
                             self.log.error('Error fetching user accounts:', err);
                             cb(err);
