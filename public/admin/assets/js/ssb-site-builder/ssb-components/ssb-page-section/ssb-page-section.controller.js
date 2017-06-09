@@ -218,6 +218,7 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
             });
             if(section.layoutModifiers.grid && section.layoutModifiers.grid.overlay &&         section.layoutModifiers.grid.overlay.isOverlayActive){
                 angular.forEach(section.components, function(cmp,index) {
+                    section.components[index].isGrid=true;
                 section.components[index].isOverlayActive=true;
                 section.components[index].overlayBackground=
                    section.layoutModifiers.grid.overlay.overlayColor;
@@ -229,6 +230,7 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
             }else{
                 angular.forEach(section.components, function(cmp,index) {
                  section.components[index].isOverlayActive=false;
+                 section.components[index].isGrid=section.layoutModifiers.grid;
                 });
             }
         }else{

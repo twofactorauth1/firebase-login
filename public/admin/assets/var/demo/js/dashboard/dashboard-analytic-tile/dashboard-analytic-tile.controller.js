@@ -2,9 +2,9 @@
 
 app.controller('DashboardAnalyticTileComponentController', dashboardAnalyticTileComponentController);
 
-dashboardAnalyticTileComponentController.$inject = ['$scope', '$attrs', '$filter', 'DashboardService', '$modal', '$timeout'];
+dashboardAnalyticTileComponentController.$inject = ['$scope', '$attrs', '$filter', 'DashboardService', '$modal', '$timeout', 'toaster'];
 /* @ngInject */
-function dashboardAnalyticTileComponentController($scope, $attrs, $filter, DashboardService, $modal, $timeout) {
+function dashboardAnalyticTileComponentController($scope, $attrs, $filter, DashboardService, $modal, $timeout, toaster) {
 
     var vm = this;
 
@@ -39,7 +39,7 @@ function dashboardAnalyticTileComponentController($scope, $attrs, $filter, Dashb
         if (analyticsObject) {
             switch(vm.analytic.name) {
                 case 'Inventory':
-
+                    DashboardService.getInventory();
                     ret.widgetTitle = 'Inventory Watch';
                     ret.buttonTitle = 'View Inventory';
                     ret.link = '#/inventory';
@@ -86,6 +86,7 @@ function dashboardAnalyticTileComponentController($scope, $attrs, $filter, Dashb
 
                     break;
                 case 'PurchaseOrders':
+                    DashboardService.getPurchaseOrders();
                     ret.widgetTitle = 'Purchase Orders';
                     ret.buttonTitle = 'Submit a PO';
                     ret.link = '#/purchase-orders';
@@ -113,7 +114,12 @@ function dashboardAnalyticTileComponentController($scope, $attrs, $filter, Dashb
 
                     break;
                 case 'Invoices':
+                    DashboardService.getInvoices().then(function(){
 
+                    }).catch(function(error) {
+                        if(error.data && error.data.message)
+                            toaster.pop('error', 'Error', error.data.message);
+                    });
                     ret.widgetTitle = 'Invoices';
                     ret.buttonTitle = 'View Ledger';
                     ret.link = '#/customers'; // Really, this should go to ledger for non-Admin

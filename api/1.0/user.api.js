@@ -14,6 +14,7 @@ var cookies = require('../../utils/cookieutil');
 var authenticationDao = require('../../dao/authentication.dao');
 var userManager = require('../../dao/user.manager');
 var paymentsManager = require('../../payments/payments_manager');
+var productManager = require('../../products/product_manager');
 var async = require('async');
 var UAParser = require('ua-parser-js');
 var contactActivityManager = require('../../contactactivities/contactactivity_manager');
@@ -407,7 +408,7 @@ _.extend(api.prototype, baseApi.prototype, {
         var middle = req.body.middle;
         var campaignId = req.body.campaignId;
         var existingUser = req.body.existingUser;
-        var orgId = req.body.orgId;
+        var orgId = req.body.orgId || 0;
         if(orgId && parseInt(orgId) === 1) {
             setupFee = 150000;//$1500.00
         }
@@ -452,8 +453,45 @@ _.extend(api.prototype, baseApi.prototype, {
             last:lastName
         };
         var ipAddress = self.ip(req);
+        var organization, product;
 
         async.waterfall([
+            function(callback) {
+                //figure out the setup fee
+                orgDao.getById(orgId, $$.m.Organization, function(err, _organization){
+                    if(err) {
+                        self.log.error('Could not get organization:', err);
+                        callback(err);
+                    } else {
+                        var adminAccountId = _organization.get('adminAccount');
+                        productManager.getProductByStripePlan(adminAccountId, null, plan, function(err, _product){
+                            if(err) {
+                                self.log.error('Could not get product:', err);
+                                callback(err);
+                            } else {
+                                organization = _organization;
+                                product = _product;
+                                var stripePlan = product.get('product_attributes').stripePlans[0];
+                                if(stripePlan) {
+                                    try {
+                                        setupFee = parseInt(stripePlan.signup_fee);
+                                        if(isNaN(setupFee)) {
+                                            setupFee = 0;
+                                        }
+                                        self.log.debug('Using setupFee:', setupFee);
+                                    } catch(exception) {
+                                        setupFee = 0;
+                                        self.log.debug('caught exception.  setupFee:', setupFee);
+                                    }
+                                } else {
+                                    setupFee = 0;
+                                }
+                                callback();
+                            }
+                        });
+                    }
+                });
+            },
             function(callback){
                 if(!password1 && !existingUser) {
                     self.log.debug('Creating user from social');
@@ -494,30 +532,25 @@ _.extend(api.prototype, baseApi.prototype, {
                 });
             },
             function(user, account, callback) {
-                //need to get the organization and Stripe Token
-                orgDao.getById(orgId, $$.m.Organization, function(err, organization){
-                    self.log.debug('got organization:', organization);
-                    if(organization && organization.id() !== 0) {
-                        accountDao.getAccountByID(organization.get('adminAccount'), function(err, adminAccount){
-                            if(adminAccount) {
-                                self.getStripeTokenFromAccountObject(adminAccount, req, function(err, accessToken){
-                                    if(err || !accessToken) {
-                                        self.log.error('Error getting access token:', err);
-                                        callback(err || 'Error getting access token');
-                                    } else {
-                                        callback(null, user, account, organization, adminAccount, accessToken);
-                                    }
-                                });
-                            } else {
-                                self.log.error('Error getting admin account:', err);
-                                callback(err || 'Error getting admin account');
-                            }
-                        });
-                    } else {
-                        callback(err, user, account, organization, null, null);
-                    }
-
-                });
+                if(organization && organization.id() !== 0) {
+                    accountDao.getAccountByID(organization.get('adminAccount'), function(err, adminAccount){
+                        if(adminAccount) {
+                            self.getStripeTokenFromAccountObject(adminAccount, req, function(err, accessToken){
+                                if(err || !accessToken) {
+                                    self.log.error('Error getting access token:', err);
+                                    callback(err || 'Error getting access token');
+                                } else {
+                                    callback(null, user, account, organization, adminAccount, accessToken);
+                                }
+                            });
+                        } else {
+                            self.log.error('Error getting admin account:', err);
+                            callback(err || 'Error getting admin account');
+                        }
+                    });
+                } else {
+                    callback(null, user, account, organization, null, null);
+                }
             },
             function(user, account, organization, adminAccount, accessToken, callback){
                 self.log.debug('Created user[' + user.id() + '] and account[' + account.id() + '] objects.');

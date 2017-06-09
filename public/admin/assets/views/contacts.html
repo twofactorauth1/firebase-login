@@ -61,14 +61,22 @@
                                     </button>
                                 </div>
                                 <div class="fix-btn padding-0" ng-hide="!(selectedContactsFn()).length">
-                                    <ui-select ng-model="bulkActionChoice.action" on-select="bulkActionSelectFn()" theme="bootstrap" ng-disabled='!(selectedContactsFn()).length'>
+                                    <!-- ui-select ng-model="bulkActionChoice.action" on-select="bulkActionSelectFn()" theme="bootstrap" ng-disabled='!(selectedContactsFn()).length'>
                                         <ui-select-match placeholder="Actions">
                                             <small ng-bind-html="$select.selected.label"></small>
                                         </ui-select-match>
                                         <ui-select-choices repeat="action in bulkActionChoices |  orderBy:'label' | filter: $select.search">
                                             <small ng-bind-html="action.label | highlight: $select.search"></small>
                                         </ui-select-choices>
-                                    </ui-select>
+                                    </ui-select-->
+                                    <div class="btn-group">
+                                          <button type="button" class="action-btn libtn btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            Action
+                                          </button>
+                                          <div class="dropdown-menu">
+                                            <a class="dropdown-item" ng-repeat= "action in bulkActionChoices |  orderBy:'label'" ng-click="setBulkActionChoiceFn(action.label)">{{action.label}}</a>
+                                          </div>
+                                        </div>
                                 </div>
                              </div>
                         </div>

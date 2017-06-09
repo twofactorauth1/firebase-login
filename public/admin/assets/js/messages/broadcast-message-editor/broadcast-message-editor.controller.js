@@ -2,7 +2,7 @@
 /*global app, moment, angular, window*/
 /*jslint unparam:true*/
 (function (angular) {
-    app.controller('broadcastMessageEditorCtrl', ['$scope', "$timeout", "$location", "toaster", "$stateParams", "BroadcastMessagesService", function ($scope, $timeout, $location, toaster, $stateParams, BroadcastMessagesService) {
+    app.controller('broadcastMessageEditorCtrl', ['$scope', "$modal", "$timeout", "$location", "toaster", "$stateParams", "BroadcastMessagesService", function ($scope, $modal, $timeout, $location, toaster, $stateParams, BroadcastMessagesService) {
 
         var vm = this;
 
@@ -83,6 +83,72 @@
             }, 1500);            
           }
         }, true);
+
+
+        // Hook froala insert up to our Media Manager
+        window.clickandInsertImageButton = function (editor, image, callBack) {
+            console.log('clickandInsertImageButton >>> ');
+            vm.callBackOnImageInsert = callBack;
+            vm.callBackImage = image;
+            
+            openMediaModal('media-modal', 'MediaModalCtrl', null, 'lg');
+        };
+
+
+        function openMediaModal(modal, controller, index, size) {
+            console.log('openModal >>> ', modal, controller, index);
+            var _modal = {
+                templateUrl: modal,
+                keyboard: false,
+                backdrop: 'static',
+                size: 'md',
+                resolve: {
+                    vm: function() {
+                        return vm;
+                    }
+                }
+            };
+
+            if (controller) {
+                _modal.controller = controller;
+
+                _modal.resolve.showInsert = function () {
+                  return true;
+                };
+
+                _modal.resolve.insertMedia = function () {
+                  return insertMedia;
+                };
+
+                _modal.resolve.isSingleSelect = function () {
+                    return true;
+                };
+            }
+
+            if (size) {
+                _modal.size = 'lg';
+            }
+
+            vm.modalInstance = $modal.open(_modal);
+
+            vm.modalInstance.result.then(null, function () {
+                angular.element('.sp-container').addClass('sp-hidden');
+            });
+
+        }
+
+        function insertMedia(asset) {
+            addFroalaImage(asset);
+        }
+
+        function addFroalaImage(asset) {
+
+            $timeout(function() {
+                vm.callBackOnImageInsert(asset.url, vm.callBackImage);
+            }, 0);
+
+        };
+        
 
         (function init() {
 
