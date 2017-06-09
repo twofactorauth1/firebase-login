@@ -87,7 +87,6 @@
           this.orgConfigAndPermissions.purchaseorders = true;
           this.orgConfigAndPermissions.ledger = true;
           this.orgConfigAndPermissions.quotes = false;
-          this.orgConfigAndPermissions.purchaseorders = false;
           this.orgConfigAndPermissions.rmas = false;
           this.orgConfigAndPermissions.promotions = false;
       }
