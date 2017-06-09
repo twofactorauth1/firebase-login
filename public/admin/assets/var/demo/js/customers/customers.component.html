@@ -49,12 +49,16 @@
 	                <th class="hidden-xs zip-col" st-sort="OCRD_ZipCode" style="white-space: nowrap;">ZipCode</th>
 	            </tr>
 	            <tr>
-	                <th>
+	                <th class="code-col">
 	                    <input st-search="OCRD_CardCode" ng-model="vm.uiState.fieldSearch.OCRD_CardCode" placeholder="Id" class="form-control" type="search" />
 	                </th>
-	                <th>
+	                <th class="name-col">
 	                    <input st-search="OCRD_CardName" ng-model="vm.uiState.fieldSearch.OCRD_CardName" placeholder="Name" class="form-control" type="search" />
 	                </th>
+	                <th class="hidden-xs address-col"></th>
+	                <th class="city-col"></th>
+	                <th class="state-col"></th>
+	                <th class="hidden-xs zip-col"></th>
 	            </tr>
 	        </thead>
 	        <tbody>

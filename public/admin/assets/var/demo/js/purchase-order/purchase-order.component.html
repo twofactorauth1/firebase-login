@@ -117,10 +117,14 @@
 	                <th class="hidden-xs attachment-col">Attachment</th>
 	            </tr>
 	            <tr>
-	            	<th class="hidden-xs"></th>
-	                <th>
+	            	<th class="hidden-xs select-po-col"></th>
+	                <th class="title-col">
 	                    <input st-search="title" ng-model="vm.uiState.fieldSearch.title" placeholder="Name" class="form-control" type="search" />
 	                </th>
+	                <th class="submitter-col"></th>
+	                <th class="company-col" ng-if="!vm.state.orgCardAndPermissions.isVendor"></th>
+	                <th class="created-col"></th>
+	                <th class="hidden-xs attachment-col"></th>
 	            </tr>
 	        </thead>
 	        <tbody>
