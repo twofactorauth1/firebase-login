@@ -230,6 +230,7 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
             }else{
                 angular.forEach(section.components, function(cmp,index) {
                  section.components[index].isOverlayActive=false;
+                 section.components[index].isGrid=section.layoutModifiers.grid;
                 });
             }
         }else{
