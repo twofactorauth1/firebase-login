@@ -494,7 +494,14 @@
             }, 800);
         };
 
-
+        $scope.setBulkActionChoiceFn=function(selection){
+             if (selection){
+                 $scope.bulkActionChoice.action = {
+                     data:selection.toLowerCase()
+                 };
+                 $scope.bulkActionSelectFn();
+             }
+        }
         $scope.bulkActionSelectFn = function () {
             var selectedContacts = $scope.selectedContactsFn();
             var deleteMessage = "Do you want to delete the " + selectedContacts.length + " contact?";

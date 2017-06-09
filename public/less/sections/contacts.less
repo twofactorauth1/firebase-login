@@ -9,6 +9,54 @@
     img.screenshot{
         margin-left: -15px;
     } 
+    .action-btn{
+        background-color: #40546d;
+        border-radius: 4px !important;
+        color: white;
+        @media (min-width: 320px) and (max-width: 710px) {
+            padding-left: 2px;
+        }
+        &:after {
+            display: inline-block;
+            width: 0;
+            height: 0;
+            margin-left: .3em;
+            vertical-align: middle;
+            content: "";
+            border-top: .3em solid;
+            border-right: .3em solid transparent;
+            border-left: .3em solid transparent;
+            position: static;
+        }
+        &:hover {
+            background-color: #627894;
+            border-radius: 4px !important;
+            color: white;
+        }
+    }
+    .btn-group {
+        &.open{
+            .action-btn:after{
+                border-top: 0;
+                border-bottom: .3em solid;
+            }
+        }
+        .dropdown-menu{
+            width: 112px;
+            margin-left: -11px;
+            padding: 3px;
+            min-width: 112px;
+            a {
+                display: block;
+                width: 100px;
+                padding: 7px;
+                color: black;
+                &:hover{
+                    background-color: #e5e5e5;
+                }
+            }
+        }
+    }
 }
 
 .contacts {
