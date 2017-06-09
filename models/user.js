@@ -190,7 +190,8 @@ var user = $$.m.ModelBase.extend({
             },
             intercomHash: "",
 
-            orgConfig:[]
+            orgConfig:[],
+            excludeFromCustomerView:false
         };
     },
 

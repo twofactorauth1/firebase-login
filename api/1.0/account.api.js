@@ -84,7 +84,7 @@ _.extend(api.prototype, baseApi.prototype, {
             if(isAllowed !== true) {
                 return self.send403(res);
             } else {
-                userManager.getUserAccounts(accountId, function(err, users){
+                userManager.getUserAccounts(accountId, true, function(err, users){
                     self.log.debug(accountId, userId, '<< listUsersForAccount');
                     return self.sendResultOrError(resp, err, users, 'Error listing users', null);
                 });
