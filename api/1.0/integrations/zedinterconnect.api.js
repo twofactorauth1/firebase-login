@@ -343,10 +343,16 @@ _.extend(api.prototype, baseApi.prototype, {
                         orgConfig = {};
                     }
                     var cardCodes = orgConfig.cardCodes || [];
-                    manager.getLedgerWithLimit(accountId, userId, cardCodes, dateString, limit, function(err, value){
-                        self.log.debug(accountId, userId, '<< getTopInvoices');
-                        return self.sendResultOrError(resp, err, value, "Error calling aging");
-                    });
+                    if(cardCodes.length){
+                        manager.getLedgerWithLimit(accountId, userId, cardCodes, dateString, limit, function(err, value){
+                            self.log.debug(accountId, userId, '<< getTopInvoices');
+                            return self.sendResultOrError(resp, err, value, "Error calling aging");
+                        });
+                    }
+                    else{
+                        return self.sendResultOrError(resp, null, [], "Error calling aging");
+                    }
+                   
                 });
             }
         });
