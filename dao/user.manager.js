@@ -643,7 +643,7 @@ module.exports = {
 
     },
 
-    getUserAccounts: function(accountId, fn) {
+    getUserAccounts: function(accountId, excludeAdmins, fn) {
         var self = this;
         self.log = log;
         self.log.debug('>> getUserAccounts');
@@ -651,6 +651,9 @@ module.exports = {
         var query ={
             'accounts.accountId': accountId
         };
+        if(excludeAdmins) {
+            query.$or = [{excludeFromCustomerView:{$exists:false}}, {excludeFromCustomerView:false}];
+        }
 
         dao.findMany(query, $$.m.User, function(err, list){
             if(err) {
