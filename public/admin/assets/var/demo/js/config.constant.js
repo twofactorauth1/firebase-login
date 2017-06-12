@@ -694,6 +694,7 @@ app.constant('JS_REQUIRES', {
     'CustomersComponent': 'assets/var/demo/js/customers/customers.component.js',
     'CustomersComponentController': 'assets/var/demo/js/customers/customers.controller.js',
     'CustomersService': 'assets/var/demo/js/customers/customers.service.js',
+    'LedgerService': 'assets/var/demo/js/customers/ledger.service.js',
 
     // Ledger Details
 

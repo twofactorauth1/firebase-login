@@ -1014,6 +1014,43 @@ var ziManager = {
         });
     },
 
+    getLedgerItem: function(accountId, userId, itemId, fn) {
+        var self = this;
+        self.log.debug(accountId, userId, '>> getLedgerItem');
+        var query = {'_CustStatmentHdr_CardCode': new RegExp(itemId, 'i')};
+        var collection = 'ledger';
+        ziDao.findRawWithFieldsLimitAndOrder(query, null, null, null, null, collection, null, function(err, resp) {
+            if(err) {
+                self.log.error(accountId, userId, 'Error getting ledger item:', err);
+                fn(err);
+            } else {
+                self.log.debug(accountId, userId, '<< getLedgerItem');
+                fn(null, resp);
+            }
+        });
+    },
+
+
+    getCustomerItem: function(accountId, userId, itemId, fn) {
+        var self = this;
+        self.log.debug(accountId, userId, '>> getCustomerItem');
+        var query = {'OCRD_CardCode': new RegExp(itemId, 'i')};
+        var collection = 'customer';
+        ziDao.findRawWithFieldsLimitAndOrder(query, 0, 1, null, null, collection, null, function(err, resp) {
+            if(err) {
+                self.log.error(accountId, userId, 'Error getting ledger item:', err);
+                fn(err);
+            } else {
+                if(resp && resp.results) {
+                    self.log.debug(accountId, userId, '<< getCustomerItem');
+                    fn(null, resp.results[0]);
+                } else {
+                    fn();
+                }
+            }
+        });
+    },
+
 
     _ziRequest: function(path, fn) {
         var self = this;

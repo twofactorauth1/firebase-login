@@ -34,8 +34,9 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url('loadinventory'), this.isAuthAndSubscribedApi.bind(this), this.loadinventory.bind(this));
         app.get(this.url('ledger'), this.isAuthAndSubscribedApi.bind(this), this.ledger.bind(this));
         app.get(this.url('ledger/top'), this.isAuthAndSubscribedApi.bind(this), this.getTopInvoices.bind(this));
-
+        app.get(this.url('ledger/:id'), this.isAuthAndSubscribedApi.bind(this), this.ledgerItem.bind(this));
         app.get(this.url('customers'), this.isAuthAndSubscribedApi.bind(this), this.getCustomers.bind(this));
+        app.get(this.url('customer/:id'), this.isAuthAndSubscribedApi.bind(this), this.customerItem.bind(this));
         app.get(this.url('dashboard/inventory'), this.isAuthAndSubscribedApi.bind(this), this.getDashboardInventory.bind(this));
         app.get(this.url('loadcustomer'), this.isAuthAndSubscribedApi.bind(this), this.loadcustomer.bind(this));
         app.get(this.url('loadledger'), this.isAuthAndSubscribedApi.bind(this), this.loadledger.bind(this));
@@ -378,7 +379,7 @@ _.extend(api.prototype, baseApi.prototype, {
                         orgConfig = {};
                     }
                     var cardCodes = orgConfig.cardCodes || [];
-                    
+
                     manager.getCustomers(accountId, userId, cardCodes, function(err, value){
                         self.log.debug(accountId, userId, '<< getCustomers');
                         return self.sendResultOrError(resp, err, value, "Error listing customers");
@@ -412,6 +413,78 @@ _.extend(api.prototype, baseApi.prototype, {
             self.log.debug('<< loadledger');
         });
         return self.send200(resp);
+    },
+
+    ledgerItem: function(req, resp) {
+        var self = this;
+        var accountId = parseInt(self.accountId(req));
+        var userId = self.userId(req);
+        self.log.debug(accountId, userId, '>> ledgerItem');
+        var itemId = req.params.id;
+
+        self._isUserAdmin(req, function(err, isAdmin){
+            if(isAdmin && isAdmin === true) {
+                manager.getLedgerItem(accountId, userId, itemId, function(err, value){
+                    self.log.debug(accountId, userId, '<< ledgerItem');
+                    return self.sendResultOrError(resp, err, value, "Error calling ledger");
+                });
+            } else {
+                self._getOrgConfig(accountId, userId, function(err, orgConfig){
+                    if(!orgConfig){
+                        orgConfig = {};
+                    }
+                    var cardCodes = orgConfig.cardCodes || [];
+                    if(_.contains(cardCodes, itemId.toLowerCase())){
+                        manager.getLedgerItem(accountId, userId, itemId, function(err, value){
+                            self.log.debug(accountId, userId, '<< ledgerItem');
+                            return self.sendResultOrError(resp, err, value, "Error calling ledger");
+                        });
+                    }
+                    else{
+                        return self.wrapError(resp, 400, 'Bad Request', 'User does not have any matching cardCodes');
+                    }
+                });
+
+            }
+        });
+        //TODO: security
+        
+    },
+
+    customerItem: function(req, resp) {
+        var self = this;
+        var accountId = parseInt(self.accountId(req));
+        var userId = self.userId(req);
+        self.log.debug(accountId, userId, '>> customerItem');
+        var itemId = req.params.id;
+
+        self._isUserAdmin(req, function(err, isAdmin){
+            if(isAdmin && isAdmin === true) {
+                manager.getCustomerItem(accountId, userId, itemId, function(err, value){
+                    self.log.debug(accountId, userId, '<< customerItem');
+                    return self.sendResultOrError(resp, err, value, "Error calling ledger");
+                });
+            } else {
+                self._getOrgConfig(accountId, userId, function(err, orgConfig){
+                    if(!orgConfig){
+                        orgConfig = {};
+                    }
+                    var cardCodes = orgConfig.cardCodes || [];
+                    if(_.contains(cardCodes, itemId.toLowerCase())){
+                        manager.getCustomerItem(accountId, userId, itemId, function(err, value){
+                            self.log.debug(accountId, userId, '<< customerItem');
+                            return self.sendResultOrError(resp, err, value, "Error calling customer");
+                        });
+                    }
+                    else{
+                        return self.wrapError(resp, 400, 'Bad Request', 'User does not have any matching cardCodes');
+                    }
+                });
+
+            }
+        });
+        //TODO: security
+        
     },
 
     _isUserAdmin: function(req, fn) {

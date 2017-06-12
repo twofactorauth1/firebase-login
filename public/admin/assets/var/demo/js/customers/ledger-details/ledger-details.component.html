@@ -2,7 +2,7 @@
     <div class="row">
         <div class="col-sm-8">
             <h1 class="mainTitle">Ledger Summary</h1>
-            <span class="mainDescription">{{vm.ledger.row[0]._CustStatmentHdr_CardName || vm.listledger.OCRD_CardName}}</span>
+            <span class="mainDescription">{{vm.ledger[0]._CustStatmentHdr_CardName || vm.listledger.OCRD_CardName}}</span>
         </div>
     </div>
 </section>
@@ -23,7 +23,7 @@
 
                     <div class="description">
                         <span>
-                            {{vm.ledger.row[0]._CustStatmentHdr_Address || vm.listledger.OCRD_Address}}
+                            {{vm.ledger[0]._CustStatmentHdr_Address || vm.listledger.OCRD_Address}}
                         </span>
                     </div>
                     <hr>
@@ -34,7 +34,7 @@
 
                     <div class="description">
                         <span>
-                            {{vm.ledger.row[0]._CustStatmentHdr_CardCode || vm.listledger.OCRD_CardCode}}
+                            {{vm.ledger[0]._CustStatmentHdr_CardCode || vm.listledger.OCRD_CardCode}}
                         </span>
                     </div>
                     <hr>
@@ -57,7 +57,7 @@
 
                     <div class="description">
                         <span>
-                            {{vm.ledger.row[0]._CustStatmentHdr_City || vm.listledger.OCRD_City}}
+                            {{vm.ledger[0]._CustStatmentHdr_City || vm.listledger.OCRD_City}}
                         </span>
                     </div>
                     <hr>
@@ -67,7 +67,7 @@
 
                     <div class="description">
                         <span>
-                            {{vm.ledger.row[0]._CustStatmentHdr_State1 || vm.listledger.OCRD_State1}}
+                            {{vm.ledger[0]._CustStatmentHdr_State1 || vm.listledger.OCRD_State1}}
                         </span>
                     </div>
                     <hr>
@@ -77,7 +77,7 @@
 
                     <div class="description">
                         <span>
-                            {{vm.ledger.row[0]._CustStatmentHdr_ZipCode || vm.listledger.OCRD_ZipCode}}
+                            {{vm.ledger[0]._CustStatmentHdr_ZipCode || vm.listledger.OCRD_ZipCode}}
                         </span>
                     </div>
                     <hr>
@@ -114,16 +114,16 @@
                         </tr>
                     </tbody>
                     <tfoot>
-                         <tr ng-if="!vm.ledgerDetails">
+                        <tr ng-if="!vm.ledgerDetails">
                             <td class="text-center" colspan="10">
                                 <span class="footer-no-text">No Data</span>
                             </td>
                         </tr>
-                         <tr ng-if="vm.ledgerDetails">
-                             <td class="text-right padding-right-20" colspan="10">
+                        <tr ng-if="vm.ledgerDetails">
+                            <td class="text-right padding-right-20" colspan="10">
                                  <span class="order-total-text">Total</span><span class="order-total-value">{{vm.ledgerTotal || vm.calculateLedgerTotal(vm.ledgerDetails) | currency : ledger._CustStatmentHdr_Currency }}</span>
-                             </td>
-                         </tr>
+                            </td>
+                        </tr>
 
                     </tfoot>
                 </table>
