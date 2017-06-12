@@ -201,7 +201,7 @@
                                 <div>
                                     <span class="help-block">A favicon (pronounced “fave-icon”) is a small, iconic image that represents your website. Favicons are most often found in the address bar of your web browser, but they can also be used in lists of bookmarks in web browsers.</span>
                                     <div class="favicon-image">
-                                        <p class="pagetitle" ng-text-truncate="website.title" ng-tt-chars-threshold="12" ng-tt-no-toggling></p>
+                                        <p class="pagetitle text-adjust">{{website.title}}</p>
                                         <p class="pageurl"><span ng-if="!account.domain">http://{{account.subdomain}}.indigenous.io</span><span ng-if="account.domain">http://{{account.domain}}</span></p>
 
                                         <img class="top-favicon" ng-if="website.settings.favicon" ng-src="{{ website.settings.favicon }}" err-src="assets/var/rvlvr/images/rvlvr-logo.png">
