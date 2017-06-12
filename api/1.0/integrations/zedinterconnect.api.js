@@ -421,34 +421,39 @@ _.extend(api.prototype, baseApi.prototype, {
         var userId = self.userId(req);
         self.log.debug(accountId, userId, '>> ledgerItem');
         var itemId = req.params.id;
-
-        self._isUserAdmin(req, function(err, isAdmin){
-            if(isAdmin && isAdmin === true) {
-                manager.getLedgerItem(accountId, userId, itemId, function(err, value){
-                    self.log.debug(accountId, userId, '<< ledgerItem');
-                    return self.sendResultOrError(resp, err, value, "Error calling ledger");
-                });
+        self._checkAccess(accountId, userId, 'ledger', function(err, isAllowed){
+            if(!isAllowed) {
+                self.log.debug(accountId, userId, '<< ledger [' + isAllowed + ']');
+                return self.sendResultOrError(resp, err, [], "Error calling aging");
             } else {
-                self._getOrgConfig(accountId, userId, function(err, orgConfig){
-                    if(!orgConfig){
-                        orgConfig = {};
-                    }
-                    var cardCodes = orgConfig.cardCodes || [];
-                    if(_.contains(cardCodes, itemId.toLowerCase())){
+                self._isUserAdmin(req, function(err, isAdmin){
+                    if(isAdmin && isAdmin === true) {
                         manager.getLedgerItem(accountId, userId, itemId, function(err, value){
                             self.log.debug(accountId, userId, '<< ledgerItem');
                             return self.sendResultOrError(resp, err, value, "Error calling ledger");
                         });
-                    }
-                    else{
-                        return self.wrapError(resp, 400, 'Bad Request', 'User does not have any matching cardCodes');
+                    } else {
+                        self._getOrgConfig(accountId, userId, function(err, orgConfig){
+                            if(!orgConfig){
+                                orgConfig = {};
+                            }
+                            var cardCodes = orgConfig.cardCodes || [];
+                            cardCodes = _.map(cardCodes, function(code){return code.toLowerCase()});
+                            if(_.contains(cardCodes, itemId.toLowerCase())){
+                                manager.getLedgerItem(accountId, userId, itemId, function(err, value){
+                                    self.log.debug(accountId, userId, '<< ledgerItem');
+                                    return self.sendResultOrError(resp, err, value, "Error calling ledger");
+                                });
+                            }
+                            else{
+                                return self.wrapError(resp, 400, 'Bad Request', 'User does not have any matching cardCodes');
+                            }
+                        });
+
                     }
                 });
-
             }
-        });
-        //TODO: security
-        
+        })
     },
 
     customerItem: function(req, resp) {
@@ -457,34 +462,39 @@ _.extend(api.prototype, baseApi.prototype, {
         var userId = self.userId(req);
         self.log.debug(accountId, userId, '>> customerItem');
         var itemId = req.params.id;
-
-        self._isUserAdmin(req, function(err, isAdmin){
-            if(isAdmin && isAdmin === true) {
-                manager.getCustomerItem(accountId, userId, itemId, function(err, value){
-                    self.log.debug(accountId, userId, '<< customerItem');
-                    return self.sendResultOrError(resp, err, value, "Error calling ledger");
-                });
+        self._checkAccess(accountId, userId, 'ledger', function(err, isAllowed){
+            if(!isAllowed) {
+                self.log.debug(accountId, userId, '<< ledger [' + isAllowed + ']');
+                return self.sendResultOrError(resp, err, [], "Error calling aging");
             } else {
-                self._getOrgConfig(accountId, userId, function(err, orgConfig){
-                    if(!orgConfig){
-                        orgConfig = {};
-                    }
-                    var cardCodes = orgConfig.cardCodes || [];
-                    if(_.contains(cardCodes, itemId.toLowerCase())){
+                self._isUserAdmin(req, function(err, isAdmin){
+                    if(isAdmin && isAdmin === true) {
                         manager.getCustomerItem(accountId, userId, itemId, function(err, value){
                             self.log.debug(accountId, userId, '<< customerItem');
-                            return self.sendResultOrError(resp, err, value, "Error calling customer");
+                            return self.sendResultOrError(resp, err, value, "Error calling ledger");
                         });
-                    }
-                    else{
-                        return self.wrapError(resp, 400, 'Bad Request', 'User does not have any matching cardCodes');
+                    } else {
+                        self._getOrgConfig(accountId, userId, function(err, orgConfig){
+                            if(!orgConfig){
+                                orgConfig = {};
+                            }
+                            var cardCodes = orgConfig.cardCodes || [];
+                            cardCodes = _.map(cardCodes, function(code){return code.toLowerCase()});
+                            if(_.contains(cardCodes, itemId.toLowerCase())){
+                                manager.getCustomerItem(accountId, userId, itemId, function(err, value){
+                                    self.log.debug(accountId, userId, '<< customerItem');
+                                    return self.sendResultOrError(resp, err, value, "Error calling customer");
+                                });
+                            }
+                            else{
+                                return self.wrapError(resp, 400, 'Bad Request', 'User does not have any matching cardCodes');
+                            }
+                        });
+
                     }
                 });
-
             }
-        });
-        //TODO: security
-        
+        })
     },
 
     _isUserAdmin: function(req, fn) {
