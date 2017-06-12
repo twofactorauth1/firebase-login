@@ -37,6 +37,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         app.get(this.url('customers'), this.isAuthAndSubscribedApi.bind(this), this.getCustomers.bind(this));
         app.get(this.url('dashboard/inventory'), this.isAuthAndSubscribedApi.bind(this), this.getDashboardInventory.bind(this));
+        app.get(this.url('loadcustomer'), this.isAuthAndSubscribedApi.bind(this), this.loadcustomer.bind(this));
     },
 
     demo: function(req, resp) {
@@ -384,6 +385,18 @@ _.extend(api.prototype, baseApi.prototype, {
 
             }
         });
+    },
+
+    loadcustomer: function(req, resp) {
+        var self = this;
+        var accountId = parseInt(self.accountId(req));
+        var userId = self.userId(req);
+        self.log.debug(accountId, userId, '>> loadcustomer');
+        //TODO: security
+        manager.loadCustomerCollection(function(err, value){
+            self.log.debug('<< loadcustomer');
+        });
+        return self.send200(resp);
     },
 
     _isUserAdmin: function(req, fn) {

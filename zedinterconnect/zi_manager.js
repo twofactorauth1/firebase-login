@@ -575,6 +575,91 @@ var ziManager = {
         });
     },
 
+
+    loadCustomerCollection: function(fn) {
+        var self = this;
+        self.log.debug(0, 0, '>> loadCustomerCollection');
+        var path = 'query/Indigenous/CustomerList.aspx?accept=application/json';
+
+        self._ziRequest(path, function(err, value) {
+            if(err) {
+                self.log.error(0,0, 'Error loading customers:', err);
+                fn();
+            } else {
+                //value = self.getParsedJson(value);
+                if(value === false){
+                    return fn(ERR_MSG);
+                }
+                if(value && value.response && value.response.payload && value.response.payload.querydata && value.response.payload.querydata.data){
+                    var data = value.response.payload.querydata.data.row;
+                    _.each(data, function(row){
+                        try {
+                            row.OCRD_CardCode = row.OCRD_CardCode;
+                        } catch(e) {
+                            self.log.error('Error parsing row [' + row['@id'] + '.OCRD_CardCode', e);
+                        }
+                        try {
+                            row.OCRD_CardName = row.OCRD_CardName;
+                        } catch(e) {
+                            self.log.error('Error parsing row [' + row['@id'] + '.OCRD_CardName', e);
+                        }
+                        try {
+                            row.OCRD_Phone1 = row.OCRD_Phone1;
+                        } catch(e) {
+                            self.log.error('Error parsing row [' + row['@id'] + '.OCRD_Phone1', e);
+                        }
+                        try {
+                            row.OCRD_Currency = row.OCRD_Currency;
+                        } catch(e) {
+                            self.log.error('Error parsing row [' + row['@id'] + '.OCRD_Currency', e);
+                        }
+                        try {
+                            row.OCRD_Address = row.OCRD_Address;
+                        } catch(e) {
+                            self.log.error('Error parsing row [' + row['@id'] + '.OCRD_Address', e);
+                        }
+                        try {
+                            row.OCRD_City = row.OCRD_City;
+                        } catch(e) {
+                            self.log.error('Error parsing row [' + row['@id'] + '.OCRD_City', e);
+                        }
+                        try {
+                            row.OCRD_State1 = row.OCRD_State1;
+                        } catch(e) {
+                            self.log.error('Error parsing row [' + row['@id'] + '.OCRD_State1', e);
+                        }
+                        try {
+                            row.OCRD_ZipCode = parseInt(row.OCRD_ZipCode);
+                        } catch(e) {
+                            self.log.error('Error parsing row [' + row['@id'] + '.OCRD_ZipCode', e);
+                        }                   
+                        if(row.OCRD_CardName) {
+                            row._cardName = row.OCRD_CardName.toLowerCase();
+                        }
+                    });
+                    self.log.debug(0,0, 'Bulk inserting [' + data.length + '] records');
+                    ziDao.dropCollection('new_customer', function(){
+                        ziDao.bulkInsert(data, 'new_customer', function(err, value){
+                            if(!err) {
+                                ziDao.renameCollection('new_customer', 'customer', function(err, value){
+                                    self.log.debug(0, 0, '<< loadCustomerCollection');
+                                    fn(err, value);
+                                });
+                            } else {
+                                self.log.error('Error during bulk insert:', err);
+                                fn(err);
+                            }
+
+                        });
+                    });
+                }
+                else{
+                    self.log.error('Unable to get data from api');
+                }
+            }
+        });
+    },
+
     _ziRequest: function(path, fn) {
         var self = this;
         var url = ziConfig.ZED_PROTOCOL + ziConfig.ZED_USERNAME + ':' + ziConfig.ZED_PASSWORD + '@' + ziConfig.ZED_ENDPOINT;
