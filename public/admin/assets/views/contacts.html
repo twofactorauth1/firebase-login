@@ -213,14 +213,14 @@
                                 <td class="center" ng-show="column.photo && tableView == 'list'">
                                     <img ng-src="{{ contact.photo }}" id="contact_photo_{{contact._id}}" err-src="/admin/assets/images/default-user.png" is-contact="contact" err-contact="contact" class="img-thumbnail screenshot" alt="image">
                                 </td>
-                                <td ng-show="column.name"><strong>First: </strong> <span ng-text-truncate="contact.first" ng-tt-chars-threshold="15" ng-tt-no-toggling></span><span ng-if="!contact.first">--</span></td>
-                                <td ng-show="column.name"><strong>Last: </strong> <span ng-text-truncate="contact.last" ng-tt-chars-threshold="15" ng-tt-no-toggling></span><span ng-if="!contact.last">--</span></td>
+                                <td ng-show="column.name"><strong>First: </strong> <span class="text-adjust">{{contact.first}}</span><span ng-if="!contact.first">--</span></td>
+                                <td ng-show="column.name"><strong>Last: </strong> <span class="text-adjust">{{contact.last}}</span><span ng-if="!contact.last">--</span></td>
                                 <td ng-show="column.tags"><strong>Tags: </strong>
-                                    <span ng-text-truncate="contactTagsFn(contact) || '--'" ng-tt-chars-threshold="15" ng-tt-no-toggling></span></td>
-                                <td ng-show="column.email" class="hidden-xs"><strong>Email: </strong> <span ng-if="contact.bestEmail"><a href="mailto:{{contact.bestEmail}}"><span ng-text-truncate="contact.bestEmail" ng-tt-chars-threshold="15" ng-tt-no-toggling></span></a>
+                                    <span class="text-adjust">{{contactTagsFn(contact)||'--'}}</span></td>
+                                <td ng-show="column.email" class="hidden-xs"><strong>Email: </strong> <span ng-if="contact.bestEmail"><a href="mailto:{{contact.bestEmail}}"><span class="text-adjust">{{contact.bestEmail}}</span></a>
                                     </span><span ng-if="!contact.bestEmail">--</span></td>
                                 <td ng-show="column.address" class="hidden-xs"><strong>Address: </strong>
-                                    <span ng-if="contact.details[0].addresses[0]" tooltip-placement="top" tooltip="{{contact.bestAddress}}" ng-text-truncate="contact.bestAddress" ng-tt-chars-threshold="15" ng-tt-no-toggling></span>
+                                    <span ng-if="contact.details[0].addresses[0]" tooltip-placement="top" tooltip="{{contact.bestAddress}}" class="text-adjust">{{contact.bestAddress}}</span>
                                     <span ng-if="!contact.details[0].addresses[0]">--</span>
                                 </td>
                                 <td ng-show="column.phone" class="hidden-xs" ng-class="{'center': tableView != 'grid'}"><strong>Phone: </strong> <a href="tel:{{contact.details[0].phones[0].number || '--'}}">{{contact.details[0].phones[0].number || '--'}}</a></td>
