@@ -628,7 +628,7 @@ var ziManager = {
                             self.log.error('Error parsing row [' + row['@id'] + '.OCRD_State1', e);
                         }
                         try {
-                            row.OCRD_ZipCode = parseInt(row.OCRD_ZipCode);
+                            row.OCRD_ZipCode = row.OCRD_ZipCode;
                         } catch(e) {
                             self.log.error('Error parsing row [' + row['@id'] + '.OCRD_ZipCode', e);
                         }                   
