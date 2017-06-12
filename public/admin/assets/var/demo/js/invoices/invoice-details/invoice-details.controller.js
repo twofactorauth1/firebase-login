@@ -29,20 +29,11 @@ function invoiceDetailsController($scope, $state, $attrs, $filter, $modal, $time
 
     function init(element) {
         vm.element = element;
-        InvoiceService.viewCustomerInvoice(vm.customerId).then(function(response){
-            var customer = response.data.response.payload.querydata.data;
-            if(customer && customer.row){
-                if(angular.isArray(customer.row)){
-                    vm.customer = customer;
-                }
-                else{
-                    vm.customer = {
-                        row: [
-                            customer.row
-                        ]
-                    }
-                }
-                loadInvoiceDetails(vm.customer.row);
+        InvoiceService.viewCustomerInvoice(vm.customerId, vm.transId).then(function(response){
+            var customer = response.data;
+            if(customer && customer.results){
+                vm.invoiceDetails = customer.results;
+                vm.totalLineOrder = calculateTotal(vm.invoiceDetails);
                 vm.uiState.loading = false;
             }
             else{
@@ -63,13 +54,6 @@ function invoiceDetailsController($scope, $state, $attrs, $filter, $modal, $time
                 // no-op;
             }
         });
-    }
-
-    function loadInvoiceDetails(ledgerDetails){
-        vm.invoiceDetails = _.filter(ledgerDetails, function(row){
-            return row._CustStatmentDtl_TransId == vm.transId
-        })
-        vm.totalLineOrder = calculateTotal(vm.invoiceDetails);
     }
 
     function calculateTotal(orders){

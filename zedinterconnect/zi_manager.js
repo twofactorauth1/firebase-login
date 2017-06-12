@@ -1038,7 +1038,7 @@ var ziManager = {
         var collection = 'customer';
         ziDao.findRawWithFieldsLimitAndOrder(query, 0, 1, null, null, collection, null, function(err, resp) {
             if(err) {
-                self.log.error(accountId, userId, 'Error getting ledger item:', err);
+                self.log.error(accountId, userId, 'Error getting customer item:', err);
                 fn(err);
             } else {
                 if(resp && resp.results) {
@@ -1047,6 +1047,27 @@ var ziManager = {
                 } else {
                     fn();
                 }
+            }
+        });
+    },
+
+    getCustomerInvoices: function(accountId, userId, customerId, transactionId, fn) {
+        var self = this;
+        self.log.debug(accountId, userId, '>> getCustomerInvoices');
+        console. log(transactionId);
+        console. log(customerId);
+        var query = {
+            '_CustStatmentHdr_CardCode': new RegExp(customerId, 'i'),
+            '_CustStatmentDtl_TransId': transactionId
+        };
+        var collection = 'ledger';
+        ziDao.findRawWithFieldsLimitAndOrder(query, null, null, null, null, collection, null, function(err, resp) {
+            if(err) {
+                self.log.error(accountId, userId, 'Error getting invoices:', err);
+                fn(err);
+            } else {
+                self.log.debug(accountId, userId, '<< getCustomerInvoices');
+                fn(null, resp);
             }
         });
     },

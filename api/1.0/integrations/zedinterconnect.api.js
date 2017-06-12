@@ -40,6 +40,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url('dashboard/inventory'), this.isAuthAndSubscribedApi.bind(this), this.getDashboardInventory.bind(this));
         app.get(this.url('loadcustomer'), this.isAuthAndSubscribedApi.bind(this), this.loadcustomer.bind(this));
         app.get(this.url('loadledger'), this.isAuthAndSubscribedApi.bind(this), this.loadledger.bind(this));
+        app.get(this.url('invoices/:id'), this.isAuthAndSubscribedApi.bind(this), this.getCustomerInvoices.bind(this));
     },
 
     demo: function(req, resp) {
@@ -424,13 +425,13 @@ _.extend(api.prototype, baseApi.prototype, {
         self._checkAccess(accountId, userId, 'ledger', function(err, isAllowed){
             if(!isAllowed) {
                 self.log.debug(accountId, userId, '<< ledger [' + isAllowed + ']');
-                return self.sendResultOrError(resp, err, [], "Error calling aging");
+                return self.sendResultOrError(resp, err, [], "Error calling ledgerItem");
             } else {
                 self._isUserAdmin(req, function(err, isAdmin){
                     if(isAdmin && isAdmin === true) {
                         manager.getLedgerItem(accountId, userId, itemId, function(err, value){
                             self.log.debug(accountId, userId, '<< ledgerItem');
-                            return self.sendResultOrError(resp, err, value, "Error calling ledger");
+                            return self.sendResultOrError(resp, err, value, "Error calling ledgerItem");
                         });
                     } else {
                         self._getOrgConfig(accountId, userId, function(err, orgConfig){
@@ -465,13 +466,13 @@ _.extend(api.prototype, baseApi.prototype, {
         self._checkAccess(accountId, userId, 'ledger', function(err, isAllowed){
             if(!isAllowed) {
                 self.log.debug(accountId, userId, '<< ledger [' + isAllowed + ']');
-                return self.sendResultOrError(resp, err, [], "Error calling aging");
+                return self.sendResultOrError(resp, err, [], "Error calling customerItem");
             } else {
                 self._isUserAdmin(req, function(err, isAdmin){
                     if(isAdmin && isAdmin === true) {
                         manager.getCustomerItem(accountId, userId, itemId, function(err, value){
                             self.log.debug(accountId, userId, '<< customerItem');
-                            return self.sendResultOrError(resp, err, value, "Error calling ledger");
+                            return self.sendResultOrError(resp, err, value, "Error calling customerItem");
                         });
                     } else {
                         self._getOrgConfig(accountId, userId, function(err, orgConfig){
@@ -483,7 +484,49 @@ _.extend(api.prototype, baseApi.prototype, {
                             if(_.contains(cardCodes, itemId.toLowerCase())){
                                 manager.getCustomerItem(accountId, userId, itemId, function(err, value){
                                     self.log.debug(accountId, userId, '<< customerItem');
-                                    return self.sendResultOrError(resp, err, value, "Error calling customer");
+                                    return self.sendResultOrError(resp, err, value, "Error calling customerItem");
+                                });
+                            }
+                            else{
+                                return self.wrapError(resp, 400, 'Bad Request', 'User does not have any matching cardCodes');
+                            }
+                        });
+
+                    }
+                });
+            }
+        })
+    },
+
+    getCustomerInvoices: function(req, resp) {
+        var self = this;
+        var accountId = parseInt(self.accountId(req));
+        var userId = self.userId(req);
+        self.log.debug(accountId, userId, '>> getCustomerInvoices');
+        var customerId = req.params.id;
+        var transactionId = parseInt(req.query.transactionId);
+        self._checkAccess(accountId, userId, 'ledger', function(err, isAllowed){
+            if(!isAllowed) {
+                self.log.debug(accountId, userId, '<< ledger [' + isAllowed + ']');
+                return self.sendResultOrError(resp, err, [], "Error calling invoices");
+            } else {
+                self._isUserAdmin(req, function(err, isAdmin){
+                    if(isAdmin && isAdmin === true) {
+                        manager.getCustomerInvoices(accountId, userId, customerId, transactionId, function(err, value){
+                            self.log.debug(accountId, userId, '<< getCustomerInvoices');
+                            return self.sendResultOrError(resp, err, value, "Error calling invoices");
+                        });
+                    } else {
+                        self._getOrgConfig(accountId, userId, function(err, orgConfig){
+                            if(!orgConfig){
+                                orgConfig = {};
+                            }
+                            var cardCodes = orgConfig.cardCodes || [];
+                            cardCodes = _.map(cardCodes, function(code){return code.toLowerCase()});
+                            if(_.contains(cardCodes, customerId.toLowerCase())){
+                                manager.getCustomerInvoices(accountId, userId, customerId, transactionId, function(err, value){
+                                    self.log.debug(accountId, userId, '<< getCustomerInvoices');
+                                    return self.sendResultOrError(resp, err, value, "Error calling invoices");
                                 });
                             }
                             else{
