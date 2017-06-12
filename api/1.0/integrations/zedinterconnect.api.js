@@ -378,6 +378,7 @@ _.extend(api.prototype, baseApi.prototype, {
                         orgConfig = {};
                     }
                     var cardCodes = orgConfig.cardCodes || [];
+                    
                     manager.getCustomers(accountId, userId, cardCodes, function(err, value){
                         self.log.debug(accountId, userId, '<< getCustomers');
                         return self.sendResultOrError(resp, err, value, "Error listing customers");

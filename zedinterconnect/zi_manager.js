@@ -481,30 +481,30 @@ var ziManager = {
     getCustomers: function(accountId, userId, cardCodeAry, fn) {
         var self = this;
         self.log.debug(accountId, userId, '>> getCustomers');
-        var path = 'query/Indigenous/CustomerList.aspx?accept=application/json';
+        var query = {};
+        if(cardCodeAry && cardCodeAry.length > 0 && cardCodeAry[0] === 'admin') {
 
-        self._ziRequest(path, function(err, value){
+        }
+        else{
+            var optRegexp = [];
+            cardCodeAry.forEach(function(opt){
+                optRegexp.push(  new RegExp(opt, "i") );
+            });
+            query.OCRD_CardCode = {$in:optRegexp};
+        }
+        self.log.debug('query:', query);
+        var fields = null;
+        var collection = 'customer';
+        var _skip = null;
+        var _limit = null;
+        var sortBy = null;
+        var sortDir = null;
+        
+        ziDao.findRawWithFieldsLimitAndOrder(query, _skip, _limit, sortBy, fields, collection, sortDir, function(err, value){
             if(err) {
-                self.log.error(accountId, userId, 'Error loading customers:', err);
+                self.log.error(accountId, userId, 'Error searching cached customers:', err);
                 fn(err);
             } else {
-                //value = self.getParsedJson(value);
-                if(value === false){
-                    return fn(ERR_MSG);
-                }
-                if(cardCodeAry && cardCodeAry.length > 0 && cardCodeAry[0] === 'admin') {
-                    //nothing to filter
-                } else if(value && value.response && value.response.payload && value.response.payload.querydata && value.response.payload.querydata.data) {
-                    var resultAry = value.response.payload.querydata.data.row;
-                    var filteredAry = [];
-                    cardCodeAry = _.map(cardCodeAry, function(code){return code.toLowerCase()});
-                    _.each(resultAry, function(result){
-                        if(_.contains(cardCodeAry, result.OCRD_CardCode.toLowerCase())) {
-                            filteredAry.push(result);
-                        }
-                    });
-                    value.response.payload.querydata.data.row = filteredAry;
-                }
                 self.log.debug(accountId, userId, '<< getCustomers');
                 fn(null, value);
             }
@@ -634,6 +634,12 @@ var ziManager = {
                         }                   
                         if(row.OCRD_CardName) {
                             row._cardName = row.OCRD_CardName.toLowerCase();
+                        }
+                        if(row.OCRD_City) {
+                            row._city = row.OCRD_City.toLowerCase();
+                        }
+                        if(row.OCRD_State1) {
+                            row._state = row.OCRD_State1.toLowerCase();
                         }
                     });
                     self.log.debug(0,0, 'Bulk inserting [' + data.length + '] records');

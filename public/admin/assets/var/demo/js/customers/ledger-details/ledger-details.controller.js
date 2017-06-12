@@ -45,9 +45,10 @@ function ledgerDetailsController($scope, $state, $attrs, $filter, $modal, $timeo
                 vm.uiState.loading = false;
             }
             else{
-                $scope.$watch(function() { return CustomersService.customers }, function(customers) {
-                    if(angular.isDefined(customers)){
-                        vm.listledger = _.find(CustomersService.customers, function(customer){
+                $scope.$watch(function() { return CustomersService.customers }, function(list) {
+                    if(angular.isDefined(list)){
+                        var customers = list.results;
+                        vm.listledger = _.find(customers, function(customer){
                             return customer.OCRD_CardCode.toLowerCase() == $stateParams.customerId.toLowerCase()
                         })
                     }

@@ -27,7 +27,7 @@ function customersComponentController($scope, $attrs, $filter, $modal, $timeout,
 
     $scope.$watch(function() { return CustomersService.customers }, function(customers) {
         if(angular.isDefined(customers)){
-            vm.state.customers = customers;
+            vm.state.customers = customers.results;
             vm.uiState.loading = false;
         }
     }, true);
