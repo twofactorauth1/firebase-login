@@ -70,9 +70,9 @@
 	        <tbody>
 	            <tr ng-repeat="promotion in vm.displayedPromotions" class="product-item" ng-click="vm.viewPromotionDetails(promotion)">
 	                <td><strong>Name: </strong>{{promotion.title}}</td>
-	                <td><strong>Vendor: </strong><div class="name-block-container"><span class="list-name"></span><span class="text-adjust" tooltip="{{promotion.vendor}}">{{promotion.vendor}}</span></div></td>
+	                <td><strong>Vendor: </strong><div class="name-block-container"><span class="list-name"></span><span ng-text-truncate="promotion.vendor" ng-tt-chars-threshold="25" ng-tt-no-toggling tooltip="{{promotion.vendor}}"></span></div></td>	                
 	                <td><strong>Promo Code: </strong>{{promotion.promoCode}}</td>
-	                <td class="hidden-xs"><strong>Products: </strong><div class="name-block-container"><span class="list-name"></span><span class="text-adjust" tooltip="{{promotion.products}}">{{promotion.products}}</span></div></td>
+	                <td class="hidden-xs"><strong>Products: </strong><div class="name-block-container"><span class="list-name"></span><span ng-text-truncate="promotion.products" ng-tt-chars-threshold="25" ng-tt-no-toggling tooltip="{{promotion.products}}"></span></div></td>
 	                <td class="hidden-xs"><strong>Start Date: </strong>{{vm.parseValueToDate(promotion.startDate) | date:'M/d/yyyy'}}</td>
 	                <td class="hidden-xs"><strong>Start Date: </strong>{{vm.parseValueToDate(promotion.expirationDate) | date:'M/d/yyyy'}}</td>
 	                <td><strong>Shipments: </strong>{{promotion.shipments}}</td>

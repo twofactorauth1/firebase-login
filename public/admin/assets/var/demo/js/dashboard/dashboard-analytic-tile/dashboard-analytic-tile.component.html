@@ -20,11 +20,11 @@
                             </td>
                         </tr>
                         <tr class="content-row" ng-repeat="item in vm.uiDetails.data" ng-if="vm.uiDetails.widgetLoaded">
-                            <td ng-if="item.field1 !== undefined"><span title="{{item.field1}}" class="text-adjust">{{item.field1}}</span></td>
+                            <td ng-if="item.field1 !== undefined"><span ng-text-truncate="item.field1" ng-tt-chars-threshold="10" title="{{item.field1}}" ng-tt-no-toggling></span></td>
                             <td ng-if="item.field2 !== undefined">
-                                <a href="{{item.link}}"><span title="{{item.field2}}" class="text-adjust">{{item.field2}}</span></a>
+                                <a href="{{item.link}}"><span ng-text-truncate="item.field2" ng-tt-chars-threshold="14" title="{{item.field2}}" ng-tt-no-toggling></span></a>
                             </td>
-                            <td ng-if="item.field3 !== undefined"><span class="text-adjust" title="{{item.field3}}">{{item.field3}}</span></td>
+                            <td ng-if="item.field3 !== undefined"><span ng-text-truncate="item.field3" ng-tt-chars-threshold="10" title="{{item.field3}}" ng-tt-no-toggling></span></td>
                         </tr>
                     </tbody>
                 </table>
