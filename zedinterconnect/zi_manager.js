@@ -575,7 +575,6 @@ var ziManager = {
         });
     },
 
-
     loadCustomerCollection: function(fn) {
         var self = this;
         self.log.debug(0, 0, '>> loadCustomerCollection');
@@ -659,6 +658,356 @@ var ziManager = {
             }
         });
     },
+
+    loadLedgerCollection: function(dateString, fn) {
+        var self = this;
+        self.log.debug(0, 0, '>> loadLedgerCollection');
+        var path = 'query/Indigenous/CustomerAging2.aspx?0=0&1=L9999999&2=' + dateString + '&accept=application/json';
+
+        self._ziRequest(path, function(err, value) {
+            if(err) {
+                self.log.error(0,0, 'Error loading ledger collection:', err);
+                fn();
+            } else {
+                //value = self.getParsedJson(value);
+                if(value === false){
+                    return fn(ERR_MSG);
+                }
+
+                if(value && value.response && value.response.payload && value.response.payload.querydata && value.response.payload.querydata.data){
+                    var data = value.response.payload.querydata.data.row;
+                    _.each(data, function(row){
+                        try {
+                            row.CompanyName = row.CompanyName;
+                        } catch(e) {
+                            self.log.error('Error parsing row [' + row['@id'] + '.CompanyName', e);
+                        }
+                        try {
+                            row.CompanyAddr = row.CompanyAddr;
+                        } catch(e) {
+                            self.log.error('Error parsing row [' + row['@id'] + '.CompanyAddr', e);
+                        }
+                        try {
+                            row.Phone = row.Phone;
+                        } catch(e) {
+                            self.log.error('Error parsing row [' + row['@id'] + '.Phone', e);
+                        }
+                        try {
+                            row.Fax = row.Fax;
+                        } catch(e) {
+                            self.log.error('Error parsing row [' + row['@id'] + '.Fax', e);
+                        }
+                        try {
+                            row.CompanyCurrency = row.CompanyCurrency;
+                        } catch(e) {
+                            self.log.error('Error parsing row [' + row['@id'] + '.CompanyCurrency', e);
+                        }
+                        try {
+                            row._CustStatmentHdr_CardCode = row._CustStatmentHdr_CardCode;
+                        } catch(e) {
+                            self.log.error('Error parsing row [' + row['@id'] + '._CustStatmentHdr_CardCode', e);
+                        }
+                        try {
+                            row._CustStatmentHdr_CardName = row._CustStatmentHdr_CardName;
+                        } catch(e) {
+                            self.log.error('Error parsing row [' + row['@id'] + '._CustStatmentHdr_CardName', e);
+                        }
+                        try {
+                            row._CustStatmentHdr_CardType = row._CustStatmentHdr_CardType;
+                        } catch(e) {
+                            self.log.error('Error parsing row [' + row['@id'] + '._CustStatmentHdr_CardType', e);
+                        }
+                        try {
+                            row._CustStatmentHdr_Balance = row._CustStatmentHdr_Balance;
+                        } catch(e) {
+                            self.log.error('Error parsing row [' + row['@id'] + '._CustStatmentHdr_Balance', e);
+                        } 
+                        try {
+                            row._CustStatmentHdr_BalanceFC = row._CustStatmentHdr_BalanceFC;
+                        } catch(e) {
+                            self.log.error('Error parsing row [' + row['@id'] + '._CustStatmentHdr_BalanceFC', e);
+                        } 
+                        try {
+                            row._CustStatmentHdr_BalanceSys = row._CustStatmentHdr_BalanceSys;
+                        } catch(e) {
+                            self.log.error('Error parsing row [' + row['@id'] + '._CustStatmentHdr_BalanceSys', e);
+                        } 
+                        try {
+                            row._CustStatmentHdr_Currency = row._CustStatmentHdr_Currency;
+                        } catch(e) {
+                            self.log.error('Error parsing row [' + row['@id'] + '._CustStatmentHdr_Currency', e);
+                        } 
+                        try {
+                            row._CustStatmentHdr_Address = row._CustStatmentHdr_Address;
+                        } catch(e) {
+                            self.log.error('Error parsing row [' + row['@id'] + '._CustStatmentHdr_Address', e);
+                        } 
+                        try {
+                            row._CustStatmentHdr_Block = row._CustStatmentHdr_Block;
+                        } catch(e) {
+                            self.log.error('Error parsing row [' + row['@id'] + '._CustStatmentHdr_Block', e);
+                        } 
+                        try {
+                            row._CustStatmentHdr_City = row._CustStatmentHdr_City;
+                        } catch(e) {
+                            self.log.error('Error parsing row [' + row['@id'] + '._CustStatmentHdr_City', e);
+                        } 
+                        try {
+                            row._CustStatmentHdr_State1 = row._CustStatmentHdr_State1;
+                        } catch(e) {
+                            self.log.error('Error parsing row [' + row['@id'] + '._CustStatmentHdr_State1', e);
+                        }
+                        try {
+                            row._CustStatmentHdr_ZipCode = row._CustStatmentHdr_ZipCode;
+                        } catch(e) {
+                            self.log.error('Error parsing row [' + row['@id'] + '._CustStatmentHdr_ZipCode', e);
+                        }
+                        try {
+                            row._CustStatmentHdr_Country = row._CustStatmentHdr_Country;
+                        } catch(e) {
+                            self.log.error('Error parsing row [' + row['@id'] + '._CustStatmentHdr_Country', e);
+                        }
+                        try {
+                            row._CustStatmentHdr_AgeCat1 = row._CustStatmentHdr_AgeCat1;
+                        } catch(e) {
+                            self.log.error('Error parsing row [' + row['@id'] + '._CustStatmentHdr_AgeCat1', e);
+                        }
+                        try {
+                            row._CustStatmentHdr_AgeCat2 = row._CustStatmentHdr_AgeCat2;
+                        } catch(e) {
+                            self.log.error('Error parsing row [' + row['@id'] + '._CustStatmentHdr_AgeCat2', e);
+                        }
+                        try {
+                            row._CustStatmentHdr_AgeCat3 = row._CustStatmentHdr_AgeCat3;
+                        } catch(e) {
+                            self.log.error('Error parsing row [' + row['@id'] + '._CustStatmentHdr_AgeCat3', e);
+                        }
+                        try {
+                            row._CustStatmentHdr_AgeCat4 = row._CustStatmentHdr_AgeCat4;
+                        } catch(e) {
+                            self.log.error('Error parsing row [' + row['@id'] + '._CustStatmentHdr_AgeCat4', e);
+                        }
+                        try {
+                            row._CustStatmentHdr_AgeCat5 = row._CustStatmentHdr_AgeCat5;
+                        } catch(e) {
+                            self.log.error('Error parsing row [' + row['@id'] + '._CustStatmentHdr_AgeCat5', e);
+                        }
+                        try {
+                            row._CustStatmentHdr_AgeCat6 = row._CustStatmentHdr_AgeCat6;
+                        } catch(e) {
+                            self.log.error('Error parsing row [' + row['@id'] + '._CustStatmentHdr_AgeCat6', e);
+                        }
+                        try {
+                            row._CustStatmentHdr_PymntGroup = row._CustStatmentHdr_PymntGroup;
+                        } catch(e) {
+                            self.log.error('Error parsing row [' + row['@id'] + '._CustStatmentHdr_PymntGroup', e);
+                        }
+                        try {
+                            row._CustStatmentDtl_BatchNum = parseInt(row._CustStatmentDtl_BatchNum);
+                        } catch(e) {
+                            self.log.error('Error parsing row [' + row['@id'] + '._CustStatmentDtl_BatchNum', e);
+                        }
+                        try {
+                            row._CustStatmentDtl_TransId = parseInt(row._CustStatmentDtl_TransId);
+                        } catch(e) {
+                            self.log.error('Error parsing row [' + row['@id'] + '._CustStatmentDtl_TransId', e);
+                        }
+                        try {
+                            row._CustStatmentDtl_TransType = row._CustStatmentDtl_TransType;
+                        } catch(e) {
+                            self.log.error('Error parsing row [' + row['@id'] + '._CustStatmentDtl_TransType', e);
+                        }
+                        try {
+                            row._CustStatmentDtl_CreatedBy = parseInt(row._CustStatmentDtl_CreatedBy);
+                        } catch(e) {
+                            self.log.error('Error parsing row [' + row['@id'] + '._CustStatmentDtl_CreatedBy', e);
+                        }
+                        try {
+                            row._CustStatmentDtl_DtlCardCode = row._CustStatmentDtl_DtlCardCode;
+                        } catch(e) {
+                            self.log.error('Error parsing row [' + row['@id'] + '._CustStatmentDtl_DtlCardCode', e);
+                        }
+                        try {
+                            row._CustStatmentDtl_RefDate = row._CustStatmentDtl_RefDate;
+                        } catch(e) {
+                            self.log.error('Error parsing row [' + row['@id'] + '._CustStatmentDtl_RefDate', e);
+                        }
+                        try {
+                            row._CustStatmentDtl_TaxDate = row._CustStatmentDtl_TaxDate;
+                        } catch(e) {
+                            self.log.error('Error parsing row [' + row['@id'] + '._CustStatmentDtl_TaxDate', e);
+                        }
+                        try {
+                            row._CustStatmentDtl_DueDate = row._CustStatmentDtl_DueDate;
+                        } catch(e) {
+                            self.log.error('Error parsing row [' + row['@id'] + '._CustStatmentDtl_DueDate', e);
+                        }
+                        try {
+                            row._CustStatmentDtl_LineMemo = row._CustStatmentDtl_LineMemo;
+                        } catch(e) {
+                            self.log.error('Error parsing row [' + row['@id'] + '._CustStatmentDtl_LineMemo', e);
+                        }
+                        try {
+                            row._CustStatmentDtl_Ref1 = row._CustStatmentDtl_Ref1;
+                        } catch(e) {
+                            self.log.error('Error parsing row [' + row['@id'] + '._CustStatmentDtl_Ref1', e);
+                        }
+                        try {
+                            row._CustStatmentDtl_Amount = row._CustStatmentDtl_Amount;
+                        } catch(e) {
+                            self.log.error('Error parsing row [' + row['@id'] + '._CustStatmentDtl_Amount', e);
+                        }
+                        try {
+                            row._CustStatmentDtl_SYSCred = row._CustStatmentDtl_SYSCred;
+                        } catch(e) {
+                            self.log.error('Error parsing row [' + row['@id'] + '._CustStatmentDtl_SYSCred', e);
+                        }
+                        try {
+                            row._CustStatmentDtl_SYSDeb = row._CustStatmentDtl_SYSDeb;
+                        } catch(e) {
+                            self.log.error('Error parsing row [' + row['@id'] + '._CustStatmentDtl_SYSDeb', e);
+                        }
+                        try {
+                            row._CustStatmentDtl_SourceLine = parseInt(row._CustStatmentDtl_SourceLine);
+                        } catch(e) {
+                            self.log.error('Error parsing row [' + row['@id'] + '._CustStatmentDtl_SourceLine', e);
+                        }
+                        try {
+                            row._CustStatmentDtl_Document_ID = row._CustStatmentDtl_Document_ID;
+                        } catch(e) {
+                            self.log.error('Error parsing row [' + row['@id'] + '._CustStatmentDtl_Document_ID', e);
+                        }
+                        try {
+                            row._CustStatmentDtl_Customer_PO_No = row["_CustStatmentDtl_Customer_PO_No."];
+                        } catch(e) {
+                            self.log.error('Error parsing row [' + row['@id'] + '._CustStatmentDtl_Customer_PO_No.', e);
+                        }
+                        try {
+                            row._CustStatmentDtl_Source_Document_ID = parseInt(row._CustStatmentDtl_Source_Document_ID);
+                        } catch(e) {
+                            self.log.error('Error parsing row [' + row['@id'] + '._CustStatmentDtl_Source_Document_ID', e);
+                        }
+                        try {
+                            row._CustStatmentDtl_TranType = row._CustStatmentDtl_TranType;
+                        } catch(e) {
+                            self.log.error('Error parsing row [' + row['@id'] + '._CustStatmentDtl_TranType', e);
+                        }
+                        try {
+                            row._CustStatmentDtl_SAPTranType = row._CustStatmentDtl_SAPTranType;
+                        } catch(e) {
+                            self.log.error('Error parsing row [' + row['@id'] + '._CustStatmentDtl_SAPTranType', e);
+                        }
+                        try {
+                            row._CustStatmentDtl_MatchNumber = row._CustStatmentDtl_MatchNumber;
+                        } catch(e) {
+                            self.log.error('Error parsing row [' + row['@id'] + '._CustStatmentDtl_MatchNumber', e);
+                        }
+                        try {
+                            row._CustStatmentDtl_ApplyDocId = row._CustStatmentDtl_ApplyDocId;
+                        } catch(e) {
+                            self.log.error('Error parsing row [' + row['@id'] + '._CustStatmentDtl_ApplyDocId', e);
+                        }
+                        try {
+                            row._CustStatmentDtl_SortPos = parseInt(row._CustStatmentDtl_SortPos);
+                        } catch(e) {
+                            self.log.error('Error parsing row [' + row['@id'] + '._CustStatmentDtl_SortPos', e);
+                        }
+                        try {
+                            row._CustStatmentDtl_DocAmount = row._CustStatmentDtl_DocAmount;
+                        } catch(e) {
+                            self.log.error('Error parsing row [' + row['@id'] + '._CustStatmentDtl_DocAmount', e);
+                        }
+                        try {
+                            row._CustStatmentDtl_Check_Num = row._CustStatmentDtl_Check_Num;
+                        } catch(e) {
+                            self.log.error('Error parsing row [' + row['@id'] + '._CustStatmentDtl_Check_Num', e);
+                        }
+                        try {
+                            row._CustStatmentDtl_DocAmountFC = row._CustStatmentDtl_DocAmountFC;
+                        } catch(e) {
+                            self.log.error('Error parsing row [' + row['@id'] + '._CustStatmentDtl_DocAmountFC', e);
+                        }
+                        try {
+                            row._CustStatmentDtl_Currency = row._CustStatmentDtl_Currency;
+                        } catch(e) {
+                            self.log.error('Error parsing row [' + row['@id'] + '._CustStatmentDtl_Currency', e);
+                        }
+                        try {
+                            row.OINV_U_VARPO = row.OINV_U_VARPO;
+                        } catch(e) {
+                            self.log.error('Error parsing row [' + row['@id'] + '.OINV_U_VARPO', e);
+                        }
+                        try {
+                            row.INV1_LineNum = parseInt(row.INV1_LineNum);
+                        } catch(e) {
+                            self.log.error('Error parsing row [' + row['@id'] + '.INV1_LineNum', e);
+                        }
+                        try {
+                            row.INV1_VisOrder = parseInt(row.INV1_VisOrder);
+                        } catch(e) {
+                            self.log.error('Error parsing row [' + row['@id'] + '.INV1_VisOrder', e);
+                        }
+                        try {
+                            row.INV1_ItemCode = row.INV1_ItemCode;
+                        } catch(e) {
+                            self.log.error('Error parsing row [' + row['@id'] + '.INV1_ItemCode', e);
+                        }
+                        try {
+                            row.INV1_Dscription = row.INV1_Dscription;
+                        } catch(e) {
+                            self.log.error('Error parsing row [' + row['@id'] + '.INV1_Dscription', e);
+                        }
+                        try {
+                            row.INV1_U_dscription = row.INV1_U_dscription;
+                        } catch(e) {
+                            self.log.error('Error parsing row [' + row['@id'] + '.INV1_U_dscription', e);
+                        }
+                        try {
+                            row.INV1_Quantity = row.INV1_Quantity;
+                        } catch(e) {
+                            self.log.error('Error parsing row [' + row['@id'] + '.INV1_Quantity', e);
+                        }
+                        try {
+                            row.INV1_Price = row.INV1_Price;
+                        } catch(e) {
+                            self.log.error('Error parsing row [' + row['@id'] + '.INV1_Price', e);
+                        }
+                        try {
+                            row.INV1_WhsCode = row.INV1_WhsCode;
+                        } catch(e) {
+                            self.log.error('Error parsing row [' + row['@id'] + '.INV1_WhsCode', e);
+                        }
+                        try {
+                            row.INV1_LineTotal = row.INV1_LineTotal;
+                        } catch(e) {
+                            self.log.error('Error parsing row [' + row['@id'] + '.INV1_LineTotal', e);
+                        }
+                        delete row["_CustStatmentDtl_Customer_PO_No."];
+
+                    });
+                    self.log.debug(0,0, 'Bulk inserting [' + data.length + '] records');
+                    ziDao.dropCollection('new_ledger', function(){
+                        ziDao.bulkInsert(data, 'new_ledger', function(err, value){
+                            if(!err) {
+                                ziDao.renameCollection('new_ledger', 'ledger', function(err, value){
+                                    self.log.debug(0, 0, '<< loadLedgerCollection');
+                                    fn(err, value);
+                                });
+                            } else {
+                                self.log.error('Error during bulk insert:', err);
+                                fn(err);
+                            }
+
+                        });
+                    });
+                }
+                else{
+                    self.log.error('Unable to get data from api');
+                }
+            }
+        });
+    },
+
 
     _ziRequest: function(path, fn) {
         var self = this;
