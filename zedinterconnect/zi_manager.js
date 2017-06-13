@@ -328,57 +328,46 @@ var ziManager = {
         if(cardCodeAry.length == 0) {
             cardCodeAry.push('admin');
         }
-        async.each(cardCodeAry, function(cardCode, callback){
-            var path = 'query/Indigenous/CustomerAging2.aspx?0=' + cardCode + '&1=' + cardCode + '&2=' + dateString + '&accept=application/json';
-            if(cardCode === 'admin') {
-                //just a hack to load them all.
-                path = 'query/Indigenous/CustomerAging2.aspx?0=0&1=L9999999&2=' + dateString + '&accept=application/json';
-            }
-            self._ziRequest(path, function(err, value) {
-                if(err) {
-                    self.log.error(accountId, userId, 'Error calling zi:', err);
-                    callback(err);
-                } else {
-                    
-                    //var response = self.getParsedJson(value);//response.payload.querydata.data.row
-                    var response = value;
-                    if(response === false){
-                        return fn(ERR_MSG)
-                    }
-                    if(response && response.response) {
-                        response = response.response;
-                    }
-                    if(response &&
-                        response.payload &&
-                        response.payload.querydata &&
-                        response.payload.querydata.data &&
-                        response.payload.querydata.data.row) {
-                        resultAry = resultAry.concat(response.payload.querydata.data.row);
-                    }
-                    callback();
-                }
+        var query = {};
+        if(cardCodeAry && cardCodeAry.length > 0 && cardCodeAry[0] === 'admin') {
+
+        }
+        else{
+            var optRegexp = [];
+            cardCodeAry.forEach(function(opt){
+                optRegexp.push(  new RegExp(opt, "i") );
             });
-        }, function(err){
-            //sort by _CustStatmentDtl_DueDate
+            query._CustStatmentHdr_CardCode = {$in: optRegexp};
+        }
 
-            var groupResultObject = _.groupBy(resultAry, function(result){ return result._CustStatmentDtl_TransId });
+        ziDao.findRawWithFieldsLimitAndOrder(query, null, null, null, null, "ledger", null, function(err, resultAry){
+            if(err) {
+                self.log.error(accountId, userId, 'Error searching cached ledger:', err);
+                fn(err);
+            } else {
 
-            var groupResultArray =  _(groupResultObject).map(function(g, key) {
-                return { 
-                    invoiceNumber: key,
-                    cardCode: g[0]._CustStatmentHdr_CardCode,
-                    dueDate: g[0]._CustStatmentDtl_DueDate,
-                    currency: g[0]._CustStatmentHdr_Currency,
-                    totalInvoice: _(g).reduce(function(m,x) { return m + parseFloat(x.INV1_LineTotal) ; }, 0) };
+                var groupResultObject = _.groupBy(resultAry.results, function(result){
+                    return result._CustStatmentDtl_TransId
                 });
-            if(limit > 0) {
-                resultAry = _.first(_.sortBy(groupResultArray, '_CustStatmentDtl_DueDate'), limit);
+
+                var groupResultArray =  _(groupResultObject).map(function(g, key) {
+                    return { 
+                        invoiceNumber: key,
+                        cardCode: g[0]._CustStatmentHdr_CardCode,
+                        dueDate: g[0]._CustStatmentDtl_DueDate,
+                        currency: g[0]._CustStatmentHdr_Currency,
+                        totalInvoice: _(g).reduce(function(m,x) { return m + parseFloat(x.INV1_LineTotal) ; }, 0) };
+                    });
+                if(limit > 0) {
+                    resultAry = _.first(_.sortBy(groupResultArray, '_CustStatmentDtl_DueDate'), limit);
+                }
+
+
+                self.log.debug(accountId, userId, '<< getLedgerWithLimit');
+                fn(err, resultAry);
             }
-
-
-            self.log.debug(accountId, userId, '<< getLedgerWithLimit');
-            fn(err, resultAry);
         });
+        
     },
 
     loadInventoryCollection: function(fn) {
@@ -518,24 +507,16 @@ var ziManager = {
             self.log.error(accountId, userId, 'No card code specified');
             return fn('No card code specified');
         }
-        var path = 'query/Indigenous/CustomerList.aspx?accept=application/json';
-        self._ziRequest(path, function(err, value){
+        var query = {'OCRD_CardCode': new RegExp(cardCode, 'i')};
+        var collection = 'customer';
+        ziDao.findRawWithFieldsLimitAndOrder(query, 0, 1, null, null, collection, null, function(err, resp) {
             if(err) {
-                self.log.error(accountId, userId, 'Error loading customers:', err);
+                self.log.error(accountId, userId, 'Error getting customer:', err);
                 fn(err);
             } else {
-                //value = self.getParsedJson(value);
-                if(value === false){
-                    return fn(ERR_MSG);
-                }
                 var companyName = '';
-                if(value && value.response && value.response.payload && value.response.payload.querydata && value.response.payload.querydata.data) {
-                    var resultAry = value.response.payload.querydata.data.row;
-                    _.each(resultAry, function(result){
-                        if(result && result.OCRD_CardCode && result.OCRD_CardCode.toLowerCase() === cardCode.toLowerCase()) {
-                            companyName = result.OCRD_CardName;
-                        }
-                    });
+                if(resp && resp.results) {
+                    companyName = resp.results[0].OCRD_CardName;
                 }
                 if(companyName === '') {
                     self.log.warn('Could not match a card code:' + cardCode, cardCode);
@@ -724,17 +705,17 @@ var ziManager = {
                             self.log.error('Error parsing row [' + row['@id'] + '._CustStatmentHdr_CardType', e);
                         }
                         try {
-                            row._CustStatmentHdr_Balance = row._CustStatmentHdr_Balance;
+                            row._CustStatmentHdr_Balance = parseFloat(row._CustStatmentHdr_Balance);
                         } catch(e) {
                             self.log.error('Error parsing row [' + row['@id'] + '._CustStatmentHdr_Balance', e);
                         } 
                         try {
-                            row._CustStatmentHdr_BalanceFC = row._CustStatmentHdr_BalanceFC;
+                            row._CustStatmentHdr_BalanceFC = parseFloat(row._CustStatmentHdr_BalanceFC);
                         } catch(e) {
                             self.log.error('Error parsing row [' + row['@id'] + '._CustStatmentHdr_BalanceFC', e);
                         } 
                         try {
-                            row._CustStatmentHdr_BalanceSys = row._CustStatmentHdr_BalanceSys;
+                            row._CustStatmentHdr_BalanceSys = parseFloat(row._CustStatmentHdr_BalanceSys);
                         } catch(e) {
                             self.log.error('Error parsing row [' + row['@id'] + '._CustStatmentHdr_BalanceSys', e);
                         } 
@@ -774,32 +755,32 @@ var ziManager = {
                             self.log.error('Error parsing row [' + row['@id'] + '._CustStatmentHdr_Country', e);
                         }
                         try {
-                            row._CustStatmentHdr_AgeCat1 = row._CustStatmentHdr_AgeCat1;
+                            row._CustStatmentHdr_AgeCat1 = parseFloat(row._CustStatmentHdr_AgeCat1);
                         } catch(e) {
                             self.log.error('Error parsing row [' + row['@id'] + '._CustStatmentHdr_AgeCat1', e);
                         }
                         try {
-                            row._CustStatmentHdr_AgeCat2 = row._CustStatmentHdr_AgeCat2;
+                            row._CustStatmentHdr_AgeCat2 = parseFloat(row._CustStatmentHdr_AgeCat2);
                         } catch(e) {
                             self.log.error('Error parsing row [' + row['@id'] + '._CustStatmentHdr_AgeCat2', e);
                         }
                         try {
-                            row._CustStatmentHdr_AgeCat3 = row._CustStatmentHdr_AgeCat3;
+                            row._CustStatmentHdr_AgeCat3 = parseFloat(row._CustStatmentHdr_AgeCat3);
                         } catch(e) {
                             self.log.error('Error parsing row [' + row['@id'] + '._CustStatmentHdr_AgeCat3', e);
                         }
                         try {
-                            row._CustStatmentHdr_AgeCat4 = row._CustStatmentHdr_AgeCat4;
+                            row._CustStatmentHdr_AgeCat4 = parseFloat(row._CustStatmentHdr_AgeCat4);
                         } catch(e) {
                             self.log.error('Error parsing row [' + row['@id'] + '._CustStatmentHdr_AgeCat4', e);
                         }
                         try {
-                            row._CustStatmentHdr_AgeCat5 = row._CustStatmentHdr_AgeCat5;
+                            row._CustStatmentHdr_AgeCat5 = parseFloat(row._CustStatmentHdr_AgeCat5);
                         } catch(e) {
                             self.log.error('Error parsing row [' + row['@id'] + '._CustStatmentHdr_AgeCat5', e);
                         }
                         try {
-                            row._CustStatmentHdr_AgeCat6 = row._CustStatmentHdr_AgeCat6;
+                            row._CustStatmentHdr_AgeCat6 = parseFloat(row._CustStatmentHdr_AgeCat6);
                         } catch(e) {
                             self.log.error('Error parsing row [' + row['@id'] + '._CustStatmentHdr_AgeCat6', e);
                         }
@@ -859,17 +840,17 @@ var ziManager = {
                             self.log.error('Error parsing row [' + row['@id'] + '._CustStatmentDtl_Ref1', e);
                         }
                         try {
-                            row._CustStatmentDtl_Amount = row._CustStatmentDtl_Amount;
+                            row._CustStatmentDtl_Amount = parseFloat(row._CustStatmentDtl_Amount);
                         } catch(e) {
                             self.log.error('Error parsing row [' + row['@id'] + '._CustStatmentDtl_Amount', e);
                         }
                         try {
-                            row._CustStatmentDtl_SYSCred = row._CustStatmentDtl_SYSCred;
+                            row._CustStatmentDtl_SYSCred = parseFloat(row._CustStatmentDtl_SYSCred);
                         } catch(e) {
                             self.log.error('Error parsing row [' + row['@id'] + '._CustStatmentDtl_SYSCred', e);
                         }
                         try {
-                            row._CustStatmentDtl_SYSDeb = row._CustStatmentDtl_SYSDeb;
+                            row._CustStatmentDtl_SYSDeb = parseFloat(row._CustStatmentDtl_SYSDeb);
                         } catch(e) {
                             self.log.error('Error parsing row [' + row['@id'] + '._CustStatmentDtl_SYSDeb', e);
                         }
@@ -919,17 +900,17 @@ var ziManager = {
                             self.log.error('Error parsing row [' + row['@id'] + '._CustStatmentDtl_SortPos', e);
                         }
                         try {
-                            row._CustStatmentDtl_DocAmount = row._CustStatmentDtl_DocAmount;
+                            row._CustStatmentDtl_DocAmount = parseFloat(row._CustStatmentDtl_DocAmount);
                         } catch(e) {
                             self.log.error('Error parsing row [' + row['@id'] + '._CustStatmentDtl_DocAmount', e);
                         }
                         try {
-                            row._CustStatmentDtl_Check_Num = row._CustStatmentDtl_Check_Num;
+                            row._CustStatmentDtl_Check_Num = parseInt(row._CustStatmentDtl_Check_Num);
                         } catch(e) {
                             self.log.error('Error parsing row [' + row['@id'] + '._CustStatmentDtl_Check_Num', e);
                         }
                         try {
-                            row._CustStatmentDtl_DocAmountFC = row._CustStatmentDtl_DocAmountFC;
+                            row._CustStatmentDtl_DocAmountFC = parseFloat(row._CustStatmentDtl_DocAmountFC);
                         } catch(e) {
                             self.log.error('Error parsing row [' + row['@id'] + '._CustStatmentDtl_DocAmountFC', e);
                         }
@@ -969,12 +950,12 @@ var ziManager = {
                             self.log.error('Error parsing row [' + row['@id'] + '.INV1_U_dscription', e);
                         }
                         try {
-                            row.INV1_Quantity = row.INV1_Quantity;
+                            row.INV1_Quantity = parseFloat(row.INV1_Quantity);
                         } catch(e) {
                             self.log.error('Error parsing row [' + row['@id'] + '.INV1_Quantity', e);
                         }
                         try {
-                            row.INV1_Price = row.INV1_Price;
+                            row.INV1_Price = parseFloat(row.INV1_Price);
                         } catch(e) {
                             self.log.error('Error parsing row [' + row['@id'] + '.INV1_Price', e);
                         }
@@ -984,7 +965,7 @@ var ziManager = {
                             self.log.error('Error parsing row [' + row['@id'] + '.INV1_WhsCode', e);
                         }
                         try {
-                            row.INV1_LineTotal = row.INV1_LineTotal;
+                            row.INV1_LineTotal = parseFloat(row.INV1_LineTotal);
                         } catch(e) {
                             self.log.error('Error parsing row [' + row['@id'] + '.INV1_LineTotal', e);
                         }

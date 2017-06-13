@@ -348,6 +348,7 @@ _.extend(api.prototype, baseApi.prototype, {
                     }
                     var cardCodes = orgConfig.cardCodes || [];
                     if(cardCodes.length){
+                        cardCodes = _.map(cardCodes, function(code){return code.toLowerCase()});
                         manager.getLedgerWithLimit(accountId, userId, cardCodes, dateString, limit, function(err, value){
                             self.log.debug(accountId, userId, '<< getTopInvoices');
                             return self.sendResultOrError(resp, err, value, "Error calling aging");
