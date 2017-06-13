@@ -2617,8 +2617,7 @@ module.exports = {
         var group1 = {
             $group: {
                 _id:{
-                    yearMonthDay: { $dateToString: { format: "%Y-%m-%d", date: "$server_time_dt" }},
-                    path:'$requestedUrl.path'
+                    yearMonthDay: { $dateToString: { format: "%Y-%m-%d", date: "$server_time_dt" }}
                 },
                 count:{$sum:1}
             }
@@ -2630,7 +2629,7 @@ module.exports = {
 
         var group2 = {
             $group: {
-                _id: {date:'$_id.yearMonthDay', path:'$_id.path'},
+                _id: {date:'$_id.yearMonthDay'},
                 total:{$sum:'$count'}
             }
         };
@@ -2643,7 +2642,6 @@ module.exports = {
             _.each(value, function (entry) {
                 var result = {
                     total: entry.total,
-                    path: entry._id.path || '',
                     timeframe: {
                         start: entry._id.date
                     }
