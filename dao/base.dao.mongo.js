@@ -484,6 +484,21 @@ var mongodao = {
         });
     },
 
+    _aggregateMongoWithCustomStagesAndCollection: function(stageAry, collection, fn) {
+        var self = this;
+
+        var mongoColl = this.mongo(collection);
+
+        mongoColl.aggregate(stageAry, function (err, value) {
+            if (!err) {
+                fn(null, value);
+            } else {
+                self.log.error("An error occurred: #aggregateMongoWithCustomStages() with stages: " + JSON.stringify(stageAry), err);
+                fn(err, value);
+            }
+        });
+    },
+
     _aggregateMongo: function (groupCriteria, matchCriteria, type, fn) {
         var self = this;
         var stageAry = [];

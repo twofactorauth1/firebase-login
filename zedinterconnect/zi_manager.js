@@ -331,8 +331,7 @@ var ziManager = {
         var query = {};
         if(cardCodeAry && cardCodeAry.length > 0 && cardCodeAry[0] === 'admin') {
 
-        }
-        else{
+        } else{
             var optRegexp = [];
             cardCodeAry.forEach(function(opt){
                 optRegexp.push(  new RegExp(opt, "i") );
@@ -340,6 +339,21 @@ var ziManager = {
             query._CustStatmentHdr_CardCode = {$in: optRegexp};
         }
 
+        var stageAry = [];
+        var match = {$match:query};
+        stageAry.push(match);
+        /*
+        ziDao.aggregateWithCustomStagesAndCollection(stageAry, 'ledger', function(err, resultAry){
+            if(err) {
+                self.log.error(accountId, userId, 'Error searching cached ledger:', err);
+                fn(err);
+            } else {
+                self.log.debug(accountId, userId, '<< getLedgerWithLimit');
+                fn(err, resultAry);
+            }
+        });
+        */
+        
         ziDao.findRawWithFieldsLimitAndOrder(query, null, null, null, null, "ledger", null, function(err, resultAry){
             if(err) {
                 self.log.error(accountId, userId, 'Error searching cached ledger:', err);
