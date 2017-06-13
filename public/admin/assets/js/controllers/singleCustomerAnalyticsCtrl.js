@@ -360,6 +360,9 @@
                 });
                 $scope.fourOfours = fourOfours;
             }
+            if(results["four04sReport"]){
+                $scope.fourOfoursDetails = results["four04sReport"];
+            }
 
 
             ChartAnalyticsService.analyticsOverview($scope.pageviewsData, $scope.sessionsData, $scope.visitorsData, null,$scope.fourOfours, isVisibleLegend, setLegendVisibility, function (data) {
@@ -768,7 +771,9 @@
                 });
                 $scope.fourOfours = fourOfours;
             }
-
+            if(results["four04sReport"]){
+                $scope.fourOfoursDetails = results["four04sReport"];
+            }
             ChartAnalyticsService.analyticsOverview($scope.pageviewsData, $scope.sessionsData, $scope.visitorsData, null, $scope.fourOfours, isVisibleLegend, setLegendVisibility, function (data) {
                 $scope.$apply(function () {
                     $scope.analyticsOverviewConfig = data;

@@ -185,7 +185,6 @@
             var deferred = $q.defer();
             //visitor overview
             ChartAnalyticsService.getVisitorOverviewChartData($scope.date, $scope.analyticsAccount, true, false, function(err, pageviews, users, sessions, dau,fourOfoursData){
-                debugger;
                 var pageviewsData = [];
                 var currentTotalPageviews = 0;
                 _.each(pageviews.currentMonth, function (pageView) {

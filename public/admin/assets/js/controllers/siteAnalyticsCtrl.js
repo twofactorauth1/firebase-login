@@ -428,9 +428,9 @@
             } else {
                 //console.log('No userReport:', results);
             }
-            if(results["404s"]){
+            if(results["daily404s"]){
                 var fourOfours = [];
-                _.each(results["404s"], function (fourOfour) {
+                _.each(results["daily404s"], function (fourOfour) {
                     var subArr = [];
                     subArr.push(new Date(fourOfour.timeframe.start.replace(" ", "T")).getTime() + localTimezoneOffset);
                     subArr.push(fourOfour.total);
@@ -438,7 +438,9 @@
                 });
                 $scope.fourOfours = fourOfours;
             }
-
+            if(results["404s"]){
+                $scope.fourOfoursDetails = results["404s"];
+            }
             // ----------------------------------------
             // Pageviews Metric
             // ----------------------------------------
@@ -859,15 +861,18 @@
 
 
 
-            if(results["404s"]){
+            if(results["daily404s"]){
                 var fourOfours = [];
-                _.each(results["404s"], function (fourOfour) {
+                _.each(results["daily404s"], function (fourOfour) {
                     var subArr = [];
                     subArr.push(new Date(fourOfour.timeframe.start.replace(" ", "T")).getTime() + localTimezoneOffset);
                     subArr.push(fourOfour.total);
                     fourOfours.push(subArr);
                 });
                 $scope.fourOfours = fourOfours;
+            }
+            if(results["404s"]){
+                $scope.fourOfoursDetails = results["404s"];
             }
 
             // ----------------------------------------

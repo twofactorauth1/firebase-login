@@ -16,7 +16,6 @@
         var baseLiveTrafficAPIUrl = '/api/1.0/analytics/live';
 
         var frontrunnerSitesPageviewsAPIUrl = '/api/1.0/analytics/admin/pageViewPerformance';
-        var fourOfourEndPoint='/api/1.0/analytics/admin';
         saService.runReports = runReports;
         saService.runAdminReports = runAdminReports;
         saService.runCustomerReports = runCustomerReports;
@@ -76,7 +75,7 @@
             return runSingleReport(startDate, endDate, accountId, isAdmin, isCustomer, 'dau', fn);
         }
         function getFourOFours(startDate, endDate, accountId, isAdmin, isCustomer, fn) {
-            return runSingleReport(startDate, endDate, accountId, isAdmin, isCustomer, '404s', fn);
+            return runSingleReport(startDate, endDate, accountId, isAdmin, isCustomer, 'daily404s', fn);
         }
         function getPageAnalytics(startDate, endDate, accountId, isAdmin, isCustomer, fn) {
             return runSingleReport(startDate, endDate, accountId, isAdmin, isCustomer, 'pageAnalytics', fn);
@@ -130,13 +129,8 @@
             var startDateString = moment.utc(startDate).format('YYYY-MM-DD[T]HH:mm:ss');
             var endDateString = moment.utc(endDate).format('YYYY-MM-DD[T]HH:mm:ss');
             var path = '/' + reportName + '?start=' + startDateString + '&end=' + endDateString;
-            if(reportName=="404s")debugger
             if(isAdmin) {
-                if(reportName=="404s"){
-                     path = fourOfourEndPoint + path;
-                }else{
-                    path = adminAnalyticsAPIUrl + path;
-                }
+                path = adminAnalyticsAPIUrl + path;
             } else if(isCustomer){
                 path = customerAnalyticsAPIUrl + path + '&accountId=' + accountId;
             } else {
@@ -147,7 +141,7 @@
 
         function runIndividualReports(startDate, endDate, accountId, isAdmin, isCustomer, fn) {
             var endpointAry = ['users', 'pageviews', 'sessions', 'visitors', 'visitorLocations', 'visitorLocationsByCountry',
-                'visitorDevices', 'sessionLength', 'trafficSources', 'newVsReturning', 'pageAnalytics', 'userAgents', 'revenue','404s'];
+                'visitorDevices', 'sessionLength', 'trafficSources', 'newVsReturning', 'pageAnalytics', 'userAgents', 'revenue','daily404s','404s'];
 
             //users, pageviews, dau, sessions
             var adminEndpointAry = ['pageviews', 'users','sessions', 'dau'];
