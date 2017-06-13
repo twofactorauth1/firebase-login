@@ -20,6 +20,7 @@ var moment = require('moment');
 var emailMessageManager = require('../../emailmessages/emailMessageManager');
 var organizationDao = require('../../organizations/dao/organization.dao');
 require('superagent');
+var sqsUtil = require('../../utils/sqsUtil');
 
 
 var api = function() {
@@ -70,6 +71,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url('reports/userAgents'), this.isAuthApi.bind(this), this.getUserAgentsReport.bind(this));
         app.get(this.url('reports/revenue'), this.isAuthAndSubscribedApi.bind(this), this.getRevenue.bind(this));
         app.get(this.url('reports/404s'), this.isAuthAndSubscribedApi.bind(this), this.get404s.bind(this));
+        app.get(this.url('reports/daily404s'), this.isAuthAndSubscribedApi.bind(this), this.getDaily404s.bind(this));
         app.get(this.url('reports/all'), this.isAuthAndSubscribedApi.bind(this), this.allReports.bind(this));
 
         app.get(this.url('admin/reports/dau'), this.isAuthAndSubscribedApi.bind(this), this.getDailyActiveUsers.bind(this));
@@ -97,6 +99,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url('admin/live'), this.isAuthAndSubscribedApi.bind(this), this.getAdminLiveVisitors.bind(this));
         app.get(this.url('admin/pageViewPerformance'), this.isAuthAndSubscribedApi.bind(this), this.getPageViewPerformance.bind(this));
         app.get(this.url('admin/404s'), this.isAuthAndSubscribedApi.bind(this), this.getAdmin404s.bind(this));
+        app.get(this.url('admin/reports/daily404s'), this.isAuthAndSubscribedApi.bind(this), this.getAdminDaily404s.bind(this));
     },    
 
 
@@ -125,6 +128,15 @@ _.extend(api.prototype, baseApi.prototype, {
         var events = req.body;
         self.log.debug('>> handleSendgridEvent:', events);
         self.send200(resp);
+
+        if(appConfig.nonProduction) {
+            var queueUrl = 'https://sqs.us-west-1.amazonaws.com/213805526570/test-analytics_sendgrid_q';
+            sqsUtil.sendMessage(queueUrl, null, events, function(err, value){
+                self.log.debug('response from sqs:', err);
+                self.log.debug('response from sqs:', value);
+            });
+        }
+
         var savedEvents = [];
         var contactActivitiesJSON = [];
         var deferredUpdates = {};
@@ -1306,6 +1318,35 @@ _.extend(api.prototype, baseApi.prototype, {
         });
     },
 
+    getDaily404s: function(req, resp) {
+        var self = this;
+        var userId = self.userId(req);
+        var accountId = self.accountId(req);
+        self.log.debug(accountId, userId, '>> getDaily404s (' + req.query.start + ', ' + req.query.end + ')');
+        var start = req.query.start;
+        var end = req.query.end;
+
+        if(!end) {
+            end = moment().toDate();
+        } else {
+            //2016-07-03T00:00:00 05:30
+            end = moment(end, 'YYYY-MM-DD[T]HH:mm:ss').toDate();
+        }
+
+        if(!start) {
+            start = moment().add(-30, 'days').toDate();
+        } else {
+            start = moment(start, 'YYYY-MM-DD[T]HH:mm:ss').toDate();
+            self.log.debug('start:', start);
+        }
+
+        analyticsManager.get404sByDateAndPathReport(accountId, userId, start, end, false, null, function(err, results){
+            self.log.debug(accountId, userId, '<< getDaily404s');
+            self.sendResultOrError(resp, err, results, 'Error getting report');
+        });
+
+    },
+
     allReports: function(req, resp) {
         var self = this;
         var userId = self.userId(req);
@@ -1470,6 +1511,12 @@ _.extend(api.prototype, baseApi.prototype, {
             },
             emailsReport: function(callback) {
                 analyticsManager.getCampaignEmailsReport(accountId, userId, start, end, previousStart, previousEnd, false, null, callback);
+            },
+            four04sReport: function(callback) {
+                analyticsManager.get404sReport(accountId, userId, start, end, false, null, callback);
+            },
+            daily404sReport:function(callback) {
+                analyticsManager.get404sByDateAndPathReport(accountId, userId, start, end, false, null, callback);
             }
         }, function(err, results){
             self.log.debug(accountId, userId, '<< allCustomerReports');
@@ -2668,7 +2715,7 @@ _.extend(api.prototype, baseApi.prototype, {
         var self = this;
         var userId = self.userId(req);
         var accountId = self.accountId(req);
-        self.log.debug(accountId, userId, '>> getAdminEmailsReport (' + req.query.start + ', ' + req.query.end + ')');
+        self.log.debug(accountId, userId, '>> getAdmin404s (' + req.query.start + ', ' + req.query.end + ')');
         var start = req.query.start;
         var end = req.query.end;
 
@@ -2693,7 +2740,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         if(accountId === appConfig.mainAccountID) {
             analyticsManager.get404sReport(accountId, userId, start, end, true, null, function(err, results){
-                self.log.debug(accountId, userId, '<< getAdminEmailsReport');
+                self.log.debug(accountId, userId, '<< getAdmin404s');
                 self.sendResultOrError(resp, err, results, 'Error getting report');
             });
         } else if(urlUtils.getSubdomainFromRequest(req).isOrgRoot === true){
@@ -2707,7 +2754,65 @@ _.extend(api.prototype, baseApi.prototype, {
                 } else {
                     if(organization.get('adminAccount') === accountId) {
                         analyticsManager.get404sReport(accountId, userId, start, end, true, organization.id(), function(err, results){
-                            self.log.debug(accountId, userId, '<< getAdminEmailsReport');
+                            self.log.debug(accountId, userId, '<< getAdmin404s');
+                            self.sendResultOrError(resp, err, results, 'Error getting report');
+                        });
+                    } else {
+                        self.log.warn(accountId, userId, 'Non-orgAdmin account attempted to call admin reports!');
+                        return self.send403(resp);
+                    }
+                }
+            });
+        } else {
+            self.log.warn(accountId, userId, 'Non-main account attempted to call admin reports!');
+            return self.send403(resp);
+        }
+    },
+
+    getAdminDaily404s: function(req, resp) {
+        var self = this;
+        var userId = self.userId(req);
+        var accountId = self.accountId(req);
+        self.log.debug(accountId, userId, '>> getAdminDaily404s (' + req.query.start + ', ' + req.query.end + ')');
+        var start = req.query.start;
+        var end = req.query.end;
+
+        if(!end) {
+            end = moment().toDate();
+        } else {
+            //2016-07-03T00:00:00 05:30
+            end = moment(end, 'YYYY-MM-DD[T]HH:mm:ss').toDate();
+        }
+
+        if(!start) {
+            start = moment().add(-30, 'days').toDate();
+        } else {
+            start = moment(start, 'YYYY-MM-DD[T]HH:mm:ss').toDate();
+            self.log.debug('start:', start);
+        }
+
+        var dateDiff = moment(start).diff(end, 'days');
+
+        var previousStart = moment(start).add(dateDiff, 'days').toDate();
+        var previousEnd = start;
+
+        if(accountId === appConfig.mainAccountID) {
+            analyticsManager.get404sByDateAndPathReport(accountId, userId, start, end, true, null, function(err, results){
+                self.log.debug(accountId, userId, '<< getAdminDaily404s');
+                self.sendResultOrError(resp, err, results, 'Error getting report');
+            });
+        } else if(urlUtils.getSubdomainFromRequest(req).isOrgRoot === true){
+            /*
+             * Check if we are a org admin
+             */
+            organizationDao.getByOrgDomain(urlUtils.getSubdomainFromRequest(req).orgDomain, function(err, organization){
+                if(err || !organization) {
+                    self.log.warn(accountId, userId, 'Non-main account attempted to call admin reports!');
+                    return self.send403(resp);
+                } else {
+                    if(organization.get('adminAccount') === accountId) {
+                        analyticsManager.get404sByDateAndPathReport(accountId, userId, start, end, true, organization.id(), function(err, results){
+                            self.log.debug(accountId, userId, '<< getAdminDaily404s');
                             self.sendResultOrError(resp, err, results, 'Error getting report');
                         });
                     } else {

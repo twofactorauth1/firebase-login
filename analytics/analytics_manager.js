@@ -2557,12 +2557,69 @@ module.exports = {
             match.$match.orgId = orgId;
         }
         stageAry.push(match);
+        var group1 = {
+            $group: {
+                _id:{
+                    path:'$requestedUrl.path'
+                },
+                count:{$sum:1}
+            }
+        };
+        stageAry.push(group1);
+        var group2 = {
+            $group: {
+                _id: {path:'$_id.path'},
+                total:{$sum:'$count'}
+            }
+        };
+        stageAry.push(group2);
+        dao.aggregateWithCustomStages(stageAry, $$.m.PageEvent, function(err, value) {
+            var resultAry = [];
+            _.each(value, function (entry) {
+                var result = {
+                    total: entry.total,
+                    path: entry._id.path || 'unknown'
+                };
+
+                resultAry.push(result);
+            });
+            var sortedResults = _.sortBy(resultAry, function(result){return result.total;}).reverse();
+            self.log.debug(accountId, userId, '<< get404sReport');
+            fn(err, sortedResults);
+        });
+    },
+
+    get404sByDateAndPathReport: function(accountId, userId, start, end, isAggregate, orgId, fn) {
+        var self = this;
+        self.log = _log;
+        self.log.debug(accountId, userId, '>> get404sByDateAndPathReport');
+        var granularity = self._determineGranularity(start, end);
+
+        var stageAry = [];
+        var match = {
+            $match:{
+                accountId:accountId,
+                server_time_dt:{
+                    $gte:start,
+                    $lte:end
+                },
+                'url.path':'/404'
+            }
+        };
+        if(isAggregate === true) {
+            delete match.$match.accountId;
+        }
+        if(orgId !== null) {
+            match.$match.orgId = orgId;
+        }
+        stageAry.push(match);
 
         var group1 = {
             $group: {
                 _id:{
                     yearMonthDay: { $dateToString: { format: "%Y-%m-%d", date: "$server_time_dt" }}
-                }
+                },
+                count:{$sum:1}
             }
         };
         if(granularity === 'hours') {
@@ -2572,8 +2629,8 @@ module.exports = {
 
         var group2 = {
             $group: {
-                _id: '$_id.yearMonthDay',
-                total:{$sum:1}
+                _id: {date:'$_id.yearMonthDay'},
+                total:{$sum:'$count'}
             }
         };
         stageAry.push(group2);
@@ -2586,23 +2643,23 @@ module.exports = {
                 var result = {
                     total: entry.total,
                     timeframe: {
-                        start: entry._id
+                        start: entry._id.date
                     }
                 };
                 if(granularity === 'hours') {
-                    result.timeframe.end = moment(entry._id).add(1, 'hours').format('YYYY-MM-DD HH:mm');
+                    result.timeframe.end = moment(entry._id.date).add(1, 'hours').format('YYYY-MM-DD HH:mm');
                 } else {
-                    result.timeframe.end = moment(entry._id).add(1, 'days').format('YYYY-MM-DD');
+                    result.timeframe.end = moment(entry._id.date).add(1, 'days').format('YYYY-MM-DD');
                 }
                 resultAry.push(result);
             });
             var sortedResults = _.sortBy(resultAry, function(result){return result.total;});
             if(granularity === 'hours') {
-                sortedResults = self._zeroMissingHours(sortedResults, {total:0}, moment(start).format('YYYY-MM-DD HH:mm'), moment(end).format('YYYY-MM-DD HH:mm'));
+                sortedResults = self._zeroMissingHours(sortedResults, {total:0, path:''}, moment(start).format('YYYY-MM-DD HH:mm'), moment(end).format('YYYY-MM-DD HH:mm'));
             } else {
-                sortedResults = self._zeroMissingDays(sortedResults, {total:0}, moment(start).format('YYYY-MM-DD'), moment(end).format('YYYY-MM-DD'));
+                sortedResults = self._zeroMissingDays(sortedResults, {total:0, path:''}, moment(start).format('YYYY-MM-DD'), moment(end).format('YYYY-MM-DD'));
             }
-            self.log.debug(accountId, userId, '<< get404sReport');
+            self.log.debug(accountId, userId, '<< get404sByDateAndPathReport');
             fn(err, sortedResults);
         });
     },

@@ -2,9 +2,9 @@
 
 app.controller('LedgerDetailsController', ledgerDetailsController);
 
-ledgerDetailsController.$inject = ['$scope', '$state', '$attrs', '$filter', '$modal', '$timeout', '$stateParams', '$location', 'toaster', 'CustomersService'];
+ledgerDetailsController.$inject = ['$scope', '$state', '$attrs', '$filter', '$modal', '$timeout', '$stateParams', '$location', 'toaster', 'LedgerService'];
 /* @ngInject */
-function ledgerDetailsController($scope, $state, $attrs, $filter, $modal, $timeout, $stateParams, $location, toaster, CustomersService) {
+function ledgerDetailsController($scope, $state, $attrs, $filter, $modal, $timeout, $stateParams, $location, toaster, LedgerService) {
 
     var vm = this;
 
@@ -29,30 +29,17 @@ function ledgerDetailsController($scope, $state, $attrs, $filter, $modal, $timeo
     function init(element) {
         vm.element = element;
 
-        CustomersService.getLedgerDetails($stateParams.customerId).then(function(response){
-            var ledger = response.data.response && response.data.response.payload.querydata.data;
-            if(ledger && ledger.row){
-                if(angular.isArray(ledger.row)){
-                    vm.ledger = ledger
-                }
-                else{
-                    vm.ledger = {
-                        row: [
-                            ledger.row
-                        ]
-                    }
-                }
+        LedgerService.getLedgerDetails($stateParams.customerId).then(function(response){
+            var ledger = response.data.results;
+            if(ledger && ledger.length){
+                vm.ledger = ledger;
                 vm.uiState.loading = false;
             }
             else{
-                $scope.$watch(function() { return CustomersService.customers }, function(customers) {
-                    if(angular.isDefined(customers)){
-                        vm.listledger = _.find(CustomersService.customers, function(customer){
-                            return customer.OCRD_CardCode.toLowerCase() == $stateParams.customerId.toLowerCase()
-                        })
-                    }
+                LedgerService.getCustomerDetails($stateParams.customerId).then(function(response){
+                    vm.listledger = response.data;
                     vm.uiState.loading = false;
-                }, true);
+                })
             }
         }).catch(function(error) {
             vm.uiState.loading = false;
@@ -70,7 +57,7 @@ function ledgerDetailsController($scope, $state, $attrs, $filter, $modal, $timeo
         }
     };
 
-    $scope.$watch('vm.ledger.row', function(ledgerDetails) {
+    $scope.$watch('vm.ledger', function(ledgerDetails) {
         if(angular.isDefined(ledgerDetails)){
             vm.ledgerDetails = _.uniq(ledgerDetails, function(ld){
                 return ld._CustStatmentDtl_TransId;
@@ -85,8 +72,8 @@ function ledgerDetailsController($scope, $state, $attrs, $filter, $modal, $timeo
 
     function calculateInvoiceTotal(ledger){
         var _sum = 0;
-        if(vm.ledger && vm.ledger.row){
-            var invoiceDetails = _.filter(vm.ledger.row, function(row){
+        if(vm.ledger){
+            var invoiceDetails = _.filter(vm.ledger, function(row){
                 return row._CustStatmentDtl_TransId == ledger._CustStatmentDtl_TransId
             })
 
