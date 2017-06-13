@@ -41,6 +41,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url('loadcustomer'), this.isAuthAndSubscribedApi.bind(this), this.loadcustomer.bind(this));
         app.get(this.url('loadledger'), this.isAuthAndSubscribedApi.bind(this), this.loadledger.bind(this));
         app.get(this.url('invoices/:id'), this.isAuthAndSubscribedApi.bind(this), this.getCustomerInvoices.bind(this));
+        app.get(this.url('customers/filter'), this.isAuthAndSubscribedApi.bind(this), this.customersFilter.bind(this));
     },
 
     demo: function(req, resp) {
@@ -368,10 +369,15 @@ _.extend(api.prototype, baseApi.prototype, {
         var accountId = parseInt(self.accountId(req));
         var userId = self.userId(req);
         self.log.debug(accountId, userId, '>> getCustomers');
+        var skip = parseInt(req.query.skip) || 0;
+        var limit = parseInt(req.query.limit) || 0;
+        var sortBy = req.query.sortBy || null;
+        var sortDir = parseInt(req.query.sortDir) || null;
+        var term = req.query.term || null;
 
         self._isUserAdmin(req, function(err, isAdmin){
             if(isAdmin && isAdmin === true) {
-                manager.getCustomers(accountId, userId, ['admin'], function(err, value){
+                manager.getCustomers(accountId, userId, ['admin'], skip, limit, sortBy, sortDir, term, null, function(err, value){
                     self.log.debug(accountId, userId, '<< getCustomers');
                     return self.sendResultOrError(resp, err, value, "Error listing customers");
                 });
@@ -382,8 +388,51 @@ _.extend(api.prototype, baseApi.prototype, {
                     }
                     var cardCodes = orgConfig.cardCodes || [];
 
-                    manager.getCustomers(accountId, userId, cardCodes, function(err, value){
+                    manager.getCustomers(accountId, userId, cardCodes, skip, limit, sortBy, sortDir, term, null, function(err, value){
                         self.log.debug(accountId, userId, '<< getCustomers');
+                        return self.sendResultOrError(resp, err, value, "Error listing customers");
+                    });
+                });
+
+            }
+        });
+    },
+
+
+    customersFilter: function(req, resp) {
+        var self = this;
+        var accountId = parseInt(self.accountId(req));
+        var userId = self.userId(req);
+        self.log.debug(accountId, userId, '>> customersFilter');
+        var skip = parseInt(req.query.skip) || 0;
+        var limit = parseInt(req.query.limit) || 0;
+        var sortBy = req.query.sortBy || null;
+        var sortDir = parseInt(req.query.sortDir) || null;
+        var fieldSearch = req.query;
+
+        var fieldSearch = req.query;
+        delete fieldSearch.term;
+        delete fieldSearch.skip;
+        delete fieldSearch.limit;
+        delete fieldSearch.sortBy;
+        delete fieldSearch.sortDir;
+        var term = req.query.term;
+
+        self._isUserAdmin(req, function(err, isAdmin){
+            if(isAdmin && isAdmin === true) {
+                manager.getCustomers(accountId, userId, ['admin'], skip, limit, sortBy, sortDir, term, fieldSearch, function(err, value){
+                    self.log.debug(accountId, userId, '<< customersFilter');
+                    return self.sendResultOrError(resp, err, value, "Error listing customers");
+                });
+            } else {
+                self._getOrgConfig(accountId, userId, function(err, orgConfig){
+                    if(!orgConfig){
+                        orgConfig = {};
+                    }
+                    var cardCodes = orgConfig.cardCodes || [];
+
+                    manager.getCustomers(accountId, userId, cardCodes, skip, limit, sortBy, sortDir, term, fieldSearch, function(err, value){
+                        self.log.debug(accountId, userId, '<< customersFilter');
                         return self.sendResultOrError(resp, err, value, "Error listing customers");
                     });
                 });
