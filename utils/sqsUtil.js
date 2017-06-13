@@ -23,7 +23,7 @@ var sqsUtil = {
             QueueUrl: queueUrl
         };
 
-        sqs.sendMessage(params, function(err, data) {
+        self.sqs.sendMessage(params, function(err, data) {
             if (err) {
                 self.log.error('Error sending message:', err);
                 fn(err);
