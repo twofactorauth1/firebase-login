@@ -27,7 +27,10 @@ function customersComponentController($scope, $attrs, $filter, $modal, $timeout,
     vm.uiState = {
         loading: true,
         globalSearch: CustomersService.globalSearch,
-        fieldSearch: CustomersService.fieldSearch || {},
+        fieldSearch: {
+            OCRD_CardCode: CustomersService.fieldSearch.OCRD_CardCode,
+            OCRD_CardName: CustomersService.fieldSearch.OCRD_CardName
+        },
         sortData: {
             column: '',
             details: {}
@@ -179,8 +182,9 @@ function customersComponentController($scope, $attrs, $filter, $modal, $timeout,
         $location.path('/ledger/' + customer.OCRD_CardCode);
     }
 
+    
     function showFilteredRecords(){
-        return UtilService.showFilteredRecords(vm.uiState.globalSearch, vm.uiState.fieldSearch);
+        return !vm.uiState.loadingFilter && UtilService.showFilteredRecords(vm.uiState.globalSearch, vm.uiState.fieldSearch);
     }
 
 

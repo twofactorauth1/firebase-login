@@ -12,7 +12,11 @@
         var customerService = {
             limit: pagingConstant.numberOfRowsPerPage || 50,            
             skip: 0,
-            page: 1
+            page: 1,
+            fieldSearch:{
+                OCRD_CardCode: undefined,
+                OCRD_CardName: undefined
+            }
         };
 
         var baseCustomerAPIUrl = '/api/1.0/integrations/zi';
