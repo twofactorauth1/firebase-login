@@ -342,6 +342,20 @@ var ziManager = {
         var stageAry = [];
         var match = {$match:query};
         stageAry.push(match);
+
+        var group = {
+            $group: {_id: "$_CustStatmentDtl_TransId",
+                items: {
+                    $push: {
+                        cardCode: "$_CustStatmentHdr_CardCode",
+                        dueDate: "$_CustStatmentDtl_DueDate",
+                        currency: "$_CustStatmentHdr_Currency",
+                        total: { $sum: "$INV1_LineTotal" }
+                    }
+                }
+            }
+        };
+        stageAry.push(group);
         /*
         ziDao.aggregateWithCustomStagesAndCollection(stageAry, 'ledger', function(err, resultAry){
             if(err) {
@@ -353,7 +367,7 @@ var ziManager = {
             }
         });
         */
-        
+
         ziDao.findRawWithFieldsLimitAndOrder(query, null, null, null, null, "ledger", null, function(err, resultAry){
             if(err) {
                 self.log.error(accountId, userId, 'Error searching cached ledger:', err);
