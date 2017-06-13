@@ -1470,6 +1470,9 @@ _.extend(api.prototype, baseApi.prototype, {
             },
             emailsReport: function(callback) {
                 analyticsManager.getCampaignEmailsReport(accountId, userId, start, end, previousStart, previousEnd, false, null, callback);
+            },
+            four04sReport: function(callback) {
+                analyticsManager.get404sReport(accountId, userId, start, end, false, null, callback);
             }
         }, function(err, results){
             self.log.debug(accountId, userId, '<< allCustomerReports');
