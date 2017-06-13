@@ -18,6 +18,7 @@ var ERR_MSG = 'We are having trouble retrieving these results.  Please try again
 var scheduledJobsManager = require('../scheduledjobs/scheduledjobs_manager');
 var orgManager = require('../organizations/organization_manager');
 
+
 var ziManager = {
     log: logger,
 
@@ -586,31 +587,47 @@ var ziManager = {
 
     runInventoryJob:function() {
         var self = this;
-        self.log.debug(0,0,'>> runInventoryJob');
-        self.loadInventoryCollection(function(){
-            //schedule next run
+        self.log.debug(0, 0, '>> runInventoryJob');
+        try {
+            self.loadInventoryCollection(function () {
+                self.log.debug(0,0, 'Loading customers');
+                self.loadCustomerCollection(function(){
+                    self.log.debug(0,0, 'Loading ledger');
+                    self.loadLedgerCollection(function(){
+                        self.log.debug(0,0, 'Scheduling next run');
+                        //schedule next run
 
-            var code = '$$.u.ziManager.runInventoryJob();';
-            var send_at = moment().minute(0);
+                        var code = '$$.u.ziManager.runInventoryJob();';
+                        var send_at = moment().minute(0);
 
-            send_at = moment(send_at).add(1, 'hours');
-            self.log.debug('Scheduling ahead an hour');
+                        send_at = moment(send_at).add(1, 'hours');
+                        self.log.debug('Scheduling ahead an hour');
 
-            var scheduledJob = new $$.m.ScheduledJob({
-                accountId: 0,
-                scheduledAt: moment(send_at).toDate(),
-                runAt: null,
-                job:code
+                        var scheduledJob = new $$.m.ScheduledJob({
+                            accountId: 0,
+                            scheduledAt: moment(send_at).toDate(),
+                            runAt: null,
+                            job: code
+                        });
+                        scheduledJobsManager.scheduleJob(scheduledJob, function (err, value) {
+                            if (err || !value) {
+                                self.log.error(0, 0, 'Error scheduling job with manager:', err);
+                            } else {
+                                self.log.debug(0, 0, 'scheduled next job:', value.get('scheduledAt'));
+                            }
+                            self.log.debug(0, 0, '<< runInventoryJob');
+                        });
+                    });
+                });
+
             });
-            scheduledJobsManager.scheduleJob(scheduledJob, function(err, value){
-                if(err || !value) {
-                    self.log.error(0, 0, 'Error scheduling job with manager:', err);
-                } else {
-                    self.log.debug(0,0, 'scheduled next job:', value.get('scheduledAt'));
-                }
-                self.log.debug(0,0,'<< runInventoryJob');
-            });
-        });
+        } catch(exception) {
+            self.log.error('Error scheduling inventoryjob:', exception);
+            emailMessageManager.notifyAdmin('devops@indigenous.io', 'devops@indigenous.io', null,
+                'Error loading scheduled inventory:', '', exception, function(_err, value){
+                    fn(err);
+                });
+        }
     },
 
     loadCustomerCollection: function(fn) {
