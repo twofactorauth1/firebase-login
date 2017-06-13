@@ -207,7 +207,7 @@
         function getCustomers() {
 
             function success(data) {
-                poService.customers = data && data.response && data.response.payload ? data.response.payload.querydata.data.row || null : null;
+                poService.customers = data.results;
             }
 
             function error(error) {
