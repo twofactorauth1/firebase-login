@@ -13,7 +13,7 @@ function ledgerDetailsController($scope, $state, $attrs, $filter, $modal, $timeo
     console.log($stateParams.customerId);
     vm.state = {};
     vm.uiState = {loading: true};
-
+    vm.customerId = $stateParams.customerId;
     vm.backToCustomers = backToCustomers;
 
     vm.parseValueToFloat = parseValueToFloat;
@@ -29,14 +29,14 @@ function ledgerDetailsController($scope, $state, $attrs, $filter, $modal, $timeo
     function init(element) {
         vm.element = element;
 
-        LedgerService.getLedgerDetails($stateParams.customerId).then(function(response){
+        LedgerService.getLedgerDetails(vm.customerId).then(function(response){
             var ledger = response.data.results;
             if(ledger && ledger.length){
                 vm.ledger = ledger;
                 vm.uiState.loading = false;
             }
             else{
-                LedgerService.getCustomerDetails($stateParams.customerId).then(function(response){
+                LedgerService.getCustomerDetails(vm.customerId).then(function(response){
                     vm.listledger = response.data;
                     vm.uiState.loading = false;
                 })
@@ -102,7 +102,7 @@ function ledgerDetailsController($scope, $state, $attrs, $filter, $modal, $timeo
     }
 
     function viewInventoryDetails(transId){
-        $location.path('/invoices/' + $stateParams.customerId + '/' + transId);
+        $location.path('/invoices/' + vm.customerId + '/' + transId);
     }
 
     function calculateLedgerTotal(ledger){
