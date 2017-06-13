@@ -130,7 +130,7 @@ _.extend(api.prototype, baseApi.prototype, {
         self.send200(resp);
 
         if(appConfig.nonProduction) {
-            var queueUrl = 'https://sqs.us-west-1.amazonaws.com/213805526570/test/analytics_sendgrid_q';
+            var queueUrl = 'https://sqs.us-west-1.amazonaws.com/213805526570/test-analytics_sendgrid_q';
             sqsUtil.sendMessage(queueUrl, null, events, function(err, value){
                 self.log.debug('response from sqs:', err);
                 self.log.debug('response from sqs:', value);
