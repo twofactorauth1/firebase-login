@@ -5,12 +5,18 @@
 
 	app.factory('CustomersService', CustomersService);
 
-	CustomersService.$inject = ['$http', '$q', '$timeout', 'toaster'];
+	CustomersService.$inject = ['$http', '$q', '$timeout', 'toaster', 'pagingConstant'];
 	/* @ngInject */
-	function CustomersService($http, $q, $timeout, toaster) {
+	function CustomersService($http, $q, $timeout, toaster, pagingConstant) {
 
         var customerService = {
-            
+            limit: pagingConstant.numberOfRowsPerPage || 50,            
+            skip: 0,
+            page: 1,
+            fieldSearch:{
+                OCRD_CardCode: undefined,
+                OCRD_CardName: undefined
+            }
         };
 
         var baseCustomerAPIUrl = '/api/1.0/integrations/zi';
@@ -37,9 +43,11 @@
         /**
             * Get list of all customers
         */
-        function getCustomers() {
+        function getCustomers(init) {
 
             function success(data) {
+                if(init)
+                    customerService.totalCustomers = data.total;
                 customerService.customers = data;
             }
 
@@ -47,10 +55,40 @@
                 customerService.customers = [];
                 console.error('customerService getCustomers error: ', JSON.stringify(error));
             }
-
-            return customerRequest($http.get([baseCustomerAPIUrl, 'customers'].join('/')).success(success).error(error));
+            var urlParts = [baseCustomerAPIUrl, 'customers'];
+            var _qString = "?limit="+ customerService.limit+"&skip="+ customerService.skip;
+            if(customerService.sortBy){
+                _qString += "&sortBy=" + customerService.sortBy + "&sortDir=" + customerService.sortDir;
+            }
+            if(customerService.globalSearch){
+                _qString += "&term=" + customerService.globalSearch;
+            }
+            if(checkIfFieldSearch()){
+                _.each(customerService.fieldSearch, function (value, key) {
+                    if(value != null){
+                        _qString += '&' + key + '=' + value;
+                    }
+                });
+                urlParts.push('filter');
+            }
+            return customerRequest($http.get(urlParts.join('/') + _qString).success(success).error(error));
         }
 
+        function checkIfFieldSearch(){
+            var isFieldSearch = false;
+            var fieldSearch = customerService.fieldSearch;
+            if(!_.isEmpty(fieldSearch)){
+                for(var i=0; i <= Object.keys(fieldSearch).length - 1; i++){
+                    var key = Object.keys(fieldSearch)[i];
+                    var value = fieldSearch[key];
+
+                    if(value){
+                       isFieldSearch = true;
+                    }
+                }
+            }
+            return isFieldSearch;
+        }
 
         /**
             * Get list of all customers
@@ -72,7 +110,7 @@
 
 
 		(function init() {
-            customerService.getCustomers().then(function(){
+            customerService.getCustomers(true).then(function(){
 
             }).catch(function(error) {
                 if(error.data && error.data.message)
