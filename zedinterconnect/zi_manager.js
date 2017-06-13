@@ -328,57 +328,46 @@ var ziManager = {
         if(cardCodeAry.length == 0) {
             cardCodeAry.push('admin');
         }
-        async.each(cardCodeAry, function(cardCode, callback){
-            var path = 'query/Indigenous/CustomerAging2.aspx?0=' + cardCode + '&1=' + cardCode + '&2=' + dateString + '&accept=application/json';
-            if(cardCode === 'admin') {
-                //just a hack to load them all.
-                path = 'query/Indigenous/CustomerAging2.aspx?0=0&1=L9999999&2=' + dateString + '&accept=application/json';
-            }
-            self._ziRequest(path, function(err, value) {
-                if(err) {
-                    self.log.error(accountId, userId, 'Error calling zi:', err);
-                    callback(err);
-                } else {
-                    
-                    //var response = self.getParsedJson(value);//response.payload.querydata.data.row
-                    var response = value;
-                    if(response === false){
-                        return fn(ERR_MSG)
-                    }
-                    if(response && response.response) {
-                        response = response.response;
-                    }
-                    if(response &&
-                        response.payload &&
-                        response.payload.querydata &&
-                        response.payload.querydata.data &&
-                        response.payload.querydata.data.row) {
-                        resultAry = resultAry.concat(response.payload.querydata.data.row);
-                    }
-                    callback();
-                }
+        var query = {};
+        if(cardCodeAry && cardCodeAry.length > 0 && cardCodeAry[0] === 'admin') {
+
+        }
+        else{
+            var optRegexp = [];
+            cardCodeAry.forEach(function(opt){
+                optRegexp.push(  new RegExp(opt, "i") );
             });
-        }, function(err){
-            //sort by _CustStatmentDtl_DueDate
+            query._CustStatmentHdr_CardCode = {$in: optRegexp};
+        }
 
-            var groupResultObject = _.groupBy(resultAry, function(result){ return result._CustStatmentDtl_TransId });
+        ziDao.findRawWithFieldsLimitAndOrder(query, null, null, null, null, "ledger", null, function(err, resultAry){
+            if(err) {
+                self.log.error(accountId, userId, 'Error searching cached ledger:', err);
+                fn(err);
+            } else {
 
-            var groupResultArray =  _(groupResultObject).map(function(g, key) {
-                return { 
-                    invoiceNumber: key,
-                    cardCode: g[0]._CustStatmentHdr_CardCode,
-                    dueDate: g[0]._CustStatmentDtl_DueDate,
-                    currency: g[0]._CustStatmentHdr_Currency,
-                    totalInvoice: _(g).reduce(function(m,x) { return m + parseFloat(x.INV1_LineTotal) ; }, 0) };
+                var groupResultObject = _.groupBy(resultAry.results, function(result){
+                    return result._CustStatmentDtl_TransId
                 });
-            if(limit > 0) {
-                resultAry = _.first(_.sortBy(groupResultArray, '_CustStatmentDtl_DueDate'), limit);
+
+                var groupResultArray =  _(groupResultObject).map(function(g, key) {
+                    return { 
+                        invoiceNumber: key,
+                        cardCode: g[0]._CustStatmentHdr_CardCode,
+                        dueDate: g[0]._CustStatmentDtl_DueDate,
+                        currency: g[0]._CustStatmentHdr_Currency,
+                        totalInvoice: _(g).reduce(function(m,x) { return m + parseFloat(x.INV1_LineTotal) ; }, 0) };
+                    });
+                if(limit > 0) {
+                    resultAry = _.first(_.sortBy(groupResultArray, '_CustStatmentDtl_DueDate'), limit);
+                }
+
+
+                self.log.debug(accountId, userId, '<< getLedgerWithLimit');
+                fn(err, resultAry);
             }
-
-
-            self.log.debug(accountId, userId, '<< getLedgerWithLimit');
-            fn(err, resultAry);
         });
+        
     },
 
     loadInventoryCollection: function(fn) {
