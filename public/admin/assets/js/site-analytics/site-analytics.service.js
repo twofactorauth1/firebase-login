@@ -16,7 +16,6 @@
         var baseLiveTrafficAPIUrl = '/api/1.0/analytics/live';
 
         var frontrunnerSitesPageviewsAPIUrl = '/api/1.0/analytics/admin/pageViewPerformance';
-
         saService.runReports = runReports;
         saService.runAdminReports = runAdminReports;
         saService.runCustomerReports = runCustomerReports;
@@ -28,6 +27,7 @@
         saService.getUsers = getUsers;
         saService.getSessions = getSessions;
         saService.getDailyActiveUsers = getDailyActiveUsers;
+        saService.getFourOFours= getFourOFours;
         saService.getPageAnalytics = getPageAnalytics;
         saService.getVisitorLocations = getVisitorLocations;
         saService.getVisitorLocationsByCountry = getVisitorLocationsByCountry;
@@ -74,7 +74,9 @@
         function getDailyActiveUsers(startDate, endDate, accountId, isAdmin, isCustomer, fn) {
             return runSingleReport(startDate, endDate, accountId, isAdmin, isCustomer, 'dau', fn);
         }
-
+        function getFourOFours(startDate, endDate, accountId, isAdmin, isCustomer, fn) {
+            return runSingleReport(startDate, endDate, accountId, isAdmin, isCustomer, 'daily404s', fn);
+        }
         function getPageAnalytics(startDate, endDate, accountId, isAdmin, isCustomer, fn) {
             return runSingleReport(startDate, endDate, accountId, isAdmin, isCustomer, 'pageAnalytics', fn);
         }
@@ -139,7 +141,7 @@
 
         function runIndividualReports(startDate, endDate, accountId, isAdmin, isCustomer, fn) {
             var endpointAry = ['users', 'pageviews', 'sessions', 'visitors', 'visitorLocations', 'visitorLocationsByCountry',
-                'visitorDevices', 'sessionLength', 'trafficSources', 'newVsReturning', 'pageAnalytics', 'userAgents', 'revenue'];
+                'visitorDevices', 'sessionLength', 'trafficSources', 'newVsReturning', 'pageAnalytics', 'userAgents', 'revenue','daily404s','404s'];
 
             //users, pageviews, dau, sessions
             var adminEndpointAry = ['pageviews', 'users','sessions', 'dau'];

@@ -428,8 +428,19 @@
             } else {
                 //console.log('No userReport:', results);
             }
-
-
+            if(results["daily404s"]){
+                var fourOfours = [];
+                _.each(results["daily404s"], function (fourOfour) {
+                    var subArr = [];
+                    subArr.push(new Date(fourOfour.timeframe.start.replace(" ", "T")).getTime() + localTimezoneOffset);
+                    subArr.push(fourOfour.total);
+                    fourOfours.push(subArr);
+                });
+                $scope.fourOfours = fourOfours;
+            }
+            if(results["404s"]){
+                $scope.fourOfoursDetails = results["404s"];
+            }
             // ----------------------------------------
             // Pageviews Metric
             // ----------------------------------------
@@ -498,8 +509,9 @@
             }
 
 
-            if($scope.pageviewsData && $scope.sessionsData && $scope.visitorsData) {
-                ChartAnalyticsService.analyticsOverview($scope.pageviewsData, $scope.sessionsData, $scope.visitorsData, null, isVisibleLegend, setLegendVisibility, function (data) {
+            if($scope.pageviewsData && $scope.sessionsData && $scope.visitorsData
+              &&  $scope.fourOfours) {
+                ChartAnalyticsService.analyticsOverview($scope.pageviewsData, $scope.sessionsData, $scope.visitorsData, null, $scope.fourOfours,isVisibleLegend, setLegendVisibility, function (data) {
                     //$scope.$apply(function () {
                     $scope.analyticsOverviewConfig = data;
                     //});
@@ -847,6 +859,22 @@
             var pageviewsPercent = ChartAnalyticsService.calculatePercentage(currentTotalPageviews, pageviewsPreviousData);
             $scope.pageviewsPercent = pageviewsPercent;
 
+
+
+            if(results["daily404s"]){
+                var fourOfours = [];
+                _.each(results["daily404s"], function (fourOfour) {
+                    var subArr = [];
+                    subArr.push(new Date(fourOfour.timeframe.start.replace(" ", "T")).getTime() + localTimezoneOffset);
+                    subArr.push(fourOfour.total);
+                    fourOfours.push(subArr);
+                });
+                $scope.fourOfours = fourOfours;
+            }
+            if(results["404s"]){
+                $scope.fourOfoursDetails = results["404s"];
+            }
+
             // ----------------------------------------
             // Sessions
             // ----------------------------------------
@@ -867,7 +895,7 @@
             $scope.sessionsData = _sessionsData;
 
 
-            ChartAnalyticsService.analyticsOverview($scope.pageviewsData, $scope.sessionsData, $scope.visitorsData, null, isVisibleLegend, setLegendVisibility, function (data) {
+            ChartAnalyticsService.analyticsOverview($scope.pageviewsData, $scope.sessionsData, $scope.visitorsData, null,$scope.fourOfours, isVisibleLegend, setLegendVisibility, function (data) {
                 $scope.$apply(function () {
                     $scope.analyticsOverviewConfig = data;
                 });

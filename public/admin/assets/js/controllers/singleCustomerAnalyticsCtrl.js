@@ -350,9 +350,22 @@
             });
             $scope.sessions = _totalSessions;
             $scope.sessionsData = _sessionsData;
+            if(results["daily404sReport"]){
+                var fourOfours = [];
+                _.each(results["daily404sReport"], function (fourOfour) {
+                    var subArr = [];
+                    subArr.push(new Date(fourOfour.timeframe.start.replace(" ", "T")).getTime() + localTimezoneOffset);
+                    subArr.push(fourOfour.total);
+                    fourOfours.push(subArr);
+                });
+                $scope.fourOfours = fourOfours;
+            }
+            if(results["four04sReport"]){
+                $scope.fourOfoursDetails = results["four04sReport"];
+            }
 
 
-            ChartAnalyticsService.analyticsOverview($scope.pageviewsData, $scope.sessionsData, $scope.visitorsData, null, isVisibleLegend, setLegendVisibility, function (data) {
+            ChartAnalyticsService.analyticsOverview($scope.pageviewsData, $scope.sessionsData, $scope.visitorsData, null,$scope.fourOfours, isVisibleLegend, setLegendVisibility, function (data) {
                 //$scope.$apply(function () {
                     $scope.analyticsOverviewConfig = data;
                 //});
@@ -748,9 +761,20 @@
             });
             $scope.sessions = _totalSessions;
             $scope.sessionsData = _sessionsData;
-
-
-            ChartAnalyticsService.analyticsOverview($scope.pageviewsData, $scope.sessionsData, $scope.visitorsData, null, isVisibleLegend, setLegendVisibility, function (data) {
+             if(results["daily404sReport"]){
+                var fourOfours = [];
+                _.each(results["daily404sReport"], function (fourOfour) {
+                    var subArr = [];
+                    subArr.push(new Date(fourOfour.timeframe.start.replace(" ", "T")).getTime() + localTimezoneOffset);
+                    subArr.push(fourOfour.value);
+                    fourOfours.push(subArr);
+                });
+                $scope.fourOfours = fourOfours;
+            }
+            if(results["four04sReport"]){
+                $scope.fourOfoursDetails = results["four04sReport"];
+            }
+            ChartAnalyticsService.analyticsOverview($scope.pageviewsData, $scope.sessionsData, $scope.visitorsData, null, $scope.fourOfours, isVisibleLegend, setLegendVisibility, function (data) {
                 $scope.$apply(function () {
                     $scope.analyticsOverviewConfig = data;
                 });
