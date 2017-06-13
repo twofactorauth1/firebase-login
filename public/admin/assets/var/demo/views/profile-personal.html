@@ -322,10 +322,19 @@
                                         </div>
                                     </div>
                                     <div class="user-image-buttons-edit">
-                                        <span class="btn btn-primary" ng-click="openMediaModal()"><i class="fa fa-pencil"></i></span>
+                                        <label for="upload_image" class="btn btn-primary margin-top-0">
+                                            <i class="fa fa-pencil"></i>
+                                            <input type="file"
+                                                   id="upload_image"
+                                                   class="hidden"
+                                                   file-model='vm.state.newPurchaseOrder.attachment'
+                                                   accept=".pdf, .xlsx, .xls">
+                                        </label>
                                         <span class="btn btn-danger" ng-click="removePhoto()"><i class="fa fa-times"></i> </span>
+                                        {{vm.state.newPurchaseOrder.attachment.name}}
                                     </div>
                                 </div>
+                                
                             </div>
                         </fieldset>
                     </div>
