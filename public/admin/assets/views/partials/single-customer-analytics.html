@@ -171,7 +171,7 @@
 	                            </thead>
 	                            <tbody>
 	                                <tr ng-repeat="trafficSource in trafficSourceData | orderBy:'-result'">
-	                                    <td><span ng-text-truncate="trafficSource['referrer.domain']" ng-tt-chars-threshold="25" ng-tt-no-toggling></span></td>
+	                                    <td><span class="text-adjust-table">{{trafficSource['referrer.domain']}}</span></td>
 	                                    <td>{{trafficSource.result | number}}</td>
 	                                </tr>
 	                            </tbody>
@@ -227,42 +227,76 @@
 	        </div>
 	    </div>
 	</div>
-	<div id="pageanalytics" class="panel panel-white no-radius" ng-class="{'load1 csspinner': !pagedformattedTopPages}">
-	    <div class="panel-heading border-light">
-            <h4 class="panel-title text-primary"><span class="text-bold">Page</span> Analytics</h4>
-	        <ct-paneltool class="panel-tools" tool-collapse="tool-collapse"></ct-paneltool>
-	    </div>
-	    <div class="panel-wrapper" collapse="pageanalytics">
-	        <div class="panel-body panel-scroll">
-	            <div class="table-responsive">
-	                <table class="table table-hover margin-bottom-0">
-	                    <thead>
-	                        <tr>
-	                            <th>Page</th>
-	                            <th class="center">Page Views</th>
-	                            <th class="center">Unique Page Views</th>
-	                            <th class="center">Avg. Time on Page</th>
-	                        </tr>
-	                    </thead>
-	                    <tbody>
-	                        <tr ng-repeat="topPage in pagedformattedTopPages|orderBy:'-pageviews'|limitTo:25">
-	                            <td>
-	                                {{topPage.page}}
-	                                <a href="#/dashboard/single-page?pageurl={{topPage.page}}" class="truncate hidden">{{topPage.page}}</a>
-	                            </td>
-	                            <td class="center">{{topPage.pageviews | number}}</td>
-	                            <td class="center">{{topPage.uniquePageviews | number}}</td>
-	                            <td class="center">{{topPage.avgTime | secTotime}}</td>
-	                            <!-- <td>{{topPage.entrances}}</td>
-	                                            <td>{{topPage.bounceRate | formatPercentage}}</td>
-	                                            <td>{{topPage.exitRate | formatPercentage}}</td> -->
-	                        </tr>
-	                    </tbody>
-	                </table>
-	            </div>
-	        </div>
-	    </div>
-	</div>
+   <div class="row">
+       <div class="col-xs-12 col-sm-6">
+            <div id="pageanalytics" class="panel panel-white no-radius" ng-class="{'load1 csspinner': !pagedformattedTopPages}">
+                <div class="panel-heading border-light">
+                    <h4 class="panel-title text-primary"><span class="text-bold">Page</span> Analytics</h4>
+                    <ct-paneltool class="panel-tools" tool-collapse="tool-collapse"></ct-paneltool>
+                </div>
+                <div class="panel-wrapper" collapse="pageanalytics">
+                    <div class="panel-body panel-scroll">
+                        <div class="table-responsive">
+                            <table class="table table-hover margin-bottom-0">
+                                <thead>
+                                    <tr>
+                                        <th>Page</th>
+                                        <th class="center">Page Views</th>
+                                        <th class="center">Unique Page Views</th>
+                                        <th class="center">Avg. Time on Page</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="topPage in pagedformattedTopPages|orderBy:'-pageviews'|limitTo:25">
+                                        <td>
+                                            {{topPage.page}}
+                                            <a href="#/dashboard/single-page?pageurl={{topPage.page}}" class="truncate hidden">{{topPage.page}}</a>
+                                        </td>
+                                        <td class="center">{{topPage.pageviews | number}}</td>
+                                        <td class="center">{{topPage.uniquePageviews | number}}</td>
+                                        <td class="center">{{topPage.avgTime | secTotime}}</td>
+                                        <!-- <td>{{topPage.entrances}}</td>
+                                                        <td>{{topPage.bounceRate | formatPercentage}}</td>
+                                                        <td>{{topPage.exitRate | formatPercentage}}</td> -->
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+       </div>
+       <div class="col-xs-12 col-sm-6">
+        <div id="pageanalytics" class="panel panel-white no-radius" ng-class="{'load1 csspinner': !pagedformattedTopPages}">
+            <div class="panel-heading border-light">
+                <h4 class="panel-title text-primary"><span class="text-bold">404</span> Analytics</h4>
+                <ct-paneltool class="panel-tools" tool-collapse="tool-collapse"></ct-paneltool>
+            </div>
+            <div class="panel-wrapper" collapse="pageanalytics">
+                <div class="panel-body panel-scroll">
+                    <div class="table-responsive">
+                        <table class="table table-hover margin-bottom-0">
+                            <thead>
+                                <tr>
+                                    <th>Path</th>
+                                    <th class="center">Count</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="fourOfour in fourOfoursDetails|orderBy:'-total'|limitTo:25">
+                                    <td>
+                                        {{fourOfour.path}}
+                                    </td>
+                                    <td class="center">{{fourOfour.total | number}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+      </div>
+    </div>
 	<div class="row">
 	    <div id="useragents" class="col-xs-12 col-sm-6">
 	        <div id="ua" class="panel panel-white " ng-class="{'load1 csspinner': !userAgentData}">

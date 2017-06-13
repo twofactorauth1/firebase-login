@@ -532,7 +532,7 @@
 
         this.getVisitorOverviewChartData = function(date, account, isAdmin, isCustomer, fn) {
             var promises = [];
-            var pageviews, users, sessions, dau;
+            var pageviews, users, sessions, dau,fourOfour;
             promises.push(SiteAnalyticsService.getPageviews(date.startDate, date.endDate, account, isAdmin, isCustomer, function(data){
                 console.log('got pageviews:', data);
                 pageviews = data;
@@ -549,8 +549,12 @@
                 console.log('got dau:', data);
                 dau = data;
             }));
+             promises.push(SiteAnalyticsService.getFourOFours(date.startDate, date.endDate, account, isAdmin, isCustomer, function(data){
+                console.log('got 404s:', data);
+                fourOfour = data;
+            }));
             $q.all(promises).then(function(results){
-                fn(null, pageviews, users, sessions, dau);
+                fn(null, pageviews, users, sessions, dau,fourOfour);
             });
         };
 
@@ -715,7 +719,7 @@
             return pageDepthConfig;
         };
 
-        this.analyticsOverview = function (readyPageviewsData, sessionsData, readyVisitorsData, dailyActiveUsersData, isVisibleLegend, setLegendVisibility, fn) {
+        this.analyticsOverview = function (readyPageviewsData, sessionsData, readyVisitorsData, dailyActiveUsersData,ready404Data, isVisibleLegend, setLegendVisibility, fn) {
             var _widgetName = "analytics";
             var analyticsOverviewConfig = {
                 options: {
@@ -783,6 +787,11 @@
                         name: 'Pageviews',
                         data: readyPageviewsData,
                         visible: isVisibleLegend("Pageviews", _widgetName)
+                    },
+                    {
+                        name: '404views',
+                        data: ready404Data,
+                        visible: isVisibleLegend("404views", _widgetName)
                     }
                 ],
                 credits: {
