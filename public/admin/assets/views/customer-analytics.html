@@ -221,7 +221,7 @@
                                 </thead>
                                 <tbody>
                                     <tr ng-repeat="trafficSource in trafficSourceData | orderBy:'-result'">
-                                        <td><span class="text-adjust-small-table">{{trafficSource['referrer.domain']}}</span></td>
+                                        <td><span ng-text-truncate="trafficSource['referrer.domain']" ng-tt-chars-threshold="25" ng-tt-no-toggling></span></td>
                                         <td>{{trafficSource.result | number}}</td>
                                     </tr>
                                 </tbody>
@@ -356,7 +356,7 @@
                                 </thead>
                                 <tbody>
                                 <tr ng-repeat="ua in userAgentTableData">
-                                    <td><span class="text-adjust-small-table">{{ua[0]}}</span></td>
+                                    <td><span ng-text-truncate="ua[0]" ng-tt-chars-threshold="25" ng-tt-no-toggling></span></td>
                                     <td>{{Math.round((ua[1] / browserTotal) * 100) + '%'  || '--' }}</td>
                                 </tr>
                                 </tbody>
