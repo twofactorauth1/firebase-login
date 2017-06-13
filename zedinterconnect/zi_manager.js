@@ -507,24 +507,16 @@ var ziManager = {
             self.log.error(accountId, userId, 'No card code specified');
             return fn('No card code specified');
         }
-        var path = 'query/Indigenous/CustomerList.aspx?accept=application/json';
-        self._ziRequest(path, function(err, value){
+        var query = {'OCRD_CardCode': new RegExp(cardCode, 'i')};
+        var collection = 'customer';
+        ziDao.findRawWithFieldsLimitAndOrder(query, 0, 1, null, null, collection, null, function(err, resp) {
             if(err) {
-                self.log.error(accountId, userId, 'Error loading customers:', err);
+                self.log.error(accountId, userId, 'Error getting customer:', err);
                 fn(err);
             } else {
-                //value = self.getParsedJson(value);
-                if(value === false){
-                    return fn(ERR_MSG);
-                }
                 var companyName = '';
-                if(value && value.response && value.response.payload && value.response.payload.querydata && value.response.payload.querydata.data) {
-                    var resultAry = value.response.payload.querydata.data.row;
-                    _.each(resultAry, function(result){
-                        if(result && result.OCRD_CardCode && result.OCRD_CardCode.toLowerCase() === cardCode.toLowerCase()) {
-                            companyName = result.OCRD_CardName;
-                        }
-                    });
+                if(resp && resp.results) {
+                    companyName = resp.results[0].OCRD_CardName;
                 }
                 if(companyName === '') {
                     self.log.warn('Could not match a card code:' + cardCode, cardCode);
