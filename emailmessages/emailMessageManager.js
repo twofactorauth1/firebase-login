@@ -3194,8 +3194,8 @@ var emailMessageManager = {
                 });
             },
             function(cb) {
-                sentQuery.sendDate.$gte = previousStart;
-                sentQuery.sendDate.$lte = previousEnd;
+                sentQuery.deliveredDate.$gte = previousStart;
+                sentQuery.deliveredDate.$lte = previousEnd;
                 dao.findCount(sentQuery, $$.m.Emailmessage, function(err, value){
                     if(err) {
                         self.log.error('Error finding sentCount:', err);
