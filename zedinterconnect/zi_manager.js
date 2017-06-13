@@ -467,7 +467,7 @@ var ziManager = {
         });
     },
 
-    getCustomers: function(accountId, userId, cardCodeAry, fn) {
+    getCustomers: function(accountId, userId, cardCodeAry, skip, limit, sortBy, sortDir, term, fieldSearch, fn) {
         var self = this;
         self.log.debug(accountId, userId, '>> getCustomers');
         var query = {};
@@ -481,15 +481,44 @@ var ziManager = {
             });
             query.OCRD_CardCode = {$in:optRegexp};
         }
-        self.log.debug('query:', query);
-        var fields = null;
-        var collection = 'customer';
-        var _skip = null;
-        var _limit = null;
-        var sortBy = null;
-        var sortDir = null;
         
-        ziDao.findRawWithFieldsLimitAndOrder(query, _skip, _limit, sortBy, fields, collection, sortDir, function(err, value){
+        var fields = null;
+        var collection = 'customer'; 
+
+        if(term){
+            term = term.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');   
+            var regex = new RegExp('\.*'+term+'\.*', 'i');
+            var orQuery = [                          
+                {OCRD_CardCode:regex},
+                {OCRD_CardName:regex},
+                {OCRD_Phone1:regex},
+                {OCRD_Fax:regex},
+                {OCRD_Address:regex},
+                {OCRD_City:regex},
+                {OCRD_State1:regex},
+                {OCRD_ZipCode:regex}
+            ];
+            query["$or"] = orQuery;
+        }
+        if(fieldSearch){
+            var fieldSearchArr = [];
+            for(var i=0; i <= Object.keys(fieldSearch).length - 1; i++){
+                var key = Object.keys(fieldSearch)[i];
+                var value = fieldSearch[key];
+                self.log.debug('value:', value);                
+                var obj = {};
+                value = value.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');                
+                if(value){                    
+                    obj[key] = new RegExp(value, 'i');                    
+                    fieldSearchArr.push(obj);
+                }
+            }
+            if(fieldSearchArr.length){
+                query["$and"] = fieldSearchArr;
+            }
+        }      
+        self.log.debug('query:', query);
+        ziDao.findRawWithFieldsLimitAndOrder(query, skip, limit, sortBy, fields, collection, sortDir, function(err, value){
             if(err) {
                 self.log.error(accountId, userId, 'Error searching cached customers:', err);
                 fn(err);
@@ -621,6 +650,9 @@ var ziManager = {
                         }
                         if(row.OCRD_State1) {
                             row._state = row.OCRD_State1.toLowerCase();
+                        }
+                        if(row.OCRD_ZipCode) {
+                            row._zip = parseInt(row.OCRD_ZipCode);
                         }
                     });
                     self.log.debug(0,0, 'Bulk inserting [' + data.length + '] records');
