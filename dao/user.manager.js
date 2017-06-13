@@ -18,6 +18,7 @@ var socialConfigManager = require('../socialconfig/socialconfig_manager');
 var workstreamManager = require('../workstream/workstream_manager');
 var ssbManager = require('../ssb/ssb_manager');
 var accountManager = require('../accounts/account.manager');
+var userActivityManager = require('../useractivities/useractivity_manager');
 
 var emailMessageManager = require('../emailmessages/emailMessageManager');
 var notificationConfig = require('../configs/notification.config');
@@ -660,8 +661,25 @@ module.exports = {
                 self.log.error('Error searching for users by account:' + err);
                 fn(err, null);
             } else {
-                self.log.debug('<< getUserAccounts');
-                fn(null, list);
+                var userIdAry = [];
+                _.each(list, function(user){userIdAry.push(user.id())});
+                userActivityManager.getMostRecentLogin(accountId, null, userIdAry, function(err, results){
+                    if(err) {
+                        self.log.error('Error getting login info:', err);
+                        fn(null, list);
+                    } else {
+                        _.each(list, function(user){
+                            var result = _.find(results, function(r){return r._id === user.id()});
+                            if(result) {
+                                user.set('lastLoginDate', result.date);
+                                user.set('lastLoginIP', result.ip);
+                            }
+                        });
+                        self.log.debug('<< getUserAccounts');
+                        fn(null, list);
+                    }
+                });
+
             }
         });
 
