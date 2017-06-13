@@ -184,7 +184,8 @@
             }
             var deferred = $q.defer();
             //visitor overview
-            ChartAnalyticsService.getVisitorOverviewChartData($scope.date, $scope.analyticsAccount, true, false, function(err, pageviews, users, sessions, dau){
+            ChartAnalyticsService.getVisitorOverviewChartData($scope.date, $scope.analyticsAccount, true, false, function(err, pageviews, users, sessions, dau,fourOfoursData){
+                debugger;
                 var pageviewsData = [];
                 var currentTotalPageviews = 0;
                 _.each(pageviews.currentMonth, function (pageView) {
@@ -247,8 +248,17 @@
                     dauData.push(subArr);
                 });
                 $scope.dauData = dauData;
-
-                ChartAnalyticsService.analyticsOverview($scope.pageviewsData, $scope.sessionsData, $scope.visitorsData, $scope.dauData, isVisibleLegend, setLegendVisibility, function (data) {
+                if(fourOfoursData){
+                    var fourOfours = [];
+                    _.each(fourOfoursData, function (fourOfour) {
+                        var subArr = [];
+                        subArr.push(new Date(fourOfour.timeframe.start.replace(" ", "T")).getTime() + localTimezoneOffset);
+                        subArr.push(fourOfour.total);
+                        fourOfours.push(subArr);
+                    });
+                    $scope.fourOfours = fourOfours;
+                }
+                ChartAnalyticsService.analyticsOverview($scope.pageviewsData, $scope.sessionsData, $scope.visitorsData, $scope.dauData,$scope.fourOfours, isVisibleLegend, setLegendVisibility, function (data) {
                     //$scope.$apply(function () {
                     $scope.analyticsOverviewConfig = data;
                     //});

@@ -16,7 +16,7 @@
         var baseLiveTrafficAPIUrl = '/api/1.0/analytics/live';
 
         var frontrunnerSitesPageviewsAPIUrl = '/api/1.0/analytics/admin/pageViewPerformance';
-
+        var fourOfourEndPoint='/api/1.0/analytics/admin';
         saService.runReports = runReports;
         saService.runAdminReports = runAdminReports;
         saService.runCustomerReports = runCustomerReports;
@@ -28,6 +28,7 @@
         saService.getUsers = getUsers;
         saService.getSessions = getSessions;
         saService.getDailyActiveUsers = getDailyActiveUsers;
+        saService.getFourOFours= getFourOFours;
         saService.getPageAnalytics = getPageAnalytics;
         saService.getVisitorLocations = getVisitorLocations;
         saService.getVisitorLocationsByCountry = getVisitorLocationsByCountry;
@@ -74,7 +75,9 @@
         function getDailyActiveUsers(startDate, endDate, accountId, isAdmin, isCustomer, fn) {
             return runSingleReport(startDate, endDate, accountId, isAdmin, isCustomer, 'dau', fn);
         }
-
+        function getFourOFours(startDate, endDate, accountId, isAdmin, isCustomer, fn) {
+            return runSingleReport(startDate, endDate, accountId, isAdmin, isCustomer, '404s', fn);
+        }
         function getPageAnalytics(startDate, endDate, accountId, isAdmin, isCustomer, fn) {
             return runSingleReport(startDate, endDate, accountId, isAdmin, isCustomer, 'pageAnalytics', fn);
         }
@@ -127,8 +130,13 @@
             var startDateString = moment.utc(startDate).format('YYYY-MM-DD[T]HH:mm:ss');
             var endDateString = moment.utc(endDate).format('YYYY-MM-DD[T]HH:mm:ss');
             var path = '/' + reportName + '?start=' + startDateString + '&end=' + endDateString;
+            if(reportName=="404s")debugger
             if(isAdmin) {
-                path = adminAnalyticsAPIUrl + path;
+                if(reportName=="404s"){
+                     path = fourOfourEndPoint + path;
+                }else{
+                    path = adminAnalyticsAPIUrl + path;
+                }
             } else if(isCustomer){
                 path = customerAnalyticsAPIUrl + path + '&accountId=' + accountId;
             } else {
@@ -139,7 +147,7 @@
 
         function runIndividualReports(startDate, endDate, accountId, isAdmin, isCustomer, fn) {
             var endpointAry = ['users', 'pageviews', 'sessions', 'visitors', 'visitorLocations', 'visitorLocationsByCountry',
-                'visitorDevices', 'sessionLength', 'trafficSources', 'newVsReturning', 'pageAnalytics', 'userAgents', 'revenue'];
+                'visitorDevices', 'sessionLength', 'trafficSources', 'newVsReturning', 'pageAnalytics', 'userAgents', 'revenue','404s'];
 
             //users, pageviews, dau, sessions
             var adminEndpointAry = ['pageviews', 'users','sessions', 'dau'];
