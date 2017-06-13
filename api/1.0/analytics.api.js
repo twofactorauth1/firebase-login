@@ -20,6 +20,7 @@ var moment = require('moment');
 var emailMessageManager = require('../../emailmessages/emailMessageManager');
 var organizationDao = require('../../organizations/dao/organization.dao');
 require('superagent');
+var sqsUtil = require('../../utils/sqsUtil');
 
 
 var api = function() {
@@ -125,6 +126,15 @@ _.extend(api.prototype, baseApi.prototype, {
         var events = req.body;
         self.log.debug('>> handleSendgridEvent:', events);
         self.send200(resp);
+        
+        if(appConfig.nonProduction) {
+            var queueUrl = 'https://sqs.us-west-1.amazonaws.com/213805526570/test/analytics_sendgrid_q';
+            sqsUtil.sendMessage(queueUrl, null, events, function(err, value){
+                self.log.debug('response from sqs:', err);
+                self.log.debug('response from sqs:', value);
+            });
+        }
+
         var savedEvents = [];
         var contactActivitiesJSON = [];
         var deferredUpdates = {};
