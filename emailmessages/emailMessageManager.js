@@ -1352,7 +1352,7 @@ var emailMessageManager = {
                                         "enable_text": true
                                     },
                                     "subscription_tracking":{
-                                        enable:false
+                                        enable:true
                                     }
                                 }
                             };
