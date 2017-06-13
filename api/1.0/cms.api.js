@@ -376,7 +376,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 self.log.warn('email will not be sent.');
             } else {
                 //fromAddress, fromName, toAddress, toName, subject, html, accountId, vars, emailId, fn)
-                console.log(html);
+                //console.log(html);
                 emailMessageManager.sendTestEmail(
                     emailDataObj.content.fromEmail,
                     emailDataObj.content.fromName,
