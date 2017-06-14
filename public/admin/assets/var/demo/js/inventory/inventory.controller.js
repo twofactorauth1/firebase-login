@@ -56,7 +56,7 @@ function inventoryComponentController($scope, $attrs, $filter, $modal, $timeout,
     vm.bulkActionSelectFn = bulkActionSelectFn;
     vm.showFilteredRecords = showFilteredRecords;
     vm.cancel = cancel;
-
+    vm.setBulkActionChoiceFn=setBulkActionChoiceFn;
     vm.bulkActionChoice = {};
 
     vm.bulkActionChoices = [
@@ -308,9 +308,12 @@ function inventoryComponentController($scope, $attrs, $filter, $modal, $timeout,
         return _.contains(list, product["@id"]);
     }
 
+    function setBulkActionChoiceFn(lable){
+        vm.bulkActionChoice.action={data:lable.toLowerCase()}
+        vm.bulkActionSelectFn();
+    }
     function bulkActionSelectFn() {
 
-       
         var toasterMessage = 'Items added to inventory watch list';
         if (vm.bulkActionChoice.action.data == 'unwatch'){
             toasterMessage = 'Items removed from inventory watch list';

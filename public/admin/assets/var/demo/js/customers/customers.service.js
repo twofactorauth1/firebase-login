@@ -61,12 +61,12 @@
                 _qString += "&sortBy=" + customerService.sortBy + "&sortDir=" + customerService.sortDir;
             }
             if(customerService.globalSearch){
-                _qString += "&term=" + customerService.globalSearch;
+                _qString += "&term=" + encodeURIComponent(customerService.globalSearch);
             }
             if(checkIfFieldSearch()){
                 _.each(customerService.fieldSearch, function (value, key) {
                     if(value != null){
-                        _qString += '&' + key + '=' + value;
+                        _qString += '&' + key + '=' + encodeURIComponent(value);
                     }
                 });
                 urlParts.push('filter');

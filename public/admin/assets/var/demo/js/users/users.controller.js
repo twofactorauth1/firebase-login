@@ -2,7 +2,7 @@
 /*global app, moment, angular, window*/
 /*jslint unparam:true*/
 (function (angular) {
-    app.controller('usersCtrl', ['$scope', '$state', '$http', "toaster", "$filter", "$modal", "$timeout", "AccountService","UserService", "userConstant", "formValidations", "SweetAlert", function ($scope, $state, $http, toaster, $filter, $modal, $timeout, AccountService,UserService, userConstant, formValidations, SweetAlert) {
+    app.controller('usersCtrl', ['$scope', '$state', '$http', "toaster", "$filter", "$modal", "$timeout", "AccountService","UserService", "userConstant", "formValidations", "SweetAlert", "pagingConstant", function ($scope, $state, $http, toaster, $filter, $modal, $timeout, AccountService,UserService, userConstant, formValidations, SweetAlert, pagingConstant) {
 
         var vm = this;
 
@@ -21,6 +21,7 @@
         //vm.addNewUser = addNewUser;
         vm.removeUserFromAccount = removeUserFromAccount;
 
+        vm.pagingConstant = pagingConstant;
 
         $scope.$watch("$parent.orgCardAndPermissions", function(orgCardAndPermissions){
             if(orgCardAndPermissions){
@@ -303,6 +304,18 @@
         $scope.checkIfValidUserName = function(userName){
             var regex = formValidations.email;
             return regex.test(userName);
+        };
+
+        vm.getters = {        
+            name: function (value) {
+                return value.first || '' + value.last || '';
+            },
+            ip: function (value) {
+                return value.lastLoginIP || "";
+            },
+            loginDate: function (value) {
+                return value.lastLoginDate || "";
+            }
         };
 
         (function init() {

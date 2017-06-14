@@ -2653,11 +2653,13 @@ module.exports = {
                 }
                 resultAry.push(result);
             });
-            var sortedResults = _.sortBy(resultAry, function(result){return result.total;});
+            //self.log.info('resultAry:', resultAry);
+            var sortedResults = _.sortBy(resultAry, function(result){return result.timeframe.start;});
+            //self.log.info('sortedResults:', sortedResults);
             if(granularity === 'hours') {
-                sortedResults = self._zeroMissingHours(sortedResults, {total:0, path:''}, moment(start).format('YYYY-MM-DD HH:mm'), moment(end).format('YYYY-MM-DD HH:mm'));
+                sortedResults = self._zeroMissingHours(sortedResults, {total:0}, moment(start).format('YYYY-MM-DD HH:mm'), moment(end).format('YYYY-MM-DD HH:mm'));
             } else {
-                sortedResults = self._zeroMissingDays(sortedResults, {total:0, path:''}, moment(start).format('YYYY-MM-DD'), moment(end).format('YYYY-MM-DD'));
+                sortedResults = self._zeroMissingDays(sortedResults, {total:0}, moment(start).format('YYYY-MM-DD'), moment(end).format('YYYY-MM-DD'));
             }
             self.log.debug(accountId, userId, '<< get404sByDateAndPathReport');
             fn(err, sortedResults);

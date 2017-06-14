@@ -18,6 +18,7 @@ var ERR_MSG = 'We are having trouble retrieving these results.  Please try again
 var scheduledJobsManager = require('../scheduledjobs/scheduledjobs_manager');
 var orgManager = require('../organizations/organization_manager');
 
+
 var ziManager = {
     log: logger,
 
@@ -331,8 +332,7 @@ var ziManager = {
         var query = {};
         if(cardCodeAry && cardCodeAry.length > 0 && cardCodeAry[0] === 'admin') {
 
-        }
-        else{
+        } else{
             var optRegexp = [];
             cardCodeAry.forEach(function(opt){
                 optRegexp.push(  new RegExp(opt, "i") );
@@ -340,33 +340,67 @@ var ziManager = {
             query._CustStatmentHdr_CardCode = {$in: optRegexp};
         }
 
-        ziDao.findRawWithFieldsLimitAndOrder(query, null, null, null, null, "ledger", null, function(err, resultAry){
+        var stageAry = [];
+        var match = {$match:query};
+        stageAry.push(match);
+
+        var group = {
+            $group: {_id: "$_CustStatmentDtl_TransId",
+                totalInvoice: { $sum: "$INV1_LineTotal" },
+                items: {
+                    $push: {
+                        cardCode: "$_CustStatmentHdr_CardCode",
+                        dueDate: "$_CustStatmentDtl_DueDate",
+                        currency: "$_CustStatmentHdr_Currency"
+                        
+                    }
+                }
+            }
+        };
+        stageAry.push(group);
+
+        
+        ziDao.aggregateWithCustomStagesAndCollection(stageAry, 'ledger', function(err, resultAry){
             if(err) {
                 self.log.error(accountId, userId, 'Error searching cached ledger:', err);
                 fn(err);
             } else {
-
-                var groupResultObject = _.groupBy(resultAry.results, function(result){
-                    return result._CustStatmentDtl_TransId
-                });
-
-                var groupResultArray =  _(groupResultObject).map(function(g, key) {
-                    return { 
-                        invoiceNumber: key,
-                        cardCode: g[0]._CustStatmentHdr_CardCode,
-                        dueDate: g[0]._CustStatmentDtl_DueDate,
-                        currency: g[0]._CustStatmentHdr_Currency,
-                        totalInvoice: _(g).reduce(function(m,x) { return m + parseFloat(x.INV1_LineTotal) ; }, 0) };
-                    });
-                if(limit > 0) {
-                    resultAry = _.first(_.sortBy(groupResultArray, '_CustStatmentDtl_DueDate'), limit);
-                }
-
-
                 self.log.debug(accountId, userId, '<< getLedgerWithLimit');
+                if(limit > 0) {
+                    resultAry = _.first(_.sortBy(resultAry, function(result) { 
+                        return result.items[0].dueDate && Date.parse(result.items[0].dueDate) }),
+                    limit);
+                }
                 fn(err, resultAry);
             }
         });
+        
+
+        // ziDao.findRawWithFieldsLimitAndOrder(query, null, null, null, null, "ledger", null, function(err, resultAry){
+        //     if(err) {
+        //         self.log.error(accountId, userId, 'Error searching cached ledger:', err);
+        //         fn(err);
+        //     } else {
+
+        //         var groupResultObject = _.groupBy(resultAry.results, function(result){
+        //             return result._CustStatmentDtl_TransId
+        //         });
+
+        //         var groupResultArray =  _(groupResultObject).map(function(g, key) {
+        //             return { 
+        //                 invoiceNumber: key,
+        //                 cardCode: g[0]._CustStatmentHdr_CardCode,
+        //                 dueDate: g[0]._CustStatmentDtl_DueDate,
+        //                 currency: g[0]._CustStatmentHdr_Currency,
+        //                 totalInvoice: _(g).reduce(function(m,x) { return m + parseFloat(x.INV1_LineTotal) ; }, 0) };
+        //             });
+                
+
+
+        //         self.log.debug(accountId, userId, '<< getLedgerWithLimit');
+        //         fn(err, resultAry);
+        //     }
+        // });
         
     },
 
@@ -558,31 +592,47 @@ var ziManager = {
 
     runInventoryJob:function() {
         var self = this;
-        self.log.debug(0,0,'>> runInventoryJob');
-        self.loadInventoryCollection(function(){
-            //schedule next run
+        self.log.debug(0, 0, '>> runInventoryJob');
+        try {
+            self.loadInventoryCollection(function () {
+                self.log.debug(0,0, 'Loading customers');
+                self.loadCustomerCollection(function(){
+                    self.log.debug(0,0, 'Loading ledger');
+                    self.loadLedgerCollection(function(){
+                        self.log.debug(0,0, 'Scheduling next run');
+                        //schedule next run
 
-            var code = '$$.u.ziManager.runInventoryJob();';
-            var send_at = moment().minute(0);
+                        var code = '$$.u.ziManager.runInventoryJob();';
+                        var send_at = moment().minute(0);
 
-            send_at = moment(send_at).add(1, 'hours');
-            self.log.debug('Scheduling ahead an hour');
+                        send_at = moment(send_at).add(1, 'hours');
+                        self.log.debug('Scheduling ahead an hour');
 
-            var scheduledJob = new $$.m.ScheduledJob({
-                accountId: 0,
-                scheduledAt: moment(send_at).toDate(),
-                runAt: null,
-                job:code
+                        var scheduledJob = new $$.m.ScheduledJob({
+                            accountId: 0,
+                            scheduledAt: moment(send_at).toDate(),
+                            runAt: null,
+                            job: code
+                        });
+                        scheduledJobsManager.scheduleJob(scheduledJob, function (err, value) {
+                            if (err || !value) {
+                                self.log.error(0, 0, 'Error scheduling job with manager:', err);
+                            } else {
+                                self.log.debug(0, 0, 'scheduled next job:', value.get('scheduledAt'));
+                            }
+                            self.log.debug(0, 0, '<< runInventoryJob');
+                        });
+                    });
+                });
+
             });
-            scheduledJobsManager.scheduleJob(scheduledJob, function(err, value){
-                if(err || !value) {
-                    self.log.error(0, 0, 'Error scheduling job with manager:', err);
-                } else {
-                    self.log.debug(0,0, 'scheduled next job:', value.get('scheduledAt'));
-                }
-                self.log.debug(0,0,'<< runInventoryJob');
-            });
-        });
+        } catch(exception) {
+            self.log.error('Error scheduling inventoryjob:', exception);
+            emailMessageManager.notifyAdmin('devops@indigenous.io', 'devops@indigenous.io', null,
+                'Error loading scheduled inventory:', '', exception, function(_err, value){
+                    fn(err);
+                });
+        }
     },
 
     loadCustomerCollection: function(fn) {

@@ -28,6 +28,7 @@ function purchaseOrderComponentController($scope, $attrs, $filter, $modal, $time
     vm.orderSelectClickFn = orderSelectClickFn;
     vm.bulkActionSelectFn = bulkActionSelectFn;
     vm.selectedOrdersFn = selectedOrdersFn;
+    vm.setBulkActionChoiceFn=setBulkActionChoiceFn
     vm.pagingConstant = pagingConstant;
     vm.showFilteredRecords = showFilteredRecords;    
     vm.selectCardCode = selectCardCode;
@@ -171,7 +172,10 @@ function purchaseOrderComponentController($scope, $attrs, $filter, $modal, $time
         var exportOrders = _.filter(vm.displayedOrders, function(order) { return order.isSelected; });
         return exportOrders;
     };
-
+    function setBulkActionChoiceFn(lable){
+        vm.bulkActionChoice.action={data:lable.toLowerCase()}
+        vm.bulkActionSelectFn();
+    }
 
     function bulkActionSelectFn() {
         var selectedOrders = vm.selectedOrdersFn();
