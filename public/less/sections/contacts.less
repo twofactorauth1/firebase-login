@@ -9,13 +9,15 @@
     img.screenshot{
         margin-left: -15px;
     } 
+    @media (min-width: 320px) and (max-width: 710px) {
+         .action-btn {
+             padding-left: 2px !important;
+        }
+    }
     .action-btn{
         background-color: #40546d;
         border-radius: 4px !important;
         color: white;
-        @media (min-width: 320px) and (max-width: 710px) {
-            padding-left: 2px;
-        }
         &:after {
             display: inline-block;
             width: 0;
@@ -48,7 +50,7 @@
             min-width: 112px;
             a {
                 display: block;
-                width: 100px;
+                width: 104px;
                 padding: 7px;
                 color: black;
                 &:hover{

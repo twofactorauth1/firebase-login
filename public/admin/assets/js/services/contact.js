@@ -37,14 +37,14 @@
                 _qString += "&sortBy=" + pagingParams.sortBy + "&sortDir=" + pagingParams.sortDir;
             }
             if (pagingParams.globalSearch) {
-                _qString += "&term=" + pagingParams.globalSearch;
+                _qString += "&term=" + encodeURIComponent(pagingParams.globalSearch);
             }
             if (isFieldSearchEnabled) {
                 _method = "GET";
                 urlParts.push('filter');
                 _.each(pagingParams.fieldSearch, function (value, key) {
                     if(value != null){
-                        _qString += '&' + key + '=' + value;
+                        _qString += '&' + key + '=' + encodeURIComponent(value);
                     }
                 });
             }
