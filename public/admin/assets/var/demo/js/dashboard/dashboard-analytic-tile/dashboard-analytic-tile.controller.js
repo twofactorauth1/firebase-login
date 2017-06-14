@@ -146,10 +146,10 @@ function dashboardAnalyticTileComponentController($scope, $attrs, $filter, Dashb
 
                             ret.data.push({
 
-                                field1: parseValueToCurrency(invoice.totalInvoice, invoice.currency),
-                                field2: invoice.invoiceNumber,
-                                field3: $filter('date')(parseValueToDate(invoice.dueDate), 'M/d/yyyy'),
-                                link: "#/invoices/" + invoice.cardCode + "/" + invoice.invoiceNumber
+                                field1: parseValueToCurrency(invoice.totalInvoice, invoice.items[0].currency),
+                                field2: invoice._id,
+                                field3: $filter('date')(parseValueToDate(invoice.items[0].dueDate), 'M/d/yyyy'),
+                                link: "#/invoices/" + invoice.items[0].cardCode + "/" + invoice._id
                             })
                         })
                     });
