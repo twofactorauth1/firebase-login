@@ -27,14 +27,22 @@
 	                                        </div>
 	                                        <div class="visible-xs margin-bottom-15 clearfix"></div>
 	                                        <div class="col-xs-8 col-sm-3 padding-left-50 padding-right-0 pull-left">
-                                                <ui-select ng-model="vm.bulkActionChoice.action" on-select="vm.bulkActionSelectFn()" theme="bootstrap" ng-disabled='!vm.uiState.inVentoryWatchList.length'>
+                                                <!--ui-select ng-model="vm.bulkActionChoice.action" on-select="vm.bulkActionSelectFn()" theme="bootstrap" ng-disabled='!vm.uiState.inVentoryWatchList.length'>
                                                     <ui-select-match placeholder="Actions">
                                                         <small ng-bind-html="$select.selected.label"></small>
                                                     </ui-select-match>
                                                     <ui-select-choices repeat="action in vm.bulkActionChoices |  orderBy:'label' | filter: $select.search">
                                                         <small ng-bind-html="action.label | highlight: $select.search"></small>
                                                     </ui-select-choices>
-                                                </ui-select>
+                                                </ui-select-->
+                                                <div class="btn-group action-btn-con" ng-hide='!vm.uiState.inVentoryWatchList.length'>
+                                                    <button type="button" class="action-btn libtn btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                        Action
+                                                    </button>
+                                                    <div class="dropdown-menu">
+                                                        <a class="dropdown-item" ng-repeat= "action in vm.bulkActionChoices |  orderBy:'label'" ng-click="vm.setBulkActionChoiceFn(action.label)">{{action.label}}</a>
+                                                    </div>
+                                                </div>
                                             </div>
                                             <div class="btn-group tableView">
                                                 <button class="btn btn-info" ng-class="{'active': tableView == 'list'}" href="" ng-click="tableView = 'list'" tooltip-placement="top" tooltip="List"> <span class="fa fa-th-list"></span> </button>
