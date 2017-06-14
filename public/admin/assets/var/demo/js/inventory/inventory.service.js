@@ -67,17 +67,17 @@
             }
             if(checkIfFieldSearch()){
                 if(inventoryService.globalSearch){
-                    _qString += "&term=" + inventoryService.globalSearch;
+                    _qString += "&term=" + encodeURIComponent(inventoryService.globalSearch);
                 }
                 _.each(inventoryService.fieldSearch, function (value, key) {
                     if(value != null){
-                        _qString += '&' + key + '=' + value;
+                        _qString += '&' + key + '=' + encodeURIComponent(value);
                     }
                 });
                 urlParts.push('search');
             }
             else if(inventoryService.globalSearch){
-                _qString += "&term=" + inventoryService.globalSearch;
+                _qString += "&term=" + encodeURIComponent(inventoryService.globalSearch);
                 urlParts.push('filter');
             }
             return (
