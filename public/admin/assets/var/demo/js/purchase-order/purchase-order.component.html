@@ -130,15 +130,15 @@
 	        <tbody>
 	            <tr ng-repeat="order in vm.displayedOrders" class="product-item" ng-click="vm.viewPurchaseOrderDetails(order)">
                     <td class="hidden-xs select-po-col" ng-show='vm.displayedOrders.length'><i class="fa fa-2x" ng-click='vm.orderSelectClickFn($event, order)' ng-class='{"fa-check-circle": order.isSelected, "fa-circle-o": !order.isSelected}'></i></td>
-                    <td class="title-col"><strong>Name: </strong><div class="name-block-container"><span class="list-name"></span><span class="text-adjust-table" title="{{order.title}}">{{order.title}}</span></div></td>
+                    <td class="title-col"><strong>Name: </strong><div class="name-block-container"><span class="list-name"></span><span ng-text-truncate="order.title" ng-tt-chars-threshold="25" ng-tt-no-toggling title="{{order.title}}"></span></div></td>
 	                <td class="submitter-col"><strong>Submitter: </strong>{{order.submitter.first}} {{order.submitter.last}}</td>
 
 	                <td ng-if="!vm.state.orgCardAndPermissions.isVendor" class="company-col"><strong>Company: </strong><div class="name-block-container"><span class="list-name"></span>
-	                <span class="text-adjust-table" title="{{order.companyName}}">{{order.companyName}}</span>
+	                <span ng-text-truncate="order.companyName" ng-tt-chars-threshold="25" ng-tt-no-toggling title="{{order.companyName}}"></span>
 	                </div></td>
 
 	                <td class="created-col"><strong>Date: </strong>{{order.created.date | date:'MMM d yy hh:mm a'}}</td>
-	                <td class="hidden-xs attachment-col"><strong>Attachment: </strong><span class="text-adjust-table" title="{{order.attachment.name}}">{{order.attachment.name}}</span></td>
+	                <td class="hidden-xs attachment-col"><strong>Attachment: </strong><span ng-text-truncate="order.attachment.name" ng-tt-chars-threshold="25" ng-tt-no-toggling title="{{order.attachment.name}}"></span></td>
 	            </tr>
 	        </tbody>
 	        <tfoot>

@@ -122,8 +122,8 @@
                     </thead>
                     <tbody>
                         <tr ng-repeat="order in vm.displayedOrders" class="product-item">
-                            <td class="name-col"><strong>Product Name: </strong><a ng-click="vm.goToInventory(order.INV1_Dscription)"><span class="text-adjust-table">{{order.INV1_Dscription}}</span></td></a></td>
-                            <td class="desc-col"><strong>Description: </strong><span class="hidden-xs text-adjust-table" title="{{order.INV1_U_dscription}}">{{order.INV1_U_dscription}}</span></td>
+                            <td class="name-col"><strong>Product Name: </strong><a ng-click="vm.goToInventory(order.INV1_Dscription)"><span style="white-space: nowrap;" ng-text-truncate="order.INV1_Dscription" ng-tt-chars-threshold="25" ng-tt-no-toggling></span></td></a></td>
+                            <td class="desc-col"><strong>Description: </strong><span class="hidden-xs" ng-text-truncate="order.INV1_U_dscription" ng-tt-chars-threshold="30" ng-tt-no-toggling title="{{order.INV1_U_dscription}}"></span></td>
                             <td class="qty-col"><strong>Qty: </strong>{{vm.parseValueToFloat(order.INV1_Quantity)}}</td>
                             <td class="price-col"><strong>Unit Price: </strong>{{order.INV1_Price | currency : vm.invoiceDetails[0]._CustStatmentHdr_Currency}}</td>
                             <td class="hidden-xs total-col"><strong>Line Total: </strong>{{order.INV1_LineTotal | currency : vm.invoiceDetails[0]._CustStatmentHdr_Currency}}</td>

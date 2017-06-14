@@ -1350,9 +1350,6 @@ var emailMessageManager = {
                                     "click_tracking": {
                                         "enable": true,
                                         "enable_text": true
-                                    },
-                                    "subscription_tracking":{
-                                        enable:false
                                     }
                                 }
                             };

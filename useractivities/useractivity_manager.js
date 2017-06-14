@@ -213,5 +213,44 @@ module.exports = {
             }
         });
 
+    },
+
+    getMostRecentLogin: function(accountId, userId, userIdAry, fn) {
+        var self = this;
+        self.log = log;
+        self.log.debug(accountId, userId, '>> getMostRecentLogin');
+
+        /*
+         [{$match:{accountId:1321, activityType:{$in:['LOGIN', 'REAUTH']}}}, {$sort:{userId:1, date:-1}}, {
+         $group:{_id:'$userId', date:{$last:'$start'}, ip:{$last:'$ip'}}
+         }]
+         */
+        var stageAry = [];
+        var match = {$match:{
+            accountId:accountId,
+            userId:{$in:userIdAry},
+            activityType:{$in:[$$.m.UserActivity.types.REAUTH, $$.m.UserActivity.types.LOGIN]}
+        }};
+        stageAry.push(match);
+
+        var sort = {$sort:{userId:1, date:-1}};
+        stageAry.push(sort);
+
+        var group = {$group:{
+            _id:'$userId',
+            date:{$last:'$start'},
+            ip:{$last:'$ip'}}
+        };
+        stageAry.push(group);
+
+        dao.aggregateWithCustomStages(stageAry, $$.m.UserActivity, function(err, results){
+            if(err) {
+                self.log.error(accountId, userId, 'Error in DB:', err);
+                fn(err);
+            } else {
+                self.log.debug(accountId, userId, '<< getMostRecentLogin');
+                fn(null, results);
+            }
+        });
     }
 };

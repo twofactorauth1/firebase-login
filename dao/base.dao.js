@@ -339,6 +339,9 @@ _.extend(baseDao.prototype, mongoBaseDao, {
             fn("No storage medium available for this model type");
         }
     },
+    aggregateWithCustomStagesAndCollection: function(stageAry, collection, fn) {
+        this._aggregateMongoWithCustomStagesAndCollection(stageAry, collection, fn);
+    },
 
     getMaxValue: function(query, fieldName, type, fn) {
       if(this.getStorage(type) === 'mongo') {
