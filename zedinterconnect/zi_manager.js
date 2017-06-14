@@ -346,56 +346,61 @@ var ziManager = {
 
         var group = {
             $group: {_id: "$_CustStatmentDtl_TransId",
+                totalInvoice: { $sum: "$INV1_LineTotal" },
                 items: {
                     $push: {
                         cardCode: "$_CustStatmentHdr_CardCode",
                         dueDate: "$_CustStatmentDtl_DueDate",
-                        currency: "$_CustStatmentHdr_Currency",
-                        total: { $sum: "$INV1_LineTotal" }
+                        currency: "$_CustStatmentHdr_Currency"
+                        
                     }
                 }
             }
         };
         stageAry.push(group);
-        /*
+
+        
         ziDao.aggregateWithCustomStagesAndCollection(stageAry, 'ledger', function(err, resultAry){
             if(err) {
                 self.log.error(accountId, userId, 'Error searching cached ledger:', err);
                 fn(err);
             } else {
                 self.log.debug(accountId, userId, '<< getLedgerWithLimit');
-                fn(err, resultAry);
-            }
-        });
-        */
-
-        ziDao.findRawWithFieldsLimitAndOrder(query, null, null, null, null, "ledger", null, function(err, resultAry){
-            if(err) {
-                self.log.error(accountId, userId, 'Error searching cached ledger:', err);
-                fn(err);
-            } else {
-
-                var groupResultObject = _.groupBy(resultAry.results, function(result){
-                    return result._CustStatmentDtl_TransId
-                });
-
-                var groupResultArray =  _(groupResultObject).map(function(g, key) {
-                    return { 
-                        invoiceNumber: key,
-                        cardCode: g[0]._CustStatmentHdr_CardCode,
-                        dueDate: g[0]._CustStatmentDtl_DueDate,
-                        currency: g[0]._CustStatmentHdr_Currency,
-                        totalInvoice: _(g).reduce(function(m,x) { return m + parseFloat(x.INV1_LineTotal) ; }, 0) };
-                    });
                 if(limit > 0) {
-                    resultAry = _.first(_.sortBy(groupResultArray, '_CustStatmentDtl_DueDate'), limit);
+                    resultAry = _.first(_.sortBy(resultAry, function(result) { 
+                        return result.items[0].dueDate && Date.parse(result.items[0].dueDate) }),
+                    limit);
                 }
-
-
-                self.log.debug(accountId, userId, '<< getLedgerWithLimit');
                 fn(err, resultAry);
             }
         });
+        
+
+        // ziDao.findRawWithFieldsLimitAndOrder(query, null, null, null, null, "ledger", null, function(err, resultAry){
+        //     if(err) {
+        //         self.log.error(accountId, userId, 'Error searching cached ledger:', err);
+        //         fn(err);
+        //     } else {
+
+        //         var groupResultObject = _.groupBy(resultAry.results, function(result){
+        //             return result._CustStatmentDtl_TransId
+        //         });
+
+        //         var groupResultArray =  _(groupResultObject).map(function(g, key) {
+        //             return { 
+        //                 invoiceNumber: key,
+        //                 cardCode: g[0]._CustStatmentHdr_CardCode,
+        //                 dueDate: g[0]._CustStatmentDtl_DueDate,
+        //                 currency: g[0]._CustStatmentHdr_Currency,
+        //                 totalInvoice: _(g).reduce(function(m,x) { return m + parseFloat(x.INV1_LineTotal) ; }, 0) };
+        //             });
+                
+
+
+        //         self.log.debug(accountId, userId, '<< getLedgerWithLimit');
+        //         fn(err, resultAry);
+        //     }
+        // });
         
     },
 

@@ -181,6 +181,12 @@
         vm.getters = {        
             name: function (value) {
                 return value.first || '' + value.last || '';
+            },
+            ip: function (value) {
+                return value.lastLoginIP || "";
+            },
+            loginDate: function (value) {
+                return value.lastLoginDate || "";
             }
         };
 
