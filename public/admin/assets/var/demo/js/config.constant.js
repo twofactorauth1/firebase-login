@@ -710,7 +710,8 @@ app.constant('JS_REQUIRES', {
     'PromotionsComponentController': 'assets/var/demo/js/promotions/promotions.controller.js',
     'PromotionsService': 'assets/var/demo/js/promotions/promotions.service.js',
 
-
+    'PromotionDetailsComponent': 'assets/var/demo/js/promotions/promotion-details/promotion-details.component.js',
+    'PromotionDetailsController': 'assets/var/demo/js/promotions/promotion-details/promotion-details.controller.js',
 
     'asideCtrl': 'assets/var/demo/js/controllers/asideCtrl.js',
     'UsersCtrl': 'assets/var/demo/js/users/users.controller.js',
