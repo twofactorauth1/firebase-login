@@ -15,7 +15,7 @@
                                 <span class="message-date" >{{message.modified.date | date:'dd MMM yyyy'}}</span>
                             </div>
 
-                            <p ng-text-truncate="vm.stripHTML(message.message)" ng-tt-chars-threshold="100" ng-tt-no-toggling></p>
+                            <p class="text-adjust" ng-bind-html="vm.stripHTML(message.message) | unsafe"></p>
                         </div>
                     </li>
                 </ul>

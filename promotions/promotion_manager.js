@@ -97,6 +97,22 @@ module.exports = {
                 fn(null, list);
             }
         });
+    },
+
+
+    getPromotionDetails: function(accountId, userId, promotionId, fn) {
+        var self = this;
+        log.debug('>> getPromotionDetails');
+        var query = {_id: promotionId};
+        promotionDao.findOne(query, $$.m.Promotion, function(err, value){
+            if(err) {
+                log.error('Exception getting promotion: ' + err);
+                fn(err, null);
+            } else {
+                log.debug('<< getPromotionDetails');
+                fn(null, value);
+            }
+        });    
     }
     
 };

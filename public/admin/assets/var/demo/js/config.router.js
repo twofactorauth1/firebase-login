@@ -280,6 +280,12 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         title: 'Promotions',
         icon: 'ti-layout-media-left-alt',
         resolve: loadSequence('PromotionsComponent', 'PromotionsComponentController', 'PromotionsService')
+    }).state('app.promotionDetails', {
+        url: '/promotions/:promotionId',
+        templateUrl: "/admin/assets/var/demo/js/promotions/promotion-details/promotion-details.html",
+        title: 'Promotion Details',
+        icon: 'ti-layout-media-left-alt',
+        resolve: loadSequence('PromotionDetailsComponent', 'PromotionDetailsController', 'PromotionsService')
     }).state('app.rmas', {
         url: '/rmas',
         templateUrl: "/admin/assets/var/demo/views/under-construction.html",

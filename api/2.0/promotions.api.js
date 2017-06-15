@@ -28,8 +28,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         app.get(this.url(''), this.isAuthAndSubscribedApi.bind(this), this.listPromotions.bind(this));       
         app.post(this.url(''), this.isAuthAndSubscribedApi.bind(this), this.createPromotion.bind(this));
-        
-               
+        app.get(this.url(':id'), this.isAuthAndSubscribedApi.bind(this), this.getPromotionDetails.bind(this));
     },
 
     listPromotions: function(req, resp) {
@@ -39,7 +38,7 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug(accountId, userId, '>> listPromotions');
         promotionManager.listPromotions(accountId, userId, function(err, list){
             self.log.debug(accountId, userId, '<< listPromotions');
-            return self.sendResultOrError(resp, err, list, "Error listing orders");
+            return self.sendResultOrError(resp, err, list, "Error listing promotions");
         });
     },
 
@@ -100,6 +99,19 @@ _.extend(api.prototype, baseApi.prototype, {
             // }
         // });
 
+    },
+
+    getPromotionDetails: function(req, resp) {
+        var self = this;
+        var accountId = parseInt(self.accountId(req));
+        var userId = self.userId(req);
+        var promotionId = req.params.id;
+        console.log(promotionId);
+        self.log.debug(accountId, userId, '>> listPromotions');
+        promotionManager.getPromotionDetails(accountId, userId, promotionId, function(err, list){
+            self.log.debug(accountId, userId, '<< listPromotions');
+            return self.sendResultOrError(resp, err, list, "Error getting promotion");
+        });
     }
 
 });

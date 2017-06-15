@@ -23,12 +23,12 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr ng-repeat="order in vm.archivedOrders" class="product-item" ng-click="vm.viewPurchaseOrderDetails(order)">
-                        <td><strong>Name: </strong><div class="name-block-container"><span class="list-name"></span><span ng-text-truncate="order.title" ng-tt-chars-threshold="25" ng-tt-no-toggling></span></div></td>
-                        <td class=""><strong>Submitter: </strong>{{order.submitter.first}} {{order.submitter.last}}</td>
-                        <td><strong>Date: </strong>{{order.created.date | date:'MMM d yy hh:mm a'}}</td>
-                        <td class="hidden-xs"><strong>Attachment: </strong>{{order.attachment.name}}</td>
-                    </tr>
+                <tr ng-repeat="order in vm.archivedOrders" class="product-item" ng-click="vm.viewPurchaseOrderDetails(order)">
+                    <td><strong>Name: </strong><div class="name-block-container"><span class="list-name"></span><span class="text-adjust-complexTable">{{order.title}}</span></div></td>
+                    <td class=""><strong>Submitter: </strong>{{order.submitter.first}} {{order.submitter.last}}</td>
+                    <td><strong>Date: </strong>{{order.created.date | date:'MMM d yy hh:mm a'}}</td>
+                    <td class="hidden-xs"><strong>Attachment: </strong>{{order.attachment.name}}</td>
+                </tr>
                 </tbody>
                 <tfoot>
                     <tr>

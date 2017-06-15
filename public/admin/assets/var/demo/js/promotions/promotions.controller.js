@@ -26,6 +26,7 @@ function promotionsComponentController($scope, $attrs, $filter, $modal, $timeout
     vm.checkIfInValid = checkIfInValid;
     vm.createPromotion = createPromotion;
     vm.parseValueToDate = parseValueToDate;
+    vm.viewPromotionDetails = viewPromotionDetails;
     $scope.$watch(function() { return PromotionsService.promotions }, function(promotions) {
         if(angular.isDefined(promotions)){
             vm.state.promotions = promotions;            
@@ -34,7 +35,9 @@ function promotionsComponentController($scope, $attrs, $filter, $modal, $timeout
     }, true);
 
 
-    
+    function viewPromotionDetails(promotion){
+        $location.path('/promotions/' + promotion._id);
+    }
 
     function showFilteredRecords(){
         return UtilService.showFilteredRecords(vm.uiState.globalSearch, vm.uiState.fieldSearch);

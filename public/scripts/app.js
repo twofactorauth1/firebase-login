@@ -100,6 +100,23 @@ var mainApp = angular
                 },
                 controller: 'CacheCtrl as cacheCtrl'
             })
+            .when('/page/blog/:postName', {
+                template: function(urlattr) {
+                    if(window.indigenous.ssbBlog === true) {
+                        return '<div data-ng-include="\'blogpost.html\'"></div>';
+                    } else {
+                        var s = '<div data-ng-include="';
+                        s += " '/template/single-post";
+                        if(urlattr.cachebuster) {
+                            s+='?cachebuster=' + urlattr.cachebuster;
+                        }
+                        s+= "'";
+                        s += ' "></div>';
+                        return s;
+                    }
+                },
+                controller: 'CacheCtrl as cacheCtrl'
+            })
             .when('/author/:author', {
                 template: function(urlattr) {
                     var _pageName = 'blog';
