@@ -14,6 +14,10 @@ function promotionDetailsController($scope, $state, $attrs, $filter, $modal, $ti
 
     vm.promotionId = $stateParams.promotionId;
 
+    function init(){
+        
+    }
+
 }
 
 })();
