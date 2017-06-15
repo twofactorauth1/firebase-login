@@ -12,10 +12,21 @@ function promotionDetailsController($scope, $state, $attrs, $filter, $modal, $ti
 
     vm.uiState = {loading: true};
 
+    vm.state = {};
     vm.promotionId = $stateParams.promotionId;
+    vm.backToPromotions = backToPromotions;
+
+    function backToPromotions(){
+        $state.go("app.promotions");
+    }
 
     function init(){
         
+        PromotionsService.viewPromotionDetails(vm.promotionId).then(function(response){  
+            vm.state.promotion = response.data;
+            vm.uiState.loading = false;
+            
+        })
     }
 
 }
