@@ -66,7 +66,7 @@
                     </div>
                     
 
-                    <p ng-if="selectedProduct.description" class="description product-description margin-top-20 visible-xs" ng-attr-style="{{descriptionStyle(component.formSettings)}}" ng-text-truncate="selectedProduct.description" ng-tt-chars-threshold="500" ng-tt-more-label="(More details)" ng-tt-less-label="Hide"></p>
+                    <p ng-if="selectedProduct.description" class="description product-description margin-top-20 visible-xs text-adjust" ng-attr-style="{{descriptionStyle(component.formSettings)}}" ng-tt-more-label="(More details)" ng-tt-less-label="Hide">{{selectedProduct.description}}</p>
 
                     <div class="clearfix"></div>
                     <div class="actions margin-top-20 visible-xs" ng-style="{'font-family': component.formSettings.buttonFontFamily}">

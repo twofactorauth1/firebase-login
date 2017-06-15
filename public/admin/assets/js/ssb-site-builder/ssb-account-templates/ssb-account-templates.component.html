@@ -30,7 +30,7 @@
                         <img  class="ssb-site-template-img img-responsive" ng-src="{{ template.templateImageUrl }}" err-src="/admin/assets/images/default-page.jpg">
 
                         <div class="ssb-site-template-description" ng-if="template.business.description || template.description">
-                            <p ng-text-truncate="template.business.description || template.description" ng-tt-chars-threshold="350" ng-tt-no-toggling></p>
+                             <p class="text-adjust">{{template.business.description || template.description}}</p>
                         </div>
 
                     </div>
