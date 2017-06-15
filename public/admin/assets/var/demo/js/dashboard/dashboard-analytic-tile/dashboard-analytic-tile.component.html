@@ -24,7 +24,7 @@
                             <td ng-if="item.field2 !== undefined">
                                 <a href="{{item.link}}"><span title="{{item.field2}}" class="text-adjust-small-table">{{item.field2}}</span></a>
                             </td>
-                            <td ng-if="item.field3 !== undefined"><span class="text-adjust-small-table" title="{{item.field3}}">{{item.field3}}</span></td>
+                            <td><span ng-if="item.field3 !== undefined" class="text-adjust-small-table" title="{{item.field3}}">{{item.field3}}</span></td>
                         </tr>
                     </tbody>
                 </table>
