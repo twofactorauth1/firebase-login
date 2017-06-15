@@ -82,7 +82,7 @@
                         </div>
                         <div class="form-group  hidden">
                             <button type="button" class="btn btn-o btn-info btn-wide btn-scroll btn-scroll-top ti-import" ng-click="openModal('contact-templates')">
-                            <span>Templates</span>
+                                <span>Templates</span>
                             </button>
                         </div>
                         <div class="button-group  hidden">
@@ -207,26 +207,26 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr ng-repeat="contact in displayedContacts" ng-click="viewSingle(contact)">
-                                <td ng-show='displayedContacts.length'><i class="fa fa-2x" ng-click='contactSelectClickFn($event, contact)' ng-class='{"fa-check-circle": contact.isSelected, "fa-circle-o": !contact.isSelected}'></i></td>
-                                <td ng-show="column.name" class="hidden-xs"><strong>ID: </strong>{{contact._id}}</td>
-                                <td class="center" ng-show="column.photo && tableView == 'list'">
-                                    <img ng-src="{{ contact.photo }}" id="contact_photo_{{contact._id}}" err-src="/admin/assets/images/default-user.png" is-contact="contact" err-contact="contact" class="img-thumbnail screenshot" alt="image">
-                                </td>
-                                <td ng-show="column.name"><strong>First: </strong> <span ng-text-truncate="contact.first" ng-tt-chars-threshold="15" ng-tt-no-toggling></span><span ng-if="!contact.first">--</span></td>
-                                <td ng-show="column.name"><strong>Last: </strong> <span ng-text-truncate="contact.last" ng-tt-chars-threshold="15" ng-tt-no-toggling></span><span ng-if="!contact.last">--</span></td>
-                                <td ng-show="column.tags"><strong>Tags: </strong>
-                                    <span ng-text-truncate="contactTagsFn(contact) || '--'" ng-tt-chars-threshold="15" ng-tt-no-toggling></span></td>
-                                <td ng-show="column.email" class="hidden-xs"><strong>Email: </strong> <span ng-if="contact.bestEmail"><a href="mailto:{{contact.bestEmail}}"><span ng-text-truncate="contact.bestEmail" ng-tt-chars-threshold="15" ng-tt-no-toggling></span></a>
+                        <tr ng-repeat="contact in displayedContacts" ng-click="viewSingle(contact)">
+                            <td ng-show='displayedContacts.length'><i class="fa fa-2x" ng-click='contactSelectClickFn($event, contact)' ng-class='{"fa-check-circle": contact.isSelected, "fa-circle-o": !contact.isSelected}'></i></td>
+                            <td ng-show="column.name" class="hidden-xs"><strong>ID: </strong>{{contact._id}}</td>
+                            <td class="center" ng-show="column.photo && tableView == 'list'">
+                                <img ng-src="{{ contact.photo }}" id="contact_photo_{{contact._id}}" err-src="/admin/assets/images/default-user.png" is-contact="contact" err-contact="contact" class="img-thumbnail screenshot" alt="image">
+                            </td>
+                            <td ng-show="column.name"><strong>First: </strong> <span class="text-adjust-complexTable">{{contact.first}}</span><span ng-if="!contact.first">--</span></td>
+                            <td ng-show="column.name"><strong>Last: </strong> <span class="text-adjust-complexTable">{{contact.last}}</span><span ng-if="!contact.last">--</span></td>
+                            <td ng-show="column.tags"><strong>Tags: </strong>
+                                <span class="text-adjust-complexTable">{{contactTagsFn(contact)||'--'}}</span></td>
+                            <td ng-show="column.email" class="hidden-xs"><strong>Email: </strong> <span ng-if="contact.bestEmail"><a href="mailto:{{contact.bestEmail}}"><span class="text-adjust-complexTable">{{contact.bestEmail}}</span></a>
                                     </span><span ng-if="!contact.bestEmail">--</span></td>
-                                <td ng-show="column.address" class="hidden-xs"><strong>Address: </strong>
-                                    <span ng-if="contact.details[0].addresses[0]" tooltip-placement="top" tooltip="{{contact.bestAddress}}" ng-text-truncate="contact.bestAddress" ng-tt-chars-threshold="15" ng-tt-no-toggling></span>
-                                    <span ng-if="!contact.details[0].addresses[0]">--</span>
-                                </td>
-                                <td ng-show="column.phone" class="hidden-xs" ng-class="{'center': tableView != 'grid'}"><strong>Phone: </strong> <a href="tel:{{contact.details[0].phones[0].number || '--'}}">{{contact.details[0].phones[0].number || '--'}}</a></td>
-                                <td ng-show="column.unsubscribed" class="hidden-xs"><strong>Unsub: </strong> <span ng-if="contact.unsubscribed" style="white-space: nowrap;">{{contact.unsubscribed}}</span><span ng-if="!contact.unsubscribed">--</span></td>
-                                <td ng-show="column.created" class="hidden-xs" style="white-space: nowrap;"><strong>Created: </strong> {{contact.created.date | date:'MMM d yy' || '--'}}</td>
-                            </tr>
+                            <td ng-show="column.address" class="hidden-xs"><strong>Address: </strong>
+                                <span ng-if="contact.details[0].addresses[0]" tooltip-placement="top" tooltip="{{contact.bestAddress}}" class="text-adjust-complexTable">{{contact.bestAddress}}</span>
+                                <span ng-if="!contact.details[0].addresses[0]">--</span>
+                            </td>
+                            <td ng-show="column.phone" class="hidden-xs" ng-class="{'center': tableView != 'grid'}"><strong>Phone: </strong> <a href="tel:{{contact.details[0].phones[0].number || '--'}}">{{contact.details[0].phones[0].number || '--'}}</a></td>
+                            <td ng-show="column.unsubscribed" class="hidden-xs"><strong>Unsub: </strong> <span ng-if="contact.unsubscribed" style="white-space: nowrap;">{{contact.unsubscribed}}</span><span ng-if="!contact.unsubscribed">--</span></td>
+                            <td ng-show="column.created" class="hidden-xs" style="white-space: nowrap;"><strong>Created: </strong> {{contact.created.date | date:'MMM d yy' || '--'}}</td>
+                        </tr>
                         </tbody>
                         <tfoot>
                             <tr>

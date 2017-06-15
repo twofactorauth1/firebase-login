@@ -64,8 +64,8 @@
 	        <tbody>
 	            <tr ng-repeat="customer in vm.displayedCustomers" class="product-item" ng-click="vm.viewCustomerLedger(customer)">
 	                <td class="code-col"><strong>Id: </strong>{{customer.OCRD_CardCode}}</td>
-	                <td class="name-col"><strong>Name: </strong><div class="name-block-container"><span class="list-name"></span><span ng-text-truncate="customer.OCRD_CardName" ng-tt-chars-threshold="25" ng-tt-no-toggling title="{{customer.OCRD_CardName}}"></span></div></td>
-	                <td class="hidden-xs address-col"><strong>Address: </strong><div class="name-block-container"><span class="list-name"></span><span ng-text-truncate="customer.OCRD_Address" ng-tt-chars-threshold="25" ng-tt-no-toggling title="{{customer.OCRD_Address}}"></span></div></td>
+	                <td class="name-col"><strong>Name: </strong><div class="name-block-container"><span class="list-name"></span><span class="text-adjust-table" title="{{customer.OCRD_CardName}}">{{customer.OCRD_CardName}}</span></div></td>
+	                <td class="hidden-xs address-col"><strong>Address: </strong><div class="name-block-container"><span class="list-name"></span><span class="text-adjust-table" title="{{customer.OCRD_Address}}">{{customer.OCRD_Address}}</span></div></td>
 	                <td class="city-col"><strong>City: </strong>{{customer.OCRD_City}}</td>
 	                <td class="state-col"><strong>State: </strong>{{customer.OCRD_State1}}</td>
 	                <td class="hidden-xs zip-col"><strong>ZipCode: </strong>{{customer.OCRD_ZipCode}}</td>
@@ -81,7 +81,7 @@
 	                    		</li>
 	                    	</ul>
 	                    </nav>
-	                </td>    
+	                </td>
 	                <td ng-if="!vm.state.totalCustomers" colspan="6" class="center height-100">
 	            		<h4>There are currently no customers</h4>
 	            	</td>
