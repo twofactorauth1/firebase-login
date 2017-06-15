@@ -23,9 +23,7 @@
       $scope.activities = activities;
     });
 
-    $scope.profileImage = {
-
-    }
+    
 
     $scope.getSubscription = function(){
       PaymentService.getInvoicesForAccount(function (invoices) {
@@ -76,7 +74,7 @@
 
     $scope.removePhoto = function (asset) {
       $scope.profileUser.profilePhotos[0] = null;     
-      $scope.profileImage = {}; 
+      $scope.initAttachment();
     };
 
     $scope.setProfileUser = function(user) {
@@ -133,18 +131,18 @@
         toaster.pop("error", "Email is required.");
         return;
       }
-      if($scope.profileImage.attachment && !$scope.profileImage.attachment.type.match('image.*')){
+      if($scope.profileImage && $scope.profileImage.attachment && !$scope.profileImage.attachment.type.match('image.*')){
         toaster.pop("warning", "Profile should have a valid image");
         return;
       }
       if($scope.profileUser.email)
         $scope.profileUser.username = $scope.profileUser.email;
       UserService.putUser($scope.profileUser, function (user) {
-        if($scope.profileImage.attachment){
+        if($scope.profileImage && $scope.profileImage.attachment){
           UserService.updateUserProfileImage($scope.profileImage.attachment, $scope.profileUser._id, function(user){
             $scope.profileUser = user;
             setDefaults();
-            $scope.profileImage = {};
+            $scope.initAttachment();
           });
         }
         else{
@@ -214,10 +212,17 @@
         return !$scope.passwordInValid;
     };
 
-    $scope.removeAttachment = function(){
-      $scope.profileImage = {}; 
+    $scope.initAttachment = function(){
+      
+        $scope.profileImage = {
+          attachment : undefined
+        }
+        document.getElementById("upload_image").value = "";
     }
 
+    $scope.profileImage = {
+      attachment : undefined
+    }
 
   }]);
 })(angular);
