@@ -9,6 +9,7 @@ app.directive('footerComponent', ['WebsiteService', '$location', function (Websi
     },
     templateUrl: '/components/component-wrap.html',
     link: function (scope, element, attrs, ctrl) {
+      scope.orgId=1//scope.$parent.$parent.vm.state.account.orgId
       scope.isEditing = true;
       var accountHost = $location.$$host;
       var defaultAccountUrl = "//www.indigenous.io";
