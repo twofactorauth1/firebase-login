@@ -23,6 +23,10 @@
       $scope.activities = activities;
     });
 
+    $scope.profileImage = {
+
+    }
+
     $scope.getSubscription = function(){
       PaymentService.getInvoicesForAccount(function (invoices) {
             var invoices = invoices;
@@ -71,7 +75,8 @@
     };
 
     $scope.removePhoto = function (asset) {
-      $scope.profileUser.profilePhotos[0] = null;
+      $scope.profileUser.profilePhotos[0] = null;     
+      $scope.profileImage = {}; 
     };
 
     $scope.setProfileUser = function(user) {
@@ -119,7 +124,6 @@
       // return false when INvalidated
       return !$scope.passwordNotSame;
     };
-
     $scope.profileSaveFn = function () {
       //$scope.currentUser = $scope.profileUser;
      // simpleForm.$setPristine(true);
@@ -129,15 +133,39 @@
         toaster.pop("error", "Email is required.");
         return;
       }
+      if($scope.profileImage.attachment && !$scope.profileImage.attachment.type.match('image.*')){
+        toaster.pop("warning", "Profile should have a valid image");
+        return;
+      }
       if($scope.profileUser.email)
         $scope.profileUser.username = $scope.profileUser.email;
       UserService.putUser($scope.profileUser, function (user) {
+        if($scope.profileImage.attachment){
+          UserService.updateUserProfileImage($scope.profileImage.attachment, $scope.profileUser._id, function(user){
+            $scope.profileUser = user;
+            setDefaults();
+            $scope.profileImage = {};
+          });
+        }
+        else{
+          setDefaults();
+        }
+        
+      });
+
+      function setDefaults(){
         $scope.refreshUser();
         toaster.pop('success', 'Profile Saved.');
         angular.copy($scope.profileUser, $scope.originalprofileUser);
         $scope.pageSaving = false;
         $rootScope.$broadcast('$personalProfileChanged');
-      });
+      }
+
+      // check if profile image needs to be changed
+
+      
+
+
 
       // check if password needs to be changed
       if($scope.passwordChanged()) {
@@ -186,9 +214,10 @@
         return !$scope.passwordInValid;
     };
 
-    $scope.$watch("vm.state.newPurchaseOrder.attachment", function(value){
-      console.log(value)
-    })
+    $scope.removeAttachment = function(){
+      $scope.profileImage = {}; 
+    }
+
 
   }]);
 })(angular);
