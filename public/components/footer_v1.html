@@ -1,6 +1,6 @@
-<div id="footer" class="footer-container" ng-class="component.type+'-v'+component.version">
+<div id="footer" class="footer-container {{orgId==1?'rvlvrfooter':''}}" ng-class="component.type+'-v'+component.version">
     <div class="footer-after section">
-        <div class="container" ng-if="!component.reverse">
+        <div class="container" ng-if="!component.reverse && orgId!=1">
             <p ng-if="component.text === undefined" class="col-xs-12 col-sm-8 copyright">Copyright © {{copyright.year}}. All Rights reserved.</p>
             <p ng-if="component.text !== undefined" class="col-xs-12 col-sm-8 copyright" elem ng-model="component.text"></p>
             <p class="col-xs-12 col-sm-4 powered-by {{website.settings.footerlink ? ' ' : 'text-right'}}">
@@ -13,7 +13,7 @@
                {{website.title}}
             </p> -->
         </div>
-        <div class="container reverse-footer" ng-if="component.reverse">
+        <div class="container reverse-footer" ng-if="component.reverse && orgId!=1">
             
             <p class="col-xs-12 col-sm-4 powered-by {{website.settings.footerlink ? ' ' : 'text-right'}}">
 
@@ -24,6 +24,32 @@
 
             <p ng-if="component.text === undefined" class="col-xs-12 col-sm-8 copyright">Copyright © {{copyright.year}}. All Rights reserved.</p>
             <p ng-if="component.text !== undefined" class="col-xs-12 col-sm-8 copyright" elem ng-model="component.text"></p>
+        </div>
+        <div class="container reverse-footer" ng-if="component.reverse && orgId==1">
+
+            <p class="col-xs-12 col-sm-4 powered-by {{website.settings.footerlink ? ' ' : 'text-right'}}">
+                <a class="footer-link padding-bottom-15" ng-if="!website.settings.footerlink && website.settings.footerLinkText != ''" href="{{website.settings.footerLinkURL}}" rel="nofollow">{{website.settings.footerLinkText}}</a>
+                <a class="footer-link" ng-if="website.settings.footerlink" href="{{footerLinkUrl}}" rel="nofollow">Powered by
+                </a>
+                <a class="footer-link" ng-if="website.settings.footerlink" href="{{!website.settings.footerlink && website.settings.footerLinkText != '' ? website.settings.footerLinkURL : footerLinkUrl}}"><img class="footer-logo rvrlvr-logo" src="/images/rvlvr/footer-logo.png"></a>
+            </p>
+
+            <p ng-if="component.text === undefined" class="col-xs-12 col-sm-8 copyright">Copyright © {{copyright.year}}. All Rights reserved.</p>
+            <p ng-if="component.text !== undefined" class="col-xs-12 col-sm-8 copyright" elem ng-model="component.text"></p>
+        </div>
+        <div class="container" ng-if="!component.reverse && orgId==1">
+            <p ng-if="component.text === undefined" class="col-xs-12 col-sm-8 copyright">New Copyright © {{copyright.year}}. All Rights reserved.</p>
+            <p ng-if="component.text !== undefined" class="col-xs-12 col-sm-8 copyright" elem ng-model="component.text"></p>
+            <p class="col-xs-12 col-sm-4 powered-by {{website.settings.footerlink ? ' ' : 'text-right'}}">
+
+
+                <a class="footer-link padding-bottom-15" ng-if="!website.settings.footerlink && website.settings.footerLinkText != ''" href="{{website.settings.footerLinkURL}}" rel="nofollow">{{website.settings.footerLinkText}}</a>
+                <a class="footer-link" ng-if="website.settings.footerlink" href="{{footerLinkUrl}}" rel="nofollow">Powered by  </a>
+                <a class="footer-link" ng-if="website.settings.footerlink" href="{{!website.settings.footerlink && website.settings.footerLinkText != '' ? website.settings.footerLinkURL : footerLinkUrl}}"><img class="footer-logo rvrlvr-logo" src="/images/rvlvr/footer-logo.png"></a>
+            </p>
+            <!-- <p class="col-sm-4 powered-by text-right" ng-if="!website.settings.footerlink">
+               {{website.title}}
+            </p> -->
         </div>
     </div>
 </div>
