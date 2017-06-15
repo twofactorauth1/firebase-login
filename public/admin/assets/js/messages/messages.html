@@ -27,7 +27,7 @@
             <ul class="list-unstyled broadcast-message-container-list">
                 <li ng-repeat="message in vm.state.messages | orderBy:'-modified.date'">
                     <h3 ng-bind-html="message.subject | unsafe"></h3>
-                    <p ng-text-truncate="vm.stripHTML(message.message)" ng-tt-chars-threshold="100" ng-tt-no-toggling></p>
+                    <p class="text-adjust" ng-bind-html="vm.stripHTML(message.message) | unsafe"></p>
 
                     <div class="btn-group btn-group-sm" role="group" aria-label="Post Status">
                         <button

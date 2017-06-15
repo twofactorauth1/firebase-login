@@ -24,6 +24,8 @@ var emailMessageManager = require('../emailmessages/emailMessageManager');
 var notificationConfig = require('../configs/notification.config');
 var fs = require('fs');
 var async = require('async');
+var s3dao = require('../dao/integrations/s3.dao.js');
+var awsConfig = require('../configs/aws.config');
 
 var CREATE_DEFAULT_PAGES = true;
 
@@ -894,5 +896,71 @@ module.exports = {
                 });
             }
         });
+    },
+
+    updateUserProfileImage: function(file, memberId, accountId, userId, fn) {
+        var self = this;
+        self.log = log;
+        self.log.debug('>> updateUserProfileImage');
+
+        var uploadPromise = $.Deferred();
+
+        var profileImageUrl = "";
+        if(file.path) {
+            // to do-  need to change bucket
+            var bucket = awsConfig.BUCKETS.ASSETS;
+            var subdir = 'account_' + accountId;
+            if(appConfig.nonProduction === true) {
+                subdir = 'test_' + subdir;
+            }
+            
+            s3dao.uploadToS3(bucket, subdir, file, true, function(err, value){
+                if(err) {
+                    self.log.error('Error from S3: ' + err);
+                    uploadPromise.reject();
+                    fn(err, null);
+                } else {
+                    self.log.debug('S3 upload complete');
+                    console.dir(value);
+            
+                    if (value.url.substring(0, 5) == 'http:') {
+                      profileImageUrl = value.url.substring(5, value.url.length);
+                    } else {
+                      profileImageUrl = value.url;
+                    }
+                    uploadPromise.resolve(value);
+                }
+            });
+
+        } else {
+            uploadPromise.resolve();
+        }
+        //update image
+        $.when(uploadPromise).done(function(file){
+            dao.getById(memberId, $$.m.User, function(err, user){
+                if(err) {
+                    self.log.error('Error fetching user by Id', err);
+                    return fn(err, null);
+                } else if(user === null) {
+                    self.log.warn('Could not find user with id [' + userId + ']');
+                    return fn(null, null);
+                } else {
+                    var profileImage = [];
+                    profileImage.push(profileImageUrl);
+                    user.set("profilePhotos", profileImage);
+                    dao.saveOrUpdate(user, function(err, value){
+                        if(err) {
+                            self.log.error('Exception during profile image updation: ' + err);
+                            fn(err, null);
+                        } else {
+                            self.log.debug('<< updateUserProfileImage');
+                            fn(null, value, file);
+                        }
+                    });
+                }
+            });
+            
+        });
+
     }
 };

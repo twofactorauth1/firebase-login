@@ -66,7 +66,7 @@
                                 <th class="hidden-xs" st-sort="statistics.unsubscribes" translate="campaign.UNSUBSCRIBES">Unsubscribes</th>
                                 <th class="hidden-xs" st-sort-default="reverse" st-sort="created.date" ng-class="{'center': tableView != 'grid'}" translate="tableFields.CREATED">Created</th>
                                 <th ng-class="{'center': tableView != 'grid'}">
-                                    
+
                                 </th>
                             </tr>
                             <tr ng-if="showFilter">
@@ -113,7 +113,7 @@
                                                 }">
                                                 </span>
                                             </span>
-                                            <h4 class="panel-title text-white" ng-text-truncate="campaign.name" ng-tt-chars-threshold="20" ng-tt-no-toggling></h4>
+                                            <h4 class="panel-title text-white text-adjust-complexTable">{{campaign.name}}</h4>
                                             <ul class="hidden panel-heading-tabs border-light">
                                                 <li>
                                                     <div class="pull-right">
@@ -132,8 +132,8 @@
                                             </ul>
                                         </div>
                                         <div class="panel-body">
-                                            <p><strong>Name: </strong><span class="pull-right" tooltip-placement="top" tooltip="{{campaign.name | titleCase}}" ng-text-truncate="campaign.name | titleCase" ng-tt-chars-threshold="20" ng-tt-no-toggling>
-                                            
+                                            <p><strong>Name: </strong><span class="text-adjust-complexTable pull-right" tooltip-placement="top" tooltip="{{campaign.name | titleCase}}">{{campaign.name | titleCase}}
+
                                             </span></p>
                                              <div class="clearfix margin-bottom-5"></div>
                                             <p><strong>Type: </strong> <span class="pull-right">{{campaign.type | titleCase}}</span></p>
@@ -209,7 +209,7 @@
                                         </span>
                                     </span>
                                 </td>
-                                <td ng-if="tableView != 'grid'" class=""><strong>Title: </strong> <span ng-text-truncate="campaign.name" ng-tt-chars-threshold="20" ng-tt-no-toggling tooltip-placement="top" tooltip="{{campaign.name | titleCase}}" ></span></td>
+                                <td ng-if="tableView != 'grid'" class=""><strong>Title: </strong> <span tooltip-placement="top" tooltip="{{campaign.name | titleCase}}" class="text-adjust-complexTable">{{campaign.name}}</span></td>
                                 <td ng-if="tableView != 'grid'"><strong>Type: </strong> <span>{{campaign.type | titleCase}}</span></td>
                                 <td ng-if="tableView != 'grid'"><strong>Participants: </strong><span class=" text-bold">{{campaign.statistics.participants || 0}}</span></td>
                                 <td class="hidden-xs"  ng-if="tableView != 'grid'"><strong>Sent: </strong><span class=" text-bold">{{campaign.statistics.emailsSent || 0}}</span><span ng-if="campaign.statistics.participants && campaign.type !== 'autoresponder'" class="text-small muted"> ({{percentCalFn(campaign.statistics.emailsSent, campaign.statistics.participants)}}%)</span></td>

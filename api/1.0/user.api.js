@@ -25,7 +25,7 @@ var orderManager = require('../../orders/order_manager');
 var campaignManager = require('../../campaign/campaign_manager');
 var moment = require('moment');
 var CryptoJS = require('crypto-js');
-
+var formidable = require('formidable');
 var Intercom = require('intercom.io');
 var intercomConfig = require('../../configs/intercom.config');
 var intercom = new Intercom(intercomConfig.INTERCOM_APP_ID, intercomConfig.INTERCOM_API_KEY);
@@ -74,6 +74,8 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url('exists/:username'), this.setup.bind(this), this.userExists.bind(this));
         app.get(this.url(':accountId/user/exists/:username', "account"), this.setup.bind(this), this.userExistsForAccount.bind(this));
         app.get(this.url('email/:email'), this.isAuthApi.bind(this), this.findByEmail.bind(this));
+
+        app.post(this.url('profile/:id'), this.isAuthApi.bind(this), this.updateUserProfileImage.bind(this));
     },
 
     /**
@@ -1182,6 +1184,40 @@ _.extend(api.prototype, baseApi.prototype, {
                 });
             }
         });
+    },
+
+
+    updateUserProfileImage: function(req, res) {
+        var self = this;
+        self.log.debug('>> updateUserProfileImage');
+        var form = new formidable.IncomingForm();
+        var accountId = parseInt(self.accountId(req));
+        var userId = self.userId(req);
+        var memberId = parseInt(req.params.id);
+        form.parse(req, function(err, fields, files) {
+            if(err) {
+                self.wrapError(res, 500, 'fail', 'The upload failed', err);
+                self = null;
+                return;
+            } else {
+
+                var file = files['file'];
+                console.log(file);
+
+                var fileToUpload = {};
+                fileToUpload.mimeType = file.type;
+                fileToUpload.size = file.size;
+                fileToUpload.name = file.name;
+                fileToUpload.path = file.path;
+                fileToUpload.type = file.type;
+                userManager.updateUserProfileImage(fileToUpload, memberId, accountId, userId, function(err, value, file){                                                       
+                    self.sendResultOrError(res, err, value, 'Could not update profile image');                    
+                });
+            }
+
+
+        });
+
     },
 
     isAuthenticatedSession: function(req, resp) {

@@ -623,7 +623,7 @@ app.constant('JS_REQUIRES', {
 
     'laddaCtrl': 'assets/js/controllers/laddaCtrl.js',
     'profileBusinessCtrl': 'assets/js/controllers/profileBusinessCtrl.js',
-    'profilePersonalCtrl': 'assets/js/controllers/profilePersonalCtrl.js',
+    'profilePersonalCtrl': 'assets/var/demo/js/controllers/profilePersonalCtrl.js',
     'templatesCtrl': 'assets/js/controllers/templatesCtrl.js',
     'manageTopicsCtrl': 'assets/js/controllers/manageTopicsCtrl.js',
     'integrationsCtrl': 'assets/js/controllers/integrationsCtrl.js',
@@ -710,7 +710,8 @@ app.constant('JS_REQUIRES', {
     'PromotionsComponentController': 'assets/var/demo/js/promotions/promotions.controller.js',
     'PromotionsService': 'assets/var/demo/js/promotions/promotions.service.js',
 
-
+    'PromotionDetailsComponent': 'assets/var/demo/js/promotions/promotion-details/promotion-details.component.js',
+    'PromotionDetailsController': 'assets/var/demo/js/promotions/promotion-details/promotion-details.controller.js',
 
     'asideCtrl': 'assets/var/demo/js/controllers/asideCtrl.js',
     'UsersCtrl': 'assets/var/demo/js/users/users.controller.js',

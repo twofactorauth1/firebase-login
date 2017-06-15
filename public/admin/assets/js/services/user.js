@@ -272,5 +272,17 @@
       });
     }
 
+    this.updateUserProfileImage = function(attachment, _id, fn){
+        var _formData = new FormData();
+        _formData.append('file', attachment);
+        var apiUrl = baseUrl + ['user', 'profile', _id].join('/');
+        $http.post(apiUrl, _formData, {
+            transformRequest: angular.identity,
+            headers: {'Content-Type': undefined}
+        }).success(function(data, status, headers, config) {
+            fn(data);
+        });
+    }
+
   });
 })(angular);

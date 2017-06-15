@@ -15,7 +15,7 @@
 
         promotionsService.getPromotions = getPromotions;
         promotionsService.createPromotion = createPromotion;
-
+        promotionsService.viewPromotionDetails = viewPromotionDetails;
         function promotionsRequest(fn) {
             promotionsService.loading.value = promotionsService.loading.value + 1;
             console.info('service | loading +1 : ' + promotionsService.loading.value);
@@ -66,6 +66,20 @@
             }).success(success).error(error));
         }
         
+        /**
+            * Get promotion details
+        */
+        function viewPromotionDetails(promotionId) {
+
+            function success(data) {
+               
+            }
+
+            function error(error) {
+                console.error('promotionsService viewPromotionDetails error: ', JSON.stringify(error));
+            }
+            return promotionsRequest($http.get([basePromotionAPIUrlv2, promotionId].join('/')).success(success).error(error));
+        }
 		(function init() {
             promotionsService.getPromotions();
 		})();

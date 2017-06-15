@@ -44,18 +44,38 @@
 
   #footer {
     font-family: Helvetica;
+      &.rvlvrfooter{
+          font-family: "Open sans";
+           .footer-after{
+               font-size: 14px;
+          }
+          .powered-by{
+              text-align: right;
+              a,img{
+                  float: none;
+                  clear: both
+              }
+              img.rvrlvr-logo{
+                height: 15px;
+                margin: 0 0 7px 2px !important;
+            }
+          }
+      }
   }
 
   .container.reverse-footer{
     .copyright{
       text-align: right;
     }
+    .powered-by{
+        text-align: left !important;
+    }
     .footer-link{
       float: inherit;
-      .footer-logo{
-        float: inherit;
-        margin-right: 10px;
-      }
+        .footer-logo{
+            float: inherit;
+            margin-right: 10px;
+        }
     }
   }
 }
@@ -141,4 +161,3 @@
     font-size: inherit !important;
   }
 }
-  
