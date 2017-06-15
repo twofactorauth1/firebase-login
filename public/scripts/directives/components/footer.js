@@ -1,4 +1,4 @@
-app.directive('footerComponent', ['websiteService', '$location', function (WebsiteService, $location) {
+app.directive('footerComponent', ['$window','websiteService', '$location', function ($window,WebsiteService, $location) {
   return {
     scope: {
       component: '='
@@ -6,7 +6,7 @@ app.directive('footerComponent', ['websiteService', '$location', function (Websi
     templateUrl: '/components/component-wrap.html',
     link: function (scope, element, attrs, ctrl) {
 
-      scope.orgId=scope.$parent.$parent.vm.state.account.orgId;
+      scope.orgId=$window.indigenous.orgId;
       scope.component.spacing = scope.$parent.defaultSpacings;
       var accountHost = $location.$$host;
       var defaultAccountUrl = "//www.indigenous.io";
