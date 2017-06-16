@@ -42,6 +42,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url('loadledger'), this.isAuthAndSubscribedApi.bind(this), this.loadledger.bind(this));
         app.get(this.url('invoices/:id'), this.isAuthAndSubscribedApi.bind(this), this.getCustomerInvoices.bind(this));
         app.get(this.url('customers/filter'), this.isAuthAndSubscribedApi.bind(this), this.customersFilter.bind(this));
+        app.get(this.url('inventory/products/search'), this.isAuthAndSubscribedApi.bind(this), this.productSearch.bind(this));
     },
 
     demo: function(req, resp) {
@@ -588,6 +589,26 @@ _.extend(api.prototype, baseApi.prototype, {
                 });
             }
         })
+    },
+
+    productSearch: function(req, resp) {
+        var self = this;
+        var accountId = parseInt(self.accountId(req));
+        var userId = self.userId(req);
+        self.log.debug(accountId, userId, '>> productSearch');
+        var skip = parseInt(req.query.skip) || 0;
+        var limit = parseInt(req.query.limit) || 0;
+        var sortBy = req.query.sortBy || null;
+        var sortDir = parseInt(req.query.sortDir) || null;
+        var term = req.query.term;
+        /*
+         * Search across all (or a subset) of fields for the same value if "term" is a query param.  Otherwise, use filter
+         */
+        manager.productSearch(accountId, userId, term, skip, limit, sortBy, sortDir, function(err, value){
+            self.log.debug(accountId, userId, '<< productSearch');
+            return self.sendResultOrError(resp, err, value, "Error searching products");
+        });
+
     },
 
     _isUserAdmin: function(req, fn) {
