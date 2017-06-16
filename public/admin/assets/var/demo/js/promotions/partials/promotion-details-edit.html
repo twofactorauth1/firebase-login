@@ -36,14 +36,19 @@
             <div class="form-group">
                 <h4>Products</h4>
                 <div class="description" ng-repeat="product in vm.state.promotion.products">
-                    
+                    <span class="form-control">
+                        {{product.itemName}}
+                    </span>
+                    <button type="button" class="btn btn-primary btn-o margin-left-5" ng-click="vm.removeProduct(product, $index)">
+                        <i class="fa fa-trash-o"></i> Delete
+                    </button>
                 </div>
-                    <div>
-                        <button type="button" class="btn btn-primary btn-o pull-left btn btn-primary btn-o margin-top-5 margin-bottom-5 btn-wide" ng-click="vm.openModal('new-promotion-product-modal', 'PromotionProductModalController', 'lg')">
-                            <i class="ti-plus"></i> Add Product
-                        </button>
-                    </div>
-                    <div class="clearfix"></div>    
+                <div>
+                    <button type="button" class="btn btn-primary btn-o pull-left btn btn-primary btn-o margin-top-5 margin-bottom-5 btn-wide" ng-click="vm.openModal('new-promotion-product-modal', 'PromotionProductModalController', 'lg')">
+                        <i class="ti-plus"></i> Add Product
+                    </button>
+                </div>
+                <div class="clearfix"></div>    
                 <hr>
             </div>
             <div class="form-group">

@@ -56,8 +56,9 @@ promotion-details-component{
 				}
 			}
 			.promotion-details-right-panel{
+				
 				@media (min-width: 768px) {
-					padding-left: 20px;
+					padding-left: 20px;					
 				}
 			}			
 		}&.securematics-edit-promotion{
@@ -67,6 +68,9 @@ promotion-details-component{
 					margin-bottom: 20px;
 					ul.dropdown-menu{
 						z-index: 9999;
+					}
+					.input-group{
+						display: block !important;
 					}
 				}
 				.promo-image{
@@ -80,6 +84,20 @@ promotion-details-component{
 					}
 				}
 			}				
+		}
+		.promotion-details-right-panel{
+			.form-control{
+				width: 60% !important;					
+			}
+			span.form-control{
+				display: inline-block;
+			}
+
+			@media (max-width: 767px) {
+				.form-control{
+					width: 80% !important;
+				}
+			}
 		}			
 	}
 	.loading-promotion-details{
