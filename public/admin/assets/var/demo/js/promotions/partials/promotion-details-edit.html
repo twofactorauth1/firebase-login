@@ -20,7 +20,14 @@
                 <h4>Vendor</h4>
 
                 <div class="description">
-                    <input type="text" placeholder="Vendor" class="form-control" name="vendor" ng-model="vm.state.promotion.vendor">
+                    <ui-select ng-model="vm.state.promotion.vendor" theme="bootstrap">
+                        <ui-select-match placeholder="Vendor">
+                            <small style="text-transform: capitalize;" ng-bind-html="$select.selected"></small>
+                        </ui-select-match>
+                        <ui-select-choices repeat="vendor in vm.state.vendors | filter: $select.search">
+                            <small style="text-transform: capitalize;" ng-bind-html="vendor | highlight: $select.search"></small>
+                        </ui-select-choices>
+                    </ui-select>
                 </div>
                 <hr>
             </div>
