@@ -463,6 +463,10 @@ _.extend(baseDao.prototype, mongoBaseDao, {
         }
     },
 
+    distinctWithCollection: function(key, query, collection, fn) {
+        this._distinctWithCollection(key, query, collection, fn);
+    },
+
     patch: function(query, patch, type, fn) {
         if(this.getStorage(type) === 'mongo') {
             this._patchMongo(query, patch, type, fn);

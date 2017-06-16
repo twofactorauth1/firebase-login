@@ -1169,6 +1169,21 @@ var ziManager = {
         });
     },
 
+    listVendors: function(accountId, userId, fn) {
+        var self = this;
+        self.log.debug(accountId, userId, '>> listVendors');
+        var query = {};
+        var collection = 'inventory';
+        var key = "_vendorName";
+        ziDao.distinctWithCollection(key, query, collection, function(err, resp) {
+            if(err) {
+                self.log.error(accountId, userId, 'Error getting vendors:', err);
+                fn(err);
+            } else {
+                fn(null, resp);
+            }
+        });
+    },
 
     _ziRequest: function(path, fn) {
         var self = this;

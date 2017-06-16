@@ -971,6 +971,12 @@ var mongodao = {
 
     },
 
+    _distinctWithCollection: function(key, query, collection, fn) {
+        var self = this;
+        return self.mongo(collection).distinct(key, query, fn);
+
+    },
+
     //endregion PROTECTED
 
     //region PRIVATE

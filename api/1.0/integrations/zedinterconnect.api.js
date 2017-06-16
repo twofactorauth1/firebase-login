@@ -43,6 +43,8 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url('invoices/:id'), this.isAuthAndSubscribedApi.bind(this), this.getCustomerInvoices.bind(this));
         app.get(this.url('customers/filter'), this.isAuthAndSubscribedApi.bind(this), this.customersFilter.bind(this));
         app.get(this.url('inventory/products/search'), this.isAuthAndSubscribedApi.bind(this), this.productSearch.bind(this));
+        app.get(this.url('vendors'), this.isAuthAndSubscribedApi.bind(this), this.listVendors.bind(this));
+        
     },
 
     demo: function(req, resp) {
@@ -609,6 +611,17 @@ _.extend(api.prototype, baseApi.prototype, {
             return self.sendResultOrError(resp, err, value, "Error searching products");
         });
 
+    },
+
+    listVendors: function(req, resp) {
+        var self = this;
+        var accountId = parseInt(self.accountId(req));
+        var userId = self.userId(req);
+        self.log.debug(accountId, userId, '>> listVendors');
+        manager.listVendors(accountId, userId, function(err, value){
+            self.log.debug(accountId, userId, '<< listVendors');
+            return self.sendResultOrError(resp, err, value, "Error listing vendors");
+        });
     },
 
     _isUserAdmin: function(req, fn) {
