@@ -113,6 +113,22 @@ module.exports = {
                 fn(null, value);
             }
         });    
+    },
+
+    deletePromotion: function(accountId, userId, promotionId, fn){
+        var self = this;
+        log.debug(accountId, userId, '>> deletePromotion');
+        var query = {_id: promotionId};
+        
+        promotionDao.removeByQuery(query, $$.m.Promotion, function(err, value){
+            if(err) {
+                self.log.error('Error deleting promotion: ' + err);
+                return fn(err, null);
+            } else {
+                log.debug(accountId, userId, '<< deletePromotion');
+                fn(null, value);
+            }
+        });
     }
     
 };

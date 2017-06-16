@@ -104,11 +104,11 @@ function promotionsComponentController($scope, $attrs, $filter, $modal, $timeout
     }
 
     function insertMedia(asset) {
-        vm.state.promotion.image = asset.url.replace(/^https?:/,'');
+        vm.state.promotion.promoImage = asset.url.replace(/^https?:/,'');
     }
 
     function removeImage() {
-        vm.state.promotion.image = null;
+        vm.state.promotion.promoImage = null;
     }
 
     function checkIfInValid(promotion){

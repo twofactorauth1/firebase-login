@@ -1,0 +1,69 @@
+<div class="promotion-details-container container-fluid container-fullw securematics-details-view securematics-edit-promotion" ng-if="!vm.uiState.loading">
+    <div class="inner-promotion-details bg-white col-xs-12">
+        <div class="col-sm-5 col-xs-12 promotion-details-panel promotion-details-left-panel">
+            <div class="promo-image">                
+                <img ng-src="{{vm.state.promotion.promoImage}}" err-src="assets/images/default-media.png" alt="">
+            </div>
+        </div>
+
+        <div class="col-sm-7 col-xs-12 promotion-details-panel promotion-details-right-panel">
+            <div class="form-group">
+                <h4>Promo Name</h4>
+
+                <div class="description">                    
+                    <input type="text" placeholder="Promo Name" class="form-control" name="title" ng-model="vm.state.promotion.title">
+                </div>
+                <hr>
+            </div>
+            <div class="form-group">
+                <h4>Vendor</h4>
+
+                <div class="description">
+                    <input type="text" placeholder="Vendor" class="form-control" name="vendor" ng-model="vm.state.promotion.vendor">
+                </div>
+                <hr>
+            </div>
+            <div class="form-group">
+                <h4>Promo Code</h4>
+
+                <div class="description">
+                    <input type="text" placeholder="Promo Code" class="form-control" name="promoCode" ng-model="vm.state.promotion.promoCode">
+                </div>
+                <hr>
+            </div>
+            
+            <div class="form-group">
+                <h4>Products</h4>
+                <div class="description" ng-repeat="product in vm.state.promotion.products">
+                    <span>
+                        {{product.name}}
+                    </span>
+                </div>    
+                <hr>
+            </div>
+            <div class="form-group">
+                <h4>Type</h4>
+
+                <div class="description">
+                    <input type="text" placeholder="Promo Type" class="form-control" name="type" ng-model="vm.state.promotion.type">
+                </div>
+                <hr>
+            </div>
+            <div class="form-group">
+                <h4>Start Date</h4>
+
+                <div class="description">
+                    <indi-datepicker ng-model="vm.state.promotion.startDate" popup="MM/dd/yyyy"></indi-datepicker>
+                </div>
+                <hr>
+            </div>
+            <div class="form-group">
+                <h4>Expiration Date</h4>
+                <div class="description">
+                    <indi-datepicker ng-model="vm.state.promotion.expirationDate" popup="MM/dd/yyyy"></indi-datepicker>
+                </div>
+                <hr>
+            </div>
+        </div>
+    </div>
+</div>
