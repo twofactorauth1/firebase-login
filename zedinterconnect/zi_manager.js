@@ -279,6 +279,40 @@ var ziManager = {
 
     },
 
+
+    productSearch: function(accountId, userId, term, skip, limit, sortBy, sortDir, fn) {
+        var self = this;
+        self.log.debug(accountId, userId, '>> productSearch');
+        var regex = new RegExp('\.*'+term+'\.*', 'i');
+        var query = {};
+        var orQuery = [                    
+                    {OITM_ItemName:regex},                    
+                    {OMRC_FirmName:regex}
+                ];
+        query = {
+            $or: orQuery
+        };
+        self.log.debug('query:', query);
+
+        var fields = null;
+        var collection = 'inventory';
+        var _skip = skip || 0;
+        var _limit = limit || 0;
+
+        self._addUserInventoryFilter(accountId, userId, query, function(err, query){
+            ziDao.findRawWithFieldsLimitAndOrder(query, _skip, _limit, sortBy, fields, collection, sortDir, function(err, value){
+                if(err) {
+                    self.log.error(accountId, userId, 'Error searching cached products:', err);
+                    fn(err);
+                } else {
+                    self.log.debug(accountId, userId, '<< productSearch');
+                    fn(null, value);
+                }
+            });
+        });
+
+    },
+
     inventoryFieldSearch: function(accountId, userId, field, value, skip, limit, sortBy, sortDir, fn) {
         var self = this;
         self.log.debug(accountId, userId, '>> inventoryFieldSearch');
@@ -1135,6 +1169,21 @@ var ziManager = {
         });
     },
 
+    listVendors: function(accountId, userId, fn) {
+        var self = this;
+        self.log.debug(accountId, userId, '>> listVendors');
+        var query = {};
+        var collection = 'inventory';
+        var key = "_vendorName";
+        ziDao.distinctWithCollection(key, query, collection, function(err, resp) {
+            if(err) {
+                self.log.error(accountId, userId, 'Error getting vendors:', err);
+                fn(err);
+            } else {
+                fn(null, resp);
+            }
+        });
+    },
 
     _ziRequest: function(path, fn) {
         var self = this;

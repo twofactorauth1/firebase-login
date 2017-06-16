@@ -1,5 +1,5 @@
 <div id="footer" class="footer-container {{orgId==1?'rvlvrfooter':''}}" ng-class="component.type+'-v'+component.version">
-    <div class="footer-after section">
+    <div class="footer-after section"  ng-class="{'footerEditing':isEditing}">
         <div class="container" ng-if="component.reverse && orgId!=1">
             <p ng-if="component.text === undefined" class="col-xs-12 col-sm-8 copyright">Copyright © {{copyright.year}}. All Rights reserved.</p>
             <p ng-if="component.text !== undefined" class="col-xs-12 col-sm-8 copyright" elem ng-model="component.text"></p>

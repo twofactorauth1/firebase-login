@@ -130,13 +130,13 @@
         "MAIN": "Logout"
       },
       "quotes": {
-        "MAIN": "Quotes",
+        "MAIN": "Quotes (Beta)",
         "MANAGE": "Manage Quotes",
         "NOTIFICATIONS": "Notifications",
         "VIEW": "View Quotes"
       },
       "promotions": {
-        "MAIN": "Promotions",
+        "MAIN": "Promotions (Beta)",
         "MANAGE": "Manage Promotions"
       },
       "rmas": {

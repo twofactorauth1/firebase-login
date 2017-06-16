@@ -21,6 +21,13 @@ promotion-details-component{
 				    font-size: 18px;
 				    font-weight: 300;
 				}
+				h3{
+				    font-family: "Lato", sans-serif;
+				    color: inherit;
+				    display: block;
+				    font-size: 22px;
+				    font-weight: 300;
+				}
 				hr{
 					margin-top: 5px;
 				}
@@ -38,18 +45,60 @@ promotion-details-component{
 					}
 				}
 			}
-			.promotion-details-middle-panel{
+			.promotion-details-left-panel{
 				@media (min-width: 768px) {
 					padding-left: 20px;
+				}
+				.promo-image{
+					img{
+						max-width: 100%;
+					}
 				}
 			}
 			.promotion-details-right-panel{
+				
 				@media (min-width: 768px) {
-					padding-left: 20px;
+					padding-left: 20px;					
 				}
+			}			
+		}&.securematics-edit-promotion{
+		.promotion-details-panel{
+				div.description{
+					padding-right: 0 !important;
+					margin-bottom: 20px;
+					ul.dropdown-menu{
+						z-index: 9999;
+					}
+					.input-group{
+						display: block !important;
+					}
+				}
+				.promo-image{
+					i{
+						position: absolute;
+					    top: 10px;
+					    right: 25px;
+					    font-size: 20px;
+					    color: #48b1cc;
+					    cursor: pointer;
+					}
+				}
+			}				
+		}
+		.promotion-details-right-panel{
+			.form-control{
+				width: 60% !important;					
+			}
+			span.form-control{
+				display: inline-block;
 			}
 
-		}	
+			@media (max-width: 767px) {
+				.form-control{
+					width: 80% !important;
+				}
+			}
+		}			
 	}
 	.loading-promotion-details{
 		height: 200px;
@@ -57,4 +106,8 @@ promotion-details-component{
 			margin-top: 100px;
 		}
 	}
+
+
+	
+	
 }
