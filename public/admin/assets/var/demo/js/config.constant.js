@@ -713,6 +713,10 @@ app.constant('JS_REQUIRES', {
     'PromotionDetailsComponent': 'assets/var/demo/js/promotions/promotion-details/promotion-details.component.js',
     'PromotionDetailsController': 'assets/var/demo/js/promotions/promotion-details/promotion-details.controller.js',
 
+    // Promotion Products
+
+    "PromotionProductModalController": 'assets/var/demo/js/promotions/modals/new-promotion-product-modal.controller.js',
+
     'asideCtrl': 'assets/var/demo/js/controllers/asideCtrl.js',
     'UsersCtrl': 'assets/var/demo/js/users/users.controller.js',
 
