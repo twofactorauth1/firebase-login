@@ -19,8 +19,10 @@ var promotion = $$.m.ModelBase.extend({
             attachment: null,
             startDate: null,
             expirationDate: null,
-            vendorId: null,
-            image: null,
+            vendorName: null,
+            promoImage: null,
+            promoCode: null,
+            products: null,
             created: {
                 date: new Date(),
                 by: null
