@@ -1,0 +1,75 @@
+<div class="promotion-details-container container-fluid container-fullw securematics-details-view" ng-if="!vm.uiState.loading">
+    <div class="inner-promotion-details bg-white col-xs-12">
+        <div class="col-sm-5 col-xs-12 promotion-details-panel promotion-details-left-panel">
+            <div class="promo-image">                
+                <img ng-src="{{vm.state.promotion.promoImage}}" err-src="assets/images/default-media.png" alt="">
+            </div>
+        </div>
+
+        <div class="col-sm-7 col-xs-12 promotion-details-panel promotion-details-right-panel">
+            <div class="form-group">
+                <h3>{{vm.state.promotion.title}}</h3>
+                <hr>
+            </div>
+            <div class="form-group">
+                <h4>Promo Code</h4>
+
+                <div class="description">
+                    <span>
+                        {{vm.promotion.promoCode}}
+                    </span>
+                </div>
+                <hr>
+            </div>
+            <div class="form-group">
+                <h4>Vendor</h4>
+
+                <div class="description">
+                    <span>
+                        {{vm.promotion.vendor}}
+                    </span>
+                </div>
+                <hr>
+            </div>
+            <div class="form-group">
+                <h4>Products</h4>
+                <div class="description" ng-repeat="product in vm.promotion.products">                    
+                    <span>
+                        {{product.name}}
+                    </span>
+                </div>    
+                <hr>
+            </div>
+            <div class="form-group">
+                <h4>Type</h4>
+
+                <div class="description">
+                    <span>
+                        {{vm.promotion.type}}
+                    </span>
+                </div>
+                <hr>
+            </div>
+            <div class="form-group">
+                <h4>Start Date</h4>
+
+                <div class="description">
+                    <span>
+                        {{vm.state.promotion.startDate | date:'M/d/yyyy'}}
+                    </span>
+                </div>
+                <hr>
+            </div>
+            <div class="form-group">
+                <h4>Expiration Date</h4>
+
+                <div class="description">
+                    <span>
+                        {{vm.state.promotion.expirationDate | date:'M/d/yyyy'}}
+                    </span>
+                </div>
+                <hr>
+            </div>
+        </div>
+    </div>
+</div>

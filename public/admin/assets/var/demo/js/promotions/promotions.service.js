@@ -16,6 +16,7 @@
         promotionsService.getPromotions = getPromotions;
         promotionsService.createPromotion = createPromotion;
         promotionsService.viewPromotionDetails = viewPromotionDetails;
+        promotionsService.deletePromotion = deletePromotion;
         function promotionsRequest(fn) {
             promotionsService.loading.value = promotionsService.loading.value + 1;
             console.info('service | loading +1 : ' + promotionsService.loading.value);
@@ -84,6 +85,23 @@
             promotionsService.getPromotions();
 		})();
 
+        function deletePromotion(promotion) {
+
+            function success(data) {
+                promotionsService.promotions = _.reject(promotionsService.promotions, function(c){ return c._id == promotion._id });
+            }
+
+            function error(error) {
+                console.error('promotionsService deletePromotion error: ', JSON.stringify(error));
+            }
+
+            return promotionsRequest(
+                $http({
+                    url: [basePromotionAPIUrlv2, promotion._id].join('/'),
+                    method: "DELETE"
+                }).success(success).error(error)
+            )
+        }
 
 		return promotionsService;
 	}

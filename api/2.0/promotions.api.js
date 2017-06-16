@@ -29,6 +29,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url(''), this.isAuthAndSubscribedApi.bind(this), this.listPromotions.bind(this));       
         app.post(this.url(''), this.isAuthAndSubscribedApi.bind(this), this.createPromotion.bind(this));
         app.get(this.url(':id'), this.isAuthAndSubscribedApi.bind(this), this.getPromotionDetails.bind(this));
+        app.delete(this.url(':id'), this.isAuthAndSubscribedApi.bind(this), this.deletePromotion.bind(this));
     },
 
     listPromotions: function(req, resp) {
@@ -112,7 +113,30 @@ _.extend(api.prototype, baseApi.prototype, {
             self.log.debug(accountId, userId, '<< listPromotions');
             return self.sendResultOrError(resp, err, list, "Error getting promotion");
         });
-    }
+    },
+
+    deletePromotion: function(req, resp) {
+        var self = this;
+        self.log.debug('>> deletePromotion');
+        var promotionId = req.params.id;
+        var accountId = parseInt(self.accountId(req));
+        var userId = self.userId(req);
+        // self.checkPermission(req, self.sc.privs.MODIFY_PROMOTION, function(err, isAllowed) {
+        //     if (isAllowed !== true) {
+        //         return self.send403(resp);
+        //     } else {
+                promotionManager.deletePromotion(accountId, userId, promotionId, function(err, value){
+                    if(err) {
+                        self.wrapError(resp, 500, err, "Error deleting promotion");
+                    } else {
+                        self.log.debug('<< deletePromotion');
+                        self.send200(resp);
+                        self.createUserActivity(req, 'DELETE_PROMOTION', null, null, function(){});
+                    }
+                });
+        //     }
+        // });
+    },
 
 });
 
