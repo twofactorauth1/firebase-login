@@ -1,0 +1,18 @@
+<script type="text/ng-template" id="new-promotion-product-modal">
+    <div class="modal-header">
+        <button type="button" class="close" ng-click="$parent.vm.closeModal()">
+            <span aria-hidden="true">&times;</span>
+            <span class="sr-only">Close</span>
+        </button>
+        <h3 class="modal-title">Add Product</h3>
+    </div>
+    <form name="form" role="form" id="form">
+        <div class="modal-body bg-white new-promotion-product-modal" stop-event="touchend">
+                
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-primary" ng-disabled='form.$invalid || vm.checkIfInValid(vm.state.promotion) || vm.uiState.saveLoading' ng-click="vm.createPromotion(vm.state.promotion, form)">Submit</button>
+            
+        </div>
+    </form>    
+</script>
