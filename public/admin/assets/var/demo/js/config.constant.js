@@ -716,6 +716,8 @@ app.constant('JS_REQUIRES', {
     // Promotion Products
 
     "PromotionProductModalController": 'assets/var/demo/js/promotions/modals/new-promotion-product-modal.controller.js',
+    
+    'SecurematicsProductService': 'assets/var/demo/js/promotions/products.service.js',
 
     'asideCtrl': 'assets/var/demo/js/controllers/asideCtrl.js',
     'UsersCtrl': 'assets/var/demo/js/users/users.controller.js',

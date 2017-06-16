@@ -23,6 +23,7 @@ function promotionDetailsController($scope, $state, $attrs, $filter, $modal, $ti
     vm.openMediaModal = openMediaModal;
     vm.openModal = openModal;
     vm.closeModal = closeModal;
+    vm.removeProduct = removeProduct;
     function backToPromotions(){
         $state.go("app.promotions");
     }
@@ -61,7 +62,7 @@ function promotionDetailsController($scope, $state, $attrs, $filter, $modal, $ti
             templateUrl: modal,
             keyboard: false,
             backdrop: 'static',
-            size: 'md',
+            size: 'lg',
             resolve: {
                 vm: function() {
                     return vm;
@@ -102,7 +103,7 @@ function promotionDetailsController($scope, $state, $attrs, $filter, $modal, $ti
             templateUrl: modal,
             keyboard: false,
             backdrop: 'static',
-            size: 'md',
+            size: 'lg',
             resolve: {
                 parentVm: function() {
                     return vm;
@@ -111,7 +112,7 @@ function promotionDetailsController($scope, $state, $attrs, $filter, $modal, $ti
         };
 
         if (controller) {
-            _modal.controller = controller;
+            _modal.controller = controller + ' as vm';
         }
 
 
@@ -126,6 +127,10 @@ function promotionDetailsController($scope, $state, $attrs, $filter, $modal, $ti
     function closeModal() {
         if(vm.modalInstance)
             vm.modalInstance.close();
+    }
+
+    function removeProduct(product, index){
+        vm.state.promotion.products.splice(index, 1);
     }
 
     function init(){
