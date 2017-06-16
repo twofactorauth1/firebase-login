@@ -12,11 +12,14 @@
         promotionsService.loading = {value: 0};
         
         var basePromotionAPIUrlv2 = '/api/2.0/promotions';
+        var baseVendorAPIUrlv2 = '/api/1.0/integrations/zi/vendors';
 
         promotionsService.getPromotions = getPromotions;
         promotionsService.createPromotion = createPromotion;
         promotionsService.viewPromotionDetails = viewPromotionDetails;
         promotionsService.deletePromotion = deletePromotion;
+        promotionsService.getVendors = getVendors;
+
         function promotionsRequest(fn) {
             promotionsService.loading.value = promotionsService.loading.value + 1;
             console.info('service | loading +1 : ' + promotionsService.loading.value);
@@ -29,7 +32,7 @@
 
 
         /**
-            * Get list of all po's for the account
+            * Get list of all promotions for the account
         */
         function getPromotions() {
 
@@ -38,7 +41,7 @@
             }
 
             function error(error) {
-                console.error('PurchaseOrderService getPromotions error: ', JSON.stringify(error));
+                console.error('PromotionService getPromotions error: ', JSON.stringify(error));
             }
 
             return promotionsRequest($http.get([basePromotionAPIUrlv2].join('/')).success(success).error(error));
@@ -81,9 +84,7 @@
             }
             return promotionsRequest($http.get([basePromotionAPIUrlv2, promotionId].join('/')).success(success).error(error));
         }
-		(function init() {
-            promotionsService.getPromotions();
-		})();
+		
 
         function deletePromotion(promotion) {
 
@@ -102,6 +103,26 @@
                 }).success(success).error(error)
             )
         }
+
+        /**
+            * Get list of allvendors for the account
+        */
+        function getVendors() {
+
+            function success(data) {
+                promotionsService.vendors = data;
+            }
+
+            function error(error) {
+                console.error('PromotionService getVendors error: ', JSON.stringify(error));
+            }
+
+            return promotionsRequest($http.get([baseVendorAPIUrlv2].join('/')).success(success).error(error));
+        }
+
+        (function init() {
+            promotionsService.getPromotions();
+        })();
 
 		return promotionsService;
 	}
