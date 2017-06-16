@@ -371,7 +371,7 @@
                                 </thead>
                                 <tbody>
                                 <tr ng-repeat="ua in userAgentTableData">
-                                    <td><span ng-text-truncate="ua[0]" ng-tt-chars-threshold="25" ng-tt-no-toggling></span></td>
+                                    <td><span class="text-adjust-table"></span>{{ua[0]}}</td>
                                     <td>{{Math.round((ua[1] / browserTotal) * 100) + '%'  || '--' }}</td>
                                 </tr>
                                 </tbody>
