@@ -26,7 +26,7 @@ function promotionDetailsController($scope, $state, $attrs, $filter, $modal, $ti
     }
 
     function editPromotion(){
-
+        vm.uiState.editPromotion = !vm.uiState.editPromotion;
     }
 
     function deletePromotion(){

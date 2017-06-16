@@ -21,6 +21,7 @@
 </div>
 <div class="clearfix"></div>
 <div ng-if="!vm.uiState.editPromotion" data-ng-include=" 'assets/var/demo/js/promotions/partials/promotion-details-view.html' "></div>
+<div ng-if="vm.uiState.editPromotion" data-ng-include=" 'assets/var/demo/js/promotions/partials/promotion-details-edit.html' "></div>
 <div class="loading-promotion-details center" ng-if="vm.uiState.loading">
     <h2>Loading promotion details. Please wait....</h2>
 </div>
