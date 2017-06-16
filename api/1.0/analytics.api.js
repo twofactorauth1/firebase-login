@@ -129,337 +129,342 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug('>> handleSendgridEvent:', events);
         self.send200(resp);
 
+        /*
+         * Temporary transition to use SQS for test webhooks
+         */
         if(appConfig.nonProduction) {
             var queueUrl = 'https://sqs.us-west-1.amazonaws.com/213805526570/test-analytics_sendgrid_q';
             sqsUtil.sendMessage(queueUrl, null, events, function(err, value){
                 self.log.debug('response from sqs:', err);
                 self.log.debug('response from sqs:', value);
             });
-        }
+        } else {
+            var savedEvents = [];
+            var contactActivitiesJSON = [];
+            var deferredUpdates = {};
+            async.eachSeries(events, function(event, cb){
+                var obj = {
+                    email : event.email,
+                    ts : moment.unix(event.timestamp).toDate(),
+                    start: moment.unix(event.timestamp).toDate(),
+                    accountId: event.accountId,
+                    contactId: event.contactId
+                };
 
-        var savedEvents = [];
-        var contactActivitiesJSON = [];
-        var deferredUpdates = {};
-        async.eachSeries(events, function(event, cb){
-            var obj = {
-                email : event.email,
-                ts : moment.unix(event.timestamp).toDate(),
-                start: moment.unix(event.timestamp).toDate(),
-                accountId: event.accountId,
-                contactId: event.contactId
-            };
+                if(obj.accountId) {
+                    try {
+                        obj.accountId = parseInt(obj.accountId);
+                    } catch(e){}
+                }
+                if(obj.contactId) {
+                    try {
+                        obj.contactId = parseInt(obj.contactId);
+                    } catch(e){}
+                }
 
-            if(obj.accountId) {
-                try {
-                    obj.accountId = parseInt(obj.accountId);
-                } catch(e){}
-            }
-            if(obj.contactId) {
-                try {
-                    obj.contactId = parseInt(obj.contactId);
-                } catch(e){}
-            }
-
-            if(event.event === 'delivered') {
-                emailMessageManager.isMessageDelivered(event.emailmessageId, function(err, value){
-                    if(err) {
-                        self.log.error('Error while processing [' + event.emailmessageId + ']', err);
-                        cb();//continue if possible.
-                    } else if(value) {
-                        //this message is already marked as delivered.  Add another event but don't update stats.
-                        emailMessageManager.addEvent(event.emailmessageId, event, function(err, value){
-                            if(value) {
-                                savedEvents.push(value);
-                            }
-                            cb(err);
-                        });
-                    } else {
-                        emailMessageManager.markMessageDelivered(event.emailmessageId, event, function(err, value){
-                            if(value) {
-                                savedEvents.push(value);
-                                obj.sender = value.get('sender');
-                                obj.activityType = $$.m.ContactActivity.types.EMAIL_DELIVERED;
-                                if(value.get('subject')){
-                                    obj.extraFields = obj.extraFields || [];
-                                    obj.extraFields.push({subject: value.get('subject')});
-                                }
-                                contactActivitiesJSON.push(obj);
-                                if(event.campaignId) {
-                                    var campaignUpdates = deferredUpdates[event.campaignId] || {};
-                                    if(campaignUpdates.sent) {
-                                        campaignUpdates.sent = campaignUpdates.sent + 1;
-                                    } else {
-                                        campaignUpdates.sent = 1;
-                                        deferredUpdates[event.campaignId] = campaignUpdates;
-                                    }
+                if(event.event === 'delivered') {
+                    emailMessageManager.isMessageDelivered(event.emailmessageId, function(err, value){
+                        if(err) {
+                            self.log.error('Error while processing [' + event.emailmessageId + ']', err);
+                            cb();//continue if possible.
+                        } else if(value) {
+                            //this message is already marked as delivered.  Add another event but don't update stats.
+                            emailMessageManager.addEvent(event.emailmessageId, event, function(err, value){
+                                if(value) {
+                                    savedEvents.push(value);
                                 }
                                 cb(err);
-                            } else {
-                                cb(err);
-                            }
-                        });
-                    }
-                });
-
-            } else if(event.event === 'open') {
-                emailMessageManager.isMessageOpened(event.emailmessageId, function(err, value){
-                    if(err) {
-                        self.log.error('Error while processing [' + event.emailmessageId + ']', err);
-                        cb();//continue if possible.
-                    } else if(value) {
-                        //this message is already marked as opened.  Add another event but don't update stats.
-                        emailMessageManager.addEvent(event.emailmessageId, event, function(err, value){
-                            if(value) {
-                                savedEvents.push(value);
-                            }
-                            cb(err);
-                        });
-                    } else {
-                        emailMessageManager.markMessageOpened(event.emailmessageId, event, function(err, value){
-                            if(value) {
-                                savedEvents.push(value);
-                                obj.sender = value.get('sender');
-                                obj.activityType = $$.m.ContactActivity.types.EMAIL_OPENED;
-                                if(value.get('subject')){
-                                    obj.extraFields = obj.extraFields || [];
-                                    obj.extraFields.push({subject: value.get('subject')});
-                                }
-                                contactActivitiesJSON.push(obj);
-                                if(event.campaignId) {
-                                    var campaignUpdates = deferredUpdates[event.campaignId] || {};
-                                    if(campaignUpdates.opened) {
-                                        campaignUpdates.opened = campaignUpdates.opened + 1;
-                                    } else {
-                                        campaignUpdates.opened = 1;
-                                        deferredUpdates[event.campaignId] = campaignUpdates;
+                            });
+                        } else {
+                            emailMessageManager.markMessageDelivered(event.emailmessageId, event, function(err, value){
+                                if(value) {
+                                    savedEvents.push(value);
+                                    obj.sender = value.get('sender');
+                                    obj.activityType = $$.m.ContactActivity.types.EMAIL_DELIVERED;
+                                    if(value.get('subject')){
+                                        obj.extraFields = obj.extraFields || [];
+                                        obj.extraFields.push({subject: value.get('subject')});
                                     }
-                                    campaignManager._handleSpecificCampaignEvent(event.accountId, event.campaignId, event.contactId, 'EMAIL_OPENED', function(err, value){
-                                        if(err) {
-                                            self.log.error('Error handling email open event:' + err);
-                                            return;
+                                    contactActivitiesJSON.push(obj);
+                                    if(event.campaignId) {
+                                        var campaignUpdates = deferredUpdates[event.campaignId] || {};
+                                        if(campaignUpdates.sent) {
+                                            campaignUpdates.sent = campaignUpdates.sent + 1;
                                         } else {
-                                            self.log.debug('Handled email open event.');
-                                            return;
+                                            campaignUpdates.sent = 1;
+                                            deferredUpdates[event.campaignId] = campaignUpdates;
                                         }
-                                    });
+                                    }
                                     cb(err);
                                 } else {
                                     cb(err);
                                 }
-                            } else {
-                                cb(err);
-                            }
-                        });
-                    }
-                });
+                            });
+                        }
+                    });
 
-            } else if(event.event === 'click') {
-                emailMessageManager.isMessageClicked(event.emailmessageId, function(err, value){
-                    if(err) {
-                        self.log.error('Error while processing [' + event.emailmessageId + ']', err);
-                        cb();//continue if possible.
-                    } else if(value) {
-                        //this message is already marked as clicked.  Add another event but don't update stats.
-                        emailMessageManager.addEvent(event.emailmessageId, event, function(err, value){
-                            if(value) {
-                                savedEvents.push(value);
-                            }
-                            cb(err);
-                        });
-                    } else {
-                        emailMessageManager.markMessageClicked(event.emailmessageId, event, function(err, value, addOpenEvent){
-                            if(value) {
-                                savedEvents.push(value);
-                                obj.sender = value.get('sender');
-                                obj.activityType = $$.m.ContactActivity.types.EMAIL_CLICKED;
-                                if(value.get('subject')){
-                                    obj.extraFields = obj.extraFields || [];
-                                    obj.extraFields.push({subject: value.get('subject')});
+                } else if(event.event === 'open') {
+                    emailMessageManager.isMessageOpened(event.emailmessageId, function(err, value){
+                        if(err) {
+                            self.log.error('Error while processing [' + event.emailmessageId + ']', err);
+                            cb();//continue if possible.
+                        } else if(value) {
+                            //this message is already marked as opened.  Add another event but don't update stats.
+                            emailMessageManager.addEvent(event.emailmessageId, event, function(err, value){
+                                if(value) {
+                                    savedEvents.push(value);
                                 }
-                                contactActivitiesJSON.push(obj);
-                                if(event.campaignId) {
-                                    var campaignUpdates = deferredUpdates[event.campaignId] || {};
-                                    if(campaignUpdates.clicked) {
-                                        campaignUpdates.clicked = campaignUpdates.clicked + 1;
-                                    } else {
-                                        campaignUpdates.clicked = 1;
-                                        deferredUpdates[event.campaignId] = campaignUpdates;
+                                cb(err);
+                            });
+                        } else {
+                            emailMessageManager.markMessageOpened(event.emailmessageId, event, function(err, value){
+                                if(value) {
+                                    savedEvents.push(value);
+                                    obj.sender = value.get('sender');
+                                    obj.activityType = $$.m.ContactActivity.types.EMAIL_OPENED;
+                                    if(value.get('subject')){
+                                        obj.extraFields = obj.extraFields || [];
+                                        obj.extraFields.push({subject: value.get('subject')});
                                     }
-                                    if(addOpenEvent) {
+                                    contactActivitiesJSON.push(obj);
+                                    if(event.campaignId) {
+                                        var campaignUpdates = deferredUpdates[event.campaignId] || {};
                                         if(campaignUpdates.opened) {
                                             campaignUpdates.opened = campaignUpdates.opened + 1;
                                         } else {
                                             campaignUpdates.opened = 1;
                                             deferredUpdates[event.campaignId] = campaignUpdates;
                                         }
+                                        campaignManager._handleSpecificCampaignEvent(event.accountId, event.campaignId, event.contactId, 'EMAIL_OPENED', function(err, value){
+                                            if(err) {
+                                                self.log.error('Error handling email open event:' + err);
+                                                return;
+                                            } else {
+                                                self.log.debug('Handled email open event.');
+                                                return;
+                                            }
+                                        });
+                                        cb(err);
+                                    } else {
+                                        cb(err);
                                     }
-                                }
-                                cb(err);
-                            } else {
-                                cb(err);
-                            }
-                        });
-                    }
-                });
-
-            } else if (event.event === 'unsubscribe') {
-                emailMessageManager.handleUnsubscribe(event, function(err, value){});
-                emailMessageManager.isMessageUnsubscribed(event.emailmessageId, function(err, value){
-                    if(err) {
-                        self.log.error('Error while processing [' + event.emailmessageId + ']', err);
-                        cb();//continue if possible.
-                    } else if(value) {
-                        //this message is already marked as clicked.  Add another event but don't update stats.
-                        emailMessageManager.addEvent(event.emailmessageId, event, function(err, value){
-                            if(value) {
-                                savedEvents.push(value);
-                            }
-                            cb(err);
-                        });
-                    } else {
-                        emailMessageManager.markMessageUnsubscribed(event.emailmessageId, event, function(err, value){
-                            savedEvents.push(value);
-                            obj.sender = value.get('sender');
-                            obj.activityType = $$.m.ContactActivity.types.EMAIL_UNSUB;
-                            contactActivitiesJSON.push(obj);
-                            var accountId = event.accountId ? parseInt(event.accountId) : event.accountId
-                            contactDao.findContactsByEmail(accountId, event.email, function(err, contactAry){
-                                if(err) {
-                                    self.log.error('Error finding contact for [' + event.email + '] and [' + event.accountId + ']');
-                                    return;
-                                } else if(contactAry === null || contactAry.length ===0){
-                                    //this might be a user and contact on main account
-                                    contactDao.findContactsByEmail(appConfig.mainAccountID, event.email, function(err, contacts){
-                                        if(err || contacts === null || contacts.length===0) {
-                                            self.log.error('Error finding contact for [' + event.email + '] and [' + appConfig.mainAccountID + ']');
-                                            return;
-                                        } else {
-                                            var contact = contacts[0];
-                                            contact.set('unsubscribed', true);
-                                            contactDao.saveOrUpdateContact(contact, function(err, updatedContact){
-                                                if(err) {
-                                                    self.log.error('Error marking contact unsubscribed', err);
-                                                    return;
-                                                }
-                                            });
-                                        }
-                                    });
                                 } else {
-                                    var contact = contactAry[0];
-                                    contact.set('unsubscribed', true);
-                                    contactDao.saveOrUpdateContact(contact, function(err, updatedContact){
-                                        if(err) {
-                                            self.log.error('Error marking contact unsubscribed', err);
-                                            return;
-                                        }
-                                    });
+                                    cb(err);
                                 }
                             });
+                        }
+                    });
+
+                } else if(event.event === 'click') {
+                    emailMessageManager.isMessageClicked(event.emailmessageId, function(err, value){
+                        if(err) {
+                            self.log.error('Error while processing [' + event.emailmessageId + ']', err);
+                            cb();//continue if possible.
+                        } else if(value) {
+                            //this message is already marked as clicked.  Add another event but don't update stats.
+                            emailMessageManager.addEvent(event.emailmessageId, event, function(err, value){
+                                if(value) {
+                                    savedEvents.push(value);
+                                }
+                                cb(err);
+                            });
+                        } else {
+                            emailMessageManager.markMessageClicked(event.emailmessageId, event, function(err, value, addOpenEvent){
+                                if(value) {
+                                    savedEvents.push(value);
+                                    obj.sender = value.get('sender');
+                                    obj.activityType = $$.m.ContactActivity.types.EMAIL_CLICKED;
+                                    if(value.get('subject')){
+                                        obj.extraFields = obj.extraFields || [];
+                                        obj.extraFields.push({subject: value.get('subject')});
+                                    }
+                                    contactActivitiesJSON.push(obj);
+                                    if(event.campaignId) {
+                                        var campaignUpdates = deferredUpdates[event.campaignId] || {};
+                                        if(campaignUpdates.clicked) {
+                                            campaignUpdates.clicked = campaignUpdates.clicked + 1;
+                                        } else {
+                                            campaignUpdates.clicked = 1;
+                                            deferredUpdates[event.campaignId] = campaignUpdates;
+                                        }
+                                        if(addOpenEvent) {
+                                            if(campaignUpdates.opened) {
+                                                campaignUpdates.opened = campaignUpdates.opened + 1;
+                                            } else {
+                                                campaignUpdates.opened = 1;
+                                                deferredUpdates[event.campaignId] = campaignUpdates;
+                                            }
+                                        }
+                                    }
+                                    cb(err);
+                                } else {
+                                    cb(err);
+                                }
+                            });
+                        }
+                    });
+
+                } else if (event.event === 'unsubscribe') {
+                    emailMessageManager.handleUnsubscribe(event, function(err, value){});
+                    emailMessageManager.isMessageUnsubscribed(event.emailmessageId, function(err, value){
+                        if(err) {
+                            self.log.error('Error while processing [' + event.emailmessageId + ']', err);
+                            cb();//continue if possible.
+                        } else if(value) {
+                            //this message is already marked as clicked.  Add another event but don't update stats.
+                            emailMessageManager.addEvent(event.emailmessageId, event, function(err, value){
+                                if(value) {
+                                    savedEvents.push(value);
+                                }
+                                cb(err);
+                            });
+                        } else {
+                            emailMessageManager.markMessageUnsubscribed(event.emailmessageId, event, function(err, value){
+                                savedEvents.push(value);
+                                obj.sender = value.get('sender');
+                                obj.activityType = $$.m.ContactActivity.types.EMAIL_UNSUB;
+                                contactActivitiesJSON.push(obj);
+                                var accountId = event.accountId ? parseInt(event.accountId) : event.accountId
+                                contactDao.findContactsByEmail(accountId, event.email, function(err, contactAry){
+                                    if(err) {
+                                        self.log.error('Error finding contact for [' + event.email + '] and [' + event.accountId + ']');
+                                        return;
+                                    } else if(contactAry === null || contactAry.length ===0){
+                                        //this might be a user and contact on main account
+                                        contactDao.findContactsByEmail(appConfig.mainAccountID, event.email, function(err, contacts){
+                                            if(err || contacts === null || contacts.length===0) {
+                                                self.log.error('Error finding contact for [' + event.email + '] and [' + appConfig.mainAccountID + ']');
+                                                return;
+                                            } else {
+                                                var contact = contacts[0];
+                                                contact.set('unsubscribed', true);
+                                                contactDao.saveOrUpdateContact(contact, function(err, updatedContact){
+                                                    if(err) {
+                                                        self.log.error('Error marking contact unsubscribed', err);
+                                                        return;
+                                                    }
+                                                });
+                                            }
+                                        });
+                                    } else {
+                                        var contact = contactAry[0];
+                                        contact.set('unsubscribed', true);
+                                        contactDao.saveOrUpdateContact(contact, function(err, updatedContact){
+                                            if(err) {
+                                                self.log.error('Error marking contact unsubscribed', err);
+                                                return;
+                                            }
+                                        });
+                                    }
+                                });
+                                if(event.campaignId) {
+                                    var campaignUpdates = deferredUpdates[event.campaignId] || {};
+                                    if(campaignUpdates.unsubscribes) {
+                                        campaignUpdates.unsubscribes = campaignUpdates.unsubscribes + 1;
+                                    } else {
+                                        campaignUpdates.unsubscribes = 1;
+                                        deferredUpdates[event.campaignId] = campaignUpdates;
+                                    }
+                                }
+                                cb();
+                            });
+                        }
+                    })
+
+
+                } else if (event.event === 'bounce'){
+                    contactDao.setBouncedTag(event.accountId, null, event.contactId, function(err, value){});
+                    emailMessageManager.markMessageBounced(event.emailmessageId, event, function(err, value){
+                        if(value) {
+                            savedEvents.push(value);
+                            obj.sender = value.get('sender');
+                            obj.activityType = $$.m.ContactActivity.types.EMAIL_BOUNCED;
+                            contactActivitiesJSON.push(obj);
                             if(event.campaignId) {
                                 var campaignUpdates = deferredUpdates[event.campaignId] || {};
-                                if(campaignUpdates.unsubscribes) {
-                                    campaignUpdates.unsubscribes = campaignUpdates.unsubscribes + 1;
+                                if(campaignUpdates.bounced) {
+                                    campaignUpdates.bounced = campaignUpdates.bounced + 1;
                                 } else {
-                                    campaignUpdates.unsubscribes = 1;
+                                    campaignUpdates.bounced = 1;
                                     deferredUpdates[event.campaignId] = campaignUpdates;
                                 }
                             }
-                            cb();
-                        });
-                    }
-                })
-                
-
-            } else if (event.event === 'bounce'){
-                contactDao.setBouncedTag(event.accountId, null, event.contactId, function(err, value){});
-                emailMessageManager.markMessageBounced(event.emailmessageId, event, function(err, value){
-                    if(value) {
-                        savedEvents.push(value);
-                        obj.sender = value.get('sender');
-                        obj.activityType = $$.m.ContactActivity.types.EMAIL_BOUNCED;
-                        contactActivitiesJSON.push(obj);
-                        if(event.campaignId) {
-                            var campaignUpdates = deferredUpdates[event.campaignId] || {};
-                            if(campaignUpdates.bounced) {
-                                campaignUpdates.bounced = campaignUpdates.bounced + 1;
-                            } else {
-                                campaignUpdates.bounced = 1;
-                                deferredUpdates[event.campaignId] = campaignUpdates;
-                            }
-                        }
-                        cb(err);
-                    } else {
-                        cb(err);
-                    }
-                });
-            } else if(event.event === 'dropped'){
-                if(event.reason === 'Bounced Address') {
-                    contactDao.setBouncedTag(event.accountId, null, event.contactId, function(err, value){});
-                }
-                emailMessageManager.markMessageDropped(event.emailmessageId, event, function(err, value){
-                    if(value) {
-                        savedEvents.push(value);
-                        obj.sender = value.get('sender');
-                        obj.activityType = $$.m.ContactActivity.types.EMAIL_BOUNCED;
-                        contactActivitiesJSON.push(obj);
-                        if(event.campaignId) {
-                            var campaignUpdates = deferredUpdates[event.campaignId] || {};
-                            if(campaignUpdates.dropped) {
-                                campaignUpdates.dropped = campaignUpdates.dropped + 1;
-                            } else {
-                                campaignUpdates.dropped = 1;
-                                deferredUpdates[event.campaignId] = campaignUpdates;
-                            }
-                        }
-                        cb(err);
-                    } else {
-                        cb(err);
-                    }
-                });
-            } else {
-                emailMessageManager.addEvent(event.emailmessageId, event, function(err, value){
-                    if(value) {
-                        savedEvents.push(value);
-                    }
-                    cb(err);
-                });
-            }
-        }, function(err){
-            if(err) {
-                self.log.error('Error handling events:', err);
-            }
-            async.eachSeries(contactActivitiesJSON, function(obj, cb){
-                var activity = new $$.m.ContactActivity(obj);
-                contactActivityManager.createActivity(activity, function(err, value){
-                    cb(err);
-                });
-            }, function(err){
-                if (err) {
-                    self.log.error('Error handleSendgridEvent:', err);
-                }
-                async.eachSeries(_.keys(deferredUpdates), function(key, cb){
-                    var updates = deferredUpdates[key];
-                    campaignManager.getCampaign(key, function(err, campaign){
-                        if(err || !campaign) {
-                            self.log.error('Could not update campaign with key [' + key + ']:', err);
-                            cb();
+                            cb(err);
                         } else {
-
-                            var accountId = campaign.get('accountId');
-                            var campaignId = campaign.id();
-                            var userId = 0;
-                            campaignManager.atomicUpdateCampaignStatistics(accountId, campaignId, updates, userId, cb);
+                            cb(err);
                         }
+                    });
+                } else if(event.event === 'dropped'){
+                    if(event.reason === 'Bounced Address') {
+                        contactDao.setBouncedTag(event.accountId, null, event.contactId, function(err, value){});
+                    }
+                    emailMessageManager.markMessageDropped(event.emailmessageId, event, function(err, value){
+                        if(value) {
+                            savedEvents.push(value);
+                            obj.sender = value.get('sender');
+                            obj.activityType = $$.m.ContactActivity.types.EMAIL_BOUNCED;
+                            contactActivitiesJSON.push(obj);
+                            if(event.campaignId) {
+                                var campaignUpdates = deferredUpdates[event.campaignId] || {};
+                                if(campaignUpdates.dropped) {
+                                    campaignUpdates.dropped = campaignUpdates.dropped + 1;
+                                } else {
+                                    campaignUpdates.dropped = 1;
+                                    deferredUpdates[event.campaignId] = campaignUpdates;
+                                }
+                            }
+                            cb(err);
+                        } else {
+                            cb(err);
+                        }
+                    });
+                } else {
+                    emailMessageManager.addEvent(event.emailmessageId, event, function(err, value){
+                        if(value) {
+                            savedEvents.push(value);
+                        }
+                        cb(err);
+                    });
+                }
+            }, function(err){
+                if(err) {
+                    self.log.error('Error handling events:', err);
+                }
+                async.eachSeries(contactActivitiesJSON, function(obj, cb){
+                    var activity = new $$.m.ContactActivity(obj);
+                    contactActivityManager.createActivity(activity, function(err, value){
+                        cb(err);
                     });
                 }, function(err){
                     if (err) {
-                        self.log.error('Error updating statistics:', err);
+                        self.log.error('Error handleSendgridEvent:', err);
                     }
-                    self.log.debug('<< handleSendgridEvent');
-                });
+                    async.eachSeries(_.keys(deferredUpdates), function(key, cb){
+                        var updates = deferredUpdates[key];
+                        campaignManager.getCampaign(key, function(err, campaign){
+                            if(err || !campaign) {
+                                self.log.error('Could not update campaign with key [' + key + ']:', err);
+                                cb();
+                            } else {
 
+                                var accountId = campaign.get('accountId');
+                                var campaignId = campaign.id();
+                                var userId = 0;
+                                campaignManager.atomicUpdateCampaignStatistics(accountId, campaignId, updates, userId, cb);
+                            }
+                        });
+                    }, function(err){
+                        if (err) {
+                            self.log.error('Error updating statistics:', err);
+                        }
+                        self.log.debug('<< handleSendgridEvent');
+                    });
+
+                });
             });
-        });
+        }
+
+
     },
 
     testSendgridEvent: function(req, resp) {
