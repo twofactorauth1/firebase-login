@@ -17,7 +17,7 @@ angular.module('mainApp').directive("elem", function ($timeout) {
                         '<div ng-if="component.isOverlayActive"' +
                             'class="bg slider-overlay-bg-1" ng-style ="{\'background\': component.overlayBackground, opacity: component.overlayOpacity === 0 ?  component.overlayOpacity : component.overlayOpacity/100  || 0 , \'height\': component.isOverlayActive ? component.gridHeight+\'px\':\'\' }"> ' +
                         '</div>'+
-                        '<div  ng-class ="{ \'abs_overlay\': component.isOverlayActive  }" ng-bind-html="ngModel | unsafe"></div>'+
+                        '<div class="word-break " ng-class ="{ \'abs_overlay\': component.isOverlayActive  }" ng-bind-html="ngModel | unsafe"></div>'+
                 '</div>' +
               '</div>',
     link: function(scope, element, attrs, modelCtrl) {
