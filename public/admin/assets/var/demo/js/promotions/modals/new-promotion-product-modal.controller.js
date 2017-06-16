@@ -17,9 +17,6 @@ app.controller('PromotionProductModalController', ['$timeout', 'parentVm', 'pagi
         sortData: {
             column: '',
             details: {}
-        },
-        fieldSearch: {
-            
         }
     };
 
@@ -29,6 +26,7 @@ app.controller('PromotionProductModalController', ['$timeout', 'parentVm', 'pagi
     vm.checkIfSelected = checkIfSelected;
     vm.productSelectClickFn = productSelectClickFn;
     vm.addProductsToPromotions = addProductsToPromotions;
+    vm.filterProducts = filterProducts;
     function drawPages(){
       var start = 1;
       var end;
@@ -80,6 +78,12 @@ app.controller('PromotionProductModalController', ['$timeout', 'parentVm', 'pagi
         })
     }
 
+    function filterProducts(value){
+        loadDefaults();
+        vm.uiState.globalSearch = angular.copy(value);
+        loadProducts();
+    };
+
 
     function checkIfSelected(product){
         return _.contains(_.pluck(vm.products, "itemCode"), product.OITM_ItemCode);
@@ -104,6 +108,12 @@ app.controller('PromotionProductModalController', ['$timeout', 'parentVm', 'pagi
     function addProductsToPromotions(){
         vm.parentVm.state.promotion.products = angular.copy(vm.products);
         vm.parentVm.closeModal();
+    }
+
+    function loadDefaults() {
+        vm.uiState.curPage = 1;
+        vm.uiState.skip = 0;
+        vm.uiState.pageLoading = true;
     }
 
     (function init() {

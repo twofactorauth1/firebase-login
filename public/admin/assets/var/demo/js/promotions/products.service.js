@@ -48,20 +48,10 @@
             if(pagingParams.sortBy){
                 _qString += "&sortBy=" + pagingParams.sortBy + "&sortDir=" + pagingParams.sortDir;
             }
-            if(checkIfFieldSearch()){
-                if(pagingParams.globalSearch){
-                    _qString += "&term=" + encodeURIComponent(pagingParams.globalSearch);
-                }
-                _.each(pagingParams.fieldSearch, function (value, key) {
-                    if(value != null){
-                        _qString += '&' + key + '=' + encodeURIComponent(value);
-                    }
-                });
-                urlParts.push('search');
-            }
+            
             else if(pagingParams.globalSearch){
                 _qString += "&term=" + encodeURIComponent(pagingParams.globalSearch);
-                urlParts.push('filter');
+                urlParts.push('products/search');
             }
             return (
                 productRequest($http({
@@ -71,23 +61,6 @@
             );
 
         }
-
-        function checkIfFieldSearch(){
-            var isFieldSearch = false;
-            var fieldSearch = productService.fieldSearch;
-            if(!_.isEmpty(fieldSearch)){
-                for(var i=0; i <= Object.keys(fieldSearch).length - 1; i++){
-                    var key = Object.keys(fieldSearch)[i];
-                    var value = fieldSearch[key];
-
-                    if(value){
-                       isFieldSearch = true;
-                    }
-                }
-            }
-            return isFieldSearch;
-        }
-
 		(function init() {
             
            

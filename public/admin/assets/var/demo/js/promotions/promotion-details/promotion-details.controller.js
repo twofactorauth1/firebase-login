@@ -139,6 +139,10 @@ function promotionDetailsController($scope, $state, $attrs, $filter, $modal, $ti
             vm.state.promotion = response.data;
             vm.uiState.loading = false;            
         })
+
+        PromotionsService.getVendors().then(function(response){  
+            vm.state.vendors = response.data;          
+        })
     }
 
 }
