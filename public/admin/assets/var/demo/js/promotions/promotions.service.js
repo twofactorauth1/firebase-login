@@ -20,6 +20,7 @@
         promotionsService.deletePromotion = deletePromotion;
         promotionsService.getVendors = getVendors;
         promotionsService.updatePromotion = updatePromotion;
+        promotionsService.updatePromotionAttachment = updatePromotionAttachment;
 
         function promotionsRequest(fn) {
             promotionsService.loading.value = promotionsService.loading.value + 1;
@@ -141,6 +142,24 @@
             }
 
             return promotionsRequest($http.get([baseVendorAPIUrlv2].join('/')).success(success).error(error));
+        }
+
+        function updatePromotionAttachment(attachment, _id, fn){
+            function success(data) {                
+                console.log(data);
+            }
+
+            function error(error) {
+                console.error('PromotionService updatePromotionAttachment error: ', JSON.stringify(error));
+            }
+
+            var _formData = new FormData();
+            _formData.append('file', attachment);
+            
+            return promotionsRequest($http.post([basePromotionAPIUrlv2, 'attachment', _id].join('/'), _formData, {
+                transformRequest: angular.identity,
+                headers: {'Content-Type': undefined}
+            }).success(success).error(error));
         }
 
         (function init() {
