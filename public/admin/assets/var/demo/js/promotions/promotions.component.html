@@ -53,7 +53,7 @@
 	                <th class="" st-sort="title" style="white-space: nowrap;">Name</th>
 	                <th class="" st-sort="vendor" style="white-space: nowrap;">Vendor</th>
 	                <th class="" style="white-space: nowrap;">Promo Code</th>
-	                <th class="hidden-xs" st-sort="products" style="white-space: nowrap;">Products</th>
+	                <th class="hidden-xs" style="white-space: nowrap;">Products</th>
 	                <th class="hidden-xs" st-sort="startDate" style="white-space: nowrap;">Start Date</th>
 	                <th class="hidden-xs zip-col" st-sort="expirationDate" style="white-space: nowrap;">Expiration Date</th>
 	                <th class="" st-sort="shipments" style="white-space: nowrap;">Shipments</th>
@@ -72,7 +72,7 @@
 	                <td><strong>Name: </strong>{{promotion.title}}</td>
 	                <td><strong>Vendor: </strong><div class="name-block-container"><span class="list-name"></span><span class="text-adjust-table" tooltip="{{promotion.vendor}}">{{promotion.vendor}}</span></div></td>
 	                <td><strong>Promo Code: </strong>{{promotion.promoCode}}</td>
-	                <td class="hidden-xs"><strong>Products: </strong><div class="name-block-container"><span class="list-name"></span><span class="text-adjust-table" tooltip="{{promotion.products}}">{{promotion.products}}</span></div></td>
+	                <td class="hidden-xs"><strong>Products: </strong><div class="name-block-container"><span class="list-name"></span><span class="text-adjust-table" tooltip="{{vm.getProductsName(promotion.products)}}">{{vm.getProductsName(promotion.products)}}</span></div></td>
 	                <td class="hidden-xs"><strong>Start Date: </strong>{{vm.parseValueToDate(promotion.startDate) | date:'M/d/yyyy'}}</td>
 	                <td class="hidden-xs"><strong>Start Date: </strong>{{vm.parseValueToDate(promotion.expirationDate) | date:'M/d/yyyy'}}</td>
 	                <td><strong>Shipments: </strong>{{promotion.shipments}}</td>

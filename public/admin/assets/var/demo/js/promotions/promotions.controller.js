@@ -27,6 +27,7 @@ function promotionsComponentController($scope, $attrs, $filter, $modal, $timeout
     vm.createPromotion = createPromotion;
     vm.parseValueToDate = parseValueToDate;
     vm.viewPromotionDetails = viewPromotionDetails;
+    vm.getProductsName = getProductsName;
     $scope.$watch(function() { return PromotionsService.promotions }, function(promotions) {
         if(angular.isDefined(promotions)){
             vm.state.promotions = promotions;            
@@ -134,6 +135,10 @@ function promotionsComponentController($scope, $attrs, $filter, $modal, $timeout
             vm.closeModal();
             vm.uiState.saveLoading = false;
         })
+    }
+
+    function getProductsName(products){
+        return _.pluck(products, 'itemName').join(", ");
     }
 
     function init(element) {
