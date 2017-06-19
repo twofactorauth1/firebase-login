@@ -2,9 +2,9 @@
 
 app.controller('PromotionDetailsController', promotionDetailsController);
 
-promotionDetailsController.$inject = ['$scope', '$state', '$attrs', '$filter', '$modal', '$timeout', '$stateParams', '$location', 'toaster', 'SweetAlert', 'PromotionsService'];
+promotionDetailsController.$inject = ['$scope', '$state', '$attrs', '$filter', '$modal', '$timeout', '$stateParams', '$location', 'toaster', 'SweetAlert', 'formValidations', 'PromotionsService'];
 /* @ngInject */
-function promotionDetailsController($scope, $state, $attrs, $filter, $modal, $timeout, $stateParams, $location, toaster, SweetAlert, PromotionsService) {
+function promotionDetailsController($scope, $state, $attrs, $filter, $modal, $timeout, $stateParams, $location, toaster, SweetAlert, formValidations, PromotionsService) {
 
     var vm = this;
 
@@ -24,6 +24,7 @@ function promotionDetailsController($scope, $state, $attrs, $filter, $modal, $ti
     vm.openModal = openModal;
     vm.closeModal = closeModal;
     vm.removeProduct = removeProduct;
+    vm.checkIfValidEmail = checkIfValidEmail;
     function backToPromotions(){
         $state.go("app.promotions");
     }
@@ -132,6 +133,18 @@ function promotionDetailsController($scope, $state, $attrs, $filter, $modal, $ti
     function removeProduct(product, index){
         vm.state.promotion.products.splice(index, 1);
     }
+
+
+    function checkIfValidEmail(email) {
+            if(email){
+                var regex = formValidations.email;
+                var regexValue = regex.test(email.text);
+
+                if(!regexValue){
+                    return false;
+                }
+            }
+        }
 
     function init(){
         

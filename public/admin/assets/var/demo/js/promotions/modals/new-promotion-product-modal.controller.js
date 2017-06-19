@@ -17,7 +17,8 @@ app.controller('PromotionProductModalController', ['$timeout', 'parentVm', 'pagi
         sortData: {
             column: '',
             details: {}
-        }
+        },
+        filter: vm.parentVm.state.promotion.vendor
     };
 
     vm.selectPage = selectPage;
