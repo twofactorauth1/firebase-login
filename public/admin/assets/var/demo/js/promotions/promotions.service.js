@@ -108,7 +108,15 @@
         function updatePromotion(promotion) {
 
             function success(data) {
-                
+                var index = _.findIndex(promotionsService.promotions, {
+                    _id: data._id
+                });
+
+                if (index > -1) {
+                    promotionsService.promotions[index] = data;
+                } else {
+                    promotionsService.promotions.splice(0, 0, data);
+                }
             }
 
             function error(error) {
