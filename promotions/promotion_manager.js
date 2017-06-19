@@ -129,6 +129,20 @@ module.exports = {
                 fn(null, value);
             }
         });
+    },
+
+    updatePromotion: function(accountId, userId, promotion, promotionId, fn) {
+        var self = this;
+        log.debug(accountId, userId, '>> updatePromotion');
+        promotionDao.saveOrUpdate(promotion, function(err, value){
+            if(err) {
+                self.log.error('Error updating promotion: ' + err);
+                return fn(err, null);
+            } else {
+                log.debug(accountId, userId, '<< updatePromotion');
+                fn(null, value);
+            }
+        });
     }
     
 };

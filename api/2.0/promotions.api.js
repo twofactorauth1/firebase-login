@@ -30,6 +30,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.post(this.url(''), this.isAuthAndSubscribedApi.bind(this), this.createPromotion.bind(this));
         app.get(this.url(':id'), this.isAuthAndSubscribedApi.bind(this), this.getPromotionDetails.bind(this));
         app.delete(this.url(':id'), this.isAuthAndSubscribedApi.bind(this), this.deletePromotion.bind(this));
+        app.post(this.url(':id'), this.isAuthAndSubscribedApi.bind(this), this.updatePromotion.bind(this));
     },
 
     listPromotions: function(req, resp) {
@@ -133,6 +134,57 @@ _.extend(api.prototype, baseApi.prototype, {
                         self.send200(resp);
                         self.createUserActivity(req, 'DELETE_PROMOTION', null, null, function(){});
                     }
+                });
+        //     }
+        // });
+    },
+
+
+    updatePromotion: function(req, resp) {
+        var self = this;
+        self.log.debug('>> updatePromotion');
+        var promotionId = req.params.id;
+        var accountId = parseInt(self.accountId(req));
+        var userId = self.userId(req);
+        // self.checkPermission(req, self.sc.privs.MODIFY_PROMOTION, function(err, isAllowed) {
+        //     if (isAllowed !== true) {
+        //         return self.send403(resp);
+        //     } else {
+                var promoObj = req.body;
+                var promotion = new $$.m.Promotion(promoObj);
+                var modified = {
+                    date: new Date(),
+                    by: userId
+                };
+                promotion.set('modified', modified);
+
+                if(promoObj.startDate){
+                    console.log("startDate");
+                    promotion.set("startDate", moment(promoObj.startDate).toDate());
+                }
+                else{
+                    promotion.set("startDate", null);
+                }
+                if(promoObj.expirationDate){
+                    console.log("expirationDate")
+                    promotion.set("expirationDate", moment(promoObj.expirationDate).toDate());
+                }
+                else{
+                    promotion.set("expirationDate", null);
+                }
+
+                if(promoObj.report && promoObj.report.startDate){
+                    console.log("report.startDate")
+                    promotion.attributes.report.startDate = moment(promoObj.report.startDate).toDate();
+                }
+                else{
+                    promotion.attributes.report.startDate = moment(promoObj.report.startDate).toDate();
+                }
+
+                promotionManager.updatePromotion(accountId, userId, promotion, promotionId, function(err, value){
+                    self.log.debug(accountId, userId, '<< updatePromotion');
+                    self.sendResultOrError(resp, err, value, "Error updating promotion");
+                    self.createUserActivity(req, 'UPDATE_PROMOTION', null, null, function(){});
                 });
         //     }
         // });
