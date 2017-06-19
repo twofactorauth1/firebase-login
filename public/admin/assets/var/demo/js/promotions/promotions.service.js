@@ -19,6 +19,7 @@
         promotionsService.viewPromotionDetails = viewPromotionDetails;
         promotionsService.deletePromotion = deletePromotion;
         promotionsService.getVendors = getVendors;
+        promotionsService.updatePromotion = updatePromotion;
 
         function promotionsRequest(fn) {
             promotionsService.loading.value = promotionsService.loading.value + 1;
@@ -102,6 +103,20 @@
                     method: "DELETE"
                 }).success(success).error(error)
             )
+        }
+
+        function updatePromotion(promotion) {
+
+            function success(data) {
+                
+            }
+
+            function error(error) {
+                console.error('promotionsService updatePromotion error: ', JSON.stringify(error));
+            }
+
+            return promotionsRequest($http.post([basePromotionAPIUrlv2, promotion._id].join('/'), promotion).success(success).error(error));
+            
         }
 
         /**

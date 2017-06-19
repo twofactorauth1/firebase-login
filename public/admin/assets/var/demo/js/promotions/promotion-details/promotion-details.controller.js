@@ -25,6 +25,7 @@ function promotionDetailsController($scope, $state, $attrs, $filter, $modal, $ti
     vm.closeModal = closeModal;
     vm.removeProduct = removeProduct;
     vm.checkIfValidEmail = checkIfValidEmail;
+    vm.updatePromotion = updatePromotion;
     function backToPromotions(){
         $state.go("app.promotions");
     }
@@ -136,15 +137,23 @@ function promotionDetailsController($scope, $state, $attrs, $filter, $modal, $ti
 
 
     function checkIfValidEmail(email) {
-            if(email){
-                var regex = formValidations.email;
-                var regexValue = regex.test(email.text);
+        if(email){
+            var regex = formValidations.email;
+            var regexValue = regex.test(email.text);
 
-                if(!regexValue){
-                    return false;
-                }
+            if(!regexValue){
+                return false;
             }
         }
+    }
+
+
+    function updatePromotion(){
+        PromotionsService.updatePromotion(vm.state.promotion).then(function (data) {
+            toaster.pop('success', "Promotion updated.", "Promotion was updated successfully.");
+            
+        });
+    }
 
     function init(){
         
