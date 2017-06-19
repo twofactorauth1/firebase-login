@@ -46,13 +46,13 @@
                     <span class="form-control">
                         {{product.itemName}}
                     </span>
-                    <button type="button" class="btn btn-primary btn-o margin-left-5" ng-click="vm.removeProduct(product, $index)">
-                        <i class="fa fa-trash-o"></i> Delete
+                    <button type="button" class="btn btn-primary btn-o margin-left-5 btn-wide" ng-click="vm.removeProduct(product, $index)">
+                        <i class="fa fa-trash-o"></i><span> Delete</span>
                     </button>
                 </div>
                 <div>
                     <button type="button" class="btn btn-primary btn-o pull-left btn btn-primary btn-o margin-top-5 margin-bottom-5 btn-wide" ng-click="vm.openModal('new-promotion-product-modal', 'PromotionProductModalController', 'lg')">
-                        <i class="ti-plus"></i> Add Product
+                        <i class="ti-plus"></i><span> Add Product</span>
                     </button>
                 </div>
                 <div class="clearfix"></div>    
