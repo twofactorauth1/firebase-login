@@ -100,6 +100,8 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
                           } $scope.$broadcast('updatetestimonialHeight.component', {})
                         }
                       }
+               } else if( section.components[0].type === 'testimonials' && section.components[0].version == 2 && section.components[0].customWidth){
+                   $scope.$broadcast('updatetestimonialHeight.component', {})
                }
 
             }
