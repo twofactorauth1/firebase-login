@@ -155,6 +155,25 @@ function promotionDetailsController($scope, $state, $attrs, $filter, $modal, $ti
         });
     }
 
+
+    $scope.$watch("vm.state.promotion.vendor", function(newValue, oldValue) {
+        if(angular.isDefined(newValue) && angular.isDefined(oldValue) && newValue != oldValue){
+            clearProductList()
+        }
+    }, true);
+
+
+    $scope.$watch("vm.state.promotion.type", function(newValue, oldValue) {
+        if(angular.isDefined(newValue) && angular.isDefined(oldValue) && newValue != oldValue){
+            clearProductList()
+        }
+    }, true);
+
+    
+    function clearProductList(){
+        vm.state.promotion.products = [];
+    }
+
     function init(){
         
         PromotionsService.viewPromotionDetails(vm.promotionId).then(function(response){  
