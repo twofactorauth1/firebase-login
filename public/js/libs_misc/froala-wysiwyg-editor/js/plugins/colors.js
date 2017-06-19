@@ -1015,6 +1015,10 @@
         this.events.disableBlur();
         this.selection.restore();
         this.colors.text(val, true);
+        var selection= $(this.selection.element());
+        if(!selection.hasClass('add_color')){
+            selection.addClass('add_color')
+        }
     }
   });
 

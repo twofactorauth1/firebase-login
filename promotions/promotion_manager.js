@@ -34,7 +34,6 @@ module.exports = {
         if(file.path) {
             // to do-  need to change bucket
             var bucket = awsConfig.BUCKETS.PROMOTIONS;
-            var bucket = awsConfig.BUCKETS.PURCHASE_ORDERS;
             var subdir = 'account_' + promotion.get('accountId');
             if(appConfig.nonProduction === true) {
                 subdir = 'test_' + subdir;
@@ -129,6 +128,95 @@ module.exports = {
                 fn(null, value);
             }
         });
+    },
+
+    updatePromotion: function(accountId, userId, promotion, promotionId, fn) {
+        var self = this;
+        log.debug(accountId, userId, '>> updatePromotion');
+        promotionDao.saveOrUpdate(promotion, function(err, value){
+            if(err) {
+                self.log.error('Error updating promotion: ' + err);
+                return fn(err, null);
+            } else {
+                log.debug(accountId, userId, '<< updatePromotion');
+                fn(null, value);
+            }
+        });
+    },
+
+    updatePromotionAttachment: function(file, promotionId, accountId, userId, fn) {
+        var self = this;
+        self.log = log;
+        self.log.debug('>> updatePromotionAttachment');
+
+        var uploadPromise = $.Deferred();
+
+        var attachment = {
+            name: file.name,
+            size: file.size,
+            mimeType: file.mimeType
+        };
+
+        if(file.path) {
+            // to do-  need to change bucket
+            var bucket = awsConfig.BUCKETS.PROMOTIONS;
+            var subdir = 'account_' + accountId;
+            if(appConfig.nonProduction === true) {
+                subdir = 'test_' + subdir;
+            }
+            
+            s3dao.uploadToS3(bucket, subdir, file, true, function(err, value){
+                if(err) {
+                    self.log.error('Error from S3: ' + err);
+                    uploadPromise.reject();
+                    fn(err, null);
+                } else {
+                    self.log.debug('S3 upload complete');
+                    console.dir(value);
+            
+                    if(value && value.url) {
+                        value.url = value.url.replace("s3.amazonaws.com", "s3-us-west-1.amazonaws.com");
+                    }
+
+                    if (value.url.substring(0, 5) == 'http:') {
+                      attachment.url = value.url.substring(5, value.url.length);
+                    } else {
+                      attachment.url = value.url;
+                    }
+                   
+                    uploadPromise.resolve(value);
+                }
+            });
+
+        } else {
+            uploadPromise.resolve();
+        }
+        //update attachment
+        $.when(uploadPromise).done(function(file){
+            console.log(promotionId);
+            promotionDao.getById(promotionId, $$.m.Promotion, function(err, promotion){
+                if(err) {
+                    log.error('Exception getting promotion: ' + err);
+                    fn(err, null);
+                } else {
+                    promotion.set("attachment", attachment);
+                    console.log(promotion);
+                    promotionDao.saveOrUpdate(promotion, function(err, savedPromotion){
+                        if(err) {
+                            self.log.error('Exception during promotion creation: ' + err);
+                            fn(err, null);
+                        } else {
+                            self.log.debug('<< updatePromotionAttachment');
+                            fn(null, savedPromotion, file);
+                        }
+                    });
+                }
+            });
+            
+            
+        });
+
     }
+
     
 };

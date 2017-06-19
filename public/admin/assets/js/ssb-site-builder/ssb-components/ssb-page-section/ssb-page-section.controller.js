@@ -100,6 +100,8 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
                           } $scope.$broadcast('updatetestimonialHeight.component', {})
                         }
                       }
+               } else if( section.components[0].type === 'testimonials' && section.components[0].version == 2 && section.components[0].customWidth){
+                   $scope.$broadcast('updatetestimonialHeight.component', {})
                }
 
             }
@@ -246,7 +248,8 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
             }
         }else{
             angular.forEach(section.components, function(cmp,index) {
-             section.components[index].isOverlayActive=false;
+                section.components[index].isOverlayActive=false;
+                section.components[index].isGrid=false;
             });
         }
         setUpFroalaVideoSize(section);
