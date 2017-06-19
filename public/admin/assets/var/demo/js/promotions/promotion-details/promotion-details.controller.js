@@ -12,7 +12,7 @@ function promotionDetailsController($scope, $state, $attrs, $filter, $modal, $ti
 
     vm.uiState = {
         loading: true,
-        editPromotion: false
+        editPromotion: true
     };
 
     vm.state = {};
