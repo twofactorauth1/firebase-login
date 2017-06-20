@@ -616,7 +616,7 @@ var ziManager = {
                 fn(err);
             } else {
                 var companyName = '';
-                if(resp && resp.results) {
+                if(resp && resp.results && resp.results.length) {
                     companyName = resp.results[0].OCRD_CardName;
                 }
                 if(companyName === '') {

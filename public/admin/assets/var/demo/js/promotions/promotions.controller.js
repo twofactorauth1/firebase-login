@@ -28,6 +28,8 @@ function promotionsComponentController($scope, $attrs, $filter, $modal, $timeout
     vm.parseValueToDate = parseValueToDate;
     vm.viewPromotionDetails = viewPromotionDetails;
     vm.getProductsName = getProductsName;
+    vm.addNewPromotion = addNewPromotion;
+
     $scope.$watch(function() { return PromotionsService.promotions }, function(promotions) {
         if(angular.isDefined(promotions)){
             vm.state.promotions = promotions;            
@@ -38,6 +40,10 @@ function promotionsComponentController($scope, $attrs, $filter, $modal, $timeout
 
     function viewPromotionDetails(promotion){
         $location.path('/promotions/' + promotion._id);
+    }
+
+    function addNewPromotion(){
+        $location.path('/promotions/new');
     }
 
     function showFilteredRecords(){

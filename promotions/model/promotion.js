@@ -23,6 +23,8 @@ var promotion = $$.m.ModelBase.extend({
             promoImage: null,
             promoCode: null,
             products: null,
+            report: null,
+            type: null,
             created: {
                 date: new Date(),
                 by: null

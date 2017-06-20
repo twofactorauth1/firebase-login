@@ -23,6 +23,9 @@ function dashboardInboxComponentController($scope, $attrs, $filter, $modal, $tim
         if(messages){
             vm.inboxMessages = $filter('orderBy')(messages, '-modified.date');
             vm.setSelectedMessage(0);
+           $timeout(function() {
+               $(".slick-swipe").slick({ adaptiveHeight: true, slidesToShow:1, dots:false, arrows:true, autoplay:false, touchMove:true, draggable:true });
+           }, 500);
         }
     }, true);
 
