@@ -47,7 +47,7 @@ _.extend(router.prototype, BaseRouter.prototype, {
     handleBasicAuth: function(req, resp, next) {
         var self = this;
         var accountId = self.accountId(req);
-        console.log('accountId:', accountId);
+        
         if(accountId === appConfig.mainAccountID) {
             basicAuthFn(req, resp, next);
         } else {
