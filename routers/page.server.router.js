@@ -35,13 +35,24 @@ _.extend(router.prototype, BaseRouter.prototype, {
     base: "home",
 
     initialize: function() {
-        app.get('/simple-interim-page', [basicAuthFn, this.setupForPages.bind(this)], this.optimizedIndex.bind(this));
-        app.get('/investors', [basicAuthFn, this.setupForPages.bind(this)], this.optimizedIndex.bind(this));
+        app.get('/simple-interim-page', [this.setupForPages.bind(this), this.handleBasicAuth.bind(this)], this.optimizedIndex.bind(this));
+        app.get('/investors', [this.setupForPages.bind(this), this.handleBasicAuth.bind(this)], this.optimizedIndex.bind(this));
 
         app.get("/:page", [sitemigration_middleware.checkForRedirect, this.setupForPages.bind(this)], this.optimizedIndex.bind(this));
         app.get('/preview/:pageId', this.isAuth.bind(this), this.previewIndex.bind(this));
         app.get('/preview/:pageId/:postId', this.isAuth.bind(this), this.previewIndex.bind(this));
         return this;
+    },
+
+    handleBasicAuth: function(req, resp, next) {
+        var self = this;
+        var accountId = self.accountId(req);
+        console.log('accountId:', accountId);
+        if(accountId === appConfig.mainAccountID) {
+            basicAuthFn(req, resp, next);
+        } else {
+            next();
+        }
     },
 
 
