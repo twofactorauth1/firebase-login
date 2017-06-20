@@ -51,8 +51,10 @@
             
             else if(pagingParams.globalSearch){
                 _qString += "&term=" + encodeURIComponent(pagingParams.globalSearch);
-                urlParts.push('products/search');
+                
             }
+             _qString += '&vendor=' + encodeURIComponent(pagingParams.filter);
+            urlParts.push('products/search');
             return (
                 productRequest($http({
                   url: urlParts.join('/') + _qString,

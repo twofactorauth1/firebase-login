@@ -32,6 +32,7 @@ function purchaseOrderComponentController($scope, $attrs, $filter, $modal, $time
     vm.pagingConstant = pagingConstant;
     vm.showFilteredRecords = showFilteredRecords;    
     vm.selectCardCode = selectCardCode;
+    vm.getSubmitterName = getSubmitterName;
 
     vm.bulkActionChoice = {};
 
@@ -128,7 +129,7 @@ function purchaseOrderComponentController($scope, $attrs, $filter, $modal, $time
             return value.created.date;
         },
         submitter: function (value) {
-            return value.submitter ? value.submitter.first || '' + value.submitter.last || '' : '';
+            return getSubmitterName(value.submitter);
         }
     };
 
@@ -250,6 +251,19 @@ function purchaseOrderComponentController($scope, $attrs, $filter, $modal, $time
         vm.state.newPurchaseOrder.companyName = customer.OCRD_CardName;
     }
 
+    function getSubmitterName(user){
+        var _userName = "";
+        if(!user){
+            return _userName;
+        }
+        if(user.first || user.last){
+            _userName = user.first + " " + user.last;
+        }
+        else{
+            _userName = user.username;
+        }
+        return _userName.trim();
+    }
 
     function init(element) {
         vm.element = element;

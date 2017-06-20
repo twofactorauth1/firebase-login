@@ -30,6 +30,8 @@ _.extend(api.prototype, baseApi.prototype, {
         app.post(this.url(''), this.isAuthAndSubscribedApi.bind(this), this.createPromotion.bind(this));
         app.get(this.url(':id'), this.isAuthAndSubscribedApi.bind(this), this.getPromotionDetails.bind(this));
         app.delete(this.url(':id'), this.isAuthAndSubscribedApi.bind(this), this.deletePromotion.bind(this));
+        app.post(this.url(':id'), this.isAuthAndSubscribedApi.bind(this), this.updatePromotion.bind(this));
+        app.post(this.url('attachment/:id'), this.isAuthApi.bind(this), this.updatePromotionAttachment.bind(this));
     },
 
     listPromotions: function(req, resp) {
@@ -136,6 +138,89 @@ _.extend(api.prototype, baseApi.prototype, {
                 });
         //     }
         // });
+    },
+
+
+    updatePromotion: function(req, resp) {
+        var self = this;
+        self.log.debug('>> updatePromotion');
+        var promotionId = req.params.id;
+        var accountId = parseInt(self.accountId(req));
+        var userId = self.userId(req);
+        // self.checkPermission(req, self.sc.privs.MODIFY_PROMOTION, function(err, isAllowed) {
+        //     if (isAllowed !== true) {
+        //         return self.send403(resp);
+        //     } else {
+                var promoObj = req.body;
+                var promotion = new $$.m.Promotion(promoObj);
+                var modified = {
+                    date: new Date(),
+                    by: userId
+                };
+                promotion.set('modified', modified);
+
+                if(promoObj.startDate){
+                    console.log("startDate");
+                    promotion.set("startDate", moment(promoObj.startDate).toDate());
+                }
+                else{
+                    promotion.set("startDate", null);
+                }
+                if(promoObj.expirationDate){
+                    console.log("expirationDate")
+                    promotion.set("expirationDate", moment(promoObj.expirationDate).toDate());
+                }
+                else{
+                    promotion.set("expirationDate", null);
+                }
+
+                if(promoObj.report && promoObj.report.startDate){
+                    console.log("report.startDate")
+                    promotion.attributes.report.startDate = moment(promoObj.report.startDate).toDate();
+                }
+                else{
+                    promotion.attributes.report.startDate = moment(promoObj.report.startDate).toDate();
+                }
+
+                promotionManager.updatePromotion(accountId, userId, promotion, promotionId, function(err, value){
+                    self.log.debug(accountId, userId, '<< updatePromotion');
+                    self.sendResultOrError(resp, err, value, "Error updating promotion");
+                    self.createUserActivity(req, 'UPDATE_PROMOTION', null, null, function(){});
+                });
+        //     }
+        // });
+    },
+
+
+    updatePromotionAttachment: function(req, res) {
+        var self = this;
+        self.log.debug('>> updatePromotionAttachment');
+        var form = new formidable.IncomingForm();
+        var accountId = parseInt(self.accountId(req));
+        var userId = self.userId(req);
+        var promotionId = req.params.id;
+        form.parse(req, function(err, fields, files) {
+            if(err) {
+                self.wrapError(res, 500, 'fail', 'The upload failed', err);
+                self = null;
+                return;
+            } else {
+
+                var file = files['file'];
+                console.log(file);
+
+                var fileToUpload = {};
+                fileToUpload.mimeType = file.type;
+                fileToUpload.size = file.size;
+                fileToUpload.name = file.name;
+                fileToUpload.path = file.path;
+                fileToUpload.type = file.type;
+                promotionManager.updatePromotionAttachment(fileToUpload, promotionId, accountId, userId, function(err, value, file){                                                       
+                    self.log.debug('>> updatePromotionAttachment');
+                    self.sendResultOrError(res, err, value, 'Could not update promotion attachment');                    
+                });
+            }
+        });
     },
 
 });

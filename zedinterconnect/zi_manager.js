@@ -280,18 +280,22 @@ var ziManager = {
     },
 
 
-    productSearch: function(accountId, userId, term, skip, limit, sortBy, sortDir, fn) {
+    productSearch: function(accountId, userId, term, skip, limit, sortBy, sortDir, filter, fn) {
         var self = this;
         self.log.debug(accountId, userId, '>> productSearch');
         var regex = new RegExp('\.*'+term+'\.*', 'i');
-        var query = {};
-        var orQuery = [                    
-                    {OITM_ItemName:regex},                    
-                    {OMRC_FirmName:regex}
-                ];
-        query = {
-            $or: orQuery
+        var query = {
+            _vendorName: filter
         };
+
+        var orQuery = [                    
+                    {OITM_ItemName:regex}
+                ];
+        
+        if(term){
+            query["$or"] = orQuery;
+        }
+
         self.log.debug('query:', query);
 
         var fields = null;
@@ -612,7 +616,7 @@ var ziManager = {
                 fn(err);
             } else {
                 var companyName = '';
-                if(resp && resp.results) {
+                if(resp && resp.results && resp.results.length) {
                     companyName = resp.results[0].OCRD_CardName;
                 }
                 if(companyName === '') {

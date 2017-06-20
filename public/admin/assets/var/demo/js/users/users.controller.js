@@ -2,7 +2,7 @@
 /*global app, moment, angular, window*/
 /*jslint unparam:true*/
 (function (angular) {
-    app.controller('usersCtrl', ['$scope', '$state', '$http', "toaster", "$filter", "$modal", "$timeout", "AccountService","UserService", "userConstant", "formValidations", "SweetAlert", "pagingConstant", function ($scope, $state, $http, toaster, $filter, $modal, $timeout, AccountService,UserService, userConstant, formValidations, SweetAlert, pagingConstant) {
+    app.controller('usersCtrl', ['$scope', '$state', '$http', "toaster", "$filter", "$modal", "$timeout", "AccountService","UserService", "userConstant", "formValidations", "SweetAlert", "pagingConstant", "UtilService", function ($scope, $state, $http, toaster, $filter, $modal, $timeout, AccountService,UserService, userConstant, formValidations, SweetAlert, pagingConstant, UtilService) {
 
         var vm = this;
 
@@ -16,6 +16,8 @@
         vm.uiState = {
             loading: true
         };
+
+        vm.showFilteredRecords = showFilteredRecords;
 
         vm.openSimpleModal = openSimpleModal;
         //vm.addNewUser = addNewUser;
@@ -317,6 +319,10 @@
                 return value.lastLoginDate || "";
             }
         };
+
+        function showFilteredRecords(){
+            return UtilService.showFilteredRecords(vm.uiState.globalSearch, vm.uiState.fieldSearch);
+        }
 
         (function init() {
 

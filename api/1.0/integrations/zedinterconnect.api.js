@@ -603,10 +603,12 @@ _.extend(api.prototype, baseApi.prototype, {
         var sortBy = req.query.sortBy || null;
         var sortDir = parseInt(req.query.sortDir) || null;
         var term = req.query.term;
+        var filter = req.query.vendor;
+        
         /*
          * Search across all (or a subset) of fields for the same value if "term" is a query param.  Otherwise, use filter
          */
-        manager.productSearch(accountId, userId, term, skip, limit, sortBy, sortDir, function(err, value){
+        manager.productSearch(accountId, userId, term, skip, limit, sortBy, sortDir, filter, function(err, value){
             self.log.debug(accountId, userId, '<< productSearch');
             return self.sendResultOrError(resp, err, value, "Error searching products");
         });

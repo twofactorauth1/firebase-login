@@ -72,3 +72,6 @@ span.fontWeight_700, span.fontWeight_700 a.btn{
 .fr-link-attr.fr-error{
   color: #a94442 !important;
 }
+.add_color a.btn{
+    color: inherit !important;
+}
