@@ -35,8 +35,8 @@ _.extend(router.prototype, BaseRouter.prototype, {
     base: "home",
 
     initialize: function() {
-        app.get('/simple-interim-page', [this.setupForPages.bind(this), this.handleBasicAuth.bind(this)], this.optimizedIndex.bind(this));
-        app.get('/investors', [this.setupForPages.bind(this), this.handleBasicAuth.bind(this)], this.optimizedIndex.bind(this));
+        app.get('/simple-interim-page', [this.setupForPages.bind(this), this._handleBasicAuth.bind(this)], this.optimizedIndex.bind(this));
+        app.get('/investors', [this.setupForPages.bind(this), this._handleBasicAuth.bind(this)], this.optimizedIndex.bind(this));
 
         app.get("/:page", [sitemigration_middleware.checkForRedirect, this.setupForPages.bind(this)], this.optimizedIndex.bind(this));
         app.get('/preview/:pageId', this.isAuth.bind(this), this.previewIndex.bind(this));
@@ -44,14 +44,21 @@ _.extend(router.prototype, BaseRouter.prototype, {
         return this;
     },
 
-    handleBasicAuth: function(req, resp, next) {
+    _handleBasicAuth: function(req, resp, next) {
         var self = this;
-        var accountId = self.accountId(req);
-        
-        if(accountId === appConfig.mainAccountID) {
-            basicAuthFn(req, resp, next);
+        self.log.debug('>> handleBasicAuth');
+
+
+
+        if(req.session.unAuthAccountId === appConfig.mainAccountID) {
+            self.log.debug('<< handleBasicAuth (basicAuth)');
+            return basicAuthFn(req, resp, next);
         } else {
-            next();
+            self.log.debug('<< handleBasicAuth (next)');
+            if(!req.params.page) {
+                req.params.page = req.path.replace('/', '');
+            }
+            return next();
         }
     },
 
@@ -69,6 +76,8 @@ _.extend(router.prototype, BaseRouter.prototype, {
         }
         self.log.debug('<< index ... req.session.accountId:' + req.session.accountId);
     },
+
+
 
     optimizedIndex: function(req,resp) {
         var self = this;
