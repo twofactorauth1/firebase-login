@@ -310,7 +310,7 @@ _.extend(view.prototype, BaseView.prototype, {
     renderCachedPage: function (accountId, handle) {
         var data = {},
             self = this;
-        self.log.debug('>> renderCachedPage');
+        self.log.debug('>> renderCachedPage', handle);
 
         async.waterfall([
             function getWebpageData(cb) {
