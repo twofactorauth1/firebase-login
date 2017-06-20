@@ -163,7 +163,12 @@
                 console.error('promotionsService updatePromotion error: ', JSON.stringify(error));
             }
 
-            return promotionsRequest($http.post([basePromotionAPIUrlv2, promotion._id].join('/'), promotion).success(success).error(error));
+            var apiUrl = basePromotionAPIUrlv2;
+            if(promotion._id){
+                apiUrl = [basePromotionAPIUrlv2, promotion._id].join('/');
+            }
+
+            return promotionsRequest($http.post(apiUrl, promotion).success(success).error(error));
             
         }
 

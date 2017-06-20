@@ -130,15 +130,15 @@ module.exports = {
         });
     },
 
-    updatePromotion: function(accountId, userId, promotion, promotionId, fn) {
+    saveOrUpdatePromotion: function(accountId, userId, promotion, promotionId, fn) {
         var self = this;
-        log.debug(accountId, userId, '>> updatePromotion');
+        log.debug(accountId, userId, '>> saveOrUpdatePromotion');
         promotionDao.saveOrUpdate(promotion, function(err, value){
             if(err) {
-                self.log.error('Error updating promotion: ' + err);
+                self.log.error('Error saving promotion: ' + err);
                 return fn(err, null);
             } else {
-                log.debug(accountId, userId, '<< updatePromotion');
+                log.debug(accountId, userId, '<< saveOrUpdatePromotion');
                 fn(null, value);
             }
         });
