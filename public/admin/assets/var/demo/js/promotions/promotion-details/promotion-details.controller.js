@@ -12,7 +12,8 @@ function promotionDetailsController($scope, $window, $state, $attrs, $filter, $m
 
     vm.uiState = {
         loading: true,
-        editPromotion: true
+        editPromotion: true,
+        saveLoading: false
     };
     vm.attachment = {
     };
@@ -156,6 +157,7 @@ function promotionDetailsController($scope, $window, $state, $attrs, $filter, $m
 
 
     function updatePromotion(){
+        vm.uiState.saveLoading = true;
         PromotionsService.updatePromotion(vm.state.promotion).then(function (response) {
             var promotionId = response.data._id;
             vm.state.promotion = response.data;
@@ -173,6 +175,7 @@ function promotionDetailsController($scope, $window, $state, $attrs, $filter, $m
 
     function setDefaults(){
         vm.initAttachment();
+        vm.uiState.saveLoading = false;
         toaster.pop('success', "Promotion saved.", "Promotion was saved successfully.");
         if(vm.promotionId == 'new'){
             $state.go('app.promotions');
