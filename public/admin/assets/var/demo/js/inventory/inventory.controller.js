@@ -60,13 +60,13 @@ function inventoryComponentController($scope, $attrs, $filter, $modal, $timeout,
     vm.bulkActionChoice = {};
 
     vm.bulkActionChoices = [
-        {
-            data: 'watch',
-            label: 'Watch'
-        },{
-            data: 'unwatch',
-            label: 'Unwatch'
-        }];
+    {
+        data: 'watch',
+        label: 'Watch'
+    },{
+        data: 'unwatch',
+        label: 'Unwatch'
+    }];
 
     $scope.$watch(function() { return InventoryService.inventory }, function(inventory) {
         if(angular.isDefined(inventory)){
@@ -301,11 +301,48 @@ function inventoryComponentController($scope, $attrs, $filter, $modal, $timeout,
             }
             vm.uiState.inVentoryWatchList.push(product["@id"]);
         }
+        showWatchOptions();
     };
 
 
     function checkIfSelected(product, list){
         return _.contains(list, product["@id"]);
+    }
+
+    function showWatchOptions(){
+        var diff =_.difference(vm.uiState.inVentoryWatchList, vm.state.userOrgConfig.watchList);        
+        var intersection =_.intersection(vm.uiState.inVentoryWatchList, vm.state.userOrgConfig.watchList);
+        if(diff.length === 0){
+            console.log("Watch not shown");
+            vm.bulkActionChoices = [
+                {
+                    data: 'unwatch',
+                    label: 'Unwatch'
+                }
+            ];
+        }
+        
+        else if(intersection.length === 0){
+            console.log("UnWatch not shown");
+            vm.bulkActionChoices = [
+                {
+                    data: 'watch',
+                    label: 'Watch'
+                }
+            ];
+        }
+        else{
+            vm.bulkActionChoices = [
+                {
+                    data: 'watch',
+                    label: 'Watch'
+                },{
+                    data: 'unwatch',
+                    label: 'Unwatch'
+                }
+            ];
+        }
+        
     }
 
     function setBulkActionChoiceFn(lable){

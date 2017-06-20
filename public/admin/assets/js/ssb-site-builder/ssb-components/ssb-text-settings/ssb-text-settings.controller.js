@@ -48,7 +48,10 @@ function ssbTextSettingsController($rootScope, $scope, $attrs, $filter, $timeout
         'visibility': true,
         'spacing': {}
     };
-
+    vm.showHide=showHide;
+    function showHide(){
+         return vm.elementData.visibility!==false;
+    }
     function applyStyles() {
         pvm = {};
 
@@ -298,7 +301,7 @@ function ssbTextSettingsController($rootScope, $scope, $attrs, $filter, $timeout
 
     }
 
-    function elementStyle() {
+    function elementStyle(isEdit) {
         if (vm.elementData && vm.elementData.type) {
             var styleString = ' ';
             var component = vm.elementData;
@@ -352,7 +355,7 @@ function ssbTextSettingsController($rootScope, $scope, $attrs, $filter, $timeout
                 styleString += 'color: ' + component.txtcolor + ';';
             }
 
-            if (component.visibility === false) {
+            if (!isEdit && component.visibility === false) {
                 styleString += 'display: none!important;';
             }
 

@@ -62,11 +62,10 @@
                 <h4>Type</h4>
 
                 <div class="description">
-                    <select class="form-control" name="type" ng-model="vm.state.promotion.type">
+                    
+                    <select id="topic_category" ng-model="vm.state.promotion.type" class="form-control margin-bottom-0">
                         <option></option>
-                        <option value="TRY_AND_BUY">Try and Buy</option>
-                        <option value="MILESTONE" disabled>Milestone </option>
-                        <option value="EVENT" disabled>Event</option>
+                        <option ng-repeat="promoOption in vm.promoTypeOptions.options" value="{{promoOption.value}}" ng-disabled="promoOption.disabled" ng-selected="{{promoOption.value == vm.state.promotion.type}}">{{promoOption.label}}</option>
                     </select>
                 </div>
                 <hr>
@@ -93,15 +92,14 @@
 
                 <div class="form-group">                   
                     <div class="checkbox clip-check check-primary" style="z-index:2;">
-                        <input type="checkbox" id="rpt_weekly" ng-model="vm.state.promotion.report.schedule" ng-true-value="'weekly'">
+                        <input type="checkbox" id="rpt_weekly" ng-model="vm.state.promotion.report.schedule" ng-true-value="'WEEKLY'">
                         <label for="rpt_weekly" class="text-inline">
-                            Weekly
+                            {{vm.reportSheduleOptions['WEEKLY']}}
                         </label>
 
-                        
-                        <input type="checkbox" id="rpt_monthly" ng-true-value="'monthly'" ng-model="vm.state.promotion.report.schedule">
+                        <input type="checkbox" id="rpt_monthly" ng-true-value="'MONTHLY'" ng-model="vm.state.promotion.report.schedule">
                         <label for="rpt_monthly" class="text-inline">
-                            Monthly
+                            {{vm.reportSheduleOptions['MONTHLY']}}
                         </label>
                     
                     </div>
@@ -119,7 +117,9 @@
                         add-on-paste="true"
                         placeholder="Add an email"
                         add-on-comma="true"
-                        on-tag-adding="vm.checkIfValidEmail($tag)">
+                        on-tag-adding="vm.checkIfValidEmail($tag)"
+                        use-strings="true"
+                        >
                     </tags-input>
                     
                 </div> 

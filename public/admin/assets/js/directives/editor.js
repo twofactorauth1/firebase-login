@@ -17,16 +17,17 @@ app.directive("elem", function($rootScope, $timeout, $compile, SimpleSiteBuilder
                         'data-edit ' +
                         'class="edit-wrap ssb-edit-wrap ssb-element"> ' +
                         '<span class="editable-title">{{component}}</span>' +
-                        '<div ' +
+                        '<div'  +
                             'ng-class="{{vm.elementClass()}}" ' +
-                            'ng-attr-style="{{vm.elementStyle()}}" ' +
+                            'ng-attr-style="{{vm.elementStyle(true)}}" ' +
                             'class="ssb-text-settings {{className}}" ' +
                             'is-edit="true" >' +
                                 '<div ng-if="component.isOverlayActive"' +
                                 'class="bg slider-overlay-bg" ng-style ="{\'background\': component.overlayBackground, opacity: component.overlayOpacity === 0 ?  component.overlayOpacity : component.overlayOpacity/100  || 0 , \'height\': component.isOverlayActive ? component.gridHeight+\'px\':\'\' }"> ' +
                                 '</div>'+
-                                '<div class="editable element-wrap" ng-bind-html="ngModel | unsafe"></div>'+
-                        '</div>' +
+                                '<div ng-show="vm.showHide()" class="editable element-wrap" ng-bind-html="ngModel | unsafe"></div>'+
+                                '<div ng-if="!vm.showHide()" class="text-center">HIDDEN</div>'+
+                        '</div>'
                     '</div>';
 
         var blogTemplate =
@@ -77,6 +78,9 @@ app.directive("elem", function($rootScope, $timeout, $compile, SimpleSiteBuilder
     link: function(scope, element, attrs, ngModel) {
       
         scope.component= scope.$parent.component;
+        scope.isVisible=function (){
+             return ( scope.component.visibility !== false)
+        }
         scope.update = function(e) {
             $timeout(function() {
                 scope.$apply(function() {

@@ -22,6 +22,45 @@
         promotionsService.updatePromotion = updatePromotion;
         promotionsService.updatePromotionAttachment = updatePromotionAttachment;
 
+
+        promotionsService.promoTypeOptions = {
+            TRY_AND_BUY: "Try and Buy",
+            MILESTONE: "Milestone",
+            EVENT: "Event",
+            options: [
+                {
+                    label: "Try and Buy",
+                    value: "TRY_AND_BUY",
+                    disabled: false
+                },
+                {
+                    label: "Milestone",
+                    value: "MILESTONE",
+                    disabled: true
+                },
+                {
+                    label: "Event",
+                    value: "EVENT",
+                    disabled: true
+                }
+            ]    
+        }
+
+        promotionsService.reportSheduleOptions = {
+            WEEKLY: 'Weekly',
+            MONTHLY: 'Monthly',
+            options: [
+                {
+                    label: "Weekly",
+                    value: "WEEKLY"
+                },
+                {
+                    label: "Monthly",
+                    value: "MONTHLY"
+                }
+            ]
+        }
+
         function promotionsRequest(fn) {
             promotionsService.loading.value = promotionsService.loading.value + 1;
             console.info('service | loading +1 : ' + promotionsService.loading.value);
@@ -124,7 +163,12 @@
                 console.error('promotionsService updatePromotion error: ', JSON.stringify(error));
             }
 
-            return promotionsRequest($http.post([basePromotionAPIUrlv2, promotion._id].join('/'), promotion).success(success).error(error));
+            var apiUrl = basePromotionAPIUrlv2;
+            if(promotion._id){
+                apiUrl = [basePromotionAPIUrlv2, promotion._id].join('/');
+            }
+
+            return promotionsRequest($http.post(apiUrl, promotion).success(success).error(error));
             
         }
 
