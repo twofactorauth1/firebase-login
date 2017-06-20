@@ -2,9 +2,9 @@
 
 app.controller('PromotionDetailsController', promotionDetailsController);
 
-promotionDetailsController.$inject = ['$scope', '$state', '$attrs', '$filter', '$modal', '$timeout', '$stateParams', '$location', 'toaster', 'SweetAlert', 'formValidations', 'PromotionsService'];
+promotionDetailsController.$inject = ['$scope', '$window', '$state', '$attrs', '$filter', '$modal', '$timeout', '$stateParams', '$location', 'toaster', 'SweetAlert', 'formValidations', 'PromotionsService'];
 /* @ngInject */
-function promotionDetailsController($scope, $state, $attrs, $filter, $modal, $timeout, $stateParams, $location, toaster, SweetAlert, formValidations, PromotionsService) {
+function promotionDetailsController($scope, $window, $state, $attrs, $filter, $modal, $timeout, $stateParams, $location, toaster, SweetAlert, formValidations, PromotionsService) {
 
     var vm = this;
 
@@ -14,7 +14,8 @@ function promotionDetailsController($scope, $state, $attrs, $filter, $modal, $ti
         loading: true,
         editPromotion: true
     };
-
+    vm.attachment = {
+    };
     vm.state = {};
     vm.promotionId = $stateParams.promotionId;
     vm.backToPromotions = backToPromotions;
@@ -26,9 +27,15 @@ function promotionDetailsController($scope, $state, $attrs, $filter, $modal, $ti
     vm.removeProduct = removeProduct;
     vm.checkIfValidEmail = checkIfValidEmail;
     vm.updatePromotion = updatePromotion;
+    vm.initAttachment = initAttachment;
+    vm.viewPromotionPdf = viewPromotionPdf;
+    
     function backToPromotions(){
         $state.go("app.promotions");
     }
+
+    vm.promoTypeOptions = PromotionsService.promoTypeOptions;
+    vm.reportSheduleOptions = PromotionsService.reportSheduleOptions;
 
     function editPromotion(){
         vm.uiState.editPromotion = !vm.uiState.editPromotion;
@@ -149,11 +156,21 @@ function promotionDetailsController($scope, $state, $attrs, $filter, $modal, $ti
 
 
     function updatePromotion(){
-        PromotionsService.updatePromotion(vm.state.promotion).then(function (data) {
-            toaster.pop('success', "Promotion updated.", "Promotion was updated successfully.");
-            
+        PromotionsService.updatePromotion(vm.state.promotion).then(function (response) {
+            var promotionId = response.data._id;
+            if(vm.attachment && vm.attachment.name){
+                PromotionsService.updatePromotionAttachment(vm.attachment, promotionId).then(function (promotion){
+                    vm.state.promotion = promotion.data;
+                    vm.initAttachment();
+                    toaster.pop('success', "Promotion updated.", "Promotion was updated successfully.");
+                });
+            }
+            else{
+                toaster.pop('success', "Promotion updated.", "Promotion was updated successfully.");
+            }         
         });
     }
+
 
 
     $scope.$watch("vm.state.promotion.vendor", function(newValue, oldValue) {
@@ -169,9 +186,19 @@ function promotionDetailsController($scope, $state, $attrs, $filter, $modal, $ti
         }
     }, true);
 
-    
+
     function clearProductList(){
         vm.state.promotion.products = [];
+    }
+
+    function initAttachment(){
+      
+        vm.attachment = {};
+        document.getElementById("upload_file").value = "";
+    }
+
+    function viewPromotionPdf(){
+        $window.open(vm.state.promotion.attachment.url, '_blank');
     }
 
     function init(){

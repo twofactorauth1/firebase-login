@@ -46,13 +46,13 @@
                     <span class="form-control">
                         {{product.itemName}}
                     </span>
-                    <button type="button" class="btn btn-primary btn-o margin-left-5" ng-click="vm.removeProduct(product, $index)">
-                        <i class="fa fa-trash-o"></i> Delete
+                    <button type="button" class="btn btn-primary btn-o margin-left-5 btn-wide" ng-click="vm.removeProduct(product, $index)">
+                        <i class="fa fa-trash-o"></i><span> Delete</span>
                     </button>
                 </div>
                 <div>
                     <button type="button" class="btn btn-primary btn-o pull-left btn btn-primary btn-o margin-top-5 margin-bottom-5 btn-wide" ng-click="vm.openModal('new-promotion-product-modal', 'PromotionProductModalController', 'lg')">
-                        <i class="ti-plus"></i> Add Product
+                        <i class="ti-plus"></i><span> Add Product</span>
                     </button>
                 </div>
                 <div class="clearfix"></div>    
@@ -62,45 +62,44 @@
                 <h4>Type</h4>
 
                 <div class="description">
-                    <select class="form-control" name="type" ng-model="vm.state.promotion.type">
+                    
+                    <select id="topic_category" ng-model="vm.state.promotion.type" class="form-control margin-bottom-0">
                         <option></option>
-                        <option value="TRY_AND_BUY">Try and Buy</option>
-                        <option value="MILESTONE" disabled>Milestone </option>
-                        <option value="EVENT" disabled>Event</option>
+                        <option ng-repeat="promoOption in vm.promoTypeOptions" value="{{promoOption.value}}" ng-disabled="promoOption.disabled" ng-selected="{{promoOption.value == vm.state.promotion.type}}">{{promoOption.label}}</option>
                     </select>
                 </div>
                 <hr>
             </div>
-            <div class="form-group">
+            <div class="form-group col-xs-12 col-sm-6 padding-0">
                 <h4>Start Date</h4>
 
                 <div class="description">
                     <indi-datepicker ng-model="vm.state.promotion.startDate" popup="MM/dd/yyyy"></indi-datepicker>
                 </div>
-                <hr>
+                <hr class="visible-xs" />
             </div>
-            <div class="form-group">
+            <div class="form-group col-xs-12 col-sm-6 padding-0">
                 <h4>Expiration Date</h4>
                 <div class="description">
                     <indi-datepicker ng-model="vm.state.promotion.expirationDate" popup="MM/dd/yyyy"></indi-datepicker>
                 </div>
-                <hr>
+                <hr class="visible-xs" />
             </div>
-
+            <div class="clearfix hidden-xs"></div>    
+            <hr class="hidden-xs">
             <div>
                 <h3>Report Notifications</h3>
 
                 <div class="form-group">                   
                     <div class="checkbox clip-check check-primary" style="z-index:2;">
-                        <input type="checkbox" id="rpt_weekly" ng-model="vm.state.promotion.report.schedule" ng-true-value="'weekly'">
+                        <input type="checkbox" id="rpt_weekly" ng-model="vm.state.promotion.report.schedule" ng-true-value="'WEEKLY'">
                         <label for="rpt_weekly" class="text-inline">
-                            Weekly
+                            {{vm.reportSheduleOptions['WEEKLY']}}
                         </label>
 
-                        
-                        <input type="checkbox" id="rpt_monthly" ng-true-value="'monthly'" ng-model="vm.state.promotion.report.schedule">
+                        <input type="checkbox" id="rpt_monthly" ng-true-value="'MONTHLY'" ng-model="vm.state.promotion.report.schedule">
                         <label for="rpt_monthly" class="text-inline">
-                            Monthly
+                            {{vm.reportSheduleOptions['MONTHLY']}}
                         </label>
                     
                     </div>
@@ -118,12 +117,36 @@
                         add-on-paste="true"
                         placeholder="Add an email"
                         add-on-comma="true"
-                        on-tag-adding="vm.checkIfValidEmail($tag)">
+                        on-tag-adding="vm.checkIfValidEmail($tag)"
+                        use-strings="true"
+                        >
                     </tags-input>
                     
                 </div> 
             </div>
 
+            <div class="form-group">
+                   
+                <h4>Attachment</h4>
+                <span class="required hidden">*</span>
+                
+                <label for="upload_file" class="btn btn-primary">
+                    <span ng-if="!vm.state.promotion.attachment.name">Upload File</span>
+                    <span ng-if="vm.state.promotion.attachment.name">Replace File</span>
+                    <input type="file"
+                           id="upload_file"
+                           class="hidden"
+                           file-model='vm.attachment'
+                           accept=".pdf">
+                </label>
+                <span class="file-name">{{vm.attachment.name}}</span>
+                <span class="margin-left-10" ng-if="vm.attachment.name" ng-click="vm.initAttachment()"><i class="fa fa-trash-o"></i> </span>
+            </div>
+
+            <div class="form-group" ng-if="vm.state.promotion.attachment.name">
+                <button type="button" class="btn btn-success margin-top-5 margin-bottom-5 btn-wide" ng-click="vm.viewPromotionPdf()">View PDF
+                </button>
+            </div>
         </div>
     </div>
 </div>
