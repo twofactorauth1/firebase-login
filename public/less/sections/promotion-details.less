@@ -43,6 +43,11 @@ promotion-details-component{
 					span:after{
 						content: "\00a0";
 					}
+					.ui-select-bootstrap.dropdown .ui-select-match{
+						outline: none !important;
+						background: none !important;
+						box-shadow: none !important;
+					}
 				}
 			}
 			.promotion-details-left-panel{
@@ -87,7 +92,11 @@ promotion-details-component{
 		}
 		.promotion-details-right-panel{
 			.form-control, tags-input{
-				width: 60% !important;					
+				width: 60% !important;	
+				outline: none !important;
+				.host{
+					outline: none !important;
+				}				
 			}
 			span.form-control{
 				display: inline-block;
