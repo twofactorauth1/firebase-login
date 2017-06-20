@@ -29,10 +29,13 @@ function promotionDetailsController($scope, $window, $state, $attrs, $filter, $m
     vm.updatePromotion = updatePromotion;
     vm.initAttachment = initAttachment;
     vm.viewPromotionPdf = viewPromotionPdf;
-
+    
     function backToPromotions(){
         $state.go("app.promotions");
     }
+
+    vm.promoTypeOptions = PromotionsService.promoTypeOptions;
+    vm.reportSheduleOptions = PromotionsService.reportSheduleOptions;
 
     function editPromotion(){
         vm.uiState.editPromotion = !vm.uiState.editPromotion;
