@@ -25,7 +25,9 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
     // APPLICATION ROUTES
     // -----------------------------------
     // For any unmatched url, redirect to /app/dashboard
-    $urlRouterProvider.otherwise("/dashboard");
+    $urlRouterProvider.otherwise(function($injector, $location){
+        $location.url("/")
+    });
     //
     //lower casing all urls
     $urlRouterProvider.rule(function ($injector, $location) {
@@ -285,7 +287,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         templateUrl: "/admin/assets/var/demo/js/promotions/promotion-details/promotion-details.html",
         title: 'Promotion Details',
         icon: 'ti-layout-media-left-alt',
-        resolve: loadSequence('PromotionDetailsComponent', 'PromotionDetailsController', 'PromotionsService', 'PromotionProductModalController', 'SecurematicsProductService')
+        resolve: loadSequence('PromotionDetailsComponent', 'PromotionDetailsController', 'PromotionsService', 'PromotionProductModalController', 'SecurematicsProductService', 'pdfobject')
     }).state('app.rmas', {
         url: '/rmas',
         templateUrl: "/admin/assets/var/demo/views/under-construction.html",

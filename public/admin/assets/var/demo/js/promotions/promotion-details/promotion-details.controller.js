@@ -210,6 +210,17 @@ function promotionDetailsController($scope, $window, $state, $attrs, $filter, $m
         $window.open(vm.state.promotion.attachment.url, '_blank');
     }
 
+    $scope.$watch("vm.state.promotion.attachment", function(attachment){
+        if(attachment && attachment.url &&  attachment.mimeType == 'application/pdf'){
+            $timeout(function() {
+                var myPDF = new PDFObject({ 
+                    url: attachment.url 
+                }).embed('pdf-container');
+            }, 500);
+            
+        }
+    }, true)
+
     function init(){
         
         if(vm.promotionId == 'new'){

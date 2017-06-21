@@ -14,8 +14,10 @@
       userPermissions: {
         ledgerState: "app.customers",
         dashbordLedgerUrl: '#/customers',
-        vendorRestrictedStates : []
-      }
+        vendorRestrictedStates : []        
+      },
+      userRestrictedStates: [],
+      defaultState: "app.dohy"
     };
 
     this.getOrgConfigAndPermissions = function (account, user) {
@@ -82,6 +84,11 @@
           } else {
               this.orgConfigAndPermissions.promotions = false;
           }
+          if(m.dashboard !== undefined) {
+              this.orgConfigAndPermissions.dashboard = m.dashboard;
+          } else {
+              this.orgConfigAndPermissions.dashboard = true;
+          }
       } else {
           this.orgConfigAndPermissions.inventory = true;
           this.orgConfigAndPermissions.purchaseorders = true;
@@ -89,8 +96,46 @@
           this.orgConfigAndPermissions.quotes = false;
           this.orgConfigAndPermissions.rmas = false;
           this.orgConfigAndPermissions.promotions = false;
+          this.orgConfigAndPermissions.dashboard = true;
       }
-
+      if(!this.orgConfigAndPermissions.dashboard){
+        this.orgConfigAndPermissions.userRestrictedStates.push("app.dohy");
+        var values = Object.keys(orgConfig.modules)
+        var itemArray =  _.filter(Object.keys(orgConfig.modules), function(item){
+           return orgConfig.modules[item] == true; 
+        });
+        if(itemArray.length){
+          var _statename = "";
+            switch (itemArray[0]) {
+              case 'inventory':
+                  _statename = "app.inventory";
+                  break;
+              case 'purchaseorders':
+                  _statename = "app.purchaseorders";
+                  break;
+              case 'ledger':
+                  _statename = "app.customers";
+                  break;
+              case 'quotes':
+                  _statename = "app.viewquotes";
+                  break;
+              case 'rmas':
+                  _statename = "app.rmas";
+                  break;
+              case 'promotions':
+                  _statename = "app.promotions";
+                  break;
+              case 'dashboard':
+                  _statename = "app.dohy";
+                  break;                    
+              default:
+            }
+            this.orgConfigAndPermissions.defaultState = _statename;
+        }
+        else{
+          this.orgConfigAndPermissions.logoutUrl = "/logout";
+        }
+      }
       return this.orgConfigAndPermissions;
     };
 
