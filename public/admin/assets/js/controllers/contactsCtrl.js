@@ -560,7 +560,7 @@
             }
 
             if ($scope.bulkActionChoice.action && $scope.bulkActionChoice.action.data == 'export') {
-                ContactService.exportCsvContacts(_.pluck($scope.selectedContactsFn(), '_id'));
+                ContactService.exportCsvContacts(_.pluck($scope.selectedContactsFn(), '_id'),null);
                 $scope.bulkActionChoice = null;
                 $scope.bulkActionChoice = {};
                 $scope.clearSelectionFn();
@@ -665,10 +665,10 @@
         };
 
         $scope.exportContactsFn = function () {
-            if (_.pluck($scope.selectedContactsFn().length)) {
-                ContactService.exportCsvContacts(_.pluck($scope.selectedContactsFn(), '_id'));
+            if ($scope.selectedContactsFn().length>0) {
+                ContactService.exportCsvContacts(_.pluck($scope.selectedContactsFn(), '_id'),null);
             } else {
-                ContactService.exportCsvContacts(null);
+                ContactService.exportCsvContacts(null,$scope.pagingParams);
             }
             $scope.clearSelectionFn();
             toaster.pop('success', 'Contact export started.');

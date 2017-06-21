@@ -551,13 +551,29 @@
             }
         };
 
-        this.exportCsvContacts = function (ids) {
+        this.exportCsvContacts = function (ids, pagingParams) {
             var apiUrl = baseUrl + ['contact', 'export', 'csv'].join('/');
             if (ids) {
                 var params = _.map(ids, function (x) {
                     return ('ids=' + x);
                 });
-                var apiUrl = apiUrl + '?' + params.join('&');
+                apiUrl = apiUrl + '?' + params.join('&');
+            }else{
+                var _qString = "skip=0" ;
+                if (pagingParams.sortBy) {
+                    _qString += "&sortBy=" + pagingParams.sortBy + "&sortDir=" + pagingParams.sortDir;
+                }
+                if (pagingParams.globalSearch) {
+                    _qString += "&term=" + encodeURIComponent(pagingParams.globalSearch);
+                }
+                if (pagingParams.fieldSearch) {
+                    _.each(pagingParams.fieldSearch, function (value, key) {
+                        if(value != null){
+                            _qString += '&' + key + '=' + encodeURIComponent(value);
+                        }
+                    });
+                }
+                apiUrl = apiUrl + '?'  +_qString;
             }
             window.location = apiUrl;
         };
