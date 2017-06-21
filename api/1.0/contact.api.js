@@ -327,13 +327,16 @@ _.extend(api.prototype, baseApi.prototype, {
             var skip = 0;
             var sortBy = req.query.sortBy || null;
             var sortDir = parseInt(req.query.sortDir) || null;
+            var term = req.query.term;
             var fieldSearch = req.query;
             delete fieldSearch.term;
             delete fieldSearch.skip;
             delete fieldSearch.limit;
             delete fieldSearch.sortBy;
             delete fieldSearch.sortDir;
-            var term = req.query.term;
+
+            self.log.debug('>> term');
+             self.log.debug(term);
             /*
              * Search across the fields
              */
@@ -392,6 +395,8 @@ _.extend(api.prototype, baseApi.prototype, {
                             query["$and"] = fieldSearchArr;
                         }
                     }
+                    self.log.debug("-------------------------");
+                    self.log.debug(query);
                     contactDao.findMany(query, $$.m.Contact, function(err, contacts){
                             if(sortDir && sortBy){
                                 contacts.sort(function(a,b) {
