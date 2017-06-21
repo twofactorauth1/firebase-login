@@ -258,7 +258,7 @@ _.extend(api.prototype, baseApi.prototype, {
                     return self.send403(resp);
                 } else {
                     contactDao.findMany(query, $$.m.Contact, function(err, contacts){
-                        var headers = ['first', 'middle', 'last', 'email', 'created', 'type', 'tags', 'phone', 'website', 'company', 'address', 'notes'];
+                        var headers = ['first', 'middle', 'last', 'email', 'created', 'type', 'tags', 'phone', 'unsubscribed', 'website', 'company', 'address', 'notes'];
                         var extras = _.pluck(_.pluck(contacts, 'attributes'), 'extra');
                         var extraHeaders = [];
 
@@ -279,26 +279,37 @@ _.extend(api.prototype, baseApi.prototype, {
                                 return x;
                               }
                             });
-                            csv += contact.get('first') + ',';
-                            csv += contact.get('middle') + ',';
-                            csv += contact.get('last') + ',';
-                            csv += contact.getPrimaryEmail() + ',';
-                            csv += contact.get('created').date + ',';
-                            csv += contact.get('type') + ',';
-                            csv += tags.join(' | ') + ',';
-                            csv += contact.getPrimaryPhone() + ',';
-                            csv += contact.get('details').length && contact.get('details')[0].websites && contact.get('details')[0].websites[0] && contact.get('details')[0].websites[0].website ? contact.get('details')[0].websites[0].website + ',' : ',';
-                            csv += contact.get('details').length && contact.get('details')[0].company ? contact.get('details')[0].company + ',' : ',';
-                            csv += contact.getPrimaryAddress() + ',';
-                            csv += contact.getNotes() + ',';
+                            var parseString=function (text){
+                                if(text==undefined)
+                                    return ',';
+                                // "" added for number value
+                                text=""+text;
+                                if(text.indexOf(',')>-1)
+                                    return "\""+text+"\",";
+                                else
+                                    return text+",";
+                            }
+                            csv += parseString(contact.get('first'));
+                            csv += parseString(contact.get('middle'));
+                            csv += parseString(contact.get('last'));
+                            csv += parseString(contact.getPrimaryEmail());
+                            csv += parseString(contact.get('created').date);
+                            csv += parseString(contact.get('type'));
+                            csv += parseString(tags.join(' | '));
+                            csv += parseString(contact.getPrimaryPhone());
+                            csv += parseString(contact.get('unsubscribed'));
+                            csv += parseString(contact.get('details').length && contact.get('details')[0].websites && contact.get('details')[0].websites[0] && contact.get('details')[0].websites[0].website ? contact.get('details')[0].websites[0].website  : '');
+                            csv += parseString(contact.get('details').length && contact.get('details')[0].company ? contact.get('details')[0].company : '');
+                            csv +=parseString( contact.getPrimaryAddress() );
+                            csv += parseString(contact.getNotes() );
                             
                             _.each(extraHeaders, function (header) {
                                 var extraField = _.findWhere(contact.get('extra'), {label: header});
 
                                 if (extraField) {
-                                  csv += extraField.value + ',';
+                                  csv += parseString(extraField.value);
                                 } else {
-                                  csv += ',';
+                                  csv += parseString('');
                                 }
                             });
 
