@@ -12,7 +12,8 @@ function promotionDetailsController($scope, $window, $state, $attrs, $filter, $m
 
     vm.uiState = {
         loading: true,
-        editPromotion: true
+        editPromotion: true,
+        saveLoading: false
     };
     vm.attachment = {
     };
@@ -156,22 +157,30 @@ function promotionDetailsController($scope, $window, $state, $attrs, $filter, $m
 
 
     function updatePromotion(){
+        vm.uiState.saveLoading = true;
         PromotionsService.updatePromotion(vm.state.promotion).then(function (response) {
             var promotionId = response.data._id;
+            vm.state.promotion = response.data;
             if(vm.attachment && vm.attachment.name){
                 PromotionsService.updatePromotionAttachment(vm.attachment, promotionId).then(function (promotion){
                     vm.state.promotion = promotion.data;
-                    vm.initAttachment();
-                    toaster.pop('success', "Promotion updated.", "Promotion was updated successfully.");
+                    setDefaults();                 
                 });
             }
             else{
-                toaster.pop('success', "Promotion updated.", "Promotion was updated successfully.");
+                setDefaults();
             }         
         });
     }
 
-
+    function setDefaults(){
+        vm.initAttachment();
+        vm.uiState.saveLoading = false;
+        toaster.pop('success', "Promotion saved.", "Promotion was saved successfully.");
+        if(vm.promotionId == 'new'){
+            $state.go('app.promotions');
+        } 
+    }
 
     $scope.$watch("vm.state.promotion.vendor", function(newValue, oldValue) {
         if(angular.isDefined(newValue) && angular.isDefined(oldValue) && newValue != oldValue){
@@ -203,11 +212,18 @@ function promotionDetailsController($scope, $window, $state, $attrs, $filter, $m
 
     function init(){
         
-        PromotionsService.viewPromotionDetails(vm.promotionId).then(function(response){  
-            vm.state.promotion = response.data;
-            vm.uiState.loading = false;            
-        })
-
+        if(vm.promotionId == 'new'){
+            vm.state.promotion = {
+                _id: null
+            };
+            vm.uiState.loading = false; 
+        }
+        else{
+            PromotionsService.viewPromotionDetails(vm.promotionId).then(function(response){  
+                vm.state.promotion = response.data;
+                vm.uiState.loading = false;            
+            })
+        }
         PromotionsService.getVendors().then(function(response){  
             vm.state.vendors = response.data;          
         })

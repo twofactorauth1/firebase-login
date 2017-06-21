@@ -233,7 +233,7 @@ module.exports = {
         }};
         stageAry.push(match);
 
-        var sort = {$sort:{userId:1, date:-1}};
+        var sort = {$sort:{userId:1, start:1}};
         stageAry.push(sort);
 
         var group = {$group:{

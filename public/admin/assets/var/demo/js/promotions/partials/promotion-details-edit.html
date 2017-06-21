@@ -65,7 +65,7 @@
                     
                     <select id="topic_category" ng-model="vm.state.promotion.type" class="form-control margin-bottom-0">
                         <option></option>
-                        <option ng-repeat="promoOption in vm.promoTypeOptions" value="{{promoOption.value}}" ng-disabled="promoOption.disabled" ng-selected="{{promoOption.value == vm.state.promotion.type}}">{{promoOption.label}}</option>
+                        <option ng-repeat="promoOption in vm.promoTypeOptions.options" value="{{promoOption.value}}" ng-disabled="promoOption.disabled" ng-selected="{{promoOption.value == vm.state.promotion.type}}">{{promoOption.label}}</option>
                     </select>
                 </div>
                 <hr>

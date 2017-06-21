@@ -5,8 +5,29 @@
                 <i class="ti-comment-alt"></i>
                 <!-- span class="message-count">2</span -->
             </tab-heading>
-
-            <div class="col-sm-5 message-container message-container-left" perfect-scrollbar wheel-propagation="false" suppress-scroll-x="true" >
+            <div class="col-sm-12 message-container-right broad-cast-small" style="min-height: 0; margin-top: 0 !important;">
+                <ul class="message-container-top">
+                    <div class="slick-swipe">
+                        <li ng-repeat="message in vm.inboxMessages">
+                            <div class="message-user">
+                                <img src="{{message.user.profilePhotos[0]}}" class="thumbnail img-circle">
+                            </div>
+                            <div>
+                                <div class="margin-bottom-5">
+                                    <h3 class="message-title margin-top-5 margin-bottom-5">{{message.user.first}} {{message.user.last}}</h3>
+                                    <span class="message-date">{{message.modified.date | date:'dd MMM yyyy'}}</span>
+                                    <h4 class="message-title">{{message.subject}}</h4>
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
+                            <div class="col-xs-12 margin-top-20">
+                                <p class="message-title" ng-bind-html="message.message | unsafe"></p>
+                            </div>
+                        </li>
+                    </div>
+                </ul>
+            </div>
+            <div class="col-sm-5 message-container message-container-left broad-cast-msg" perfect-scrollbar wheel-propagation="false" suppress-scroll-x="true" >
                 <ul class="message-container-top">
                     <li ng-class="{'active-message': vm.selectedMessageIndex === $index}" ng-repeat="message in vm.inboxMessages" ng-click="vm.setSelectedMessage($index)">
                         <div>
@@ -20,7 +41,7 @@
                     </li>
                 </ul>
             </div>
-            <div class="col-sm-7 message-container message-container-right active-message" perfect-scrollbar wheel-propagation="false" suppress-scroll-x="true">
+            <div class="col-sm-7 message-container message-container-right broad-cast-msg active-message" perfect-scrollbar wheel-propagation="false" suppress-scroll-x="true">
                 <ul class="message-container-top">
                     <li>
                         <div class="message-user">

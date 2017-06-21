@@ -45,64 +45,64 @@ _.extend(api.prototype, baseApi.prototype, {
         });
     },
 
-    createPromotion: function(req, res) {
-        var self = this;
-        self.log.debug('>> createPromotion');
-        var form = new formidable.IncomingForm();
-        var accountId = parseInt(self.accountId(req));
+    // createPromotion: function(req, res) {
+    //     var self = this;
+    //     self.log.debug('>> createPromotion');
+    //     var form = new formidable.IncomingForm();
+    //     var accountId = parseInt(self.accountId(req));
         
-        // self.checkPermission(req, self.sc.privs.MODIFY_PROMOTION, function(err, isAllowed){
-            // if(isAllowed !== true) {
-            //     return self.send403(res);
-            // } else {
-                var userId = self.userId(req);
+    //     // self.checkPermission(req, self.sc.privs.MODIFY_PROMOTION, function(err, isAllowed){
+    //         // if(isAllowed !== true) {
+    //         //     return self.send403(res);
+    //         // } else {
+    //             var userId = self.userId(req);
 
-                form.parse(req, function(err, fields, files) {
-                    if(err) {
-                        self.wrapError(res, 500, 'fail', 'The upload failed', err);
-                        self = null;
-                        return;
-                    } else {
+    //             form.parse(req, function(err, fields, files) {
+    //                 if(err) {
+    //                     self.wrapError(res, 500, 'fail', 'The upload failed', err);
+    //                     self = null;
+    //                     return;
+    //                 } else {
 
-                        var file = files['file'];
+    //                     var file = files['file'];
                         
-                        var body = JSON.parse(fields['promotion']);
+    //                     var body = JSON.parse(fields['promotion']);
 
-                        var promotion = new $$.m.Promotion(body);
-                        var adminUrl = fields['adminUrl'];
+    //                     var promotion = new $$.m.Promotion(body);
+    //                     var adminUrl = fields['adminUrl'];
 
                         
-                        var fileToUpload = {};
-                        fileToUpload.mimeType = file.type;
-                        fileToUpload.size = file.size;
-                        fileToUpload.name = file.name;
-                        fileToUpload.path = file.path;
-                        fileToUpload.type = file.type;
+    //                     var fileToUpload = {};
+    //                     fileToUpload.mimeType = file.type;
+    //                     fileToUpload.size = file.size;
+    //                     fileToUpload.name = file.name;
+    //                     fileToUpload.path = file.path;
+    //                     fileToUpload.type = file.type;
 
 
-                        promotion.set("accountId", accountId);
-                        promotion.set("userId", userId);
+    //                     promotion.set("accountId", accountId);
+    //                     promotion.set("userId", userId);
 
-                        if(body.startDate){
-                            console.log("startDate");
-                            promotion.set("startDate", moment(body.startDate).toDate());
-                        }
-                        if(body.expirationDate){
-                            console.log("expirationDate")
-                            promotion.set("expirationDate", moment(body.expirationDate).toDate());
-                        }
-                        promotionManager.createPromotion(fileToUpload, adminUrl, promotion, accountId, userId, function(err, value, file){                                                       
-                            self.sendResultOrError(res, err, value, 'Could not create promotion');
-                            self.createUserActivity(req, 'CREATE_PROMOTION', null, null, function(){});
-                        });
-                    }
+    //                     if(body.startDate){
+    //                         console.log("startDate");
+    //                         promotion.set("startDate", moment(body.startDate).toDate());
+    //                     }
+    //                     if(body.expirationDate){
+    //                         console.log("expirationDate")
+    //                         promotion.set("expirationDate", moment(body.expirationDate).toDate());
+    //                     }
+    //                     promotionManager.createPromotion(fileToUpload, adminUrl, promotion, accountId, userId, function(err, value, file){                                                       
+    //                         self.sendResultOrError(res, err, value, 'Could not create promotion');
+    //                         self.createUserActivity(req, 'CREATE_PROMOTION', null, null, function(){});
+    //                     });
+    //                 }
 
 
-                });
-            // }
-        // });
+    //             });
+    //         // }
+    //     // });
 
-    },
+    // },
 
     getPromotionDetails: function(req, resp) {
         var self = this;
@@ -160,14 +160,12 @@ _.extend(api.prototype, baseApi.prototype, {
                 promotion.set('modified', modified);
 
                 if(promoObj.startDate){
-                    console.log("startDate");
                     promotion.set("startDate", moment(promoObj.startDate).toDate());
                 }
                 else{
                     promotion.set("startDate", null);
                 }
                 if(promoObj.expirationDate){
-                    console.log("expirationDate")
                     promotion.set("expirationDate", moment(promoObj.expirationDate).toDate());
                 }
                 else{
@@ -175,17 +173,62 @@ _.extend(api.prototype, baseApi.prototype, {
                 }
 
                 if(promoObj.report && promoObj.report.startDate){
-                    console.log("report.startDate")
                     promotion.attributes.report.startDate = moment(promoObj.report.startDate).toDate();
                 }
                 else{
-                    promotion.attributes.report.startDate = moment(promoObj.report.startDate).toDate();
+                    if(promotion.attributes.report){
+                        promotion.attributes.report.startDate = null;
+                    }
                 }
 
-                promotionManager.updatePromotion(accountId, userId, promotion, promotionId, function(err, value){
+                promotionManager.saveOrUpdatePromotion(accountId, userId, promotion, promotionId, function(err, value){
                     self.log.debug(accountId, userId, '<< updatePromotion');
                     self.sendResultOrError(resp, err, value, "Error updating promotion");
                     self.createUserActivity(req, 'UPDATE_PROMOTION', null, null, function(){});
+                });
+        //     }
+        // });
+    },
+
+    createPromotion: function(req, resp) {
+        var self = this;
+        self.log.debug('>> createPromotion');
+        var accountId = parseInt(self.accountId(req));
+        var userId = self.userId(req);
+        // self.checkPermission(req, self.sc.privs.MODIFY_PROMOTION, function(err, isAllowed) {
+        //     if (isAllowed !== true) {
+        //         return self.send403(resp);
+        //     } else {
+                var promoObj = req.body;
+                var promotion = new $$.m.Promotion(promoObj);
+                var modified = {
+                    date: new Date(),
+                    by: userId
+                };
+                var created = {
+                    date: new Date(),
+                    by: userId
+                };
+
+                promotion.set('modified', modified);
+                promotion.set('created', created);
+                promotion.set("accountId", accountId);
+                promotion.set("userId", userId);
+
+                if(promoObj.startDate){                    
+                    promotion.set("startDate", moment(promoObj.startDate).toDate());
+                }
+                if(promoObj.expirationDate){
+                    promotion.set("expirationDate", moment(promoObj.expirationDate).toDate());
+                }
+                if(promoObj.report && promoObj.report.startDate){
+                    promotion.attributes.report.startDate = moment(promoObj.report.startDate).toDate();
+                }
+
+                promotionManager.saveOrUpdatePromotion(accountId, userId, promotion, null, function(err, value){
+                    self.log.debug(accountId, userId, '<< createPromotion');
+                    self.sendResultOrError(resp, err, value, "Error creating promotion");
+                    self.createUserActivity(req, 'CREATE_PROMOTION', null, null, function(){});
                 });
         //     }
         // });
