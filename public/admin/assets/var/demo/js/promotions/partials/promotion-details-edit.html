@@ -1,13 +1,6 @@
 <div class="promotion-details-container container-fluid container-fullw securematics-details-view securematics-edit-promotion" ng-if="!vm.uiState.loading">
     <div class="inner-promotion-details bg-white col-xs-12">
         <div class="col-sm-5 col-xs-12 promotion-details-panel promotion-details-left-panel">
-            <div class="promo-image">                
-                <img ng-src="{{vm.state.promotion.promoImage}}" err-src="assets/images/default-media.png" alt="">
-                <i class="fa fa-pencil-square-o" ng-click="vm.openMediaModal('media-modal', 'MediaModalCtrl', 'lg')"></i>
-            </div>
-        </div>
-
-        <div class="col-sm-7 col-xs-12 promotion-details-panel promotion-details-right-panel">
             <div class="form-group">
                 <h4>Promo Name</h4>
 
@@ -39,38 +32,8 @@
                 </div>
                 <hr>
             </div>
-            
-            <div class="form-group" ng-if="vm.state.promotion.type == 'TRY_AND_BUY' && vm.state.promotion.vendor">
-                <h4>Products</h4>
-                <div class="description" ng-repeat="product in vm.state.promotion.products">
-                    <span class="form-control">
-                        {{product.itemName}}
-                    </span>
-                    <button type="button" class="btn btn-primary btn-o margin-left-5 btn-wide" ng-click="vm.removeProduct(product, $index)">
-                        <i class="fa fa-trash-o"></i><span> Delete</span>
-                    </button>
-                </div>
-                <div>
-                    <button type="button" class="btn btn-primary btn-o pull-left btn btn-primary btn-o margin-top-5 margin-bottom-5 btn-wide" ng-click="vm.openModal('new-promotion-product-modal', 'PromotionProductModalController', 'lg')">
-                        <i class="ti-plus"></i><span> Add Product</span>
-                    </button>
-                </div>
-                <div class="clearfix"></div>    
-                <hr>
-            </div>
-            <div class="form-group">
-                <h4>Type</h4>
-
-                <div class="description">
-                    
-                    <select id="topic_category" ng-model="vm.state.promotion.type" class="form-control margin-bottom-0">
-                        <option></option>
-                        <option ng-repeat="promoOption in vm.promoTypeOptions.options" value="{{promoOption.value}}" ng-disabled="promoOption.disabled" ng-selected="{{promoOption.value == vm.state.promotion.type}}">{{promoOption.label}}</option>
-                    </select>
-                </div>
-                <hr>
-            </div>
-            <div class="form-group col-xs-12 col-sm-6 padding-0">
+                       
+            <div class="form-group col-xs-12 col-sm-6 padding-left-0 single-row-view">
                 <h4>Start Date</h4>
 
                 <div class="description">
@@ -78,7 +41,7 @@
                 </div>
                 <hr class="visible-xs" />
             </div>
-            <div class="form-group col-xs-12 col-sm-6 padding-0">
+            <div class="form-group col-xs-12 col-sm-6 padding-right-0 single-row-view">
                 <h4>Expiration Date</h4>
                 <div class="description">
                     <indi-datepicker ng-model="vm.state.promotion.expirationDate" popup="MM/dd/yyyy"></indi-datepicker>
@@ -143,9 +106,42 @@
                 <span class="margin-left-10" ng-if="vm.attachment.name" ng-click="vm.initAttachment()"><i class="fa fa-trash-o"></i> </span>
             </div>
 
-            <div class="form-group" ng-if="vm.state.promotion.attachment.name">
+            <div class="form-group hidden" ng-if="vm.state.promotion.attachment.name">
                 <button type="button" class="btn btn-success margin-top-5 margin-bottom-5 btn-wide" ng-click="vm.viewPromotionPdf()">View PDF
                 </button>
+            </div>
+        </div>
+
+        <div class="col-sm-7 col-xs-12 promotion-details-panel promotion-details-right-panel">
+            <div class="form-group">
+                <h4>Type</h4>
+
+                <div class="description">
+                    
+                    <select id="topic_category" ng-model="vm.state.promotion.type" class="form-control margin-bottom-0">
+                        <option></option>
+                        <option ng-repeat="promoOption in vm.promoTypeOptions.options" value="{{promoOption.value}}" ng-disabled="promoOption.disabled" ng-selected="{{promoOption.value == vm.state.promotion.type}}">{{promoOption.label}}</option>
+                    </select>
+                </div>
+                <hr>
+            </div>
+            <div class="form-group" ng-if="vm.state.promotion.type == 'TRY_AND_BUY' && vm.state.promotion.vendor">
+                <h4>Products</h4>
+                <div class="description" ng-repeat="product in vm.state.promotion.products">
+                    <span class="form-control">
+                        {{product.itemName}}
+                    </span>
+                    <button type="button" class="btn btn-primary btn-o margin-left-5 btn-wide" ng-click="vm.removeProduct(product, $index)">
+                        <i class="fa fa-trash-o"></i><span> Delete</span>
+                    </button>
+                </div>
+                <div>
+                    <button type="button" class="btn btn-primary btn-o pull-left btn btn-primary btn-o margin-top-5 margin-bottom-5 btn-wide" ng-click="vm.openModal('new-promotion-product-modal', 'PromotionProductModalController', 'lg')">
+                        <i class="ti-plus"></i><span> Add Product</span>
+                    </button>
+                </div>
+                <div class="clearfix"></div>    
+                
             </div>
         </div>
     </div>
