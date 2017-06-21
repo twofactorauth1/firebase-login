@@ -16,11 +16,14 @@
                                 <div class="margin-bottom-5">
                                     <h3 class="message-title margin-top-5 margin-bottom-5">{{message.user.first}} {{message.user.last}}</h3>
                                     <span class="message-date">{{message.modified.date | date:'dd MMM yyyy'}}</span>
-                                    <h4 class="message-title">{{message.subject}}</h4>
                                 </div>
+
+                            </div>
+                            <div class="margin-top-30">
+                                <h4 class="message-title">{{message.subject}}</h4>
                             </div>
                             <div class="clearfix"></div>
-                            <div class="col-xs-12 margin-top-20">
+                            <div class="margin-top-0">
                                 <p class="message-title" ng-bind-html="message.message | unsafe"></p>
                             </div>
                         </li>
