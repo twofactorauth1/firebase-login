@@ -2,8 +2,8 @@
 /**
  * Indigenous Main Controller
  */
-app.controller('AppCtrl', ['$rootScope', '$scope', '$state', '$translate', '$window', '$document', '$timeout', '$modal', 'cfpLoadingBar', 'UserService', 'AccountService', 'accountConstant', 'UserPermissionsConfig',
-    function ($rootScope, $scope, $state, $translate, $window, $document, $timeout, $modal, cfpLoadingBar, UserService, AccountService, accountConstant, UserPermissionsConfig) {
+app.controller('AppCtrl', ['$rootScope', '$scope', '$state', '$translate', '$window', '$location', '$document', '$timeout', '$modal', 'cfpLoadingBar', 'UserService', 'AccountService', 'accountConstant', 'UserPermissionsConfig',
+    function ($rootScope, $scope, $state, $translate, $window, $location, $document, $timeout, $modal, cfpLoadingBar, UserService, AccountService, accountConstant, UserPermissionsConfig) {
 
         AccountService.getAccount(function (account) {
             $scope.account = account;
@@ -44,48 +44,8 @@ app.controller('AppCtrl', ['$rootScope', '$scope', '$state', '$translate', '$win
         // -----------------------------------
         var $win = $($window);
 
-        $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
-            //start loading bar on stateChangeStart
-            $rootScope.app.layout.isMinimalAdminChrome = false;
-            $rootScope.app.layout.isAnalyticsDashboardMode = false;
-            if ($scope.account && $scope.account.locked_sub && $state.includes('app.account.billing')) {
-                cfpLoadingBar.complete();
-            } else {
-                cfpLoadingBar.start();
-            }
-
-        });
-        $rootScope.$on('$stateChangeSuccess', function (event, toState, toParams, fromState, fromParams) {
-            //stop loading bar on stateChangeSuccess
-            event.targetScope.$watch("$viewContentLoaded", function () {
-
-                cfpLoadingBar.complete();
-            });
-
-            // scroll top the page on change state
-
-            $document.scrollTo(0, 0);
-
-            if (angular.element('.email-reader').length) {
-                angular.element('.email-reader').animate({
-                    scrollTop: 0
-                }, 0);
-            }
-
-            // Save the route title
-            $rootScope.currTitle = $state.current.title;
-        });
-
-        // State not found
-        $rootScope.$on('$stateNotFound', function (event, unfoundState, fromState, fromParams) {
-            //$rootScope.loading = false;
-            console.log(unfoundState.to);
-            // "lazy.state"
-            console.log(unfoundState.toParams);
-            // {a:1, b:2}
-            console.log(unfoundState.options);
-            // {inherit:false} + default options
-        });
+        
+        
 
         $rootScope.pageTitle = function () {
             return $rootScope.app.name + ' - ' + ($rootScope.currTitle || $rootScope.app.description);
@@ -193,6 +153,13 @@ app.controller('AppCtrl', ['$rootScope', '$scope', '$state', '$translate', '$win
             if (values[0] && values[1]) {
                 $scope.orgCardAndPermissions = UserPermissionsConfig.getOrgConfigAndPermissions(values[0], values[1]);
                 $scope.userPermissions = angular.copy($scope.orgCardAndPermissions);
+                if(_.contains($scope.userPermissions.userRestrictedStates, $state.current.name)){                    
+                    $state.go($scope.userPermissions.defaultState);
+                    cfpLoadingBar.complete();
+                }
+                else{
+                    $state.go($scope.userPermissions.defaultState);
+                }
             }
         }, 0), true);
 
@@ -221,6 +188,60 @@ app.controller('AppCtrl', ['$rootScope', '$scope', '$state', '$translate', '$win
                 }
             });
         };
+
+        $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
+            //start loading bar on stateChangeStart
+            $rootScope.app.layout.isMinimalAdminChrome = false;
+            $rootScope.app.layout.isAnalyticsDashboardMode = false;
+            
+            if(_.contains($scope.userPermissions.userRestrictedStates, toState.name)){
+                event.preventDefault();
+                if($scope.userPermissions.logoutUrl){
+                    location.href = $scope.userPermissions.logoutUrl;
+                }
+                else{
+                    $state.go($scope.userPermissions.defaultState);
+                }
+            }
+            else{
+                if ($scope.account && $scope.account.locked_sub && $state.includes('app.account.billing')) {
+                cfpLoadingBar.complete();
+                } else {
+                    cfpLoadingBar.start();
+                }
+            }
+        });
+        $rootScope.$on('$stateChangeSuccess', function (event, toState, toParams, fromState, fromParams) {
+            //stop loading bar on stateChangeSuccess
+            event.targetScope.$watch("$viewContentLoaded", function () {
+
+                cfpLoadingBar.complete();
+            });
+
+            // scroll top the page on change state
+
+            $document.scrollTo(0, 0);
+
+            if (angular.element('.email-reader').length) {
+                angular.element('.email-reader').animate({
+                    scrollTop: 0
+                }, 0);
+            }
+
+            // Save the route title
+            $rootScope.currTitle = $state.current.title;
+        });
+
+        // State not found
+        $rootScope.$on('$stateNotFound', function (event, unfoundState, fromState, fromParams) {
+            //$rootScope.loading = false;
+            console.log(unfoundState.to);
+            // "lazy.state"
+            console.log(unfoundState.toParams);
+            // {a:1, b:2}
+            console.log(unfoundState.options);
+            // {inherit:false} + default options
+        });
 
     }
 ]);
