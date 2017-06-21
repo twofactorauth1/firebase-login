@@ -87,7 +87,7 @@
           if(m.dashboard !== undefined) {
               this.orgConfigAndPermissions.dashboard = m.dashboard;
           } else {
-              this.orgConfigAndPermissions.dashboard = false;
+              this.orgConfigAndPermissions.dashboard = true;
           }
       } else {
           this.orgConfigAndPermissions.inventory = true;

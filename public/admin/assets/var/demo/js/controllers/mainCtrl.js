@@ -3,7 +3,7 @@
  * Indigenous Main Controller
  */
 app.controller('AppCtrl', ['$rootScope', '$scope', '$state', '$translate', '$window', '$location', '$document', '$timeout', '$modal', 'cfpLoadingBar', 'UserService', 'AccountService', 'accountConstant', 'UserPermissionsConfig',
-    function ($rootScope, $scope, $state, $translate, $window, $location, document, $timeout, $modal, cfpLoadingBar, UserService, AccountService, accountConstant, UserPermissionsConfig) {
+    function ($rootScope, $scope, $state, $translate, $window, $location, $document, $timeout, $modal, cfpLoadingBar, UserService, AccountService, accountConstant, UserPermissionsConfig) {
 
         AccountService.getAccount(function (account) {
             $scope.account = account;
