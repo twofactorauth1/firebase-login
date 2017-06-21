@@ -284,9 +284,10 @@ _.extend(api.prototype, baseApi.prototype, {
                                     return ',';
                                 // "" added for number value
                                 text=""+text;
-                                self.log.debug('<< text>>'+text.replace(/,/g ,'\,'));
-                                return "\""+text+"\" ,";
-
+                                if(text.indexOf(',')>-1)
+                                    return "\""+text+"\",";
+                                else
+                                    return text+",";
                             }
                             csv += parseString(contact.get('first'));
                             csv += parseString(contact.get('middle'));
