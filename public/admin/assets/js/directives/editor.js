@@ -78,9 +78,6 @@ app.directive("elem", function($rootScope, $timeout, $compile, SimpleSiteBuilder
     link: function(scope, element, attrs, ngModel) {
       
         scope.component= scope.$parent.component;
-        scope.isVisible=function (){
-             return ( scope.component.visibility !== false)
-        }
         scope.update = function(e) {
             $timeout(function() {
                 scope.$apply(function() {

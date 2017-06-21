@@ -2,7 +2,7 @@
     <div class="inner-promotion-details bg-white col-xs-12">
         <div class="col-sm-5 col-xs-12 promotion-details-panel promotion-details-left-panel">
             <div class="promo-image">                
-                <img ng-src="{{vm.state.promotion.promoImage}}" err-src="assets/images/default-media.png" alt="">
+                <img ng-src="{{vm.state.promotion.promoImage}}" err-src="assets/images/default-media.png" alt="" style="max-width: 100%">
             </div>
         </div>
 
@@ -99,10 +99,10 @@
                 </div> 
             </div>
 
-            <div class="form-group" ng-if="vm.state.promotion.attachment.name">
+            <div class="form-group hidden" ng-if="vm.state.promotion.attachment.name">
                 <button type="button" class="btn btn-success margin-top-5 margin-bottom-5 btn-wide" ng-click="vm.viewPromotionPdf()">View PDF
                 </button>
             </div>
-        </div>
+        </div>        
     </div>
 </div>

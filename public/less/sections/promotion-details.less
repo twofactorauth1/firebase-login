@@ -4,11 +4,10 @@ promotion-details-component{
 	    padding: 10px !important;
 	}
 	.promotion-details-container{
-		margin-top: 20px;
-		margin-bottom: 20px;
+		border: 0 !important;
 		.inner-promotion-details{
 			padding:20px;
-			border: 1px solid #eee;
+			
 			.promotion-details-panel{
 				.form-group{
 					padding-top: 5px;
@@ -50,7 +49,7 @@ promotion-details-component{
 					}
 				}
 			}
-			.promotion-details-left-panel{
+			.promotion-details-right-panel{
 				@media (min-width: 768px) {
 					padding-left: 20px;
 				}
@@ -59,13 +58,30 @@ promotion-details-component{
 						max-width: 100%;
 					}
 				}
+				.form-control, tags-input{
+					width: 75%;	
+					outline: none !important;
+					.host{
+						outline: none !important;
+					}				
+				}
+				span.form-control{
+					display: inline-block;
+					float: left;
+				}
+
+				span.form-control + .btn-wide{
+					min-width: 100px;
+				}
+
+				
 			}
-			.promotion-details-right-panel{
+			.promotion-details-left-panel{
 				
 				@media (min-width: 768px) {
 					padding-left: 20px;					
 				}
-			}			
+			}
 		}&.securematics-edit-promotion{
 		.promotion-details-panel{
 				div.description{
@@ -75,24 +91,35 @@ promotion-details-component{
 						z-index: 9999;
 					}
 					.input-group{
-						display: block !important;
+						display: flex;
+						input{
+							background: none !important;
+							width: 100% !important;
+						}
+						.input-group-btn{
+							position: absolute;
+    						right: 0;
+							button{
+								border-left: 0 !important;
+								float: right;
+							}
+						}
 					}
 				}
-				.promo-image{
-					i{
-						position: absolute;
-					    top: 10px;
-					    right: 25px;
-					    font-size: 20px;
-					    color: #48b1cc;
-					    cursor: pointer;
+
+				
+				@media (max-width: 767px) {
+					.form-control, tags-input, .input-group{
+						width: 80%;
 					}
+					.single-row-view{
+						padding: 0 !important;
+					}					
 				}
 			}				
 		}
-		.promotion-details-right-panel{
-			.form-control, tags-input{
-				width: 60% !important;	
+		.promotion-details-left-panel{
+			.form-control, tags-input{					
 				outline: none !important;
 				.host{
 					outline: none !important;
@@ -102,12 +129,8 @@ promotion-details-component{
 				display: inline-block;
 			}
 
-			@media (max-width: 767px) {
-				.form-control, tags-input{
-					width: 80% !important;
-				}
-			}
-		}			
+			
+		}		
 	}
 	.loading-promotion-details{
 		height: 200px;
@@ -118,10 +141,14 @@ promotion-details-component{
 
 	@media (max-width: 767px) {
 		.btn-wide{
-			min-width: 40px;
+			min-width: 40px !important;
 			span{
 				display: none;
 			}
 		}
+	}
+	div#pdf-container > object {
+    	height: 600px;
+        padding:16px;
 	}
 }

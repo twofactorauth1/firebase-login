@@ -23,8 +23,15 @@
     </div>
 </div>
 <div class="clearfix"></div>
-<div ng-if="!vm.uiState.editPromotion" data-ng-include=" 'assets/var/demo/js/promotions/partials/promotion-details-view.html' "></div>
-<div ng-if="vm.uiState.editPromotion" data-ng-include=" 'assets/var/demo/js/promotions/partials/promotion-details-edit.html' "></div>
+<tabset class="tabbable margin-top-15" ng-show="!vm.uiState.loading">
+    <tab heading="Promotion Details">        
+        <div data-ng-include=" 'assets/var/demo/js/promotions/partials/promotion-details-edit.html' "></div>
+    </tab>
+    <tab heading="Shipments">
+        <div data-ng-include=" 'assets/var/demo/js/promotions/partials/promotion-details-view.html' "></div>
+    </tab>
+</tabset>    
+<div id="pdf-container" class="hidden-xs container-fluid container-fullw securematics-details-view"></div>
 <div class="loading-promotion-details center" ng-if="vm.uiState.loading">
     <h2>Loading promotion details. Please wait....</h2>
 </div>

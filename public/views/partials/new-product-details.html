@@ -32,7 +32,7 @@
             </div>
             <div class="col-sm-6 product-details-container">
             	<div class="" ng-style="{'color':component.txtcolor}">
-                    <h4 class="modal-widget-title" ng-attr-style="{{titleStyle(component.formSettings)}}">{{selectedProduct.name | characters:50 :true}}</h4>
+                    <h4 class="modal-widget-title" ng-attr-style="{{titleStyle(component.formSettings)}}">{{selectedProduct.name}}</h4>
                     <div class="clearfix"></div>
                     <h4 class="modal-widget-price" ng-attr-style="{{priceStyle(component.formSettings)}}"><span ng-class="{'strikethrough text-small': selectedProduct.onSaleToday}">{{selectedProduct.regular_price | currency}}</span><span ng-if="selectedProduct.onSaleToday">{{selectedProduct.sale_price | currency}}</span></h4>
                     <div class="clearfix"></div>
