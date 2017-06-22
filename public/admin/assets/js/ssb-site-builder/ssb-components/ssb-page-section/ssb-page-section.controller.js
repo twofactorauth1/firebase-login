@@ -283,13 +283,14 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
             }else if(sectionElement.hasClass("ssb-page-section-layout-hero-v7")){
                 var sectionElementTextHeight=10;
                 var innerSectionTextElement = sectionElement.find(".single-testimonial.slick-active .testimonial-row");
+                var outerWrapSection = sectionElement.parent().find(".testimonial-wrap ").height();
                 if(innerSectionTextElement.length ){
                     sectionElementTextHeight+=innerSectionTextElement.height()
                 }
                 var  image =sectionElement.find(".single-testimonial.slick-active .component-slider-image img").hide();
                 if(image.length>0){
                     var imageParent=image.parent();
-                    imageParent.css('background-image', 'url(' + image[0].src + ')').css("min-height",  sectionElementTextHeight);
+                    imageParent.css('background-image', 'url(' + image[0].src + ')').css("min-height",  outerWrapSection);
                 }
 
             }
