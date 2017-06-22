@@ -34,6 +34,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.post(this.url('attachment/:id'), this.isAuthApi.bind(this), this.updatePromotionAttachment.bind(this));
         app.post(this.url('promotion/shipment'), this.isAuthApi.bind(this), this.createShipment.bind(this));
         app.post(this.url('promotion/shipment/attachment/:id'), this.isAuthApi.bind(this), this.updateShipmentAttachment.bind(this));
+        app.get(this.url(':promotionId/shipments'), this.isAuthAndSubscribedApi.bind(this), this.listShipments.bind(this));       
 
     },
 
@@ -346,6 +347,18 @@ _.extend(api.prototype, baseApi.prototype, {
             }
         });
     },
+
+    listShipments: function(req, resp) {
+        var self = this;
+        var accountId = parseInt(self.accountId(req));
+        var userId = self.userId(req);
+        var promotionId = req.params.promotionId;
+        self.log.debug(accountId, userId, '>> listShipments');
+        promotionManager.listShipments(accountId, userId, promotionId, function(err, list){
+            self.log.debug(accountId, userId, '<< listShipments');
+            return self.sendResultOrError(resp, err, list, "Error listing shipments");
+        });
+    }
 
 });
 

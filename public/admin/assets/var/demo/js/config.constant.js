@@ -721,6 +721,10 @@ app.constant('JS_REQUIRES', {
 
     // Promotion Shipments
     "PromotionShipmentModalController": 'assets/var/demo/js/promotions/modals/new-promotion-shipment-modal.controller.js',
+    'ShipmentsComponent': 'assets/var/demo/js/promotions/shipments/shipments.component.js',
+    'ShipmentsComponentController': 'assets/var/demo/js/promotions/shipments/shipments.controller.js',
+
+
     'asideCtrl': 'assets/var/demo/js/controllers/asideCtrl.js',
     'UsersCtrl': 'assets/var/demo/js/users/users.controller.js',
 

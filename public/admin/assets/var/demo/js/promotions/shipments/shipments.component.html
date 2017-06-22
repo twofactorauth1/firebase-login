@@ -1,0 +1,111 @@
+<section id="page-title" class="padding-top-15 padding-bottom-15 securematics-promotions-section" >
+    <div class="row">
+        <div class="col-sm-8">
+            <h1 class="mainTitle">SHIPMENTS</h1>
+            <span ng-if="vm.state.shipments" class="mainDescription">There {{vm.state.shipments.length > 1 ? 'are' : 'is'}}  currently {{vm.state.shipments.length | number : 0}} shipment<span ng-if="vm.state.shipments.length > 1">s</span>. <span ng-if="vm.showFilteredRecords()"> ({{filteredCollection.length || 0}} in filtered view)</span></span>
+        </div>
+    </div>
+</section>
+
+
+<div class="securematics-shipments-list securematics-list-container" ng-init="tableView='list'">
+	<div st-table="vm.displayedShipments" st-safe-src="vm.state.shipments" st-filtered-collection>
+	    <div class="container-fluid container-fullw bg-white padding-top-0 padding-bottom-0 margin-bottom-15 margin-0">
+	        <div class="row">
+	            <div class="col-sm-12">
+	                <div class="panel panel-transparent row margin-bottom-0">
+	                    <div class="panel-body">
+	                        <form role="form" class="ng-pristine ng-valid row">
+	                            <div>
+	                                <div class="col-xs-12 col-sm-12 padding-left-0">
+	                                    <div class="form-group">
+	                                        <div class="col-xs-4 col-sm-5 padding-right-0">
+	                                            <span class="input-icon">
+                                                    <input type="text" st-search ng-model="vm.uiState.globalSearch" placeholder="Search by partner, customer..." id="form-field-14" class="form-control">
+                                                    <i class="ti-search"></i>
+                                                </span>
+	                                        </div>
+	                                        <div class="col-xs-4 col-sm-4 padding-right-0">
+	                                        	<div class="btn-group pull-right ">
+			                                        <button class="btn btn-info" ng-class="{'active': tableView == 'list'}" href="" ng-click="tableView = 'list'" tooltip-placement="top" tooltip="List"> <span class="fa fa-th-list"></span> </button>
+			                                        <button class="btn btn-info" ng-class="{'active': tableView == 'grid'}" href="" ng-click="tableView = 'grid'" tooltip-placement="top" tooltip="Grid"> <span class="fa fa-th"></span> </button>
+                                    			</div>
+	                                        </div>
+	                                    </div>
+	                                </div>
+	                            </div>
+	                        </form>
+	                    </div>
+	                </div>
+	            </div>
+	        </div>
+	    </div>
+	    <table class="table table-hover table-striped" ng-class="{'grid': tableView == 'grid', 'bg-white table-list-view': tableView == 'list'}" ng-if="!vm.uiState.loading">
+	        <thead ng-class="{'bg-white': tableView == 'grid'}">
+	            <tr>
+	                <th class="col-partner" st-sort="partner" style="white-space: nowrap;">Partner</th>
+	                <th class="col-customer" st-sort="customer" style="white-space: nowrap;">Customer</th>
+	                <th class="col-products" style="white-space: nowrap;">Products</th>
+	                <th class="hidden-xs col-ship-date" st-sort="shipDate" style="white-space: nowrap;">Ship Date</th>
+	                <th class="hidden-xs col-config-date" st-sort="configDate" style="white-space: nowrap;">Config Date</th>
+	                <th class="hidden-xs col-deploy-date" st-sort="deployDate" style="white-space: nowrap;">Deploy Date</th>
+	                <th class="col-end-date" st-sort="endDate" style="white-space: nowrap;">End Date</th>
+	                <th class="col-report hidden-xs" style="white-space: nowrap;">Report</th>
+	                <th class="col-status" style="white-space: nowrap;">Status</th>
+	            </tr>
+	            <tr>
+	                <th class="col-partner">
+	                    <input st-search="title" ng-model="vm.uiState.fieldSearch.partner" placeholder="Partner" class="form-control" type="search" />
+	                </th>
+	                <th class="col-customer">
+	                    <input st-search="vendor" ng-model="vm.uiState.fieldSearch.customer" placeholder="Customer" class="form-control" type="search" />
+	                </th>
+
+	                <th class="col-products">
+	                    
+	                </th>
+	                <th class="col-ship-date hidden-xs">
+	                    
+	                </th>
+	                <th class="col-config-date hidden-xs">
+	                    
+	                </th>
+	                <th class="col-deploy-date hidden-xs">
+	                    
+	                </th>
+	                <th class="col-end-date">
+	                    
+	                </th>
+	                <th class="col-report hidden-xs"></th>
+	                <th class="col-status"></th>
+	            </tr>
+	        </thead>
+	        <tbody>
+	            <tr ng-repeat="shipment in vm.displayedShipments" class="product-item">
+	                <td class="col-partner"><strong>Partner: </strong>{{shipment.partner}}</td>
+	                <td class="col-customer"><strong>Customer: </strong><div class="name-block-container"><span class="list-name"></span><span class="text-adjust-table" tooltip="{{shipment.customer}}">{{shipment.customer}}</span></div></td>
+	                <td class="col-products"><strong>Products: </strong></td>
+	                <td class="hidden-xs col-ship-date"><strong>Ship Date: </strong>{{vm.parseValueToDate(shipment.shipDate) | date:'M/d/yyyy'}}</td>
+	                <td class="hidden-xs col-config-date"><strong>Config Date: </strong>{{vm.parseValueToDate(shipment.configDate) | date:'M/d/yyyy'}}</td>
+	                <td class="hidden-xs col-deploy-date"><strong>Deploy Date: </strong>{{vm.parseValueToDate(shipment.deployDate) | date:'M/d/yyyy'}}</td>
+	                <td class="col-end-date"><strong>End Date: </strong>{{vm.parseValueToDate(shipment.endDate) | date:'M/d/yyyy'}}</td>
+	                <td class="col-report"><strong>Report: </strong><i ng-if="shipment.attachment.name" class="fa fa-file-pdf-o" ng-click="vm.viewPdf(shipment.attachment)"></i></td>
+	                <td class="col-status"><strong>Status: </strong>{{vm.statusOptions[shipment.status]}}</td>
+	            </tr>
+	        </tbody>
+	        <tfoot>
+	            <tr>
+	                <td ng-if="vm.state.shipments.length" class="text-center" st-custom-pagination="" st-displayed-pages="vm.pagingConstant.displayedPages" st-items-by-page="vm.pagingConstant.numberOfRowsPerPage || 50" colspan="10">
+	                </td>
+	                <td ng-if="!vm.state.shipments.length" colspan="10" class="center height-100">
+	            		<h4>There are currently no shipments</h4>
+	            	</td>
+	            </tr>
+	        </tfoot>
+	    </table>
+	    <div class="load1 csspinner height-400" ng-show="vm.uiState.loading"></div>
+	</div>
+</div>
+
+
+<div ng-if="$parent.userPermissions.isAdminUser" data-ng-include=" 'assets/var/demo/js/promotions/modals/new-promotion-modal.html' "></div>
