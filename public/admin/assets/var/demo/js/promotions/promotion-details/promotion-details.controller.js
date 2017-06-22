@@ -30,7 +30,8 @@ function promotionDetailsController($scope, $window, $state, $attrs, $filter, $m
     vm.updatePromotion = updatePromotion;
     vm.initAttachment = initAttachment;
     vm.viewPromotionPdf = viewPromotionPdf;
-    
+    vm.addShipment = addShipment;
+
     function backToPromotions(){
         $state.go("app.promotions");
     }
@@ -219,7 +220,11 @@ function promotionDetailsController($scope, $window, $state, $attrs, $filter, $m
             }, 500);
             
         }
-    }, true)
+    }, true);
+
+    function addShipment(){
+        
+    }
 
     function init(){
         

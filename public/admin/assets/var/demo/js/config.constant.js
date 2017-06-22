@@ -719,6 +719,8 @@ app.constant('JS_REQUIRES', {
     
     'SecurematicsProductService': 'assets/var/demo/js/promotions/products.service.js',
 
+    // Promotion Shipments
+    "PromotionShipmentModalController": 'assets/var/demo/js/promotions/modals/new-promotion-shipment-modal.controller.js',
     'asideCtrl': 'assets/var/demo/js/controllers/asideCtrl.js',
     'UsersCtrl': 'assets/var/demo/js/users/users.controller.js',
 

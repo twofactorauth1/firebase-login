@@ -20,6 +20,9 @@
         <button type="button" class="btn btn-primary btn-o pull-right margin-top-5 margin-bottom-5 margin-left-5 btn-wide" ng-click="vm.deletePromotion()">
             <i class="fa fa-trash-o"></i><span> Delete</span>
         </button>
+        <button type="button" class="btn btn-primary btn-o pull-right margin-top-5 margin-bottom-5 margin-left-5 btn-wide" ng-click="vm.openModal('new-promotion-shipment-modal', 'PromotionShipmentModalController', 'lg')">
+            <i class="ti-plus"></i><span> Add Shipment</span>
+        </button>
     </div>
 </div>
 <div class="clearfix"></div>
@@ -35,3 +38,4 @@
 <div class="loading-promotion-details center" ng-if="vm.uiState.loading">
     <h2>Loading promotion details. Please wait....</h2>
 </div>
+<div data-ng-include=" 'assets/var/demo/js/promotions/modals/new-promotion-shipment-modal.html' "></div>
