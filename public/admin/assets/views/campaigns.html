@@ -54,7 +54,7 @@
             <div class="panel panel-transparent row margin-bottom-0">
                 <div class="panel-body">
                     <table class="table table-hover table-striped margin-bottom-0" ng-class="{'grid': tableView == 'grid', 'bg-white table-list-view': tableView != 'grid'}" ng-show="displayedCampaigns">
-                        <thead>
+                        <thead ng-class="{'bg-white': tableView == 'grid'}">
                             <tr>
                                 <th st-sort="status" class="center" translate="tableFields.STATUS">Status</th>
                                 <th st-sort="name" translate="tableFields.NAME">Name</th>
@@ -65,7 +65,7 @@
                                 <th class="hidden-xs" st-sort="statistics.emailsClicked" translate="campaign.CLICKRATE">Clicks</th>
                                 <th class="hidden-xs" st-sort="statistics.unsubscribes" translate="campaign.UNSUBSCRIBES">Unsubscribes</th>
                                 <th class="hidden-xs" st-sort-default="reverse" st-sort="created.date" ng-class="{'center': tableView != 'grid'}" translate="tableFields.CREATED">Created</th>
-                                <th ng-class="{'center': tableView != 'grid'}">
+                                <th ng-class="{'center': tableView != 'grid'}" ng-hide="tableView == 'grid'">
 
                                 </th>
                             </tr>
