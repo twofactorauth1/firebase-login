@@ -158,7 +158,7 @@ app.controller('AppCtrl', ['$rootScope', '$scope', '$state', '$translate', '$win
                     cfpLoadingBar.complete();
                 }
                 else{
-                    $state.go($state.current.name || $scope.userPermissions.defaultState);
+                    $state.go($state.current.name || $scope.currentState || $scope.userPermissions.defaultState, $scope.stateParams);
                 }
             }
         }, 0), true);
@@ -209,6 +209,8 @@ app.controller('AppCtrl', ['$rootScope', '$scope', '$state', '$translate', '$win
                 } else {
                     cfpLoadingBar.start();
                 }
+                $scope.currentState = toState.name;
+                $scope.stateParams = toParams;
             }
         });
         $rootScope.$on('$stateChangeSuccess', function (event, toState, toParams, fromState, fromParams) {
