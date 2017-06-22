@@ -25,6 +25,7 @@ var promotion = $$.m.ModelBase.extend({
             products: null,
             report: null,
             type: null,
+            shipments: [],
             created: {
                 date: new Date(),
                 by: null
