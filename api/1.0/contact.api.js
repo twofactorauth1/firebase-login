@@ -317,6 +317,7 @@ _.extend(api.prototype, baseApi.prototype, {
                         contactDao.findMany(query, $$.m.Contact, function(err, contacts){
                             self.log.debug('<< exportCsvContacts');
                             resp.set('Content-Type', 'text/csv');
+                            resp.set("Content-Disposition",  "attachment;filename=csv.csv");
                             self.sendResult(resp, makeCsv(contacts));
                         });
                     }
@@ -409,6 +410,7 @@ _.extend(api.prototype, baseApi.prototype, {
                           }
                         self.log.debug('<< exportCsvContacts');
                         resp.set('Content-Type', 'text/csv');
+                        resp.set("Content-Disposition",  "attachment;filename=csv.csv");
                         self.sendResult(resp, makeCsv(contacts));
                     });
                 }
