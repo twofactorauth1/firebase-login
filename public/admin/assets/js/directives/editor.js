@@ -17,7 +17,7 @@ app.directive("elem", function($rootScope, $timeout, $compile, SimpleSiteBuilder
                         'data-edit ' +
                         'class="edit-wrap ssb-edit-wrap ssb-element"> ' +
                         '<span class="editable-title">{{component}}</span>' +
-                        '<div'  +
+                        '<div '  +
                             'ng-class="{{vm.elementClass()}}" ' +
                             'ng-attr-style="{{vm.elementStyle(true)}}" ' +
                             'class="ssb-text-settings {{className}}" ' +
