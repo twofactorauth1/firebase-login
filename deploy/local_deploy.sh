@@ -101,11 +101,11 @@ main(){
 	# create a new version and update the environment to use this version
 	aws elasticbeanstalk create-application-version --application-name "${APP_NAME}" --version-label "${APP_VERSION}" --description "${APP_DESCRIPTION}" --source-bundle S3Bucket="${S3_BUCKET}",S3Key="${APP_NAME}-${APP_VERSION}.zip"	|| on_err "$_"
     aws elasticbeanstalk create-environment --environment-name "${GREEN_ENV_NAME}" --application-name "${APP_NAME}" --version-label "${APP_VERSION}" --description "${APP_DESCRIPTION}" --solution-stack-name "64bit Amazon Linux 2016.03 v2.1.1 running Node.js"
-
+    # NEED TO ADD A WAIT FOR 'Updating' BEFORE WE WAIT FOR 'Ready'
 	interval=5; timeout=90; while [[ ! `aws elasticbeanstalk describe-environments --environment-name "${GREEN_ENV_NAME}" | grep -i status | grep -i ready` && $timeout > 0 ]]; do sleep $interval; timeout=$((timeout - interval)); done
 
 	#[ $timeout > 0 ] && aws elasticbeanstalk update-environment --environment-name "${ENV_NAME}" --version-label "${APP_VERSION}" || exit 0
-    [ $timeout > 0 ] && echo 'ready to swap' || exit 0
+    [ $timeout > 0 ] && aws elasticbeanstalk swap-environment-cnames --source-environment-name "${ENV_NAME}" --destination-environment-name "${GREEN_ENV_NAME}" || exit 0
 
 
 	# Testing?
