@@ -158,7 +158,7 @@ app.controller('AppCtrl', ['$rootScope', '$scope', '$state', '$translate', '$win
                     cfpLoadingBar.complete();
                 }
                 else{
-                    $state.go($scope.userPermissions.defaultState);
+                    $state.go($state.current.name || $scope.userPermissions.defaultState);
                 }
             }
         }, 0), true);
