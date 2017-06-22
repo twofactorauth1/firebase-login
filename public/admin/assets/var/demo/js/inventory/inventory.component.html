@@ -35,7 +35,7 @@
                                                         <small ng-bind-html="action.label | highlight: $select.search"></small>
                                                     </ui-select-choices>
                                                 </ui-select-->
-                                                <div class="btn-group action-btn-con" ng-hide='!vm.uiState.inVentoryWatchList.length'>
+                                                <div class="btn-group action-btn-con" ng-hide='!vm.uiState.inVentoryWatchList.length' ng-if="vm.uiState.userPermissions.dashboard">
                                                     <button type="button" class="action-btn libtn btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                         Action
                                                     </button>
@@ -60,7 +60,7 @@
 	    <table class="table table-hover table-striped" ng-class="{'grid': tableView == 'grid', 'bg-white table-list-view': tableView == 'list'}" ng-if="!vm.uiState.loading" fixed-header-table>
 	        <thead ng-class="{'bg-white': tableView == 'grid'}" sticky offset="65" sticky-class="sticky-header-class">
 	            <tr class="inventory-header-row">
-	                <th class="select-col hidden-xs"></th>
+	                <th class="select-col hidden-xs" ng-if="vm.uiState.userPermissions.dashboard"></th>
 	                <th class="name-col sort" style="white-space: nowrap;" ng-class="{'st-sort-ascent': vm.uiState.sortData.details['name'].direction === 1, 'st-sort-descent': vm.uiState.sortData.details['name'].direction === -1}" ng-click="vm.sortInventory('_itemName', 'name')">Product</th>
 	                <th class="vendor-col sort" style="white-space: nowrap;" ng-class="{'st-sort-ascent': vm.uiState.sortData.details['vendor'].direction === 1, 'st-sort-descent': vm.uiState.sortData.details['vendor'].direction === -1}" ng-click="vm.sortInventory('_vendorName', 'vendor')">Vendor</th>
 	                <th class="hidden-xs desc-col">Description</th>
@@ -70,7 +70,7 @@
 	                <th class="qty-col sort" style="white-space: nowrap;" ng-class="{'st-sort-ascent': vm.uiState.sortData.details['available'].direction === 1, 'st-sort-descent': vm.uiState.sortData.details['available'].direction === -1}" ng-click="vm.sortInventory('Available', 'available')"><span class="hidden-xs">Qty </span>Avail</th>
 	            </tr>
 	            <tr class="inventory-header-row">
-	            	<th class="hidden-xs select-col"></th>
+	            	<th class="hidden-xs select-col" ng-if="vm.uiState.userPermissions.dashboard"></th>
 	                <th class="name-col">
 	                    <input ng-model="vm.uiState.fieldSearch.OITM_ItemName" ng-model-options="{ debounce: 800 }" placeholder="Product" class="form-control" type="search"/>
 	                </th>
@@ -90,7 +90,7 @@
 	        </thead>
 	        <tbody>
 	            <tr ng-repeat="product in vm.displayedProducts" class="product-item" ng-click="vm.viewSingleInventory(product)" ng-class='{"inventory-watch-row": vm.checkIfSelected(product, vm.state.userOrgConfig.watchList)}'>
-	            	<td class="hidden-xs select-col"><i class="fa fa-2x" ng-click='vm.productSelectClickFn($event, product)' ng-class='{"fa-check-circle": vm.checkIfSelected(product, vm.uiState.inVentoryWatchList), "fa-circle-o": !vm.checkIfSelected(product, vm.uiState.inVentoryWatchList)}'></i></td>
+	            	<td class="hidden-xs select-col" ng-if="vm.uiState.userPermissions.dashboard"><i class="fa fa-2x" ng-click='vm.productSelectClickFn($event, product)' ng-class='{"fa-check-circle": vm.checkIfSelected(product, vm.uiState.inVentoryWatchList), "fa-circle-o": !vm.checkIfSelected(product, vm.uiState.inVentoryWatchList)}'></i></td>
 	                <td class="name-col"><strong>Product: </strong><div class="name-block-container"><div class="text-adjust-outerTable">{{product.OITM_ItemName}}</div></div></td>
 	                <td class="vendor-col text-adjust-outerTable" style="white-space: nowrap;"><strong>Vendor: </strong><div class="text-adjust-outerTable">{{product.OMRC_FirmName}}</div></td>
 	                <td class="hidden-xs desc-col"><strong>Description: </strong><div tooltip="{{product.OITM_U_dscription}}" class="text-adjust-outerTable">{{product.OITM_U_dscription}}</div></td>
