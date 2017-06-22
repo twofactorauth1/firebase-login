@@ -61,6 +61,22 @@
             ]
         }
 
+
+        promotionsService.shipmentStatusOptions = {
+            ACTIVE: "Active",
+            INACTIVE: "Inactive",
+            options: [
+                {
+                    label: "Active",
+                    value: "ACTIVE"
+                },
+                {
+                    label: "Inactive",
+                    value: "INACTIVE"
+                }
+            ]    
+        }
+
         function promotionsRequest(fn) {
             promotionsService.loading.value = promotionsService.loading.value + 1;
             console.info('service | loading +1 : ' + promotionsService.loading.value);

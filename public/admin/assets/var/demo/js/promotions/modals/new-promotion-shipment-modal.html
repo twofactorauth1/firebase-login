@@ -7,10 +7,90 @@
         <h3 class="modal-title">Promotion Shipment</h3>
     </div>
     <form name="form" role="form" id="form">
-        <div class="modal-body bg-white new-promotion-shipment-modal" stop-event="touchend">
+        <div class="modal-body bg-white new-promotion-shipment-modal" stop-event="touchend" style="min-height: 200px;">
         
-                Shipment Body
+            <div class="form-group col-sm-6" >
+                <label>
+                    Partner
+                </label>
+                <input type="text" placeholder="Partner" class="form-control" ng-model="vm.state.shipment.partner" name="partner">
+            </div>
 
+            <div class="form-group col-sm-6" >
+                <label>
+                    Customer
+                </label>
+                <input type="text" placeholder="Customer" class="form-control" ng-model="vm.state.shipment.customer" name="customer">
+            </div>
+            <div class="clearfix"></div>
+
+            <div class="form-group col-sm-6" >
+                <label>
+                    Products
+                </label>
+                <input type="text" placeholder="Model Serial Quantity" class="form-control" ng-model="vm.state.shipment.serial" name="serial">
+            </div>
+
+            <div class="form-group col-sm-6" >
+                <label>
+                    Ship Date
+                </label>
+                <indi-datepicker ng-model="vm.state.shipment.shipDate" popup="MM/dd/yyyy"></indi-datepicker>
+            </div>
+            <div class="clearfix"></div>
+
+            <div class="form-group col-sm-6" >
+                <label>
+                    Config Date
+                </label>
+                <indi-datepicker ng-model="vm.state.shipment.configDate" popup="MM/dd/yyyy"></indi-datepicker>
+            </div>
+
+            <div class="form-group col-sm-6" >
+                <label>
+                    Deploy Date
+                </label>
+                <indi-datepicker ng-model="vm.state.shipment.deployDate" popup="MM/dd/yyyy"></indi-datepicker>
+            </div>
+            <div class="clearfix"></div>
+
+            <div class="form-group col-sm-6" >
+                <label>
+                    End Date
+                </label>
+                <indi-datepicker ng-model="vm.state.shipment.endDate" popup="MM/dd/yyyy"></indi-datepicker>
+            </div>
+
+            <div class="form-group col-sm-6" >
+                <label class="block">
+                    One Config
+                </label>
+                <label for="upload_shipment_file" class="btn btn-primary margin-top-0">
+                    <span ng-if="!vm.state.shipment.attachment.name">Upload File</span>
+                    <span ng-if="vm.state.shipment.attachment.name">Replace File</span>
+                    <input type="file"
+                           id="upload_shipment_file"
+                           class="hidden"
+                           file-model='vm.attachment'
+                           accept=".pdf">
+                </label>
+                <span class="file-name">{{vm.attachment.name}}</span>
+                <span class="margin-left-10" ng-if="vm.attachment.name" ng-click="vm.initAttachment()"><i class="fa fa-trash-o"></i></span>
+            </div>
+            <div class="clearfix"></div>
+
+            <div class="form-group col-sm-6">
+                <label class="block">
+                    Status
+                </label>
+                    
+                <select id="promotion_type" ng-model="vm.state.shipment.status" class="form-control margin-bottom-0">
+                    <option></option>
+                    <option ng-repeat="statusOption in vm.statusOptions.options" value="{{statusOption.value}}" ng-selected="{{statusOption.value == vm.state.shipment.status}}">{{statusOption.label}}</option>
+                </select>
+                
+            </div>
+            <div class="clearfix"></div>
         </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-o btn-primary" ng-click="">
