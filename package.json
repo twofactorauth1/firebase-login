@@ -21,8 +21,6 @@
     "deep-diff": "^0.3.3",
     "deepcopy": "~0.3.3",
     "dot": "~1.0.2",
-    "eslint": "^3.0.1",
-    "eslint-config-google": "^0.6.0",
     "express": "3.4.8",
     "express-basic-auth": "^1.0.1",
     "express-session": "^1.15.2",

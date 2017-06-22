@@ -80,7 +80,7 @@ main(){
 
 	echo Starting zip
 	# zip the application
-	zip -q -x *.git* node_modules/ -r "${APP_NAME}-${APP_VERSION}.zip" . || on_err "$_"
+	zip -q -x *.git* "node_modules/phantomj*" "node_modules/grunt*" "node_modules/karma*" "node_modules/eslint*" -r "${APP_NAME}-${APP_VERSION}.zip" . || on_err "$_"
 
 	echo "Using access key $AWS_ACCESS_KEY_ID"
 	# delete any version with the same name (based on the short revision)
@@ -102,6 +102,8 @@ main(){
 	aws elasticbeanstalk create-application-version --application-name "${APP_NAME}" --version-label "${APP_VERSION}" --description "${APP_DESCRIPTION}" --source-bundle S3Bucket="${S3_BUCKET}",S3Key="${APP_NAME}-${APP_VERSION}.zip"	|| on_err "$_"
     aws elasticbeanstalk create-environment --environment-name "${GREEN_ENV_NAME}" --application-name "${APP_NAME}" --version-label "${APP_VERSION}" --description "${APP_DESCRIPTION}" --solution-stack-name "64bit Amazon Linux 2016.03 v2.1.1 running Node.js"
     # NEED TO ADD A WAIT FOR 'Updating' BEFORE WE WAIT FOR 'Ready'
+    interval=5; timeout=90; while [[ ! `aws elasticbeanstalk describe-environments --environment-name "${GREEN_ENV_NAME}" | grep -i status | grep -i updating` && $timeout > 0 ]]; do sleep $interval; timeout=$((timeout - interval)); done
+
 	interval=5; timeout=90; while [[ ! `aws elasticbeanstalk describe-environments --environment-name "${GREEN_ENV_NAME}" | grep -i status | grep -i ready` && $timeout > 0 ]]; do sleep $interval; timeout=$((timeout - interval)); done
 
 	#[ $timeout > 0 ] && aws elasticbeanstalk update-environment --environment-name "${ENV_NAME}" --version-label "${APP_VERSION}" || exit 0

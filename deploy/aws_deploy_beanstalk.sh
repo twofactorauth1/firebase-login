@@ -97,7 +97,7 @@ main(){
 
 	echo Starting zip
 	# zip the application
-	zip -q -x *.git* node_modules/ -r "${APP_NAME}-${APP_VERSION}.zip" . || on_err "$_"
+	zip -q -x *.git* "node_modules/phantomj*" "node_modules/grunt*" "node_modules/karma*" "node_modules/eslint*" -r "${APP_NAME}-${APP_VERSION}.zip" . || on_err "$_"
 
 	echo "Using access key $AWS_ACCESS_KEY_ID"
 	# delete any version with the same name (based on the short revision)
