@@ -23,7 +23,7 @@
         promotionsService.updatePromotionAttachment = updatePromotionAttachment;
         promotionsService.saveShipment = saveShipment;
         promotionsService.updateShipmentAttachment = updateShipmentAttachment;
-
+        promotionsService.getShipments = getShipments;
         promotionsService.promoTypeOptions = {
             TRY_AND_BUY: "Try and Buy",
             MILESTONE: "Milestone",
@@ -267,6 +267,23 @@
                 transformRequest: angular.identity,
                 headers: {'Content-Type': undefined}
             }).success(success).error(error));
+        }
+
+
+        /**
+            * Get list of all shipment for the promotion
+        */
+        function getShipments(promotionId) {
+
+            function success(data) {
+                promotionsService.shipments = data;
+            }
+
+            function error(error) {
+                console.error('PromotionService getShipments error: ', JSON.stringify(error));
+            }
+
+            return promotionsRequest($http.get([basePromotionAPIUrlv2, promotionId, 'shipments'].join('/')).success(success).error(error));
         }
 
         (function init() {

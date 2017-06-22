@@ -303,6 +303,21 @@ module.exports = {
             
         });
 
+    },
+
+    listShipments: function(accountId, userId, promotionId, fn) {
+        var self = this;
+        console.log(promotionId);
+        log.debug('>> listShipments');
+        shipmentDao.findMany({'promotionId': promotionId}, $$.m.Shipment, function(err, list){
+            if(err) {
+                log.error('Exception listing shipments: ' + err);
+                fn(err, null);
+            } else {
+                log.debug('<< listShipments');
+                fn(null, list);
+            }
+        });
     }
 
     
