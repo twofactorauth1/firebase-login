@@ -17,7 +17,8 @@ function inventoryDetailsController($scope, $state, $attrs, $filter, $modal, $ti
     vm.uiState = {
         loading: true,
         dimNotApplicableText: 'NA',
-        loadingWatchInventory: true
+        loadingWatchInventory: true,
+        userPermissions: $scope.$parent.userPermissions
     };
 
     vm.backToInventory = backToInventory;

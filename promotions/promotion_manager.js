@@ -13,7 +13,7 @@ var awsConfig = require('../configs/aws.config');
 var appConfig = require('../configs/app.config');
 
 var accountDao = require('../dao/account.dao');
-
+var shipmentDao = require('./dao/shipment.dao.js');
 
 module.exports = {
 	
@@ -216,6 +216,108 @@ module.exports = {
             
         });
 
+    },
+
+    saveOrUpdateShipment: function(accountId, userId, shipment, shipmentId, fn) {
+        var self = this;
+        log.debug(accountId, userId, '>> saveOrUpdateShipment');
+        shipmentDao.saveOrUpdate(shipment, function(err, value){
+            if(err) {
+                self.log.error('Error saving shipment: ' + err);
+                return fn(err, null);
+            } else {
+                log.debug(accountId, userId, '<< saveOrUpdateShipment');
+                fn(null, value);
+            }
+        });
+    },
+
+    updateShipmentAttachment: function(file, shipmentId, accountId, userId, fn) {
+        var self = this;
+        self.log = log;
+        self.log.debug('>> updateShipmentAttachment');
+
+        var uploadPromise = $.Deferred();
+
+        var attachment = {
+            name: file.name,
+            size: file.size,
+            mimeType: file.mimeType
+        };
+
+        if(file.path) {
+            // to do-  need to change bucket
+            var bucket = awsConfig.BUCKETS.PROMOTIONS;
+            var subdir = 'account_' + accountId;
+            if(appConfig.nonProduction === true) {
+                subdir = 'test_' + subdir;
+            }
+            
+            s3dao.uploadToS3(bucket, subdir, file, true, function(err, value){
+                if(err) {
+                    self.log.error('Error from S3: ' + err);
+                    uploadPromise.reject();
+                    fn(err, null);
+                } else {
+                    self.log.debug('S3 upload complete');
+                    console.dir(value);
+            
+                    if(value && value.url) {
+                        value.url = value.url.replace("s3.amazonaws.com", "s3-us-west-1.amazonaws.com");
+                    }
+
+                    if (value.url.substring(0, 5) == 'http:') {
+                      attachment.url = value.url.substring(5, value.url.length);
+                    } else {
+                      attachment.url = value.url;
+                    }
+                   
+                    uploadPromise.resolve(value);
+                }
+            });
+
+        } else {
+            uploadPromise.resolve();
+        }
+        //update attachment
+        $.when(uploadPromise).done(function(file){
+            console.log(shipmentId);
+            shipmentDao.getById(shipmentId, $$.m.Shipment, function(err, shipment){
+                if(err) {
+                    log.error('Exception getting shipment: ' + err);
+                    fn(err, null);
+                } else {
+                    shipment.set("attachment", attachment);
+                    console.log(shipment);
+                    promotionDao.saveOrUpdate(shipment, function(err, savedShipment){
+                        if(err) {
+                            self.log.error('Exception during shipment creation: ' + err);
+                            fn(err, null);
+                        } else {
+                            self.log.debug('<< updateShipmentAttachment');
+                            fn(null, savedShipment, file);
+                        }
+                    });
+                }
+            });            
+            
+        });
+
+    },
+
+    listShipments: function(accountId, userId, promotionId, fn) {
+        var self = this;
+        console.log(promotionId);
+        log.debug('>> listShipments');
+        shipmentDao.findMany({'promotionId': promotionId}, $$.m.Shipment, function(err, list){
+            if(err) {
+                log.error('Exception listing shipments: ' + err);
+                fn(err, null);
+            } else {
+                log.debug('<< listShipments');
+                fn(null, list);
+            }
+        });
     }
 
     

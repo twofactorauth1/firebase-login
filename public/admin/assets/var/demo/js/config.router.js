@@ -287,7 +287,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         templateUrl: "/admin/assets/var/demo/js/promotions/promotion-details/promotion-details.html",
         title: 'Promotion Details',
         icon: 'ti-layout-media-left-alt',
-        resolve: loadSequence('PromotionDetailsComponent', 'PromotionDetailsController', 'PromotionsService', 'PromotionProductModalController', 'SecurematicsProductService', 'pdfobject')
+        resolve: loadSequence('PromotionDetailsComponent', 'PromotionDetailsController', 'PromotionsService', 'PromotionProductModalController', 'PromotionShipmentModalController', 'SecurematicsProductService', 'pdfobject', 'ShipmentsComponent', 'ShipmentsComponentController')
     }).state('app.rmas', {
         url: '/rmas',
         templateUrl: "/admin/assets/var/demo/views/under-construction.html",

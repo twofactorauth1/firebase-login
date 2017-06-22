@@ -21,8 +21,9 @@
         promotionsService.getVendors = getVendors;
         promotionsService.updatePromotion = updatePromotion;
         promotionsService.updatePromotionAttachment = updatePromotionAttachment;
-
-
+        promotionsService.saveShipment = saveShipment;
+        promotionsService.updateShipmentAttachment = updateShipmentAttachment;
+        promotionsService.getShipments = getShipments;
         promotionsService.promoTypeOptions = {
             TRY_AND_BUY: "Try and Buy",
             MILESTONE: "Milestone",
@@ -59,6 +60,22 @@
                     value: "MONTHLY"
                 }
             ]
+        }
+
+
+        promotionsService.shipmentStatusOptions = {
+            ACTIVE: "Active",
+            INACTIVE: "Inactive",
+            options: [
+                {
+                    label: "Active",
+                    value: "ACTIVE"
+                },
+                {
+                    label: "Inactive",
+                    value: "INACTIVE"
+                }
+            ]    
         }
 
         function promotionsRequest(fn) {
@@ -204,6 +221,69 @@
                 transformRequest: angular.identity,
                 headers: {'Content-Type': undefined}
             }).success(success).error(error));
+        }
+
+
+        function saveShipment(shipment) {
+
+            function success(data) {
+                // var index = _.findIndex(promotionsService.shipments, {
+                //     _id: data._id
+                // });
+
+                // if (index > -1) {
+                //     promotionsService.promotions[index] = data;
+                // } else {
+                //     promotionsService.promotions.splice(0, 0, data);
+                // }
+            }
+
+            function error(error) {
+                console.error('promotionsService saveShipment error: ', JSON.stringify(error));
+            }
+
+            var apiUrl = [basePromotionAPIUrlv2, 'promotion', 'shipment'].join('/');
+            if(shipment._id){
+                apiUrl = [basePromotionAPIUrlv2, 'promotion', 'shipment', shipment._id].join('/');
+            }
+
+            return promotionsRequest($http.post(apiUrl, shipment).success(success).error(error));
+            
+        }
+
+        function updateShipmentAttachment(attachment, _id, fn){
+            function success(data) {                
+                console.log(data);
+            }
+
+            function error(error) {
+                console.error('PromotionService updateShipmentAttachment error: ', JSON.stringify(error));
+            }
+
+            var _formData = new FormData();
+            _formData.append('file', attachment);
+            
+            return promotionsRequest($http.post([basePromotionAPIUrlv2, 'promotion', 'shipment', 'attachment', _id].join('/'), _formData, {
+                transformRequest: angular.identity,
+                headers: {'Content-Type': undefined}
+            }).success(success).error(error));
+        }
+
+
+        /**
+            * Get list of all shipment for the promotion
+        */
+        function getShipments(promotionId) {
+
+            function success(data) {
+                promotionsService.shipments = data;
+            }
+
+            function error(error) {
+                console.error('PromotionService getShipments error: ', JSON.stringify(error));
+            }
+
+            return promotionsRequest($http.get([basePromotionAPIUrlv2, promotionId, 'shipments'].join('/')).success(success).error(error));
         }
 
         (function init() {

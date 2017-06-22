@@ -27,7 +27,8 @@ function inventoryComponentController($scope, $attrs, $filter, $modal, $timeout,
             OITM_ItemCode: InventoryService.fieldSearch.OITM_ItemCode,
             Available: InventoryService.fieldSearch.Available
         },        
-        inVentoryWatchList: []
+        inVentoryWatchList: [],
+        userPermissions: $scope.$parent.userPermissions
     };
 
     vm.viewSingleInventory = viewSingleInventory;

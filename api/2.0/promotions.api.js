@@ -32,6 +32,10 @@ _.extend(api.prototype, baseApi.prototype, {
         app.delete(this.url(':id'), this.isAuthAndSubscribedApi.bind(this), this.deletePromotion.bind(this));
         app.post(this.url(':id'), this.isAuthAndSubscribedApi.bind(this), this.updatePromotion.bind(this));
         app.post(this.url('attachment/:id'), this.isAuthApi.bind(this), this.updatePromotionAttachment.bind(this));
+        app.post(this.url('promotion/shipment'), this.isAuthApi.bind(this), this.createShipment.bind(this));
+        app.post(this.url('promotion/shipment/attachment/:id'), this.isAuthApi.bind(this), this.updateShipmentAttachment.bind(this));
+        app.get(this.url(':promotionId/shipments'), this.isAuthAndSubscribedApi.bind(this), this.listShipments.bind(this));       
+
     },
 
     listPromotions: function(req, resp) {
@@ -265,6 +269,96 @@ _.extend(api.prototype, baseApi.prototype, {
             }
         });
     },
+
+    createShipment: function(req, resp) {
+        var self = this;
+        self.log.debug('>> createShipment');
+        var accountId = parseInt(self.accountId(req));
+        var userId = self.userId(req);
+        // self.checkPermission(req, self.sc.privs.MODIFY_PROMOTION, function(err, isAllowed) {
+        //     if (isAllowed !== true) {
+        //         return self.send403(resp);
+        //     } else {
+                var shipmentObj = req.body;
+                var shipment = new $$.m.Shipment(shipmentObj);
+                var modified = {
+                    date: new Date(),
+                    by: userId
+                };
+                var created = {
+                    date: new Date(),
+                    by: userId
+                };
+
+                shipment.set('modified', modified);
+                shipment.set('created', created);
+                shipment.set("accountId", accountId);
+                shipment.set("userId", userId);
+
+                if(shipmentObj.shipDate){                    
+                    shipment.set("shipDate", moment(shipmentObj.shipDate).toDate());
+                }
+                if(shipmentObj.configDate){
+                    shipment.set("configDate", moment(shipmentObj.configDate).toDate());
+                }
+                if(shipmentObj.deployDate){                    
+                    shipment.set("deployDate", moment(shipmentObj.deployDate).toDate());
+                }
+                if(shipmentObj.endDate){
+                    shipment.set("endDate", moment(shipmentObj.endDate).toDate());
+                }
+
+                promotionManager.saveOrUpdateShipment(accountId, userId, shipment, null, function(err, value){
+                    self.log.debug(accountId, userId, '<< createShipment');
+                    self.sendResultOrError(resp, err, value, "Error creating shipment");
+                    self.createUserActivity(req, 'CREATE_SHIPMENT', null, null, function(){});
+                });
+        //     }
+        // });
+    },
+
+    updateShipmentAttachment: function(req, res) {
+        var self = this;
+        self.log.debug('>> updateShipmentAttachment');
+        var form = new formidable.IncomingForm();
+        var accountId = parseInt(self.accountId(req));
+        var userId = self.userId(req);
+        var shipmentId = req.params.id;
+        form.parse(req, function(err, fields, files) {
+            if(err) {
+                self.wrapError(res, 500, 'fail', 'The upload failed', err);
+                self = null;
+                return;
+            } else {
+
+                var file = files['file'];
+                console.log(file);
+
+                var fileToUpload = {};
+                fileToUpload.mimeType = file.type;
+                fileToUpload.size = file.size;
+                fileToUpload.name = file.name;
+                fileToUpload.path = file.path;
+                fileToUpload.type = file.type;
+                promotionManager.updateShipmentAttachment(fileToUpload, shipmentId, accountId, userId, function(err, value, file){                                                       
+                    self.log.debug('>> updateShipmentAttachment');
+                    self.sendResultOrError(res, err, value, 'Could not update shipment attachment');                    
+                });
+            }
+        });
+    },
+
+    listShipments: function(req, resp) {
+        var self = this;
+        var accountId = parseInt(self.accountId(req));
+        var userId = self.userId(req);
+        var promotionId = req.params.promotionId;
+        self.log.debug(accountId, userId, '>> listShipments');
+        promotionManager.listShipments(accountId, userId, promotionId, function(err, list){
+            self.log.debug(accountId, userId, '<< listShipments');
+            return self.sendResultOrError(resp, err, list, "Error listing shipments");
+        });
+    }
 
 });
 
