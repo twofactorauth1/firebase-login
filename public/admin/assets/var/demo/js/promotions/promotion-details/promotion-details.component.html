@@ -27,14 +27,13 @@
 </div>
 <div class="clearfix"></div>
 <tabset class="tabbable margin-top-15" ng-show="!vm.uiState.loading">
-    <tab heading="Promotion Details">        
+    <tab heading="Promotion Details">
         <div data-ng-include=" 'assets/var/demo/js/promotions/partials/promotion-details-edit.html' "></div>
     </tab>
     <tab heading="Shipments">
         <shipments-component></shipments-component>
     </tab>
-</tabset>    
-<div id="pdf-container" class="hidden-xs container-fluid container-fullw securematics-details-view"></div>
+</tabset>
 <div class="loading-promotion-details center" ng-if="vm.uiState.loading">
     <h2>Loading promotion details. Please wait....</h2>
 </div>
