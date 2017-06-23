@@ -55,7 +55,7 @@
 	            </tr>
 	            <tr>
 	                <th class="col-partner">
-	                    <input st-search="title" ng-model="vm.uiState.fieldSearch.partner" placeholder="Partner" class="form-control" type="search" />
+	                    <input st-search="title" ng-model="vm.uiState.fieldSearch.partner" placeholder="VAR" class="form-control" type="search" />
 	                </th>
 	                <th class="col-customer">
 	                    <input st-search="vendor" ng-model="vm.uiState.fieldSearch.customer" placeholder="Customer" class="form-control" type="search" />
@@ -82,7 +82,7 @@
 	        </thead>
 	        <tbody>
 	            <tr ng-repeat="shipment in vm.displayedShipments" class="product-item">
-	                <td class="col-partner"><strong>Partner: </strong>{{shipment.partner}}</td>
+	                <td class="col-partner"><strong>VAR: </strong>{{shipment.partner}}</td>
 	                <td class="col-customer"><strong>Customer: </strong><div class="name-block-container"><span class="list-name"></span><span class="text-adjust-table" tooltip="{{shipment.customer}}">{{shipment.customer}}</span></div></td>
 	                <td class="col-products"><strong>Products: </strong></td>
 	                <td class="hidden-xs col-ship-date"><strong>Ship Date: </strong>{{vm.parseValueToDate(shipment.shipDate) | date:'M/d/yyyy'}}</td>
