@@ -120,7 +120,7 @@
 	            	<th class="hidden-xs select-po-col" ng-click='vm.selectAllClickFn($event)' ng-show='vm.displayedOrders.length'><i class="fa fa-2x" ng-class='{"fa-check-circle": vm.selectAllChecked, "fa-circle-o": !vm.selectAllChecked}'></i></th>
 	                <th class="title-col" st-sort="title" style="white-space: nowrap">Name</th>
 	                <th class="submitter-col" st-sort="vm.getters.submitter" style="white-space: nowrap">Submitter</th>
-	                <th class="company-col" st-sort="companyName" ng-if="!vm.state.orgCardAndPermissions.isVendor" style="white-space: nowrap">Partner</th>
+	                <th class="company-col" st-sort="companyName" ng-if="!vm.state.orgCardAndPermissions.isVendor" style="white-space: nowrap">VAR</th>
 	                <th class="created-col" st-sort="vm.getters.created" style="white-space: nowrap">Date</th>
 	                <th class="hidden-xs attachment-col">Attachment</th>
 	            </tr>
@@ -141,7 +141,7 @@
                     <td class="title-col"><strong>Name: </strong><div class="name-block-container"><span class="list-name"></span><span class="text-adjust-table" title="{{order.title}}">{{order.title || '&nbsp;'}}</span></div></td>
 	                <td class="submitter-col"><strong>Submitter: </strong>{{vm.getSubmitterName(order.submitter) || '&nbsp;'}}</td>
 
-	                <td ng-if="!vm.state.orgCardAndPermissions.isVendor" class="company-col"><strong>Company: </strong><div class="name-block-container"><span class="list-name"></span>
+	                <td ng-if="!vm.state.orgCardAndPermissions.isVendor" class="company-col"><strong>VAR: </strong><div class="name-block-container"><span class="list-name"></span>
 	                <span class="text-adjust-table" title="{{order.companyName}}">{{order.companyName || '&nbsp;'}}</span>
 	                </div></td>
 

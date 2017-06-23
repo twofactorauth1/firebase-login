@@ -21,7 +21,7 @@
 	                                    <div class="form-group">
 	                                        <div class="col-xs-4 col-sm-5 padding-right-0">
 	                                            <span class="input-icon">
-                                                    <input type="text" st-search ng-model="vm.uiState.globalSearch" placeholder="Search by partner, customer..." id="form-field-14" class="form-control">
+                                                    <input type="text" st-search ng-model="vm.uiState.globalSearch" placeholder="Search by VAR, customer..." id="form-field-14" class="form-control">
                                                     <i class="ti-search"></i>
                                                 </span>
 	                                        </div>
@@ -43,7 +43,7 @@
 	    <table class="table table-hover table-striped" ng-class="{'grid': tableView == 'grid', 'bg-white table-list-view': tableView == 'list'}" ng-if="!vm.uiState.loading">
 	        <thead ng-class="{'bg-white': tableView == 'grid'}">
 	            <tr>
-	                <th class="col-partner" st-sort="partner" style="white-space: nowrap;">Partner</th>
+	                <th class="col-partner" st-sort="partner" style="white-space: nowrap;">VAR</th>
 	                <th class="col-customer" st-sort="customer" style="white-space: nowrap;">Customer</th>
 	                <th class="col-products" style="white-space: nowrap;">Products</th>
 	                <th class="hidden-xs col-ship-date" st-sort="shipDate" style="white-space: nowrap;">Ship Date</th>
