@@ -4,7 +4,7 @@
             <div class="form-group">
                 <h4>Promo Name</h4>
 
-                <div class="description">                    
+                <div class="description">
                     <input type="text" placeholder="Promo Name" class="form-control" name="title" ng-model="vm.state.promotion.title">
                 </div>
                 <hr>
@@ -32,7 +32,7 @@
                 </div>
                 <hr>
             </div>
-                       
+
             <div class="form-group col-xs-12 col-sm-6 padding-left-0 single-row-view">
                 <h4>Start Date</h4>
 
@@ -48,12 +48,12 @@
                 </div>
                 <hr class="visible-xs" />
             </div>
-            <div class="clearfix hidden-xs"></div>    
+            <div class="clearfix hidden-xs"></div>
             <hr class="hidden-xs">
             <div>
                 <h3>Report Notifications</h3>
 
-                <div class="form-group">                   
+                <div class="form-group">
                     <div class="checkbox clip-check check-primary" style="z-index:2;">
                         <input type="checkbox" id="rpt_weekly" ng-model="vm.state.promotion.report.schedule" ng-true-value="'WEEKLY'">
                         <label for="rpt_weekly" class="text-inline">
@@ -64,9 +64,9 @@
                         <label for="rpt_monthly" class="text-inline">
                             {{vm.reportSheduleOptions['MONTHLY']}}
                         </label>
-                    
+
                     </div>
-                </div>    
+                </div>
                 <div class="form-group">
                     <h4>Start Date</h4>
                     <div class="description">
@@ -74,7 +74,7 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <h4>Recipients</h4>                    
+                    <h4>Recipients</h4>
                     <tags-input
                         ng-model="vm.state.promotion.report.recipients"
                         add-on-paste="true"
@@ -84,15 +84,17 @@
                         use-strings="true"
                         >
                     </tags-input>
-                    
-                </div> 
+
+                </div>
             </div>
 
             <div class="form-group">
-                   
+
                 <h4>Attachment</h4>
                 <span class="required hidden">*</span>
-                
+                <div class="visible-xs">
+                    {{vm.state.promotion.attachment.name}}
+                </div>
                 <label for="upload_file" class="btn btn-primary">
                     <span ng-if="!vm.state.promotion.attachment.name">Upload File</span>
                     <span ng-if="vm.state.promotion.attachment.name">Replace File</span>
@@ -117,7 +119,7 @@
                 <h4>Type</h4>
 
                 <div class="description">
-                    
+
                     <select id="promotion_type" ng-model="vm.state.promotion.type" class="form-control margin-bottom-0">
                         <option></option>
                         <option ng-repeat="promoOption in vm.promoTypeOptions.options" value="{{promoOption.value}}" ng-disabled="promoOption.disabled" ng-selected="{{promoOption.value == vm.state.promotion.type}}">{{promoOption.label}}</option>
@@ -140,10 +142,13 @@
                         <i class="ti-plus"></i><span> Add Product</span>
                     </button>
                 </div>
-                <div class="clearfix"></div>    
-                
+                <div class="clearfix"></div>
+
             </div>
         </div>
-    </div>    
+        <div class="col-xs-12">
+            <div id="pdf-container" class="hidden-xs container-fluid container-fullw securematics-details-view"></div>
+        </div>
+    </div>
 </div>
 <div data-ng-include=" 'assets/var/demo/js/promotions/modals/new-promotion-product-modal.html' "></div>

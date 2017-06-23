@@ -8,15 +8,15 @@ on_err(){
 }
 
 env_check(){
-	if [ "x$AWS_ACCESS_KEY_ID" = "x" ]; then 
+	if [ "x$AWS_ACCESS_KEY_ID" = "x" ]; then
 		on_err "No AWS_ACCESS_KEY_ID defined."
 	fi
 	if [ "x$AWS_SECRET_ACCESS_KEY" = "x" ]; then
 		on_err "No AWS_SECRET_ACCESS_KEY defined.";
 	fi
-	if [ "x$APP_NAME" = "x" ]; then 
-		on_err "No APP_NAME defined."; 
-	fi	
+	if [ "x$APP_NAME" = "x" ]; then
+		on_err "No APP_NAME defined.";
+	fi
 
 	if [ "$1" = "master" ]; then
 		export AWS_DEFAULT_REGION="us-west-1"
@@ -33,26 +33,20 @@ env_check(){
         export ENV_NAME="indiwebTestB-env"
         export APP_NAME="indiweb-test-b"
         export S3_BUCKET="elasticbeanstalk-us-west-1-213805526570"
-    elif [ "$1" = "mlab" ]; then
-        export GOOGLE_CLIENT_ID="277102651227-koaeib7b05jjc355thcq3bqtkbuv1o5r.apps.googleusercontent.com"
-        export GOOGLE_CLIENT_SECRET="lg41TWgRgRfZQ22Y9Qd902pH"
-        export AWS_DEFAULT_REGION="us-west-1"
-        export ENV_NAME="indiwebMlab-env"
-        export APP_NAME="indiweb-mlab"
-        export S3_BUCKET="elasticbeanstalk-us-west-1-213805526570"
+        export GREEN_ENV_NAME=indiwebTestB-Green
 	else
 		on_err "No environment specified"
-	fi	
+	fi
 
-	export APP_VERSION=`git rev-parse --short HEAD`
+	export APP_VERSION=`git rev-parse --short HEAD`-local
 }
 
 main(){
 	pip list | grep awscli > /dev/null
-	[ $? -ne 0 ] && pip install awscli	
+	[ $? -ne 0 ] && pip install awscli
 
 	# clean build artifacts and create the application archive (also ignore any files named .git* in any folder)
-	#git clean -fd	
+	#git clean -fd
 
 	# Generate angular constants file
 	if [ "$1" = "master" ]; then
@@ -64,36 +58,25 @@ main(){
 	    echo "Generating constants for development."
 	    grunt ngconstant:development || on_err "$_"
 	    cp public/admin/assets/js/config.js public/js/scripts/config.js
-	    export APP_DESCRIPTION="Test Build"
+	    export APP_DESCRIPTION="Test Build (local)"
 	    echo $APP_DESCRIPTION
 	    cp public/robots-test.txt public/robots.txt
-	elif [ "$1" = "develop" ]; then
-	    echo "Generating constants for development."
-        grunt ngconstant:development || on_err "$_"
-        cp public/admin/assets/js/config.js public/js/scripts/config.js
-        export APP_DESCRIPTION="MLab Build"
-        echo $APP_DESCRIPTION
-        cp public/robots-test.txt public/robots.txt
 	else
 		echo "No environment specified.  No constants"
 	fi
 	# precompile assets, ...
 	########################
 	# remove original main file
-	#rm -f public/js/main.js	
+	#rm -f public/js/main.js
 
 	# run grunt
 	echo Running grunt production
 	grunt production --optimize=uglify || on_err "$_"
-	#if [ "$1" = "master" ]; then
-	    # copy the minimized jade file
-	mv templates/snippets/index_body_scripts_minimized.jade templates/snippets/index_body_scripts.jade
-	mv templates/snippets/admin_body_scripts_minimized.jade templates/snippets/admin_body_scripts.jade
-	#fi	
 
+	cp templates/snippets/index_body_scripts_minimized.jade templates/snippets/index_body_scripts.jade
+	cp templates/snippets/admin_body_scripts_minimized.jade templates/snippets/admin_body_scripts.jade
 
-	echo "Remove as much as possible"
-    # npm prune --production
+    npm prune --production
 
 	echo Starting zip
 	# zip the application
@@ -109,7 +92,7 @@ main(){
 	aws elasticbeanstalk describe-application-versions --application-name "${APP_NAME}" --output text \
 	  --query 'ApplicationVersions[*].[VersionLabel,DateCreated,Description]' | \
 	  grep -vi sample | tail -n +${LIMIT_REVISIONS} | \
-	  while read ver date desc; do aws elasticbeanstalk delete-application-version --application-name "${APP_NAME}" --version-label "${ver}" --delete-source-bundle; done	
+	  while read ver date desc; do aws elasticbeanstalk delete-application-version --application-name "${APP_NAME}" --version-label "${ver}" --delete-source-bundle; done
 
 	echo "Uploading to S3"
 	# upload to S3
@@ -117,12 +100,15 @@ main(){
 
 	# create a new version and update the environment to use this version
 	aws elasticbeanstalk create-application-version --application-name "${APP_NAME}" --version-label "${APP_VERSION}" --description "${APP_DESCRIPTION}" --source-bundle S3Bucket="${S3_BUCKET}",S3Key="${APP_NAME}-${APP_VERSION}.zip"	|| on_err "$_"
+    aws elasticbeanstalk create-environment --environment-name "${GREEN_ENV_NAME}" --application-name "${APP_NAME}" --version-label "${APP_VERSION}" --description "${APP_DESCRIPTION}" --solution-stack-name "64bit Amazon Linux 2016.03 v2.1.1 running Node.js"
+    # NEED TO ADD A WAIT FOR 'Updating' BEFORE WE WAIT FOR 'Ready'
+    interval=5; timeout=90; while [[ ! `aws elasticbeanstalk describe-environments --environment-name "${GREEN_ENV_NAME}" | grep -i status | grep -i updating` && $timeout > 0 ]]; do sleep $interval; timeout=$((timeout - interval)); done
 
-	interval=5; timeout=90; while [[ ! `aws elasticbeanstalk describe-environments --environment-name "${ENV_NAME}" | grep -i status | grep -i ready` && $timeout > 0 ]]; do sleep $interval; timeout=$((timeout - interval)); done
+	interval=5; timeout=90; while [[ ! `aws elasticbeanstalk describe-environments --environment-name "${GREEN_ENV_NAME}" | grep -i status | grep -i ready` && $timeout > 0 ]]; do sleep $interval; timeout=$((timeout - interval)); done
 
-	[ $timeout > 0 ] && aws elasticbeanstalk update-environment --environment-name "${ENV_NAME}" --version-label "${APP_VERSION}" || exit 0
+	#[ $timeout > 0 ] && aws elasticbeanstalk update-environment --environment-name "${ENV_NAME}" --version-label "${APP_VERSION}" || exit 0
+    [ $timeout > 0 ] && aws elasticbeanstalk swap-environment-cnames --source-environment-name "${ENV_NAME}" --destination-environment-name "${GREEN_ENV_NAME}" || exit 0
 
-	
 
 	# Testing?
 
@@ -140,6 +126,8 @@ main(){
         grunt nodeunit:selenium
     fi
 }
-
+export AWS_ACCESS_KEY_ID=AKIAIS2VFA3QL7JVKQQQ
+export AWS_SECRET_ACCESS_KEY=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
+export APP_NAME=indiweb-test-b
 env_check $*
 main $*
