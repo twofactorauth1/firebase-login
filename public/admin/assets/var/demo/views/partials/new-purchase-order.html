@@ -22,7 +22,7 @@
                 <textarea required placeholder="Text" class="form-control" ng-model="vm.state.newPurchaseOrder.text"></textarea>
             </div>
             <div class="form-group">
-                <label class="">Company<span class="required">*</span></label>
+                <label class="">VAR<span class="required">*</span></label>
                     <ui-select ng-if="vm.state.customers.length >= 200"
                         ng-model="vm.state.newPurchaseOrder.cardCode"
                         theme="bootstrap"
@@ -30,14 +30,14 @@
                         ng-disabled="vm.state.orgCardAndPermissions.cardCodes.length <= 1 && vm.state.orgCardAndPermissions.isVendor"
                         >
                         <ui-select-match
-                            placeholder="Company Name">
+                            placeholder="VAR Name">
                             {{$select.selected.OCRD_CardName}}
                         </ui-select-match>
                         <ui-select-choices  all-choices="vm.state.customers" repeat="customer.OCRD_CardCode as customer in $select.pageOptions.customers | propsFilter: {OCRD_CardName: $select.search}" refresh-delay="0">
                             <div ng-bind-html="customer.OCRD_CardName | highlight: $select.search"></div>
                           </small>
                         </ui-select-choices>
-                        
+
                     </ui-select>
 
                     <ui-select ng-if="vm.state.customers.length < 200 && vm.state.customers.length > 1"
@@ -47,14 +47,14 @@
                         ng-disabled="vm.state.orgCardAndPermissions.cardCodes.length <= 1 && vm.state.orgCardAndPermissions.isVendor"
                         >
                         <ui-select-match
-                            placeholder="Company Name">
+                            placeholder="VAR Name">
                             {{$select.selected.OCRD_CardName}}
                         </ui-select-match>
                         <ui-select-choices repeat="customer.OCRD_CardCode as customer in vm.state.customers | propsFilter: {OCRD_CardName: $select.search}" refresh-delay="0">
                             <div ng-bind-html="customer.OCRD_CardName | highlight: $select.search"></div>
                           </small>
                         </ui-select-choices>
-                        
+
                     </ui-select>
                     <label class="block form-control" ng-if="vm.state.customers.length <= 1">
                         {{vm.state.newPurchaseOrder.companyName}}
@@ -77,7 +77,7 @@
             </div>
         </form>
         <div class="modal-body-loading center" ng-if="vm.uiState.loadingNewPoModal">
-            <h3>Loading customers.....</h3> 
+            <h3>Loading customers.....</h3>
         </div>
     </div>
     <div class="modal-footer">
