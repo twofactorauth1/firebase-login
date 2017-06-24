@@ -84,7 +84,7 @@
                     <i class="ti-shopping-cart"></i>
                 </div>
                 <div class="item-inner">
-                    <span class="title"> Purchase Orders </span><i class="icon-desktop"></i>
+                    <span class="title"> Submit PO </span><i class="icon-desktop"></i>
                 </div>
             </div>
         </a>
@@ -134,7 +134,7 @@
     </li>
 
     <li ng-class="{'active open':$state.includes('app.promotions')}" ng-if="userPermissions.promotions">
-        <a href="javascript:void(0)">
+        <a ui-sref="app.promotions">
             <div class="item-content">
                 <div class="item-media">
                     <i class="ti-medall"></i>
@@ -144,13 +144,6 @@
                 </div>
             </div>
         </a>
-        <ul class="sub-menu">
-            <li ui-sref-active="active" ng-class="{'active': $state.includes('app.promotions')}">
-                <a ui-sref="app.promotions">
-                    <span class="title" translate="sidebar.nav.promotions.MANAGE"> Manage Promotions </span>
-                </a>
-            </li>
-        </ul>
     </li>
 
 	<li ng-class="{'active open':$state.includes('app.marketing')}" class="hidden">
