@@ -65,16 +65,21 @@
 
 
         promotionsService.shipmentStatusOptions = {
-            ACTIVE: "Active",
-            INACTIVE: "Inactive",
+            TRY: "Try",
+            BUY: "Buy",
+            RMA: 'RMA',
             options: [
                 {
-                    label: "Active",
-                    value: "ACTIVE"
+                    label: "Try",
+                    value: "TRY"
                 },
                 {
-                    label: "Inactive",
-                    value: "INACTIVE"
+                    label: "Buy",
+                    value: "BUY"
+                },
+                {
+                    label: "RMA",
+                    value: "RMA"
                 }
             ]    
         }
