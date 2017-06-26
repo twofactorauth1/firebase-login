@@ -636,7 +636,8 @@ var ziManager = {
                 self.log.debug(0,0, 'Loading customers');
                 self.loadCustomerCollection(function(){
                     self.log.debug(0,0, 'Loading ledger');
-                    self.loadLedgerCollection(function(){
+                    var dateString = moment().format("M/DD/YY");
+                    self.loadLedgerCollection(dateString, function(){
                         self.log.debug(0,0, 'Scheduling next run');
                         //schedule next run
 
