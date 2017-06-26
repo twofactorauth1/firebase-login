@@ -43,7 +43,7 @@
 	    <table class="table table-hover table-striped" ng-class="{'grid': tableView == 'grid', 'bg-white table-list-view': tableView == 'list'}" ng-if="!vm.uiState.loading">
 	        <thead ng-class="{'bg-white': tableView == 'grid'}">
 	            <tr>
-	                <th class="col-partner" st-sort="partner" style="white-space: nowrap;">VAR</th>
+	                <th class="col-partner" st-sort="companyName" style="white-space: nowrap;">VAR</th>
 	                <th class="col-customer" st-sort="customer" style="white-space: nowrap;">Customer</th>
 	                <th class="col-products" style="white-space: nowrap;">Products</th>
 	                <th class="hidden-xs col-ship-date" st-sort="shipDate" style="white-space: nowrap;">Ship Date</th>
@@ -55,7 +55,7 @@
 	            </tr>
 	            <tr>
 	                <th class="col-partner">
-	                    <input st-search="title" ng-model="vm.uiState.fieldSearch.partner" placeholder="VAR" class="form-control" type="search" />
+	                    <input st-search="companyName" ng-model="vm.uiState.fieldSearch.companyName" placeholder="VAR" class="form-control" type="search" />
 	                </th>
 	                <th class="col-customer">
 	                    <input st-search="vendor" ng-model="vm.uiState.fieldSearch.customer" placeholder="Customer" class="form-control" type="search" />
@@ -82,7 +82,7 @@
 	        </thead>
 	        <tbody>
 	            <tr ng-repeat="shipment in vm.displayedShipments" class="product-item">
-	                <td class="col-partner"><strong>VAR: </strong>{{shipment.partner}}</td>
+	                <td class="col-partner"><strong>VAR: </strong>{{shipment.companyName}}</td>
 	                <td class="col-customer"><strong>Customer: </strong><div class="name-block-container"><span class="list-name"></span><span class="text-adjust-table" tooltip="{{shipment.customer}}">{{shipment.customer}}</span></div></td>
 	                <td class="col-products"><strong>Products: </strong></td>
 	                <td class="hidden-xs col-ship-date"><strong>Ship Date: </strong>{{vm.parseValueToDate(shipment.shipDate) | date:'M/d/yyyy'}}</td>
