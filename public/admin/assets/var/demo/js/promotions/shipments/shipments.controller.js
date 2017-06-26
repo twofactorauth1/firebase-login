@@ -55,9 +55,8 @@ function shipmentsComponentController($scope, $attrs, $window, $filter, $statePa
     }
         
     function closeModal() {
-        if($scope.modalInstance)
-            $scope.modalInstance.close();
-        vm.uiState.modalLoading = false;
+        if(vm.modalInstance)
+            vm.modalInstance.close();
         
     }
 

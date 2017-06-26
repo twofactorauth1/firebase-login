@@ -55,7 +55,7 @@ function promotionsComponentController($scope, $attrs, $filter, $modal, $timeout
         vm.state.promotion = {};
         var templateUrl = 'new-promotion-modal';
         
-        $scope.modalInstance = $modal.open({
+        vm.modalInstance = $modal.open({
             templateUrl: templateUrl,
             size: size,
             keyboard: false,
@@ -66,8 +66,8 @@ function promotionsComponentController($scope, $attrs, $filter, $modal, $timeout
 
 
     function closeModal() {
-        if($scope.modalInstance)
-            $scope.modalInstance.close();
+        if(vm.modalInstance)
+            vm.modalInstance.close();
         vm.uiState.modalLoading = false;
         vm.state.promotion = {};
     }

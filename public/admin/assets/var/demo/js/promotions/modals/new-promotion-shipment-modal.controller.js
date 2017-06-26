@@ -15,6 +15,7 @@ app.controller('PromotionShipmentModalController', ['$scope', '$timeout', 'paren
     vm.statusOptions = PromotionsService.shipmentStatusOptions;
     vm.saveShipment = saveShipment;
     vm.selectCardCode = selectCardCode;
+    vm.loadShipment = loadShipment;
     function initAttachment(){
         vm.attachment = {};
         document.getElementById("upload_shipment_file").value = "";
@@ -23,7 +24,7 @@ app.controller('PromotionShipmentModalController', ['$scope', '$timeout', 'paren
 
     function saveShipment(){
         vm.uiState.saveLoading = true;
-        vm.state.shipment.promotionId = vm.parentVm.state.promotion._id;
+        vm.state.shipment.promotionId = vm.parentVm.promotionId;
         PromotionsService.saveShipment(vm.state.shipment).then(function (response) {
             var shipmentId = response.data._id;
             vm.state.shipment = response.data;
@@ -73,8 +74,18 @@ app.controller('PromotionShipmentModalController', ['$scope', '$timeout', 'paren
             vm.state.orgCardAndPermissions = permissions;
         }
     });
+
+    function loadShipment(){
+        if(vm.parentVm.currentShipment){
+            vm.state.shipment = vm.parentVm.currentShipment;
+        }
+        else{
+            vm.state.shipment = {};
+        }
+    }
+
     (function init() {
-        
+        vm.loadShipment();
     })();
 
 }]);

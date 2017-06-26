@@ -81,7 +81,7 @@
 	            </tr>
 	        </thead>
 	        <tbody>
-	            <tr ng-repeat="shipment in vm.displayedShipments" class="product-item">
+	            <tr ng-repeat="shipment in vm.displayedShipments" class="product-item" ng-click="vm.currentShipment = shipment; vm.openModal('new-promotion-shipment-modal', 'PromotionShipmentModalController', 'lg')">
 	                <td class="col-partner"><strong>VAR: </strong>{{shipment.companyName}}</td>
 	                <td class="col-customer"><strong>Customer: </strong><div class="name-block-container"><span class="list-name"></span><span class="text-adjust-table" tooltip="{{shipment.customer}}">{{shipment.customer}}</span></div></td>
 	                <td class="col-products"><strong>Products: </strong></td>
