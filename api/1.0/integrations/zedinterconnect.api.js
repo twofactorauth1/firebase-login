@@ -390,11 +390,16 @@ _.extend(api.prototype, baseApi.prototype, {
                         orgConfig = {};
                     }
                     var cardCodes = orgConfig.cardCodes || [];
-
-                    manager.getCustomers(accountId, userId, cardCodes, skip, limit, sortBy, sortDir, term, null, function(err, value){
-                        self.log.debug(accountId, userId, '<< getCustomers');
-                        return self.sendResultOrError(resp, err, value, "Error listing customers");
-                    });
+                    if(cardCodes.length){
+                        manager.getCustomers(accountId, userId, cardCodes, skip, limit, sortBy, sortDir, term, null, function(err, value){
+                            self.log.debug(accountId, userId, '<< getCustomers');
+                            return self.sendResultOrError(resp, err, value, "Error listing customers");
+                        });
+                    }
+                    else
+                    {
+                        return self.wrapError(resp, 400, 'Bad Request', 'User does not have any cardCodes');
+                    }    
                 });
 
             }
