@@ -13,6 +13,7 @@
         
         var basePromotionAPIUrlv2 = '/api/2.0/promotions';
         var baseVendorAPIUrlv2 = '/api/1.0/integrations/zi/vendors';
+        var baseCustomerAPIUrl = '/api/1.0/integrations/zi';
 
         promotionsService.getPromotions = getPromotions;
         promotionsService.createPromotion = createPromotion;
@@ -286,8 +287,27 @@
             return promotionsRequest($http.get([basePromotionAPIUrlv2, promotionId, 'shipments'].join('/')).success(success).error(error));
         }
 
+
+        /**
+            * Get list of all customers
+        */
+        function getCustomers() {
+
+            function success(data) {
+                promotionsService.customers = data.results;
+            }
+
+            function error(error) {
+                promotionsService.customers = [];
+                console.error('promotionsService getCustomers error: ', JSON.stringify(error));
+            }
+
+            return promotionsRequest($http.get([baseCustomerAPIUrl, 'customers'].join('/')).success(success).error(error));
+        }
+
         (function init() {
             promotionsService.getPromotions();
+            getCustomers();
         })();
 
 		return promotionsService;

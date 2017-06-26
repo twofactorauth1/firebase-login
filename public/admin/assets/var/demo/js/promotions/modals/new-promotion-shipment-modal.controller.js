@@ -1,17 +1,20 @@
 'use strict';
 /*global app*/
-app.controller('PromotionShipmentModalController', ['$timeout', 'parentVm', 'toaster', 'PromotionsService', function ($timeout, parentVm, toaster, PromotionsService) {
+app.controller('PromotionShipmentModalController', ['$scope', '$timeout', 'parentVm', 'toaster', 'PromotionsService', function ($scope, $timeout, parentVm, toaster, PromotionsService) {
 
     var vm = this;
 
     vm.parentVm = parentVm;
     
     vm.state = {};
-    vm.uiState = {};
+    vm.uiState = {
+        loadingShipmentModal: true
+    };
     vm.attachment = {};
     vm.initAttachment = initAttachment;
     vm.statusOptions = PromotionsService.shipmentStatusOptions;
     vm.saveShipment = saveShipment;
+    vm.selectCardCode = selectCardCode;
     function initAttachment(){
         vm.attachment = {};
         document.getElementById("upload_shipment_file").value = "";
@@ -41,6 +44,34 @@ app.controller('PromotionShipmentModalController', ['$timeout', 'parentVm', 'toa
         vm.parentVm.closeModal();
     }
 
+    $scope.$watch(function() { return PromotionsService.customers }, function(customers) {
+        if(angular.isDefined(customers)){
+            vm.state.customers = _.map(
+                customers, 
+                function(customer) {
+                    return { OCRD_CardName: customer.OCRD_CardName, OCRD_CardCode: customer.OCRD_CardCode };
+                }
+            );
+            vm.uiState.loadingShipmentModal = false;   
+            var isVendor = vm.state.orgCardAndPermissions && vm.state.orgCardAndPermissions.isVendor;
+            if(isVendor){
+                if(vm.state.customers && vm.state.customers.length == 1){
+                    vm.state.shipment.cardCode = vm.state.customers[0].OCRD_CardCode;
+                    vm.state.shipment.companyName = vm.state.customers[0].OCRD_CardName;
+                }
+            }         
+        }
+    }, true);
+
+    function selectCardCode(customer){
+        vm.state.shipment.companyName = customer.OCRD_CardName;
+    }
+
+    $scope.$watch("$parent.orgCardAndPermissions", function(permissions) {
+        if(angular.isDefined(permissions)){
+            vm.state.orgCardAndPermissions = permissions;
+        }
+    });
     (function init() {
         
     })();
