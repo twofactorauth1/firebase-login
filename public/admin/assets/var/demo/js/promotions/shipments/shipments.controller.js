@@ -24,6 +24,7 @@ function shipmentsComponentController($scope, $attrs, $window, $filter, $statePa
     vm.parseValueToDate = parseValueToDate;
     vm.statusOptions = PromotionsService.shipmentStatusOptions;
     vm.viewPdf = viewPdf;
+    vm.loadShipments = loadShipments;
     function showFilteredRecords(){
         return UtilService.showFilteredRecords(vm.uiState.globalSearch, vm.uiState.fieldSearch);
     }
@@ -54,9 +55,8 @@ function shipmentsComponentController($scope, $attrs, $window, $filter, $statePa
     }
         
     function closeModal() {
-        if($scope.modalInstance)
-            $scope.modalInstance.close();
-        vm.uiState.modalLoading = false;
+        if(vm.modalInstance)
+            vm.modalInstance.close();
         
     }
 
@@ -67,20 +67,34 @@ function shipmentsComponentController($scope, $attrs, $window, $filter, $statePa
         }
     }
 
-    function viewPdf(attachment){
+    function viewPdf($event, attachment){
+        $event.stopPropagation();
         if(attachment.url)
             $window.open(attachment.url, '_blank');
     }
 
-    function init(element) {
-        vm.element = element;
-        if(vm.promotionId != 'new'){
-            vm.state.shipments = [];
-        }
+    function loadShipments(){
+        vm.uiState.loading = true;
         PromotionsService.getShipments(vm.promotionId).then(function(response){
             vm.state.shipments = response.data;
             vm.uiState.loading = false;
         })
+    }
+
+    $scope.$watch(function() { return PromotionsService.refreshShipment }, function(status) {
+        if(angular.isDefined(status) && status){
+            loadShipments();
+        }
+    }, true);
+
+    function init(element) {
+        vm.element = element;
+        if(vm.promotionId != 'new'){
+            vm.loadShipments();
+        }
+        else{
+            vm.state.shipments = [];
+        }
     }
 
 }

@@ -5,14 +5,15 @@
 
 	app.factory('PromotionsService', PromotionsService);
 
-	PromotionsService.$inject = ['$http', '$location'];
+	PromotionsService.$inject = ['$http', '$location', '$timeout'];
 	/* @ngInject */
-	function PromotionsService($http, $location) {
+	function PromotionsService($http, $location, $timeout) {
         var promotionsService = {};
         promotionsService.loading = {value: 0};
         
         var basePromotionAPIUrlv2 = '/api/2.0/promotions';
         var baseVendorAPIUrlv2 = '/api/1.0/integrations/zi/vendors';
+        var baseCustomerAPIUrl = '/api/1.0/integrations/zi';
 
         promotionsService.getPromotions = getPromotions;
         promotionsService.createPromotion = createPromotion;
@@ -24,6 +25,8 @@
         promotionsService.saveShipment = saveShipment;
         promotionsService.updateShipmentAttachment = updateShipmentAttachment;
         promotionsService.getShipments = getShipments;
+        promotionsService.deleteShipment = deleteShipment;
+        promotionsService.refreshPromotionShipment = refreshPromotionShipment;
         promotionsService.promoTypeOptions = {
             TRY_AND_BUY: "Try and Buy",
             MILESTONE: "Milestone",
@@ -64,16 +67,21 @@
 
 
         promotionsService.shipmentStatusOptions = {
-            ACTIVE: "Active",
-            INACTIVE: "Inactive",
+            TRY: "Try",
+            BUY: "Buy",
+            RMA: 'RMA',
             options: [
                 {
-                    label: "Active",
-                    value: "ACTIVE"
+                    label: "Try",
+                    value: "TRY"
                 },
                 {
-                    label: "Inactive",
-                    value: "INACTIVE"
+                    label: "Buy",
+                    value: "BUY"
+                },
+                {
+                    label: "RMA",
+                    value: "RMA"
                 }
             ]    
         }
@@ -286,8 +294,54 @@
             return promotionsRequest($http.get([basePromotionAPIUrlv2, promotionId, 'shipments'].join('/')).success(success).error(error));
         }
 
+
+        /**
+            * Get list of all customers
+        */
+        function getCustomers() {
+
+            function success(data) {
+                promotionsService.customers = data.results;
+            }
+
+            function error(error) {
+                promotionsService.customers = [];
+                console.error('promotionsService getCustomers error: ', JSON.stringify(error));
+            }
+
+            return promotionsRequest($http.get([baseCustomerAPIUrl, 'customers'].join('/')).success(success).error(error));
+        }
+
+        function refreshPromotionShipment(status)
+        {
+            promotionsService.refreshShipment = false;
+            $timeout(function() {
+                promotionsService.refreshShipment = status;
+            }, 0);
+            
+        }
+
+        function deleteShipment(shipment) {
+
+            function success(data) {
+                
+            }
+
+            function error(error) {
+                console.error('promotionsService deleteShipment error: ', JSON.stringify(error));
+            }
+
+            return promotionsRequest(
+                $http({
+                    url: [basePromotionAPIUrlv2, 'promotion', 'shipment', shipment._id].join('/'),
+                    method: "DELETE"
+                }).success(success).error(error)
+            )
+        }
+
         (function init() {
             promotionsService.getPromotions();
+            getCustomers();
         })();
 
 		return promotionsService;

@@ -110,6 +110,8 @@ function promotionDetailsController($scope, $window, $state, $attrs, $filter, $m
 
 
     function openModal(modal, controller, size){
+        var isVendor = vm.state.orgCardAndPermissions && vm.state.orgCardAndPermissions.isVendor;
+        
         var _modal = {
             templateUrl: modal,
             keyboard: false,
@@ -133,6 +135,9 @@ function promotionDetailsController($scope, $window, $state, $attrs, $filter, $m
             angular.element('.sp-container').addClass('sp-hidden');
         });
     }
+
+
+    
 
 
     function closeModal() {
@@ -225,7 +230,7 @@ function promotionDetailsController($scope, $window, $state, $attrs, $filter, $m
     function addShipment(){
         
     }
-
+    
     function init(){
         
         if(vm.promotionId == 'new'){

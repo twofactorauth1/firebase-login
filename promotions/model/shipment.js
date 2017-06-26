@@ -12,7 +12,8 @@ var shipment = $$.m.ModelBase.extend({
     defaults: function() {
         return {
             _id: null,
-            partner: null,
+            cardCode: null,
+            companyName: null,
             customer: null,
             promotionId: null,
             attachment: null,

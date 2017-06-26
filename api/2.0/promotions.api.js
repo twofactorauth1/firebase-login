@@ -33,8 +33,10 @@ _.extend(api.prototype, baseApi.prototype, {
         app.post(this.url(':id'), this.isAuthAndSubscribedApi.bind(this), this.updatePromotion.bind(this));
         app.post(this.url('attachment/:id'), this.isAuthApi.bind(this), this.updatePromotionAttachment.bind(this));
         app.post(this.url('promotion/shipment'), this.isAuthApi.bind(this), this.createShipment.bind(this));
+        app.post(this.url('promotion/shipment/:id'), this.isAuthApi.bind(this), this.updateShipment.bind(this));
         app.post(this.url('promotion/shipment/attachment/:id'), this.isAuthApi.bind(this), this.updateShipmentAttachment.bind(this));
         app.get(this.url(':promotionId/shipments'), this.isAuthAndSubscribedApi.bind(this), this.listShipments.bind(this));       
+        app.delete(this.url('promotion/shipment/:id'), this.isAuthApi.bind(this), this.deleteShipment.bind(this));
 
     },
 
@@ -317,6 +319,59 @@ _.extend(api.prototype, baseApi.prototype, {
         // });
     },
 
+    updateShipment: function(req, resp) {
+        var self = this;
+        self.log.debug('>> updateShipment');
+        var accountId = parseInt(self.accountId(req));
+        var userId = self.userId(req);
+        var shipmentId = req.params.id;
+        // self.checkPermission(req, self.sc.privs.MODIFY_PROMOTION, function(err, isAllowed) {
+        //     if (isAllowed !== true) {
+        //         return self.send403(resp);
+        //     } else {
+                var shipmentObj = req.body;
+                var shipment = new $$.m.Shipment(shipmentObj);
+                var modified = {
+                    date: new Date(),
+                    by: userId
+                };
+                
+                shipment.set('modified', modified);
+
+                if(shipmentObj.shipDate){                    
+                    shipment.set("shipDate", moment(shipmentObj.shipDate).toDate());
+                }
+                else{
+                    shipment.set("shipDate", null);
+                }
+                if(shipmentObj.configDate){
+                    shipment.set("configDate", moment(shipmentObj.configDate).toDate());
+                }
+                else{
+                    shipment.set("configDate", null);
+                }
+                if(shipmentObj.deployDate){                    
+                    shipment.set("deployDate", moment(shipmentObj.deployDate).toDate());
+                }
+                else{
+                    shipment.set("deployDate", null);
+                }
+                if(shipmentObj.endDate){
+                    shipment.set("endDate", moment(shipmentObj.endDate).toDate());
+                }
+                else{
+                    shipment.set("endDate", null);
+                }
+
+                promotionManager.saveOrUpdateShipment(accountId, userId, shipment, shipmentId, function(err, value){
+                    self.log.debug(accountId, userId, '<< updateShipment');
+                    self.sendResultOrError(resp, err, value, "Error updating shipment");
+                    self.createUserActivity(req, 'UPDATE_SHIPMENT', null, null, function(){});
+                });
+        //     }
+        // });
+    },
+
     updateShipmentAttachment: function(req, res) {
         var self = this;
         self.log.debug('>> updateShipmentAttachment');
@@ -358,6 +413,29 @@ _.extend(api.prototype, baseApi.prototype, {
             self.log.debug(accountId, userId, '<< listShipments');
             return self.sendResultOrError(resp, err, list, "Error listing shipments");
         });
+    },
+
+    deleteShipment: function(req, resp) {
+        var self = this;
+        self.log.debug('>> deleteShipment');
+        var shipmentId = req.params.id;
+        var accountId = parseInt(self.accountId(req));
+        var userId = self.userId(req);
+        // self.checkPermission(req, self.sc.privs.MODIFY_PROMOTION, function(err, isAllowed) {
+        //     if (isAllowed !== true) {
+        //         return self.send403(resp);
+        //     } else {
+                promotionManager.deleteShipment(accountId, userId, shipmentId, function(err, value){
+                    if(err) {
+                        self.wrapError(resp, 500, err, "Error deleting shipment");
+                    } else {
+                        self.log.debug('<< deleteShipment');
+                        self.send200(resp);
+                        self.createUserActivity(req, 'DELETE_SHIPMENT', null, null, function(){});
+                    }
+                });
+        //     }
+        // });
     }
 
 });
