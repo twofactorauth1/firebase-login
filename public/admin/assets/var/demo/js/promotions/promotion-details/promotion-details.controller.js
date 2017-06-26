@@ -230,7 +230,7 @@ function promotionDetailsController($scope, $window, $state, $attrs, $filter, $m
     function addShipment(){
         
     }
-
+    
     function init(){
         
         if(vm.promotionId == 'new'){

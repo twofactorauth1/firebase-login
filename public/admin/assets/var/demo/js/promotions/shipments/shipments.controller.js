@@ -87,8 +87,6 @@ function shipmentsComponentController($scope, $attrs, $window, $filter, $statePa
         }
     }, true);
 
-    
-
     function init(element) {
         vm.element = element;
         if(vm.promotionId != 'new'){

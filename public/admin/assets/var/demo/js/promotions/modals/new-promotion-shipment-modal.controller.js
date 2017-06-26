@@ -1,12 +1,14 @@
 'use strict';
 /*global app*/
-app.controller('PromotionShipmentModalController', ['$scope', '$timeout', 'parentVm', 'toaster', 'PromotionsService', function ($scope, $timeout, parentVm, toaster, PromotionsService) {
+app.controller('PromotionShipmentModalController', ['$scope', '$timeout', 'parentVm', 'toaster', 'PromotionsService', 'UserPermissionsConfig', function ($scope, $timeout, parentVm, toaster, PromotionsService, UserPermissionsConfig) {
 
     var vm = this;
 
     vm.parentVm = parentVm;
     
-    vm.state = {};
+    vm.state = {
+        orgCardAndPermissions: UserPermissionsConfig.orgConfigAndPermissions
+    };
     vm.uiState = {
         loadingShipmentModal: true
     };
@@ -47,6 +49,7 @@ app.controller('PromotionShipmentModalController', ['$scope', '$timeout', 'paren
     }
 
     $scope.$watch(function() { return PromotionsService.customers }, function(customers) {
+        
         if(angular.isDefined(customers)){
             vm.state.customers = _.map(
                 customers, 
@@ -68,12 +71,7 @@ app.controller('PromotionShipmentModalController', ['$scope', '$timeout', 'paren
     function selectCardCode(customer){
         vm.state.shipment.companyName = customer.OCRD_CardName;
     }
-
-    $scope.$watch("$parent.orgCardAndPermissions", function(permissions) {
-        if(angular.isDefined(permissions)){
-            vm.state.orgCardAndPermissions = permissions;
-        }
-    });
+   
 
     function loadShipment(){
         if(vm.parentVm.currentShipment){
