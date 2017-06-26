@@ -65,7 +65,7 @@
                                                 type="text"
                                                 placeholder="Untitled Campaign"
                                                 ng-model="vm.state.campaign.name"
-                                                ng-disabled="!vm.uiState.dataLoaded || vm.state.campaign.status.toLowerCase() !== 'draft'"/>
+                                                ng-if="vm.uiState.dataLoaded && vm.state.campaign.status.toLowerCase() === 'draft'"/>
 
                                         </div>
                                     </div>
