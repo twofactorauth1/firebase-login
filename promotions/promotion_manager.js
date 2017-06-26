@@ -318,6 +318,22 @@ module.exports = {
                 fn(null, list);
             }
         });
+    },
+
+    deleteShipment: function(accountId, userId, shipmentId, fn){
+        var self = this;
+        log.debug(accountId, userId, '>> deleteShipment');
+        var query = {_id: shipmentId};
+        
+        shipmentDao.removeByQuery(query, $$.m.Shipment, function(err, value){
+            if(err) {
+                self.log.error('Error deleting shipment: ' + err);
+                return fn(err, null);
+            } else {
+                log.debug(accountId, userId, '<< deleteShipment');
+                fn(null, value);
+            }
+        });
     }
 
     

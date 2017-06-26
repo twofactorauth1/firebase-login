@@ -25,6 +25,7 @@
         promotionsService.saveShipment = saveShipment;
         promotionsService.updateShipmentAttachment = updateShipmentAttachment;
         promotionsService.getShipments = getShipments;
+        promotionsService.deleteShipment = deleteShipment;
         promotionsService.promoTypeOptions = {
             TRY_AND_BUY: "Try and Buy",
             MILESTONE: "Milestone",
@@ -316,6 +317,24 @@
                 promotionsService.refreshPromotionShipment = undefined;
             }, 0);
             promotionsService.refreshPromotionShipment = status;
+        }
+
+        function deleteShipment(shipment) {
+
+            function success(data) {
+                
+            }
+
+            function error(error) {
+                console.error('promotionsService deleteShipment error: ', JSON.stringify(error));
+            }
+
+            return promotionsRequest(
+                $http({
+                    url: [basePromotionAPIUrlv2, 'promotion', 'shipment', shipment._id].join('/'),
+                    method: "DELETE"
+                }).success(success).error(error)
+            )
         }
 
         (function init() {

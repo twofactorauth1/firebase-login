@@ -1,6 +1,6 @@
 'use strict';
 /*global app*/
-app.controller('PromotionShipmentModalController', ['$scope', '$timeout', 'parentVm', 'toaster', 'PromotionsService', 'UserPermissionsConfig', function ($scope, $timeout, parentVm, toaster, PromotionsService, UserPermissionsConfig) {
+app.controller('PromotionShipmentModalController', ['$scope', '$timeout', 'parentVm', 'toaster', 'PromotionsService', 'UserPermissionsConfig', 'SweetAlert', function ($scope, $timeout, parentVm, toaster, PromotionsService, UserPermissionsConfig, SweetAlert) {
 
     var vm = this;
 
@@ -10,7 +10,8 @@ app.controller('PromotionShipmentModalController', ['$scope', '$timeout', 'paren
         orgCardAndPermissions: UserPermissionsConfig.orgConfigAndPermissions
     };
     vm.uiState = {
-        loadingShipmentModal: true
+        loadingShipmentModal: true,
+        deleteShipment: false
     };
     vm.attachment = {};
     vm.initAttachment = initAttachment;
@@ -18,6 +19,7 @@ app.controller('PromotionShipmentModalController', ['$scope', '$timeout', 'paren
     vm.saveShipment = saveShipment;
     vm.selectCardCode = selectCardCode;
     vm.loadShipment = loadShipment;
+    vm.deleteShipment = deleteShipment;
     function initAttachment(){
         vm.attachment = {};
         document.getElementById("upload_shipment_file").value = "";
@@ -76,10 +78,36 @@ app.controller('PromotionShipmentModalController', ['$scope', '$timeout', 'paren
     function loadShipment(){
         if(vm.parentVm.currentShipment){
             vm.state.shipment = vm.parentVm.currentShipment;
+            vm.uiState.deleteShipment = true;
         }
         else{
             vm.state.shipment = {};
         }
+    }
+
+    function deleteShipment(){
+        SweetAlert.swal({
+            title: "Are you sure?",
+            text: "Do you want to delete this shipment?",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#DD6B55",
+            confirmButtonText: "Yes, delete shipment!",
+            cancelButtonText: "No, do not delete shipment!",
+            closeOnConfirm: true,
+            closeOnCancel: true
+        },
+        function (isConfirm) {
+            if (isConfirm) {
+                vm.uiState.saveLoading = true;
+                PromotionsService.deleteShipment(vm.state.shipment).then(function (data) {
+                    toaster.pop('success', "Shipment deleted.", "Shipment was deleted successfully.");
+                    setDefaults();
+                });
+            } else {
+                SweetAlert.swal("Not Deleted", "The shipment was not deleted.", "error");
+            }
+        });
     }
 
     (function init() {
