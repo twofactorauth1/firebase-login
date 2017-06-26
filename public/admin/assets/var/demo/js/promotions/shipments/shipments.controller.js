@@ -24,6 +24,7 @@ function shipmentsComponentController($scope, $attrs, $window, $filter, $statePa
     vm.parseValueToDate = parseValueToDate;
     vm.statusOptions = PromotionsService.shipmentStatusOptions;
     vm.viewPdf = viewPdf;
+    vm.loadShipments = loadShipments;
     function showFilteredRecords(){
         return UtilService.showFilteredRecords(vm.uiState.globalSearch, vm.uiState.fieldSearch);
     }
@@ -72,15 +73,30 @@ function shipmentsComponentController($scope, $attrs, $window, $filter, $statePa
             $window.open(attachment.url, '_blank');
     }
 
-    function init(element) {
-        vm.element = element;
-        if(vm.promotionId != 'new'){
-            vm.state.shipments = [];
-        }
+    function loadShipments(){
+        vm.uiState.loading = true;
         PromotionsService.getShipments(vm.promotionId).then(function(response){
             vm.state.shipments = response.data;
             vm.uiState.loading = false;
         })
+    }
+
+    $scope.$watch(function() { return PromotionsService.refreshPromotionShipment }, function(status) {
+        if(angular.isDefined(status)){
+            loadShipments();
+        }
+    }, true);
+
+    
+
+    function init(element) {
+        vm.element = element;
+        if(vm.promotionId != 'new'){
+            vm.loadShipments();
+        }
+        else{
+            vm.state.shipments = [];
+        }
     }
 
 }

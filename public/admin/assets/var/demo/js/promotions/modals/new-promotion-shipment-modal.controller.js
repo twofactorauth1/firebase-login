@@ -42,6 +42,7 @@ app.controller('PromotionShipmentModalController', ['$scope', '$timeout', 'paren
     function setDefaults(){
         vm.uiState.saveLoading = false;
         vm.parentVm.closeModal();
+        PromotionsService.refreshPromotionShipment = true;
     }
 
     $scope.$watch(function() { return PromotionsService.customers }, function(customers) {

@@ -5,9 +5,9 @@
 
 	app.factory('PromotionsService', PromotionsService);
 
-	PromotionsService.$inject = ['$http', '$location'];
+	PromotionsService.$inject = ['$http', '$location', '$timeout'];
 	/* @ngInject */
-	function PromotionsService($http, $location) {
+	function PromotionsService($http, $location, $timeout) {
         var promotionsService = {};
         promotionsService.loading = {value: 0};
         
@@ -308,6 +308,14 @@
             }
 
             return promotionsRequest($http.get([baseCustomerAPIUrl, 'customers'].join('/')).success(success).error(error));
+        }
+
+        function refreshPromotionShipment(status)
+        {
+            $timeout(function() {
+                promotionsService.refreshPromotionShipment = undefined;
+            }, 0);
+            promotionsService.refreshPromotionShipment = status;
         }
 
         (function init() {
