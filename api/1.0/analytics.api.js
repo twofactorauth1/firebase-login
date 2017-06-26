@@ -138,6 +138,12 @@ _.extend(api.prototype, baseApi.prototype, {
                 self.log.debug('response from sqs:', err);
                 self.log.debug('response from sqs:', value);
             });
+        } else if(appConfig.nonProduction === false){
+            var queueUrl = 'https://sqs.us-west-1.amazonaws.com/213805526570/analytics_sendgrid_q';
+            sqsUtil.sendMessage(queueUrl, null, events, function(err, value){
+                self.log.debug('response from sqs:', err);
+                self.log.debug('response from sqs:', value);
+            });
         } else {
             var savedEvents = [];
             var contactActivitiesJSON = [];
