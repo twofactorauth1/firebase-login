@@ -81,8 +81,8 @@ function shipmentsComponentController($scope, $attrs, $window, $filter, $statePa
         })
     }
 
-    $scope.$watch(function() { return PromotionsService.refreshPromotionShipment }, function(status) {
-        if(angular.isDefined(status)){
+    $scope.$watch(function() { return PromotionsService.refreshShipment }, function(status) {
+        if(angular.isDefined(status) && status){
             loadShipments();
         }
     }, true);

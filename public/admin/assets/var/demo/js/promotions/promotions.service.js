@@ -26,6 +26,7 @@
         promotionsService.updateShipmentAttachment = updateShipmentAttachment;
         promotionsService.getShipments = getShipments;
         promotionsService.deleteShipment = deleteShipment;
+        promotionsService.refreshPromotionShipment = refreshPromotionShipment;
         promotionsService.promoTypeOptions = {
             TRY_AND_BUY: "Try and Buy",
             MILESTONE: "Milestone",
@@ -313,10 +314,11 @@
 
         function refreshPromotionShipment(status)
         {
+            promotionsService.refreshShipment = false;
             $timeout(function() {
-                promotionsService.refreshPromotionShipment = undefined;
+                promotionsService.refreshShipment = status;
             }, 0);
-            promotionsService.refreshPromotionShipment = status;
+            
         }
 
         function deleteShipment(shipment) {
