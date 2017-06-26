@@ -89,7 +89,7 @@
 	                <td class="hidden-xs col-config-date"><strong>Config Date: </strong>{{vm.parseValueToDate(shipment.configDate) | date:'M/d/yyyy'}}</td>
 	                <td class="hidden-xs col-deploy-date"><strong>Deploy Date: </strong>{{vm.parseValueToDate(shipment.deployDate) | date:'M/d/yyyy'}}</td>
 	                <td class="col-end-date"><strong>End Date: </strong>{{vm.parseValueToDate(shipment.endDate) | date:'M/d/yyyy'}}</td>
-	                <td class="col-report"><strong>Report: </strong><i ng-if="shipment.attachment.name" class="fa fa-file-pdf-o" ng-click="vm.viewPdf(shipment.attachment)"></i></td>
+	                <td class="col-report"><strong>Report: </strong><i ng-if="shipment.attachment.name" class="fa fa-file-pdf-o" ng-click="vm.viewPdf($event, shipment.attachment)"></i></td>
 	                <td class="col-status"><strong>Status: </strong>{{vm.statusOptions[shipment.status]}}</td>
 	            </tr>
 	        </tbody>

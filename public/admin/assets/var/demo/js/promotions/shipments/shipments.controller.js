@@ -67,7 +67,8 @@ function shipmentsComponentController($scope, $attrs, $window, $filter, $statePa
         }
     }
 
-    function viewPdf(attachment){
+    function viewPdf($event, attachment){
+        $event.stopPropagation();
         if(attachment.url)
             $window.open(attachment.url, '_blank');
     }
