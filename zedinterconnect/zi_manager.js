@@ -285,9 +285,9 @@ var ziManager = {
         self.log.debug(accountId, userId, '>> productSearch');
         var regex = new RegExp('\.*'+term+'\.*', 'i');
         var query = {
-            _vendorName: filter
+            _vendorName: new RegExp('^' + filter)
         };
-
+        
         var orQuery = [                    
                     {OITM_ItemName:regex}
                 ];

@@ -138,6 +138,12 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
             if(section.filter){
                 classString += " ssb-section-filter-" + section.filter.replace(/[^0-9a-z]/gi, '-');
             }
+            if(section.hideOnlyMobile){
+                classString += " ssb-section-o-desktop" ;
+            }
+            if(section.showOnlyMobile){
+                classString += " ssb-section-o-moblie";
+            }
 
         }
         // console.debug('section classString')
@@ -358,6 +364,12 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
         }
         if(component.slider && component.slider.sliderDotShape){
            classString += ' square-dot ';
+        }
+        if(component.hideOnlyMobile){
+            classString += " ssb-component-o-desktop" ;
+        }
+        if(component.showOnlyMobile){
+            classString += " ssb-component-o-moblie";
         }
         if(vm.section.layoutModifiers && vm.section.layoutModifiers.columns){
             if (angular.isDefined(vm.section.layoutModifiers.columns.columnsNum)) {

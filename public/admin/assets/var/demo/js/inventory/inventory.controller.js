@@ -2,9 +2,9 @@
 
 app.controller('InventoryComponentController', inventoryComponentController);
 
-inventoryComponentController.$inject = ['$scope', '$attrs', '$filter', '$modal', '$timeout', '$location', 'pagingConstant', 'toaster', 'InventoryService', 'UtilService'];
+inventoryComponentController.$inject = ['$scope', '$attrs', '$filter', '$modal', '$timeout', '$location', 'pagingConstant', 'toaster', 'InventoryService', 'UtilService', 'SecurematicsCommonService'];
 /* @ngInject */
-function inventoryComponentController($scope, $attrs, $filter, $modal, $timeout, $location, pagingConstant, toaster, InventoryService, UtilService) {
+function inventoryComponentController($scope, $attrs, $filter, $modal, $timeout, $location, pagingConstant, toaster, InventoryService, UtilService, SecurematicsCommonService) {
 
     var vm = this;
 
@@ -41,6 +41,7 @@ function inventoryComponentController($scope, $attrs, $filter, $modal, $timeout,
     vm.pagingConstant = pagingConstant;
     vm.selectPage = selectPage;
     vm.checkIfSelected = checkIfSelected;
+    vm.getTruncateVendorName = getTruncateVendorName;
     vm.quantitySearchOptions =[
         {
            "label": "> 0",
@@ -381,6 +382,10 @@ function inventoryComponentController($scope, $attrs, $filter, $modal, $timeout,
     function cancel($event) {
         $event.stopPropagation();
     };
+
+    function getTruncateVendorName(name){
+        return SecurematicsCommonService.truncateVendorName(name);
+    }
 
     function init(element) {
         vm.element = element;

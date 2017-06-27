@@ -15,6 +15,7 @@ function ssbTextSettingsController($rootScope, $scope, $attrs, $filter, $timeout
     vm.element = null;
     vm.elementId = null;
     vm.parentTextElement = null;
+    vm.showHideClass = showHideClass;
     vm.parentTextElementModelAttribute = null;
     vm.parentTextElementClassNameAttribute = null;
     vm.parentComponent = null;
@@ -45,10 +46,24 @@ function ssbTextSettingsController($rootScope, $scope, $attrs, $filter, $timeout
             'color': ''
         },
         'txtcolor': '',
+        'hideOnlyMobile':false,
+        'showOnlyMobile':false,
         'visibility': true,
         'spacing': {}
     };
     vm.showHide=showHide;
+    function showHideClass(){
+        var classString="";
+        if(vm.elementData){
+            if(vm.elementData.hideOnlyMobile){
+                classString += " ssb-text-o-desktop" ;
+            }
+            if(vm.elementData.showOnlyMobile){
+                classString += " ssb-text-o-moblie";
+            }
+        }
+        return classString;
+    }
     function showHide(){
          return vm.elementData.visibility!==false;
     }
