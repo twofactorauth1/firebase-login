@@ -22,6 +22,7 @@ app.controller('PromotionShipmentModalController', ['$scope', '$timeout', 'paren
     vm.deleteShipment = deleteShipment;
     vm.addProductsToShipment = addProductsToShipment;
     vm.shipmentProductOptions = angular.copy(vm.parentVm.state.promotion.products)
+    vm.removeProduct = removeProduct;
     vm.setShipmentProduct = setShipmentProduct;
 
     function initAttachment(){
@@ -122,6 +123,10 @@ app.controller('PromotionShipmentModalController', ['$scope', '$timeout', 'paren
             quantity: 1,
             serial: null
         })
+    }
+
+    function removeProduct(product, index){
+        vm.state.shipment.products.splice(index, 1);
     }
 
     function setShipmentProduct(product){

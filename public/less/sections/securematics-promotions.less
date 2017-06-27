@@ -1,9 +1,10 @@
-.securematics-promotions-section{
+promotions-component, promotion-details-component{
 	.promotions-stats{
 		.promotions-stats-item{
 			padding-top: 15px;
     		padding-bottom: 15px;
 			border: 1px solid #48b1cc;
+			background: #ffffff !important;
 			span{
 				display: block;
     			text-align: center;
@@ -11,7 +12,38 @@
 			span.promotions-stats-value{
 				color: #48b1cc;
 				font-size: 25px;
+
+			}
+			span.promotions-stats-value:after{
+                content: "\00a0";
+            }
+			
+
+		}
+		&.promo-details-stat{
+		.promotions-stats-item{			
+			span.promotions-stats-value{
+				font-size: 18px !important;
 			}
 		}
+		.col-shipment{
+			position: relative;
+			min-height: 1px;
+			padding-right: 15px;
+			padding-left: 15px;
+			
+			float:left;
+			margin-bottom: 20px;
+			@media screen and (min-width: 1190px) {
+                width: 12.5%;
+            }
+            @media screen and (min-width: 768px) and (max-width: 1189px) {
+                width: 25%;
+            }
+            @media screen and (max-width: 767px) {
+                width: 33.3%;
+            }
+		}
+	}	
 	}
 }
