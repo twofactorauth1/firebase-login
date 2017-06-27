@@ -227,8 +227,36 @@ function promotionDetailsController($scope, $window, $state, $attrs, $filter, $m
         }
     }, true);
 
+
+    $scope.$watch(function() { return PromotionsService.shipments }, function(shipments) {
+        vm.state.shipments = angular.copy(shipments);
+        getShipmentStats();
+    }, true);
+
     function addShipment(){
         
+    }
+
+    function getShipmentStats(){
+        vm.state.shipmentStats = {};
+        if(vm.state.shipments){
+            // Reports
+            // vm.state.shipmentStats.reports = _.filter(vm.state.shipments, function(shipment) {
+            //     return shipment.attachment && shipment.attachment.name
+            // });
+            // // Try State
+            // vm.state.shipmentStats.tryState = _.filter(vm.state.shipments, function(shipment) {
+            //     return shipment.attachment && shipment.attachment.name
+            // });
+            // // Buy State
+            // vm.state.shipmentStats.buyState = _.filter(vm.state.shipments, function(shipment) {
+            //     return shipment.attachment && shipment.attachment.name
+            // });
+            // // RMA State
+            // vm.state.shipmentStats.rmaState = _.filter(vm.state.shipments, function(shipment) {
+            //     return shipment.attachment && shipment.attachment.name
+            // });
+        }
     }
     
     function init(){

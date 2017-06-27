@@ -285,7 +285,7 @@
         function getShipments(promotionId) {
 
             function success(data) {
-                promotionsService.shipments = data;
+                promotionsService.shipments = angular.copy(data);
             }
 
             function error(error) {
