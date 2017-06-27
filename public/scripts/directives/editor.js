@@ -13,7 +13,7 @@ angular.module('mainApp').directive("elem", function ($timeout) {
                 '<div ' +
                     'ng-class="{{vm.elementClass()}}" ' +
                     'ng-attr-style="{{vm.elementStyle(false)}}" ' +
-                    'class="ssb-text-settings" >' +
+                    'class="ssb-text-settings {{vm.showHideClass()}}" >' +
                         '<div ng-if="component.isOverlayActive"' +
                             'class="bg slider-overlay-bg-1" ng-style ="{\'background\': component.overlayBackground, opacity: component.overlayOpacity === 0 ?  component.overlayOpacity : component.overlayOpacity/100  || 0 , \'height\': component.isOverlayActive ? component.gridHeight+\'px\':\'\' }"> ' +
                         '</div>'+
