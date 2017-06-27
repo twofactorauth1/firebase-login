@@ -246,7 +246,8 @@ function promotionDetailsController($scope, $window, $state, $attrs, $filter, $m
             })
         }
         PromotionsService.getVendors().then(function(response){  
-            vm.state.vendors = response.data;          
+            var _vendors = response.data;
+             vm.state.vendors = PromotionsService.truncateVendorList(_vendors);
         })
     }
 

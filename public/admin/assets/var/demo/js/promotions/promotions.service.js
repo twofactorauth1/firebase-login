@@ -27,6 +27,7 @@
         promotionsService.getShipments = getShipments;
         promotionsService.deleteShipment = deleteShipment;
         promotionsService.refreshPromotionShipment = refreshPromotionShipment;
+        promotionsService.truncateVendorList = truncateVendorList;
         promotionsService.promoTypeOptions = {
             TRY_AND_BUY: "Try and Buy",
             MILESTONE: "Milestone",
@@ -337,6 +338,21 @@
                     method: "DELETE"
                 }).success(success).error(error)
             )
+        }
+
+        function truncateVendorList(list){
+            var _wordsToremoveArray = ["hardware", "service", "services", "support", "education", "software", "networks", "license"];
+            _wordsToremoveArray = _.map(_wordsToremoveArray, function(item){
+                return " " + item.trim(); 
+            })
+
+            var regexString = _wordsToremoveArray.join("|");
+            var regex = new RegExp(regexString + "\s*$", "g");
+            
+            var _list = _.uniq(_.map(list, function(item){
+                return item.replace(regex, "")
+            }))
+            return _list;
         }
 
         (function init() {
