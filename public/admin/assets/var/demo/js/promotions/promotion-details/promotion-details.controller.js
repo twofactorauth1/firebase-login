@@ -249,6 +249,8 @@ function promotionDetailsController($scope, $window, $state, $attrs, $filter, $m
             var _vendors = response.data;
             vm.state.vendors = SecurematicsCommonService.truncateVendorList(_vendors);
         })
+
+        PromotionsService.clearShipmentList();
     }
 
 }
