@@ -1,7 +1,7 @@
 'use strict';
 /*global app, moment, angular, window*/
 /*jslint unparam:true*/
-app.directive('footerComponent', ['WebsiteService', '$location', function (WebsiteService, $location) {
+app.directive('footerComponent', ['$window','WebsiteService', '$location', function ($window,WebsiteService, $location) {
   return {
     scope: {
       component: '=',
@@ -9,10 +9,13 @@ app.directive('footerComponent', ['WebsiteService', '$location', function (Websi
     },
     templateUrl: '/components/component-wrap.html',
     link: function (scope, element, attrs, ctrl) {
-      scope.orgId=scope.$parent.$parent.vm.state.account.orgId;
+      scope.orgId=$window.indigenous.orgId;
       scope.isEditing = true;
       var accountHost = $location.$$host;
       var defaultAccountUrl = "//www.indigenous.io";
+      if(scope.orgId==1){
+          defaultAccountUrl = "//www.gorvlvr.com";
+      }
       scope.footerLinkUrl = defaultAccountUrl + "?utm_source=" + accountHost + "&utm_medium=footer_link";
       if(!scope.ssbEditor)
         scope.component.spacing = scope.$parent.defaultSpacings;

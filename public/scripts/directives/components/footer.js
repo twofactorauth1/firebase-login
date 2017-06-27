@@ -10,6 +10,9 @@ app.directive('footerComponent', ['$window','websiteService', '$location', funct
       scope.component.spacing = scope.$parent.defaultSpacings;
       var accountHost = $location.$$host;
       var defaultAccountUrl = "//www.indigenous.io";
+      if(scope.orgId==1){
+          defaultAccountUrl = "//www.gorvlvr.com";
+      }
       scope.footerLinkUrl = defaultAccountUrl + "?utm_source=" + accountHost + "&utm_medium=footer_link";
       WebsiteService(function (err, data) {
         if (err) {
