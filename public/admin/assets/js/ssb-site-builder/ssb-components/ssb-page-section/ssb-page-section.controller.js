@@ -365,6 +365,12 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
         if(component.slider && component.slider.sliderDotShape){
            classString += ' square-dot ';
         }
+        if(component.hideOnlyMobile){
+            classString += " ssb-component-o-desktop" ;
+        }
+        if(component.showOnlyMobile){
+            classString += " ssb-component-o-moblie";
+        }
         if(vm.section.layoutModifiers && vm.section.layoutModifiers.columns){
             if (angular.isDefined(vm.section.layoutModifiers.columns.columnsNum)) {
                 var _lastCoulmnFullWidth = false;

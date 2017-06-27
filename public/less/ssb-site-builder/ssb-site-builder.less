@@ -710,20 +710,28 @@ div[class^="spacing-"] {
         margin-top: 0;
     }
 }
-.ssb-section-o-desktop , .ssb-section-o-moblie{
+.ssb-text-o-desktop,.ssb-text-o-moblie, .ssb-component-o-desktop,.ssb-component-o-moblie,.ssb-section-o-desktop , .ssb-section-o-moblie{
     display: none;
 }
 @media (min-width: 0px) and (max-width: 794px) {
-    .ssb-section-o-moblie ,
+    .ssb-section-o-moblie,
+    .ssb-component-o-moblie,
+    .ssb-text-o-moblie,
     .ssb-edit-wrap .ssb-section-o-desktop,
-    .ssb-edit-wrap .ssb-section-o-moblie  {
+    .ssb-edit-wrap .ssb-section-o-moblie,
+    .ssb-edit-wrap .ssb-component-o-desktop,
+    .ssb-edit-wrap .ssb-component-o-moblie   {
         display: block;
     }
 }
 @media (min-width:  795px) {
-    .ssb-section-o-desktop ,
+    .ssb-section-o-desktop,
+    .ssb-component-o-desktop,
+    .ssb-text-o-desktop,
     .ssb-edit-wrap .ssb-section-o-desktop,
-    .ssb-edit-wrap .ssb-section-o-moblie {
+    .ssb-edit-wrap .ssb-section-o-moblie,
+    .ssb-edit-wrap .ssb-component-o-desktop,
+    .ssb-edit-wrap .ssb-component-o-moblie {
         display: block;
     }
 }

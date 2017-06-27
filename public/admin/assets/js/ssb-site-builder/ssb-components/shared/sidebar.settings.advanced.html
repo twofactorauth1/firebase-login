@@ -6,6 +6,20 @@
         </label>
         <switch ng-model="vm.component.visibility" class="pull-right" ng-change="saveComponentChanges()"></switch>
     </div>
+    <div class="form-group">
+        <label for="colorpicker">
+            Hide on small screens
+            <span tooltip-placement="top" tooltip-append-to-body="true" tooltip="Hide on small screens."><i class="fa fa-info-circle" /></span>
+        </label>
+        <switch ng-model="vm.component.hideOnlyMobile" class="pull-right" ng-change="saveComponentChanges()"></switch>
+    </div>
+    <div class="form-group">
+        <label for="colorpicker">
+            Show only on small screens
+            <span tooltip-placement="top" tooltip-append-to-body="true" tooltip="Show only on small screens."><i class="fa fa-info-circle" /></span>
+        </label>
+        <switch ng-model="vm.component.showOnlyMobile" class="pull-right" ng-change="saveComponentChanges()"></switch>
+    </div>
 </div>
 <div class="row padding-10" ng-if="vm.component.type != 'navigation'">
     <div class="form-group">
