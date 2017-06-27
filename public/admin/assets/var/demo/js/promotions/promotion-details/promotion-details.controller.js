@@ -2,9 +2,9 @@
 
 app.controller('PromotionDetailsController', promotionDetailsController);
 
-promotionDetailsController.$inject = ['$scope', '$window', '$state', '$attrs', '$filter', '$modal', '$timeout', '$stateParams', '$location', 'toaster', 'SweetAlert', 'formValidations', 'PromotionsService'];
+promotionDetailsController.$inject = ['$scope', '$window', '$state', '$attrs', '$filter', '$modal', '$timeout', '$stateParams', '$location', 'toaster', 'SweetAlert', 'formValidations', 'PromotionsService', 'SecurematicsCommonService'];
 /* @ngInject */
-function promotionDetailsController($scope, $window, $state, $attrs, $filter, $modal, $timeout, $stateParams, $location, toaster, SweetAlert, formValidations, PromotionsService) {
+function promotionDetailsController($scope, $window, $state, $attrs, $filter, $modal, $timeout, $stateParams, $location, toaster, SweetAlert, formValidations, PromotionsService, SecurematicsCommonService) {
 
     var vm = this;
 
@@ -247,7 +247,7 @@ function promotionDetailsController($scope, $window, $state, $attrs, $filter, $m
         }
         PromotionsService.getVendors().then(function(response){  
             var _vendors = response.data;
-             vm.state.vendors = PromotionsService.truncateVendorList(_vendors);
+            vm.state.vendors = SecurematicsCommonService.truncateVendorList(_vendors);
         })
     }
 

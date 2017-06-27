@@ -2,9 +2,9 @@
 
 app.controller('PromotionsComponentController', promotionsComponentController);
 
-promotionsComponentController.$inject = ['$scope', '$attrs', '$filter', '$modal', '$timeout', '$location', 'pagingConstant', 'toaster', 'PromotionsService', 'UtilService'];
+promotionsComponentController.$inject = ['$scope', '$attrs', '$filter', '$modal', '$timeout', '$location', 'pagingConstant', 'toaster', 'PromotionsService', 'UtilService', 'SecurematicsCommonService'];
 /* @ngInject */
-function promotionsComponentController($scope, $attrs, $filter, $modal, $timeout, $location, pagingConstant, toaster, PromotionsService, UtilService) {
+function promotionsComponentController($scope, $attrs, $filter, $modal, $timeout, $location, pagingConstant, toaster, PromotionsService, UtilService, SecurematicsCommonService) {
 
     var vm = this;
 
@@ -29,7 +29,7 @@ function promotionsComponentController($scope, $attrs, $filter, $modal, $timeout
     vm.viewPromotionDetails = viewPromotionDetails;
     vm.getProductsName = getProductsName;
     vm.addNewPromotion = addNewPromotion;
-
+    vm.getTruncateVendorName = getTruncateVendorName;
     $scope.$watch(function() { return PromotionsService.promotions }, function(promotions) {
         if(angular.isDefined(promotions)){
             vm.state.promotions = promotions;            
@@ -145,6 +145,11 @@ function promotionsComponentController($scope, $attrs, $filter, $modal, $timeout
 
     function getProductsName(products){
         return _.pluck(products, 'itemName').join(", ");
+    }
+
+    function getTruncateVendorName(name){
+        if(name)
+            return SecurematicsCommonService.truncateVendorName(name);
     }
 
     function init(element) {

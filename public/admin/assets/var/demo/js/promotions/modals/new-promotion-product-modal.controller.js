@@ -1,6 +1,6 @@
 'use strict';
 /*global app*/
-app.controller('PromotionProductModalController', ['$timeout', 'parentVm', 'pagingConstant', 'toaster', 'SecurematicsProductService', function ($timeout, parentVm, pagingConstant, toaster, SecurematicsProductService) {
+app.controller('PromotionProductModalController', ['$timeout', 'parentVm', 'pagingConstant', 'toaster', 'SecurematicsProductService', 'SecurematicsCommonService', function ($timeout, parentVm, pagingConstant, toaster, SecurematicsProductService, SecurematicsCommonService) {
 
     var vm = this;
 
@@ -28,6 +28,7 @@ app.controller('PromotionProductModalController', ['$timeout', 'parentVm', 'pagi
     vm.productSelectClickFn = productSelectClickFn;
     vm.addProductsToPromotions = addProductsToPromotions;
     vm.filterProducts = filterProducts;
+    vm.getTruncateVendorName = getTruncateVendorName;
     function drawPages(){
       var start = 1;
       var end;
@@ -115,6 +116,10 @@ app.controller('PromotionProductModalController', ['$timeout', 'parentVm', 'pagi
         vm.uiState.curPage = 1;
         vm.uiState.skip = 0;
         vm.uiState.pageLoading = true;
+    }
+
+    function getTruncateVendorName(name){
+        return SecurematicsCommonService.truncateVendorName(name);
     }
 
     (function init() {
