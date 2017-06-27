@@ -2,7 +2,8 @@
     <div class="row">
         <div class="col-sm-8">
             <h1 class="mainTitle">SHIPMENTS</h1>
-            <span ng-if="vm.state.shipments" class="mainDescription">There {{vm.state.shipments.length > 1 ? 'are' : 'is'}}  currently {{vm.state.shipments.length | number : 0}} shipment<span ng-if="vm.state.shipments.length > 1">s</span>. <span ng-if="vm.showFilteredRecords()"> ({{filteredCollection.length || 0}} in filtered view)</span></span>
+            <span ng-if="vm.state.shipments.length" class="mainDescription">There {{vm.state.shipments.length > 1 ? 'are' : 'is'}}  currently {{vm.state.shipments.length | number : 0}} shipment<span ng-if="vm.state.shipments.length > 1">s</span>. <span ng-if="vm.showFilteredRecords()"> ({{filteredCollection.length || 0}} in filtered view)</span></span>
+            <span class="mainDescription" ng-if="vm.state.shipments && !vm.state.shipments.length">There are currently no shipments</span>
         </div>
     </div>
 </section>
