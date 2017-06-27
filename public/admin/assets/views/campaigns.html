@@ -56,15 +56,15 @@
                     <table class="table table-hover table-striped margin-bottom-0" ng-class="{'grid': tableView == 'grid', 'bg-white table-list-view': tableView != 'grid'}" ng-show="displayedCampaigns">
                         <thead ng-class="{'bg-white': tableView == 'grid'}">
                             <tr>
-                                <th st-sort="status" class="center" translate="tableFields.STATUS">Status</th>
+                                <th st-sort="status" class="center" translate="tableFields.STATUS" style="white-space: nowrap;">Status</th>
                                 <th st-sort="name" translate="tableFields.NAME">Name</th>
-                                <th st-sort="type" translate="tableFields.TYPE">Type</th>
-                                <th st-sort="statistics.participants" translate="campaign.PARTICIPANTS">Participants</th>
+                                <th class="hidden-xs hidden-sm hidden-md" st-sort="type" translate="tableFields.TYPE">Type</th>
+                                <th st-sort="statistics.participants" translate="campaign.PARTICIPANTS" style="white-space: nowrap;">Participants</th>
                                 <th class="hidden-xs" st-sort="statistics.emailsSent" translate="campaign.SENTRATE">Sent</th>
                                 <th class="hidden-xs" st-sort="statistics.emailsOpened" translate="campaign.OPENRATE">Opens</th>
-                                <th class="hidden-xs" st-sort="statistics.emailsClicked" translate="campaign.CLICKRATE">Clicks</th>
-                                <th class="hidden-xs" st-sort="statistics.unsubscribes" translate="campaign.UNSUBSCRIBES">Unsubscribes</th>
-                                <th class="hidden-xs" st-sort-default="reverse" st-sort="created.date" ng-class="{'center': tableView != 'grid'}" translate="tableFields.CREATED">Created</th>
+                                <th class="hidden-xs hidden-sm" st-sort="statistics.emailsClicked" translate="campaign.CLICKRATE">Clicks</th>
+                                <th class="hidden-xs hidden-sm" st-sort="statistics.unsubscribes" translate="campaign.UNSUBSCRIBES" style="white-space: nowrap;">Unsubscribes</th>
+                                <th class="hidden-xs" st-sort-default="reverse" st-sort="created.date" ng-class="{'center': tableView != 'grid'}" translate="tableFields.CREATED" style="white-space: nowrap;">Created</th>
                                 <th ng-class="{'center': tableView != 'grid'}" ng-hide="tableView == 'grid'">
 
                                 </th>
@@ -183,7 +183,7 @@
                                                         Unsubscribes
                                                     </div>
                                                     <div class="col-xs-6 text-center">
-                                                        <div class="padding-top-10"><a ng-click="downloadReport(campaign._id)" href="javascript:void(0);"><span class="hidden-xs no-redirect-link">Download Report</span><span class="ti-export visible-xs no-redirect-link"></span></a></div>
+                                                        <div class="padding-top-10"><a ng-click="downloadReport(campaign._id)" href="javascript:void(0);"><span class="hidden-xs no-redirect-link">Report</span><span class="ti-export visible-xs no-redirect-link"></span></a></div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -210,15 +210,15 @@
                                     </span>
                                 </td>
                                 <td ng-if="tableView != 'grid'" class=""><strong>Title: </strong> <span tooltip-placement="top" tooltip="{{campaign.name | titleCase}}" class="text-adjust-complexTable">{{campaign.name}}</span></td>
-                                <td ng-if="tableView != 'grid'"><strong>Type: </strong> <span>{{campaign.type | titleCase}}</span></td>
+                                <td class="hidden-xs hidden-sm hidden-md" ng-if="tableView != 'grid'"><strong>Type: </strong> <span>{{campaign.type | titleCase}}</span></td>
                                 <td ng-if="tableView != 'grid'"><strong>Participants: </strong><span class=" text-bold">{{campaign.statistics.participants || 0}}</span></td>
                                 <td class="hidden-xs"  ng-if="tableView != 'grid'"><strong>Sent: </strong><span class=" text-bold">{{campaign.statistics.emailsSent || 0}}</span><span ng-if="campaign.statistics.participants && campaign.type !== 'autoresponder'" class="text-small muted"> ({{percentCalFn(campaign.statistics.emailsSent, campaign.statistics.participants)}}%)</span></td>
                                 <td class="hidden-xs" ng-if="tableView != 'grid'"><strong>Opened: </strong><span class=" text-bold">{{campaign.statistics.emailsOpened || 0}}</span><span ng-if="campaign.statistics.participants && campaign.type !== 'autoresponder'" class="text-small muted"> ({{percentCalFn(campaign.statistics.emailsOpened, campaign.statistics.emailsSent)}}%)</span></td>
-                                <td class="hidden-xs" ng-if="tableView != 'grid'"><strong>Clicked: </strong><span class=" text-bold">{{campaign.statistics.emailsClicked || 0}}</span><span ng-if="campaign.statistics.participants && campaign.type !== 'autoresponder'" class="text-small muted"> ({{percentCalFn(campaign.statistics.emailsClicked, campaign.statistics.emailsOpened)}}%)</span></td>
-                                <td class="hidden-xs" ng-if="tableView != 'grid'"><strong>Unsubscribes: </strong><span class=" text-bold">{{campaign.statistics.unsubscribes || 0}}</span></td>
+                                <td class="hidden-xs hidden-sm" ng-if="tableView != 'grid'"><strong>Clicked: </strong><span class=" text-bold">{{campaign.statistics.emailsClicked || 0}}</span><span ng-if="campaign.statistics.participants && campaign.type !== 'autoresponder'" class="text-small muted"> ({{percentCalFn(campaign.statistics.emailsClicked, campaign.statistics.emailsOpened)}}%)</span></td>
+                                <td class="hidden-xs hidden-sm" ng-if="tableView != 'grid'"><strong>Unsubscribes: </strong><span class=" text-bold">{{campaign.statistics.unsubscribes || 0}}</span></td>
                                 <td ng-if="tableView != 'grid'" class="hidden-xs" ng-class="{'center': tableView != 'grid'}"><strong>Created: </strong> {{campaign.created.date | date:'MMM d yy'}}</td>
                                 <td ng-if="tableView != 'grid'">
-                                    <div class=""><a ng-click="downloadReport(campaign._id)" href="javascript:void(0);"><span class="hidden-xs no-redirect-link">Download Report</span><span class="ti-export visible-xs no-redirect-link"></span></a></div>
+                                    <div class=""><a ng-click="downloadReport(campaign._id)" href="javascript:void(0);"><span class="hidden-xs no-redirect-link">Report</span><span class="ti-export visible-xs no-redirect-link"></span></a></div>
                                 </td>
                                 <!-- <td ng-if="tableView != 'grid'" class="center">
                                     <div class="dropdown">
