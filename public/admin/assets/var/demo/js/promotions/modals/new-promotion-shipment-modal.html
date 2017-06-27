@@ -70,8 +70,9 @@
                         </select>
                         
                     </div>
-                    <div class="col-sm-6 form-group" >                    
+                    <div class="col-sm-6 form-group ship-product-row" >                    
                     <input type="text" placeholder="Serial Number" class="form-control" ng-model="product.serial" name="serial">
+                    <i class="fa fa-trash-o margin-left-10 btn-danger btn" ng-click="vm.removeProduct(product, $index)"></i>
                     </div>
                     
                 </div>
