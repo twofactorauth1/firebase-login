@@ -27,6 +27,7 @@
         promotionsService.getShipments = getShipments;
         promotionsService.deleteShipment = deleteShipment;
         promotionsService.refreshPromotionShipment = refreshPromotionShipment;
+        promotionsService.clearShipmentList = clearShipmentList;
         promotionsService.promoTypeOptions = {
             TRY_AND_BUY: "Try and Buy",
             MILESTONE: "Milestone",
@@ -284,7 +285,7 @@
         function getShipments(promotionId) {
 
             function success(data) {
-                promotionsService.shipments = data;
+                promotionsService.shipments = angular.copy(data);
             }
 
             function error(error) {
@@ -338,6 +339,11 @@
                 }).success(success).error(error)
             )
         }
+
+        function clearShipmentList(){
+            promotionsService.shipments = undefined;
+        }
+        
 
         (function init() {
             promotionsService.getPromotions();

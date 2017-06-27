@@ -20,6 +20,11 @@ app.controller('PromotionShipmentModalController', ['$scope', '$timeout', 'paren
     vm.selectCardCode = selectCardCode;
     vm.loadShipment = loadShipment;
     vm.deleteShipment = deleteShipment;
+    vm.addProductsToShipment = addProductsToShipment;
+    vm.shipmentProductOptions = angular.copy(vm.parentVm.state.promotion.products)
+    vm.removeProduct = removeProduct;
+    vm.setShipmentProduct = setShipmentProduct;
+
     function initAttachment(){
         vm.attachment = {};
         document.getElementById("upload_shipment_file").value = "";
@@ -110,6 +115,26 @@ app.controller('PromotionShipmentModalController', ['$scope', '$timeout', 'paren
         });
     }
 
+    function addProductsToShipment(){
+        vm.state.shipment.products = vm.state.shipment.products || [];
+        vm.state.shipment.products.push({
+            itemName: null,
+            itemCode: null,
+            quantity: 1,
+            serial: null
+        })
+    }
+
+    function removeProduct(product, index){
+        vm.state.shipment.products.splice(index, 1);
+    }
+
+    function setShipmentProduct(product){
+        var _product = _.findWhere(vm.shipmentProductOptions, function(option){
+            return option.itemCode == product.itemCode
+        })
+        product.itemName = _product.itemName;
+    }
     (function init() {
         vm.loadShipment();
     })();

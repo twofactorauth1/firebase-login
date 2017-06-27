@@ -59,7 +59,7 @@
                             <tr ng-repeat="product in vm.displayedProducts" class="product-item">
                                 <td class=""><i class="fa fa-2x" ng-click='vm.productSelectClickFn($event, product)' ng-class='{"fa-check-circle": vm.checkIfSelected(product), "fa-circle-o": !vm.checkIfSelected(product)}'></i></td>
                                 <td class=""><strong>Product: </strong><div class="name-block-container"><div class="text-adjust-outerTable">{{product.OITM_ItemName}}</div></div></td>
-                                <td class="text-adjust-outerTable" style="white-space: nowrap;"><strong>Vendor: </strong><div class="text-adjust-outerTable">{{product.OMRC_FirmName}}</div></td>
+                                <td class="text-adjust-outerTable" style="white-space: nowrap;"><strong>Vendor: </strong><div class="text-adjust-outerTable">{{vm.getTruncateVendorName(product.OMRC_FirmName)}}</div></td>
                             </tr>
                         </tbody>
                         <tfoot ng-hide="vm.uiState.loading">

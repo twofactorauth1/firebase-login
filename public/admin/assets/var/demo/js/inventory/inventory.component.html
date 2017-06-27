@@ -92,7 +92,7 @@
 	            <tr ng-repeat="product in vm.displayedProducts" class="product-item" ng-click="vm.viewSingleInventory(product)" ng-class='{"inventory-watch-row": vm.checkIfSelected(product, vm.state.userOrgConfig.watchList)}'>
 	            	<td class="hidden-xs select-col" ng-if="vm.uiState.userPermissions.dashboard"><i class="fa fa-2x" ng-click='vm.productSelectClickFn($event, product)' ng-class='{"fa-check-circle": vm.checkIfSelected(product, vm.uiState.inVentoryWatchList), "fa-circle-o": !vm.checkIfSelected(product, vm.uiState.inVentoryWatchList)}'></i></td>
 	                <td class="name-col"><strong>Product: </strong><div class="name-block-container"><div class="text-adjust-outerTable">{{product.OITM_ItemName}}</div></div></td>
-	                <td class="vendor-col text-adjust-outerTable" style="white-space: nowrap;"><strong>Vendor: </strong><div class="text-adjust-outerTable">{{product.OMRC_FirmName}}</div></td>
+	                <td class="vendor-col text-adjust-outerTable" style="white-space: nowrap;"><strong>Vendor: </strong><div class="text-adjust-outerTable">{{vm.getTruncateVendorName(product.OMRC_FirmName)}}</div></td>
 	                <td class="hidden-xs desc-col"><strong>Description: </strong><div tooltip="{{product.OITM_U_dscription}}" class="text-adjust-outerTable">{{product.OITM_U_dscription}}</div></td>
 	                <td class="hidden-xs hidden-sm dim-col"><strong>Box Dim: </strong>{{vm.getDimentions(product)}}</td>
 	                <td class="weight-col hidden-xs hidden-sm" style="white-space: nowrap;"><strong>Weight: </strong>{{vm.getWeight(product)}}</td>

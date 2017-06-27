@@ -2,9 +2,9 @@
 
 app.controller('InventoryDetailsController', inventoryDetailsController);
 
-inventoryDetailsController.$inject = ['$scope', '$state', '$attrs', '$filter', '$modal', '$timeout', '$stateParams', '$location', 'SweetAlert', 'toaster', 'InventoryService', 'ChartAnalyticsService'];
+inventoryDetailsController.$inject = ['$scope', '$state', '$attrs', '$filter', '$modal', '$timeout', '$stateParams', '$location', 'SweetAlert', 'toaster', 'InventoryService', 'ChartAnalyticsService', 'SecurematicsCommonService'];
 /* @ngInject */
-function inventoryDetailsController($scope, $state, $attrs, $filter, $modal, $timeout, $stateParams, $location, SweetAlert, toaster, InventoryService, ChartAnalyticsService) {
+function inventoryDetailsController($scope, $state, $attrs, $filter, $modal, $timeout, $stateParams, $location, SweetAlert, toaster, InventoryService, ChartAnalyticsService, SecurematicsCommonService) {
 
     var vm = this;
 
@@ -28,6 +28,8 @@ function inventoryDetailsController($scope, $state, $attrs, $filter, $modal, $ti
     vm.checkProductGroup = checkProductGroup;
 
     vm.watchInventoryItem = watchInventoryItem;
+
+    vm.getTruncateVendorName = getTruncateVendorName;
 
     function backToInventory(){
         $state.go("app.inventory");
@@ -80,6 +82,10 @@ function inventoryDetailsController($scope, $state, $attrs, $filter, $modal, $ti
             vm.uiState.loadingWatchInventory = false;
         });
     };
+
+    function getTruncateVendorName(name){
+        return SecurematicsCommonService.truncateVendorName(name);
+    }
 
     function init(element) {
         vm.element = element;
