@@ -31,7 +31,9 @@
         <div data-ng-include=" 'assets/var/demo/js/promotions/partials/promotion-details-edit.html' "></div>
     </tab>
     <tab heading="Shipments" ng-if="vm.state.promotion._id">
-        <shipments-component></shipments-component>
+        <shipments-component
+            promotion= "vm.state.promotion"
+        ></shipments-component>
     </tab>
 </tabset>
 <div class="loading-promotion-details center" ng-if="vm.uiState.loading">

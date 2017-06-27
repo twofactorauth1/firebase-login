@@ -57,20 +57,40 @@
             </div>
             <div class="clearfix"></div>
 
-            <div class="form-group col-sm-6" >
-                <label>
-                    Products
-                </label>
-                <input type="text" placeholder="Model Serial Quantity" class="form-control" ng-model="vm.state.shipment.serial" name="serial">
+            <div class="shipment-products" ng-if="vm.shipmentProductOptions.length">
+                <div class="form-group col-sm-12 margin-bottom-0">
+                    <label>
+                        Products
+                    </label>
+                </div>
+                <div ng-repeat="product in vm.state.shipment.products">
+                    <div class="col-sm-6 form-group" >
+                        <select class="form-control margin-bottom-0" ng-options="option.itemCode as option.itemName for option in vm.shipmentProductOptions" 
+                            ng-model="product.itemCode" ng-change="vm.setShipmentProduct(product)">
+                        </select>
+                        
+                    </div>
+                    <div class="col-sm-6 form-group" >                    
+                    <input type="text" placeholder="Serial Number" class="form-control" ng-model="product.serial" name="serial">
+                    </div>
+                    
+                </div>
+                <div class="clearfix"></div>
+                <div class="col-sm-12">
+                    <button type="button" class="btn btn-primary pull-left margin-top-10 margin-bottom-10 btn-wide btn-warning" ng-click="vm.addProductsToShipment()">
+                            <i class="ti-plus"></i><span> Add Product</span>
+                    </button>
+                </div>
+                
+                <div class="clearfix"></div>
             </div>
-
             <div class="form-group col-sm-6" >
                 <label>
                     Ship Date
                 </label>
                 <indi-datepicker ng-model="vm.state.shipment.shipDate" popup="MM/dd/yyyy"></indi-datepicker>
             </div>
-            <div class="clearfix"></div>
+            
 
             <div class="form-group col-sm-6" >
                 <label>
@@ -78,14 +98,14 @@
                 </label>
                 <indi-datepicker ng-model="vm.state.shipment.configDate" popup="MM/dd/yyyy"></indi-datepicker>
             </div>
-
+            <div class="clearfix"></div>
             <div class="form-group col-sm-6" >
                 <label>
                     Deploy Date
                 </label>
                 <indi-datepicker ng-model="vm.state.shipment.deployDate" popup="MM/dd/yyyy"></indi-datepicker>
             </div>
-            <div class="clearfix"></div>
+            
 
             <div class="form-group col-sm-6" >
                 <label>
@@ -93,7 +113,7 @@
                 </label>
                 <indi-datepicker ng-model="vm.state.shipment.endDate" popup="MM/dd/yyyy"></indi-datepicker>
             </div>
-
+            <div class="clearfix"></div>
             <div class="form-group col-sm-6" >
                 <label class="block">
                     One Config
@@ -110,7 +130,7 @@
                 <span class="file-name">{{vm.attachment.name}}</span>
                 <span class="margin-left-10" ng-if="vm.attachment.name" ng-click="vm.initAttachment()"><i class="fa fa-trash-o"></i></span>
             </div>
-            <div class="clearfix"></div>
+            
 
             <div class="form-group col-sm-6">
                 <label class="block">
