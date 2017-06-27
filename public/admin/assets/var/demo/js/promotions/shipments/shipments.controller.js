@@ -25,7 +25,9 @@ function shipmentsComponentController($scope, $attrs, $window, $filter, $statePa
     vm.statusOptions = PromotionsService.shipmentStatusOptions;
     vm.viewPdf = viewPdf;
     vm.loadShipments = loadShipments;
+    vm.preventClick = preventClick;
     vm.state.promotion = vm.promotion;
+
     function showFilteredRecords(){
         return UtilService.showFilteredRecords(vm.uiState.globalSearch, vm.uiState.fieldSearch);
     }
@@ -96,6 +98,11 @@ function shipmentsComponentController($scope, $attrs, $window, $filter, $statePa
         else{
             vm.state.shipments = [];
         }
+    }
+
+    function preventClick($event){
+        $event.stopPropagation();
+        
     }
 
 }

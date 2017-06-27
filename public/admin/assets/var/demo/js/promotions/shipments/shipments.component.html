@@ -52,6 +52,7 @@
 	                <th class="col-end-date" st-sort="endDate" style="white-space: nowrap;">End Date</th>
 	                <th class="col-report hidden-xs" style="white-space: nowrap;">Report</th>
 	                <th class="col-status" style="white-space: nowrap;">Status</th>
+	                <th class="col-expand"></th>
 	            </tr>
 	            <tr>
 	                <th class="col-partner">
@@ -78,10 +79,11 @@
 	                </th>
 	                <th class="col-report hidden-xs"></th>
 	                <th class="col-status"></th>
+	                <th class="col-expand"></th>
 	            </tr>
 	        </thead>
 	        <tbody>
-	            <tr ng-repeat="shipment in vm.displayedShipments" class="product-item" ng-click="vm.currentShipment = shipment; vm.openModal('new-promotion-shipment-modal', 'PromotionShipmentModalController', 'lg')">
+	            <tr ng-repeat-start="shipment in vm.displayedShipments" class="product-item" ng-click="vm.currentShipment = shipment; vm.openModal('new-promotion-shipment-modal', 'PromotionShipmentModalController', 'lg')">
 	                <td class="col-partner"><strong>VAR: </strong>{{shipment.companyName}}</td>
 	                <td class="col-customer"><strong>Customer: </strong><div class="name-block-container"><span class="list-name"></span><span class="text-adjust-table" tooltip="{{shipment.customer}}">{{shipment.customer}}</span></div></td>
 	                <td class="col-products"><strong>Products: </strong></td>
@@ -91,7 +93,16 @@
 	                <td class="col-end-date"><strong>End Date: </strong>{{vm.parseValueToDate(shipment.endDate) | date:'M/d/yyyy'}}</td>
 	                <td class="col-report"><strong>Report: </strong><i ng-if="shipment.attachment.name" class="fa fa-file-pdf-o" ng-click="vm.viewPdf($event, shipment.attachment)"></i></td>
 	                <td class="col-status"><strong>Status: </strong>{{vm.statusOptions[shipment.status]}}</td>
+	                <td>
+	                    <button class="expand-btn" ng-click="vm.preventClick($event);expanded = !expanded">
+	                       <span ng-if="expanded" class="fa fa-chevron-up"></span>
+	                       <span ng-if="!expanded" class="fa fa-chevron-down"></span>
+	                    </button>
+                	</td>
 	            </tr>
+	            <tr ng-repeat-end ng-show="expanded">
+            		<td colspan="10" class="center"><b>Details to follow</b></td>
+        		</tr>
 	        </tbody>
 	        <tfoot>
 	            <tr>
