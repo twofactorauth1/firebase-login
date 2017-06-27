@@ -43,7 +43,30 @@
         <switch ng-model="component.layoutModifiers.fixed" class="pull-right"></switch>
     </div>
 
-    
+    <div class="form-group">
+        <label>
+            Hide on small screens
+            <span
+                tooltip-placement="top"
+                tooltip="Hide on small screens."
+                tooltip-append-to-body="true">
+                <i class="fa fa-info-circle" />
+            </span>
+        </label>
+        <switch ng-model="component.hideOnlyMobile" ng-change="vm.uiState.toggleSection(component, false, true)" class="pull-right"></switch>
+    </div>
+    <div class="form-group">
+        <label>
+            Show only on small screens
+            <span
+                tooltip-placement="top"
+                tooltip="Show only on small screens."
+                tooltip-append-to-body="true">
+                <i class="fa fa-info-circle" />
+            </span>
+        </label>
+        <switch ng-model="component.showOnlyMobile" ng-change="vm.uiState.toggleSection(component, false, true)" class="pull-right"></switch>
+    </div>
     <div class="form-group">
         <label for="component-title">
             Anchor

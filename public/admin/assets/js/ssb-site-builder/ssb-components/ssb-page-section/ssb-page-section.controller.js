@@ -138,6 +138,12 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
             if(section.filter){
                 classString += " ssb-section-filter-" + section.filter.replace(/[^0-9a-z]/gi, '-');
             }
+            if(section.hideOnlyMobile){
+                classString += " ssb-section-o-desktop" ;
+            }
+            if(section.showOnlyMobile){
+                classString += " ssb-section-o-moblie";
+            }
 
         }
         // console.debug('section classString')
