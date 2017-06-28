@@ -286,6 +286,7 @@
 
             function success(data) {
                 promotionsService.shipments = angular.copy(data);
+                updatePromotionShipmentCount(promotionId, promotionsService.shipments.length);
             }
 
             function error(error) {
@@ -344,6 +345,14 @@
             promotionsService.shipments = undefined;
         }
         
+        function updatePromotionShipmentCount(promotionId, count){
+            var promotion = _.findWhere(promotionsService.promotions, {
+                _id: promotionId
+            });
+            if(promotion){
+                promotion.shipmentCount = count;
+            }
+        }
 
         (function init() {
             promotionsService.getPromotions();

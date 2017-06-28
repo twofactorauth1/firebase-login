@@ -15,7 +15,7 @@
             page: 1,
             fieldSearch:{
                 OITM_ItemName: undefined,
-                OMRC_FirmName: undefined,
+                _shortVendorName: undefined,
                 OITM_ItemCode: undefined,
                 Available: undefined
             }

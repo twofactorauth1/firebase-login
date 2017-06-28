@@ -2,9 +2,9 @@
 
 app.controller('InventoryComponentController', inventoryComponentController);
 
-inventoryComponentController.$inject = ['$scope', '$attrs', '$filter', '$modal', '$timeout', '$location', 'pagingConstant', 'toaster', 'InventoryService', 'UtilService', 'SecurematicsCommonService'];
+inventoryComponentController.$inject = ['$scope', '$attrs', '$filter', '$modal', '$timeout', '$location', 'pagingConstant', 'toaster', 'InventoryService', 'UtilService'];
 /* @ngInject */
-function inventoryComponentController($scope, $attrs, $filter, $modal, $timeout, $location, pagingConstant, toaster, InventoryService, UtilService, SecurematicsCommonService) {
+function inventoryComponentController($scope, $attrs, $filter, $modal, $timeout, $location, pagingConstant, toaster, InventoryService, UtilService) {
 
     var vm = this;
 
@@ -23,7 +23,7 @@ function inventoryComponentController($scope, $attrs, $filter, $modal, $timeout,
         globalSearch: InventoryService.globalSearch,
         fieldSearch: {
             OITM_ItemName: InventoryService.fieldSearch.OITM_ItemName,
-            OMRC_FirmName: InventoryService.fieldSearch.OMRC_FirmName,
+            _shortVendorName: InventoryService.fieldSearch._shortVendorName,
             OITM_ItemCode: InventoryService.fieldSearch.OITM_ItemCode,
             Available: InventoryService.fieldSearch.Available
         },        
@@ -41,7 +41,6 @@ function inventoryComponentController($scope, $attrs, $filter, $modal, $timeout,
     vm.pagingConstant = pagingConstant;
     vm.selectPage = selectPage;
     vm.checkIfSelected = checkIfSelected;
-    vm.getTruncateVendorName = getTruncateVendorName;
     vm.quantitySearchOptions =[
         {
            "label": "> 0",
@@ -284,7 +283,7 @@ function inventoryComponentController($scope, $attrs, $filter, $modal, $timeout,
         //InventoryService.fieldSearch = {};
         vm.uiState.fieldSearch = {
             OITM_ItemName: undefined,
-            OMRC_FirmName: undefined,
+            _shortVendorName: undefined,
             OITM_ItemCode: undefined,
             Available: undefined
         }
@@ -382,10 +381,6 @@ function inventoryComponentController($scope, $attrs, $filter, $modal, $timeout,
     function cancel($event) {
         $event.stopPropagation();
     };
-
-    function getTruncateVendorName(name){
-        return SecurematicsCommonService.truncateVendorName(name);
-    }
 
     function init(element) {
         vm.element = element;
