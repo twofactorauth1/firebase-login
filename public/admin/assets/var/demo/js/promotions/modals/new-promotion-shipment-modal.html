@@ -138,9 +138,9 @@
                     Status
                 </label>
 
-                <select id="promotion_type" ng-model="vm.state.shipment.status" class="form-control margin-bottom-0">
-                    <option></option>
-                    <option ng-repeat="statusOption in vm.statusOptions.options" value="{{statusOption.value}}" ng-selected="{{statusOption.value == vm.state.shipment.status}}">{{statusOption.label}}</option>
+                <select class="form-control margin-bottom-0" ng-options="option.value as option.label for option in vm.statusOptions.options" 
+                    ng-model="vm.state.shipment.status">
+                    <option value="">-- Select Shipment Status --</option>
                 </select>
 
             </div>
