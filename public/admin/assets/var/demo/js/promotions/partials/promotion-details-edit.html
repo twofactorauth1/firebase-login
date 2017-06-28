@@ -37,14 +37,14 @@
                 <h4>Start Date</h4>
 
                 <div class="description">
-                    <indi-datepicker ng-model="vm.state.promotion.startDate" popup="MM/dd/yyyy"></indi-datepicker>
+                    <indi-datepicker ng-model="vm.state.promotion.startDate" popup="MM/dd/yyyy" click-input="true"></indi-datepicker>
                 </div>
                 <hr class="visible-xs" />
             </div>
             <div class="form-group col-xs-12 col-sm-6 padding-right-0 single-row-view">
                 <h4>Expiration Date</h4>
                 <div class="description">
-                    <indi-datepicker ng-model="vm.state.promotion.expirationDate" popup="MM/dd/yyyy"></indi-datepicker>
+                    <indi-datepicker ng-model="vm.state.promotion.expirationDate" popup="MM/dd/yyyy" click-input="true"></indi-datepicker>
                 </div>
                 <hr class="visible-xs" />
             </div>
@@ -70,7 +70,7 @@
                 <div class="form-group">
                     <h4>Start Date</h4>
                     <div class="description">
-                        <indi-datepicker ng-model="vm.state.promotion.report.startDate" popup="MM/dd/yyyy"></indi-datepicker>
+                        <indi-datepicker ng-model="vm.state.promotion.report.startDate" popup="MM/dd/yyyy" click-input="true"></indi-datepicker>
                     </div>
                 </div>
                 <div class="form-group">
@@ -126,7 +126,7 @@
                         <option></option>
                         <option ng-repeat="promoOption in vm.promoTypeOptions.options" value="{{promoOption.value}}" ng-disabled="promoOption.disabled" ng-selected="{{promoOption.value == vm.state.promotion.type}}">{{promoOption.label}}</option>
                     </select>
-                    
+
                 </div>
                 <hr>
             </div>
