@@ -27,9 +27,19 @@ function shipmentsComponentController($scope, $attrs, $window, $filter, $statePa
     vm.loadShipments = loadShipments;
     vm.preventClick = preventClick;
     vm.state.promotion = vm.promotion;
+    vm.getShipmentStatus = getShipmentStatus;
 
     function showFilteredRecords(){
         return UtilService.showFilteredRecords(vm.uiState.globalSearch, vm.uiState.fieldSearch);
+    }
+
+    function getShipmentStatus(status){
+        if(status){
+            var _status = _.findWhere(vm.statusOptions.options, {
+                value: status
+            });
+            return _status.label;
+        }
     }
 
     function openModal(modal, controller, size){
