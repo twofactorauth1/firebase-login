@@ -55,7 +55,7 @@
 	                <th class="hidden-xs col-products" style="white-space: nowrap;">Products</th>
 	                <th class="hidden-xs col-start-date" st-sort="startDate" style="white-space: nowrap;">Start Date</th>
 	                <th class="hidden-xs col-exp-date" st-sort="expirationDate" style="white-space: nowrap;">Expiration Date</th>
-	                <th class="col-shipment" st-sort="shipments" style="white-space: nowrap;">Shipments</th>
+	                <th class="col-shipment" st-sort="shipmentCount" style="white-space: nowrap;">Shipments</th>
 	            </tr>
 	            <tr>
 	                <th class="col-title">
@@ -90,7 +90,7 @@
 	                <td class="hidden-xs col-products"><strong>Products: </strong><div class="name-block-container"><span class="list-name"></span><span class="text-adjust-table" tooltip="{{vm.getProductsName(promotion.products)}}">{{vm.getProductsName(promotion.products)}}</span></div></td>
 	                <td class="hidden-xs col-start-date"><strong>Start Date: </strong>{{vm.parseValueToDate(promotion.startDate) | date:'M/d/yyyy'}}</td>
 	                <td class="hidden-xs col-exp-date"><strong>Start Date: </strong>{{vm.parseValueToDate(promotion.expirationDate) | date:'M/d/yyyy'}}</td>
-	                <td class="col-shipment"><strong>Shipments: </strong>{{promotion.shipments}}</td>
+	                <td class="col-shipment"><strong>Shipments: </strong>{{promotion.shipmentCount || 0}}</td>
 	            </tr>
 	        </tbody>
 	        <tfoot>
