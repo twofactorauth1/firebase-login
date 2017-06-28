@@ -263,7 +263,7 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
     function resizeSliderImagesToFullHeight(section){
         if(section){
             var sectionElement = angular.element("#section_"+ section._id)
-            if(sectionElement.hasClass("ssb-page-section-layout-nav-hero-v2")|| sectionElement.hasClass("ssb-page-section-layout-nav-hero-v3")){
+            if(sectionElement.hasClass("ssb-page-section-layout-nav-hero-v2")|| sectionElement.hasClass("ssb-page-section-layout-nav-hero-v3") || sectionElement.hasClass("ssb-page-section-layout-nav-hero-v4")){
                 var sectionElementTextHeight=120 // 120 is offset
                 var innerSectionHeaderElement = sectionElement.find(".navigation-header");
                 if(innerSectionHeaderElement.length ){

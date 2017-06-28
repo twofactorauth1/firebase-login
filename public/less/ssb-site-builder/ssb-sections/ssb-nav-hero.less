@@ -8,6 +8,18 @@
     }
 
     /*
+     * Only for nav-hero-v4
+    */
+
+    .ssb-page-section-layout-nav-hero-v4 {
+        .ssb-theme-btn {
+            @media (max-width: 767px) {
+                white-space: normal;
+            }
+        }
+    }
+
+    /*
      * Common for all versions
     */
 
@@ -167,7 +179,8 @@
 
     .ssb-page-section-layout-nav-hero-v1,
     .ssb-page-section-layout-nav-hero-v2,
-    .ssb-page-section-layout-nav-hero-v3 {
+    .ssb-page-section-layout-nav-hero-v3,
+    .ssb-page-section-layout-nav-hero-v4 {
 
         [ssb-text-component] {
 
@@ -186,7 +199,8 @@
      * layout-hero-v2
     */
     .ssb-page-section-layout-nav-hero-v2,
-    .ssb-page-section-layout-nav-hero-v3 {
+    .ssb-page-section-layout-nav-hero-v3,
+    .ssb-page-section-layout-nav-hero-v4 {
 
 
         .flex-container-absolute-column {
@@ -210,7 +224,7 @@
 
     }
 
-    .ssb-page-section-layout-nav-hero-v2 [testimonials-component] ,.ssb-page-section-layout-nav-hero-v3 [testimonials-component]{
+    .ssb-page-section-layout-nav-hero-v2 [testimonials-component] ,.ssb-page-section-layout-nav-hero-v3 [testimonials-component], .ssb-page-section-layout-nav-hero-v4 [testimonials-component] {
 
         div.title {
             display: none;
@@ -340,7 +354,7 @@
         });
 
     }
-    .ssb-page-section-layout-nav-hero-v2 [testimonials-component].ssb-component-stretch-image , .ssb-page-section-layout-nav-hero-v3 [testimonials-component].ssb-component-stretch-image{
+    .ssb-page-section-layout-nav-hero-v2 [testimonials-component].ssb-component-stretch-image , .ssb-page-section-layout-nav-hero-v3 [testimonials-component].ssb-component-stretch-image, .ssb-page-section-layout-nav-hero-v4 [testimonials-component].ssb-component-stretch-image {
         .slick-slide .img img {
             @media screen and (max-width: 767px) {
                 max-width: none !important;
