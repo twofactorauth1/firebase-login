@@ -2,9 +2,9 @@
 
 app.controller('PromotionDetailsController', promotionDetailsController);
 
-promotionDetailsController.$inject = ['$scope', '$window', '$state', '$attrs', '$filter', '$modal', '$timeout', '$stateParams', '$location', 'toaster', 'SweetAlert', 'formValidations', 'PromotionsService', 'SecurematicsCommonService'];
+promotionDetailsController.$inject = ['$scope', '$window', '$state', '$attrs', '$filter', '$modal', '$timeout', '$stateParams', '$location', 'toaster', 'SweetAlert', 'formValidations', 'PromotionsService'];
 /* @ngInject */
-function promotionDetailsController($scope, $window, $state, $attrs, $filter, $modal, $timeout, $stateParams, $location, toaster, SweetAlert, formValidations, PromotionsService, SecurematicsCommonService) {
+function promotionDetailsController($scope, $window, $state, $attrs, $filter, $modal, $timeout, $stateParams, $location, toaster, SweetAlert, formValidations, PromotionsService) {
 
     var vm = this;
 
@@ -31,6 +31,7 @@ function promotionDetailsController($scope, $window, $state, $attrs, $filter, $m
     vm.initAttachment = initAttachment;
     vm.viewPromotionPdf = viewPromotionPdf;
     vm.addShipment = addShipment;
+    vm.shipmentStatusOptions = PromotionsService.shipmentStatusOptions;
 
     function backToPromotions(){
         $state.go("app.promotions");
@@ -223,7 +224,6 @@ function promotionDetailsController($scope, $window, $state, $attrs, $filter, $m
                     url: attachment.url 
                 }).embed('pdf-container');
             }, 500);
-            
         }
     }, true);
 
@@ -241,24 +241,34 @@ function promotionDetailsController($scope, $window, $state, $attrs, $filter, $m
         vm.state.shipmentStats = {};
         if(vm.state.shipments){
             // Reports
-            // vm.state.shipmentStats.reports = _.filter(vm.state.shipments, function(shipment) {
-            //     return shipment.attachment && shipment.attachment.name
-            // });
-            // // Try State
-            // vm.state.shipmentStats.tryState = _.filter(vm.state.shipments, function(shipment) {
-            //     return shipment.attachment && shipment.attachment.name
-            // });
-            // // Buy State
-            // vm.state.shipmentStats.buyState = _.filter(vm.state.shipments, function(shipment) {
-            //     return shipment.attachment && shipment.attachment.name
-            // });
-            // // RMA State
-            // vm.state.shipmentStats.rmaState = _.filter(vm.state.shipments, function(shipment) {
-            //     return shipment.attachment && shipment.attachment.name
-            // });
+            vm.state.shipmentStats.reports = _.size(_.filter(vm.state.shipments, function(shipment) {
+                return shipment.attachment && shipment.attachment.name
+            }));
+            // Try State
+            vm.state.shipmentStats.tryState = _.size(_.filter(vm.state.shipments, function(shipment) {
+                return shipment.status === vm.shipmentStatusOptions.TRY
+            }));
+            // Buy State
+            vm.state.shipmentStats.buyState = _.size(_.filter(vm.state.shipments, function(shipment) {
+                return shipment.status === vm.shipmentStatusOptions.BUY
+            }));
+            // RMA State
+            vm.state.shipmentStats.rmaState = _.size(_.filter(vm.state.shipments, function(shipment) {
+                return shipment.status === vm.shipmentStatusOptions.RMA
+            }));
+            // Confugured
+            vm.state.shipmentStats.configured = _.size(_.filter(vm.state.shipments, function(shipment) {
+                return shipment.configDate
+            }));
+            // Confugured
+            vm.state.shipmentStats.deployed = _.size(_.filter(vm.state.shipments, function(shipment) {
+                return shipment.deployDate
+            }));
         }
     }
+
     
+
     function init(){
         
         if(vm.promotionId == 'new'){
@@ -274,8 +284,7 @@ function promotionDetailsController($scope, $window, $state, $attrs, $filter, $m
             })
         }
         PromotionsService.getVendors().then(function(response){  
-            var _vendors = response.data;
-            vm.state.vendors = SecurematicsCommonService.truncateVendorList(_vendors);
+            vm.state.vendors = response.data;
         })
 
         PromotionsService.clearShipmentList();

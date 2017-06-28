@@ -5,11 +5,12 @@ app.directive('indiDatepicker',function($compile,$timeout){
         scope: {
             ngModel: '=',
             popup: '@',
-            readOnly: '@'
+            readOnly: '@',
+            clickInput: '@'
         },
         template:
             '<div class="input-group">'     +
-                    '<input type="text" readonly="{{readOnly}}" class="form-control" datepicker-popup="{{popup}}" ng-model="ngModel" is-open="datePicker.isOpen" min-date="minDate" close-text="Close"/>' +
+                    '<input type="text" ng-click="clickInputFn($event)" readonly="{{readOnly}}" class="form-control" datepicker-popup="{{popup}}" ng-model="ngModel" is-open="datePicker.isOpen" min-date="minDate" close-text="Close"/>' +
                     '<span class="input-group-btn">' +
                         '<button type="button" class="btn btn-default" ng-click="open($event)">' +
                             '<i class="glyphicon glyphicon-calendar"></i>' +
@@ -58,6 +59,14 @@ app.directive('indiDatepicker',function($compile,$timeout){
             scope.endOpened = false;
             scope.startOpened = !scope.startOpened;
           };
+
+          scope.clickInputFn = function($event){
+            if(scope.clickInput){
+              scope.open($event);
+            }
+          }
         }
+
+        
     };
 });

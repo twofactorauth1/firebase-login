@@ -29,9 +29,9 @@
         promotionsService.refreshPromotionShipment = refreshPromotionShipment;
         promotionsService.clearShipmentList = clearShipmentList;
         promotionsService.promoTypeOptions = {
-            TRY_AND_BUY: "Try and Buy",
-            MILESTONE: "Milestone",
-            EVENT: "Event",
+            TRY_AND_BUY: "TRY_AND_BUY",
+            MILESTONE: "MILESTONE",
+            EVENT: "EVENT",
             options: [
                 {
                     label: "Try and Buy",
@@ -68,8 +68,8 @@
 
 
         promotionsService.shipmentStatusOptions = {
-            TRY: "Try",
-            BUY: "Buy",
+            TRY: "TRY",
+            BUY: "BUY",
             RMA: 'RMA',
             options: [
                 {
@@ -286,6 +286,7 @@
 
             function success(data) {
                 promotionsService.shipments = angular.copy(data);
+                updatePromotionShipmentCount(promotionId, promotionsService.shipments.length);
             }
 
             function error(error) {
@@ -344,6 +345,14 @@
             promotionsService.shipments = undefined;
         }
         
+        function updatePromotionShipmentCount(promotionId, count){
+            var promotion = _.findWhere(promotionsService.promotions, {
+                _id: promotionId
+            });
+            if(promotion){
+                promotion.shipmentCount = count;
+            }
+        }
 
         (function init() {
             promotionsService.getPromotions();

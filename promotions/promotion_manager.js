@@ -93,7 +93,24 @@ module.exports = {
                 fn(err, null);
             } else {
                 log.debug('<< listPromotions');
-                fn(null, list);
+                //fn(null, list);
+                async.eachSeries(list, function(promotion, cb){
+                    shipmentDao.findCount({promotionId: promotion.id(), accountId: accountId}, $$.m.Shipment, function(err, value){
+                        if(err) {
+                            cb(err);
+                        } else {
+                            promotion.set("shipmentCount", value);
+                            cb();
+                        }
+                    })
+                }, function(err){
+                    if(err) {
+                        self.log.error('Error getting shipments:', err);
+                        return fn(err);
+                    } else {
+                        fn(null, list);
+                    }
+                });
             }
         });
     },

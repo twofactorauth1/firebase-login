@@ -56,13 +56,13 @@
                         <thead>
                             <tr>
                                 <th st-sort="title">Title</th>
-                                <th class="hidden-xs" st-sort="isPublic">Public</th>
+                                <th class="hidden-xs" st-sort="isPublic" style="white-space: nowrap;">Public</th>
                                 <th class="hidden-xs" st-sort="category">Category</th>
-                                <th class="hidden-xs text-center" st-sort="statistics.views">Views</th>
-                                <th class="hidden-xs text-center" st-sort="statistics.helpful">Helpful</th>
-                                <th class="hidden-xs text-center" st-sort="statistics.nothelpful">Not Helpful</th>
-                                <th class="hidden-xs" st-sort="getters.created" ng-class="{'center': tableView != 'grid'}">Created</th>
-                                <th class="hidden-xs" st-sort-default="reverse" st-sort="getters.updated" ng-class="{'center': tableView != 'grid'}">Updated</th>
+                                <th class="hidden-xs text-center" st-sort="statistics.views" style="white-space: nowrap;">Views</th>
+                                <th class="hidden-xs text-center" st-sort="statistics.helpful" style="white-space: nowrap;">Helpful</th>
+                                <th class="hidden-xs text-center" st-sort="statistics.nothelpful" style="white-space: nowrap;">Not Helpful</th>
+                                <th class="hidden-xs" st-sort="getters.created" ng-class="{'center': tableView != 'grid'}" style="white-space: nowrap;">Created</th>
+                                <th class="hidden-xs" st-sort-default="reverse" st-sort="getters.updated" ng-class="{'center': tableView != 'grid'}" style="white-space: nowrap;">Updated</th>
                             </tr>
                             <tr ng-if="showFilter">
                                 <th>
@@ -99,8 +99,8 @@
                                 <td><strong>Views: </strong><span class="text-bold"><span class="fa fa-eye"></span> {{topic.statistics.views}} </span></td>
                                 <td><strong>Helpful: </strong><span class="text-success text-bold"><span class="fa fa-thumbs-up"></span> {{topic.statistics.helpful}} </span></td>
                                 <td><strong>Not Helpful: </strong><span class="text-danger text-bold"><span class="fa fa-thumbs-down"></span> {{topic.statistics.nothelpful}}</span></td>
-                                <td class="hidden-xs" ng-class="{'center': tableView != 'grid'}"><strong>Created: </strong> {{topic.created.date | date:'MMM d yy'}}</td>
-                                <td class="hidden-xs" ng-class="{'center': tableView != 'grid'}"><strong>Updated: </strong>{{topic.updated.date | date:'MMM d yy'}}</td>
+                                <td class="hidden-xs" ng-class="{'center': tableView != 'grid'}" style="white-space: nowrap;"><strong>Created: </strong> {{topic.created.date | date:'MMM d yy'}}</td>
+                                <td class="hidden-xs" ng-class="{'center': tableView != 'grid'}" style="white-space: nowrap;"><strong>Updated: </strong>{{topic.updated.date | date:'MMM d yy'}}</td>
                             </tr>
                         </tbody>
                     </table>

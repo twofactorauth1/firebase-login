@@ -724,6 +724,9 @@ app.constant('JS_REQUIRES', {
     'ShipmentsComponent': 'assets/var/demo/js/promotions/shipments/shipments.component.js',
     'ShipmentsComponentController': 'assets/var/demo/js/promotions/shipments/shipments.controller.js',
 
+    // Promotion Participants
+    'ParticipantsComponent': 'assets/var/demo/js/promotions/participants/participants.component.js',
+    'ParticipantsComponentController': 'assets/var/demo/js/promotions/participants/participants.controller.js',
 
     'asideCtrl': 'assets/var/demo/js/controllers/asideCtrl.js',
     'UsersCtrl': 'assets/var/demo/js/users/users.controller.js',
