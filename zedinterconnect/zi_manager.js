@@ -289,8 +289,8 @@ var ziManager = {
         };
         
         var orQuery = [                    
-                    {OITM_ItemName:regex}
-                ];
+            {OITM_ItemName:regex}
+        ];
         
         if(term){
             query["$or"] = orQuery;

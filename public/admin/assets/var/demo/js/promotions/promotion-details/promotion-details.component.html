@@ -31,6 +31,11 @@
     <tab heading="Promotion Details">
         <div data-ng-include=" 'assets/var/demo/js/promotions/partials/promotion-details-edit.html' "></div>
     </tab>
+    <tab heading="Participants" ng-if="vm.state.promotion._id">
+        <promotion-participants-component
+            promotion= "vm.state.promotion"
+        ></promotion-participants-component>
+    </tab>
     <tab heading="Shipments" ng-if="vm.state.promotion._id">
         <shipments-component
             promotion= "vm.state.promotion"
