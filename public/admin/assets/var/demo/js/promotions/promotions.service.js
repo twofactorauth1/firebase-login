@@ -68,8 +68,8 @@
 
 
         promotionsService.shipmentStatusOptions = {
-            TRY: "Try",
-            BUY: "Buy",
+            TRY: "TRY",
+            BUY: "BUY",
             RMA: 'RMA',
             options: [
                 {

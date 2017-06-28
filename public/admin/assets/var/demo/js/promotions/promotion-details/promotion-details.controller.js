@@ -31,6 +31,7 @@ function promotionDetailsController($scope, $window, $state, $attrs, $filter, $m
     vm.initAttachment = initAttachment;
     vm.viewPromotionPdf = viewPromotionPdf;
     vm.addShipment = addShipment;
+    vm.shipmentStatusOptions = PromotionsService.shipmentStatusOptions
 
     function backToPromotions(){
         $state.go("app.promotions");
@@ -241,21 +242,29 @@ function promotionDetailsController($scope, $window, $state, $attrs, $filter, $m
         vm.state.shipmentStats = {};
         if(vm.state.shipments){
             // Reports
-            // vm.state.shipmentStats.reports = _.filter(vm.state.shipments, function(shipment) {
-            //     return shipment.attachment && shipment.attachment.name
-            // });
-            // // Try State
-            // vm.state.shipmentStats.tryState = _.filter(vm.state.shipments, function(shipment) {
-            //     return shipment.attachment && shipment.attachment.name
-            // });
-            // // Buy State
-            // vm.state.shipmentStats.buyState = _.filter(vm.state.shipments, function(shipment) {
-            //     return shipment.attachment && shipment.attachment.name
-            // });
-            // // RMA State
-            // vm.state.shipmentStats.rmaState = _.filter(vm.state.shipments, function(shipment) {
-            //     return shipment.attachment && shipment.attachment.name
-            // });
+            vm.state.shipmentStats.reports = _.size(_.filter(vm.state.shipments, function(shipment) {
+                return shipment.attachment && shipment.attachment.name
+            }));
+            // Try State
+            vm.state.shipmentStats.tryState = _.size(_.filter(vm.state.shipments, function(shipment) {
+                return shipment.status === vm.shipmentStatusOptions.TRY
+            }));
+            // Buy State
+            vm.state.shipmentStats.buyState = _.size(_.filter(vm.state.shipments, function(shipment) {
+                return shipment.status === vm.shipmentStatusOptions.BUY
+            }));
+            // RMA State
+            vm.state.shipmentStats.rmaState = _.size(_.filter(vm.state.shipments, function(shipment) {
+                return shipment.status === vm.shipmentStatusOptions.RMA
+            }));
+            // Confugured
+            vm.state.shipmentStats.configured = _.size(_.filter(vm.state.shipments, function(shipment) {
+                return shipment.configDate
+            }));
+            // Deployed
+            vm.state.shipmentStats.deployed = _.size(_.filter(vm.state.shipments, function(shipment) {
+                return shipment.deployDate
+            }));
         }
     }
     
