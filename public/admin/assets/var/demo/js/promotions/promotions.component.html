@@ -85,7 +85,7 @@
 	        <tbody>
 	            <tr ng-repeat="promotion in vm.displayedPromotions" class="product-item" ng-click="vm.viewPromotionDetails(promotion)">
 	                <td class="col-title"><strong>Name: </strong>{{promotion.title}}</td>
-	                <td class="col-vendor"><strong>Vendor: </strong><div class="name-block-container"><span class="list-name"></span><span class="text-adjust-table" tooltip="{{vm.getTruncateVendorName(promotion.vendor)}}">{{vm.getTruncateVendorName(promotion.vendor)}}</span></div></td>
+	                <td class="col-vendor"><strong>Vendor: </strong><div class="name-block-container"><span class="list-name"></span><span class="text-adjust-table text-capitalize">{{promotion.vendor}}</span></div></td>
 	                <td class="col-promo-code"><strong>Promo Code: </strong>{{promotion.promoCode}}</td>
 	                <td class="hidden-xs col-products"><strong>Products: </strong><div class="name-block-container"><span class="list-name"></span><span class="text-adjust-table" tooltip="{{vm.getProductsName(promotion.products)}}">{{vm.getProductsName(promotion.products)}}</span></div></td>
 	                <td class="hidden-xs col-start-date"><strong>Start Date: </strong>{{vm.parseValueToDate(promotion.startDate) | date:'M/d/yyyy'}}</td>

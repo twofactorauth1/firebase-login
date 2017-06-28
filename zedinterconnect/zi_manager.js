@@ -285,7 +285,7 @@ var ziManager = {
         self.log.debug(accountId, userId, '>> productSearch');
         var regex = new RegExp('\.*'+term+'\.*', 'i');
         var query = {
-            _vendorName: new RegExp('^' + filter)
+            _shortVendorName: new RegExp('^' + filter)
         };
         
         var orQuery = [                    
@@ -516,6 +516,7 @@ var ziManager = {
                             row._firmName = row.OMRC_FirmName.toLowerCase();
                         }
                         row._vendorName = row.OMRC_FirmName.toLowerCase();
+                        row._shortVendorName = self._getTruncatedVendorName(row._vendorName);
                     }
 
                 });
@@ -1179,7 +1180,7 @@ var ziManager = {
         self.log.debug(accountId, userId, '>> listVendors');
         var query = {};
         var collection = 'inventory';
-        var key = "_vendorName";
+        var key = "_shortVendorName";
         ziDao.distinctWithCollection(key, query, collection, function(err, resp) {
             if(err) {
                 self.log.error(accountId, userId, 'Error getting vendors:', err);
@@ -1238,6 +1239,16 @@ var ziManager = {
                 }
             });
         });
+    },
+
+    _getTruncatedVendorName: function(name){
+        var textToRemoveArray = ["hardware", "service", "services", "support", "education", "software", "networks", "license"];
+        var _textToRemoveArray = _.map(textToRemoveArray, function(item){
+            return " " + item.trim(); 
+        })
+        var regexString = _textToRemoveArray.join("|");
+        var regex = new RegExp(regexString + "\s*$", "gi");
+        return name.replace(regex, "");
     }
 
 
