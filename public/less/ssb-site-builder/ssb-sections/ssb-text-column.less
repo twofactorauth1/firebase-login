@@ -97,4 +97,22 @@
         width: 100%;
         position: absolute;
     }
+
+    [class*="ssb-component-layout-columns-spacing-1"],
+    [class*="ssb-component-layout-columns-spacing-2"],
+    [class*="ssb-component-layout-columns-spacing-3"],
+    [class*="ssb-component-layout-columns-spacing-4"],
+    [class*="ssb-component-layout-columns-spacing-5"],
+    [class*="ssb-component-layout-columns-spacing-6"],
+    [class*="ssb-component-layout-columns-spacing-7"],
+    [class*="ssb-component-layout-columns-spacing-8"],
+    [class*="ssb-component-layout-columns-spacing-9"]{
+        .component-wrap {
+            margin-right:0px!important;
+            margin-left:0px!important;
+        }
+    }
+    [class*="ssb-component-layout-columns-spacing-first-column"] .component-wrap {
+        padding-left:0px!important;
+    }
 }
