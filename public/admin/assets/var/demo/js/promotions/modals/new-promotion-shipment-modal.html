@@ -128,7 +128,7 @@
                            file-model='vm.attachment'
                            accept=".pdf">
                 </label>
-                <span class="file-name">{{vm.attachment.name}}</span>
+                <span class="file-name">{{vm.attachment.name || vm.state.shipment.attachment.name}}</span>
                 <span class="margin-left-10" ng-if="vm.attachment.name" ng-click="vm.initAttachment()"><i class="fa fa-trash-o"></i></span>
             </div>
             
