@@ -1,5 +1,9 @@
 promotion-details-component{
-	
+	select{
+		-webkit-appearance: menulist !important;
+		-moz-appearance: menulist !important;
+		appearance: menulist !important;
+	}
 	.promotion-top-buttons{
 	    padding: 10px !important;
 	}
@@ -102,6 +106,7 @@ promotion-details-component{
 							button{
 								border-left: 0 !important;
 								float: right;
+								z-index: 10;
 							}
 						}
 					}
@@ -158,11 +163,14 @@ promotion-details-component{
 		input{
 			display: inline-block;
 			width:85%;
+			float: left;
 		}
-		i{
-			vertical-align: bottom;
+		select{
+			-webkit-appearance: menulist !important;
+			-moz-appearance: menulist !important;
+			appearance: menulist !important;
 		}
-	}
+	}	
 }
 .securematics-shipments-list{
 	.expand-btn{

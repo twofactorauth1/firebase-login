@@ -5,7 +5,6 @@
             <span ng-if="vm.state.promotions" class="mainDescription">There {{vm.state.promotions.length > 1 ? 'are' : 'is'}}  currently {{vm.state.promotions.length | number : 0}} promotion<span ng-if="vm.state.promotions.length > 1">s</span>. <span ng-if="vm.showFilteredRecords()"> ({{filteredCollection.length || 0}} in filtered view)</span></span>
         </div>
     </div>
-    <div ng-if="$parent.userPermissions.isAdminUser" data-ng-include=" 'assets/var/demo/js/promotions/partials/promotions.statistics.html' "></div>
 </section>
 
 
@@ -32,7 +31,7 @@
 			                                        <button class="btn btn-info" ng-class="{'active': tableView == 'grid'}" href="" ng-click="tableView = 'grid'" tooltip-placement="top" tooltip="Grid"> <span class="fa fa-th"></span> </button>
                                     			</div>
 	                                        </div>
-	                                        
+
                                     		<div ng-if="$parent.userPermissions.isAdminUser" class="col-xs-4 col-sm-3 padding-0">
 		                                        <button type="button" class="btn btn-o btn-info btn-scroll btn-scroll-top ti ti-plus ng-click-active pull-right btn-wide" ng-click="vm.addNewPromotion()">
 		                                            <span>New</span>
@@ -67,19 +66,19 @@
 	                </th>
 
 	                <th class="col-promo-code">
-	                    
+
 	                </th>
 	                <th class="col-products hidden-xs">
-	                    
+
 	                </th>
 	                <th class="col-start-date hidden-xs">
-	                    
+
 	                </th>
 	                <th class="col-exp-date hidden-xs">
-	                    
+
 	                </th>
 	                <th class="col-shipment">
-	                    
+
 	                </th>
 	            </tr>
 	        </thead>

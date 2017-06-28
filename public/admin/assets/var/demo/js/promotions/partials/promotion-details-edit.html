@@ -37,14 +37,14 @@
                 <h4>Start Date</h4>
 
                 <div class="description">
-                    <indi-datepicker ng-model="vm.state.promotion.startDate" popup="MM/dd/yyyy"></indi-datepicker>
+                    <indi-datepicker ng-model="vm.state.promotion.startDate" popup="MM/dd/yyyy" click-input="true"></indi-datepicker>
                 </div>
                 <hr class="visible-xs" />
             </div>
             <div class="form-group col-xs-12 col-sm-6 padding-right-0 single-row-view">
                 <h4>Expiration Date</h4>
                 <div class="description">
-                    <indi-datepicker ng-model="vm.state.promotion.expirationDate" popup="MM/dd/yyyy"></indi-datepicker>
+                    <indi-datepicker ng-model="vm.state.promotion.expirationDate" popup="MM/dd/yyyy" click-input="true"></indi-datepicker>
                 </div>
                 <hr class="visible-xs" />
             </div>
@@ -70,7 +70,7 @@
                 <div class="form-group">
                     <h4>Start Date</h4>
                     <div class="description">
-                        <indi-datepicker ng-model="vm.state.promotion.report.startDate" popup="MM/dd/yyyy"></indi-datepicker>
+                        <indi-datepicker ng-model="vm.state.promotion.report.startDate" popup="MM/dd/yyyy" click-input="true"></indi-datepicker>
                     </div>
                 </div>
                 <div class="form-group">
@@ -91,7 +91,7 @@
             <div class="form-group">
 
                 <h4>Attachment</h4>
-                <span class="required hidden">*</span>
+                
                 <div class="visible-xs">
                     {{vm.state.promotion.attachment.name}}
                 </div>
@@ -99,10 +99,12 @@
                     <span ng-if="!vm.state.promotion.attachment.name">Upload File</span>
                     <span ng-if="vm.state.promotion.attachment.name">Replace File</span>
                     <input type="file"
-                           id="upload_file"
-                           class="hidden"
-                           file-model='vm.attachment'
-                           accept=".pdf">
+                       id="upload_file"
+                       class="hidden"
+                       file-model='vm.attachment'
+                       accept=".pdf"
+                       accepted-formats="application/pdf" 
+                    >
                 </label>
                 <span class="file-name">{{vm.attachment.name}}</span>
                 <span class="margin-left-10" ng-if="vm.attachment.name" ng-click="vm.initAttachment()"><i class="fa fa-trash-o"></i> </span>
@@ -124,10 +126,11 @@
                         <option></option>
                         <option ng-repeat="promoOption in vm.promoTypeOptions.options" value="{{promoOption.value}}" ng-disabled="promoOption.disabled" ng-selected="{{promoOption.value == vm.state.promotion.type}}">{{promoOption.label}}</option>
                     </select>
+
                 </div>
                 <hr>
             </div>
-            <div class="form-group" ng-if="vm.state.promotion.type == 'TRY_AND_BUY' && vm.state.promotion.vendor">
+            <div class="form-group" ng-if="vm.state.promotion.type == vm.promoTypeOptions.TRY_AND_BUY && vm.state.promotion.vendor">
                 <h4>Products</h4>
                 <div class="description" ng-repeat="product in vm.state.promotion.products">
                     <span class="form-control">

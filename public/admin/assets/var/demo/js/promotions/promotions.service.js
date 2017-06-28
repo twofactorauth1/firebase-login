@@ -29,9 +29,9 @@
         promotionsService.refreshPromotionShipment = refreshPromotionShipment;
         promotionsService.clearShipmentList = clearShipmentList;
         promotionsService.promoTypeOptions = {
-            TRY_AND_BUY: "Try and Buy",
-            MILESTONE: "Milestone",
-            EVENT: "Event",
+            TRY_AND_BUY: "TRY_AND_BUY",
+            MILESTONE: "MILESTONE",
+            EVENT: "EVENT",
             options: [
                 {
                     label: "Try and Buy",
@@ -68,8 +68,8 @@
 
 
         promotionsService.shipmentStatusOptions = {
-            TRY: "Try",
-            BUY: "Buy",
+            TRY: "TRY",
+            BUY: "BUY",
             RMA: 'RMA',
             options: [
                 {
@@ -285,7 +285,7 @@
         function getShipments(promotionId) {
 
             function success(data) {
-                promotionsService.shipments = data;
+                promotionsService.shipments = angular.copy(data);
             }
 
             function error(error) {

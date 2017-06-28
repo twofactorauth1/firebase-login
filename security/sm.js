@@ -533,40 +533,72 @@ var securityManager = {
         accountDao.getAccountByID(accountId, function(err, account){
             var accessToken = null;
             if(account && account.get('orgId') && account.get('orgId') > 0 && billing.stripeParent !== 6) {
-                var credentials = account.get('credentials');
-                var creds = null;
-                _.each(credentials, function (cred) {
-                    if (cred.type === 'stripe') {
-                        creds = cred;
+                orgManager.getAdminAccountByOrgId(account.id(), null, account.get('orgId'), function (err, adminAccount) {
+                    if (err) {
+                        log.error('Error getting org stripe credentials:', err);
+                        return cb(null, false);
+                    } else {
+                        var credentials = adminAccount.get('credentials');
+                        var creds = null;
+                        _.each(credentials, function (cred) {
+                            if (cred.type === 'stripe') {
+                                creds = cred;
+                            }
+                        });
+                        if (creds && creds.accessToken) {
+                            //log.info('using accessToken:', creds.accessToken);
+                            accessToken = creds.accessToken;
+                        }
+                        stripeDao.getStripeSubscription(billing.stripeCustomerId, billing.subscriptionId, accessToken, function(err, subscription){
+                            if(err || !subscription) {
+                                log.error('Error getting stripe subscription: ' + err);
+                                return cb(err, false);
+                            } else if(subscription.status === 'active' || subscription.status === 'trialing') {
+
+                                var planId = subscription.plan.id;
+                                var planName = subscription.plan.name;
+                                subscriptionPrivilegeDao.getByPlanId(accountId, planId, function(err, subPrivs){
+                                    if(err || !subPrivs) {
+                                        log.error('Error getting subscription privileges for plan [' + planId + '] with accountId [' + accountId + ']: ' + err);
+                                        return cb(err, false);
+                                    }
+                                    log.trace('<< _isValidSub(true)');
+                                    return cb(null, true);
+                                });
+                            } else {
+                                //TODO: If the sub is expired, put in privs here
+                                log.warn('The subscription for account ' + accountId + ' appears to be expired.');
+                                return cb(null, false);
+                            }
+                        });
                     }
                 });
-                if(creds && creds.accessToken) {
-                    accessToken = creds.accessToken;
-                }
+
+            } else {
+                stripeDao.getStripeSubscription(billing.stripeCustomerId, billing.subscriptionId, accessToken, function(err, subscription){
+                    if(err || !subscription) {
+                        log.error('Error getting stripe subscription: ' + err);
+                        return cb(err, false);
+                    } else if(subscription.status === 'active' || subscription.status === 'trialing') {
+
+                        var planId = subscription.plan.id;
+                        var planName = subscription.plan.name;
+                        subscriptionPrivilegeDao.getByPlanId(accountId, planId, function(err, subPrivs){
+                            if(err || !subPrivs) {
+                                log.error('Error getting subscription privileges for plan [' + planId + '] with accountId [' + accountId + ']: ' + err);
+                                return cb(err, false);
+                            }
+                            log.trace('<< _isValidSub(true)');
+                            return cb(null, true);
+                        });
+                    } else {
+                        //TODO: If the sub is expired, put in privs here
+                        log.warn('The subscription for account ' + accountId + ' appears to be expired.');
+                        return cb(null, false);
+                    }
+                });
             }
-            stripeDao.getStripeSubscription(billing.stripeCustomerId, billing.subscriptionId, accessToken, function(err, subscription){
-                if(err || !subscription) {
-                    log.error('Error getting stripe subscription: ' + err);
-                    return cb(err, false);
-                } else if(subscription.status === 'active' || subscription.status === 'trialing') {
 
-                    var planId = subscription.plan.id;
-                    var planName = subscription.plan.name;
-                    subscriptionPrivilegeDao.getByPlanId(accountId, planId, function(err, subPrivs){
-                        if(err || !subPrivs) {
-                            log.error('Error getting subscription privileges for plan [' + planId + '] with accountId [' + accountId + ']: ' + err);
-                            return cb(err, false);
-                        }
-
-                        log.trace('<< _isValidSub(true)');
-                        return cb(null, true);
-                    });
-                } else {
-                    //TODO: If the sub is expired, put in privs here
-                    log.warn('The subscription for account ' + accountId + ' appears to be expired.');
-                    return cb(null, false);
-                }
-            });
         });
 
     }

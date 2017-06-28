@@ -71,8 +71,11 @@
                         
                     </div>
                     <div class="col-sm-6 form-group ship-product-row" >                    
-                    <input type="text" placeholder="Serial Number" class="form-control" ng-model="product.serial" name="serial">
-                    <i class="fa fa-trash-o margin-left-10 btn-danger btn" ng-click="vm.removeProduct(product, $index)"></i>
+                        <input type="text" placeholder="Serial Number" class="form-control" ng-model="product.serial" name="serial">
+                        <button type="button" class="btn btn-o btn-danger margin-left-5" ng-click="vm.removeProduct(product, $index)">
+                            <span class="fa fa-trash-o" ></span>
+                        </button>
+                    
                     </div>
                     
                 </div>
@@ -89,7 +92,7 @@
                 <label>
                     Ship Date
                 </label>
-                <indi-datepicker ng-model="vm.state.shipment.shipDate" popup="MM/dd/yyyy"></indi-datepicker>
+                <indi-datepicker ng-model="vm.state.shipment.shipDate" popup="MM/dd/yyyy" click-input="true"></indi-datepicker>
             </div>
             
 
@@ -97,14 +100,14 @@
                 <label>
                     Config Date
                 </label>
-                <indi-datepicker ng-model="vm.state.shipment.configDate" popup="MM/dd/yyyy"></indi-datepicker>
+                <indi-datepicker ng-model="vm.state.shipment.configDate" popup="MM/dd/yyyy" click-input="true"></indi-datepicker>
             </div>
             <div class="clearfix"></div>
             <div class="form-group col-sm-6" >
                 <label>
                     Deploy Date
                 </label>
-                <indi-datepicker ng-model="vm.state.shipment.deployDate" popup="MM/dd/yyyy"></indi-datepicker>
+                <indi-datepicker ng-model="vm.state.shipment.deployDate" popup="MM/dd/yyyy" click-input="true"></indi-datepicker>
             </div>
             
 
@@ -112,7 +115,7 @@
                 <label>
                     End Date
                 </label>
-                <indi-datepicker ng-model="vm.state.shipment.endDate" popup="MM/dd/yyyy"></indi-datepicker>
+                <indi-datepicker ng-model="vm.state.shipment.endDate" popup="MM/dd/yyyy" click-input="true"></indi-datepicker>
             </div>
             <div class="clearfix"></div>
             <div class="form-group col-sm-6" >
@@ -128,7 +131,7 @@
                            file-model='vm.attachment'
                            accept=".pdf">
                 </label>
-                <span class="file-name">{{vm.attachment.name}}</span>
+                <span class="file-name">{{vm.attachment.name || vm.state.shipment.attachment.name}}</span>
                 <span class="margin-left-10" ng-if="vm.attachment.name" ng-click="vm.initAttachment()"><i class="fa fa-trash-o"></i></span>
             </div>
             
@@ -138,9 +141,9 @@
                     Status
                 </label>
 
-                <select id="promotion_type" ng-model="vm.state.shipment.status" class="form-control margin-bottom-0">
-                    <option></option>
-                    <option ng-repeat="statusOption in vm.statusOptions.options" value="{{statusOption.value}}" ng-selected="{{statusOption.value == vm.state.shipment.status}}">{{statusOption.label}}</option>
+                <select class="form-control margin-bottom-0" ng-options="option.value as option.label for option in vm.statusOptions.options" 
+                    ng-model="vm.state.shipment.status">
+                    <option value="">-- Select Shipment Status --</option>
                 </select>
 
             </div>

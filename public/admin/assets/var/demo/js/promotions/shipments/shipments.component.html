@@ -93,7 +93,7 @@
 	                <td class="hidden-xs col-deploy-date"><strong>Deploy Date: </strong>{{vm.parseValueToDate(shipment.deployDate) | date:'M/d/yyyy'}}</td>
 	                <td class="col-end-date"><strong>End Date: </strong>{{vm.parseValueToDate(shipment.endDate) | date:'M/d/yyyy'}}</td>
 	                <td class="col-report"><strong>Report: </strong><i ng-if="shipment.attachment.name" class="fa fa-file-pdf-o" ng-click="vm.viewPdf($event, shipment.attachment)"></i></td>
-	                <td class="col-status"><strong>Status: </strong>{{vm.statusOptions[shipment.status]}}</td>
+	                <td class="col-status"><strong>Status: </strong>{{vm.getShipmentStatus(shipment.status)}}</td>
 	                <td ng-show="tableView == 'list'">
 	                    <button class="expand-btn" ng-click="vm.preventClick($event);expanded = !expanded">
 	                       <span ng-if="expanded" class="fa fa-chevron-up"></span>

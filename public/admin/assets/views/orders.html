@@ -61,13 +61,13 @@
                         <thead ng-class="{'bg-white': tableView == 'grid'}">
                             <tr>
                                 <th class="hidden-xs" ng-class="{'column-width': tableView == 'grid'}" st-sort="order_id">ID</th>
-                                <th ng-class="{'column-width': tableView == 'grid', 'center': tableView == 'list'}" st-sort="status">Status</th>
+                                <th ng-class="{'column-width': tableView == 'grid', 'center': tableView == 'list'}" st-sort="status" style="white-space: nowrap;">Status</th>
                                 <th ng-class="{'column-width': tableView == 'grid'}" st-sort="getters.customerName">Contact</th>
-                                <th class="hidden-xs" ng-class="{'column-width': tableView == 'grid'}" >(Qty) Items</th>
-                                <th class="hidden-xs" style="width:20%" ng-class="{'column-width': tableView == 'grid', 'center': tableView == 'list'}">SKUs</th>
-                                <th class="hidden-xs" ng-class="{'column-width': tableView == 'grid', 'center': tableView == 'list'}" st-sort="total">$ Total</th>
-                                <th class="hidden-xs" ng-class="{'column-width': tableView == 'grid'}" st-sort="getters.created" st-sort-default="reverse">Order Date</th>
-                                <th class="hidden-xs" ng-class="{'column-width': tableView == 'grid'}" st-sort="getters.modified">Modified</th>
+                                <th class="hidden-xs" ng-hide='tableView == "grid"' ng-class="{'column-width': tableView == 'grid'}" >(Qty) Items</th>
+                                <th class="hidden-xs hidden-sm" ng-hide='tableView == "grid"' style="width:20%" ng-class="{'column-width': tableView == 'grid', 'center': tableView == 'list'}">SKUs</th>
+                                <th ng-class="{'column-width': tableView == 'grid', 'center': tableView == 'list'}" st-sort="total" style="white-space: nowrap;">Total</th>
+                                <th class="hidden-xs" ng-class="{'column-width': tableView == 'grid'}" st-sort="getters.created" st-sort-default="reverse" style="white-space: nowrap;">Order Date</th>
+                                <th class="hidden-xs hidden-sm" ng-class="{'column-width': tableView == 'grid'}" st-sort="getters.modified" style="white-space: nowrap;">Modified</th>
                             </tr>
                             <tr ng-if="showFilter">
                                 <th class="column-width hidden-xs">
@@ -96,20 +96,20 @@
                                 <th class="column-width hidden-xs">
                                     <input st-search="line_items.name" placeholder="Item Names" class="form-control" type="search" />
                                 </th>
-                                <th class="column-width hidden-xs">
+                                <th class="column-width hidden-xs hidden-sm">
                                     <input st-search="line_items.product.sku" placeholder="SKU" class="form-control" type="search" />
                                 </th>
-                                <th class="column-width hidden-xs">
+                                <th class="column-width">
                                     <div class="input-group">
                                         <span class="input-group-addon">$</span>
                                         <input st-search="total" placeholder="Total" class="form-control" type="search" />
                                     </div>
                                 </th>
-                                <th>
+                                <th class="hidden-xs">
                                     <!-- <input st-search="created" placeholder="Created" class="form-control" type="search" ng-model="createdDate" />
                                     <input date-range-picker class="form-control date-picker" type="text" ng-model="createdDate" options="{opens: 'left'}"/> -->
                                 </th>
-                                <th>
+                                <th class="hidden-xs hidden-sm">
                                     <!-- <input st-search="modified" placeholder="Modified" class="form-control" type="search" /> -->
                                 </th>
                             </tr>
@@ -150,20 +150,20 @@
                                     </span>
                                 </td>
                                 <td class="hidden-xs" ng-hide='tableView == "grid"'><strong>(Qty) Items:</strong>
-                                    <span ng-repeat="item in order.line_items track by $index"> 
+                                    <span ng-repeat="item in order.line_items track by $index" style="white-space: nowrap;"> 
                                         <span>{{item.quantity ? '('+item.quantity+')' : '(1)'}}</span>
                                         {{item.product.name || item.name}}<br ng-if="($index+1 < order.line_items.length)" />
                                     </span>
                                 </td>
-                                <td class="hidden-xs" ng-class="{'center': tableView == 'list'}" ng-hide='tableView == "grid"'><strong>SKUs:</strong>
+                                <td class="hidden-xs hidden-sm" ng-class="{'center': tableView == 'list'}" ng-hide='tableView == "grid"'><strong>SKUs:</strong>
                                     <span ng-repeat="item in order.line_items track by $index">
                                         <span>{{item.product.sku ? item.product.sku : ' '}}</span>
                                         <br ng-if="($index+1 < order.line_items.length)" />
                                     </span>
                                 </td>
-                                <td class="hidden-xs" ng-class="{'center': tableView == 'list'}"><strong>Total:</strong> {{order.total | currency}}</td>
+                                <td ng-class="{'center': tableView == 'list'}"><strong>Total:</strong> {{order.total | currency}}</td>
                                 <td class="hidden-xs"><strong>Created:</strong> {{order.created.date | date:'MMM d yy'}}</td>
-                                <td class="hidden-xs"><strong>Modified:</strong>{{order.modified.date | date:'MMM d yy'}}</td>
+                                <td class="hidden-xs hidden-sm"><strong>Modified:</strong>{{order.modified.date | date:'MMM d yy'}}</td>
                             </tr>
                         </tbody>
                         <tfoot>

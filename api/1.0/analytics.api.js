@@ -129,9 +129,7 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug('>> handleSendgridEvent:', events);
         self.send200(resp);
 
-        /*
-         * Temporary transition to use SQS for test webhooks
-         */
+       
         if(appConfig.nonProduction) {
             var queueUrl = 'https://sqs.us-west-1.amazonaws.com/213805526570/test-analytics_sendgrid_q';
             sqsUtil.sendMessage(queueUrl, null, events, function(err, value){
@@ -145,6 +143,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 self.log.debug('response from sqs:', value);
             });
         } else {
+            //Leaving this here for now in case we need to quickly switch back.  KJM 6/27
             var savedEvents = [];
             var contactActivitiesJSON = [];
             var deferredUpdates = {};

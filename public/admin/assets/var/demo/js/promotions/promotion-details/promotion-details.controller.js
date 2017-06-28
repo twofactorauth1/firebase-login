@@ -31,6 +31,7 @@ function promotionDetailsController($scope, $window, $state, $attrs, $filter, $m
     vm.initAttachment = initAttachment;
     vm.viewPromotionPdf = viewPromotionPdf;
     vm.addShipment = addShipment;
+    vm.shipmentStatusOptions = PromotionsService.shipmentStatusOptions;
 
     function backToPromotions(){
         $state.go("app.promotions");
@@ -223,14 +224,51 @@ function promotionDetailsController($scope, $window, $state, $attrs, $filter, $m
                     url: attachment.url 
                 }).embed('pdf-container');
             }, 500);
-            
         }
+    }, true);
+
+
+    $scope.$watch(function() { return PromotionsService.shipments }, function(shipments) {
+        vm.state.shipments = angular.copy(shipments);
+        getShipmentStats();
     }, true);
 
     function addShipment(){
         
     }
+
+    function getShipmentStats(){
+        vm.state.shipmentStats = {};
+        if(vm.state.shipments){
+            // Reports
+            vm.state.shipmentStats.reports = _.size(_.filter(vm.state.shipments, function(shipment) {
+                return shipment.attachment && shipment.attachment.name
+            }));
+            // Try State
+            vm.state.shipmentStats.tryState = _.size(_.filter(vm.state.shipments, function(shipment) {
+                return shipment.status === vm.shipmentStatusOptions.TRY
+            }));
+            // Buy State
+            vm.state.shipmentStats.buyState = _.size(_.filter(vm.state.shipments, function(shipment) {
+                return shipment.status === vm.shipmentStatusOptions.BUY
+            }));
+            // RMA State
+            vm.state.shipmentStats.rmaState = _.size(_.filter(vm.state.shipments, function(shipment) {
+                return shipment.status === vm.shipmentStatusOptions.RMA
+            }));
+            // Confugured
+            vm.state.shipmentStats.configured = _.size(_.filter(vm.state.shipments, function(shipment) {
+                return shipment.configDate
+            }));
+            // Confugured
+            vm.state.shipmentStats.deployed = _.size(_.filter(vm.state.shipments, function(shipment) {
+                return shipment.deployDate
+            }));
+        }
+    }
+
     
+
     function init(){
         
         if(vm.promotionId == 'new'){
