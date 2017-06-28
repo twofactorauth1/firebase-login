@@ -23,7 +23,16 @@ angular.module('mainApp').directive("elem", function ($timeout) {
     link: function(scope, element, attrs, modelCtrl) {
 
         scope.component= scope.$parent.component;
-
+        $timeout(function() {
+            if(!element.hasClass("ssb-text-o-desktop")
+               && element.children().hasClass("ssb-text-o-desktop")){
+                element.addClass("ssb-text-o-desktop")
+            }
+            if(!element.hasClass("ssb-text-o-moblie")
+               && element.children().hasClass("ssb-text-o-moblie")){
+                element.addClass("ssb-text-o-moblie")
+            }
+        }, 0);
 
         /*
         * Replace square bracket tokens with valid script tags
