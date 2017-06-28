@@ -12,14 +12,14 @@ app.directive('fileModel', ['$parse', 'toaster', function ($parse, toaster) {
                             modelSetter(scope, element[0].files[0]);
                         }
                         else{
-                            console.log("wrong file format");
-                            toaster.pop("warning", "Wrong file format");
+                            console.log("invalid file format");
+                            toaster.pop("warning", "Invalid file format");
                         }
                     }
                     else{
                         modelSetter(scope, element[0].files[0]);
                     }
-                    
+
                 });
             });
         }
