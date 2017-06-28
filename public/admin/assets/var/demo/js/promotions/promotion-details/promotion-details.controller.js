@@ -261,7 +261,7 @@ function promotionDetailsController($scope, $window, $state, $attrs, $filter, $m
             vm.state.shipmentStats.configured = _.size(_.filter(vm.state.shipments, function(shipment) {
                 return shipment.configDate
             }));
-            // Deployed
+            // Confugured
             vm.state.shipmentStats.deployed = _.size(_.filter(vm.state.shipments, function(shipment) {
                 return shipment.deployDate
             }));
