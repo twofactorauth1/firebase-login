@@ -207,7 +207,7 @@ var ziManager = {
                     {In_Stock:regex},
                     {Committed:regex},
                     {Available:regex},
-                    {OMRC_FirmName:regex},
+                    {_shortVendorName:regex},
                     {OLGT_UnitName:regex},
                     {OITM_SLength1:regex},
                     {OLGT_UnitName_10:regex},
