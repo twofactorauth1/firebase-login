@@ -31,7 +31,7 @@ function promotionDetailsController($scope, $window, $state, $attrs, $filter, $m
     vm.initAttachment = initAttachment;
     vm.viewPromotionPdf = viewPromotionPdf;
     vm.addShipment = addShipment;
-    vm.shipmentStatusOptions = PromotionsService.shipmentStatusOptions
+    vm.shipmentStatusOptions = PromotionsService.shipmentStatusOptions;
 
     function backToPromotions(){
         $state.go("app.promotions");
@@ -224,7 +224,6 @@ function promotionDetailsController($scope, $window, $state, $attrs, $filter, $m
                     url: attachment.url 
                 }).embed('pdf-container');
             }, 500);
-            
         }
     }, true);
 
@@ -267,7 +266,9 @@ function promotionDetailsController($scope, $window, $state, $attrs, $filter, $m
             }));
         }
     }
+
     
+
     function init(){
         
         if(vm.promotionId == 'new'){

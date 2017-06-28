@@ -91,7 +91,7 @@
             <div class="form-group">
 
                 <h4>Attachment</h4>
-                <span class="required hidden">*</span>
+                
                 <div class="visible-xs">
                     {{vm.state.promotion.attachment.name}}
                 </div>
@@ -99,10 +99,12 @@
                     <span ng-if="!vm.state.promotion.attachment.name">Upload File</span>
                     <span ng-if="vm.state.promotion.attachment.name">Replace File</span>
                     <input type="file"
-                           id="upload_file"
-                           class="hidden"
-                           file-model='vm.attachment'
-                           accept=".pdf">
+                       id="upload_file"
+                       class="hidden"
+                       file-model='vm.attachment'
+                       accept=".pdf"
+                       accepted-formats="application/pdf" 
+                    >
                 </label>
                 <span class="file-name">{{vm.attachment.name}}</span>
                 <span class="margin-left-10" ng-if="vm.attachment.name" ng-click="vm.initAttachment()"><i class="fa fa-trash-o"></i> </span>
