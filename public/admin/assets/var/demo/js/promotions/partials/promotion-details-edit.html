@@ -129,7 +129,7 @@
                 </div>
                 <hr>
             </div>
-            <div class="form-group" ng-if="vm.state.promotion.type == 'TRY_AND_BUY' && vm.state.promotion.vendor">
+            <div class="form-group" ng-if="vm.state.promotion.type == vm.promoTypeOptions.TRY_AND_BUY && vm.state.promotion.vendor">
                 <h4>Products</h4>
                 <div class="description" ng-repeat="product in vm.state.promotion.products">
                     <span class="form-control">

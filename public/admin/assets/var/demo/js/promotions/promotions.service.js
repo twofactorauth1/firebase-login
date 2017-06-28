@@ -29,9 +29,9 @@
         promotionsService.refreshPromotionShipment = refreshPromotionShipment;
         promotionsService.clearShipmentList = clearShipmentList;
         promotionsService.promoTypeOptions = {
-            TRY_AND_BUY: "Try and Buy",
-            MILESTONE: "Milestone",
-            EVENT: "Event",
+            TRY_AND_BUY: "TRY_AND_BUY",
+            MILESTONE: "MILESTONE",
+            EVENT: "EVENT",
             options: [
                 {
                     label: "Try and Buy",
