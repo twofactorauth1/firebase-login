@@ -140,7 +140,7 @@ function inventoryComponentController($scope, $attrs, $filter, $modal, $timeout,
         var _dimentions = "";
         if(product){
             if(product.OITB_ItmsGrpNam && product.OITB_ItmsGrpNam.toLowerCase() == 'services'){
-                _dimentions = "NA";
+                _dimentions = "";
                 return _dimentions;
             }
 

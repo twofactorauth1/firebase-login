@@ -26,7 +26,7 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
     vm.player = {};
     vm.sectionInitDelayDone = false;
     vm.setFixedPosition = setFixedPosition;
-    
+
 
     $scope.$watch('vm.section.bg.video.id', function (_id) {
         if (_id && vm.section.bg.video.show) {
@@ -78,7 +78,7 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
                             classString += ' ssb-fixed-first-element';
                         }
                     }
-                    
+
 
                 }
                 if(section.layoutModifiers.grid && section.layoutModifiers.grid.isActive){
@@ -376,58 +376,58 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
                 var _lastCoulmnFullWidth = false;
                 var actualColumnsToIgnore = [];
                 if(vm.section.layoutModifiers.columns.ignoreColumns && vm.section.layoutModifiers.columns.ignoreColumns.length){
-                    var ignoreColumns = vm.section.layoutModifiers.columns.ignoreColumns;                    
+                    var ignoreColumns = vm.section.layoutModifiers.columns.ignoreColumns;
                     _.each(ignoreColumns, function(val){
                         if(val === 'last'){
                             actualColumnsToIgnore.push(vm.section.components.length - 1);
                             _lastCoulmnFullWidth = true;
                         }
                         else{
-                            actualColumnsToIgnore.push(val - 1);   
+                            actualColumnsToIgnore.push(val - 1);
                         }
                     });
                 }
                 var fixedColumn = actualColumnsToIgnore.indexOf(index) > -1 ? true : false;
 
                 var colCount = parseInt(vm.section.layoutModifiers.columns.columnsNum) || 1;
-                var colClass = " col-xs-12 col-md-" + Math.floor(12/colCount);
+                var colClass = " col-xs-12 col-sm-" + Math.floor(12/colCount);
                 
                 if(!fixedColumn) {
                     classString += colClass;
                     if(colCount == 5){
                         classString += " col-xs-15 col-md-15";
                     }
-                }             
-                    
+                }
+
                 var totalCoulmns = colCount;
                 var actualColumnsIndexes = [];
                 for(var i = 0; i<= vm.section.components.length -1; i++){
                     actualColumnsIndexes.push(i);
                 }
                 if(actualColumnsToIgnore.length){
-                    totalCoulmns = totalCoulmns + actualColumnsToIgnore.length;  
-                    actualColumnsIndexes = _.difference(actualColumnsIndexes, actualColumnsToIgnore);                  
+                    totalCoulmns = totalCoulmns + actualColumnsToIgnore.length;
+                    actualColumnsIndexes = _.difference(actualColumnsIndexes, actualColumnsToIgnore);
                 }
 
                 if (index !== undefined && index >= totalCoulmns && !fixedColumn) {
-                    classString += " ssb-col-hide"; 
-                    //actualColumnsIndexes = _.reject(actualColumnsIndexes, function(num){ return num === index; });                   
+                    classString += " ssb-col-hide";
+                    //actualColumnsIndexes = _.reject(actualColumnsIndexes, function(num){ return num === index; });
                 }
 
-                
+
                 if (vm.section.layoutModifiers.columns.columnsSpacing && !fixedColumn) {
                     if(parseInt(vm.section.layoutModifiers.columns.columnsNum) > 1){
                         if(actualColumnsIndexes.indexOf(index) === 0){
-                            classString += ' ssb-component-layout-columns-spacing-first-column-' + vm.section.layoutModifiers.columns.columnsSpacing + ' ';    
+                            classString += ' ssb-component-layout-columns-spacing-first-column-' + vm.section.layoutModifiers.columns.columnsSpacing + ' ';
                         }
                         else if(actualColumnsIndexes.indexOf(index) === vm.section.layoutModifiers.columns.columnsNum - 1){
-                            classString += ' ssb-component-layout-columns-spacing-last-column-' + vm.section.layoutModifiers.columns.columnsSpacing + ' ';    
+                            classString += ' ssb-component-layout-columns-spacing-last-column-' + vm.section.layoutModifiers.columns.columnsSpacing + ' ';
                         }
                         else{
-                            classString += ' ssb-component-layout-columns-spacing-' + vm.section.layoutModifiers.columns.columnsSpacing + ' ';    
+                            classString += ' ssb-component-layout-columns-spacing-' + vm.section.layoutModifiers.columns.columnsSpacing + ' ';
                         }
                     }
-                    
+
                 }
 
                 if(index === vm.section.components.length - 1 && _lastCoulmnFullWidth){
@@ -435,10 +435,10 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
                 }
             }
 
-            if(!fixedColumn && parseInt(vm.section.layoutModifiers.columns.columnsNum) > 1){            
+            if(!fixedColumn && parseInt(vm.section.layoutModifiers.columns.columnsNum) > 1){
                 var element = angular.element(".inner-component-style." + component.type + "" + component._id);
                 if (vm.section.columnBorder && vm.section.columnBorder.show && vm.section.columnBorder.color) {
-                    
+
                     if(element){
                         element.css({
                             'border-color':  vm.section.columnBorder.color,
@@ -454,9 +454,9 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
                             'border': 'none'
                         })
                     }
-                }                    
+                }
             }
-            
+
         }
 
 
@@ -572,7 +572,7 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
             styleString += 'border-style: ' + component.border.style + ';';
             styleString += 'border-radius: ' + component.border.radius + '%;';
         }
-        
+
 
         return styleString;
     }
@@ -589,8 +589,8 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
                 ssbPageSectionService = $injector.get("SsbPageSectionService");
             if (elementIsFirstPosition) {
                 // Preview page
-                if($location.$$path.indexOf("/preview/") == 0){                  
-                    var dup = vm.element.clone();                        
+                if($location.$$path.indexOf("/preview/") == 0){
+                    var dup = vm.element.clone();
                     dup.addClass('ssb-fixed-clone-element');
                     dup.attr('id', 'clone_of_' + vm.section._id);
                     dup.insertAfter(vm.element);
@@ -598,13 +598,13 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
                         function () {
                             return angular.element(".ssb-fixed-first-element").height();
                         },
-                        function (value) {                                
+                        function (value) {
                             if(dup)
                                 dup.css("min-height", value + "px");
                             if(ssbPageSectionService)
                                 ssbPageSectionService.setSectionOffset(value);
                         }
-                    ) 
+                    )
                 }
                 else{
                     var dup = vm.element.clone();
@@ -616,14 +616,14 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
                             function () {
                                 return angular.element(".ssb-fixed-first-element").height();
                             },
-                            function (value) {   
+                            function (value) {
                                 ssbPageSectionService.setSectionOffset(value);
                             }
                         )
                     }
-                    
+
                 }
-                
+
             } else {
                 $timeout(function() {
                     $(vm.element[0]).sticky({zIndex:999});
@@ -794,21 +794,21 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
                     angular.element(".ssb-page-section").slice(1).wrapAll( "<div class='ssb-wrap-fixed-right-nav' />");
                     $timeout(function() {
                         if(!angular.element(".ssb-wrap-fixed-right-nav").length)
-                            angular.element(".ssb-page-section").slice(1).wrapAll( "<div class='ssb-wrap-fixed-right-nav' />");                                         
+                            angular.element(".ssb-page-section").slice(1).wrapAll( "<div class='ssb-wrap-fixed-right-nav' />");
                     }, 0);
-                    
+
                 }
             }
             else{
                 if(!angular.element(".ssb-wrap-left-fixed-left-nav").length){
                     angular.element(".ssb-page-layout-row:first").addClass("ssb-wrap-left-fixed-left-nav");
-                    angular.element(".ssb-page-layout-row").slice(1).wrapAll( "<div class='ssb-wrap-fixed-right-nav' />");    
+                    angular.element(".ssb-page-layout-row").slice(1).wrapAll( "<div class='ssb-wrap-fixed-right-nav' />");
                     $timeout(function() {
                         if(!angular.element(".ssb-wrap-fixed-right-nav").length)
-                            angular.element(".ssb-page-layout-row").slice(1).wrapAll( "<div class='ssb-wrap-fixed-right-nav' />");    
+                            angular.element(".ssb-page-layout-row").slice(1).wrapAll( "<div class='ssb-wrap-fixed-right-nav' />");
                     }, 0);
                 }
-            } 
+            }
 
             $scope.$watch(
                 function () {
@@ -818,7 +818,7 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
                     angular.element(".ssb-wrap-fixed-right-nav").css("margin-left", value + "px");
                     $timeout(function(){
                         angular.element(".ssb-wrap-fixed-right-nav").css("margin-left", value + "px");
-                    },0)    
+                    },0)
                 }
             )
         }
@@ -829,7 +829,7 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
             }, 0);
         }
 
-        
+
 
     }
 

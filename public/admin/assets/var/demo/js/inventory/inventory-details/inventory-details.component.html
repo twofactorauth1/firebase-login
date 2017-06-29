@@ -142,9 +142,8 @@
                 <h4>Weight</h4>
 
                 <div class="description">
-
                     <span ng-if="vm.inventory.OITM_SWeight1 > 0">
-                        {{vm.parseValueToFloat(vm.inventory.OITM_SWeight1) | number : 0}} {{vm.inventory.OWGT_UnitName}}
+                        {{vm.parseValueToFloat(vm.inventory.OITM_SWeight1) | number : 0}} {{vm.getWeightUnits(vm.parseValueToFloat(vm.inventory.OITM_SWeight1), vm.inventory.OWGT_UnitName)}}
                     </span>
                     <span ng-if="vm.inventory.OITM_SWeight1 <= 0">
                         &nbsp;

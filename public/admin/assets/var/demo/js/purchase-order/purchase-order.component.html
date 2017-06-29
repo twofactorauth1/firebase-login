@@ -121,7 +121,7 @@
 	                <th class="title-col" st-sort="title" style="white-space: nowrap">Name</th>
 	                <th class="submitter-col" st-sort="vm.getters.submitter" style="white-space: nowrap">Submitter</th>
 	                <th class="company-col" st-sort="companyName" ng-if="!vm.state.orgCardAndPermissions.isVendor" style="white-space: nowrap">VAR</th>
-	                <th class="created-col" st-sort="vm.getters.created" style="white-space: nowrap">Date</th>
+	                <th class="created-col" st-sort="vm.getters.created" style="white-space: nowrap" st-sort-default="reverse">Date</th>
 	                <th class="hidden-xs attachment-col">Attachment</th>
 	            </tr>
 	            <tr>
@@ -145,7 +145,7 @@
 	                <span class="text-adjust-table" title="{{order.companyName}}">{{order.companyName || '&nbsp;'}}</span>
 	                </div></td>
 
-	                <td class="created-col"><strong>Date: </strong>{{order.created.date | date:'MMM d yy hh:mm a'}}</td>
+	                <td class="created-col" style="white-space: nowrap"><strong>Date: </strong>{{order.created.date | date:'MMM d yy hh:mm a'}}</td>
 	                <td class="hidden-xs attachment-col"><strong>Attachment: </strong><span class="text-adjust-table" title="{{order.attachment.name}}">{{order.attachment.name || '&nbsp;'}}</span></td>
 	            </tr>
 	        </tbody>

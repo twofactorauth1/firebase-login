@@ -727,7 +727,8 @@ app.constant('JS_REQUIRES', {
     // Promotion Participants
     'ParticipantsComponent': 'assets/var/demo/js/promotions/participants/participants.component.js',
     'ParticipantsComponentController': 'assets/var/demo/js/promotions/participants/participants.controller.js',
-
+    'SecurematicsParticipantsService': 'assets/var/demo/js/promotions/participants.service.js',  
+    
     'asideCtrl': 'assets/var/demo/js/controllers/asideCtrl.js',
     'UsersCtrl': 'assets/var/demo/js/users/users.controller.js',
 

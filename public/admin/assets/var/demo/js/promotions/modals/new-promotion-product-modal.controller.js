@@ -102,7 +102,8 @@ app.controller('PromotionProductModalController', ['$timeout', 'parentVm', 'pagi
         else{            
             vm.products.push({
               itemName: product.OITM_ItemName,
-              itemCode: product.OITM_ItemCode
+              itemCode: product.OITM_ItemCode,
+              itemPrice: product.ITM1_Price
             });
         }
     };
