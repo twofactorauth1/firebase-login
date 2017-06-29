@@ -33,7 +33,7 @@
         <table class="table table-hover table-striped" ng-class="{'grid': tableView == 'grid', 'bg-white table-list-view': tableView == 'list'}" ng-if="!vm.uiState.loading">
             <thead ng-class="{'bg-white': tableView == 'grid'}">
                 <tr class="inventory-header-row">
-                    <th class=""></th>
+                    <th class="" ng-click='vm.selectAllClickFn($event)' ng-show='vm.displayedParticipants.length'><i class="fa fa-2x" ng-class='{"fa-check-circle": vm.selectAllChecked, "fa-circle-o": !vm.selectAllChecked}'></i></th>
                     <th class="" style="white-space: nowrap;">Card Code</th>
                     <th class="" style="white-space: nowrap;" >Name</th>
                 </tr>

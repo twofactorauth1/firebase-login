@@ -29,7 +29,7 @@ function participantsComponentController($scope, $attrs, $window, $filter, $stat
     vm.numberOfPages = numberOfPages;
     vm.checkIfSelected = checkIfSelected;
     vm.participantSelectClickFn = participantSelectClickFn;
-
+    vm.selectAllClickFn = selectAllClickFn;
     
     vm.filterParticipants = filterParticipants;
     
@@ -76,7 +76,16 @@ function participantsComponentController($scope, $attrs, $window, $filter, $stat
 
     function loadParticipants(){
         SecurematicsParticipantsService.getParticipants(vm.uiState).then(function(response){
-            vm.state.participants = response.data.results;
+            
+            vm.state.participants = _.map(response.data.results, 
+                function(participant) {
+                    return {
+                        OCRD_CardCode: participant.OCRD_CardCode,
+                        OCRD_CardName: participant.OCRD_CardName,
+                        _cardName: participant._cardName                        
+                    };
+                }
+            );
             vm.state.totalParticipants = response.data.total;
             vm.uiState.loading = false;
             vm.uiState.pageLoading = false;
@@ -108,6 +117,15 @@ function participantsComponentController($scope, $attrs, $window, $filter, $stat
         }
     };
 
+    function selectAllClickFn($event){
+        vm.selectAllChecked = !vm.selectAllChecked;
+        if(vm.selectAllChecked){
+            // Need to add all VARs to promtion
+        }
+        else{
+            vm.promotion.participants = [];
+        }
+    }
 
     function loadDefaults() {
         vm.uiState.curPage = 1;
