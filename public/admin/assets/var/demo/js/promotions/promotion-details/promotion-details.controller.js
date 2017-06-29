@@ -264,10 +264,22 @@ function promotionDetailsController($scope, $window, $state, $attrs, $filter, $m
             vm.state.shipmentStats.deployed = _.size(_.filter(vm.state.shipments, function(shipment) {
                 return shipment.deployDate
             }));
+            // Promo Sales
+            vm.state.shipmentStats.promoSales = getPromoSales();
         }
     }
 
-    
+    function getPromoSales(){
+        var promoShipments = _.filter(vm.state.shipments, function(shipment) {
+            return shipment.status === vm.shipmentStatusOptions.BUY
+        })
+        if(promoShipments){
+            var products = _.without(_.flatten(_.pluck(vm.state.shipments, "products")), null);
+            var totalPrice = _.reduce(products, function(m, product) { 
+                return m + parseFloat(product.itemPrice || 0) ; }, 0);
+            return totalPrice;
+        }
+    }
 
     function init(){
         

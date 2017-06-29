@@ -121,7 +121,8 @@ app.controller('PromotionShipmentModalController', ['$scope', '$timeout', 'paren
             itemName: null,
             itemCode: null,
             quantity: 1,
-            serial: null
+            serial: null,
+            itemPrice: 0
         })
     }
 
@@ -134,7 +135,10 @@ app.controller('PromotionShipmentModalController', ['$scope', '$timeout', 'paren
             return option.itemCode == product.itemCode
         })
         product.itemName = _product.itemName;
+        product.itemPrice = _product.itemPrice;
     }
+
+    
     (function init() {
         vm.loadShipment();
     })();
