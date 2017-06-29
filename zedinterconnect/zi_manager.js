@@ -283,16 +283,17 @@ var ziManager = {
     productSearch: function(accountId, userId, term, skip, limit, sortBy, sortDir, filter, fn) {
         var self = this;
         self.log.debug(accountId, userId, '>> productSearch');
-        var regex = new RegExp('\.*'+term+'\.*', 'i');
+        
         var query = {
             _shortVendorName: new RegExp('^' + filter)
         };
         
-        var orQuery = [                    
-            {OITM_ItemName:regex}
-        ];
-        
         if(term){
+            term = term.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+            var regex = new RegExp('\.*'+term+'\.*', 'i');
+            var orQuery = [                    
+                {OITM_ItemName:regex}
+            ];
             query["$or"] = orQuery;
         }
 
@@ -342,6 +343,42 @@ var ziManager = {
 
     },
 
+    participantSearch: function(accountId, userId, term, skip, limit, sortBy, sortDir, fn) {
+        var self = this;
+        self.log.debug(accountId, userId, '>> participantSearch');
+        
+        var query = {};
+        if(term){
+            term = term.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+            var regex = new RegExp('\.*'+term+'\.*', 'i');
+            var orQuery = [                    
+                {
+                    OCRD_CardCode:regex,
+                    OCRD_CardName:regex
+                }
+            ];
+            query["$or"] = orQuery;       
+        }
+
+        self.log.debug('query:', query);
+
+        var fields = null;
+        var collection = 'customer';
+        var _skip = skip || 0;
+        var _limit = limit || 0;
+
+        
+        ziDao.findRawWithFieldsLimitAndOrder(query, skip, limit, sortBy, fields, collection, sortDir, function(err, value){
+            if(err) {
+                self.log.error(accountId, userId, 'Error searching participantsh:', err);
+                fn(err);
+            } else {
+                self.log.debug(accountId, userId, '<< participantSearch');
+                fn(null, value);
+            }
+        });
+
+    },
     getLedger: function(accountId, userId, cardCodeFrom, cardCodeTo, dateString, fn) {
         var self = this;
         self.log.debug(accountId, userId, '>> getLedger');

@@ -44,6 +44,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url('customers/filter'), this.isAuthAndSubscribedApi.bind(this), this.customersFilter.bind(this));
         app.get(this.url('inventory/products/search'), this.isAuthAndSubscribedApi.bind(this), this.productSearch.bind(this));
         app.get(this.url('vendors'), this.isAuthAndSubscribedApi.bind(this), this.listVendors.bind(this));
+        app.get(this.url('promotions/participants/search'), this.isAuthAndSubscribedApi.bind(this), this.participantSearch.bind(this));
         
     },
 
@@ -629,6 +630,27 @@ _.extend(api.prototype, baseApi.prototype, {
             self.log.debug(accountId, userId, '<< listVendors');
             return self.sendResultOrError(resp, err, value, "Error listing vendors");
         });
+    },
+
+    participantSearch: function(req, resp) {
+        var self = this;
+        var accountId = parseInt(self.accountId(req));
+        var userId = self.userId(req);
+        self.log.debug(accountId, userId, '>> participantSearch');
+        var skip = parseInt(req.query.skip) || 0;
+        var limit = parseInt(req.query.limit) || 0;
+        var sortBy = req.query.sortBy || null;
+        var sortDir = parseInt(req.query.sortDir) || null;
+        var term = req.query.term;
+        
+        /*
+         * Search across all (or a subset) of fields for the same value if "term" is a query param.  Otherwise, use filter
+         */
+        manager.participantSearch(accountId, userId, term, skip, limit, sortBy, sortDir, function(err, value){
+            self.log.debug(accountId, userId, '<< participantSearch');
+            return self.sendResultOrError(resp, err, value, "Error searching participants");
+        });
+
     },
 
     _isUserAdmin: function(req, fn) {
