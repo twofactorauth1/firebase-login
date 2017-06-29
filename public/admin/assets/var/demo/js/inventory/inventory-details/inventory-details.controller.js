@@ -29,6 +29,7 @@ function inventoryDetailsController($scope, $state, $attrs, $filter, $modal, $ti
 
     vm.watchInventoryItem = watchInventoryItem;
    
+    vm.getWeightUnits = getWeightUnits;
 
     function backToInventory(){
         $state.go("app.inventory");
@@ -81,6 +82,18 @@ function inventoryDetailsController($scope, $state, $attrs, $filter, $modal, $ti
             vm.uiState.loadingWatchInventory = false;
         });
     };
+
+    function getWeightUnits(weight, unit){
+        var weightUnits = "";
+        if(unit && weight){
+            if(weight > 1)
+                weightUnits = unit + 's';
+            else{
+                weightUnits = unit;
+            }
+        }
+        return weightUnits;
+    }
 
     function init(element) {
         vm.element = element;
