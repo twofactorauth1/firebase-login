@@ -140,7 +140,7 @@
       UserService.putUser($scope.profileUser, function (user) {
         if($scope.profileImage && $scope.profileImage.attachment){
           UserService.updateUserProfileImage($scope.profileImage.attachment, $scope.profileUser._id, function(user){
-            $scope.profileUser = user;
+            setProfileImage(user)
             setDefaults();
             $scope.initAttachment();
           });
@@ -150,6 +150,13 @@
         }
         
       });
+
+      function setProfileImage(user){
+        if(user && user.profilePhotos && user.profilePhotos[0]){          
+            $scope.profileUser.profilePhotos = [];
+            $scope.profileUser.profilePhotos.push(user.profilePhotos[0]);
+        }
+      }
 
       function setDefaults(){
         $scope.refreshUser();
