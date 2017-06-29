@@ -352,10 +352,8 @@ var ziManager = {
             term = term.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
             var regex = new RegExp('\.*'+term+'\.*', 'i');
             var orQuery = [                    
-                {
-                    OCRD_CardCode:regex,
-                    OCRD_CardName:regex
-                }
+                {OCRD_CardCode:regex},
+                {OCRD_CardName:regex}
             ];
             query["$or"] = orQuery;       
         }
