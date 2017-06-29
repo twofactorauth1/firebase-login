@@ -23,13 +23,14 @@ function participantsComponentController($scope, $attrs, $window, $filter, $stat
             details: {}
         }
     };
-
+    vm.promotion.participants = vm.promotion.participants || [];
     vm.selectPage = selectPage;
     vm.showPages = vm.pagingConstant.displayedPages;
     vm.numberOfPages = numberOfPages;
     vm.checkIfSelected = checkIfSelected;
-    vm.productSelectClickFn = productSelectClickFn;
-    vm.addProductsToPromotions = addProductsToPromotions;
+    vm.participantSelectClickFn = participantSelectClickFn;
+
+    
     vm.filterParticipants = filterParticipants;
     
     function drawPages(){
@@ -89,32 +90,24 @@ function participantsComponentController($scope, $attrs, $window, $filter, $stat
         loadParticipants();
     };
 
-
-    function checkIfSelected(product){
-        return _.contains(_.pluck(vm.products, "itemCode"), product.OITM_ItemCode);
+    function checkIfSelected(participant){
+        return _.contains(_.pluck(vm.promotion.participants, "cardCode"), participant.OCRD_CardCode);
     }
 
-    function productSelectClickFn($event, product) {
-        $event.stopPropagation();
-
-        if(_.contains(_.pluck(vm.products, "itemCode"), product.OITM_ItemCode)){
-            vm.products = _.reject(vm.products, function(item){
-              return product.OITM_ItemCode == item.itemCode
+    function participantSelectClickFn($event, participant) {       
+        if(_.contains(_.pluck(vm.promotion.participants, "cardCode"), participant.OCRD_CardCode)){
+            vm.promotion.participants = _.reject(vm.promotion.participants, function(item){
+              return participant.OCRD_CardCode == item.cardCode
             });
         }
         else{            
-            vm.products.push({
-              itemName: product.OITM_ItemName,
-              itemCode: product.OITM_ItemCode,
-              itemPrice: product.ITM1_Price
+            vm.promotion.participants.push({
+              cardCode: participant.OCRD_CardCode,
+              name: participant._cardName
             });
         }
     };
 
-    function addProductsToPromotions(){
-        vm.parentVm.state.promotion.products = angular.copy(vm.products);
-        vm.parentVm.closeModal();
-    }
 
     function loadDefaults() {
         vm.uiState.curPage = 1;
