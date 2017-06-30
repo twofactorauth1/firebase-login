@@ -134,7 +134,7 @@ _.extend(api.prototype, baseApi.prototype, {
         for(i=0,j=events.length; i<j; i+= chunk) {
             arrayOfEventArrays.push(events.slice(i, i+chunk));
         }
-
+        self.log.debug('breaking into '+ arrayOfEventArrays.length + ' chunks');
         if(appConfig.nonProduction) {
             var queueUrl = 'https://sqs.us-west-1.amazonaws.com/213805526570/test-analytics_sendgrid_q';
             async.eachSeries(arrayOfEventArrays, function(ary, cb){
@@ -146,6 +146,7 @@ _.extend(api.prototype, baseApi.prototype, {
                     }
                     cb();
                 });
+
             }, function(err){
                 if(err) {
                     self.log.error('Error sending events:', err);
