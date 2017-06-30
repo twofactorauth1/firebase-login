@@ -31,7 +31,16 @@ app.directive('navigationComponent', ['websiteService', 'accountService', '$time
                     $scope.currentpage.handle = 'blog';
                 }
             });
-
+            $scope.toggleNavClass=function(ele){
+                var li=$(ele.target).parents("li")
+                if(li){
+                    if(!li.hasClass("nav-active")){
+                        li.addClass("nav-active")
+                    }else{
+                        li.removeClass("nav-active")
+                    }
+                }
+            }
             $scope.$watch(function() { return SsbPageSectionService.offset }, function(offset) {
                 $scope.scrollOffsetTop = offset;
             }, true);

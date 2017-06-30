@@ -464,6 +464,28 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
     };
   };
 
+
+
+    $scope.addSubLink = function (index) {
+     //edit[index]=true;
+     var alink=undefined;
+     if ($scope.component.customnav) {
+        if($scope.component.linkLists[0].links.length>index){
+             alink =$scope.component.linkLists[0].links[index];
+        }
+     } else {
+        if($scope.website.linkLists.size>index){
+             alink =$scope.website.linkLists;
+        }
+     }
+     if(alink){
+         if(!(alink.links && alink.links.length>0)){
+                var copyLink=angular.copy(alink);
+                alink.links=[copyLink]
+                updateParentPageSettings(alink.linkType,alink.linkTo.data, false);
+            }
+     }
+  };
   /*
    * @setLinkUrl
    * -
