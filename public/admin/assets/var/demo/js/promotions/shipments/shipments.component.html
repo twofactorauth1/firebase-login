@@ -111,14 +111,19 @@
 	            			</div>
             			</div>
             			<div class="col-sm-4 hidden-xs">
-            				<h4>Partner Sales Rep</h4>
-	            			<div>
-	            				{{shipment.customerDetails.partnerSalesRep}}
-	            			</div>
-	            			<h4 class="margin-top-10">Juniper Rep Engaged</h4>
-	            			<div>
-	            				{{shipment.customerDetails.juniperRep}}
-	            			</div>
+            				<div ng-if="shipment.customerDetails.partnerSalesRep" class="margin-bottom-10">
+	            				<h4>Partner Sales Rep</h4>
+		            			<div>
+		            				{{shipment.customerDetails.partnerSalesRep}}
+		            			</div>
+		            		</div>
+		            		<div ng-if="shipment.customerDetails.juniperRep">
+		            			<h4>Juniper Rep Engaged</h4>
+		            			<div>
+		            				{{shipment.customerDetails.juniperRep}}
+		            			</div>
+		            		</div>	
+	            			
             			</div>
             			
             		</td>
