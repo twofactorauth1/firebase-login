@@ -10,8 +10,6 @@ function shipmentsComponentController($scope, $attrs, $window, $filter, $statePa
 
     vm.init = init;
 
-    vm.state = {};
-
     vm.uiState = {
         loading: true
     };
@@ -26,7 +24,6 @@ function shipmentsComponentController($scope, $attrs, $window, $filter, $statePa
     vm.viewPdf = viewPdf;
     vm.loadShipments = loadShipments;
     vm.preventClick = preventClick;
-    vm.state.promotion = vm.promotion;
     vm.getShipmentStatus = getShipmentStatus;
     vm.stringifyAddress = stringifyAddress;
     function showFilteredRecords(){

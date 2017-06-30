@@ -7,7 +7,7 @@ function promotionParticipantsComponent() {
     return {
         restrict: 'E',
         scope: {
-            promotion: '='
+            state: '='
         },      
         templateUrl: 'assets/var/demo/js/promotions/participants/participants.component.html',
         controller: 'ParticipantsComponentController',

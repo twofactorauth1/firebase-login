@@ -136,11 +136,7 @@ function promotionDetailsController($scope, $window, $state, $attrs, $filter, $m
             angular.element('.sp-container').addClass('sp-hidden');
         });
     }
-
-
     
-
-
     function closeModal() {
         if(vm.modalInstance)
             vm.modalInstance.close();

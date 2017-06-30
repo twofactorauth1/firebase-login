@@ -33,12 +33,12 @@
     </tab>
     <tab heading="Participants" ng-if="vm.state.promotion._id">
         <promotion-participants-component
-            promotion= "vm.state.promotion"
+            state= "vm.state"
         ></promotion-participants-component>
     </tab>
     <tab heading="Shipments" ng-if="vm.state.promotion._id">
         <shipments-component
-            promotion= "vm.state.promotion"
+            state= "vm.state"
         ></shipments-component>
     </tab>
 </tabset>
