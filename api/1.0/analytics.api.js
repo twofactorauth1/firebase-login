@@ -128,19 +128,51 @@ _.extend(api.prototype, baseApi.prototype, {
         var events = req.body;
         self.log.debug('>> handleSendgridEvent:', events);
         self.send200(resp);
-
-       
+        //break up the array into chunks to ensure we don't go over a size limit
+        var arrayOfEventArrays = [];
+        var i, j, chunk = 100;
+        for(i=0,j=events.length; i<j; i+= chunk) {
+            arrayOfEventArrays.push(events.slice(i, i+chunk));
+        }
+        self.log.debug('breaking into '+ arrayOfEventArrays.length + ' chunks');
         if(appConfig.nonProduction) {
             var queueUrl = 'https://sqs.us-west-1.amazonaws.com/213805526570/test-analytics_sendgrid_q';
-            sqsUtil.sendMessage(queueUrl, null, events, function(err, value){
-                self.log.debug('response from sqs:', err);
-                self.log.debug('response from sqs:', value);
+            async.eachSeries(arrayOfEventArrays, function(ary, cb){
+                sqsUtil.sendMessage(queueUrl, null, ary, function(err, value){
+                    if(err) {
+                        self.log.error('Error from sqs:', err);
+                    } else {
+                        self.log.debug('Response from SQS:', value);
+                    }
+                    cb();
+                });
+
+            }, function(err){
+                if(err) {
+                    self.log.error('Error sending events:', err);
+                } else {
+                    self.log.debug('<< handleSendgridEvent');
+                }
             });
+
+
         } else if(appConfig.nonProduction === false){
             var queueUrl = 'https://sqs.us-west-1.amazonaws.com/213805526570/analytics_sendgrid_q';
-            sqsUtil.sendMessage(queueUrl, null, events, function(err, value){
-                self.log.debug('response from sqs:', err);
-                self.log.debug('response from sqs:', value);
+            async.eachSeries(arrayOfEventArrays, function(ary, cb){
+                sqsUtil.sendMessage(queueUrl, null, ary, function(err, value){
+                    if(err) {
+                        self.log.error('Error from sqs:', err);
+                    } else {
+                        self.log.debug('Response from SQS:', value);
+                    }
+                    cb();
+                });
+            }, function(err){
+                if(err) {
+                    self.log.error('Error sending events:', err);
+                } else {
+                    self.log.debug('<< handleSendgridEvent');
+                }
             });
         } else {
             //Leaving this here for now in case we need to quickly switch back.  KJM 6/27
