@@ -78,7 +78,6 @@ function participantsComponentController($scope, $attrs, $window, $filter, $stat
     }
     
     function openModal(modal, controller, size){
-        var isVendor = vm.state.orgCardAndPermissions && vm.state.orgCardAndPermissions.isVendor;
         
         var _modal = {
             templateUrl: modal,

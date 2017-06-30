@@ -2,9 +2,9 @@
 
 app.controller('PromotionDetailsController', promotionDetailsController);
 
-promotionDetailsController.$inject = ['$scope', '$window', '$state', '$attrs', '$filter', '$modal', '$timeout', '$stateParams', '$location', 'toaster', 'SweetAlert', 'formValidations', 'PromotionsService'];
+promotionDetailsController.$inject = ['$scope', '$window', '$state', '$attrs', '$filter', '$modal', '$timeout', '$stateParams', '$location', 'toaster', 'SweetAlert', 'formValidations', 'PromotionsService', 'UserPermissionsConfig'];
 /* @ngInject */
-function promotionDetailsController($scope, $window, $state, $attrs, $filter, $modal, $timeout, $stateParams, $location, toaster, SweetAlert, formValidations, PromotionsService) {
+function promotionDetailsController($scope, $window, $state, $attrs, $filter, $modal, $timeout, $stateParams, $location, toaster, SweetAlert, formValidations, PromotionsService, UserPermissionsConfig) {
 
     var vm = this;
 
@@ -17,7 +17,9 @@ function promotionDetailsController($scope, $window, $state, $attrs, $filter, $m
     };
     vm.attachment = {
     };
-    vm.state = {};
+    vm.state = {
+        orgCardAndPermissions: UserPermissionsConfig.orgConfigAndPermissions
+    };
     vm.promotionId = $stateParams.promotionId;
     vm.backToPromotions = backToPromotions;
     vm.deletePromotion = deletePromotion;
@@ -111,7 +113,6 @@ function promotionDetailsController($scope, $window, $state, $attrs, $filter, $m
 
 
     function openModal(modal, controller, size){
-        var isVendor = vm.state.orgCardAndPermissions && vm.state.orgCardAndPermissions.isVendor;
         
         var _modal = {
             templateUrl: modal,
