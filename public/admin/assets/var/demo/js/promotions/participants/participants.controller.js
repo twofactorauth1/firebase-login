@@ -56,7 +56,14 @@ function participantsComponentController($scope, $attrs, $window, $filter, $stat
     function selectAllClickFn($event){
         vm.selectAllChecked = !vm.selectAllChecked;
         if(vm.selectAllChecked){
-            
+            vm.participants = _.map(vm.state.promotion.participants, 
+                function(participant) {
+                    return {
+                        cardCode: participant.cardCode,
+                        name: participant.name  
+                    };
+                }
+            );
         }
         else{
             vm.participants = [];
