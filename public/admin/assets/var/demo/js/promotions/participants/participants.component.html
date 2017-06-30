@@ -11,7 +11,7 @@
                                         <div class="form-group">
                                             <div class="col-xs-6 col-sm-6 padding-right-0">
                                                 <span class="input-icon">
-                                                    <input type="text"  placeholder="Search by Card code, name..." id="form-field-14" class="form-control">
+                                                    <input type="text" st-search placeholder="Search by Card code, name..." id="form-field-14" class="form-control">
                                                     <i class="ti-search"></i>
                                                 </span>
                                             </div>
@@ -41,10 +41,24 @@
         <table class="table table-hover table-striped" ng-class="{'grid': tableView == 'grid', 'bg-white table-list-view': tableView == 'list'}" ng-if="!vm.uiState.loading">
             <thead ng-class="{'bg-white': tableView == 'grid'}">
                 <tr class="inventory-header-row">
-                    <th class="" ng-click='vm.selectAllClickFn($event)' ng-show='vm.displayedParticipants.length'><i class="fa fa-2x" ng-class='{"fa-check-circle": vm.selectAllChecked, "fa-circle-o": !vm.selectAllChecked}'></i></th>
-                    <th class="" style="white-space: nowrap;">Card Code</th>
-                    <th class="" style="white-space: nowrap;" >Name</th>
+                    <th class=""  ng-click='vm.selectAllClickFn($event)' ng-show='vm.displayedParticipants.length'><i class="fa fa-2x" ng-class='{"fa-check-circle": vm.selectAllChecked, "fa-circle-o": !vm.selectAllChecked}'></i></th>
+                    <th class="" st-sort="cardCode" style="white-space: nowrap;">Card Code</th>
+                    <th class="" st-sort="name" style="white-space: nowrap;" >Name</th>
                     <th></th>
+                </tr>
+                <tr>
+                    <th ng-show='vm.displayedParticipants.length'>></th>
+                    <th>
+                        <input st-search="cardCode" placeholder="Card Code" class="form-control" type="search" />
+                    </th>
+                    <th class="col-vendor">
+                        <input st-search="name" placeholder="Name" class="form-control" type="search" />
+                    </th>
+
+                    <th class="col-promo-code">
+
+                    </th>
+                    
                 </tr>
             </thead>
             <tbody>
