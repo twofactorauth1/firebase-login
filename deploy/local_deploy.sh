@@ -119,7 +119,7 @@ main(){
         npm install selenium-webdriver@2.53.2
         echo "Waiting for deploy to finish"
 
-        interval=10; timeout=600; while [[ ! `aws elasticbeanstalk describe-environments --environment-name "${ENV_NAME}" | grep -i status | grep -i ready` && $timeout > 0 ]]; do sleep $interval; timeout=$((timeout - interval)); done
+        interval=10; timeout=600; while [[ ! `aws elasticbeanstalk describe-environments --environment-name "${GREEN_ENV_NAME}" | grep -i status | grep -i ready` && $timeout > 0 ]]; do sleep $interval; timeout=$((timeout - interval)); done
 
         echo "Running Selenium"
 
@@ -127,12 +127,14 @@ main(){
 
         [ $timeout > 0 ] && aws elasticbeanstalk swap-environment-cnames --source-environment-name "${ENV_NAME}" --destination-environment-name "${GREEN_ENV_NAME}" || exit 0
     elif [ "$1" = "develop" ]; then
+        npm install
         npm install selenium-webdriver@2.53.2
         echo "Waiting for deploy to finish"
-        interval=10; timeout=600; while [[ ! `aws elasticbeanstalk describe-environments --environment-name "${ENV_NAME}" | grep -i status | grep -i ready` && $timeout > 0 ]]; do sleep $interval; timeout=$((timeout - interval)); done
+        interval=10; timeout=600; while [[ ! `aws elasticbeanstalk describe-environments --environment-name "${GREEN_ENV_NAME}" | grep -i status | grep -i ready` && $timeout > 0 ]]; do sleep $interval; timeout=$((timeout - interval)); done
+        [ $timeout > 0 ] && aws elasticbeanstalk swap-environment-cnames --source-environment-name "${ENV_NAME}" --destination-environment-name "${GREEN_ENV_NAME}" || exit 0
         echo "Running Selenium"
         grunt nodeunit:selenium
-        [ $timeout > 0 ] && aws elasticbeanstalk swap-environment-cnames --source-environment-name "${ENV_NAME}" --destination-environment-name "${GREEN_ENV_NAME}" || exit 0
+
     else
         [ $timeout > 0 ] && aws elasticbeanstalk swap-environment-cnames --source-environment-name "${ENV_NAME}" --destination-environment-name "${GREEN_ENV_NAME}" || exit 0
     fi
