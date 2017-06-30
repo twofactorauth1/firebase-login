@@ -42,7 +42,7 @@
             <thead ng-class="{'bg-white': tableView == 'grid'}">
                 <tr class="inventory-header-row">
                     <th class=""  ng-click='vm.selectAllClickFn($event)' ng-show='vm.displayedParticipants.length'><i class="fa fa-2x" ng-class='{"fa-check-circle": vm.selectAllChecked, "fa-circle-o": !vm.selectAllChecked}'></i></th>
-                    <th class="" st-sort="cardCode" style="white-space: nowrap;">Card Code</th>
+                    <th class="hidden-xs" st-sort="cardCode" style="white-space: nowrap;">Card Code</th>
                     <th class="" st-sort="name" style="white-space: nowrap;" >Name</th>
                     <th></th>
                 </tr>
@@ -51,11 +51,11 @@
                     <th>
                         <input st-search="cardCode" placeholder="Card Code" class="form-control" type="search" />
                     </th>
-                    <th class="col-vendor">
+                    <th class="hidden-xs">
                         <input st-search="name" placeholder="Name" class="form-control" type="search" />
                     </th>
 
-                    <th class="col-promo-code">
+                    <th class="">
 
                     </th>
                     
@@ -64,11 +64,12 @@
             <tbody>
                 <tr ng-repeat="participant in vm.displayedParticipants" class="participant-item">
                     <td class=""><i class="fa fa-2x" ng-click='vm.participantSelectClickFn($event, participant)' ng-class='{"fa-check-circle": vm.checkIfSelected(participant), "fa-circle-o": !vm.checkIfSelected(participant)}'></i></td>
-                    <td class=""><strong>Card Code: </strong><div class="name-block-container"><div class="text-adjust-outerTable">{{participant.cardCode}}</div></div></td>
+                    <td class="hidden-xs"><strong>Card Code: </strong><div class="name-block-container"><div class="text-adjust-outerTable">{{participant.cardCode}}</div></div></td>
                     <td class="text-adjust-outerTable" style="white-space: nowrap;"><strong>Name: </strong><div class="text-adjust-outerTable text-capitalize">{{participant.name}}</div></td>
                     <td>
-                        <button type="button" class="btn btn-o btn-primary" ng-click="vm.removeParticipant(participant)">
-                            <span>Remove</span>
+                        <button type="button" class="btn btn-o btn-danger" ng-click="vm.removeParticipant(participant)">
+                            <span class="hidden-sm hidden-xs">Remove</span>
+                            <span class="fa fa-trash-o visible-sm visible-xs"></span>
                         </button>
                     </td>
                 </tr>
