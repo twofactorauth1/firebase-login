@@ -269,7 +269,7 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
     function resizeSliderImagesToFullHeight(section){
         if(section){
             var sectionElement = angular.element("#section_"+ section._id)
-            if(sectionElement.hasClass("ssb-page-section-layout-nav-hero-v2")|| sectionElement.hasClass("ssb-page-section-layout-nav-hero-v3")){
+            if(sectionElement.hasClass("ssb-page-section-layout-nav-hero-v2")|| sectionElement.hasClass("ssb-page-section-layout-nav-hero-v3") || sectionElement.hasClass("ssb-page-section-layout-nav-hero-v4")){
                 var sectionElementTextHeight=120 // 120 is offset
                 var innerSectionHeaderElement = sectionElement.find(".navigation-header");
                 if(innerSectionHeaderElement.length ){
@@ -286,6 +286,19 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
                     }
                 }
                 sectionElement.find(".single-testimonial .component-slider-image img").css("min-height",  sectionElementTextHeight);
+            }else if(sectionElement.hasClass("ssb-page-section-layout-hero-v7")){
+                var sectionElementTextHeight=10;
+                var innerSectionTextElement = sectionElement.find(".single-testimonial.slick-active .testimonial-row");
+                var outerWrapSection = sectionElement.parent().find(".testimonial-wrap ").height();
+                if(innerSectionTextElement.length ){
+                    sectionElementTextHeight+=innerSectionTextElement.height()
+                }
+                var  image =sectionElement.find(".single-testimonial.slick-active .component-slider-image img").hide();
+                if(image.length>0){
+                    var imageParent=image.parent();
+                    imageParent.css('background-image', 'url(' + image[0].src + ')').css("min-height",  outerWrapSection);
+                }
+
             }
         }
     }
