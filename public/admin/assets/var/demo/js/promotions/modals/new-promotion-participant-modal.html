@@ -1,0 +1,104 @@
+<script type="text/ng-template" id="new-promotion-participant-modal">
+    <div class="modal-header">
+        <button type="button" class="close" ng-click="vm.parentVm.closeModal()">
+            <span aria-hidden="true">&times;</span>
+            <span class="sr-only">Close</span>
+        </button>
+        <h3 class="modal-title">Add Participant</h3>
+    </div>
+    <form name="form" role="form" id="form">
+        <div class="modal-body bg-white new-promotion-participant-modal" stop-event="touchend" style="max-height: 400px;overflow: auto;overflow-x: hidden;">
+        
+            <div class="securematics-list-container" ng-init="tableView='list'">
+                <div st-table="vm.displayedParticipants" st-safe-src="vm.state.participants" >
+                    <div class="bg-white padding-top-0 padding-bottom-0 margin-bottom-0 margin-left-15">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="panel panel-transparent row margin-bottom-0">
+                                    <div class="panel-body">
+                                        <form role="form" class="ng-pristine ng-valid row">
+                                            <div>
+                                                <div class="col-xs-12 col-sm-12 padding-left-0">
+                                                    <div class="form-group">
+                                                        <div class="col-xs-6 col-sm-6 padding-right-0">
+                                                            <span class="input-icon">
+                                                                <input type="text" ng-model="globalSearch" placeholder="Search by Card code, name..." id="form-field-14" class="form-control">
+                                                                <i class="ti-search"></i>
+                                                            </span>
+                                                        </div>
+                                                        <div class="col-xs-6 col-sm-6 padding-right-0">
+                                                            <button type="button" class="btn btn-o btn-primary" ng-click="vm.filterParticipants(globalSearch)">
+                                                                <span>Find</span>
+                                                            </button>
+                                                            <div class="btn-group action-btn-con margin-left-10" ng-hide='!vm.participants.length'>
+                                                                <button type="button" class="action-btn libtn btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                                    Action
+                                                                </button>
+                                                                <div class="dropdown-menu">
+                                                                    <a class="dropdown-item" ng-repeat= "action in vm.bulkActionChoices |  orderBy:'label'" ng-click="vm.setBulkActionChoiceFn()">{{action.label}}</a>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <table class="table table-hover table-striped" ng-class="{'grid': tableView == 'grid', 'bg-white table-list-view': tableView == 'list'}" ng-if="!vm.uiState.loading">
+                        <thead ng-class="{'bg-white': tableView == 'grid'}">
+                            <tr class="inventory-header-row">
+                                <th class="" ng-click='vm.selectAllClickFn($event)' ng-show='vm.displayedParticipants.length'><i class="fa fa-2x" ng-class='{"fa-check-circle": vm.selectAllChecked, "fa-circle-o": !vm.selectAllChecked}'></i></th>
+                                <th class="" style="white-space: nowrap;">Card Code</th>
+                                <th class="" style="white-space: nowrap;" >Name</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="participant in vm.displayedParticipants" class="participant-item">
+                                <td class=""><i class="fa fa-2x" ng-click='vm.participantSelectClickFn($event, participant)' ng-class='{"fa-check-circle": vm.checkIfSelected(participant), "fa-circle-o": !vm.checkIfSelected(participant)}'></i></td>
+                                <td class=""><strong>Card Code: </strong><div class="name-block-container"><div class="text-adjust-outerTable">{{participant.OCRD_CardCode}}</div></div></td>
+                                <td class="text-adjust-outerTable" style="white-space: nowrap;"><strong>Name: </strong><div class="text-adjust-outerTable text-capitalize">{{participant.OCRD_CardName}}</div></td>
+                                <td>
+                                    <button type="button" class="btn btn-o btn-primary" ng-click="vm.addParticipant(participant)">
+                                        <span>Add</span>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                        <tfoot ng-hide="vm.uiState.loading">
+                            <tr>
+                                <td colspan="10" class="center" ng-if="vm.state.totalParticipants">
+                                    <nav ng-if="vm.numberOfPages() && vm.pages.length >= 2">
+                                        <ul class="pagination">
+                                            <li ng-repeat="page in vm.pages" ng-class="{active: page == vm.uiState.curPage}">
+                                                <a ng-click="vm.selectPage(page)" class="ng-binding">{{page}}</a>
+                                            </li>
+                                        </ul>
+                                    </nav>
+                                </td>
+                                <td ng-if="!vm.state.totalParticipants" colspan="6" class="center height-100">
+                                    <h4>There are currently no participants</h4>
+                                </td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                    <div class="load1 csspinner height-400" ng-show="vm.uiState.loading"></div>
+                </div>
+            </div>
+
+        </div>
+        <div class="modal-footer">
+            
+        </div>
+    </form>
+    <div class="server-side-pagination-container">
+        <div class="custom-paging-overlay center" style="min-height: auto;" ng-if="vm.uiState.pageLoading">
+            <h1>loading...</h1>
+        </div>
+    </div>
+</script>

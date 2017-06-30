@@ -725,6 +725,7 @@ app.constant('JS_REQUIRES', {
     'ShipmentsComponentController': 'assets/var/demo/js/promotions/shipments/shipments.controller.js',
 
     // Promotion Participants
+    "PromotionParticipantModalController": 'assets/var/demo/js/promotions/modals/new-promotion-participant-modal.controller.js',
     'ParticipantsComponent': 'assets/var/demo/js/promotions/participants/participants.component.js',
     'ParticipantsComponentController': 'assets/var/demo/js/promotions/participants/participants.controller.js',
     'SecurematicsParticipantsService': 'assets/var/demo/js/promotions/participants.service.js',  

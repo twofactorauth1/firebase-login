@@ -44,8 +44,7 @@
 	    <table class="table table-hover table-striped" ng-class="{'grid': tableView == 'grid', 'bg-white table-list-view': tableView == 'list'}" ng-if="!vm.uiState.loading">
 	        <thead ng-class="{'bg-white': tableView == 'grid'}">
 	            <tr>
-	                <th class="col-partner" st-sort="companyName" style="white-space: nowrap;">VAR</th>
-	                <th class="col-customer" st-sort="customer" style="white-space: nowrap;">Customer</th>
+	                <th class="col-partner" st-sort="companyName" style="white-space: nowrap;">VAR</th>	                
 	                <th class="col-products" style="white-space: nowrap;">Products</th>
 	                <th class="hidden-xs col-ship-date" st-sort="shipDate" style="white-space: nowrap;">Ship Date</th>
 	                <th class="hidden-xs col-config-date" st-sort="configDate" style="white-space: nowrap;">Config Date</th>
@@ -59,10 +58,6 @@
 	                <th class="col-partner">
 	                    <input st-search="companyName" ng-model="vm.uiState.fieldSearch.companyName" placeholder="VAR" class="form-control" type="search" />
 	                </th>
-	                <th class="col-customer">
-	                    <input st-search="vendor" ng-model="vm.uiState.fieldSearch.customer" placeholder="Customer" class="form-control" type="search" />
-	                </th>
-
 	                <th class="col-products">
 
 	                </th>
@@ -84,9 +79,9 @@
 	            </tr>
 	        </thead>
 	        <tbody>
-	            <tr ng-repeat-start="shipment in vm.displayedShipments" class="product-item" ng-click="vm.currentShipment = shipment; vm.openModal('new-promotion-shipment-modal', 'PromotionShipmentModalController', 'lg')">
+	            <tr ng-repeat-start="shipment in vm.displayedShipments" class="list-row" ng-click="vm.currentShipment = shipment; vm.openModal('new-promotion-shipment-modal', 'PromotionShipmentModalController', 'lg')" >
 	                <td class="col-partner"><strong>VAR: </strong>{{shipment.companyName}}</td>
-	                <td class="col-customer"><strong>Customer: </strong><div class="name-block-container"><span class="list-name"></span><span class="text-adjust-table" tooltip="{{shipment.customer}}">{{shipment.customer}}</span></div></td>
+	                
 	                <td class="col-products"><strong>Products: </strong></td>
 	                <td class="hidden-xs col-ship-date"><strong>Ship Date: </strong>{{vm.parseValueToDate(shipment.shipDate) | date:'M/d/yyyy'}}</td>
 	                <td class="hidden-xs col-config-date"><strong>Config Date: </strong>{{vm.parseValueToDate(shipment.configDate) | date:'M/d/yyyy'}}</td>
@@ -101,8 +96,38 @@
 	                    </button>
                 	</td>
 	            </tr>
-	            <tr ng-repeat-end ng-show="expanded && tableView == 'list'">
-            		<td colspan="10" class="center"><b>Details to follow</b></td>
+	            <tr ng-repeat-end ng-show="expanded && tableView == 'list'" class="details-row">
+
+            		<td colspan="10" class="">
+            			<div class="col-sm-4 col-xs-6">
+        					<h4>Customer</h4>
+        					<div ng-bind-html="vm.stringifyAddress(shipment.customerDetails)">
+        					</div>
+            			</div>
+            			<div class="col-sm-4 col-xs-6">
+            				<h4>Project</h4>
+	            			<div>
+	            				{{shipment.customerDetails.projectName}}
+	            			</div>
+            			</div>
+            			<div class="col-sm-4 hidden-xs">
+            				<div ng-if="shipment.customerDetails.partnerSalesRep" class="margin-bottom-10">
+	            				<h4>Partner Sales Rep</h4>
+		            			<div>
+		            				{{shipment.customerDetails.partnerSalesRep}}
+		            			</div>
+		            		</div>
+		            		<div ng-if="shipment.customerDetails.juniperRep">
+		            			<h4>Juniper Rep Engaged</h4>
+		            			<div>
+		            				{{shipment.customerDetails.juniperRep}}
+		            			</div>
+		            		</div>	
+	            			
+            			</div>
+            			
+            		</td>
+            		
         		</tr>
 	        </tbody>
 	        <tfoot>

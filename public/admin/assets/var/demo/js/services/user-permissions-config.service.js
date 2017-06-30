@@ -45,10 +45,14 @@
           }
           else if(this.orgConfigAndPermissions.cardCodes.length == 0){
             this.orgConfigAndPermissions.userPermissions.dashbordLedgerUrl = "#";
+            this.orgConfigAndPermissions.isSecurematicsUser = true;
           }
           if(this.orgConfigAndPermissions.cardCodes.length > 0){
             this.orgConfigAndPermissions.isVendorWithCardCodes = true;
           }
+        }
+        else{
+          this.orgConfigAndPermissions.isSecurematicsUser = true;
         }
       }
       if(orgConfig.modules) {

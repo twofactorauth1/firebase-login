@@ -10,8 +10,6 @@ function shipmentsComponentController($scope, $attrs, $window, $filter, $statePa
 
     vm.init = init;
 
-    vm.state = {};
-
     vm.uiState = {
         loading: true
     };
@@ -26,9 +24,8 @@ function shipmentsComponentController($scope, $attrs, $window, $filter, $statePa
     vm.viewPdf = viewPdf;
     vm.loadShipments = loadShipments;
     vm.preventClick = preventClick;
-    vm.state.promotion = vm.promotion;
     vm.getShipmentStatus = getShipmentStatus;
-
+    vm.stringifyAddress = stringifyAddress;
     function showFilteredRecords(){
         return UtilService.showFilteredRecords(vm.uiState.globalSearch, vm.uiState.fieldSearch);
     }
@@ -115,6 +112,41 @@ function shipmentsComponentController($scope, $attrs, $window, $filter, $statePa
         
     }
 
+    function stringifyAddress(details) {
+        var _firstRow = "";
+        var _middleRow = "";
+        var _bottomRow = "";
+        if (details) {
+            if(details.customerName){
+                _firstRow += details.customerName + '<br>';
+            }
+            if(details.address1 || details.address2)
+            {
+                if(details.address1){
+                    _middleRow +=  details.address1 + " ";     
+                }
+                if(details.address2){
+                    _middleRow += details.address2;    
+                }
+                if(_middleRow.length){
+                    _middleRow += '<br>';  
+                }
+            }
+            if(details.city || details.state || details.zip)
+            {
+                if(details.city){
+                    _bottomRow +=  details.city + ", ";     
+                }
+                if(details.state){
+                    _bottomRow +=  details.state + " ";  
+                }
+                if(details.zip){
+                    _bottomRow +=  details.zip;  
+                }
+            }
+        }
+        return _firstRow + _middleRow + _bottomRow;
+    }
 }
 
 })();

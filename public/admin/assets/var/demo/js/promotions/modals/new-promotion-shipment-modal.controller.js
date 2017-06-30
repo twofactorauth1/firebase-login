@@ -1,13 +1,13 @@
 'use strict';
 /*global app*/
-app.controller('PromotionShipmentModalController', ['$scope', '$timeout', 'parentVm', 'toaster', 'PromotionsService', 'UserPermissionsConfig', 'SweetAlert', function ($scope, $timeout, parentVm, toaster, PromotionsService, UserPermissionsConfig, SweetAlert) {
+app.controller('PromotionShipmentModalController', ['$scope', '$timeout', 'parentVm', 'toaster', 'PromotionsService', 'SweetAlert', function ($scope, $timeout, parentVm, toaster, PromotionsService, SweetAlert) {
 
     var vm = this;
 
     vm.parentVm = parentVm;
     
     vm.state = {
-        orgCardAndPermissions: UserPermissionsConfig.orgConfigAndPermissions
+        orgCardAndPermissions: vm.parentVm.state.orgCardAndPermissions
     };
     vm.uiState = {
         loadingShipmentModal: true,
