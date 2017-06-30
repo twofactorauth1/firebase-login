@@ -8,8 +8,11 @@
     </div>
     <form name="form" role="form" id="form">
         <div class="modal-body bg-white new-promotion-shipment-modal" stop-event="touchend" style="min-height: 200px;" ng-if="!vm.uiState.loadingShipmentModal">
-
-            <div class="form-group col-sm-6">
+            <div class="col-xs-12">
+                <h4>Shipment Details</h4>
+            </div>
+            
+            <div class="form-group col-sm-12">
                 <label class="">VAR</label>
                     <ui-select ng-if="vm.state.customers.length >= 200"
                         ng-model="vm.state.shipment.cardCode"
@@ -49,12 +52,6 @@
                     </label>
             </div>
 
-            <div class="form-group col-sm-6" >
-                <label>
-                    Customer
-                </label>
-                <input type="text" placeholder="Customer" class="form-control" ng-model="vm.state.shipment.customer" name="customer">
-            </div>
             <div class="clearfix"></div>
 
             <div class="shipment-products" ng-if="vm.shipmentProductOptions.length">
@@ -145,7 +142,73 @@
                     ng-model="vm.state.shipment.status">
                     <option value="">-- Select Shipment Status --</option>
                 </select>
+            </div>
+            <div class="clearfix"></div>
+            <hr>
+            <div class="col-xs-12">
+                <h4>Customer Details</h4>
+            </div>
+            <div class="form-group col-sm-6">
+                <label class="block">
+                    Project
+                </label>
+                <input type="text" placeholder="Project Name" class="form-control" ng-model="vm.state.shipment.customerDetails.projectName">
+            </div>
+            <div class="form-group col-sm-6">
+                <label class="block">
+                    Customer
+                </label>
+                <input type="text" placeholder="Customer Name" class="form-control" ng-model="vm.state.shipment.customerDetails.customerName">
+            </div>
+            <div class="clearfix"></div>
 
+            <div class="form-group col-sm-6">
+                <label class="block">
+                    Partner Sales Rep
+                </label>
+                <input type="text" placeholder="Partner Sales Rep" class="form-control" ng-model="vm.state.shipment.customerDetails.partnerSalesRep">
+            </div>
+            <div class="form-group col-sm-6">
+                <label class="block">
+                    Juniper Rep
+                </label>
+                <input type="text" placeholder="Juniper Rep" class="form-control" ng-model="vm.state.shipment.customerDetails.juniperRep">
+            </div>
+            <div class="clearfix"></div>
+
+            <div class="form-group col-sm-6">
+                <label class="block">
+                    Street Address Line 1
+                </label>
+                <input type="text" placeholder="Address Line 1" class="form-control" ng-model="vm.state.shipment.customerDetails.address1">
+            </div>
+            <div class="form-group col-sm-6">
+                <label class="block">
+                    Street Address Line 2
+                </label>
+                <input type="text" placeholder="Address Line 2" class="form-control" ng-model="vm.state.shipment.customerDetails.address2">
+            </div>
+            <div class="clearfix"></div>
+
+            <div class="form-group col-sm-6">
+                <label class="block">
+                    City
+                </label>
+                <input type="text" placeholder="City" class="form-control" ng-model="vm.state.shipment.customerDetails.city">
+            </div>
+            <div class="form-group col-sm-6">
+                <label class="block">
+                    Zip
+                </label>
+                <input type="text" placeholder="Zip" class="form-control" ng-model="vm.state.shipment.customerDetails.zip">
+            </div>
+            <div class="clearfix"></div>
+
+            <div class="form-group col-sm-6">
+                <label class="block">
+                    Country
+                </label>
+                <input type="text" placeholder="Country" class="form-control" ng-model="vm.state.shipment.customerDetails.country">
             </div>
             <div class="clearfix"></div>
         </div>
