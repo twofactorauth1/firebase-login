@@ -130,9 +130,9 @@ app.controller('PromotionShipmentModalController', ['$scope', '$timeout', 'paren
         vm.state.shipment.products.splice(index, 1);
     }
 
-    function setShipmentProduct(product){
-        var _product = _.findWhere(vm.shipmentProductOptions, function(option){
-            return option.itemCode == product.itemCode
+    function setShipmentProduct(product){       
+        var _product = _.findWhere(vm.shipmentProductOptions,{
+            itemCode: product.itemCode
         })
         product.itemName = _product.itemName;
         product.itemPrice = _product.itemPrice;
