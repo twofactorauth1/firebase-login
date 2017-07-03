@@ -1,0 +1,15 @@
+{
+  "short_name": "Securematics",
+  "name": "Securematics",
+  "theme_color": "#536878",
+  "background_color": "#FFFFFF",
+  "display": "standalone",
+  "icons": [
+    {
+		"src":"fireworks-icon192x192.png",
+		"sizes": "192x192",
+		"type": "image/png"
+    }
+  ],
+  "start_url": "android-add-to-home.html"
+}
