@@ -279,7 +279,7 @@ function promotionDetailsController($scope, $window, $state, $attrs, $filter, $m
             return shipment.status === vm.shipmentStatusOptions.BUY
         })
         if(promoShipments){
-            var products = _.without(_.flatten(_.pluck(vm.state.shipments, "products")), null);
+            var products = _.without(_.flatten(_.pluck(promoShipments, "products")), null);
             var totalPrice = _.reduce(products, function(m, product) { 
                 return m + parseFloat(product.itemPrice || 0) ; }, 0);
             return totalPrice;
