@@ -23,7 +23,7 @@
               if(selection.is('span')){
                   selection.removeAttr('class');
                   selection.attr('class', 'fontWeight_'+val);
-              }else if(selection.parent('span').hasClass() && selection.parent('span').attr('class').indexOf('fontWeight_') > -1){
+              }else if(selection.parent('span').hasClass() &&  selection.parent('span').attr('class').indexOf('fontWeight_') > -1){
                   selection.parent('span').removeAttr('class');
                   selection.parent('span').attr('class', 'fontWeight_'+val);
               }else {
