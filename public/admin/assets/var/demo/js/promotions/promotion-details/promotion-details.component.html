@@ -12,7 +12,7 @@
         <button type="button" class="btn btn-primary btn-o pull-right margin-top-5 margin-bottom-5 margin-left-5 btn-wide" ng-click="vm.backToPromotions()">
             Back to Promotions
         </button>        
-        <button type="button" class="btn btn-primary btn-o pull-right margin-top-5 margin-bottom-5 margin-left-5 btn-wide" ng-click="vm.updatePromotion()" ng-disabled="vm.uiState.saveLoading">
+        <button type="button" class="btn btn-primary btn-o pull-right margin-top-5 margin-bottom-5 margin-left-5 btn-wide" ng-click="vm.updatePromotion()" ng-disabled="vm.uiState.saveLoading" ng-if="vm.state.orgCardAndPermissions.permissions.promotion.edit">
             <i class="fa fa-check"></i><span> Save</span>
         </button>
         <button type="button" class="btn btn-primary btn-o pull-right margin-top-5 margin-bottom-5 margin-left-5 btn-wide" ng-click="vm.deletePromotion()" ng-if="vm.state.orgCardAndPermissions.permissions.promotion.delete">
