@@ -54,19 +54,23 @@ function participantsComponentController($scope, $attrs, $window, $filter, $stat
     }];
 
     function selectAllClickFn($event){
+
         vm.selectAllChecked = !vm.selectAllChecked;
         if(vm.selectAllChecked){
-            vm.participants = _.map(vm.state.promotion.participants, 
+            var participants = _.map(vm.displayedParticipants, 
                 function(participant) {
                     return {
                         cardCode: participant.cardCode,
-                        name: participant.name  
+                        name: participant.name 
                     };
                 }
             );
+            vm.participants = _.union(participants, vm.participants);
         }
         else{
-            vm.participants = [];
+            vm.participants = _.filter(vm.participants, function(participant){
+                return !_.contains(_.pluck(vm.displayedParticipants, "cardCode"), participant.cardCode)
+            })
         }
     }
 
@@ -75,6 +79,7 @@ function participantsComponentController($scope, $attrs, $window, $filter, $stat
             removeParticipant(participant);
         })
         vm.participants = [];
+        vm.selectAllChecked = false;
     }
     
     function openModal(modal, controller, size){
@@ -114,6 +119,18 @@ function participantsComponentController($scope, $attrs, $window, $filter, $stat
                 vm.uiState.loading = false;
             //}
         //}, true);
+
+        
+        $('promotion-participants-component').on('click', 'ul.pagination li', function() {
+            if(!$(this).hasClass("active")){
+                console.log("Page changed")
+                if(vm && vm.selectAllChecked){
+                    $timeout(function() {
+                        vm.selectAllChecked = false;
+                    }, 0);
+                }
+            }
+        });
     }
 
     

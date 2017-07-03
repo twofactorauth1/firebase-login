@@ -11,14 +11,11 @@
     <div class="col-xs-12 col-md-12 padding-right-30 margin-top-5">
         <button type="button" class="btn btn-primary btn-o pull-right margin-top-5 margin-bottom-5 margin-left-5 btn-wide" ng-click="vm.backToPromotions()">
             Back to Promotions
-        </button>
-        <button type="button" class="btn btn-primary btn-o pull-right margin-top-5 margin-bottom-5 margin-left-5 btn-wide hidden" ng-click="vm.editPromotion()">
-            <i class="fa fa-pencil-square-o"></i><span> Edit</span>
-        </button>
+        </button>        
         <button type="button" class="btn btn-primary btn-o pull-right margin-top-5 margin-bottom-5 margin-left-5 btn-wide" ng-click="vm.updatePromotion()" ng-disabled="vm.uiState.saveLoading">
             <i class="fa fa-check"></i><span> Save</span>
         </button>
-        <button type="button" class="btn btn-primary btn-o pull-right margin-top-5 margin-bottom-5 margin-left-5 btn-wide" ng-click="vm.deletePromotion()">
+        <button type="button" class="btn btn-primary btn-o pull-right margin-top-5 margin-bottom-5 margin-left-5 btn-wide" ng-click="vm.deletePromotion()" ng-if="vm.state.orgCardAndPermissions.permissions.promotion.delete">
             <i class="fa fa-trash-o"></i><span> Delete</span>
         </button>
         <button type="button" ng-if="vm.state.promotion._id" class="btn btn-primary btn-o pull-right margin-top-5 margin-bottom-5 margin-left-5 btn-wide" ng-click="vm.openModal('new-promotion-shipment-modal', 'PromotionShipmentModalController', 'lg')">
@@ -29,7 +26,8 @@
 <div class="clearfix"></div>
 <tabset class="tabbable margin-top-15" ng-show="!vm.uiState.loading">
     <tab heading="Promotion Details">
-        <div data-ng-include=" 'assets/var/demo/js/promotions/partials/promotion-details-edit.html' "></div>
+        <div ng-if="vm.state.orgCardAndPermissions.permissions.promotion.edit" data-ng-include=" 'assets/var/demo/js/promotions/partials/promotion-details-edit.html' "></div>
+        <div ng-if="!vm.state.orgCardAndPermissions.permissions.promotion.edit" data-ng-include=" 'assets/var/demo/js/promotions/partials/promotion-details-view.html' "></div>
     </tab>
     <tab heading="Participants" ng-if="vm.state.promotion._id && vm.state.orgCardAndPermissions.isAdminUser">
         <promotion-participants-component

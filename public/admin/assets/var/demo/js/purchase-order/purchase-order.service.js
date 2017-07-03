@@ -11,6 +11,7 @@
 
 
         var poService = {
+            createPurchaseOrderEmailTo: 'OM-PurchaseOrders@securematics.com'
         };
 
         

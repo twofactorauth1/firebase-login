@@ -120,6 +120,7 @@ function purchaseOrderComponentController($scope, $attrs, $filter, $modal, $time
         PurchaseOrderService.createPurchaseOrder(po).then(function(response){
             vm.closeModal();
             vm.uiState.saveLoading = false;
+            toaster.pop('success', "Thank You for your PO. The order is being processed. If you have any questions, then please contact "+ PurchaseOrderService.createPurchaseOrderEmailTo, null, 10000);
         })
     }
 
