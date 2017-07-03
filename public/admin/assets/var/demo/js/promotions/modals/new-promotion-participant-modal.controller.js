@@ -61,7 +61,8 @@ app.controller('PromotionParticipantModalController', ['$timeout', 'parentVm', '
         if(page != vm.uiState.curPage){
             vm.uiState.pageLoading = true;
             vm.uiState.curPage = page;
-            vm.uiState.skip = (page - 1) * vm.uiState.limit;
+            vm.uiState.skip = (page - 1) * vm.uiState.limit;  
+            vm.selectAllChecked = false;          
             loadParticipants();
         }
     }
@@ -109,14 +110,23 @@ app.controller('PromotionParticipantModalController', ['$timeout', 'parentVm', '
     function selectAllClickFn($event){
         vm.selectAllChecked = !vm.selectAllChecked;
         if(vm.selectAllChecked){
-            // Need to add all VARs to promotion
+            var participants = _.map(vm.state.participants, 
+                function(participant) {
+                    return {
+                        OCRD_CardCode: participant.OCRD_CardCode,
+                        OCRD_CardName: participant.OCRD_CardName,
+                        _cardName: participant._cardName  
+                    };
+                }
+            );
+            vm.participants = _.union(participants, vm.participants);
         }
         else{
-            vm.participants = [];
+            vm.participants = _.filter(vm.participants, function(participant){
+                return !_.contains(_.pluck(vm.state.participants, "OCRD_CardCode"), participant.OCRD_CardCode)
+            })
         }
     }
-
-
 
     vm.bulkActionChoices = [
     {
@@ -129,6 +139,7 @@ app.controller('PromotionParticipantModalController', ['$timeout', 'parentVm', '
             addParticipant(participant);
         })
         vm.participants = [];
+        vm.selectAllChecked = false;
     }
 
     function addParticipant(participant){
@@ -144,6 +155,7 @@ app.controller('PromotionParticipantModalController', ['$timeout', 'parentVm', '
         vm.uiState.curPage = 1;
         vm.uiState.skip = 0;
         vm.uiState.pageLoading = true;
+        
     }
 
     (function init() {
