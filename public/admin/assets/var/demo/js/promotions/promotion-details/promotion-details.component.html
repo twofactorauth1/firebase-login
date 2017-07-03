@@ -29,7 +29,7 @@
         <div ng-if="vm.state.orgCardAndPermissions.permissions.promotion.edit" data-ng-include=" 'assets/var/demo/js/promotions/partials/promotion-details-edit.html' "></div>
         <div ng-if="!vm.state.orgCardAndPermissions.permissions.promotion.edit" data-ng-include=" 'assets/var/demo/js/promotions/partials/promotion-details-view.html' "></div>
     </tab>
-    <tab heading="Participants" ng-if="vm.state.promotion._id && vm.state.orgCardAndPermissions.isAdminUser">
+    <tab heading="Participants" ng-if="vm.state.promotion._id && vm.state.orgCardAndPermissions.permissions.promotion.participants">
         <promotion-participants-component
             state= "vm.state"
         ></promotion-participants-component>
