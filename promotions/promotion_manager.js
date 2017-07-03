@@ -84,10 +84,26 @@ module.exports = {
 
     },
 
-    listPromotions: function(accountId, userId, fn) {
+    listPromotions: function(accountId, userId, cardCodeAry, fn) {
         var self = this;
         log.debug('>> listPromotions');
-        promotionDao.findMany({'accountId':accountId}, $$.m.Promotion, function(err, list){
+        var query = {
+            'accountId':accountId
+        };
+        if(cardCodeAry && cardCodeAry.length > 0 && (cardCodeAry[0] === 'admin' || cardCodeAry[0] === 'securematics')) {
+            // NO FILTER
+        }
+        else{
+            var optRegexp = [];
+            cardCodeAry.forEach(function(opt){
+                optRegexp.push(  new RegExp(opt, "i") );
+            });
+            query = {
+                'accountId':accountId,
+                'participants.cardCode': {$in:optRegexp}
+            };
+        }    
+        promotionDao.findMany(query, $$.m.Promotion, function(err, list){
             if(err) {
                 log.error('Exception listing promotions: ' + err);
                 fn(err, null);
@@ -116,10 +132,23 @@ module.exports = {
     },
 
 
-    getPromotionDetails: function(accountId, userId, promotionId, fn) {
+    getPromotionDetails: function(accountId, userId, promotionId, cardCodeAry, fn) {
         var self = this;
         log.debug('>> getPromotionDetails');
         var query = {_id: promotionId};
+        if(cardCodeAry && cardCodeAry.length > 0 && (cardCodeAry[0] === 'admin' || cardCodeAry[0] === 'securematics')) {
+            // NO FILTER
+        }
+        else{
+            var optRegexp = [];
+            cardCodeAry.forEach(function(opt){
+                optRegexp.push(  new RegExp(opt, "i") );
+            });
+            query = {
+                'accountId':accountId,
+                'participants.cardCode': {$in:optRegexp}
+            }; 
+        }
         promotionDao.findOne(query, $$.m.Promotion, function(err, value){
             if(err) {
                 log.error('Exception getting promotion: ' + err);
