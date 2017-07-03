@@ -119,6 +119,18 @@ function participantsComponentController($scope, $attrs, $window, $filter, $stat
                 vm.uiState.loading = false;
             //}
         //}, true);
+
+        
+        $('promotion-participants-component').on('click', 'ul.pagination li', function() {
+            if(!$(this).hasClass("active")){
+                console.log("Page changed")
+                if(vm && vm.selectAllChecked){
+                    $timeout(function() {
+                        vm.selectAllChecked = false;
+                    }, 0);
+                }
+            }
+        });
     }
 
     

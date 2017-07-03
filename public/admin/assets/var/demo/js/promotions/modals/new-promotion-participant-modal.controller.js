@@ -160,6 +160,7 @@ app.controller('PromotionParticipantModalController', ['$timeout', 'parentVm', '
 
     (function init() {
         loadParticipants();
+        
     })();
 
 }]);
