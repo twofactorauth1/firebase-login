@@ -351,11 +351,27 @@ module.exports = {
 
     },
 
-    listShipments: function(accountId, userId, promotionId, fn) {
+    listShipments: function(accountId, userId, promotionId, cardCodeAry, fn) {
         var self = this;
         console.log(promotionId);
         log.debug('>> listShipments');
-        shipmentDao.findMany({'promotionId': promotionId}, $$.m.Shipment, function(err, list){
+        var query = {
+            'promotionId':promotionId
+        };
+        if(cardCodeAry && cardCodeAry.length > 0 && (cardCodeAry[0] === 'admin' || cardCodeAry[0] === 'securematics')) {
+            // NO FILTER
+        }
+        else{
+            var optRegexp = [];
+            cardCodeAry.forEach(function(opt){
+                optRegexp.push(  new RegExp(opt, "i") );
+            });
+            query = {
+                'promotionId':promotionId,
+                'cardCode': {$in:optRegexp}
+            };
+        }  
+        shipmentDao.findMany(query, $$.m.Shipment, function(err, list){
             if(err) {
                 log.error('Exception listing shipments: ' + err);
                 fn(err, null);
