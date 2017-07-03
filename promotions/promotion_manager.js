@@ -84,13 +84,13 @@ module.exports = {
 
     },
 
-    listPromotions: function(accountId, userId, cardCodeAry, fn) {
+    listPromotions: function(accountId, userId, cardCodeAry, vendorFilter, fn) {
         var self = this;
         log.debug('>> listPromotions');
         var query = {
             'accountId':accountId
         };
-        if(cardCodeAry && cardCodeAry.length > 0 && (cardCodeAry[0] === 'admin' || cardCodeAry[0] === 'securematics')) {
+        if(cardCodeAry && cardCodeAry.length > 0 && (cardCodeAry[0] === 'admin' || cardCodeAry[0] === 'securematics' || cardCodeAry[0] === 'vendor-restricted')) {
             // NO FILTER
         }
         else{
@@ -102,7 +102,11 @@ module.exports = {
                 'accountId':accountId,
                 'participants.cardCode': {$in:optRegexp}
             };
-        }    
+        } 
+        if(vendorFilter){
+            query.vendor = new RegExp(vendorFilter, "i");
+        };
+        console.log(query)
         promotionDao.findMany(query, $$.m.Promotion, function(err, list){
             if(err) {
                 log.error('Exception listing promotions: ' + err);
@@ -132,11 +136,11 @@ module.exports = {
     },
 
 
-    getPromotionDetails: function(accountId, userId, promotionId, cardCodeAry, fn) {
+    getPromotionDetails: function(accountId, userId, promotionId, cardCodeAry, vendorFilter, fn) {
         var self = this;
         log.debug('>> getPromotionDetails');
         var query = {_id: promotionId};
-        if(cardCodeAry && cardCodeAry.length > 0 && (cardCodeAry[0] === 'admin' || cardCodeAry[0] === 'securematics')) {
+        if(cardCodeAry && cardCodeAry.length > 0 && (cardCodeAry[0] === 'admin' || cardCodeAry[0] === 'securematics' || cardCodeAry[0] === 'vendor-restricted')) {
             // NO FILTER
         }
         else{
@@ -149,6 +153,10 @@ module.exports = {
                 'participants.cardCode': {$in:optRegexp}
             }; 
         }
+        if(vendorFilter){
+            query.vendor = new RegExp(vendorFilter, "i");
+        };
+        console.log(query)
         promotionDao.findOne(query, $$.m.Promotion, function(err, value){
             if(err) {
                 log.error('Exception getting promotion: ' + err);

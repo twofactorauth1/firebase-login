@@ -305,6 +305,11 @@ function promotionDetailsController($scope, $window, $state, $attrs, $filter, $m
         })
 
         PromotionsService.clearShipmentList();
+        if(vm.state.orgCardAndPermissions.permissions.promotion.shipments.edit){
+            if(!PromotionsService.customers){
+                PromotionsService.getCustomers();
+            }
+        }
     }
 
 }

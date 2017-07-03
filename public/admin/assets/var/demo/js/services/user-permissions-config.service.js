@@ -33,6 +33,7 @@
       if(userAccount && userAccount.permissions && userAccount.permissions.length){
         this.orgConfigAndPermissions.isVendor = _.contains(userAccount.permissions, 'vendor');
         this.orgConfigAndPermissions.isAdminUser = _.contains(userAccount.permissions, 'admin');
+        this.orgConfigAndPermissions.isVendorRestrictedUser = _.contains(userAccount.permissions, 'vendor-restricted');
       }
       if(this.orgConfigAndPermissions.isVendor){
         this.orgConfigAndPermissions.userPermissions.vendorRestrictedStates = this.vendorRestrictedStates;
@@ -147,7 +148,10 @@
               "create": this.orgConfigAndPermissions.isAdminUser || this.orgConfigAndPermissions.isSecurematicsUser,
               "delete": this.orgConfigAndPermissions.isAdminUser || this.orgConfigAndPermissions.isSecurematicsUser,
               "edit": this.orgConfigAndPermissions.isAdminUser || this.orgConfigAndPermissions.isSecurematicsUser,
-              "participants": this.orgConfigAndPermissions.isAdminUser || this.orgConfigAndPermissions.isSecurematicsUser
+              "participants": this.orgConfigAndPermissions.isAdminUser || this.orgConfigAndPermissions.isSecurematicsUser,
+              "shipments":{
+                "edit": !this.orgConfigAndPermissions.isVendorRestrictedUser
+              }
           }
       }
 

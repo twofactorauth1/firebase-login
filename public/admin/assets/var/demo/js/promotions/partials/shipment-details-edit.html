@@ -1,0 +1,225 @@
+<form name="form" role="form" id="form">
+        <div class="modal-body bg-white new-promotion-shipment-modal" stop-event="touchend" style="min-height: 200px;" ng-if="!vm.uiState.loadingShipmentModal">
+            <div class="col-xs-12">
+                <h4>Shipment Details</h4>
+            </div>
+            
+            <div class="form-group col-sm-12">
+                <label class="">VAR</label>
+                    <ui-select ng-if="vm.state.customers.length >= 200"
+                        ng-model="vm.state.shipment.cardCode"
+                        theme="bootstrap"
+                        on-select="vm.selectCardCode($select.selected)"
+                        ng-disabled="vm.state.orgCardAndPermissions.cardCodes.length <= 1 && vm.state.orgCardAndPermissions.isVendor"
+                        >
+                        <ui-select-match
+                            placeholder="VAR Name">
+                            {{$select.selected.OCRD_CardName || vm.state.shipment.companyName}}
+                        </ui-select-match>
+                        <ui-select-choices  all-choices="vm.state.customers" repeat="customer.OCRD_CardCode as customer in $select.pageOptions.customers | propsFilter: {OCRD_CardName: $select.search}" refresh-delay="0">
+                            <div ng-bind-html="customer.OCRD_CardName | highlight: $select.search"></div>
+                          </small>
+                        </ui-select-choices>
+
+                    </ui-select>
+
+                    <ui-select ng-if="vm.state.customers.length < 200 && vm.state.customers.length > 1"
+                        ng-model="vm.state.shipment.cardCode"
+                        theme="bootstrap"
+                        on-select="vm.selectCardCode($select.selected)"
+                        ng-disabled="vm.state.orgCardAndPermissions.cardCodes.length <= 1 && vm.state.orgCardAndPermissions.isVendor"
+                        >
+                        <ui-select-match
+                            placeholder="VAR Name">
+                            {{$select.selected.OCRD_CardName || vm.state.shipment.companyName}}
+                        </ui-select-match>
+                        <ui-select-choices repeat="customer.OCRD_CardCode as customer in vm.state.customers | propsFilter: {OCRD_CardName: $select.search}" refresh-delay="0">
+                            <div ng-bind-html="customer.OCRD_CardName | highlight: $select.search"></div>
+                          </small>
+                        </ui-select-choices>
+
+                    </ui-select>
+                    <label class="block form-control margin-top-0" ng-if="vm.state.customers.length <= 1">
+                        {{vm.state.shipment.companyName}}
+                    </label>
+            </div>
+
+            <div class="clearfix"></div>
+
+            <div class="shipment-products" ng-if="vm.shipmentProductOptions.length">
+                <div class="form-group col-sm-12 margin-bottom-0">
+                    <label>
+                        Products
+                    </label>
+                </div>
+                <div ng-repeat="product in vm.state.shipment.products">
+                    <div class="col-sm-6 form-group" >
+                        <select class="form-control margin-bottom-0" ng-options="option.itemCode as option.itemName for option in vm.shipmentProductOptions" 
+                            ng-model="product.itemCode" ng-change="vm.setShipmentProduct(product)">
+                        </select>
+                        
+                    </div>
+                    <div class="col-sm-6 form-group ship-product-row" >                    
+                        <input type="text" placeholder="Serial Number" class="form-control" ng-model="product.serial" name="serial">
+                        <button type="button" class="btn btn-o btn-danger margin-left-5" ng-click="vm.removeProduct(product, $index)">
+                            <span class="fa fa-trash-o" ></span>
+                        </button>
+                    
+                    </div>
+                    
+                </div>
+                <div class="clearfix"></div>
+                <div class="col-sm-12">
+                    <button type="button" class="btn btn-primary pull-left margin-top-10 margin-bottom-10 btn-wide btn-warning" ng-click="vm.addProductsToShipment()">
+                            <i class="ti-plus"></i><span> Add Product</span>
+                    </button>
+                </div>
+                
+                <div class="clearfix"></div>
+            </div>
+            <div class="form-group col-sm-6" >
+                <label>
+                    Ship Date
+                </label>
+                <indi-datepicker ng-model="vm.state.shipment.shipDate" popup="MM/dd/yyyy" click-input="true"></indi-datepicker>
+            </div>
+            
+
+            <div class="form-group col-sm-6" >
+                <label>
+                    Config Date
+                </label>
+                <indi-datepicker ng-model="vm.state.shipment.configDate" popup="MM/dd/yyyy" click-input="true"></indi-datepicker>
+            </div>
+            <div class="clearfix"></div>
+            <div class="form-group col-sm-6" >
+                <label>
+                    Deploy Date
+                </label>
+                <indi-datepicker ng-model="vm.state.shipment.deployDate" popup="MM/dd/yyyy" click-input="true"></indi-datepicker>
+            </div>
+            
+
+            <div class="form-group col-sm-6" >
+                <label>
+                    End Date
+                </label>
+                <indi-datepicker ng-model="vm.state.shipment.endDate" popup="MM/dd/yyyy" click-input="true"></indi-datepicker>
+            </div>
+            <div class="clearfix"></div>
+            <div class="form-group col-sm-6" >
+                <label class="block">
+                    One Config
+                </label>
+                <label for="upload_shipment_file" class="btn btn-primary margin-top-0">
+                    <span ng-if="!vm.state.shipment.attachment.name">Upload File</span>
+                    <span ng-if="vm.state.shipment.attachment.name">Replace File</span>
+                    <input type="file"
+                           id="upload_shipment_file"
+                           class="hidden"
+                           file-model='vm.attachment'
+                           accept=".pdf">
+                </label>
+                <span class="file-name">{{vm.attachment.name || vm.state.shipment.attachment.name}}</span>
+                <span class="margin-left-10" ng-if="vm.attachment.name" ng-click="vm.initAttachment()"><i class="fa fa-trash-o"></i></span>
+            </div>
+            
+
+            <div class="form-group col-sm-6">
+                <label class="block">
+                    Status
+                </label>
+
+                <select class="form-control margin-bottom-0" ng-options="option.value as option.label for option in vm.statusOptions.options" 
+                    ng-model="vm.state.shipment.status">
+                    <option value="">-- Select Shipment Status --</option>
+                </select>
+            </div>
+            <div class="clearfix"></div>
+            <hr>
+            <div class="col-xs-12">
+                <h4>Customer Details</h4>
+            </div>
+            <div class="form-group col-sm-6">
+                <label class="block">
+                    Project
+                </label>
+                <input type="text" placeholder="Project Name" class="form-control" ng-model="vm.state.shipment.customerDetails.projectName">
+            </div>
+            <div class="form-group col-sm-6">
+                <label class="block">
+                    Customer
+                </label>
+                <input type="text" placeholder="Customer Name" class="form-control" ng-model="vm.state.shipment.customerDetails.customerName">
+            </div>
+            <div class="clearfix"></div>
+
+            <div class="form-group col-sm-6">
+                <label class="block">
+                    Partner Sales Rep
+                </label>
+                <input type="text" placeholder="Partner Sales Rep" class="form-control" ng-model="vm.state.shipment.customerDetails.partnerSalesRep">
+            </div>
+            <div class="form-group col-sm-6">
+                <label class="block">
+                    Juniper Rep
+                </label>
+                <input type="text" placeholder="Juniper Rep" class="form-control" ng-model="vm.state.shipment.customerDetails.juniperRep">
+            </div>
+            <div class="clearfix"></div>
+
+            <div class="form-group col-sm-6">
+                <label class="block">
+                    Street Address Line 1
+                </label>
+                <input type="text" placeholder="Address Line 1" class="form-control" ng-model="vm.state.shipment.customerDetails.address1">
+            </div>
+            <div class="form-group col-sm-6">
+                <label class="block">
+                    Street Address Line 2
+                </label>
+                <input type="text" placeholder="Address Line 2" class="form-control" ng-model="vm.state.shipment.customerDetails.address2">
+            </div>
+            <div class="clearfix"></div>
+
+            <div class="form-group col-sm-6">
+                <label class="block">
+                    City
+                </label>
+                <input type="text" placeholder="City" class="form-control" ng-model="vm.state.shipment.customerDetails.city">
+            </div>
+            <div class="form-group col-sm-6">
+                <label class="block">
+                    State
+                </label>
+                <input type="text" placeholder="State" class="form-control" ng-model="vm.state.shipment.customerDetails.state">
+            </div>
+            <div class="clearfix"></div>
+
+            <div class="form-group col-sm-6">
+                <label class="block">
+                    Zip
+                </label>
+                <input type="text" placeholder="Zip" class="form-control" ng-model="vm.state.shipment.customerDetails.zip">
+            </div>
+            <div class="form-group col-sm-6">
+                <label class="block">
+                    Country
+                </label>
+                <input type="text" placeholder="Country" class="form-control" ng-model="vm.state.shipment.customerDetails.country">
+            </div>
+            <div class="clearfix"></div>
+        </div>
+        <div class="modal-body-loading center" ng-if="vm.uiState.loadingShipmentModal">
+            <h3>Loading VARS.....</h3>
+        </div>
+        <div class="modal-footer">
+            <button type="button" ng-disabled="vm.uiState.saveLoading" class="btn btn-o btn-primary" ng-click="vm.saveShipment()">
+                <span>Save</span>
+            </button>
+            <button type="button" ng-disabled="vm.uiState.saveLoading" ng-if="vm.uiState.deleteShipment" class="btn btn-o btn-primary" ng-click="vm.deleteShipment()">
+                <span>Delete</span>
+            </button>
+
+        </div>
+    </form>
