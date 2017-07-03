@@ -12,7 +12,6 @@ function promotionDetailsController($scope, $window, $state, $attrs, $filter, $m
 
     vm.uiState = {
         loading: true,
-        editPromotion: true,
         saveLoading: false
     };
     vm.attachment = {
@@ -34,7 +33,7 @@ function promotionDetailsController($scope, $window, $state, $attrs, $filter, $m
     vm.viewPromotionPdf = viewPromotionPdf;
     vm.addShipment = addShipment;
     vm.shipmentStatusOptions = PromotionsService.shipmentStatusOptions;
-
+    vm.getPromoType = getPromoType;
     function backToPromotions(){
         $state.go("app.promotions");
     }
@@ -44,6 +43,15 @@ function promotionDetailsController($scope, $window, $state, $attrs, $filter, $m
 
     function editPromotion(){
         vm.uiState.editPromotion = !vm.uiState.editPromotion;
+    }
+
+    function getPromoType(type){
+        if(type){
+            var _type = _.findWhere(vm.promoTypeOptions.options, {
+                value: type
+            });
+            return _type.label;
+        }
     }
 
     function deletePromotion(){

@@ -53,8 +53,9 @@
         }
         else{
           this.orgConfigAndPermissions.isSecurematicsUser = true;
-        }
+        }        
       }
+
       if(orgConfig.modules) {
           var m = orgConfig.modules;
           if(m.inventory !== undefined) {
@@ -140,6 +141,15 @@
           this.orgConfigAndPermissions.logoutUrl = "/logout";
         }
       }
+
+      this.orgConfigAndPermissions.permissions = {
+          promotion:{
+              "create": this.orgConfigAndPermissions.isAdminUser || this.orgConfigAndPermissions.isSecurematicsUser,
+              "delete": this.orgConfigAndPermissions.isAdminUser || this.orgConfigAndPermissions.isSecurematicsUser,
+              "edit": this.orgConfigAndPermissions.isAdminUser || this.orgConfigAndPermissions.isSecurematicsUser
+          }
+      }
+
       return this.orgConfigAndPermissions;
     };
 

@@ -32,7 +32,7 @@
                                     			</div>
 	                                        </div>
 
-                                    		<div ng-if="$parent.userPermissions.isAdminUser" class="col-xs-4 col-sm-3 padding-0">
+                                    		<div ng-if="$parent.userPermissions.permissions.promotion.create" class="col-xs-4 col-sm-3 padding-0">
 		                                        <button type="button" class="btn btn-o btn-info btn-scroll btn-scroll-top ti ti-plus ng-click-active pull-right btn-wide" ng-click="vm.addNewPromotion()">
 		                                            <span>New</span>
 		                                        </button>
@@ -108,4 +108,4 @@
 </div>
 
 
-<div ng-if="$parent.userPermissions.isAdminUser" data-ng-include=" 'assets/var/demo/js/promotions/modals/new-promotion-modal.html' "></div>
+<div ng-if="$parent.userPermissions.permissions.promotion.create" data-ng-include=" 'assets/var/demo/js/promotions/modals/new-promotion-modal.html' "></div>
