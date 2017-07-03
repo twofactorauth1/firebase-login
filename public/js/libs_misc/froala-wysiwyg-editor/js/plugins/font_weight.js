@@ -17,14 +17,30 @@
             "700":"Bold",
       },
       callback: function (cmd, val) {
-          if(this.format.is('span', {class:'fontWeight_'+val})){
-              this.format.remove('span', {
-                  class:'fontWeight_'+val
+          var nearestAnchor = $(this.selection.element().closest('a'));
+          var selection = $(this.selection.element());
+          if(nearestAnchor.hasClass('ssb-theme-btn-active-element')) {
+              if(selection.is('span')){
+                  selection.removeAttr('class');
+                  selection.attr('class', 'fontWeight_'+val);
+              }else if(selection.parent('span').hasClass() &&  selection.parent('span').attr('class').indexOf('fontWeight_') > -1){
+                  selection.parent('span').removeAttr('class');
+                  selection.parent('span').attr('class', 'fontWeight_'+val);
+              }else {
+                  this.format.apply('span', {
+                      class:'fontWeight_'+val
+                  });
+              }
+          }else {
+              if (this.format.is('span', {class: 'fontWeight_' + val})) {
+                  this.format.remove('span', {
+                      class: 'fontWeight_' + val
+                  });
+              }
+              this.format.apply('span', {
+                  class: 'fontWeight_' + val
               });
           }
-          this.format.apply('span', {
-              class:'fontWeight_'+val
-          });
       },
       // Callback on refresh.
       refresh: function ($btn) {

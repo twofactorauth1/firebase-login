@@ -50,6 +50,29 @@ var jsonldbuilder = {
             };
         }
         return JSONLD;
+    },
+
+    sendWebhookData: function(cb) {
+        var ary = [];
+
+        var request = require('request');
+        var options = {
+            method: 'post',
+            body: ary,
+            json: true,
+            url: 'http://main.indigenous.local:3000/api/1.0/analytics/sendgrid/event'
+        };
+        request(options, function (err, res, body) {
+            if (err) {
+                console.error('error posting json: ', err);
+                throw err
+            }
+            var headers = res.headers;
+            var statusCode = res.statusCode;
+            console.log('headers: ', headers);
+            console.log('statusCode: ', statusCode);
+            console.log('body: ', body);
+        });
     }
 
 

@@ -689,6 +689,12 @@ module.exports = function(grunt) {
         dbCopyUtil.updateContactActivityTypes(done);
     });
 
+    grunt.registerTask('sendWebhookData', 'sendWebhookData', function() {
+        var done = this.async();
+        var jsonldbuilder = require('./utils/jsonldbuilder');
+        jsonldbuilder.sendWebhookData(done);
+    });
+
     // grunt.registerTask('serve', 'Start a custom web server.', function() {
     //     grunt.log.writeln('Starting web server on port 80.');
     //     require('./app.js');
