@@ -56,14 +56,15 @@ _.extend(api.prototype, baseApi.prototype, {
                     var _isAdmin = false;
                     var _isVendor = false;
                     var _isVAR = false;
-                    
+                    var _isSecurematics = false;
                     if(userObj){
                         _isAdmin = _.contains(userObj.getPermissionsForAccount(accountId), 'admin');
                         _isVendor = _.contains(userObj.getPermissionsForAccount(accountId), 'vendor-restricted');
                         _isVAR = _.contains(userObj.getPermissionsForAccount(accountId), 'vendor');
+                        _isSecurematics = _.contains(userObj.getPermissionsForAccount(accountId), 'securematics');
                     }   
-                    if(_isAdmin) {
-                        promotionManager.listPromotions(accountId, userId, ['admin'], vendorFilter, function(err, list){
+                    if(_isAdmin || _isSecurematics) {
+                        promotionManager.listPromotions(accountId, userId, [], vendorFilter, function(err, list){
                             self.log.debug(accountId, userId, '<< listPromotions');
                             return self.sendResultOrError(resp, err, list, "Error listing promotions");
                         });
@@ -76,7 +77,7 @@ _.extend(api.prototype, baseApi.prototype, {
                                 }
                                 vendorFilter = orgConfig.vendorName;
                                 if(vendorFilter){
-                                    promotionManager.listPromotions(accountId, userId, ["vendor-restricted"], vendorFilter, function(err, list){
+                                    promotionManager.listPromotions(accountId, userId, [], vendorFilter, function(err, list){
                                         self.log.debug(accountId, userId, '<< listPromotions');
                                         return self.sendResultOrError(resp, err, list, "Error listing promotions");
                                     }); 
@@ -95,13 +96,6 @@ _.extend(api.prototype, baseApi.prototype, {
                                 if(cardCodes.length){
                                     cardCodes = _.map(cardCodes, function(code){return code.toLowerCase()});
                                     promotionManager.listPromotions(accountId, userId, cardCodes, vendorFilter, function(err, list){
-                                        self.log.debug(accountId, userId, '<< listPromotions');
-                                        return self.sendResultOrError(resp, err, list, "Error listing promotions");
-                                    });
-                                }
-                                else{
-                                    // Securematics User
-                                    promotionManager.listPromotions(accountId, userId, ['securematics'], vendorFilter, function(err, list){
                                         self.log.debug(accountId, userId, '<< listPromotions');
                                         return self.sendResultOrError(resp, err, list, "Error listing promotions");
                                     });
@@ -132,14 +126,16 @@ _.extend(api.prototype, baseApi.prototype, {
                     var _isAdmin = false;
                     var _isVendor = false;
                     var _isVAR = false;
+                    var _isSecurematics = false;
                     if(userObj){
                         _isAdmin = _.contains(userObj.getPermissionsForAccount(accountId), 'admin');
                         _isVendor = _.contains(userObj.getPermissionsForAccount(accountId), 'vendor-restricted');
                         _isVAR = _.contains(userObj.getPermissionsForAccount(accountId), 'vendor');
+                        _isSecurematics = _.contains(userObj.getPermissionsForAccount(accountId), 'securematics');
                     }
 
-                    if(_isAdmin) {
-                        promotionManager.getPromotionDetails(accountId, userId, promotionId, ['admin'], vendorFilter, function(err, list){
+                    if(_isAdmin || _isSecurematics) {
+                        promotionManager.getPromotionDetails(accountId, userId, promotionId, [], vendorFilter, function(err, list){
                             self.log.debug(accountId, userId, '<< getPromotionDetails');
                             return self.sendResultOrError(resp, err, list, "Error getting promotion");
                         });
@@ -152,7 +148,7 @@ _.extend(api.prototype, baseApi.prototype, {
                                 }
                                 vendorFilter = orgConfig.vendorName;
                                 if(vendorFilter){
-                                    promotionManager.getPromotionDetails(accountId, userId, promotionId, ['vendor-restricted'], vendorFilter, function(err, list){
+                                    promotionManager.getPromotionDetails(accountId, userId, promotionId, [], vendorFilter, function(err, list){
                                         self.log.debug(accountId, userId, '<< getPromotionDetails');
                                         return self.sendResultOrError(resp, err, list, "Error getting promotion");
                                     }); 
@@ -171,13 +167,6 @@ _.extend(api.prototype, baseApi.prototype, {
                                 if(cardCodes.length){
                                     cardCodes = _.map(cardCodes, function(code){return code.toLowerCase()});
                                     promotionManager.getPromotionDetails(accountId, userId, promotionId, cardCodes, vendorFilter, function(err, list){
-                                        self.log.debug(accountId, userId, '<< getPromotionDetails');
-                                        return self.sendResultOrError(resp, err, list, "Error getting promotion");
-                                    });
-                                }
-                                else{
-                                    // Securematics User
-                                    promotionManager.getPromotionDetails(accountId, userId, promotionId, ['securematics'], vendorFilter, function(err, list){
                                         self.log.debug(accountId, userId, '<< getPromotionDetails');
                                         return self.sendResultOrError(resp, err, list, "Error getting promotion");
                                     });
@@ -483,35 +472,53 @@ _.extend(api.prototype, baseApi.prototype, {
                 return self.sendResultOrError(resp, err, [], "Error listing promotions");
             } else {
                 self.log.debug(accountId, userId, '>> listShipments');
-                var cardCodeAry = [];
-                self._isUserAdmin(req, function(err, isAdmin){
-                    if(isAdmin && isAdmin === true) {
-                        promotionManager.listShipments(accountId, userId, promotionId, ['admin'], function(err, list){
+                     
+                self._checkUserRole(req, function(err, userObj){
+                    var _isAdmin = false;
+                    var _isVendor = false;
+                    var _isVAR = false;
+                    var _isSecurematics = false;
+                    if(userObj){
+                        _isAdmin = _.contains(userObj.getPermissionsForAccount(accountId), 'admin');
+                        _isVendor = _.contains(userObj.getPermissionsForAccount(accountId), 'vendor-restricted');
+                        _isVAR = _.contains(userObj.getPermissionsForAccount(accountId), 'vendor');
+                        _isSecurematics = _.contains(userObj.getPermissionsForAccount(accountId), 'securematics');
+                    }
+                    if(_isAdmin || _isSecurematics) {
+                        promotionManager.listShipments(accountId, userId, promotionId, [], function(err, list){
                             self.log.debug(accountId, userId, '<< listShipments');
                             return self.sendResultOrError(resp, err, list, "Error listing shipments");
                         });
                     }
                     else{
-                        self._getOrgConfig(accountId, userId, function(err, orgConfig){
-                            if(!orgConfig) {
-                                orgConfig = {};
-                            }
-                            var cardCodes = orgConfig.cardCodes || [];
-                            if(cardCodes.length){
-                                cardCodes = _.map(cardCodes, function(code){return code.toLowerCase()});
-                                promotionManager.listShipments(accountId, userId, promotionId, cardCodes, function(err, list){
-                                    self.log.debug(accountId, userId, '<< listShipments');
-                                    return self.sendResultOrError(resp, err, list, "Error listing shipments");
-                                });
-                            }
-                            else{
-                                // Securematics User
-                                promotionManager.listShipments(accountId, userId, promotionId, ['securematics'], function(err, list){
-                                    self.log.debug(accountId, userId, '<< listShipments');
-                                    return self.sendResultOrError(resp, err, list, "Error listing shipments");
-                                });
-                            }
-                        });
+                        if(_isVendor){
+                            promotionManager.listShipments(accountId, userId, promotionId, [], function(err, list){
+                                self.log.debug(accountId, userId, '<< listShipments');
+                                return self.sendResultOrError(resp, err, list, "Error listing shipments");
+                            });
+                        }
+                        else{
+                            self._getOrgConfig(accountId, userId, function(err, orgConfig){
+                                if(!orgConfig) {
+                                    orgConfig = {};
+                                }
+                                var cardCodes = orgConfig.cardCodes || [];
+                                if(cardCodes.length){
+                                    cardCodes = _.map(cardCodes, function(code){return code.toLowerCase()});
+                                    promotionManager.listShipments(accountId, userId, promotionId, cardCodes, function(err, list){
+                                        self.log.debug(accountId, userId, '<< listShipments');
+                                        return self.sendResultOrError(resp, err, list, "Error listing shipments");
+                                    });
+                                }
+                                else{
+                                    // Securematics User
+                                    promotionManager.listShipments(accountId, userId, promotionId, ['securematics'], function(err, list){
+                                        self.log.debug(accountId, userId, '<< listShipments');
+                                        return self.sendResultOrError(resp, err, list, "Error listing shipments");
+                                    });
+                                }
+                            });
+                        }
                     }
                 }) 
             }

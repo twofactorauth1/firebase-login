@@ -90,10 +90,7 @@ module.exports = {
         var query = {
             'accountId':accountId
         };
-        if(cardCodeAry && cardCodeAry.length > 0 && (cardCodeAry[0] === 'admin' || cardCodeAry[0] === 'securematics' || cardCodeAry[0] === 'vendor-restricted')) {
-            // NO FILTER
-        }
-        else{
+        if(cardCodeAry && cardCodeAry.length > 0) {
             var optRegexp = [];
             cardCodeAry.forEach(function(opt){
                 optRegexp.push(  new RegExp(opt, "i") );
@@ -102,7 +99,7 @@ module.exports = {
                 'accountId':accountId,
                 'participants.cardCode': {$in:optRegexp}
             };
-        } 
+        }
         if(vendorFilter){
             query.vendor = new RegExp(vendorFilter, "i");
         };
@@ -140,10 +137,7 @@ module.exports = {
         var self = this;
         log.debug('>> getPromotionDetails');
         var query = {_id: promotionId};
-        if(cardCodeAry && cardCodeAry.length > 0 && (cardCodeAry[0] === 'admin' || cardCodeAry[0] === 'securematics' || cardCodeAry[0] === 'vendor-restricted')) {
-            // NO FILTER
-        }
-        else{
+        if(cardCodeAry && cardCodeAry.length > 0 ) {
             var optRegexp = [];
             cardCodeAry.forEach(function(opt){
                 optRegexp.push(  new RegExp(opt, "i") );
@@ -153,6 +147,7 @@ module.exports = {
                 'participants.cardCode': {$in:optRegexp}
             }; 
         }
+        
         if(vendorFilter){
             query.vendor = new RegExp(vendorFilter, "i");
         };
@@ -366,10 +361,7 @@ module.exports = {
         var query = {
             'promotionId':promotionId
         };
-        if(cardCodeAry && cardCodeAry.length > 0 && (cardCodeAry[0] === 'admin' || cardCodeAry[0] === 'securematics')) {
-            // NO FILTER
-        }
-        else{
+        if(cardCodeAry && cardCodeAry.length > 0) {
             var optRegexp = [];
             cardCodeAry.forEach(function(opt){
                 optRegexp.push(  new RegExp(opt, "i") );
@@ -378,7 +370,7 @@ module.exports = {
                 'promotionId':promotionId,
                 'cardCode': {$in:optRegexp}
             };
-        }  
+        } 
         shipmentDao.findMany(query, $$.m.Shipment, function(err, list){
             if(err) {
                 log.error('Exception listing shipments: ' + err);
