@@ -18,5 +18,6 @@ angular.module("indigenous", [
     'config',
     'angular-parallax',
     'ng-sortable',
-    'http-auth-interceptor'
+    'http-auth-interceptor',
+    'angularAddToHomeScreen'
 ]);
