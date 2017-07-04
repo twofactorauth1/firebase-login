@@ -15,13 +15,13 @@
 }
 
 .aaths-iOS6-icon {
-  background-image: url('../images/addToHome/images/ios6share.png');
+  background-image: url('../var/demo/images/ios6share.png');
 }
 
 .aaths-iOS7-icon {
-  background-image: url('../images/addToHome/images/ios7share.png');
+  background-image: url('../var/demo/images/ios7share.png');
 }
 
 .aaths-iOS8-icon {
-  background-image: url('../images/addToHome/images/ios8share.png');
+  background-image: url('../var/demo/images/ios8share.png');
 }
