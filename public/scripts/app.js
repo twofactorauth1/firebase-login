@@ -39,8 +39,7 @@ var mainApp = angular
         'slugifier',
         'LocalStorageModule',
         'ngMap',
-        'ngTextTruncate',
-        'angularAddToHomeScreen'
+        'ngTextTruncate'
     ])
     .config(['$routeProvider', '$locationProvider', '$httpProvider', 'localStorageServiceProvider', function ($routeProvider, $locationProvider, $httpProvider, localStorageServiceProvider) {
         //$locationProvider.html5Mode(true);
