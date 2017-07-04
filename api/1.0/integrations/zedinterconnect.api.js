@@ -379,30 +379,45 @@ _.extend(api.prototype, baseApi.prototype, {
         var sortDir = parseInt(req.query.sortDir) || null;
         var term = req.query.term || null;
 
-        self._isUserAdmin(req, function(err, isAdmin){
-            if(isAdmin && isAdmin === true) {
+        self._checkUserRole(req, function(err, userObj){
+            var _isAdmin = false;
+            var _isVendor = false;
+            var _isVAR = false;
+            var _isSecurematics = false;
+            if(userObj){
+                _isAdmin = _.contains(userObj.getPermissionsForAccount(accountId), 'admin');
+                _isVendor = _.contains(userObj.getPermissionsForAccount(accountId), 'vendor-restricted');
+                _isVAR = _.contains(userObj.getPermissionsForAccount(accountId), 'vendor');
+                _isSecurematics = _.contains(userObj.getPermissionsForAccount(accountId), 'securematics');
+            }  
+            if(_isAdmin || _isSecurematics) {
                 manager.getCustomers(accountId, userId, ['admin'], skip, limit, sortBy, sortDir, term, null, function(err, value){
                     self.log.debug(accountId, userId, '<< getCustomers');
                     return self.sendResultOrError(resp, err, value, "Error listing customers");
                 });
             } else {
-                self._getOrgConfig(accountId, userId, function(err, orgConfig){
-                    if(!orgConfig){
-                        orgConfig = {};
-                    }
-                    var cardCodes = orgConfig.cardCodes || [];
-                    if(cardCodes.length){
-                        manager.getCustomers(accountId, userId, cardCodes, skip, limit, sortBy, sortDir, term, null, function(err, value){
-                            self.log.debug(accountId, userId, '<< getCustomers');
-                            return self.sendResultOrError(resp, err, value, "Error listing customers");
-                        });
-                    }
-                    else
-                    {
-                        return self.wrapError(resp, 400, 'Bad Request', 'User does not have any cardCodes');
-                    }    
-                });
-
+                if(_isVAR){
+                    self._getOrgConfig(accountId, userId, function(err, orgConfig){
+                        if(!orgConfig){
+                            orgConfig = {};
+                        }
+                        var cardCodes = orgConfig.cardCodes || [];
+                        if(cardCodes.length){
+                            manager.getCustomers(accountId, userId, cardCodes, skip, limit, sortBy, sortDir, term, null, function(err, value){
+                                self.log.debug(accountId, userId, '<< getCustomers');
+                                return self.sendResultOrError(resp, err, value, "Error listing customers");
+                            });
+                        }
+                        else
+                        {
+                            return self.wrapError(resp, 400, 'Bad Request', 'User does not have any cardCodes');
+                        }    
+                    });
+                }
+                else{
+                    return self.wrapError(resp, 400, 'Bad Request', 'User does not have permissions');
+                }
+                
             }
         });
     },
@@ -695,6 +710,15 @@ _.extend(api.prototype, baseApi.prototype, {
                 }
             });
 
+        });
+    },
+
+    _checkUserRole: function(req, fn) {
+        var self = this;
+        var userId = self.userId(req);
+        var accountId = parseInt(self.accountId(req));
+        userManager.getUserById(userId, function(err, user){
+            fn(null, user);
         });
     }
 });
