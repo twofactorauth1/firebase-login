@@ -48,6 +48,7 @@ angular.module('angularAddToHomeScreen')
             // compile: function(tElement, tAttrs, function transclude(function(scope, cloneLinkingFn){ return function linking(scope, elm, attrs){}})),
             link: function ($scope, iElm) {
                 $scope.aathsClose = function () {
+                    iElm.parent().removeClass("aaths-main");
                     iElm.remove();
                     if (angular.isFunction($scope.closeCallback)) {
                         $scope.closeCallback();
