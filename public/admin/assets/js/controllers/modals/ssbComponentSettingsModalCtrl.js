@@ -474,8 +474,8 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
              alink =$scope.component.linkLists[0].links[index];
         }
      } else {
-        if($scope.website.linkLists.size>index){
-             alink =$scope.website.linkLists;
+        if($scope.website.linkLists[0].links.length>index){
+             alink =$scope.website.linkLists[0].links[index];
         }
      }
      if(alink){
@@ -486,9 +486,7 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
          }
          alink.links.push({
               label: 'new sub index',
-              linkTitle: null,
-              linkType: null,
-              linkPage: null,
+              linkTo: {type: 'page'},
               ssb: true
         });
         $scope.editNav[index].links[alink.links.length-1]={isEdit:true};
@@ -845,16 +843,20 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
           version: parseInt($scope.component.version, 10)
         });
           $scope.editNav=[]
-           if ($scope.component.customnav) {
-             $scope.component.linkLists[0].links.forEach(function (value, index) {
-               $scope.editNav[index]={isEdit:false,links:[]};
+          var links=[];
+          if ($scope.component.customnav) {
+              links=$scope.component.linkLists[0].links;
+          } else {
+              links=$scope.website.linkLists[0].links;
+          }
+          links.forEach(function (value, index) {
+              $scope.editNav[index]={isEdit:false,links:[]};
               if(value.links){
-                 value.links.forEach(function (val1, idx) {
+                  value.links.forEach(function (val1, idx) {
                       $scope.editNav[index].links[idx]={isEdit:false};
-                 })
+                  });
               }
             });
-           }
       } else {
         componentType = _.findWhere($scope.componentTypes, {
           type: $scope.component.type

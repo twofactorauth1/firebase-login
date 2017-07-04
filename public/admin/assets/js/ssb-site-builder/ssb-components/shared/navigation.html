@@ -88,12 +88,108 @@
       <div ng-if="!component.customnav" id="reorderNavBarContainer" class="form-group">
           <ul ng-hide="" ng-sortable="barConfig" class="component-sortable" ng-class="{'dragging': dragging}" ng-model="mainMenu.links" class="nav-bar" data-ng-repeat="mainMenu in website.linkLists track by $index" data-ng-if="mainMenu.handle=='head-menu' ">
               <li data-ng-repeat="link in mainMenu.links track by $index" class="margin-bottom-10 fragment">
+                  <div ng-if="link.links && link.links.length>0">
+                      <div class="head-menu-links clearfix" data-label="{{link.label}}">
+                          <div class="ssb-page-section-settings-item">
+                            <div class="reorder ssb-sidebar-item-icon ssb-sidebar-move-handle ti-move display-ib" ng-hide="editNav[$index].isEdit"></div>
+                            <div class="ssb-sidebar-item-icon ssb-sidebar-item-icon-offset-1 ti-close display-ib" ng-hide="editNav[$index].isEdit" ng-click="deleteLinkFromNav($index, customMenu.links);" ></div>
+                            <div class="ssb-sidebar-item-icon ssb-sidebar-item-icon-offset-2 fa fa-pencil-square-o display-ib" ng-show="!edit[$index]" ng-click="editNav[$index].isEdit=true;"></div>
+                              <div class="ssb-sidebar-item-icon ssb-sidebar-item-icon-offset-3 fa fa-plus display-ib" ng-show="!editNav[$index].isEdit"  ng-click=" addSubLink($index)"></div>
+                              <div class="panel-group">
+                                  <div class="ssb-sidebar-sortable-item panel panel-default">
+                                    <div class="panel-heading">
+                                      <h4 class="panel-title">
+                                        <a class="nav-link-label" href>{{link.label}}</a>
+                                      </h4>
+                                    </div>
+                                  </div>
+                              </div>
+                              <div class="panel-body" ng-show="editNav[$index].isEdit">
+                                  <label >Title</label>
+                                  <input placeholder="Enter link title"  type="text" ng-model="link.label" class="form-control" style="margin-bottom: 10px;">
+                              </div>
+                              <div class="panel-body padding-top-0" ng-show="editNav[$index].isEdit">
+                                  <div class="btn btn-primary pull-right" ng-click="editNav[$index].isEdit= false;">Done</div>
+                            </div>
+                          </div>
+                      </div>
+                      <ul class="setting-nav-sub-menu" style="list-style:none;">
+                          <li  data-ng-repeat="sublink  in link.links track by $index">
+                              <div class="head-menu-links clearfix"   data-label="{{sublink.label}}">
+                                  <div class="ssb-page-section-settings-item" style="border: 1px solid #eeeeee;">
+                                      <div class="reorder ssb-sidebar-item-icon ssb-sidebar-move-handle ti-move display-ib" ng-hide="editNav[$parent.$index].links[$index ].isEdit"></div>
+                                      <div class="ssb-sidebar-item-icon ssb-sidebar-item-icon-offset-1 ti-close display-ib"
+                                           ng-click="deleteLinkFromSubNav($parent.$index,$index,customMenu.links);"
+                                           ng-hide="editNav[$parent.$index].links[$index ].isEdit"  ></div>
+                                      <div class="ssb-sidebar-item-icon ssb-sidebar-item-icon-offset-2 fa fa-pencil-square-o display-ib"  ng-hide="editNav[$parent.$index].links[$index].isEdit"  ng-click="editNav[$parent.$index].links[$index].isEdit=true; editNav[$parent.$index].linkType[$index]=sublink.linkTo.type;initializeEditLinks(sublink.linkTo, false)"></div>
+                                      <div class="panel-group">
+                                          <div class="ssb-sidebar-sortable-item panel panel-default">
+                                                <div class="panel-heading">
+                                                      <h4 class="panel-title">
+                                                         <a class="nav-link-label" href>{{sublink.label}}</a>
+                                                      </h4>
+                                                </div>
+                                          </div>
+                                      </div>
+                                      <div class="panel-body" ng-show="editNav[$parent.$index].links[$index ].isEdit">
+                                          <label >Title</label>
+                                          <input placeholder="Enter link title"  type="text" ng-model="sublink.label" class="form-control" style="margin-bottom: 10px;">
+                                      </div>
+                                      <div class="panel-body padding-top-0" ng-show="editNav[$parent.$index].links[$index ].isEdit">
+                                          <label for="link-title">Link To:</label>
+                                          <div class="radio">
+                                              <label>
+                                                  <input type="radio" name="inlineRadioOptions-{{$index}}" id="inlineRadioOptions1-{{$index}}" ng-model="sublink.linkTo.type" ng-change="editNav[$parent.$index].linkType[$index] = 'page'" value="page" ng-checked="{{sublink.linkTo.type == 'page'}}">Page
+                                              </label>
+                                          </div>
+                                          <div class="radio">
+                                              <label>
+                                                  <input type="radio" name="inlineRadioOptions-{{$index}}" id="inlineRadioOptions2-{{$index}}" ng-change="editNav[$parent.$index].linkType[$index] = 'section'" ng-model="sublink.linkTo.type" value="section" ng-checked="{{sublink.linkTo.type == 'section'}}">Section
+                                            </label>
+                                          </div>
+                                          <div class="radio">
+                                            <label>
+                                                <input type="radio" name="inlineRadioOptions-{{$index}}" id="inlineRadioOptions3-{{$index}}" ng-change="editNav[$parent.$index].linkType[$index] = 'external'" ng-model="sublink.linkTo.type" value="external" ng-checked="{{sublink.linkTo.type == 'external'}}">
+                                                External
+                                            </label>
+                                          </div>
+                                          <div class="row">
+                                              <div class="panel-body">
+                                                  <label ng-if="editNav[$parent.$index].linkType[$index]=='section'" for="link-page">Select Page</label>
+                                                  <select ng-if="editNav[$parent.$index].linkType[$index]=='section'" placeholder="Select a page" ng-model="sublink.linkTo.page" ng-change="initializeEditLinks(sublink.linkTo, true)" class="form-control margin-bottom-0">
+                                                      <option value="" disabled>Select a Page</option>
+                                                      <option ng-repeat="page in filteredPages track by $index" data-ng-if="page.title && page.handle" value="{{page.handle}}" ng-selected="{{sublink.linkTo.page == page.handle}}">{{page.title}}</option>
+                                                  </select>
+                                                  <label style="margin-top:10px" ng-if="editNav[$parent.$index].linkType[$index]=='section'" for="link-url">Select Section</label>
+                                                  <label ng-if="editNav[$parent.$index].linkType[$index]=='page'" for="link-url">Select Page</label>
+                                                  <label ng-if="editNav[$parent.$index].linkType[$index]=='external'" for="link-url">Enter Url</label>
+                                                  <select id="linkSection" style="text-transform:capitalize" ng-if="editNav[$parent.$index].linkType[$index]=='section'" ng-model="sublink.linkTo.data" placeholder="Select a section" ng-change="initializeEditLinks(sublink.linkTo, false, true)" class="form-control margin-bottom-0">
+                                                      <option value="" disabled>Select a Section</option>
+                                                      <option ng-repeat="component in currentPage.components track by $index" data-ng-if="component._id" value="{{component._id}}" ng-selected="selectedData(sublink, component)">{{setLinkTitle(component.type, $index)}}</option>
+                                                  </select>
+                                                  <select ng-if="editNav[$parent.$index].linkType[$index]=='page'" placeholder="Select a page" ng-model="sublink.linkTo.data" class="form-control margin-bottom-0">
+                                                      <option value="" disabled>Select a Page</option>
+                                                      <option ng-repeat="page in filteredPages | filterPages:website.linkLists:component.linkLists:component.customnav:link.linkTo.data track by $index" data-ng-if="page.title && page.handle" value="{{page.handle}}" ng-selected="{{sublink.linkTo.data == page.handle}}">{{page.title}}</option>
+                                                  </select>
+                                                  <input class="form-control" type="text" ng-if="editNav[$parent.$index].linkType[$index]=='external'" ng-model="sublink.linkTo.data" placeholder="Enter External URL">
+                                              </div>
+                                          </div>
+                                          <div class="panel-body padding-top-0" ng-show="editNav[$parent.$index].links[$index ].isEdit">
+                                              <div class="btn btn-primary pull-right" ng-click="editNav[$parent.$index].links[$index].isEdit= false;">Done</div>
+                                          </div>
+                                      </div>
+                                  </div>
+                              </div>
+                          </li>
+                      </ul>
+                  </div>
+                  <div ng-if="!(link.links && link.links.length>0)">
                   <div class="head-menu-links" data-label="{{link.label}}">
                           <div class="ssb-page-section-settings-item">
                             <div class="reorder ssb-sidebar-item-icon ssb-sidebar-move-handle ti-move display-ib" ng-hide="edit[$index]"></div>
                             <div class="ssb-sidebar-item-icon ssb-sidebar-item-icon-offset-1 ti-close display-ib" ng-hide="edit[$index]" ng-click="deleteLinkFromNav($index, mainMenu.links);" ></div>
                             <div class="ssb-sidebar-item-icon ssb-sidebar-item-icon-offset-2 fa fa-pencil-square-o display-ib" ng-show="!edit[$index]" ng-click="edit[$index]=true; linkType[$index]=link.linkTo.type;initializeEditLinks(link.linkTo, false)"></div>
-
+                            <div class="ssb-sidebar-item-icon ssb-sidebar-item-icon-offset-3 fa fa-plus display-ib" ng-show="!editNav[$index].isEdit"  ng-click=" addSubLink($index)"></div>
                             <div class="panel-group">
                               <div class="ssb-sidebar-sortable-item panel panel-default">
                                 <div class="panel-heading">
@@ -160,6 +256,7 @@
                               <div class="btn btn-primary pull-right" ng-click="edit[$index]= false;">Done</div>
                             </div>
 
+                        </div>
                         </div>
                   </div>
               </li>
