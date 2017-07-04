@@ -126,7 +126,7 @@
                                     <ul class="page-events">
                                         <li ng-repeat="pageEvent in vm.activeVisitorDetail.pageEvents | orderBy:'-pageTime'">
                                            <div class="col-xs-4">{{vm.convertUtcToLocal(pageEvent.pageTime)}}</div>
-                                            <div class="col-xs-8"><span class="text-adjust" tooltip-placement="top" tooltip="{{pageEvent.pageRequested}}">{{pageEvent.pageRequested}}</span></div>
+                                            <div class="col-xs-8"><span class="text-adjust inline-block" tooltip-placement="top" tooltip="{{pageEvent.pageRequested}}">{{pageEvent.pageRequested}}</span></div>
                                         </li>
                                     </ul>
                                 </div>
