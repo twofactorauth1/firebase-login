@@ -483,7 +483,15 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
                 var copyLink=angular.copy(alink);
                 alink.links=[copyLink]
                 updateParentPageSettings(alink.linkType,alink.linkTo.data, false);
-            }
+         }
+         alink.links.push({
+              label: 'new sub index',
+              linkTitle: null,
+              linkType: null,
+              linkPage: null,
+              ssb: true
+        });
+        $scope.editNav[index].links[alink.links.length-1]={isEdit:true};
      }
   };
   /*
@@ -586,6 +594,38 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
           SimpleSiteBuilderService.setDeletedPageFromLinkList(link.linkTo.data);
         }
       }
+    });
+
+  };
+  $scope.deleteLinkFromSubNav= function (parentIndex,index ) {
+    SweetAlert.swal({
+      title: "Are you sure?",
+      text: "Do you want to remove this link from sub menu",
+      type: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#DD6B55",
+      confirmButtonText: "Yes, remove this link!",
+      cancelButtonText: "No, do not remove this link!",
+      closeOnConfirm: true,
+      closeOnCancel: true
+    }, function (isConfirm) {
+      if (isConfirm) {
+       /* var link = links[parentIndex];
+        updateParentPageSettings(link.linkTo.type, link.linkTo.data, false);
+        if(link.links && link.links.length >index){
+             link.links.splice(index, 1);
+        }
+           updateParentPageSettings(link.linkTo.type, link.linkTo.data, false);
+        if(!$scope.customnav && (link.linkTo.type === 'page' || link.linkTo.type === 'home')){
+          SimpleSiteBuilderService.setDeletedPageFromLinkList(link.linkTo.data);
+        }*/
+          if ($scope.component.customnav && $scope.component.linkLists[0].links[parentIndex] && $scope.component.linkLists[0].links[parentIndex].links.length>index){
+              $scope.component.linkLists[0].links[parentIndex].links.splice(index, 1);
+          }else{
+
+
+          }
+       }
     });
 
   };
@@ -804,6 +844,17 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
           type: $scope.component.type,
           version: parseInt($scope.component.version, 10)
         });
+          $scope.editNav=[]
+           if ($scope.component.customnav) {
+             $scope.component.linkLists[0].links.forEach(function (value, index) {
+               $scope.editNav[index]={isEdit:false,links:[]};
+              if(value.links){
+                 value.links.forEach(function (val1, idx) {
+                      $scope.editNav[index].links[idx]={isEdit:false};
+                 })
+              }
+            });
+           }
       } else {
         componentType = _.findWhere($scope.componentTypes, {
           type: $scope.component.type
