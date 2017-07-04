@@ -145,8 +145,9 @@ app.controller('PromotionParticipantModalController', ['$timeout', 'parentVm', '
     function addParticipant(participant){
         if(!_.contains(_.pluck(vm.parentVm.state.promotion.participants, "cardCode"), participant.OCRD_CardCode)){
             vm.parentVm.state.promotion.participants.push({
-              cardCode: participant.OCRD_CardCode,
-              name: participant._cardName
+                cardCode: participant.OCRD_CardCode,
+                name: participant._cardName,
+                displayCardName: participant.OCRD_CardName
             });
         }
     }
