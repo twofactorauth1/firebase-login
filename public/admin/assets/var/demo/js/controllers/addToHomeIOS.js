@@ -1,6 +1,6 @@
 'use strict';
 app.controller('addToHomeIOSCtrl', ['$scope', function($scope) {
     $scope.lol = function () {
-        alert('ya done closed it');
+        console.log('ya done closed it');
     };
 }]);
