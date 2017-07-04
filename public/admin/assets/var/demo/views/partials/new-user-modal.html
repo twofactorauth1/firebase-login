@@ -1,15 +1,22 @@
-<script type="text/ng-template" id="edit-user-card-modal">
+<script type="text/ng-template" id="new-user-modal">
 
     <div class="modal-header">
-        <button type="button" class="close" ng-click="closeUserCardModal()">
+        <button type="button" class="close" ng-click="closeModal()">
             <span aria-hidden="true">&times;</span>
             <span class="sr-only">Close</span>
         </button>
-        <h3 class="modal-title">Edit User Details</h3>
+        <h3 class="modal-title">New User</h3>
     </div>
     <div class="modal-body contact-modal bg-white">
-        <form action="#" name="form" role="form" id="form" ng-if="editUser">
-            
+        <form action="#" name="form" role="form" id="form" autocomplete="off">
+            <div class="form-group">
+                <label class="">Username</label>
+                <input name="futureuser" id="input-username" class="form-control" ng-model="$parent.newuser.username" placeholder="Email Address" type="text" autocomplete="false" >
+            </div>
+            <div class="form-group">
+                <label class="">Password</label>
+                <input name="futureuserpassword" id="input-password" class="form-control" ng-model="$parent.newuser.password" placeholder="Password" type="password" autocomplete="false" autocomplete="new-password">
+            </div>
             <div class="form-group">
                 <label class="block">User Type</label>
                 <div class="radio clip-radio radio-primary radio-inline">
@@ -58,15 +65,12 @@
                         <small style="text-transform: capitalize;" ng-bind-html="vendor | highlight: $select.search"></small>
                     </ui-select-choices>
                 </ui-select>
-            </div>
+            </div> 
         </form>
-        <div ng-if="!editUser">
-            Loading..... 
-        </div>
     </div>
     <div class="clearfix"></div>
     <div class="modal-footer">
-        <button class="btn btn-primary" ng-click="updateUser()" ng-disabled="!editUser || !vm.validateUserDetails()">Save</button>
+        <button class="btn btn-primary" ng-disabled="!$parent.newuser.username || !$parent.newuser.password || !checkIfValidUserName($parent.newuser.username) || !vm.validateUserDetails()" ng-click="addNewUser()">Add New User</button>
     </div>
 
 </script>

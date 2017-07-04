@@ -24,6 +24,7 @@
         vm.removeUserFromAccount = removeUserFromAccount;
 
         vm.pagingConstant = pagingConstant;
+        vm.validateUserDetails = validateUserDetails;
 
         $scope.$watch("$parent.orgCardAndPermissions", function(orgCardAndPermissions){
             if(orgCardAndPermissions){
@@ -71,6 +72,18 @@
             }
         }, true)
 
+
+        // $scope.$watch('vm.state.userType', function (type) {
+        //     if(type){
+        //         if(type !== 'vendor'){
+        //             vm.state.cardCodes = [];
+        //         }
+        //         if(type !== 'vendor-restricted'){
+        //             vm.state.vendorName = "";
+        //         }
+        //     }
+        // }, true)
+
         function openSimpleModal(modal){
             var _modal = {
                 templateUrl: modal,
@@ -113,12 +126,11 @@
                      * params.cardCodes = ['C111111', 'C111112']
                      * etc
                      */
+                    var roleAry = getUserPermissions(); 
+                    
                     var params = {
-                        roleAry:['vendor'],
-                        orgConfig:[{
-                            orgId: vm.state.account.orgId,
-                            cardCodes:[ ]
-                        }]
+                        roleAry: roleAry,
+                        orgConfig: setNewOrgConfig()
                     };
                     AccountService.addNewUserWithParams(vm.state.account._id, $scope.newuser.username, $scope.newuser.password, params, function(err, newuser){
                         if(err) {
@@ -131,10 +143,49 @@
                         }
                     });
                 }
-
-                $scope.newuser = null;
+                setDefaults();
             });
         };
+
+
+        function setDefaults(){
+            $scope.newuser = null;
+            vm.state.userType = null;
+            vm.vendorName = null;
+        } 
+
+        function validateUserDetails(){
+            var _isValid = true;
+            if(!vm.state.userType){
+                _isValid = false;
+            }
+            if(vm.state.userType === 'vendor-restricted' && !vm.state.vendorName){
+                _isValid = false;  
+            }
+            if(vm.state.userType === 'vendor'){
+                var _cardCodes = vm.state.cardCodes || [];
+                if(!_cardCodes.length){
+                    _isValid = false;     
+                }
+            }
+            return _isValid;
+        }
+
+        function setNewOrgConfig(){
+            var orgConfig = [{
+                orgId: vm.state.account.orgId
+            }]
+            switch (vm.state.userType) {
+                case 'vendor':
+                    orgConfig[0].cardCodes = vm.state.cardCodes;
+                    break;
+                case 'vendor-restricted':
+                    orgConfig[0].vendorName = vm.state.vendorName;
+                    break;
+                default:
+            }
+            return orgConfig;
+        }
 
         $scope.closeModal = function () {
             $scope.modalInstance.close();
@@ -151,7 +202,7 @@
 
         $scope.openEditUserCardModal = function(userId) {
             $scope.currentUserId = userId;
-            vm.state.isAdmin = false;
+            
             $scope.editUser = null;
             $scope.editUser = _.find(vm.state.users, function(user){
                 return user._id == userId
@@ -163,7 +214,16 @@
 
             if(_userAccount && _userAccount.permissions){
                 if(_.contains(_userAccount.permissions, "admin")){
-                    vm.state.isAdmin = true;
+                    vm.state.userType = 'admin';
+                }
+                else if(_.contains(_userAccount.permissions, "vendor")){
+                    vm.state.userType = 'vendor';
+                }
+                else if(_.contains(_userAccount.permissions, "vendor-restricted")){
+                    vm.state.userType = 'vendor-restricted';
+                }
+                else if(_.contains(_userAccount.permissions, "securematics")){
+                    vm.state.userType = 'securematics';
                 }
             }
 
@@ -178,7 +238,7 @@
 
         $scope.updateUser = function(){
             setOrgConfig(vm.state.account.orgId);
-            var _permissions = getUserPermissions(vm.state.isAdmin);
+            var _permissions = getUserPermissions();
             UserService.editUser($scope.editUser, $scope.currentUserId, function(){
                 UserService.updateUserPermisions($scope.currentUserId, _permissions, function(user){
                     updateUserPermissions(user, $scope.currentUserId);
@@ -250,12 +310,10 @@
             });
             if(orgConfig){
                 vm.state.cardCodes = orgConfig.cardCodes;
+                vm.state.vendorName = orgConfig.vendorName;
             } else{
                 vm.state.cardCodes = null;
             }
-
-
-            //vm.state.cardCodes = $scope.editUser.cardCodes || [];
         };
 
         function setOrgConfig(orgId){
@@ -265,21 +323,37 @@
                 return config.orgId == orgId
             });
             if(orgConfig){
-                orgConfig.cardCodes = vm.state.cardCodes;
+                // orgConfig.cardCodes = vm.state.cardCodes;
+                // orgConfig.vendorName = vm.state.vendorName;
             } else {
                 orgConfigAry.push({
-                    orgId: orgId,
-                    cardCodes: vm.state.cardCodes
+                    orgId: orgId
                 })
             }
 
+            switch (vm.state.userType) {
+                case 'vendor':
+                    orgConfigAry[0].cardCodes = vm.state.cardCodes;
+                    delete orgConfigAry[0].vendorName;
+                    break;
+                case 'vendor-restricted':
+                    orgConfigAry[0].vendorName = vm.state.vendorName;
+                    delete orgConfigAry[0].cardCodes;
+                    break;
+                default:
+                    delete orgConfigAry[0].cardCodes;
+                    delete orgConfigAry[0].vendorName;
+            }
 
         };
 
-        function getUserPermissions(isAdmin){
-            var permissions = ["vendor"];
-            if(isAdmin){
-                permissions = ["super", "admin", "member"];
+        function getUserPermissions(){
+            var permissions = [];
+            if(vm.state.userType === 'admin'){
+                permissions = ["super", "admin", "member"]
+            }
+            else{
+                permissions = [vm.state.userType]
             }
             return permissions;
         }
@@ -325,7 +399,9 @@
         }
 
         (function init() {
-
+            UserService.getVendors(function(data){
+                vm.state.vendors = data;
+            })
         })();
 
     }]);
