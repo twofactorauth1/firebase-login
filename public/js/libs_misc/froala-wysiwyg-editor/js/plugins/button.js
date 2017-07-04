@@ -13,9 +13,9 @@
         refreshAfterCallback: true,
         callback: function () {
             var buttonHTML = '<span>&nbsp;</span>' +
-                                '<ind-button class="btn btn-primary ssb-theme-btn">' +
+                                '<a class="btn btn-primary ssb-theme-btn">' +
                                     'Button Text' +
-                                '</ind-button>' +
+                                '</a>' +
                              '<span>&nbsp;</span>';
 
             this.selection.restore();
