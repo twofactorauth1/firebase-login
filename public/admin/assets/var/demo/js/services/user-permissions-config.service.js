@@ -34,6 +34,7 @@
         this.orgConfigAndPermissions.isVendor = _.contains(userAccount.permissions, 'vendor');
         this.orgConfigAndPermissions.isAdminUser = _.contains(userAccount.permissions, 'admin');
         this.orgConfigAndPermissions.isVendorRestrictedUser = _.contains(userAccount.permissions, 'vendor-restricted');
+        this.orgConfigAndPermissions.isSecurematicsUser = _.contains(userAccount.permissions, 'securematics');
       }
       if(this.orgConfigAndPermissions.isVendor){
         this.orgConfigAndPermissions.userPermissions.vendorRestrictedStates = this.vendorRestrictedStates;
@@ -46,15 +47,12 @@
           }
           else if(this.orgConfigAndPermissions.cardCodes.length == 0){
             this.orgConfigAndPermissions.userPermissions.dashbordLedgerUrl = "#";
-            this.orgConfigAndPermissions.isSecurematicsUser = true;
+            
           }
           if(this.orgConfigAndPermissions.cardCodes.length > 0){
             this.orgConfigAndPermissions.isVendorWithCardCodes = true;
           }
-        }
-        else{
-          this.orgConfigAndPermissions.isSecurematicsUser = true;
-        }        
+        }       
       }
 
       if(orgConfig.modules) {
