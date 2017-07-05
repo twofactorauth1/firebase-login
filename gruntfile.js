@@ -695,6 +695,12 @@ module.exports = function(grunt) {
         jsonldbuilder.sendWebhookData(done);
     });
 
+    grunt.registerTask('finishDeploy', 'finishDeploy', function(){
+        var done = this.async();
+        var deployUtils = require('./utils/deployUtils');
+        deployUtils.finishDeploy(done);
+    });
+
     // grunt.registerTask('serve', 'Start a custom web server.', function() {
     //     grunt.log.writeln('Starting web server on port 80.');
     //     require('./app.js');
