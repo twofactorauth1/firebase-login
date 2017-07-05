@@ -26,6 +26,7 @@ function shipmentsComponentController($scope, $attrs, $window, $filter, $statePa
     vm.preventClick = preventClick;
     vm.getShipmentStatus = getShipmentStatus;
     vm.stringifyAddress = stringifyAddress;
+    vm.getProductsName = getProductsName;
     function showFilteredRecords(){
         return UtilService.showFilteredRecords(vm.uiState.globalSearch, vm.uiState.fieldSearch);
     }
@@ -146,6 +147,10 @@ function shipmentsComponentController($scope, $attrs, $window, $filter, $statePa
             }
         }
         return _firstRow + _middleRow + _bottomRow;
+    }
+
+    function getProductsName(products){
+        return _.pluck(products, 'itemName').join(", ");
     }
 }
 

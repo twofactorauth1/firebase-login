@@ -18,7 +18,7 @@
         <button type="button" class="btn btn-primary btn-o pull-right margin-top-5 margin-bottom-5 margin-left-5 btn-wide" ng-click="vm.deletePromotion()" ng-if="vm.state.orgCardAndPermissions.permissions.promotion.delete">
             <i class="fa fa-trash-o"></i><span> Delete</span>
         </button>
-        <button type="button" ng-if="vm.state.promotion._id" class="btn btn-primary btn-o pull-right margin-top-5 margin-bottom-5 margin-left-5 btn-wide" ng-click="vm.openModal('new-promotion-shipment-modal', 'PromotionShipmentModalController', 'lg')">
+        <button type="button" ng-if="vm.state.promotion._id && vm.state.orgCardAndPermissions.permissions.promotion.shipments.edit" class="btn btn-primary btn-o pull-right margin-top-5 margin-bottom-5 margin-left-5 btn-wide" ng-click="vm.openModal('new-promotion-shipment-modal', 'PromotionShipmentModalController', 'lg')">
             <i class="ti-plus"></i><span> Add Shipment</span>
         </button>
     </div>

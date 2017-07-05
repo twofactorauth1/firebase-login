@@ -45,7 +45,7 @@
 	        <thead ng-class="{'bg-white': tableView == 'grid'}">
 	            <tr>
 	                <th class="col-partner" st-sort="companyName" style="white-space: nowrap;">VAR</th>	                
-	                <th class="col-products" style="white-space: nowrap;">Products</th>
+	                <th class="col-products hidden-xs" style="white-space: nowrap;">Products</th>
 	                <th class="hidden-xs col-ship-date" st-sort="shipDate" style="white-space: nowrap;">Ship Date</th>
 	                <th class="hidden-xs col-config-date" st-sort="configDate" style="white-space: nowrap;">Config Date</th>
 	                <th class="hidden-xs col-deploy-date" st-sort="deployDate" style="white-space: nowrap;">Deploy Date</th>
@@ -58,7 +58,7 @@
 	                <th class="col-partner">
 	                    <input st-search="companyName" ng-model="vm.uiState.fieldSearch.companyName" placeholder="VAR" class="form-control" type="search" />
 	                </th>
-	                <th class="col-products">
+	                <th class="col-products hidden-xs">
 
 	                </th>
 	                <th class="col-ship-date hidden-xs">
@@ -82,7 +82,7 @@
 	            <tr ng-repeat-start="shipment in vm.displayedShipments" class="list-row" ng-click="vm.currentShipment = shipment; vm.openModal('new-promotion-shipment-modal', 'PromotionShipmentModalController', 'lg')" >
 	                <td class="col-partner"><strong>VAR: </strong>{{shipment.companyName}}</td>
 	                
-	                <td class="col-products"><strong>Products: </strong></td>
+	                <td class="hidden-xs col-products"><strong>Products: </strong><div class="name-block-container"><span class="list-name"></span><span class="text-adjust-table" tooltip="{{vm.getProductsName(shipment.products)}}">{{vm.getProductsName(shipment.products)}}</span></div></td>
 	                <td class="hidden-xs col-ship-date"><strong>Ship Date: </strong>{{vm.parseValueToDate(shipment.shipDate) | date:'M/d/yyyy'}}</td>
 	                <td class="hidden-xs col-config-date"><strong>Config Date: </strong>{{vm.parseValueToDate(shipment.configDate) | date:'M/d/yyyy'}}</td>
 	                <td class="hidden-xs col-deploy-date"><strong>Deploy Date: </strong>{{vm.parseValueToDate(shipment.deployDate) | date:'M/d/yyyy'}}</td>

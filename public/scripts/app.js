@@ -141,7 +141,7 @@ var mainApp = angular
                     if(window.indigenous.ssbBlog === true) {
                         _pageName = 'blog-list';
                     }
- 
+
                     var s = '<div class="main-include" ssb-data-styles data-ng-include="';
                     s += " '/template/" + _pageName;
                         if(urlattr.cachebuster) {
@@ -226,9 +226,9 @@ var mainApp = angular
         var editorIndex = window.location.search.indexOf("editor=true");
         if (editorIndex == -1 && !isPreview) {
             analyticsService.sessionStart(function (data) {
-            });  
+            });
         }
-        
+
 
         $rootScope.app = {
             isMobile: (function () { // true if the browser is a mobile device
@@ -250,7 +250,7 @@ var mainApp = angular
                 }
             }
             else{
-                return $rootScope.title;   
+                return $rootScope.title;
             }
         };
 
@@ -261,10 +261,10 @@ var mainApp = angular
 
         $rootScope.$on("$routeChangeSuccess", function (scope, next, current) {
 
-            $rootScope.isSocialEnabled = $location.absUrl().search(/\/blog\/.+/) !== -1;            
+            $rootScope.isSocialEnabled = $location.absUrl().search(/\/blog\/.+/) !== -1;
             if (editorIndex == -1 && !isPreview) {
                 analyticsService.pageStart(function () {
-                
+
                     analyticsService.pagePing();
                     clearInterval(runningInterval);
 
@@ -279,7 +279,7 @@ var mainApp = angular
                         }
                     }, 15000);
                 });
-            }    
+            }
         });
 
 

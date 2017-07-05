@@ -28,6 +28,7 @@
         promotionsService.deleteShipment = deleteShipment;
         promotionsService.refreshPromotionShipment = refreshPromotionShipment;
         promotionsService.clearShipmentList = clearShipmentList;
+        promotionsService.getCustomers = getCustomers;
         promotionsService.promoTypeOptions = {
             TRY_AND_BUY: "TRY_AND_BUY",
             MILESTONE: "MILESTONE",
@@ -356,7 +357,7 @@
 
         (function init() {
             promotionsService.getPromotions();
-            getCustomers();
+            //getCustomers();
         })();
 
 		return promotionsService;

@@ -1,0 +1,172 @@
+<form name="form" role="form" id="form">
+    <div class="modal-body bg-white new-promotion-shipment-modal" stop-event="touchend" style="min-height: 200px;">
+        <div class="col-xs-12">
+            <h4>Shipment Details</h4>
+        </div>
+        
+        <div class="form-group col-sm-12">
+            <label class="block">VAR</label>
+            <span class="">
+                {{vm.state.shipment.companyName}}
+            </span>
+        </div>
+
+        <div class="clearfix"></div>
+
+        <div class="shipment-products" ng-if="vm.state.shipment.products.length">
+            <div class="form-group col-sm-12 margin-bottom-0">
+                <label class="block">
+                    Products
+                </label>
+            </div>
+            <div ng-repeat="product in vm.state.shipment.products" class="">
+                <div class="col-sm-6" >
+                    <label class="block" ng-if="$index==0">Name</label>
+                    <span class="block">
+                        {{product.itemName}}
+                    </span>
+                </div>
+                <div class="col-sm-6 ship-product-row" >
+                    <label class="block" ng-if="$index==0">Serial Number</label>
+                    <span class="block">
+                        {{product.serial}}
+                    </span>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+
+            <div class="clearfix"></div>
+            <div class="margin-top-10"></div>
+        </div>
+        <div class="form-group col-sm-6" >
+            <label class="block">
+                Ship Date
+            </label>
+            <span>
+                {{vm.state.shipment.shipDate | date:'M/d/yyyy'}}
+            </span>
+        </div>
+        
+
+        <div class="form-group col-sm-6" >
+            <label class="block">
+                Config Date
+            </label>
+            <span>
+                {{vm.state.shipment.configDate | date:'M/d/yyyy'}}
+            </span>
+        </div>
+        <div class="clearfix"></div>
+        <div class="form-group col-sm-6" >
+            <label class="block">
+                Deploy Date
+            </label>
+            <span>
+                {{vm.state.shipment.deployDate | date:'M/d/yyyy'}}
+            </span>
+        </div>
+        
+
+        <div class="form-group col-sm-6" >
+            <label class="block">
+                End Date
+            </label>
+            <span>
+                {{vm.state.shipment.endDate | date:'M/d/yyyy'}}
+            </span>
+        </div>
+        <div class="clearfix"></div>
+        <div class="form-group col-sm-6" >
+            <label class="block">
+                One Config
+            </label>
+            
+            <span class="file-name">{{vm.attachment.name || vm.state.shipment.attachment.name}}</span>
+        </div>
+        
+
+        <div class="form-group col-sm-6">
+            <label class="block">
+                Status
+            </label>
+            <span>{{vm.state.shipment.status}}</span>
+        </div>
+        <div class="clearfix"></div>
+        <hr>
+        <div class="col-xs-12">
+            <h4>Customer Details</h4>
+        </div>
+        <div class="form-group col-sm-6">
+            <label class="block">
+                Project
+            </label>
+            <span>{{vm.state.shipment.customerDetails.projectName}}</span>
+        </div>
+        <div class="form-group col-sm-6">
+            <label class="block">
+                Customer
+            </label>
+            <span>{{vm.state.shipment.customerDetails.customerName}}</span>
+        </div>
+        <div class="clearfix"></div>
+
+        <div class="form-group col-sm-6">
+            <label class="block">
+                Partner Sales Rep
+            </label>
+            <span>{{vm.state.shipment.customerDetails.partnerSalesRep}}</span>
+            
+        </div>
+        <div class="form-group col-sm-6">
+            <label class="block">
+                Juniper Rep
+            </label>
+            <span>{{vm.state.shipment.customerDetails.juniperRep}}</span>
+        </div>
+        <div class="clearfix"></div>
+
+        <div class="form-group col-sm-6">
+            <label class="block">
+                Street Address Line 1
+            </label>
+            <span>{{vm.state.shipment.customerDetails.address1}}</span>
+        </div>
+        <div class="form-group col-sm-6">
+            <label class="block">
+                Street Address Line 2
+            </label>
+            <span>{{vm.state.shipment.customerDetails.address2}}</span>
+        </div>
+        <div class="clearfix"></div>
+
+        <div class="form-group col-sm-6">
+            <label class="block">
+                City
+            </label>
+            <span>{{vm.state.shipment.customerDetails.city}}</span>
+            
+        </div>
+        <div class="form-group col-sm-6">
+            <label class="block">
+                State
+            </label>
+            <span>{{vm.state.shipment.customerDetails.state}}</span>
+        </div>
+        <div class="clearfix"></div>
+
+        <div class="form-group col-sm-6">
+            <label class="block">
+                Zip
+            </label>
+            <span>{{vm.state.shipment.customerDetails.zip}}</span>
+            
+        </div>
+        <div class="form-group col-sm-6">
+            <label class="block">
+                Country
+            </label>
+            <span>{{vm.state.shipment.customerDetails.country}}</span>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+</form>

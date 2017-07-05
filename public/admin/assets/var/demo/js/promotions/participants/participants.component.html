@@ -65,7 +65,7 @@
                 <tr ng-repeat="participant in vm.displayedParticipants" class="participant-item">
                     <td class=""><i class="fa fa-2x" ng-click='vm.participantSelectClickFn($event, participant)' ng-class='{"fa-check-circle": vm.checkIfSelected(participant), "fa-circle-o": !vm.checkIfSelected(participant)}'></i></td>
                     <td class="hidden-xs"><strong>Card Code: </strong><div class="name-block-container"><div class="text-adjust-outerTable">{{participant.cardCode}}</div></div></td>
-                    <td class="text-adjust-outerTable" style="white-space: nowrap;"><strong>Name: </strong><div class="text-adjust-outerTable text-capitalize">{{participant.name}}</div></td>
+                    <td class="text-adjust-outerTable" style="white-space: nowrap;"><strong>Name: </strong><div class="text-adjust-outerTable">{{participant.displayCardName}}</div></td>
                     <td>
                         <button type="button" class="btn btn-o btn-danger" ng-click="vm.removeParticipant(participant)">
                             <span class="hidden-sm hidden-xs">Remove</span>

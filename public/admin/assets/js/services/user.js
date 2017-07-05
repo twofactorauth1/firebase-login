@@ -6,7 +6,7 @@
   app.service('UserService', function($http) {
     var account, that = this;
     var baseUrl = '/api/1.0/';
-
+    var baseVendorAPIUrlv2 = '/api/1.0/integrations/zi/vendors';
     this.getUser = function(fn) {
       var apiUrl = baseUrl + ['user'].join('/');
       $http.get(apiUrl)
@@ -281,6 +281,14 @@
             headers: {'Content-Type': undefined}
         }).success(function(data, status, headers, config) {
             fn(data);
+        });
+    }
+
+    this.getVendors = function(fn){
+      $http.get(baseVendorAPIUrlv2).success(function(data){
+            fn(data);
+        }).error(function(err){
+            fn(err);
         });
     }
 
