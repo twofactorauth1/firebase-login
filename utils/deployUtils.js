@@ -106,6 +106,53 @@ var deployUtils = {
          * Swap CNAMEs
          * Terminate Green
          */
+        var options = {
+            accessKeyId: 'AKIAIS2VFA3QL7JVKQQQ',
+            secretAccessKey: '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',
+            region: 'us-west-1',
+            apiVersion: '2010-12-01'
+        };
+        var elasticbeanstalk = new AWS.ElasticBeanstalk(options);
+        console.log('Rolling back');
+        var cnameParams = {
+            DestinationEnvironmentName: blueEnvironment,
+            SourceEnvironmentName: greenEnvironment
+        };
+        elasticbeanstalk.swapEnvironmentCNAMEs(cnameParams, function(err, data) {
+            if(err) {
+                console.log('Error swapping CNAMEs', err);
+                cb(err);
+            } else {
+                setTimeout(function(){
+                    console.log('waiting for CNAME swap');
+                    async.retry({times:30, interval:10000}, function(callback){
+                        elasticbeanstalk.describeEnvironments({EnvironmentNames:[greenEnvironment]}, function(err, value){
+                            if(value && value.Environments && value.Environments[0] && value.Environments[0].Status && value.Environments[0].Status === 'Ready') {
+                                callback(null, value.Environments[0]);
+                            } else {
+                                console.log('Not ready:', value);
+                                callback('Not Ready');
+                            }
+                        });
+                    }, function(err, results){
+                        var params = {
+                            EnvironmentName: greenEnvironment
+                        };
+                        console.log('Terminating ' + greenEnvironment);
+                        elasticbeanstalk.terminateEnvironment(params, function(err, data) {
+                            if(err) {
+                                console.error('Error terminating:', err);
+                            } else {
+                                console.log('Terminated');
+                            }
+                            cb(err);
+                        });
+                    });
+                }, 5000);
+
+            }
+
+        });
     }
 
 };

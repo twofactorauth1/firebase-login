@@ -701,6 +701,12 @@ module.exports = function(grunt) {
         deployUtils.finishDeploy(done);
     });
 
+    grunt.registerTask('rollbackDeploy', 'rollbackDeploy', function(){
+        var done = this.async();
+        var deployUtils = require('./utils/deployUtils');
+        deployUtils.rollbackDeploy(done);
+    });
+
     // grunt.registerTask('serve', 'Start a custom web server.', function() {
     //     grunt.log.writeln('Starting web server on port 80.');
     //     require('./app.js');
