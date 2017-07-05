@@ -2,6 +2,7 @@ var AWS = require('aws-sdk');
 var blueEnvironment = 'indiwebTestB-env';
 var greenEnvironment = 'indiwebTestB-Green';
 var async = require('async');
+var awsConfigs = require('../configs/aws.config');
 
 var deployUtils = {
 
@@ -11,7 +12,13 @@ var deployUtils = {
          * Swap CNAMEs
          * Terminate Green
          */
-        var elasticbeanstalk = new AWS.ElasticBeanstalk({apiVersion: '2010-12-01'});
+        var options = {
+            accessKeyId: 'AKIAIS2VFA3QL7JVKQQQ',
+            secretAccessKey: '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',
+            region: 'us-west-1',
+            apiVersion: '2010-12-01'
+        };
+        var elasticbeanstalk = new AWS.ElasticBeanstalk(options);
         elasticbeanstalk.describeEnvironments({EnvironmentNames: [
             greenEnvironment
         ]}, function(err, value){
@@ -32,13 +39,13 @@ var deployUtils = {
                     } else {
                         console.log('waiting to check the environment');
                         setTimeout(function(){
-                            async.retry({times:30, interval:10000}, function(cb){
+                            async.retry({times:30, interval:10000}, function(callback){
                                 elasticbeanstalk.describeEnvironments({EnvironmentNames:[blueEnvironment]}, function(err, value){
                                     if(value && value.Environments && value.Environments[0] && value.Environments[0].Status && value.Environments[0].Status === 'Ready') {
-                                        cb(value.Environments[0]);
+                                        callback(null, value.Environments[0]);
                                     } else {
                                         console.log('Not ready:', value);
-                                        cb('Not Ready');
+                                        callback('Not Ready');
                                     }
                                 });
                             }, function(err, results){
@@ -48,21 +55,36 @@ var deployUtils = {
                                     DestinationEnvironmentName: blueEnvironment,
                                     SourceEnvironmentName: greenEnvironment
                                 };
-                                elasticbeanstalk.swapEnvironmentCNAMEs(params, function(err, data) {
+                                elasticbeanstalk.swapEnvironmentCNAMEs(cnameParams, function(err, data) {
                                     if(err) {
                                         console.log('Error swapping CNAMEs', err);
                                         cb(err);
                                     } else {
-                                        var params = {
-                                            EnvironmentName: greenEnvironment
-                                        };
-                                        console.log('Terminating ' + greenEnvironment);
-                                        elasticbeanstalk.terminateEnvironment(params, function(err, data) {
-                                            if(err) {
-                                                console.error('Error terminating:', err);
-                                            }
-                                            cb(err);
-                                        });
+                                        setTimeout(function(){
+                                            console.log('waiting for CNAME swap');
+                                            async.retry({times:30, interval:10000}, function(callback){
+                                                elasticbeanstalk.describeEnvironments({EnvironmentNames:[greenEnvironment]}, function(err, value){
+                                                    if(value && value.Environments && value.Environments[0] && value.Environments[0].Status && value.Environments[0].Status === 'Ready') {
+                                                        callback(null, value.Environments[0]);
+                                                    } else {
+                                                        console.log('Not ready:', value);
+                                                        callback('Not Ready');
+                                                    }
+                                                });
+                                            }, function(err, results){
+                                                var params = {
+                                                    EnvironmentName: greenEnvironment
+                                                };
+                                                console.log('Terminating ' + greenEnvironment);
+                                                elasticbeanstalk.terminateEnvironment(params, function(err, data) {
+                                                    if(err) {
+                                                        console.error('Error terminating:', err);
+                                                    }
+                                                    cb(err);
+                                                });
+                                            });
+                                        }, 5000);
+
                                     }
 
                                 });
