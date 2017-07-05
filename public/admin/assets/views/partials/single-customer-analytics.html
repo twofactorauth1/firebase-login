@@ -283,7 +283,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr ng-repeat="fourOfour in fourOfoursDetails|orderBy:'-total'|limitTo:25">
+                                <tr ng-repeat="fourOfour in fourOfoursDetails|orderBy:'-total'|limitTo:25 | filter:{'path':'!/404'}">
                                     <td>
                                         {{fourOfour.path}}
                                     </td>
