@@ -15,6 +15,7 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
   }, true);
 
   $scope.website = $scope.$parent.vm.state.website;
+    debugger
   $scope.originalWebsite = angular.copy($scope.website);
   // $scope.blog.post = blog;
   $scope.isDirty = {};
@@ -480,13 +481,13 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
      }
      if(alink){
          if(!(alink.links && alink.links.length>0)){
-                var copyLink=angular.copy(alink);
-                alink.links=[copyLink]
-                updateParentPageSettings(alink.linkType,alink.linkTo.data, false);
+             var copyLink=angular.copy(alink);
+             alink.links=[copyLink]
+             alink.linkTo={data:"",type:"sub-nav"}; updateParentPageSettings(alink.linkType,alink.linkTo.data, false);
          }
          alink.links.push({
               label: 'new sub index',
-              linkTo: {type: 'page'},
+              linkTo: {type: '',data:""},
               ssb: true
         });
         $scope.editNav[index].links[alink.links.length-1]={isEdit:true};
@@ -617,10 +618,17 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
         if(!$scope.customnav && (link.linkTo.type === 'page' || link.linkTo.type === 'home')){
           SimpleSiteBuilderService.setDeletedPageFromLinkList(link.linkTo.data);
         }*/
-          if ($scope.component.customnav && $scope.component.linkLists[0].links[parentIndex] && $scope.component.linkLists[0].links[parentIndex].links.length>index){
-              $scope.component.linkLists[0].links[parentIndex].links.splice(index, 1);
+          if ($scope.component.customnav){
+              if($scope.component.linkLists[0].links[parentIndex] && $scope.component.linkLists[0].links[parentIndex].links.length>index){
+                  $scope.component.linkLists[0].links[parentIndex].links.splice(index, 1);
+              }
           }else{
-
+              if($scope.website.linkLists[0].links[parentIndex].links.length>index){
+                  $scope.website.linkLists[0].links[parentIndex].links.splice(index, 1);
+                  /*if(!$scope.customnav && (link.linkTo.type === 'page' || link.linkTo.type === 'home')){
+                      SimpleSiteBuilderService.setDeletedPageFromLinkList(link.linkTo.data);
+                  }*/
+              }
 
           }
        }

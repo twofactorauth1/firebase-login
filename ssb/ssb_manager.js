@@ -697,8 +697,33 @@ module.exports = {
                 if(_index > -1)
                     list.links.splice(_index, 1);
             });
+             // check for subnav
+            _.each(list.links, function(link){
+                self.log.debug("subnav" );
+                self.log.debug(link );
+                if(link.linkTo.type=="sub-nav"){
+                    _.each(linkList, function(modifiedLink){
+                         self.log.debug('>> chekcing modifiedLink link --' );
+                        self.log.debug( modifiedLink );
+                        var sublist=[]
+                         _.each(link.links, function(subLink){
+                               self.log.debug('>> chekcing sub link --' );
+                               self.log.debug( subLink );
+                             if(!(subLink.linkTo.type==modifiedLink.linkTo.type &&
+                             subLink.linkTo.data==modifiedLink.linkTo.data)){
+                                 sublist.push(subLink)
+                             }else{
+                                  self.log.debug('>> removed sub link --' );
+                                  self.log.debug( subLink );
+                             }
+                         });
+                        link.links=sublist;
+                    });
+                }
+            });
         }
         self.log.debug('>> updatedLinkList is' + list );
+         self.log.debug(list );
         fn(null, list);
     },
 
