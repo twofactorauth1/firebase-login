@@ -26,7 +26,7 @@
         vm.pagingConstant = pagingConstant;
         vm.validateUserDetails = validateUserDetails;
         vm.setDefaults = setDefaults;
-        
+
         $scope.$watch("$parent.orgCardAndPermissions", function(orgCardAndPermissions){
             if(orgCardAndPermissions){
               if(_.contains(orgCardAndPermissions.userPermissions.vendorRestrictedStates, $state.current.name)){
@@ -127,8 +127,8 @@
                      * params.cardCodes = ['C111111', 'C111112']
                      * etc
                      */
-                    var roleAry = getUserPermissions(); 
-                    
+                    var roleAry = getUserPermissions();
+
                     var params = {
                         roleAry: roleAry,
                         orgConfig: setNewOrgConfig()
@@ -153,7 +153,7 @@
             $scope.newuser = null;
             vm.state.userType = null;
             vm.vendorName = null;
-        } 
+        }
 
         function validateUserDetails(){
             var _isValid = true;
@@ -161,12 +161,12 @@
                 _isValid = false;
             }
             if(vm.state.userType === 'vendor-restricted' && !vm.state.vendorName){
-                _isValid = false;  
+                _isValid = false;
             }
             if(vm.state.userType === 'vendor'){
                 var _cardCodes = vm.state.cardCodes || [];
                 if(!_cardCodes.length){
-                    _isValid = false;     
+                    _isValid = false;
                 }
             }
             return _isValid;
@@ -183,6 +183,8 @@
                 case 'vendor-restricted':
                     orgConfig[0].vendorName = vm.state.vendorName;
                     orgConfig[0].modules = {
+                        dashboard: false,
+                        inventory: true,
                         ledger: false,
                         purchaseorders: false
                     };
@@ -210,7 +212,7 @@
 
         $scope.openEditUserCardModal = function(userId) {
             $scope.currentUserId = userId;
-            
+
             $scope.editUser = null;
             $scope.editUser = _.find(vm.state.users, function(user){
                 return user._id == userId
@@ -351,7 +353,7 @@
                     break;
                 case 'vendor-restricted':
                     delete orgConfigAry[0].cardCodes;
-                    orgConfigAry[0].vendorName = vm.state.vendorName;                   
+                    orgConfigAry[0].vendorName = vm.state.vendorName;
                     orgConfigAry[0].modules.ledger = false;
                     orgConfigAry[0].modules.purchaseorders = false;
                     orgConfigAry[0].inventoryFilter = {
@@ -401,7 +403,7 @@
             return regex.test(userName);
         };
 
-        vm.getters = {        
+        vm.getters = {
             name: function (value) {
                 return value.first || '' + value.last || '';
             },

@@ -39,7 +39,7 @@ env_check(){
 		on_err "No environment specified"
 	fi
 
-	export APP_VERSION=`git rev-parse --short HEAD`-local
+	export APP_VERSION=`git rev-parse --short HEAD`
 }
 
 main(){
@@ -123,7 +123,6 @@ main(){
 
         grunt nodeunit:selenium
 
-        [ $timeout > 0 ] && aws elasticbeanstalk swap-environment-cnames --source-environment-name "${ENV_NAME}" --destination-environment-name "${GREEN_ENV_NAME}" || exit 0
     elif [ "$1" = "develop" ]; then
         npm install
         npm install selenium-webdriver@2.53.2
