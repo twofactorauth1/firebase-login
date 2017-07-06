@@ -9,9 +9,12 @@
 <div st-table="vm.displayedCustomerLedger" st-safe-src="vm.ledgerDetails">
     <div class="ledger-top-buttons container-fluid container-fullw bg-white">
         <div class="col-xs-12 col-md-12 padding-right-30 margin-top-5">
-            <button type="button" class="btn btn-primary btn-o pull-right btn btn-primary btn-o margin-bottom-5 margin-left-5" ng-click="vm.backToCustomers()" ng-if="!vm.state.orgCardAndPermissions.isVendorWithOneCardCode">
+            <button type="button" class="btn btn-primary btn-o pull-right margin-bottom-5 margin-left-5" ng-click="vm.backToCustomers()" ng-if="!vm.state.orgCardAndPermissions.isVendorWithOneCardCode">
             Back to Customers
             </button>
+            <a class="btn btn-primary btn-o pull-right margin-bottom-5 margin-left-5" href="https://app.behalf.com/users/signup/?utm_source=securematics:9c0MsQBW&utm_medium=ledger&utm_campaign=portal" ng-disabled="!vm.state.orgCardAndPermissions.isVendor">
+            Pay with Behalf
+            </a>
         </div>
     </div>
     <div class="clearfix"></div>
