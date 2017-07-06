@@ -424,7 +424,7 @@ module.exports = {
                 var csv = headers + '\n';
                 _.each(list, function(shipment){
                     csv += self._parseString(shipment.get('companyName'));
-                    csv += self._parseString(shipment.getProducts());
+                    csv += self._parseString(shipment.getProductsWithSerialNumber());
                     csv += self._parseString(shipment.getFormattedDate("shipDate"));
                     csv += self._parseString(shipment.getFormattedDate("configDate"));
                     csv += self._parseString(shipment.getFormattedDate("deployDate"));

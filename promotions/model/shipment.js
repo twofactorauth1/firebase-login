@@ -40,6 +40,23 @@ var shipment = $$.m.ModelBase.extend({
     getProducts: function() {
         return _.pluck(this.get("products"), 'itemName').join(", ");
     },
+
+    getProductsWithSerialNumber: function(){
+        var products = _.map(this.get("products"),
+            function(product) {                 
+                return { 
+                    itemName: product.serial ? product.itemName + "(" + product.serial + ")" : product.itemName 
+                };
+            }
+        );
+        if(products){
+            return _.pluck(products, 'itemName').join(", ");
+        }
+        else{
+            return "";
+        }
+    },
+
     getStatus: function(){
         var statusOptions = {
             TRY: "Try",
@@ -49,7 +66,8 @@ var shipment = $$.m.ModelBase.extend({
         return statusOptions[this.get("status")];
     },
     getFormattedDate: function(dateField){
-        return this.get(dateField) ? moment(this.get(dateField)).format("MM/DD/YYYY") : '';
+        //return this.get(dateField) ? moment(this.get(dateField)).format("MM/DD/YYYY") : '';
+        return this.get(dateField) ? this.get(dateField) : '';
     },
 
     getCustomerDetails: function() {

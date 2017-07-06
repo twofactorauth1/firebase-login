@@ -100,15 +100,20 @@
 
             		<td colspan="10" class="">
             			<div class="col-sm-4 col-xs-6">
-        					<h4>Customer</h4>
-        					<div ng-bind-html="vm.stringifyAddress(shipment.customerDetails)">
-        					</div>
+            				<div ng-if="vm.stringifyAddress(shipment.customerDetails)">
+            					<h4>Customer</h4>
+	        					<div ng-bind-html="vm.stringifyAddress(shipment.customerDetails)">
+	        					</div>
+            				</div>
+        					
             			</div>
             			<div class="col-sm-4 col-xs-6">
-            				<h4>Project</h4>
-	            			<div>
-	            				{{shipment.customerDetails.projectName}}
-	            			</div>
+	            			<div ng-if="shipment.customerDetails.projectName">
+	            				<h4>Project</h4>
+		            			<div>
+		            				{{shipment.customerDetails.projectName}}
+		            			</div>
+		            		</div>
             			</div>
             			<div class="col-sm-4 hidden-xs">
             				<div ng-if="shipment.customerDetails.partnerSalesRep" class="margin-bottom-10">
