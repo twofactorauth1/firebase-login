@@ -7,7 +7,7 @@
   },
   "dependencies": {
     "amdefine": "0.1.0",
-    "async": "~0.2.10",
+    "async": "~1.5.2",
     "aws-sdk": "2.6.1",
     "bcrypt": "0.8.6",
     "cheerio": "^0.20.0",
