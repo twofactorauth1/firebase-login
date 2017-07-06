@@ -39,7 +39,7 @@ env_check(){
 		on_err "No environment specified"
 	fi
 
-	export APP_VERSION=`git rev-parse --short HEAD`-local
+	export APP_VERSION=`git rev-parse --short HEAD`
 }
 
 main(){
