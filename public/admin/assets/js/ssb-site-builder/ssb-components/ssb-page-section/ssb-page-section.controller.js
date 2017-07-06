@@ -296,7 +296,7 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
                 var  image =sectionElement.find(".single-testimonial.slick-active .component-slider-image img").hide();
                 if(image.length>0){
                     var imageParent=image.parent();
-                    imageParent.css('background-image', 'url(' + image[0].src + ')').css("min-height",  outerWrapSection);
+                    imageParent.css('background-image', 'url(' + image[0].src + ')').css("min-height",  outerWrapSection).css("background-size", "cover");
                 }
 
             }
