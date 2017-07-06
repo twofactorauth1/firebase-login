@@ -422,7 +422,6 @@ _.extend(api.prototype, baseApi.prototype, {
         });
     },
 
-
     customersFilter: function(req, resp) {
         var self = this;
         var accountId = parseInt(self.accountId(req));

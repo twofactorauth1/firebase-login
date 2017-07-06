@@ -25,7 +25,8 @@
 
         vm.pagingConstant = pagingConstant;
         vm.validateUserDetails = validateUserDetails;
-
+        vm.setDefaults = setDefaults;
+        
         $scope.$watch("$parent.orgCardAndPermissions", function(orgCardAndPermissions){
             if(orgCardAndPermissions){
               if(_.contains(orgCardAndPermissions.userPermissions.vendorRestrictedStates, $state.current.name)){
@@ -181,6 +182,13 @@
                     break;
                 case 'vendor-restricted':
                     orgConfig[0].vendorName = vm.state.vendorName;
+                    orgConfig[0].modules = {
+                        ledger: false,
+                        purchaseorders: false
+                    };
+                    orgConfig[0].inventoryFilter = {
+                        _shortVendorName: vm.state.vendorName
+                    }
                     break;
                 default:
             }
@@ -331,18 +339,29 @@
                 })
             }
 
+            if(!orgConfigAry[0].modules){
+                orgConfigAry[0].modules = {};
+            }
+
             switch (vm.state.userType) {
                 case 'vendor':
                     orgConfigAry[0].cardCodes = vm.state.cardCodes;
                     delete orgConfigAry[0].vendorName;
+                    delete orgConfigAry[0].inventoryFilter;
                     break;
                 case 'vendor-restricted':
-                    orgConfigAry[0].vendorName = vm.state.vendorName;
                     delete orgConfigAry[0].cardCodes;
+                    orgConfigAry[0].vendorName = vm.state.vendorName;                   
+                    orgConfigAry[0].modules.ledger = false;
+                    orgConfigAry[0].modules.purchaseorders = false;
+                    orgConfigAry[0].inventoryFilter = {
+                        _shortVendorName: vm.state.vendorName
+                    }
                     break;
                 default:
                     delete orgConfigAry[0].cardCodes;
                     delete orgConfigAry[0].vendorName;
+                    delete orgConfigAry[0].inventoryFilter;
             }
 
         };

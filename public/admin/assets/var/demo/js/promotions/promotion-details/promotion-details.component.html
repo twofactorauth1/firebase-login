@@ -11,7 +11,10 @@
     <div class="col-xs-12 col-md-12 padding-right-30 margin-top-5">
         <button type="button" class="btn btn-primary btn-o pull-right margin-top-5 margin-bottom-5 margin-left-5 btn-wide" ng-click="vm.backToPromotions()">
             Back to Promotions
-        </button>        
+        </button>    
+        <button type="button" class="btn btn-primary btn-o pull-right margin-top-5 margin-bottom-5 margin-left-5 btn-wide" ng-click="vm.exportShipments()" ng-disabled="vm.uiState.saveLoading">
+            <i class="ti-export"></i><span> Export Shipments</span>
+        </button>    
         <button type="button" class="btn btn-primary btn-o pull-right margin-top-5 margin-bottom-5 margin-left-5 btn-wide" ng-click="vm.updatePromotion()" ng-disabled="vm.uiState.saveLoading" ng-if="vm.state.orgCardAndPermissions.permissions.promotion.edit">
             <i class="fa fa-check"></i><span> Save</span>
         </button>

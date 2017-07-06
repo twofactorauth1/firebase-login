@@ -99,7 +99,7 @@
           this.orgConfigAndPermissions.ledger = true;
           this.orgConfigAndPermissions.quotes = false;
           this.orgConfigAndPermissions.rmas = false;
-          this.orgConfigAndPermissions.promotions = false;
+          this.orgConfigAndPermissions.promotions = true;
           this.orgConfigAndPermissions.dashboard = true;
       }
       if(!this.orgConfigAndPermissions.dashboard){

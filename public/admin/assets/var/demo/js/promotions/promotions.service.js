@@ -29,6 +29,7 @@
         promotionsService.refreshPromotionShipment = refreshPromotionShipment;
         promotionsService.clearShipmentList = clearShipmentList;
         promotionsService.getCustomers = getCustomers;
+        promotionsService.exportShipments = exportShipments;
         promotionsService.promoTypeOptions = {
             TRY_AND_BUY: "TRY_AND_BUY",
             MILESTONE: "MILESTONE",
@@ -353,6 +354,11 @@
             if(promotion){
                 promotion.shipmentCount = count;
             }
+        }
+
+        function exportShipments(promotionId){
+            var apiUrl = [basePromotionAPIUrlv2, promotionId, 'shipments', 'export', 'csv'].join('/');
+            window.location = apiUrl;
         }
 
         (function init() {

@@ -396,7 +396,60 @@ module.exports = {
                 fn(null, value);
             }
         });
-    }
+    },
 
+    exportShipments: function(accountId, userId, promotionId, cardCodeAry, fn) {
+        var self = this;
+        console.log(promotionId);
+        log.debug('>> exportShipments');
+        var query = {
+            'promotionId':promotionId
+        };
+        if(cardCodeAry && cardCodeAry.length > 0) {
+            var optRegexp = [];
+            cardCodeAry.forEach(function(opt){
+                optRegexp.push(  new RegExp(opt, "i") );
+            });
+            query = {
+                'promotionId':promotionId,
+                'cardCode': {$in:optRegexp}
+            };
+        } 
+        shipmentDao.findMany(query, $$.m.Shipment, function(err, list){
+            if(err) {
+                log.error('Exception listing shipments: ' + err);
+                fn(err, null);
+            } else {
+                var headers = ['VAR', 'Products', 'Ship Date', 'Config Date', 'Deploy Date', 'End Date', 'Status', 'Customer', 'Project', 'Partner Sales Rep', 'Junper Rep'];
+                var csv = headers + '\n';
+                _.each(list, function(shipment){
+                    csv += self._parseString(shipment.get('companyName'));
+                    csv += self._parseString(shipment.getProductsWithSerialNumber());
+                    csv += self._parseString(shipment.getFormattedDate("shipDate"));
+                    csv += self._parseString(shipment.getFormattedDate("configDate"));
+                    csv += self._parseString(shipment.getFormattedDate("deployDate"));
+                    csv += self._parseString(shipment.getFormattedDate("endDate"));
+                    csv += self._parseString(shipment.getStatus());
+                    csv += self._parseString(shipment.getCustomerDetails());
+                    csv += self._parseString(shipment.getCustomerProject());
+                    csv += self._parseString(shipment.getCustomerPartner());
+                    csv += self._parseString(shipment.getCustomerJuniperRep());
+                    csv += '\n';
+                })
+                fn(null, csv);
+            }
+        });
+    },
+
+    _parseString: function(text){
+        if(text==undefined)
+            return ',';
+        // "" added for number value
+        text= "" + text;
+        if(text.indexOf(',')>-1)
+            return "\"" + text + "\",";
+        else
+            return text+",";
+    }
     
 };
