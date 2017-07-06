@@ -14,7 +14,7 @@
       userPermissions: {
         ledgerState: "app.customers",
         dashbordLedgerUrl: '#/customers',
-        vendorRestrictedStates : []        
+        vendorRestrictedStates : []
       },
       userRestrictedStates: [],
       defaultState: "app.dohy"
@@ -47,12 +47,12 @@
           }
           else if(this.orgConfigAndPermissions.cardCodes.length == 0){
             this.orgConfigAndPermissions.userPermissions.dashbordLedgerUrl = "#";
-            
+
           }
           if(this.orgConfigAndPermissions.cardCodes.length > 0){
             this.orgConfigAndPermissions.isVendorWithCardCodes = true;
           }
-        }       
+        }
       }
 
       if(orgConfig.modules) {
@@ -99,14 +99,14 @@
           this.orgConfigAndPermissions.ledger = true;
           this.orgConfigAndPermissions.quotes = false;
           this.orgConfigAndPermissions.rmas = false;
-          this.orgConfigAndPermissions.promotions = true;
+          this.orgConfigAndPermissions.promotions = false;
           this.orgConfigAndPermissions.dashboard = true;
       }
       if(!this.orgConfigAndPermissions.dashboard){
         this.orgConfigAndPermissions.userRestrictedStates.push("app.dohy");
         var values = Object.keys(orgConfig.modules)
         var itemArray =  _.filter(Object.keys(orgConfig.modules), function(item){
-           return orgConfig.modules[item] == true; 
+           return orgConfig.modules[item] == true;
         });
         if(itemArray.length){
           var _statename = "";
@@ -131,7 +131,7 @@
                   break;
               case 'dashboard':
                   _statename = "app.dohy";
-                  break;                    
+                  break;
               default:
             }
             this.orgConfigAndPermissions.defaultState = _statename;
