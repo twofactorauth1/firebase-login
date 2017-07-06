@@ -181,6 +181,10 @@
                     break;
                 case 'vendor-restricted':
                     orgConfig[0].vendorName = vm.state.vendorName;
+                    orgConfig[0].modules = {
+                        ledger: false,
+                        purchaseorders: false
+                    }
                     break;
                 default:
             }
@@ -331,6 +335,10 @@
                 })
             }
 
+            if(!orgConfigAry[0].modules){
+                orgConfigAry[0].modules = {};
+            }
+
             switch (vm.state.userType) {
                 case 'vendor':
                     orgConfigAry[0].cardCodes = vm.state.cardCodes;
@@ -339,6 +347,8 @@
                 case 'vendor-restricted':
                     orgConfigAry[0].vendorName = vm.state.vendorName;
                     delete orgConfigAry[0].cardCodes;
+                    orgConfigAry[0].modules.ledger = false;
+                    orgConfigAry[0].modules.purchaseorders = false;
                     break;
                 default:
                     delete orgConfigAry[0].cardCodes;
