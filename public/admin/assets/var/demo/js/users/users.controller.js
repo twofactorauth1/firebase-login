@@ -25,7 +25,8 @@
 
         vm.pagingConstant = pagingConstant;
         vm.validateUserDetails = validateUserDetails;
-
+        vm.setDefaults = setDefaults;
+        
         $scope.$watch("$parent.orgCardAndPermissions", function(orgCardAndPermissions){
             if(orgCardAndPermissions){
               if(_.contains(orgCardAndPermissions.userPermissions.vendorRestrictedStates, $state.current.name)){
