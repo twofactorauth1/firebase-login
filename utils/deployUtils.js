@@ -1,6 +1,8 @@
 var AWS = require('aws-sdk');
-var blueEnvironment = 'indiwebTestB-env';
-var greenEnvironment = 'indiwebTestB-Green';
+var TEST_blueEnvironment = 'indiwebTestB-env';
+var TEST_greenEnvironment = 'indiwebTestB-Green';
+var blueEnvironment = 'indigeweb-env-blue';
+var greenEnvironment = 'indigeweb-env-green';
 var async = require('async');
 var awsConfigs = require('../configs/aws.config');
 
