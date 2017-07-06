@@ -99,12 +99,15 @@
 	            <tr ng-repeat-end ng-show="expanded && tableView == 'list'" class="details-row">
 
             		<td colspan="10" class="">
-            			<div class="col-sm-4 col-xs-6">
-        					<h4>Customer</h4>
+        					<div ng-bind-html="vm.stringifyAddress(shipment.customerDetails)">
+            			<div class="col-sm-4 col-xs-6" ng-if="">
+        					<h4>
+        						Customer
+        					</h4>
         					<div ng-bind-html="vm.stringifyAddress(shipment.customerDetails)">
         					</div>
             			</div>
-            			<div class="col-sm-4 col-xs-6">
+            			<div class="col-sm-4 col-xs-6" ng-if="shipment.customerDetails.projectName">
             				<h4>Project</h4>
 	            			<div>
 	            				{{shipment.customerDetails.projectName}}
