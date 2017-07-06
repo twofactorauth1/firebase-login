@@ -15,7 +15,7 @@ var appConfig = require('../configs/app.config');
 var accountDao = require('../dao/account.dao');
 var shipmentDao = require('./dao/shipment.dao.js');
 
-module.exports = {
+var manager = {
 	
 	createPromotion: function(file, adminUrl, promotion, accountId, userId, fn) {
         var self = this;
@@ -442,6 +442,13 @@ module.exports = {
         });
     },
 
+    createPromotionReport: function(accountId, userId, fn) {
+        var self = this;
+        self.log = log;
+        self.log.debug(accountId, userId, '>> createPromotionReport');
+
+    },
+
     _parseString: function(text){
         if(text==undefined)
             return ',';
@@ -454,3 +461,7 @@ module.exports = {
     }
     
 };
+
+$$.u = $$.u || {};
+$$.u.promotionManager = manager;
+module.exports = manager;

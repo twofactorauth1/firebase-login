@@ -31,6 +31,10 @@ _.extend(api.prototype, baseApi.prototype, {
         app.post(this.url(''), this.isAuthAndSubscribedApi.bind(this), this.createPromotion.bind(this));
         app.get(this.url(':id'), this.isAuthAndSubscribedApi.bind(this), this.getPromotionDetails.bind(this));
         app.delete(this.url(':id'), this.isAuthAndSubscribedApi.bind(this), this.deletePromotion.bind(this));
+        app.post(this.url('report'), this.isAuthAndSubscribedApi.bind(this), this.createPromotionReport.bind(this));
+        app.get(this.url('reports'), this.isAuthAndSubscribedApi.bind(this), this.listPromotionReports.bind(this));
+        app.post(this.url('report/:id'), this.isAuthAndSubscribedApi.bind(this), this.updatePromotionReport.bind(this));
+        app.delete(this.url('report/:id'), this.isAuthAndSubscribedApi.bind(this), this.deletePromotionReport.bind(this));
         app.post(this.url(':id'), this.isAuthAndSubscribedApi.bind(this), this.updatePromotion.bind(this));
         app.post(this.url('attachment/:id'), this.isAuthApi.bind(this), this.updatePromotionAttachment.bind(this));
         app.post(this.url('promotion/shipment'), this.isAuthApi.bind(this), this.createShipment.bind(this));
@@ -38,7 +42,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.post(this.url('promotion/shipment/attachment/:id'), this.isAuthApi.bind(this), this.updateShipmentAttachment.bind(this));
         app.get(this.url(':promotionId/shipments'), this.isAuthAndSubscribedApi.bind(this), this.listShipments.bind(this));       
         app.delete(this.url('promotion/shipment/:id'), this.isAuthApi.bind(this), this.deleteShipment.bind(this));
-        app.get(this.url(':promotionId/shipments/export/csv'), this.isAuthAndSubscribedApi.bind(this), this.exportShipments.bind(this));       
+        app.get(this.url(':promotionId/shipments/export/csv'), this.isAuthAndSubscribedApi.bind(this), this.exportShipments.bind(this));
 
     },
 
@@ -600,6 +604,27 @@ _.extend(api.prototype, baseApi.prototype, {
                 });
         //     }
         // });
+    },
+
+    createPromotionReport: function(req, resp) {
+        var self = this;
+        var userId = self.userId(req);
+        var accountId = parseInt(self.accountId(req));
+        self.log.debug(accountId, userId, '>> schedulePromotionsReport', req.body);
+
+
+    },
+
+    listPromotionReports: function(req, resp) {
+
+    },
+
+    updatePromotionReport: function(req, resp) {
+
+    },
+
+    deletePromotionReport: function(req, resp) {
+
     },
 
     _isUserAdmin: function(req, fn) {
