@@ -49,7 +49,8 @@ var shipment = $$.m.ModelBase.extend({
         return statusOptions[this.get("status")];
     },
     getFormattedDate: function(dateField){
-        return this.get(dateField) ? moment(this.get(dateField)).format("MM/DD/YYYY") : '';
+        //return this.get(dateField) ? moment(this.get(dateField)).format("MM/DD/YYYY") : '';
+        return this.get(dateField) ? this.get(dateField) : '';
     },
 
     getCustomerDetails: function() {
