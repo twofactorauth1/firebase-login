@@ -20,7 +20,7 @@ module.exports = {
 	createPromotion: function(file, adminUrl, promotion, accountId, userId, fn) {
         var self = this;
         self.log = log;
-        self.log.debug('>> createPromotion');
+        self.log.debug(accountId, userId, '>> createPromotion');
 
         var uploadPromise = $.Deferred();
 
@@ -75,7 +75,7 @@ module.exports = {
                     self.log.error('Exception during promotion creation: ' + err);
                     fn(err, null);
                 } else {
-                    self.log.debug('<< createPromotion');
+                    self.log.debug(accountId, userId, '<< createPromotion');
                     fn(null, savedPromotion, file);
                 }
             });
@@ -86,7 +86,8 @@ module.exports = {
 
     listPromotions: function(accountId, userId, cardCodeAry, vendorFilter, fn) {
         var self = this;
-        log.debug('>> listPromotions');
+        self.log = log;
+        log.debug(accountId, userId, '>> listPromotions');
         var query = {
             'accountId':accountId
         };
@@ -103,13 +104,13 @@ module.exports = {
         if(vendorFilter){
             query.vendor = new RegExp(vendorFilter, "i");
         };
-        console.log(query)
+        console.log(query);
         promotionDao.findMany(query, $$.m.Promotion, function(err, list){
             if(err) {
                 log.error('Exception listing promotions: ' + err);
                 fn(err, null);
             } else {
-                log.debug('<< listPromotions');
+
                 //fn(null, list);
                 async.eachSeries(list, function(promotion, cb){
                     shipmentDao.findCount({promotionId: promotion.id(), accountId: accountId}, $$.m.Shipment, function(err, value){
@@ -125,6 +126,7 @@ module.exports = {
                         self.log.error('Error getting shipments:', err);
                         return fn(err);
                     } else {
+                        log.debug(accountId, userId, '<< listPromotions');
                         fn(null, list);
                     }
                 });
@@ -135,7 +137,7 @@ module.exports = {
 
     getPromotionDetails: function(accountId, userId, promotionId, cardCodeAry, vendorFilter, fn) {
         var self = this;
-        log.debug('>> getPromotionDetails');
+        log.debug(accountId, userId, '>> getPromotionDetails');
         var query = {_id: promotionId};
         if(cardCodeAry && cardCodeAry.length > 0 ) {
             var optRegexp = [];
@@ -151,13 +153,13 @@ module.exports = {
         if(vendorFilter){
             query.vendor = new RegExp(vendorFilter, "i");
         };
-        console.log(query)
+        console.log(query);
         promotionDao.findOne(query, $$.m.Promotion, function(err, value){
             if(err) {
-                log.error('Exception getting promotion: ' + err);
+                log.error(accountId, userId, 'Exception getting promotion: ' + err);
                 fn(err, null);
             } else {
-                log.debug('<< getPromotionDetails');
+                log.debug(accountId, userId, '<< getPromotionDetails');
                 fn(null, value);
             }
         });    
@@ -196,7 +198,7 @@ module.exports = {
     updatePromotionAttachment: function(file, promotionId, accountId, userId, fn) {
         var self = this;
         self.log = log;
-        self.log.debug('>> updatePromotionAttachment');
+        self.log.debug(accountId, userId, '>> updatePromotionAttachment');
 
         var uploadPromise = $.Deferred();
 
@@ -245,7 +247,7 @@ module.exports = {
             console.log(promotionId);
             promotionDao.getById(promotionId, $$.m.Promotion, function(err, promotion){
                 if(err) {
-                    log.error('Exception getting promotion: ' + err);
+                    log.error(accountId, userId, 'Exception getting promotion: ' + err);
                     fn(err, null);
                 } else {
                     promotion.set("attachment", attachment);
@@ -255,7 +257,7 @@ module.exports = {
                             self.log.error('Exception during promotion creation: ' + err);
                             fn(err, null);
                         } else {
-                            self.log.debug('<< updatePromotionAttachment');
+                            self.log.debug(accountId, userId, '<< updatePromotionAttachment');
                             fn(null, savedPromotion, file);
                         }
                     });
@@ -284,7 +286,7 @@ module.exports = {
     updateShipmentAttachment: function(file, shipmentId, accountId, userId, fn) {
         var self = this;
         self.log = log;
-        self.log.debug('>> updateShipmentAttachment');
+        self.log.debug(accountId, userId, '>> updateShipmentAttachment');
 
         var uploadPromise = $.Deferred();
 
@@ -343,7 +345,7 @@ module.exports = {
                             self.log.error('Exception during shipment creation: ' + err);
                             fn(err, null);
                         } else {
-                            self.log.debug('<< updateShipmentAttachment');
+                            self.log.debug(accountId, userId, '<< updateShipmentAttachment');
                             fn(null, savedShipment, file);
                         }
                     });
@@ -356,8 +358,7 @@ module.exports = {
 
     listShipments: function(accountId, userId, promotionId, cardCodeAry, fn) {
         var self = this;
-        console.log(promotionId);
-        log.debug('>> listShipments');
+        log.debug(accountId, userId, '>> listShipments', promotionId);
         var query = {
             'promotionId':promotionId
         };
@@ -373,10 +374,10 @@ module.exports = {
         } 
         shipmentDao.findMany(query, $$.m.Shipment, function(err, list){
             if(err) {
-                log.error('Exception listing shipments: ' + err);
+                log.error(accountId, userId, 'Exception listing shipments: ', err);
                 fn(err, null);
             } else {
-                log.debug('<< listShipments');
+                log.debug(accountId, userId, '<< listShipments');
                 fn(null, list);
             }
         });
@@ -400,8 +401,7 @@ module.exports = {
 
     exportShipments: function(accountId, userId, promotionId, cardCodeAry, fn) {
         var self = this;
-        console.log(promotionId);
-        log.debug('>> exportShipments');
+        log.debug(accountId, userId, '>> exportShipments', promotionId);
         var query = {
             'promotionId':promotionId
         };
@@ -417,7 +417,7 @@ module.exports = {
         } 
         shipmentDao.findMany(query, $$.m.Shipment, function(err, list){
             if(err) {
-                log.error('Exception listing shipments: ' + err);
+                log.error(accountId, userId, 'Exception listing shipments: ', err);
                 fn(err, null);
             } else {
                 var headers = ['VAR', 'Products', 'Ship Date', 'Config Date', 'Deploy Date', 'End Date', 'Status', 'Customer', 'Project', 'Partner Sales Rep', 'Junper Rep'];
@@ -435,7 +435,8 @@ module.exports = {
                     csv += self._parseString(shipment.getCustomerPartner());
                     csv += self._parseString(shipment.getCustomerJuniperRep());
                     csv += '\n';
-                })
+                });
+                log.debug(accountId, userId, '<< exportShipments');
                 fn(null, csv);
             }
         });
