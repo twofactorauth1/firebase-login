@@ -34,6 +34,7 @@ function promotionDetailsController($scope, $window, $state, $attrs, $filter, $m
     vm.addShipment = addShipment;
     vm.shipmentStatusOptions = PromotionsService.shipmentStatusOptions;
     vm.getPromoType = getPromoType;
+    vm.exportShipments = exportShipments;
     function backToPromotions(){
         $state.go("app.promotions");
     }
@@ -284,6 +285,10 @@ function promotionDetailsController($scope, $window, $state, $attrs, $filter, $m
                 return m + parseFloat(product.itemPrice || 0) ; }, 0);
             return totalPrice;
         }
+    }
+
+    function exportShipments(){
+        PromotionsService.exportShipments(vm.promotionId);
     }
 
     function init(){

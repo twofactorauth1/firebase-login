@@ -38,6 +38,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.post(this.url('promotion/shipment/attachment/:id'), this.isAuthApi.bind(this), this.updateShipmentAttachment.bind(this));
         app.get(this.url(':promotionId/shipments'), this.isAuthAndSubscribedApi.bind(this), this.listShipments.bind(this));       
         app.delete(this.url('promotion/shipment/:id'), this.isAuthApi.bind(this), this.deleteShipment.bind(this));
+        app.get(this.url(':promotionId/shipments/export/csv'), this.isAuthAndSubscribedApi.bind(this), this.exportShipments.bind(this));       
 
     },
 
@@ -469,7 +470,7 @@ _.extend(api.prototype, baseApi.prototype, {
         self._checkAccess(accountId, userId, 'promotions', function(err, isAllowed){
             if(!isAllowed) {
                 self.log.debug(accountId, userId, '<< promotions [' + isAllowed + ']');
-                return self.sendResultOrError(resp, err, [], "Error listing promotions");
+                return self.sendResultOrError(resp, err, [], "Error listing shipments");
             } else {
                 self.log.debug(accountId, userId, '>> listShipments');
                      
@@ -510,11 +511,63 @@ _.extend(api.prototype, baseApi.prototype, {
                                         return self.sendResultOrError(resp, err, list, "Error listing shipments");
                                     });
                                 }
-                                else{
-                                    // Securematics User
-                                    promotionManager.listShipments(accountId, userId, promotionId, ['securematics'], function(err, list){
-                                        self.log.debug(accountId, userId, '<< listShipments');
-                                        return self.sendResultOrError(resp, err, list, "Error listing shipments");
+                            });
+                        }
+                    }
+                }) 
+            }
+        })
+        
+    },
+
+    exportShipments: function(req, resp) {
+        var self = this;
+        var accountId = parseInt(self.accountId(req));
+        var userId = self.userId(req);
+        var promotionId = req.params.promotionId;
+        self.log.debug(accountId, userId, '>> exportShipments');
+        self._checkAccess(accountId, userId, 'promotions', function(err, isAllowed){
+            if(!isAllowed) {
+                self.log.debug(accountId, userId, '<< promotions [' + isAllowed + ']');
+                return self.sendResultOrError(resp, err, [], "Error listing shipments");
+            } else {
+                self.log.debug(accountId, userId, '>> exportShipments');
+                     
+                self._checkUserRole(req, function(err, userObj){
+                    var _isAdmin = false;
+                    var _isVendor = false;
+                    var _isVAR = false;
+                    var _isSecurematics = false;
+                    if(userObj){
+                        _isAdmin = _.contains(userObj.getPermissionsForAccount(accountId), 'admin');
+                        _isVendor = _.contains(userObj.getPermissionsForAccount(accountId), 'vendor-restricted');
+                        _isVAR = _.contains(userObj.getPermissionsForAccount(accountId), 'vendor');
+                        _isSecurematics = _.contains(userObj.getPermissionsForAccount(accountId), 'securematics');
+                    }
+                    if(_isAdmin || _isSecurematics) {
+                        promotionManager.exportShipments(accountId, userId, promotionId, [], function(err, list){
+                            self.log.debug(accountId, userId, '<< exportShipments');
+                            self._exportToCSV(req, resp, list);
+                        });
+                    }
+                    else{
+                        if(_isVendor){
+                            promotionManager.exportShipments(accountId, userId, promotionId, [], function(err, list){
+                                self.log.debug(accountId, userId, '<< exportShipments');
+                                self._exportToCSV(req, resp, list);
+                            });
+                        }
+                        else{
+                            self._getOrgConfig(accountId, userId, function(err, orgConfig){
+                                if(!orgConfig) {
+                                    orgConfig = {};
+                                }
+                                var cardCodes = orgConfig.cardCodes || [];
+                                if(cardCodes.length){
+                                    cardCodes = _.map(cardCodes, function(code){return code.toLowerCase()});
+                                    promotionManager.exportShipments(accountId, userId, promotionId, cardCodes, function(err, list){
+                                        self.log.debug(accountId, userId, '<< exportShipments');
+                                        self._exportToCSV(req, resp, list);
                                     });
                                 }
                             });
@@ -601,6 +654,13 @@ _.extend(api.prototype, baseApi.prototype, {
             });
 
         });
+    },
+
+    _exportToCSV: function(req, resp, csv){
+        var self = this;
+        resp.set('Content-Type', 'text/csv');
+        resp.set("Content-Disposition", "attachment;filename=csv.csv");
+        self.sendResult(resp, csv);
     }
 
 });
