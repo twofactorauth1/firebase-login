@@ -48,13 +48,6 @@
                       <label for="inlineRadioOptions-3" class="pull-right">External</label>
                       <input type="radio" name="addRadioOptions-3" id="addRadio3" ng-model="newLink.linkType" ng-click="newLink.linkType='external'" value="external">
                   </div>
-                  <div class="radio-inline">
-                      <label>Under page</label>
-                      <select  placeholder="Select a page" ng-model="link.linkTo.data" class="form-control margin-bottom-0">
-                          <option value="" >Select a Page</option>
-                              <option  data-ng-repeat="slink in menuLinks track by $index" >{{slink.label}}</option>
-                          </select>
-                  </div>
               </div>
               <div class="col-xs-12">
                   <label ng-if="newLink.linkType=='section'" for="link-page">Select Page</label>
@@ -424,12 +417,6 @@
                                           <option value="" disabled>Select a Page</option>
                                           <option ng-repeat="page in filteredPages | filterPages:website.linkLists:component.linkLists:component.customnav:link.linkTo.data track by $index" data-ng-if="page.title && page.handle" value="{{page.handle}}" ng-selected="{{link.linkTo.data == page.handle}}">{{page.title}}</option>
                                       </select>
-                                      <label>Under page</label>
-                                      <select  placeholder="Select a page" ng-model="link.linkTo.data" class="form-control margin-bottom-0">
-                                          <option value="" >Select a Page</option>
-                                          <option  data-ng-repeat="slink in customMenu.links track by $index" >{{slink.label}}</option>
-                                      </select>
-
                                       <input class="form-control" type="text" ng-if="linkType[$index]=='external'" ng-model="link.linkTo.data" placeholder="Enter External URL">
                                   </div>
                               </div>

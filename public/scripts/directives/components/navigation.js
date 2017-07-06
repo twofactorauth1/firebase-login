@@ -32,12 +32,15 @@ app.directive('navigationComponent', ['websiteService', 'accountService', '$time
                 }
             });
             $scope.toggleNavClass=function(ele){
-                var li=$(ele.target).parents("li")
+                var li=$(ele.target).parents("li");
                 if(li){
                     if(!li.hasClass("nav-active")){
-                        li.addClass("nav-active")
+                        li.parents("section").addClass("overflow_visible");
+                        li.siblings().removeClass("nav-active");
+                        li.addClass("nav-active");
                     }else{
-                        li.removeClass("nav-active")
+                        li.removeClass("nav-active");
+                        li.parents("section").remove("overflow_visible");
                     }
                 }
             }
