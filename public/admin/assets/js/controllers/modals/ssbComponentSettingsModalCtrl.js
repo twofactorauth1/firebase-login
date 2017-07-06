@@ -15,7 +15,6 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
   }, true);
 
   $scope.website = $scope.$parent.vm.state.website;
-    debugger
   $scope.originalWebsite = angular.copy($scope.website);
   // $scope.blog.post = blog;
   $scope.isDirty = {};
