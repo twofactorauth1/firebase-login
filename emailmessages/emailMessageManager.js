@@ -1764,7 +1764,8 @@ var emailMessageManager = {
                 });
             },
             function(batchId, personalizations, contacts, html, cb) {
-
+                var b = new Buffer(attachment);
+                var s = b.toString('base64');
                 var request = sg.emptyRequest();
                 request.body = {
                     "batch_id": batchId,
@@ -1789,7 +1790,17 @@ var emailMessageManager = {
                             "enable": true,
                             "enable_text": true
                         }
-                    }
+                    },
+                    "attachments": [
+                        {
+                            "content": s,
+                            "content_id": "ii_139db99fdb5c3704",
+                            "disposition": "inline",
+                            "filename": "report.csv",
+                            "name": "report",
+                            "type": "csv"
+                        }
+                    ]
                 };
                 request.method = 'POST';
                 request.path = '/v3/mail/send';
@@ -1797,12 +1808,15 @@ var emailMessageManager = {
                 if(senderName && senderName.length > 0) {
                     request.body.from.name = senderName;
                 }
-                request.body.reply_to = {
-                    email: replyTo
-                };
-                if(fromName) {
-                    request.body.reply_to.name = fromName;
+                if(replyTo) {
+                    request.body.reply_to = {
+                        email: replyTo
+                    };
+                    if(fromName) {
+                        request.body.reply_to.name = fromName;
+                    }
                 }
+
                 request.body.personalizations = personalizations;
                 self._safeStoreBatchEmail(request.body, accountId, null, null, null, personalizations, function(err, messageIds){
                     cb(err, batchId, personalizations, request, messageIds, contacts);

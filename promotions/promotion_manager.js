@@ -16,6 +16,7 @@ var accountDao = require('../dao/account.dao');
 var shipmentDao = require('./dao/shipment.dao.js');
 var scheduledJobsManager = require('../scheduledjobs/scheduledjobs_manager');
 var emailMessageManager = require('../emailmessages/emailMessageManager');
+require('./model/promotionReport');
 
 var manager = {
 	
@@ -472,7 +473,7 @@ var manager = {
                 fn(err);
             } else {
                 self.log.debug(accountId, userId, 'Saved the report.  Scheduling.');
-                var jobString = '$$.u.promotionManager.runReport(' + value.id() + ');';
+                var jobString = '$$.u.promotionManager.runReport(\'' + value.id() + '\');';
                 var job = new $$.m.ScheduledJob({
                     accountId: accountId,
                     scheduledAt: startOnDate,
@@ -565,7 +566,6 @@ var manager = {
          * send the email
          * reschedule the job
          */
-        //TODO: this
         var self = this;
         self.log = log;
         try {
@@ -600,7 +600,7 @@ var manager = {
                                     return;
                                 } else {
                                     self.log.debug('Sent report.  Rescheduling');
-                                    var jobString = '$$.u.promotionManager.runReport(' + value.id() + ');';
+                                    var jobString = '$$.u.promotionManager.runReport(\'' + reportId + '\');';
                                     var nextRunDate = null;
                                     if(report.get('repeat') === 'monthly') {
                                         nextRunDate = moment().add(1, 'month').toDate();
@@ -624,6 +624,8 @@ var manager = {
                                         if(err) {
                                             self.log.error(accountId, userId, 'Error scheduling job:', err);
                                             emailMessageManager.notifyAdmin(null, null, null, 'Error scheduling promotion report', 'Failed to reschedule report with id [' + reportId + ']', err, function(){});
+                                        } else {
+                                            self.log.debug(accountId, userId, 'Next run date:', nextRunDate);
                                         }
                                     });
                                 }
