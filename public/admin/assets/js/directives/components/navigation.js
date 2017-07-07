@@ -43,8 +43,46 @@ app.directive('navigationComponent', ['WebsiteService', 'AccountService', '$time
           });
         }
       }
-      $scope.currentpage = $scope.$parent.page;
-
+      $scope.toggleNavClass=function(ele){
+          var li=$(ele.target).parents("li");
+          if(li){
+              if(!li.hasClass("nav-active")){
+                  li.parents("section").addClass("overflow_visible");
+                  li.siblings().removeClass("nav-active");
+                  li.addClass("nav-active");
+              }else{
+                  li.removeClass("nav-active");
+                  li.parents("section").remove("overflow_visible");
+              }
+          }
+      }
+      $scope.currentpage = $scope.$parent.page;/*
+$scope.component.linkLists[0].links[1].links=[{
+                                            "label":"Home",
+                                            "type":"link",
+                                            "linkTo":{
+                                                    "data":"index",
+                                                    "type":"page",
+                                                    "page":null
+                                                }
+                                        },{
+                                            "label":"Home 2",
+                                            "type":"link",
+                                            "linkTo":{
+                                                    "data":"index",
+                                                    "type":"page",
+                                                    "page":null
+                                                }
+                                        },
+                                             {
+                                            "label":"Home 3",
+                                            "type":"link",
+                                            "linkTo":{
+                                                    "data":"index",
+                                                    "type":"page",
+                                                    "page":null
+                                                }
+                                        }]*/
       $scope.$parent.$watch('vm.state.page', function(page) {
         if(page)
           $scope.currentpage = page;
