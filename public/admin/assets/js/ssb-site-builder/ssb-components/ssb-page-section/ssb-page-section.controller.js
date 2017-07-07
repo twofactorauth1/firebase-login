@@ -287,18 +287,24 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
                 }
                 sectionElement.find(".single-testimonial .component-slider-image img").css("min-height",  sectionElementTextHeight);
             }else if(sectionElement.hasClass("ssb-page-section-layout-hero-v7")){
-                var sectionElementTextHeight=10;
-                var innerSectionTextElement = sectionElement.find(".single-testimonial.slick-active .testimonial-row");
-                var outerWrapSection = sectionElement.parent().find(".testimonial-wrap ").height();
-                if(innerSectionTextElement.length ){
-                    sectionElementTextHeight+=innerSectionTextElement.height()
+                var sectionElementTextHeight=120;
+                var maxTextHeight=0;
+                var allText=sectionElement.find(".single-testimonial .testimonial-row");
+                if(allText){
+                    for(var i=0;i<allText.length; i++) {
+                        if($(allText[i]) && maxTextHeight<$(allText[i]).height()){
+                            maxTextHeight=$(allText[i]).height();
+                        }
+                    }
+                    console.log(maxTextHeight);
+                    sectionElementTextHeight+=maxTextHeight;
+                    console.log(sectionElementTextHeight);
+                    var images=sectionElement.find(".single-testimonial .component-slider-image img").hide();
+                    for(var i=0;i<images.length; i++) {
+                        var imageParent=$(images[i]).parent();
+                        imageParent.css('background-image', 'url(' + $(images[i])[0].src + ')').css("min-height",  sectionElementTextHeight+120).css("background-size", "cover");
+                    }
                 }
-                var  image =sectionElement.find(".single-testimonial.slick-active .component-slider-image img").hide();
-                if(image.length>0){
-                    var imageParent=image.parent();
-                    imageParent.css('background-image', 'url(' + image[0].src + ')').css("min-height",  outerWrapSection).css("background-size", "cover");
-                }
-
             }
         }
     }
