@@ -145,8 +145,8 @@
 	        <tbody>
 	            <tr ng-repeat="order in vm.displayedOrders" class="product-item" ng-click="vm.viewPurchaseOrderDetails(order)">
                     <td class="hidden-xs select-po-col" ng-show='vm.displayedOrders.length'>
-                        <div class="checkbox clip-check check-success checkbox-inline">
-                            <input type="checkbox" id="modal-select-{{$index}}" ng-checked="vm.checkIfSelected(order)" ng-click='vm.preventClick($event); vm.orderSelectClickFn($event, order)'>
+                        <div class="checkbox clip-check check-success checkbox-inline" ng-click='vm.preventClick($event)'>
+                            <input type="checkbox" id="modal-select-{{$index}}" ng-checked="order.isSelected" ng-click='vm.orderSelectClickFn($event, order)'>
                             <label for="modal-select-{{$index}}">
 
                             </label>
