@@ -128,7 +128,6 @@ app.controller('SiteBuilderPageSettingsModalController', ['$scope', '$timeout', 
           closeOnCancel: true
         }, function (isConfirm) {
           if (isConfirm) {
-
               vm.saveLoading = true;
               angular.element('.modal.in').show();
               saveWebsite().then(function(){

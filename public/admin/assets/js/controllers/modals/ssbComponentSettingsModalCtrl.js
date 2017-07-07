@@ -43,7 +43,24 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
       $scope.dragging = false;
     }
   };
-
+  $scope.subbarConfig = {
+    animation: 0,
+    handle: '.sub-reorder',
+    draggable: '.sub-fragment',
+    ghostClass: "sortable-ghost",
+    scroll: true,
+    scrollSensitivity: 200,
+    scrollSpeed: 20, // px
+    onSort: function (evt) {
+      // $scope.scrollToComponent(evt.newIndex); TOOD: reimplement
+    },
+    onStart: function (evt) {
+      $scope.subdragging = true;
+    },
+    onEnd: function (evt) {
+      $scope.subdragging = false;
+    }
+  };
   $scope.testOptions = {
     min: 5,
     max: 100,
@@ -464,6 +481,34 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
     };
   };
 
+
+
+    $scope.addSubLink = function (index) {
+     //edit[index]=true;
+     var alink=undefined;
+     if ($scope.component.customnav) {
+        if($scope.component.linkLists[0].links.length>index){
+             alink =$scope.component.linkLists[0].links[index];
+        }
+     } else {
+        if($scope.website.linkLists[0].links.length>index){
+             alink =$scope.website.linkLists[0].links[index];
+        }
+     }
+     if(alink){
+         if(!(alink.links && alink.links.length>0)){
+             var copyLink=angular.copy(alink);
+             alink.links=[copyLink]
+             alink.linkTo={data:"",type:"sub-nav"}; updateParentPageSettings(alink.linkType,alink.linkTo.data, false);
+         }
+         alink.links.push({
+              label: 'new sub index',
+              linkTo: {type: '',data:""},
+              ssb: true
+        });
+        $scope.editNav[index].links[alink.links.length-1]={isEdit:true};
+     }
+  };
   /*
    * @setLinkUrl
    * -
@@ -564,6 +609,45 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
           SimpleSiteBuilderService.setDeletedPageFromLinkList(link.linkTo.data);
         }
       }
+    });
+
+  };
+  $scope.deleteLinkFromSubNav= function (parentIndex,index ) {
+    SweetAlert.swal({
+      title: "Are you sure?",
+      text: "Do you want to remove this link from sub menu",
+      type: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#DD6B55",
+      confirmButtonText: "Yes, remove this link!",
+      cancelButtonText: "No, do not remove this link!",
+      closeOnConfirm: true,
+      closeOnCancel: true
+    }, function (isConfirm) {
+      if (isConfirm) {
+       /* var link = links[parentIndex];
+        updateParentPageSettings(link.linkTo.type, link.linkTo.data, false);
+        if(link.links && link.links.length >index){
+             link.links.splice(index, 1);
+        }
+           updateParentPageSettings(link.linkTo.type, link.linkTo.data, false);
+        if(!$scope.customnav && (link.linkTo.type === 'page' || link.linkTo.type === 'home')){
+          SimpleSiteBuilderService.setDeletedPageFromLinkList(link.linkTo.data);
+        }*/
+          if ($scope.component.customnav){
+              if($scope.component.linkLists[0].links[parentIndex] && $scope.component.linkLists[0].links[parentIndex].links.length>index){
+                  $scope.component.linkLists[0].links[parentIndex].links.splice(index, 1);
+              }
+          }else{
+              if($scope.website.linkLists[0].links[parentIndex].links.length>index){
+                  $scope.website.linkLists[0].links[parentIndex].links.splice(index, 1);
+                  /*if(!$scope.customnav && (link.linkTo.type === 'page' || link.linkTo.type === 'home')){
+                      SimpleSiteBuilderService.setDeletedPageFromLinkList(link.linkTo.data);
+                  }*/
+              }
+
+          }
+       }
     });
 
   };
@@ -782,6 +866,21 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
           type: $scope.component.type,
           version: parseInt($scope.component.version, 10)
         });
+          $scope.editNav=[]
+          var links=[];
+          if ($scope.component.customnav) {
+              links=$scope.component.linkLists[0].links;
+          } else {
+              links=$scope.website.linkLists[0].links;
+          }
+          links.forEach(function (value, index) {
+              $scope.editNav[index]={isEdit:false,links:[]};
+              if(value.links){
+                  value.links.forEach(function (val1, idx) {
+                      $scope.editNav[index].links[idx]={isEdit:false};
+                  });
+              }
+            });
       } else {
         componentType = _.findWhere($scope.componentTypes, {
           type: $scope.component.type
