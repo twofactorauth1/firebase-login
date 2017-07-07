@@ -19,14 +19,9 @@
                                                 <button type="button" class="btn btn-primary pull-right btn-wide btn-warning" ng-click="vm.openModal('new-promotion-participant-modal', 'PromotionParticipantModalController', 'lg')">
                                                     <i class="ti-plus"></i><span> Add Participants</span>
                                                 </button>
-                                                <div class="btn-group action-btn-con margin-left-10" ng-hide='!vm.participants.length'>
-                                                    <button type="button" class="action-btn libtn btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                        Action
-                                                    </button>
-                                                    <div class="dropdown-menu">
-                                                        <a class="dropdown-item" ng-repeat= "action in vm.bulkActionChoices |  orderBy:'label'" ng-click="vm.setBulkActionChoiceFn()">{{action.label}}</a>
-                                                    </div>
-                                                </div>
+                                                <button type="button" ng-disabled='!vm.participants.length' class="btn btn-default pull-right margin-right-5 participant-delete-btn btn-wide" ng-click="vm.setBulkActionChoiceFn()">
+                                                    Delete
+                                                </button>
                                             </div>
                                         </div>
                                     </div>
@@ -41,37 +36,41 @@
         <table class="table table-hover table-striped" ng-class="{'grid': tableView == 'grid', 'bg-white table-list-view': tableView == 'list'}" ng-if="!vm.uiState.loading">
             <thead ng-class="{'bg-white': tableView == 'grid'}">
                 <tr class="inventory-header-row">
-                    <th class=""  ng-click='vm.selectAllClickFn($event)' ng-show='vm.displayedParticipants.length'><i class="fa fa-2x" ng-class='{"fa-check-circle": vm.selectAllChecked, "fa-circle-o": !vm.selectAllChecked}'></i></th>
+                    <th class="" ng-show='vm.displayedParticipants.length'>
+                        <div class="checkbox clip-check check-success checkbox-inline">
+                            <input type="checkbox" id="participant-select-all" ng-checked="vm.selectAllChecked" ng-click='vm.selectAllClickFn($event)'>
+                            <label for="participant-select-all">
+                                
+                            </label>
+                        </div>
+                    </th>
                     <th class="hidden-xs" st-sort="cardCode" style="white-space: nowrap;">Card Code</th>
                     <th class="" st-sort="name" style="white-space: nowrap;" >Name</th>
-                    <th></th>
+                    
                 </tr>
                 <tr>
                     <th ng-show='vm.displayedParticipants.length'></th>
-                    <th>
+                    <th class="hidden-xs">
                         <input st-search="cardCode" placeholder="Card Code" class="form-control" type="search" />
                     </th>
-                    <th class="hidden-xs">
-                        <input st-search="name" placeholder="Name" class="form-control" type="search" />
-                    </th>
-
                     <th class="">
-
+                        <input st-search="name" placeholder="Name" class="form-control" type="search" />
                     </th>
                     
                 </tr>
             </thead>
             <tbody>
                 <tr ng-repeat="participant in vm.displayedParticipants" class="participant-item">
-                    <td class=""><i class="fa fa-2x" ng-click='vm.participantSelectClickFn($event, participant)' ng-class='{"fa-check-circle": vm.checkIfSelected(participant), "fa-circle-o": !vm.checkIfSelected(participant)}'></i></td>
+                    <td class="">
+                        <div class="checkbox clip-check check-success checkbox-inline">
+                            <input type="checkbox" id="participant-select-{{$index}}" ng-checked="vm.checkIfSelected(participant)" ng-click='vm.participantSelectClickFn($event, participant)'>
+                            <label for="participant-select-{{$index}}">
+                                
+                            </label>
+                        </div>
+                    </td>
                     <td class="hidden-xs"><strong>Card Code: </strong><div class="name-block-container"><div class="text-adjust-outerTable">{{participant.cardCode}}</div></div></td>
                     <td class="text-adjust-outerTable" style="white-space: nowrap;"><strong>Name: </strong><div class="text-adjust-outerTable">{{participant.displayCardName}}</div></td>
-                    <td>
-                        <button type="button" class="btn btn-o btn-danger" ng-click="vm.removeParticipant(participant)">
-                            <span class="hidden-sm hidden-xs">Remove</span>
-                            <span class="fa fa-trash-o visible-sm visible-xs"></span>
-                        </button>
-                    </td>
                 </tr>
             </tbody>
             <tfoot ng-hide="vm.uiState.loading">

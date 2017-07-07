@@ -33,6 +33,7 @@ function purchaseOrderComponentController($scope, $attrs, $filter, $modal, $time
     vm.showFilteredRecords = showFilteredRecords;    
     vm.selectCardCode = selectCardCode;
     vm.getSubmitterName = getSubmitterName;
+    vm.preventClick = preventClick;
 
     vm.bulkActionChoice = {};
 
@@ -151,6 +152,10 @@ function purchaseOrderComponentController($scope, $attrs, $filter, $modal, $time
     }
 
 
+    function checkIfSelected(participant){
+        return _.contains(_.pluck(vm.participants, "OCRD_CardCode"), participant.OCRD_CardCode);
+    }
+
     function selectAllClickFn($event) {
         $event.stopPropagation();
         vm.selectAllChecked = !vm.selectAllChecked;
@@ -177,6 +182,11 @@ function purchaseOrderComponentController($scope, $attrs, $filter, $modal, $time
     function setBulkActionChoiceFn(lable){
         vm.bulkActionChoice.action={data:lable.toLowerCase()}
         vm.bulkActionSelectFn();
+    }
+
+    function preventClick($event){
+        $event.stopPropagation();
+
     }
 
     function bulkActionSelectFn() {

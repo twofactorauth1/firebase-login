@@ -221,7 +221,8 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
    * - an array of component types and icons for the add component modal
    */
 
-  $scope.componentTypes = [{
+  $scope.componentTypes = [
+      {
     title: 'Blog',
     type: 'blog',
     preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/blog.png',
@@ -402,7 +403,8 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
     enabled: false
   }];
 
-  $scope.componentOpacityValues = [{
+  $scope.componentOpacityValues = [
+      {
     label: 10,
     value: 0.1
   }, {
@@ -507,10 +509,43 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
       linkUrl: null,
       linkTitle: null,
       linkType: null,
-      linkPage: null
     };
   };
-
+ $scope.addSubLink = function (index) {
+     debugger
+     edit[index]=true;
+     var alink=undefined;
+     if ($scope.componentEditing.customnav) {
+        if($scope.componentEditing.linkLists.size<=index){
+            var alink =$scope.componentEditing.linkLists;
+        }
+     } else {
+        if($scope.website.linkLists.size<=index){
+            var alink =$scope.website.linkLists;
+        }
+     }
+     if(alink){
+         if(alink.links && alink.links.length>0){
+             alink.links.push={
+                    linkUrl: null,
+                    linkTitle: null,
+                    linkType: null,
+                }
+            }else{
+                var copyLink=angular.copy(alink);
+                alink.links=[copyLink,{
+                    linkUrl: null,
+                    linkTitle: null,
+                    linkType: null,
+                } ]
+            }
+         $timeout(function () {
+              $scope.$apply(function () {
+                $scope.updateLinkList();
+              })
+          }, 500);
+     }
+  };
   /*
    * @setLinkUrl
    * -
@@ -541,7 +576,8 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
    * - list of product options for the dropdown in component settings
    */
 
-  $scope.numberOfProductOptions = [{
+  $scope.numberOfProductOptions = [
+      {
     name: 'All',
     value: 0
   }, {
@@ -651,7 +687,7 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
    */
 
   $scope.addLinkToNav = function () {
-
+debugger
     if ($scope.newLink && $scope.newLink.linkTitle && $scope.newLink.linkUrl) {
       if($scope.checkDuplicateLinkTitle($scope.newLink.linkTitle, $scope.componentEditing.customnav)){
         return;
@@ -857,7 +893,8 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
     }, 0);
   };
 
-  $scope.spacingArr = [{
+  $scope.spacingArr = [
+      {
     name: 'Top',
     category: 'padding',
     value: 'paddingTop',

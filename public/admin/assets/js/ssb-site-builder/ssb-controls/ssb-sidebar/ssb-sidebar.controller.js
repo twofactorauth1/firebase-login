@@ -869,9 +869,22 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
         _.each(vm.state.website.linkLists, function (value, index) {
             if (value.handle === "head-menu") {
                 if(!state){
-                    var _list = _.reject(value.links, function(link){
-                        return link.linkTo.data === vm.state.page.handle &&
-                        (link.linkTo.type === "page" || link.linkTo.type === "home")
+                    var _list =[];
+                    _.each(value.links, function(link,idx){
+                        if(!(link.linkTo.data === vm.state.page.handle &&
+                           (link.linkTo.type === "page" ||
+                            link.linkTo.type === "home")) || link.linkTo.type ==="sub-nav"){
+                             if( link.linkTo.type ==="sub-nav"){
+                                  var _sublist = _.reject(link.links,
+                                                          function(sublink){
+                                      return sublink.linkTo.data === vm.state.page.handle &&
+                                          (sublink.linkTo.type === "page" || sublink.linkTo.type === "home")
+                                  })
+                                 link.links= _sublist;
+                             }
+                            _list.push(link);
+                        }
+
                     });
                     if(_list){
                         value.links = _list;

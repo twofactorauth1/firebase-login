@@ -58,6 +58,7 @@ function inventoryComponentController($scope, $attrs, $filter, $modal, $timeout,
     vm.showFilteredRecords = showFilteredRecords;
     vm.cancel = cancel;
     vm.setBulkActionChoiceFn=setBulkActionChoiceFn;
+    vm.preventClick = preventClick;
     vm.bulkActionChoice = {};
 
     vm.bulkActionChoices = [
@@ -384,6 +385,11 @@ function inventoryComponentController($scope, $attrs, $filter, $modal, $timeout,
 
     function init(element) {
         vm.element = element;
+    }
+
+    function preventClick($event){
+        $event.stopPropagation();
+
     }
 
 }

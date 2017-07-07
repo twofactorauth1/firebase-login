@@ -81,7 +81,8 @@ function ledgerDetailsController($scope, $state, $attrs, $filter, $modal, $timeo
                 ledger.lineItems = invoiceDetails.length;
 
                 _.each(invoiceDetails, function(order){
-                    _sum+= parseFloat(order.INV1_LineTotal)
+                    if(order.INV1_LineTotal)
+                        _sum+= parseFloat(order.INV1_LineTotal);
                 })
             }
         }
@@ -109,7 +110,8 @@ function ledgerDetailsController($scope, $state, $attrs, $filter, $modal, $timeo
         console.log('inside', ledger);
         var _sum = 0;
         _.each(ledger, function(invoice){
-            _sum+= parseFloat(invoice.invoiceTotal)
+            if(invoice.invoiceTotal)
+                _sum+= parseFloat(invoice.invoiceTotal)
         });
         vm.ledgerTotal = _sum;
         return _sum;
