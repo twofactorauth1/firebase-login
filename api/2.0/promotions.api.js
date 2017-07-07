@@ -611,12 +611,29 @@ _.extend(api.prototype, baseApi.prototype, {
         var userId = self.userId(req);
         var accountId = parseInt(self.accountId(req));
         self.log.debug(accountId, userId, '>> schedulePromotionsReport', req.body);
+        var promotionId = req.body.promotionId;
+        var cardCodeRestrictions = req.body.cardCodeRestrictions || [];
+        var recipientAry = req.body.recipientAry || [];
+        var startOnDate = moment.parse(req.body.startOnDate) || new Date();
+        var repeatInterval = req.body.repeatInterval;
+        promotionManager.createPromotionReport(accountId, userId, promotionId, cardCodeRestrictions, recipientAry,
+                startOnDate, repeatInterval, function(err, value){
 
+            self.log.debug(accountId, userId, '<< schedulePromotionsReport');
+            return self.sendResultOrError(resp, err, value, "Error creating report");
+        });
 
     },
 
     listPromotionReports: function(req, resp) {
-
+        var self = this;
+        var userId = self.userId(req);
+        var accountId = parseInt(self.accountId(req));
+        self.log.debug(accountId, userId, '>> listPromotionReports');
+        promotionManager.listReports(accountId, userId, function(err, list){
+            self.log.debug(accountId, userId, '<< schedulePromotionsReport');
+            return self.sendResultOrError(resp, err, list, "Error listing reports");
+        });
     },
 
     updatePromotionReport: function(req, resp) {

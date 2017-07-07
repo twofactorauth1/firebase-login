@@ -12,11 +12,15 @@ var promotionReport = $$.m.ModelBase.extend({
     defaults: function() {
         return {
             _id: null,
+            accountId:null,
             promotionId:null,
             cardCodeRestrictions:[],
             recipients:[],
             startOn:null,//date
             repeat:null,//weekly, monthly
+            fromName:'Securematics Admin',
+            fromAddress:'admin@securematics.com',
+            subject: 'Promotion Report',
             sendAt:{
                 hourOfDay:15,
                 minuteOfDay:0
