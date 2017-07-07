@@ -117,7 +117,14 @@
 	    <table class="table table-hover table-striped table-po-list" ng-class="{'grid': tableView == 'grid', 'bg-white table-list-view': tableView == 'list', 'admin-po-list': !vm.state.orgCardAndPermissions.isVendor}" ng-if="!vm.uiState.loading" fixed-header-table>
 	        <thead ng-class="{'bg-white': tableView == 'grid'}" sticky offset="65" sticky-class="sticky-header-class">
 	            <tr>
-	            	<th class="hidden-xs select-po-col" ng-click='vm.selectAllClickFn($event)' ng-show='vm.displayedOrders.length'><i class="fa fa-2x" ng-class='{"fa-check-circle": vm.selectAllChecked, "fa-circle-o": !vm.selectAllChecked}'></i></th>
+	            	<th class="hidden-xs select-po-col" ng-show='vm.displayedOrders.length'>
+                        <div class="checkbox clip-check check-success checkbox-inline">
+                            <input type="checkbox" id="modal-select-all" ng-checked="vm.selectAllChecked" ng-click='vm.selectAllClickFn($event)'>
+                            <label for="modal-select-all">
+
+                            </label>
+                        </div>
+                    </th>
 	                <th class="title-col" st-sort="title" style="white-space: nowrap">Name</th>
 	                <th class="submitter-col" st-sort="vm.getters.submitter" style="white-space: nowrap">Submitter</th>
 	                <th class="company-col" st-sort="companyName" ng-if="!vm.state.orgCardAndPermissions.isVendor" style="white-space: nowrap">VAR</th>
@@ -137,7 +144,14 @@
 	        </thead>
 	        <tbody>
 	            <tr ng-repeat="order in vm.displayedOrders" class="product-item" ng-click="vm.viewPurchaseOrderDetails(order)">
-                    <td class="hidden-xs select-po-col" ng-show='vm.displayedOrders.length'><i class="fa fa-2x" ng-click='vm.orderSelectClickFn($event, order)' ng-class='{"fa-check-circle": order.isSelected, "fa-circle-o": !order.isSelected}'></i></td>
+                    <td class="hidden-xs select-po-col" ng-show='vm.displayedOrders.length'>
+                        <div class="checkbox clip-check check-success checkbox-inline">
+                            <input type="checkbox" id="modal-select-{{$index}}" ng-checked="vm.checkIfSelected(order)" ng-click='vm.preventClick($event); vm.orderSelectClickFn($event, order)'>
+                            <label for="modal-select-{{$index}}">
+
+                            </label>
+                        </div>
+                    </td>
                     <td class="title-col"><strong>Name: </strong><div class="name-block-container"><span class="list-name"></span><span class="text-adjust-table" title="{{order.title}}">{{order.title || '&nbsp;'}}</span></div></td>
 	                <td class="submitter-col"><strong>Submitter: </strong>{{vm.getSubmitterName(order.submitter) || '&nbsp;'}}</td>
 
