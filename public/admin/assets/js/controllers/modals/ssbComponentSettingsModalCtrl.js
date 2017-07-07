@@ -43,7 +43,24 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
       $scope.dragging = false;
     }
   };
-
+  $scope.subbarConfig = {
+    animation: 0,
+    handle: '.sub-reorder',
+    draggable: '.sub-fragment',
+    ghostClass: "sortable-ghost",
+    scroll: true,
+    scrollSensitivity: 200,
+    scrollSpeed: 20, // px
+    onSort: function (evt) {
+      // $scope.scrollToComponent(evt.newIndex); TOOD: reimplement
+    },
+    onStart: function (evt) {
+      $scope.subdragging = true;
+    },
+    onEnd: function (evt) {
+      $scope.subdragging = false;
+    }
+  };
   $scope.testOptions = {
     min: 5,
     max: 100,

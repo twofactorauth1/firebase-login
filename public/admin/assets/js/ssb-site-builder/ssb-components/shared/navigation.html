@@ -106,11 +106,11 @@
                             </div>
                           </div>
                       </div>
-                      <ul class="setting-nav-sub-menu" style="list-style:none;">
-                          <li  data-ng-repeat="sublink  in link.links track by $index">
+                      <ul ng-sortable="subbarConfig"   ng-class="{'subdragging': subdragging}" ng-model="link.links"  class="setting-nav-sub-menu" style="list-style:none;">
+                          <li  data-ng-repeat="sublink  in link.links track by $index" class="sub-fragment">
                               <div class="head-menu-links" data-label="{{sublink.label}}">
                           <div class="ssb-page-section-settings-item">
-                            <div class="reorder ssb-sidebar-item-icon ssb-sidebar-move-handle ti-move display-ib" ng-hide="editNav[$parent.$index].links[$index].isEdit"></div>
+                            <div class="sub-reorder ssb-sidebar-item-icon ssb-sidebar-move-handle ti-move display-ib" ng-hide="editNav[$parent.$index].links[$index].isEdit"></div>
                             <div class="ssb-sidebar-item-icon ssb-sidebar-item-icon-offset-1 ti-close display-ib" ng-hide="editNav[$parent.$index].links[$index].isEdit" ng-click="deleteLinkFromNav($index, mainMenu.links);" ></div>
                             <div class="ssb-sidebar-item-icon ssb-sidebar-item-icon-offset-2 fa fa-pencil-square-o display-ib" ng-show="!editNav[$parent.$index].links[$index].isEdit" ng-click="edit[$index]=true; linkType[$index]=sublink.linkTo.type;initializeEditLinks(sublink.linkTo, false)"></div>
                             <div class="ssb-sidebar-item-icon ssb-sidebar-item-icon-offset-3 fa fa-plus display-ib" ng-show="!editNav[$parent.$index].links[$index].isEdit"  ng-click="addSubLink($index)"></div>
@@ -292,11 +292,11 @@
                             </div>
                           </div>
                       </div>
-                      <ul class="setting-nav-sub-menu" style="list-style:none;">
-                          <li  data-ng-repeat="sublink  in link.links track by $index">
+                      <ul   ng-sortable="subbarConfig"   ng-class="{'subdragging': subdragging}" ng-model="link.links"  class="setting-nav-sub-menu" style="list-style:none;" class="setting-nav-sub-menu" style="list-style:none;">
+                          <li  data-ng-repeat="sublink  in link.links track by $index" class="sub-fragment">
                               <div class="head-menu-links clearfix"   data-label="{{sublink.label}}">
                                   <div class="ssb-page-section-settings-item" style="border: 1px solid #eeeeee;">
-                                      <div class="reorder ssb-sidebar-item-icon ssb-sidebar-move-handle ti-move display-ib" ng-hide="editNav[$parent.$index].links[$index ].isEdit"></div>
+                                      <div class="sub-reorder ssb-sidebar-item-icon ssb-sidebar-move-handle ti-move display-ib" ng-hide="editNav[$parent.$index].links[$index ].isEdit"></div>
                                       <div class="ssb-sidebar-item-icon ssb-sidebar-item-icon-offset-1 ti-close display-ib"
                                            ng-click="deleteLinkFromSubNav($parent.$index,$index,customMenu.links);"
                                            ng-hide="editNav[$parent.$index].links[$index ].isEdit"  ></div>
