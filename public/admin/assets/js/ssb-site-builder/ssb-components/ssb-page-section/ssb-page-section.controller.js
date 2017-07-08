@@ -230,7 +230,8 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
             styleString += 'border-radius: ' + section.border.radius + '%;';
         }
 
-        if (section.layoutModifiers &&
+        if (section &&
+            section.layoutModifiers &&
             section.layoutModifiers.grid && section.layoutModifiers.grid.isActive ){
              angular.forEach(section.components, function(cmp,index) {
                section.components[index].gridHeight= section.layoutModifiers.grid.height;
@@ -296,9 +297,7 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
                             maxTextHeight=$(allText[i]).height();
                         }
                     }
-                    console.log(maxTextHeight);
                     sectionElementTextHeight+=maxTextHeight;
-                    console.log(sectionElementTextHeight);
                     var images=sectionElement.find(".single-testimonial .component-slider-image img").hide();
                     for(var i=0;i<images.length; i++) {
                         var imageParent=$(images[i]).parent();
@@ -410,7 +409,7 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
 
                 var colCount = parseInt(vm.section.layoutModifiers.columns.columnsNum) || 1;
                 var colClass = " col-xs-12 col-sm-" + Math.floor(12/colCount);
-                
+
                 if(!fixedColumn) {
                     classString += colClass;
                     if(colCount == 5){
@@ -654,7 +653,6 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
                             $('html, body').stop();
                               $timeout(function() {
                                   window.scrollTo(0, $anchor.offset().top - fixedElementHeight);
-                                  console.log($anchor.offset().top - fixedElementHeight)
                              }, 200);
                         }
                     };
@@ -674,7 +672,6 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
                                 return $(vm.element[0]).height();
                             },
                             function (value) {
-                                console.log(value)
                                 ssbPageSectionService.setSectionOffset(value);
                             }
                         )
