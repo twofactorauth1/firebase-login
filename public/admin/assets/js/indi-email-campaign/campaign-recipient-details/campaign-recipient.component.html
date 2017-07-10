@@ -84,7 +84,7 @@
                 </div>
             </div>
         </div>
-        <table class="table table-hover table-striped" ng-class="{'grid': tableView == 'grid', 'bg-white table-list-view': tableView == 'list'}" ng-if="!vm.uiState.loading">
+        <table class="table table-hover table-striped select-placeholder" ng-class="{'grid': tableView == 'grid', 'bg-white table-list-view': tableView == 'list'}" ng-if="!vm.uiState.loading">
             <thead ng-class="{'bg-white': tableView == 'grid'}">
                 <tr>
                     <th class="sort" ng-class="{'st-sort-ascent': vm.sortData.details['contactId'].direction === 1, 'st-sort-descent': vm.sortData.details['contactId'].direction === -1}" ng-click="vm.sortCampaignRecipientList('contactId', 'contactId')">ID</th>
@@ -110,23 +110,23 @@
                         <input ng-model="vm.uiState.fieldSearch.receiver" ng-model-options="{ debounce: 800 }" placeholder="Recipient" class="form-control" type="search" size="9" />
                     </th>
                     <th class="">
-                        <select ng-model="vm.uiState.fieldSearch.deliveredDate" class="form-control" ng-options="options.value as options.label for options in vm.booleanSearchOptions">
-                            <option value=""></option>
+                        <select ng-model="vm.uiState.fieldSearch.deliveredDate" class="form-control" ng-options="options.value as options.label for options in vm.booleanSearchOptions" required>
+                            <option value="" disabled selected class="placeholder">Delivered</option>
                         </select>
                     </th>
                     <th class="">
-                        <select ng-model="vm.uiState.fieldSearch.openedDate" class="form-control" ng-options="options.value as options.label for options in vm.booleanSearchOptions">
-                            <option value=""></option>
+                        <select ng-model="vm.uiState.fieldSearch.openedDate" class="form-control" ng-options="options.value as options.label for options in vm.booleanSearchOptions" required>
+                            <option value="" disabled selected class="placeholder">Opened</option>
                         </select>
                     </th>
                     <th class="">
-                        <select ng-model="vm.uiState.fieldSearch.clickedDate" class="form-control" ng-options="options.value as options.label for options in vm.booleanSearchOptions">
-                            <option value=""></option>
+                        <select ng-model="vm.uiState.fieldSearch.clickedDate" class="form-control" ng-options="options.value as options.label for options in vm.booleanSearchOptions" required>
+                            <option value="" disabled selected class="placeholder">Clicked</option>
                         </select>
                     </th>
                     <th class="">
-                        <select ng-model="vm.uiState.fieldSearch.unsubscribedDate" class="form-control" ng-options="options.value as options.label for options in vm.booleanSearchOptions">
-                            <option value=""></option>
+                        <select ng-model="vm.uiState.fieldSearch.unsubscribedDate" class="form-control" ng-options="options.value as options.label for options in vm.booleanSearchOptions" required>
+                            <option value="" disabled selected class="placeholder">Unsubscribed</option>
                         </select>
                     </th>
                 </tr>

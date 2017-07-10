@@ -14,6 +14,9 @@ var appConfig = require('../configs/app.config');
 
 var accountDao = require('../dao/account.dao');
 var shipmentDao = require('./dao/shipment.dao.js');
+var scheduledJobsManager = require('../scheduledjobs/scheduledjobs_manager');
+var emailMessageManager = require('../emailmessages/emailMessageManager');
+require('./model/promotionReport');
 
 var manager = {
 	
@@ -103,7 +106,7 @@ var manager = {
         }
         if(vendorFilter){
             query.vendor = new RegExp(vendorFilter, "i");
-        };
+        }
         console.log(query);
         promotionDao.findMany(query, $$.m.Promotion, function(err, list){
             if(err) {
@@ -152,7 +155,7 @@ var manager = {
         
         if(vendorFilter){
             query.vendor = new RegExp(vendorFilter, "i");
-        };
+        }
         console.log(query);
         promotionDao.findOne(query, $$.m.Promotion, function(err, value){
             if(err) {
@@ -420,7 +423,7 @@ var manager = {
                 log.error(accountId, userId, 'Exception listing shipments: ', err);
                 fn(err, null);
             } else {
-                var headers = ['VAR', 'Products', 'Ship Date', 'Config Date', 'Deploy Date', 'End Date', 'Status', 'Customer', 'Project', 'Partner Sales Rep', 'Junper Rep'];
+                var headers = ['VAR', 'Products', 'Ship Date', 'Config Date', 'Deploy Date', 'End Date', 'Status', 'Customer', 'Project', 'Partner Sales Rep', 'Juniper Rep'];
                 var csv = headers + '\n';
                 _.each(list, function(shipment){
                     csv += self._parseString(shipment.get('companyName'));
@@ -442,10 +445,198 @@ var manager = {
         });
     },
 
-    createPromotionReport: function(accountId, userId, fn) {
+    createPromotionReport: function(accountId, userId, promotionId, cardCodeRestrictions, recipientAry, startOnDate, repeatInterval, fn) {
         var self = this;
         self.log = log;
         self.log.debug(accountId, userId, '>> createPromotionReport');
+        /*
+         * validate repeatInterval: (weekly|monthly)
+         */
+        if(repeatInterval !== 'weekly') {
+            repeatInterval = 'monthly';
+        }
+        var promotionReport = new $$.m.PromotionReport({
+            accountId:accountId,
+            promotionId:promotionId,
+            cardCodeRestrictions:cardCodeRestrictions,
+            recipients:recipientAry,
+            startOn:startOnDate,
+            repeat:repeatInterval,
+            created:{
+                date:new Date(),
+                by:userId
+            }
+        });
+        promotionDao.saveOrUpdate(promotionReport, function(err, value){
+            if(err) {
+                self.log.error(accountId, userId, 'Error saving promotionReport:', err);
+                fn(err);
+            } else {
+                self.log.debug(accountId, userId, 'Saved the report.  Scheduling.');
+                var jobString = '$$.u.promotionManager.runReport(\'' + value.id() + '\');';
+                var job = new $$.m.ScheduledJob({
+                    accountId: accountId,
+                    scheduledAt: startOnDate,
+                    runAt: null,
+                    job:jobString,
+                    executing:false,
+                    completedAt: null,
+                    created: {
+                        date: new Date(),
+                        by: userId
+                    }
+                });
+                scheduledJobsManager.scheduleJob(job, function(err, scheduledJob){
+                    if(err) {
+                        self.log.error(accountId, userId, 'Error scheduling job:', err);
+                        fn(err);
+                    } else {
+                        self.log.debug(accountId, userId, '<< createPromotionReport');
+                        fn(null, value);
+                    }
+                });
+            }
+        });
+    },
+
+    listReports: function(accountId, userId, fn) {
+        var self = this;
+        self.log = log;
+        self.log.debug(accountId, userId, '>> listReports');
+        var query = {accountId:accountId};//TODO: might need more security.  promotionId?
+        promotionDao.findMany(query, $$.m.PromotionReport, function(err, list){
+            if(err) {
+                self.log.error(accountId, userId, 'Error listing reports:', err);
+                fn(err);
+            } else {
+                self.log.debug(accountId, userId, '<< listReports');
+                fn(null, list);
+            }
+        });
+    },
+
+    updateReport: function(accountId, userId, reportId, patchObject, fn) {
+        var self = this;
+        self.log = log;
+        self.log.debug(accountId, userId, '>> updateReport');
+        promotionDao.findOne({_id:reportId}, $$.m.PromotionReport, function(err, report){
+            if(err) {
+                self.log.error(accountId, userId, 'Error finding report:', err);
+                fn(err);
+            } else if (!report) {
+                self.log.error(accountId, userId, 'Could not find report with ID [' + reportId + ']');
+                fn('Could not find report with ID [' + reportId + ']');
+            } else {
+                _.each(patchObject, function(value, key){
+                    report.set(key, value);
+                });
+                report.set('modified', {date:new Date(), by:userId});
+                promotionDao.saveOrUpdate(report, function(err, value){
+                    if(err) {
+                        self.log.error(accountId, userId, 'Error saving report:', err);
+                        fn(err);
+                    } else {
+                        self.log.debug(accountId, userId, '<< updateReport');
+                        fn(null, value);
+                    }
+                });
+            }
+        });
+    },
+
+    removeReport: function(accountId, userId, reportId, fn) {
+        var self = this;
+        self.log = log;
+        self.log.debug(accountId, userId, '>> removeReport', reportId);
+        promotionDao.removeById(reportId, $$.m.PromotionReport, function(err, value){
+            if(err) {
+                self.log.error(accountId, userId, 'Error removing report:', err);
+                fn(err);
+            } else {
+                self.log.debug(accountId, userId, '<< removeReport');
+                fn(null, value);
+            }
+        });
+    },
+
+    runReport: function(reportId) {
+        /*
+         * get the report object
+         * generate the csv
+         * send the email
+         * reschedule the job
+         */
+        var self = this;
+        self.log = log;
+        try {
+            promotionDao.findOne({_id:reportId}, $$.m.PromotionReport, function(err, report){
+                if(err) {
+                    self.log.error('Error finding report:', err);
+                    emailMessageManager.notifyAdmin(null, null, null, 'Error running promotion report', 'Failed to run report with id [' + reportId + ']', err, function(){});
+                    return;
+                } else if(!report) {
+                    self.log.warn('Tried to run report that does not exist.  Deleted?', reportId);
+                    return;
+                } else {
+                    self.log.debug('Running report ', report);
+                    var promotionId = report.get('promotionId');
+                    var cardCodeAry = report.get('cardCodeRestrictions');
+                    self.exportShipments(null, null, promotionId, cardCodeAry, function(err, csv){
+                        if(err) {
+                            self.log.error('Error generating CSV', err);
+                            emailMessageManager.notifyAdmin(null, null, null, 'Error running promotion report', 'Failed to run report with id [' + reportId + ']', err, function(){});
+                            return;
+                        } else {
+                            var accountId = report.get('accountId');
+                            var fromName = report.get('fromName');
+                            var fromAddress = report.get('fromAdddress');
+                            var toAddressAry = report.get('recipients');
+                            var subject = report.get('subject');
+                            var content = 'Please find attached promotion report';
+                            emailMessageManager.sendPromotionReport(accountId, fromAddress, fromName, toAddressAry, subject, csv, content, function(err, value){
+                                if(err) {
+                                    self.log.error('Error sending report:', err);
+                                    emailMessageManager.notifyAdmin(null, null, null, 'Error running promotion report', 'Failed to run report with id [' + reportId + ']', err, function(){});
+                                    return;
+                                } else {
+                                    self.log.debug('Sent report.  Rescheduling');
+                                    var jobString = '$$.u.promotionManager.runReport(\'' + reportId + '\');';
+                                    var nextRunDate = null;
+                                    if(report.get('repeat') === 'monthly') {
+                                        nextRunDate = moment().add(1, 'month').toDate();
+                                    } else {
+                                        nextRunDate = moment().add(1, 'week').toDate();
+                                    }
+                                    var userId = report.get('created').by;
+                                    var job = new $$.m.ScheduledJob({
+                                        accountId: accountId,
+                                        scheduledAt: nextRunDate,
+                                        runAt: null,
+                                        job:jobString,
+                                        executing:false,
+                                        completedAt: null,
+                                        created: {
+                                            date: new Date(),
+                                            by: userId
+                                        }
+                                    });
+                                    scheduledJobsManager.scheduleJob(job, function(err){
+                                        if(err) {
+                                            self.log.error(accountId, userId, 'Error scheduling job:', err);
+                                            emailMessageManager.notifyAdmin(null, null, null, 'Error scheduling promotion report', 'Failed to reschedule report with id [' + reportId + ']', err, function(){});
+                                        } else {
+                                            self.log.debug(accountId, userId, 'Next run date:', nextRunDate);
+                                        }
+                                    });
+                                }
+                            });
+                        }
+                    });
+                }
+            });
+        } catch(exception) {
+            emailMessageManager.notifyAdmin(null, null, null, 'Error running promotion report', 'Failed to run report with id [' + reportId + ']', exception, function(){});
+        }
 
     },
 
