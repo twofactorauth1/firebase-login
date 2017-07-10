@@ -85,7 +85,7 @@
                       <div class="head-menu-links clearfix" data-label="{{link.label}}">
                           <div class="ssb-page-section-settings-item">
                             <div class="reorder ssb-sidebar-item-icon ssb-sidebar-move-handle ti-move display-ib" ng-hide="editNav[$index].isEdit"></div>
-                            <div class="ssb-sidebar-item-icon ssb-sidebar-item-icon-offset-1 ti-close display-ib" ng-hide="editNav[$index].isEdit" ng-click="deleteLinkFromNav($index, customMenu.links);" ></div>
+                            <div class="ssb-sidebar-item-icon ssb-sidebar-item-icon-offset-1 ti-close display-ib" ng-hide="editNav[$index].isEdit" ng-click="deleteLinkFromNav($index,  mainMenu.links);" ></div>
                             <div class="ssb-sidebar-item-icon ssb-sidebar-item-icon-offset-2 fa fa-pencil-square-o display-ib" ng-show="!edit[$index]" ng-click="editNav[$index].isEdit=true;"></div>
                               <div class="ssb-sidebar-item-icon ssb-sidebar-item-icon-offset-3 fa fa-plus display-ib" ng-show="!editNav[$index].isEdit"  ng-click=" addSubLink($index)"></div>
                               <div class="panel-group">
@@ -111,8 +111,8 @@
                               <div class="head-menu-links" data-label="{{sublink.label}}">
                           <div class="ssb-page-section-settings-item">
                             <div class="sub-reorder ssb-sidebar-item-icon ssb-sidebar-move-handle ti-move display-ib" ng-hide="editNav[$parent.$index].links[$index].isEdit"></div>
-                            <div class="ssb-sidebar-item-icon ssb-sidebar-item-icon-offset-1 ti-close display-ib" ng-hide="editNav[$parent.$index].links[$index].isEdit" ng-click="deleteLinkFromNav($index, mainMenu.links);" ></div>
-                            <div class="ssb-sidebar-item-icon ssb-sidebar-item-icon-offset-2 fa fa-pencil-square-o display-ib" ng-show="!editNav[$parent.$index].links[$index].isEdit" ng-click="edit[$index]=true; linkType[$index]=sublink.linkTo.type;initializeEditLinks(sublink.linkTo, false)"></div>
+                            <div class="ssb-sidebar-item-icon ssb-sidebar-item-icon-offset-1 ti-close display-ib" ng-hide="editNav[$parent.$index].links[$index].isEdit" ng-click="deleteLinkFromNav($index,  link.links);" ></div>
+                            <div class="ssb-sidebar-item-icon ssb-sidebar-item-icon-offset-2 fa fa-pencil-square-o display-ib" ng-show="!editNav[$parent.$index].links[$index].isEdit" ng-click="edit[$index]=true; linkType[$index]=sublink.linkTo.type;"></div>
                             <div class="ssb-sidebar-item-icon ssb-sidebar-item-icon-offset-3 fa fa-plus display-ib" ng-show="!editNav[$parent.$index].links[$index].isEdit"  ng-click="addSubLink($index)"></div>
                             <div class="panel-group">
                               <div class="ssb-sidebar-sortable-item panel panel-default">
