@@ -219,7 +219,7 @@ mainApp.service('analyticsService', ['$http', '$location', 'ipCookie', function 
         //If it is undefined, set a new one.
         if(!session_cookie || !session_cookie.id){
             console.log('restarting session');
-            this.sessionStart(fn);
+            this.sessionStart(function(data){});
         }
         var sessionId = ipCookie("session_cookie")["id"] || Math.uuid();
 
