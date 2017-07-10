@@ -79,7 +79,7 @@ function ssbBlogPostListComponentController(SimpleSiteBuilderBlogService, $scope
     }
 
     function sortBlogPosts(blogpost){
-        return Date.parse($filter('date')(blogpost.publish_date || blogpost.created.date, "MM/dd/yyyy"));
+        return Date.parse($filter('date')(blogpost.modified.date || blogpost.created.date, "MM/dd/yyyy"));
     }
 
     function listArticleStyle(item){

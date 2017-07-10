@@ -109,7 +109,7 @@ function ssbBlogRecentPostComponentController(SimpleSiteBuilderBlogService, $sco
     }
 
     function sortBlogPosts(blogpost){
-        return blogpost.publish_date && blogpost.publish_date.split && Date.parse(blogpost.publish_date.split('T')[0]);
+        return blogpost.modified.date && blogpost.modified.date.split && Date.parse(blogpost.modified.date.split('T')[0]);
     }
 
     function showNumberOfPosts(){
