@@ -14,6 +14,18 @@
         .border-bottom-0{
             border-bottom: 0;
         }
+        .select-placeholder {
+            select:required:invalid {
+              color: #c4c3c5;
+              padding-left: 4px;
+            }
+            option.placeholder[value=""][disabled] {
+              display: none;
+            }
+            option {
+              color: #5b5b60;
+            }
+        }
     }
     
     .margin-right-mobile{
