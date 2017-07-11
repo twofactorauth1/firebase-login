@@ -41,26 +41,12 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
     },
     onEnd: function (evt) {
       $scope.dragging = false;
+      $timeout(function () {
+             $scope.updateSubIndex();
+        },1000);
     }
   };
-  $scope.subbarConfig = {
-    animation: 0,
-    handle: '.sub-reorder',
-    draggable: '.sub-fragment',
-    ghostClass: "sortable-ghost",
-    scroll: true,
-    scrollSensitivity: 200,
-    scrollSpeed: 20, // px
-    onSort: function (evt) {
-      // $scope.scrollToComponent(evt.newIndex); TOOD: reimplement
-    },
-    onStart: function (evt) {
-      $scope.subdragging = true;
-    },
-    onEnd: function (evt) {
-      $scope.subdragging = false;
-    }
-  };
+
   $scope.testOptions = {
     min: 5,
     max: 100,
@@ -498,17 +484,57 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
      if(alink){
          if(!(alink.links && alink.links.length>0)){
              var copyLink=angular.copy(alink);
+             copyLink.sub_index=0;
              alink.links=[copyLink]
              alink.linkTo={data:"",type:"sub-nav"}; updateParentPageSettings(alink.linkType,alink.linkTo.data, false);
          }
          alink.links.push({
+              sub_index:alink.links.length,
               label: 'new sub index',
               linkTo: {type: '',data:""},
               ssb: true
         });
         $scope.editNav[index].links[alink.links.length-1]={isEdit:true};
+        $timeout(function () {
+             $scope.updateSubIndex();
+        },1000);
      }
   };
+    $scope.updateSubIndex=function(){
+         $(".subnavs").unbind("sortable").sortable({
+            opacity: 0.5,
+            handle:'.sub-reorder',
+            start:function( event, ui ){
+
+                $scope.old_index=ui.item.index();
+            },
+            update: function( event, ui ){
+                $scope.$apply(function(){
+                  var parentIndex= parseInt(ui.item.attr("parent-index")), old_index= $scope.old_index, new_index= ui.item.index();
+                    if ($scope.component.customnav){
+                        if($scope.component.linkLists[0].links[parentIndex] && $scope.component.linkLists[0].links[parentIndex].links.length > old_index){
+                            $timeout(function () {
+                                $scope.component.linkLists[0].links[parentIndex].links.splice(new_index, 0, $scope.component.linkLists[0].links[parentIndex].links.splice(old_index, 1)[0]);
+                                _.each($scope.component.linkLists[0].links[parentIndex].links, function (element, index) {
+                                    element.sub_index=index;
+                                });
+                            }, 0);
+                        }
+                    }else{
+                        if($scope.website.linkLists[0].links[parentIndex] && $scope.website.linkLists[0].links[parentIndex].links.length > old_index){
+                            $timeout(function () {
+                                $scope.website.linkLists[0].links[parentIndex].links.splice(new_index, 0, $scope.website.linkLists[0].links[parentIndex].links.splice(old_index, 1)[0]);
+                                _.each($scope.website.linkLists[0].links[parentIndex].links, function (element, index) {
+                                    element.sub_index=index;
+                                });
+                            }, 0);
+                        }
+                    }
+                })
+            }
+        });
+
+    }
   /*
    * @setLinkUrl
    * -
@@ -1071,7 +1097,6 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
   };
 
   $scope.init = function() {
-
       /*
        * @getPages
        * -
@@ -1182,7 +1207,9 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
       });
 
       $scope.editComponent();
-
+      $timeout(function () {
+             $scope.updateSubIndex();
+        },1000);
 
   };
 
