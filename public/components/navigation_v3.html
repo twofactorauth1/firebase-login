@@ -63,12 +63,12 @@
         <div class="col-sm-9">
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div ng-if="!component.customnav" class="collapse navbar-collapse" id="bs-example-navbar-collapse-{{navbarId}}">
-                <ul ng-class="{'nav-font-size':component.nav.font.size, 'nav-font-family':component.nav.font.family, 'nav-align': component.nav.align, 'nav-mixed-case': component.nav.allowMixedCase}" class="nav navbar-nav navbar-right" data-edit="{ 'type': 'component' }" data-ng-repeat="mainMenu in website.linkLists track by $index" data-ng-if=" mainMenu.handle=='head-menu' ">
-                    <li ng-class="{'nav-font-size':component.nav.font.size, 'nav-font-family':component.nav.font.family}" data-ng-repeat="alink in mainMenu.links track by $index">
+                <ul ng-class="{'nav-font-size':component.nav.font.size, 'nav-font-family':component.nav.font.family, 'nav-align': component.nav.align, 'nav-mixed-case': component.nav.allowMixedCase}" class="nav navbar-nav navbar-right" data-edit="{ 'type': 'component' }" data-ng-repeat="mainMenu in website.linkLists" data-ng-if=" mainMenu.handle=='head-menu' ">
+                    <li ng-class="{'nav-font-size':component.nav.font.size, 'nav-font-family':component.nav.font.family}" data-ng-repeat="alink in mainMenu.links">
                         <div ng-if="alink.links && alink.links.length>0">
                             <a href="javascript:void(0)" ng-style="{'color' : component.txtcolor }" ng-click="toggleNavClass($event)">{{alink.label || alink.url}}</a>
                             <ul class="nav-sub-menu">
-                                <li  data-ng-repeat="sublink in alink.links track by $index">
+                                <li  data-ng-repeat="sublink in alink.links">
                                     <div data-ng-include data-src="'/admin/assets/js/ssb-site-builder/ssb-components/shared/link_2.html'" ng-init="link = sublink" style="padding: 10px 0px;"></div>
                                 </li>
                             </ul>
@@ -80,12 +80,12 @@
                 </ul>
             </div>
             <div ng-if="component.customnav" class="collapse navbar-collapse" id="bs-example-navbar-collapse-{{navbarId}}">
-                <ul ng-class="{'nav-font-size':component.nav.font.size, 'nav-font-family':component.nav.font.family, 'nav-align': component.nav.align, 'nav-mixed-case': component.nav.allowMixedCase}" class="nav navbar-nav navbar-right" data-ng-repeat="mainMenu in component.linkLists track by $index" data-ng-if=" mainMenu.handle=='head-menu' " data-edit="{ 'type': 'component' }">
-                    <li data-ng-repeat="alink in mainMenu.links track by $index" >
+                <ul ng-class="{'nav-font-size':component.nav.font.size, 'nav-font-family':component.nav.font.family, 'nav-align': component.nav.align, 'nav-mixed-case': component.nav.allowMixedCase}" class="nav navbar-nav navbar-right" data-ng-repeat="mainMenu in component.linkLists" data-ng-if=" mainMenu.handle=='head-menu' " data-edit="{ 'type': 'component' }">
+                    <li data-ng-repeat="alink in mainMenu.links" >
                       <div ng-if="alink.links && alink.links.length>0">
                           <a href="javascript:void(0)" ng-style="{'color' : component.txtcolor }" ng-click="toggleNavClass($event)">{{alink.label || alink.url}}</a>
                             <ul class="nav-sub-menu">
-                                <li  data-ng-repeat="sublink in alink.links track by $index">
+                                <li  data-ng-repeat="sublink in alink.links">
                                     <div data-ng-include data-src="'/admin/assets/js/ssb-site-builder/ssb-components/shared/link_2.html'" ng-init="link = sublink" style="padding: 10px 0px;"></div>
                                 </li>
                             </ul>
