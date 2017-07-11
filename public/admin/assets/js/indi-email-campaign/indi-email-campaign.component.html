@@ -75,7 +75,7 @@
                                                 ng-hide="vm.state.campaign.status === 'COMPLETED'"
                                                 type="button"
                                                 ng-disabled="!vm.uiState.dataLoaded"
-                                                ng-if="vm.uiState.disableEditing || vm.state.campaign.status.toLowerCase() !== 'cancelled'"
+                                                ng-if="vm.state.campaign.status.toLowerCase() !== 'cancelled' || !vm.uiState.disableEditing"
                                                 ng-click='vm.cancelCampaignFn()'
                                                 class="btn btn-primary campaign-btn-wide btn-warning"
                                                 tooltip-placement="bottom"
