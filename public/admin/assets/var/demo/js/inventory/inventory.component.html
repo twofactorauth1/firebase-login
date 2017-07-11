@@ -57,7 +57,7 @@
 	            </div>
 	        </div>
 	    </div>
-	    <table class="table table-hover table-striped" ng-class="{'grid': tableView == 'grid', 'bg-white table-list-view': tableView == 'list'}" ng-if="!vm.uiState.loading" fixed-header-table>
+	    <table class="table table-hover table-striped select-placeholder" ng-class="{'grid': tableView == 'grid', 'bg-white table-list-view': tableView == 'list'}" ng-if="!vm.uiState.loading" fixed-header-table>
 	        <thead ng-class="{'bg-white': tableView == 'grid'}" sticky offset="65" sticky-class="sticky-header-class">
 	            <tr class="inventory-header-row">
 	                <th class="select-col hidden-xs" ng-if="vm.uiState.userPermissions.dashboard"></th>
@@ -82,8 +82,8 @@
 	                <th class="weight-col hidden-xs hidden-sm"></th>
                     <th class="price-col hidden-xs hidden-sm"></th>
 	                <th class="qty-col">
-	                    <select ng-model="vm.uiState.fieldSearch.Available" class="form-control" ng-options="options.value as options.label for options in vm.quantitySearchOptions" ng-change="updateSettings()">
-                            <option value=""></option>
+	                    <select ng-model="vm.uiState.fieldSearch.Available" class="form-control" ng-options="options.value as options.label for options in vm.quantitySearchOptions" ng-change="updateSettings()" required>
+                            <option value="" selected class="placeholder">Qty Avail</option>
                         </select>
 	                </th>
 	            </tr>

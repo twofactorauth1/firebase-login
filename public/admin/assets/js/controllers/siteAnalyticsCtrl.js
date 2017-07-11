@@ -1084,6 +1084,13 @@
             }
         });
 
+        $scope.$watch('analytics404', function (value, oldValue) {
+            if (angular.isDefined(value) && angular.isDefined(oldValue) && !angular.equals(value, oldValue) && $scope.dataLoaded) {
+                AnalyticsWidgetStateService.setSiteAnalyticsWidgetStates("analytics404", value);
+                reflowCharts();
+            }
+        });
+
         $scope.$watch('ua', function (value, oldValue) {
             if (angular.isDefined(value) && angular.isDefined(oldValue) && !angular.equals(value, oldValue) && $scope.dataLoaded) {
                 AnalyticsWidgetStateService.setSiteAnalyticsWidgetStates("ua", value);
@@ -1116,6 +1123,7 @@
                 $scope.newVReturning = AnalyticsWidgetStateService.siteAnalyticsWidgetStateConfig.newVReturning;
                 $scope.trafficSources = AnalyticsWidgetStateService.siteAnalyticsWidgetStateConfig.trafficSources;
                 $scope.pageanalytics = AnalyticsWidgetStateService.siteAnalyticsWidgetStateConfig.pageanalytics;
+                $scope.analytics404 = AnalyticsWidgetStateService.siteAnalyticsWidgetStateConfig.analytics404;
                 $scope.ua = AnalyticsWidgetStateService.siteAnalyticsWidgetStateConfig.ua;
                 $scope.userAgentsTable = AnalyticsWidgetStateService.siteAnalyticsWidgetStateConfig.userAgentsTable;
                 $scope.rev = AnalyticsWidgetStateService.siteAnalyticsWidgetStateConfig.rev;
