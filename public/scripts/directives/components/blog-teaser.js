@@ -21,14 +21,15 @@ app.directive('blogTeaserComponent', ['postsService', '$filter', function (posts
         return function (blogpost) {
           if (component.postorder) {
             if (component.postorder == 1 || component.postorder == 2) {
-              return Date.parse($filter('date')(blogpost.modified.date, "MM/dd/yyyy HH:mm:ss"));
+                return new Date(blogpost.modified.date).getTime();
+              //return Date.parse($filter('date')(blogpost.modified.date, "MM/dd/yyyy HH:mm:ss"));
             } else if (component.postorder == 3 || component.postorder == 4) {
-              return Date.parse($filter('date')(blogpost.created.date, "MM/dd/yyyy HH:mm:ss"));
+              return new Date(blogpost.modified.date).getTime();
             } else if (component.postorder == 5 || component.postorder == 6) {
-              return Date.parse($filter('date')(blogpost.publish_date || blogpost.created.date, "MM/dd/yyyy"));
+              return new Date(blogpost.modified.date).getTime();
             }
           } else
-            return Date.parse($filter('date')(blogpost.publish_date || blogpost.created.date, "MM/dd/yyyy"));
+            return new Date(blogpost.modified.date ||  blogpost.created.date).getTime();
         };
       };
       $scope.titleStyle = function (component) {

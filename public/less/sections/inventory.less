@@ -67,6 +67,18 @@
 
 	}
 
+    table.select-placeholder {
+        select:required:invalid {
+          color: #c4c3c5;
+          padding-left: 4px;
+        }
+        option.placeholder[value=""][disabled] {
+          display: none;
+        }
+        option {
+          color: #5b5b60;
+        }
+    }
 
 	.table > thead > tr > th.sort:before {
 	    font-family: FontAwesome;
