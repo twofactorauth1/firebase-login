@@ -39,6 +39,7 @@
             "newVReturning": false,
             "trafficSources": false,
             "pageanalytics": false,
+            "analytics404": false,
             "ua": false,
             "userAgentsTable": false,
             "rev": false,
