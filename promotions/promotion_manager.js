@@ -14,7 +14,7 @@ var appConfig = require('../configs/app.config');
 
 var accountDao = require('../dao/account.dao');
 var shipmentDao = require('./dao/shipment.dao.js');
-
+var pdfGenerator = require('html-pdf');
 var manager = {
 	
 	createPromotion: function(file, adminUrl, promotion, accountId, userId, fn) {
@@ -381,6 +381,162 @@ var manager = {
                 fn(null, list);
             }
         });
+    },
+
+    generatePdfForShipments: function(promotionId, fn) {
+        var self = this;
+        
+        var component = {};
+        var options = {
+            quality: 100
+        }
+        var self = this;
+        var query = {
+            'promotionId':promotionId
+        };
+        
+        shipmentDao.findMany(query, $$.m.Shipment, function(err, list){
+            if(err) {
+                fn(err, null);
+            } else {
+                var component = {};
+
+                component.totalShipments = list.length;
+                component.reports = 0;
+                component.tryState = 0;
+                component.buyState = 0;
+                component.rmaState = 0;
+                component.configured = 0;
+                component.deployed = 0;
+                
+                _.each(list, function (shipment) {
+                    if(shipment.get("attachment") && shipment.get("attachment").name){
+                        component.reports += 1;
+                    }
+                    if(shipment.get("status") === "TRY"){
+                        component.tryState += 1;
+                    }
+                    if(shipment.get("status") === "BUY"){
+                        component.buyState += 1;
+                    }
+                    if(shipment.get("status") === "RMA"){
+                        component.rmaState += 1;
+                    }
+                    if(shipment.get("configDate")){
+                        component.configured += 1;
+
+                    }
+                    if(shipment.get("deployDate")){
+                        component.deployed += 1;
+                    }
+                    shipment.configDate = shipment.getFormattedDate("configDate");
+                    shipment.deployDate = shipment.getFormattedDate("deployDate");
+                    shipment.shipDate = shipment.getFormattedDate("shipDate");
+                    shipment.endDate = shipment.getFormattedDate("endDate");
+                    shipment.status = shipment.getStatus();
+                    shipment.VAR = shipment.get("companyName");
+                    shipment.customerDetails = shipment.getCustomerDetails("<br>");
+                    shipment.customerProject = shipment.getCustomerProject();
+                    shipment.customerPartner = shipment.getCustomerPartner();
+                    shipment.customerJuniperRep = shipment.getCustomerJuniperRep();
+                    shipment.products = shipment.getProductsWithSerialNumber();
+                    
+                    console.log(shipment);
+                });
+        
+                component.shipments = list;
+                
+                app.render('promotions/shipment-html-view', component, function(err, html){
+                    if(err) {
+                        console.log(err);
+                    } else {
+                        
+                        pdfGenerator.create(html, options).toStream(function(err, stream){
+                            fn(null, stream);
+                        });
+                    }
+                });
+            }
+        });
+        
+    },
+
+    generateHTMLForShipments: function(promotionId, fn) {
+        var self = this;
+        
+        var component = {};
+        var options = {
+            quality: 100
+        }
+        var self = this;
+        var query = {
+            'promotionId':promotionId
+        };
+        
+        shipmentDao.findMany(query, $$.m.Shipment, function(err, list){
+            if(err) {
+                fn(err, null);
+            } else {
+                var component = {};
+
+                component.totalShipments = list.length;
+                component.reports = 0;
+                component.tryState = 0;
+                component.buyState = 0;
+                component.rmaState = 0;
+                component.configured = 0;
+                component.deployed = 0;
+                
+                _.each(list, function (shipment) {
+                    if(shipment.get("attachment") && shipment.get("attachment").name){
+                        component.reports += 1;
+                    }
+                    if(shipment.get("status") === "TRY"){
+                        component.tryState += 1;
+                    }
+                    if(shipment.get("status") === "BUY"){
+                        component.buyState += 1;
+                    }
+                    if(shipment.get("status") === "RMA"){
+                        component.rmaState += 1;
+                    }
+                    if(shipment.get("configDate")){
+                        component.configured += 1;
+
+                    }
+                    if(shipment.get("deployDate")){
+                        component.deployed += 1;
+                    }
+                    shipment.configDate = shipment.getFormattedDate("configDate");
+                    shipment.deployDate = shipment.getFormattedDate("deployDate");
+                    shipment.shipDate = shipment.getFormattedDate("shipDate");
+                    shipment.endDate = shipment.getFormattedDate("endDate");
+                    shipment.status = shipment.getStatus();
+                    shipment.VAR = shipment.get("companyName");
+                    shipment.customerDetails = shipment.getCustomerDetails("<br>");
+                    shipment.customerProject = shipment.getCustomerProject();
+                    shipment.customerPartner = shipment.getCustomerPartner();
+                    shipment.customerJuniperRep = shipment.getCustomerJuniperRep();
+                    shipment.products = shipment.getProductsWithSerialNumber();
+                    
+                    console.log(shipment);
+                });
+        
+                component.shipments = list;
+                
+                app.render('promotions/shipment-html-view', component, function(err, html){
+                    if(err) {
+                        console.log(err);
+                    } else {
+                        
+                        pdfGenerator.create(html, options).toStream(function(err, stream){
+                            fn(null, html);
+                        });
+                    }
+                });
+            }
+        });
+        
     },
 
     deleteShipment: function(accountId, userId, shipmentId, fn){
