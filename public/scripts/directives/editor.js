@@ -27,10 +27,12 @@ angular.module('mainApp').directive("elem", function ($timeout) {
             if(!element.hasClass("ssb-text-o-desktop")
                && element.children().hasClass("ssb-text-o-desktop")){
                 element.addClass("ssb-text-o-desktop")
+                element.parents(".ssb-text-only").addClass("ssb-text-o-desktop");
             }
             if(!element.hasClass("ssb-text-o-moblie")
                && element.children().hasClass("ssb-text-o-moblie")){
                 element.addClass("ssb-text-o-moblie")
+                element.parents(".ssb-text-only").addClass("ssb-text-o-moblie");
             }
         }, 0);
 
