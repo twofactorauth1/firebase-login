@@ -31,13 +31,14 @@ _.extend(api.prototype, baseApi.prototype, {
 
         app.get(this.url(''), this.isAuthAndSubscribedApi.bind(this), this.listPromotions.bind(this));       
         app.post(this.url(''), this.isAuthAndSubscribedApi.bind(this), this.createPromotion.bind(this));
-        app.get(this.url(':id'), this.isAuthAndSubscribedApi.bind(this), this.getPromotionDetails.bind(this));
-        app.delete(this.url(':id'), this.isAuthAndSubscribedApi.bind(this), this.deletePromotion.bind(this));
+
         app.post(this.url('report'), this.isAuthAndSubscribedApi.bind(this), this.createPromotionReport.bind(this));
         app.get(this.url('reports'), this.isAuthAndSubscribedApi.bind(this), this.listPromotionReports.bind(this));
         app.post(this.url('report/:id'), this.isAuthAndSubscribedApi.bind(this), this.updatePromotionReport.bind(this));
         app.delete(this.url('report/:id'), this.isAuthAndSubscribedApi.bind(this), this.deletePromotionReport.bind(this));
         app.post(this.url(':id'), this.isAuthAndSubscribedApi.bind(this), this.updatePromotion.bind(this));
+        app.get(this.url(':id'), this.isAuthAndSubscribedApi.bind(this), this.getPromotionDetails.bind(this));
+        app.delete(this.url(':id'), this.isAuthAndSubscribedApi.bind(this), this.deletePromotion.bind(this));
         app.post(this.url('attachment/:id'), this.isAuthApi.bind(this), this.updatePromotionAttachment.bind(this));
         app.post(this.url('promotion/shipment'), this.isAuthApi.bind(this), this.createShipment.bind(this));
         app.post(this.url('promotion/shipment/:id'), this.isAuthApi.bind(this), this.updateShipment.bind(this));
@@ -54,10 +55,7 @@ _.extend(api.prototype, baseApi.prototype, {
         var component = {};
         var promotionId = req.params.promotionId;
         promotionManager.generateReportForShipments(promotionId, 'pdf' , function(err, stream){
-            //stream.pipe(resp);
-            resp.writeHead(200, {'Content-Type': 'text/html'});
-            resp.write(stream);
-            resp.end();
+            stream.pipe(resp);
         });
     },
 
@@ -636,20 +634,56 @@ _.extend(api.prototype, baseApi.prototype, {
         var userId = self.userId(req);
         var accountId = parseInt(self.accountId(req));
         self.log.debug(accountId, userId, '>> schedulePromotionsReport', req.body);
+        var promotionId = req.body.promotionId;
+        var cardCodeRestrictions = req.body.cardCodeRestrictions || [];
+        var recipientAry = req.body.recipientAry || [];
+        var startOnDate = new Date();
+        if(req.body.startOnDate) {
+            startOnDate = moment(req.body.startOnDate).toDate();
+        }
+        var repeatInterval = req.body.repeatInterval;
+        promotionManager.createPromotionReport(accountId, userId, promotionId, cardCodeRestrictions, recipientAry,
+                startOnDate, repeatInterval, function(err, value){
 
+            self.log.debug(accountId, userId, '<< schedulePromotionsReport');
+            return self.sendResultOrError(resp, err, value, "Error creating report");
+        });
 
     },
 
     listPromotionReports: function(req, resp) {
-
+        var self = this;
+        var userId = self.userId(req);
+        var accountId = parseInt(self.accountId(req));
+        self.log.debug(accountId, userId, '>> listPromotionReports');
+        promotionManager.listReports(accountId, userId, function(err, list){
+            self.log.debug(accountId, userId, '<< schedulePromotionsReport');
+            return self.sendResultOrError(resp, err, list, "Error listing reports");
+        });
     },
 
     updatePromotionReport: function(req, resp) {
-
+        var self = this;
+        var userId = self.userId(req);
+        var accountId = parseInt(self.accountId(req));
+        var reportId = req.params.id;
+        self.log.debug(accountId, userId, '>> updatePromotionReport(' + reportId + ')', req.body);
+        promotionManager.updateReport(accountId, userId, reportId, req.body, function(err, report){
+            self.log.debug(accountId, userId, '<< updatePromotionReport');
+            return self.sendResultOrError(resp, err, report, "Error updating report");
+        });
     },
 
     deletePromotionReport: function(req, resp) {
-
+        var self = this;
+        var userId = self.userId(req);
+        var accountId = parseInt(self.accountId(req));
+        var reportId = req.params.id;
+        self.log.debug(accountId, userId, '>> deletePromotionReport');
+        promotionManager.removeReport(accountId, userId, reportId, function(err, value){
+            self.log.debug(accountId, userId, '<< deletePromotionReport');
+            return self.sendResultOrError(resp, err, value, "Error repoving report");
+        });
     },
 
     _isUserAdmin: function(req, fn) {

@@ -477,8 +477,8 @@ var manager = {
                                     fn(null, html);
                                 }
                                 else{
-                                    pdfGenerator.create(html, options).toFile('./public/businesscard.pdf', function(err, stream){
-                                        fn(null, html);
+                                    pdfGenerator.create(html, options).toStream(function(err, stream){
+                                        fn(null, stream);
                                     }); 
                                 }
                             }
