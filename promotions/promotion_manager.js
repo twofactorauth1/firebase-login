@@ -420,7 +420,9 @@ var manager = {
                         component.rmaState = 0;
                         component.configured = 0;
                         component.deployed = 0;
-
+                        component.wonCost = 0;
+                        component.openCost = 0;
+                        component.lastCost = 0;
                         
                         _.each(list, function (shipment) {
                             if(shipment.get("attachment") && shipment.get("attachment").name){
@@ -428,9 +430,11 @@ var manager = {
                             }
                             if(shipment.get("status") === "TRY"){
                                 component.tryState += 1;
+                                component.openCost += shipment.getShipmentPrice();
                             }
                             if(shipment.get("status") === "BUY"){
                                 component.buyState += 1;
+                                component.wonCost += shipment.getShipmentPrice();
                             }
                             if(shipment.get("status") === "RMA"){
                                 component.rmaState += 1;
@@ -453,9 +457,15 @@ var manager = {
                             shipment.customerPartner = shipment.getCustomerPartner();
                             shipment.customerJuniperRep = shipment.getCustomerJuniperRep();
                             shipment.products = shipment.getProductsWithSerialNumber();
-                            
-                            console.log(shipment);
+
                         });
+
+                        var lastShipment = _.last(_.sortBy(list, function(result) { 
+                            return result.get("created") && Date.parse(result.get("created").date) })
+                        );
+                        component.wonCost = self._parseCurrency("$", component.wonCost);
+                        component.openCost = self._parseCurrency("$", component.openCost);
+                        component.lastCost = self._parseCurrency("$", lastShipment.getShipmentPrice());
                 
                         component.shipments = list;
                         
@@ -743,9 +753,11 @@ var manager = {
             return "\"" + text + "\",";
         else
             return text+",";
+    },
+    _parseCurrency: function(symbol, value){
+        return symbol + " " + value.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, "$1,");
     }
-    
-};
+}    
 
 $$.u = $$.u || {};
 $$.u.promotionManager = manager;

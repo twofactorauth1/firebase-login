@@ -142,6 +142,12 @@ var shipment = $$.m.ModelBase.extend({
         }
     },
 
+    getShipmentPrice: function(){
+        var totalPrice = _.reduce(this.get("products"), function(m, product) { 
+            return m + parseFloat(product.itemPrice || 0) ; }, 0);
+        return totalPrice || 0;
+    },
+
     initialize: function(options) {
         var details = this.get("customerDetails");
     }
