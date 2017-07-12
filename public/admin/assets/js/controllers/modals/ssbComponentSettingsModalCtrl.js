@@ -486,11 +486,12 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
              var copyLink=angular.copy(alink);
              copyLink.sub_index=0;
              alink.links=[copyLink]
+             alink.label="New Parent"
              alink.linkTo={data:"",type:"sub-nav"}; updateParentPageSettings(alink.linkType,alink.linkTo.data, false);
          }
          alink.links.push({
               sub_index:alink.links.length,
-              label: 'new sub index',
+              label: 'New Child',
               linkTo: {type: '',data:""},
               ssb: true
         });
