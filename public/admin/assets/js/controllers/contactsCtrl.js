@@ -334,8 +334,8 @@
             });
             if (tempTags)
                 tempTags = _.uniq(tempTags);
-            var matchingContact = _.findWhere($scope.contacts, {
-                bestEmail: $scope.contact.email
+            var matchingContact  = _.find($scope.contacts,function(element){
+                return (element.bestEmail.toLowerCase() == $scope.contact.email.toLowerCase());
             });
             if (matchingContact) {
                 $scope.setDuplicateUser(true);
