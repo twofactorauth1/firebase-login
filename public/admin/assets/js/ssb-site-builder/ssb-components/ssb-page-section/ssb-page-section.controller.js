@@ -287,24 +287,25 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
                     }
                 }
                 sectionElement.find(".single-testimonial .component-slider-image img").css("min-height",  sectionElementTextHeight);
-            }else if(sectionElement.hasClass("ssb-page-section-layout-hero-v7")){
-                var sectionElementTextHeight=120;
-                var maxTextHeight=0;
-                var allText=sectionElement.find(".single-testimonial .testimonial-row");
-                if(allText){
-                    for(var i=0;i<allText.length; i++) {
-                        if($(allText[i]) && maxTextHeight<$(allText[i]).height()){
-                            maxTextHeight=$(allText[i]).height();
-                        }
-                    }
-                    sectionElementTextHeight+=maxTextHeight;
-                    var images=sectionElement.find(".single-testimonial .component-slider-image img").hide();
-                    for(var i=0;i<images.length; i++) {
-                        var imageParent=$(images[i]).parent();
-                        imageParent.css('background-image', 'url(' + $(images[i])[0].src + ')').css("min-height",  sectionElementTextHeight+120).css("background-size", "cover");
-                    }
-                }
             }
+            // else if(sectionElement.hasClass("ssb-page-section-layout-hero-v7")){
+            //     var sectionElementTextHeight=120;
+            //     var maxTextHeight=0;
+            //     var allText=sectionElement.find(".single-testimonial .testimonial-row");
+            //     if(allText){
+            //         for(var i=0;i<allText.length; i++) {
+            //             if($(allText[i]) && maxTextHeight<$(allText[i]).height()){
+            //                 maxTextHeight=$(allText[i]).height();
+            //             }
+            //         }
+            //         sectionElementTextHeight+=maxTextHeight;
+            //         var images=sectionElement.find(".single-testimonial .component-slider-image img").hide();
+            //         for(var i=0;i<images.length; i++) {
+            //             var imageParent=$(images[i]).parent();
+            //             imageParent.css('background-image', 'url(' + $(images[i])[0].src + ')').css("min-height",  sectionElementTextHeight+120).css("background-size", "cover");
+            //         }
+            //     }
+            // }
         }
     }
 
