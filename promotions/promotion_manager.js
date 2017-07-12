@@ -19,10 +19,11 @@ var scheduledJobsManager = require('../scheduledjobs/scheduledjobs_manager');
 var emailMessageManager = require('../emailmessages/emailMessageManager');
 require('./model/promotionReport');
 
-var pdfGenerator = require('html-pdf');
+//var pdfGenerator = require('html-pdf');
+var conversion = require("phantom-html-to-pdf")();
 var manager = {
-	
-	createPromotion: function(file, adminUrl, promotion, accountId, userId, fn) {
+    
+    createPromotion: function(file, adminUrl, promotion, accountId, userId, fn) {
         var self = this;
         self.log = log;
         self.log.debug(accountId, userId, '>> createPromotion');
@@ -477,9 +478,11 @@ var manager = {
                                     fn(null, html);
                                 }
                                 else{
-                                    pdfGenerator.create(html, options).toStream(function(err, stream){
-                                        fn(null, stream);
-                                    }); 
+                                    conversion({ html: html }, function(err, pdf) {
+                                      console.log(pdf.logs);
+                                      console.log(pdf.numberOfPages);
+                                      fn(null, pdf.stream);
+                                    });
                                 }
                             }
                         });
