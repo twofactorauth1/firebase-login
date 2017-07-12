@@ -40,6 +40,19 @@ var promotion = $$.m.ModelBase.extend({
 
     initialize: function(options) {
 
+    },
+
+    getReportDate: function(){
+        var _dateInterval = "";
+        if(this.get("report") && this.get("report").schedule && this.get("report").startDate){
+            if(this.get("report").schedule === 'WEEKLY'){
+                _dateInterval = moment(this.get("report").startDate).format("MMMM D, YYYY") + " - " + moment(this.get("report").startDate).add(7, 'days').format("MMMM D, YYYY")
+            }
+            else if(this.get("report").schedule === 'MONTHLY'){
+                _dateInterval = moment(this.get("report").startDate).format("MMMM D, YYYY") + " - " + moment(this.get("report").startDate).add(1, 'months').format("MMMM D, YYYY")
+            }
+        }
+        return _dateInterval;
     }
 
 }, {
