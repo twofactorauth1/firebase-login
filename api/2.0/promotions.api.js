@@ -53,25 +53,19 @@ _.extend(api.prototype, baseApi.prototype, {
     generatePDF: function(req, resp){
         var component = {};
         var promotionId = req.params.promotionId;
-        promotionManager.generatePdfForShipments(promotionId, function(err, stream){
+        promotionManager.generateReportForShipments(promotionId, 'pdf' , function(err, stream){
             stream.pipe(resp);
         });
-
-        
     },
 
     generateHTML: function(req, resp){
         var component = {};
         var promotionId = req.params.promotionId;
-        
-
-        promotionManager.generateHTMLForShipments(promotionId, function(err, stream){
-           
+        promotionManager.generateReportForShipments(promotionId, 'html', function(err, stream){
             resp.writeHead(200, {'Content-Type': 'text/html'});
             resp.write(stream);
             resp.end();
         });
-        
     },
 
     listPromotions: function(req, resp) {

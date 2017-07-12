@@ -1031,11 +1031,5 @@ app.constant('JS_REQUIRES', {
     files: [
         '../js/libs/pdfobject/pdfobject.min.js'
     ]
-  },
-  {
-    name: 'pdfjs',
-    files: [
-        '../js/libs/jspdf/dist/jspdf.debug.js'
-    ]
   }]
 });
