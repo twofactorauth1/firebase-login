@@ -70,16 +70,18 @@ var shipment = $$.m.ModelBase.extend({
         //return this.get(dateField) ? this.get(dateField) : '';
     },
 
-    getCustomerDetails: function() {
+    getCustomerDetails: function(separator) {
         var _firstRow = "";
         var _middleRow = "";
         var _bottomRow = "";
         var details = this.get("customerDetails");
-        
+        if(!separator){
+           separator = ", ";
+        }
         
         if (details) {
             if(details.customerName){
-                _firstRow += details.customerName + ", ";
+                _firstRow += details.customerName + separator;
 
             }
             if(details.address1 || details.address2)
@@ -91,7 +93,7 @@ var shipment = $$.m.ModelBase.extend({
                     _middleRow += details.address2;    
                 }
                 if(_middleRow.length){
-                    _middleRow += ", ";
+                    _middleRow += separator;
                 }
             }
             if(details.city || details.state || details.zip)
@@ -138,6 +140,12 @@ var shipment = $$.m.ModelBase.extend({
         else{
             return "";
         }
+    },
+
+    getShipmentPrice: function(){
+        var totalPrice = _.reduce(this.get("products"), function(m, product) { 
+            return m + parseFloat(product.itemPrice || 0) ; }, 0);
+        return totalPrice || 0;
     },
 
     initialize: function(options) {

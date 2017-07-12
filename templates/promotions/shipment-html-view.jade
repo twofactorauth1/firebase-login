@@ -1,0 +1,238 @@
+html
+	head
+	meta(http-equiv='Content-Type', content='text/html; charset=UTF-8')
+	link(rel='stylesheet', href='http://getbootstrap.com/dist/css/bootstrap.min.css')
+	link(rel='stylesheet', href='http://fonts.googleapis.com/css?family=Raleway')
+	style(type='text/css').
+		body{
+			margin-top: 50px;
+			font-family: 'Raleway',sans-serif;
+		}
+		.mainDiv{
+			
+		}
+		.reportName h4{
+			padding: 0;
+			margin: 0;
+		}
+		.reportDate{
+			font-size: 12px;
+			right: 0 !important;
+		}
+		.statistics .value-stat{
+			color: #48b1cc !important;
+			font-size: 12px;
+			margin-right: 5px;
+		}
+		.statistics .label-stat{
+			color: #8e8e93 !important;
+			font-size: 12px;
+		}
+		.statsContainer, .shipmentPrice, .shipmentDetails{
+			margin-top: 20px;
+		}
+
+		.colShipment{
+			padding-right: 10px;
+		}
+		.colShipment span.value{
+			color: #48b1cc !important;
+			display:block;
+			font-size: 15px;
+		}
+		.colShipment span.title{
+			color: #8e8e93 !important;
+			display:block;
+			font-size: 12px;
+		}
+		.promotions-stats-item{
+			border: 1px solid #eee;
+			padding-top: 15px;
+			padding-bottom: 15px;
+			text-align: center;
+		}
+
+		.shipmentHeader{
+			margin-bottom: 15px;
+		}
+		.shipmentDetailsTable{
+			width: 100%;
+			border: 1px solid #eee;
+			border-collapse: separate;
+			border-bottom: none;			
+		}
+		.shipmentDetailsTable thead tr{
+			height: 40px;
+			background: #f4f9ff;		
+		}
+		.shipmentDetailsTable tr{
+			height: 40px;		
+		}
+		.shipmentDetailsTable thead tr th{
+			font-size: 9px;
+			padding-left: 10px;
+			color:#48b1cc !important;
+			border-bottom: 1px solid #eee;		
+		}
+
+		.shipmentDetailsTable thead tr th:first-child{
+					
+		}
+
+		.shipmentDetailsTable tbody tr td{
+			font-size: 9px;
+			padding-left: 10px;
+			color:#5b5b60 !important;
+			border-bottom: 1px solid #eee;			
+		}
+
+		.shipmentDetailsTable tbody tr.main td:first-child{
+			border-left: #48b1cc 2px solid;			
+		}
+		
+
+		.customerDetails{
+			width: 100%;
+		}
+		.customerDetails span.block{
+			color:#5b5b60 !important;
+		}
+		.customerDetails tr td{
+			border-bottom: none !important;
+			padding-left: 0 !important;
+		}
+		.customerDetails tbody tr{
+			height: 0 !important;
+		}
+		.customerDetails tbody tr td{
+			padding-bottom: 10px;
+			vertical-align: top;
+		}
+		.customerDetails tbody tr td.details-container{
+			position: relative;
+			padding-left: 20px
+		}
+		.customerDetails tbody tr td .customer-details{
+			padding-left: 20px
+		}
+		.customerDetails tbody tr td .col-separator{
+			position: absolute;
+			    position: absolute;
+			    border-right: 1px solid #eee;
+			    height: 80%;
+			    float: left;
+			    top: 10%;
+			    left: 0;
+		}
+		.customerDetails tbody tr td.customer{
+			width: 25%
+		}
+		.customerDetails tbody tr td.products{
+			width: 25%
+		}
+		.customerDetails tbody tr td.project{
+			width: 25%
+		}
+		.customerDetails tbody tr td.partner{
+			width: 25%
+		}
+
+		.customerDetails tbody tr td .heading{
+			font-size: 9px;
+			color: #48b1cc !important;
+			padding-top: 9px;
+			padding-bottom: 5px;
+		}
+	body
+		
+		div.mainDiv.col-xs-12
+			div.reportName.col-xs-6.pull-left
+				h4 !{reportName}
+			div.reportDate.col-xs-6.pull-right
+				span.pull-right !{reportDate}
+			div.clearfix		
+			div.statsContainer			
+				div.statistics.col-xs-4
+					span.value-stat !{totalShipments}
+					span.label-stat SHIPMENTS
+				div.statistics.col-xs-4
+					span.value-stat !{reports}
+					span.label-stat REPORTS
+				div.statistics.col-xs-4
+					span.value-stat !{buyState}
+					span.label-stat BUY
+					
+				div.statistics.col-xs-4
+					span.value-stat !{configured}
+					span.label-stat CONFIGURED
+				div.statistics.col-xs-4
+					span.value-stat !{tryState}
+					span.label-stat TRY
+				div.statistics.col-xs-4
+					span.value-stat !{rmaState}
+					span.label-stat RMA						
+				div.statistics.col-xs-4
+					span.value-stat !{deployed}
+					span.label-stat DEPLOYED
+						
+			div.clearfix
+			div.shipmentPrice
+				div.colShipment.col-xs-4
+					div.promotions-stats-item
+						span.value.center !{openCost}
+						span.title.center OPEN
+				div.colShipment.col-xs-4
+					div.promotions-stats-item
+						span.value.center !{wonCost}
+						span.title.center WON
+				div.colShipment.col-xs-4
+					div.promotions-stats-item
+						span.value.center !{lastCost}
+						span.title.center LAST		
+			div.clearfix			
+			div.shipmentDetails.col-xs-12
+				h5.shipmentHeader Shipment details
+				table.shipmentDetailsTable
+					thead
+						tr
+							th VAR
+							th SHIP
+							th CONFIG
+							th DEPLOY
+							th END
+							th STATUS
+					tbody
+						each shipment, i in shipments
+							tr.main
+								td !{shipment.VAR}
+								td !{shipment.shipDate}
+								td !{shipment.configDate}
+								td !{shipment.deployDate}
+								td !{shipment.endDate}
+								td !{shipment.status}
+							tr
+								td(colspan="6")
+									table.customerDetails
+										tr
+											td.customer
+												div
+													div.heading CUSTOMER
+													span.block !{shipment.customerDetails}
+
+											td.products.details-container
+												div.customer-details
+													div.heading PRODUCTS
+													span.block !{shipment.products}
+													div.col-separator
+											td.project.details-container
+												div.customer-details
+													div.heading PROJECT
+													span.block !{shipment.customerProject}
+													div.col-separator
+											td.partner.details-container
+												div.customer-details
+													div.heading PARTNER SALES REP
+													span.block !{shipment.customerPartner}
+													div.heading JUNIPER REP ENGAGED
+													span.block !{shipment.customerJuniperRep}
+													div.col-separator
