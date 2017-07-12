@@ -124,6 +124,8 @@
             $scope.passwordInValid = false;
             if ($scope.edituser && $scope.edituser.password1 && $scope.edituser.password1.length < 6) {
                 $scope.passwordInValid = true;
+            } else if ($scope.newuser && $scope.newuser.password.length<6){
+                $scope.passwordInValid = true;
             } else {
                 $scope.passwordInValid = false;
             }
