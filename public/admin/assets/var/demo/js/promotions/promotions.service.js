@@ -30,6 +30,7 @@
         promotionsService.clearShipmentList = clearShipmentList;
         promotionsService.getCustomers = getCustomers;
         promotionsService.exportShipments = exportShipments;
+        promotionsService.generatePdf = generatePdf;
         promotionsService.promoTypeOptions = {
             TRY_AND_BUY: "TRY_AND_BUY",
             MILESTONE: "MILESTONE",
@@ -359,6 +360,12 @@
         function exportShipments(promotionId){
             var apiUrl = [basePromotionAPIUrlv2, promotionId, 'shipments', 'export', 'csv'].join('/');
             window.location = apiUrl;
+        }
+
+        function generatePdf(promotionId, view){
+            var apiUrl = [basePromotionAPIUrlv2, promotionId, 'shipments', view].join('/');
+            //window.location = apiUrl;
+            window.open(apiUrl, "_blank");
         }
 
         (function init() {

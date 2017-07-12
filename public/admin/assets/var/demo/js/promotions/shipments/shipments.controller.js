@@ -27,6 +27,11 @@ function shipmentsComponentController($scope, $attrs, $window, $filter, $statePa
     vm.getShipmentStatus = getShipmentStatus;
     vm.stringifyAddress = stringifyAddress;
     vm.getProductsName = getProductsName;
+    vm.generatePdf = generatePdf;
+
+    function generatePdf(view){
+        PromotionsService.generatePdf(vm.promotionId, view);
+    }
     function showFilteredRecords(){
         return UtilService.showFilteredRecords(vm.uiState.globalSearch, vm.uiState.fieldSearch);
     }
