@@ -106,27 +106,26 @@
                             </div>
                           </div>
                       </div>
-                      <ul ng-sortable="subbarConfig"   ng-class="{'subdragging': subdragging}" ng-model="link.links"  class="setting-nav-sub-menu" style="list-style:none;">
-                          <li  data-ng-repeat="sublink  in link.links track by $index" class="sub-fragment">
+                      <ul class="setting-nav-sub-menu subnavs" style="list-style:none;" class="setting-nav-sub-menu" style="list-style:none;">
+                          <li  data-ng-repeat="sublink  in link.links" class="sub-fragment" parent-index="{{$parent.$index}}">
                               <div class="head-menu-links" data-label="{{sublink.label}}">
-                          <div class="ssb-page-section-settings-item">
-                            <div class="sub-reorder ssb-sidebar-item-icon ssb-sidebar-move-handle ti-move display-ib" ng-hide="editNav[$parent.$index].links[$index].isEdit"></div>
-                            <div class="ssb-sidebar-item-icon ssb-sidebar-item-icon-offset-1 ti-close display-ib" ng-hide="editNav[$parent.$index].links[$index].isEdit" ng-click="deleteLinkFromNav($index,  link.links);" ></div>
-                            <div class="ssb-sidebar-item-icon ssb-sidebar-item-icon-offset-2 fa fa-pencil-square-o display-ib" ng-show="!editNav[$parent.$index].links[$index].isEdit" ng-click="edit[$index]=true; linkType[$index]=sublink.linkTo.type;"></div>
-                            <div class="ssb-sidebar-item-icon ssb-sidebar-item-icon-offset-3 fa fa-plus display-ib" ng-show="!editNav[$parent.$index].links[$index].isEdit"  ng-click="addSubLink($index)"></div>
-                            <div class="panel-group">
-                              <div class="ssb-sidebar-sortable-item panel panel-default">
-                                <div class="panel-heading">
-                                  <h4 class="panel-title">
-                                    <a class="nav-link-label" href>{{sublink.label}}</a>
-                                  </h4>
-                                </div>
-                              </div>
-                            </div>
+                                  <div class="ssb-page-section-settings-item">
+                                    <div class="sub-reorder ssb-sidebar-item-icon ssb-sidebar-move-handle ti-move display-ib" ng-hide="editNav[$parent.$index].links[$index].isEdit"></div>
+                                    <div class="ssb-sidebar-item-icon ssb-sidebar-item-icon-offset-1 ti-close display-ib" ng-hide="editNav[$parent.$index].links[$index].isEdit" ng-click="deleteLinkFromNav($index,  link.links);" ></div>
+                                    <div class="ssb-sidebar-item-icon ssb-sidebar-item-icon-offset-2 fa fa-pencil-square-o display-ib" ng-show="!editNav[$parent.$index].links[$index].isEdit" ng-click="editNav[$parent.$index].links[$index].isEdit=true; linkType[$index]=sublink.linkTo.type;"></div>
+                                    <div class="panel-group">
+                                      <div class="ssb-sidebar-sortable-item panel panel-default">
+                                        <div class="panel-heading">
+                                          <h4 class="panel-title">
+                                            <a class="nav-link-label" href>{{sublink.label}}</a>
+                                          </h4>
+                                        </div>
+                                      </div>
+                                    </div>
 
-                            <div class="panel-body" ng-show="edit[$index]">
-                              <label  ng-if="link.linkTo.type !== 'page'" ng-show="editNav[$parent.$index].links[$index].isEdit" for="editNav[$parent.$index].links[$index].isEdit">Title</label>
-                              <input ng-if="link.linkTo.type !== 'page'" placeholder="Enter link title" ng-show="editNav[$parent.$index].links[$index].isEdit" type="text" ng-model="link.label" class="form-control" style="margin-bottom: 10px;">
+                            <div class="panel-body" ng-show="editNav[$parent.$index].links[$index].isEdit">
+                              <label  ng-if="sublink.linkTo.type !== 'page'" ng-show="editNav[$parent.$index].links[$index].isEdit" for="editNav[$parent.$index].links[$index].isEdit">Title</label>
+                              <input ng-if="sublink.linkTo.type !== 'page'" placeholder="Enter link title" ng-show="editNav[$parent.$index].links[$index].isEdit" type="text" ng-model="sublink.label" class="form-control" style="margin-bottom: 10px;">
                             </div>
 
                             <div class="panel-body padding-top-0" ng-show="editNav[$parent.$index].links[$index].isEdit">
@@ -134,7 +133,7 @@
 
                               <div class="radio">
                                 <label>
-                                  <input type="radio" name="inlineRadioOptions1-{{$index}}" id="inlineRadioOptions1-{{$index}}" ng-model="link.linkTo.type" ng-change="editNav[$parent.$index].linkType[$index] = 'page'" value="page" ng-checked="{{sublink.linkTo.type == 'page'}}">
+                                  <input type="radio" name="inlineRadioOptions1-{{$index}}" id="inlineRadioOptions1-{{$index}}" ng-model="sublink.linkTo.type" ng-change="editNav[$parent.$index].linkType[$index] = 'page'" value="page" ng-checked="{{sublink.linkTo.type == 'page'}}">
                                   Page
                                 </label>
                               </div>

@@ -13,6 +13,8 @@ var userManager = require('../../dao/user.manager');
 var orgManager = require('../../organizations/organization_manager');
 require('../../promotions/model/promotion');
 
+
+
 var api = function () {
     this.init.apply(this, arguments);
 };
@@ -44,7 +46,27 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url(':promotionId/shipments'), this.isAuthAndSubscribedApi.bind(this), this.listShipments.bind(this));       
         app.delete(this.url('promotion/shipment/:id'), this.isAuthApi.bind(this), this.deleteShipment.bind(this));
         app.get(this.url(':promotionId/shipments/export/csv'), this.isAuthAndSubscribedApi.bind(this), this.exportShipments.bind(this));
+        app.get(this.url(':promotionId/shipments/pdf'), this.isAuthAndSubscribedApi.bind(this), this.generatePDF.bind(this));
+        app.get(this.url(':promotionId/shipments/html'), this.isAuthAndSubscribedApi.bind(this), this.generateHTML.bind(this));
+    },
 
+
+    generatePDF: function(req, resp){
+        var component = {};
+        var promotionId = req.params.promotionId;
+        promotionManager.generateReportForShipments(promotionId, 'pdf' , function(err, stream){
+            stream.pipe(resp);
+        });
+    },
+
+    generateHTML: function(req, resp){
+        var component = {};
+        var promotionId = req.params.promotionId;
+        promotionManager.generateReportForShipments(promotionId, 'html', function(err, stream){
+            resp.writeHead(200, {'Content-Type': 'text/html'});
+            resp.write(stream);
+            resp.end();
+        });
     },
 
     listPromotions: function(req, resp) {

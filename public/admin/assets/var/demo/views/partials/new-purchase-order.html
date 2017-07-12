@@ -22,7 +22,8 @@
                 <textarea required placeholder="Text" class="form-control" ng-model="vm.state.newPurchaseOrder.text"></textarea>
             </div>
             <div class="form-group">
-                <label class="">VAR<span class="required">*</span></label>
+                <label class="">VAR
+                    <span class="required">*</span></label>
                     <ui-select ng-if="vm.state.customers.length >= 200"
                         ng-model="vm.state.newPurchaseOrder.cardCode"
                         theme="bootstrap"

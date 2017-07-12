@@ -149,5 +149,12 @@
 	</div>
 </div>
 
+<button class="btn btn-primary" ng-click="vm.generatePdf('pdf')">
+	Genrate PDF
+</button>
+<button class="btn btn-primary" ng-click="vm.generatePdf('html')">
+	Genrate HTML
+</button>
+
 
 <div ng-if="$parent.userPermissions.isAdminUser" data-ng-include=" 'assets/var/demo/js/promotions/modals/new-promotion-modal.html' "></div>

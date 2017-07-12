@@ -15,7 +15,8 @@
             </div>
             <div class="form-group">
                 <label class="">Password</label>
-                <input name="futureuserpassword" id="input-password" class="form-control" ng-model="$parent.newuser.password" placeholder="Password" type="password" autocomplete="false" autocomplete="new-password">
+                <input name="futureuserpassword" id="input-password" ng-change="checkPasswordLength()" class="form-control" ng-model="$parent.newuser.password" placeholder="Password" type="password" autocomplete="false" autocomplete="new-password">
+                <div ng-if="passwordInValid" style="color:red" class="help-block">Min length should be 6 characters</div>
             </div>
             <div class="form-group">
                 <label class="block">User Type</label>
@@ -70,7 +71,7 @@
     </div>
     <div class="clearfix"></div>
     <div class="modal-footer">
-        <button class="btn btn-primary" ng-disabled="!$parent.newuser.username || !$parent.newuser.password || !checkIfValidUserName($parent.newuser.username) || !vm.validateUserDetails()" ng-click="addNewUser()">Add New User</button>
+        <button class="btn btn-primary" ng-disabled="!$parent.newuser.username || !$parent.newuser.password || ($parent.newuser.password.length<6) || !checkIfValidUserName($parent.newuser.username) || !vm.validateUserDetails()" ng-click="addNewUser()">Add New User</button>
     </div>
 
 </script>

@@ -14,13 +14,16 @@ var appConfig = require('../configs/app.config');
 
 var accountDao = require('../dao/account.dao');
 var shipmentDao = require('./dao/shipment.dao.js');
+
 var scheduledJobsManager = require('../scheduledjobs/scheduledjobs_manager');
 var emailMessageManager = require('../emailmessages/emailMessageManager');
 require('./model/promotionReport');
 
+//var pdfGenerator = require('html-pdf');
+var conversion = require("phantom-html-to-pdf")();
 var manager = {
-	
-	createPromotion: function(file, adminUrl, promotion, accountId, userId, fn) {
+    
+    createPromotion: function(file, adminUrl, promotion, accountId, userId, fn) {
         var self = this;
         self.log = log;
         self.log.debug(accountId, userId, '>> createPromotion');
@@ -386,6 +389,110 @@ var manager = {
         });
     },
 
+    generateReportForShipments: function(promotionId, view, fn) {
+        var self = this;
+        
+        var component = {};
+        var options = {
+            quality: 100
+        }
+        var self = this;
+        var query = {
+            'promotionId':promotionId
+        };
+        promotionDao.findOne({_id: promotionId}, $$.m.Promotion, function(err, value){
+            if(err) {
+                log.error(accountId, userId, 'Exception getting promotion: ' + err);
+                fn(err, null);
+            } else {
+                var component = {};
+                component.reportName = value.get("title") || "Shipments Report";
+                component.reportDate = value.getReportDate();
+
+                shipmentDao.findMany(query, $$.m.Shipment, function(err, list){
+                    if(err) {
+                        fn(err, null);
+                    } else {
+                        
+                        component.totalShipments = list.length;
+                        component.reports = 0;
+                        component.tryState = 0;
+                        component.buyState = 0;
+                        component.rmaState = 0;
+                        component.configured = 0;
+                        component.deployed = 0;
+                        component.wonCost = 0;
+                        component.openCost = 0;
+                        component.lastCost = 0;
+                        
+                        _.each(list, function (shipment) {
+                            if(shipment.get("attachment") && shipment.get("attachment").name){
+                                component.reports += 1;
+                            }
+                            if(shipment.get("status") === "TRY"){
+                                component.tryState += 1;
+                                component.openCost += shipment.getShipmentPrice();
+                            }
+                            if(shipment.get("status") === "BUY"){
+                                component.buyState += 1;
+                                component.wonCost += shipment.getShipmentPrice();
+                            }
+                            if(shipment.get("status") === "RMA"){
+                                component.rmaState += 1;
+                            }
+                            if(shipment.get("configDate")){
+                                component.configured += 1;
+
+                            }
+                            if(shipment.get("deployDate")){
+                                component.deployed += 1;
+                            }
+                            shipment.configDate = shipment.getFormattedDate("configDate");
+                            shipment.deployDate = shipment.getFormattedDate("deployDate");
+                            shipment.shipDate = shipment.getFormattedDate("shipDate");
+                            shipment.endDate = shipment.getFormattedDate("endDate");
+                            shipment.status = shipment.getStatus();
+                            shipment.VAR = shipment.get("companyName");
+                            shipment.customerDetails = shipment.getCustomerDetails("<br>");
+                            shipment.customerProject = shipment.getCustomerProject();
+                            shipment.customerPartner = shipment.getCustomerPartner();
+                            shipment.customerJuniperRep = shipment.getCustomerJuniperRep();
+                            shipment.products = shipment.getProductsWithSerialNumber();
+
+                        });
+
+                        var lastShipment = _.last(_.sortBy(list, function(result) { 
+                            return result.get("created") && Date.parse(result.get("created").date) })
+                        );
+                        component.wonCost = self._parseCurrency("$", component.wonCost);
+                        component.openCost = self._parseCurrency("$", component.openCost);
+                        component.lastCost = self._parseCurrency("$", lastShipment.getShipmentPrice());
+                
+                        component.shipments = list;
+                        
+                        app.render('promotions/shipment-html-view', component, function(err, html){
+                            if(err) {
+                                console.log(err);
+                            } else {
+                                if(view == 'html'){
+                                    fn(null, html);
+                                }
+                                else{
+                                    conversion({ html: html }, function(err, pdf) {
+                                      console.log(pdf.logs);
+                                      console.log(pdf.numberOfPages);
+                                      fn(null, pdf.stream);
+                                    });
+                                }
+                            }
+                        });
+                    }
+                });
+            }
+        });
+        
+    },
+
     deleteShipment: function(accountId, userId, shipmentId, fn){
         var self = this;
         log.debug(accountId, userId, '>> deleteShipment');
@@ -649,9 +756,11 @@ var manager = {
             return "\"" + text + "\",";
         else
             return text+",";
+    },
+    _parseCurrency: function(symbol, value){
+        return symbol + " " + value.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, "$1,");
     }
-    
-};
+}    
 
 $$.u = $$.u || {};
 $$.u.promotionManager = manager;
