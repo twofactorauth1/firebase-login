@@ -21,6 +21,7 @@ var purchaseOrder = $$.m.ModelBase.extend({
             cardCode:null,
             companyName:null,
             archived: false,
+            submitterEmail: null,
             created: {
                 date: new Date(),
                 by: null

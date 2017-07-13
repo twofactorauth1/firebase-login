@@ -731,6 +731,9 @@ module.exports = {
         if(po.get("text")){
             text.push("<b>Text</b>: "+ po.get("text"));
         }
+        if(po.get("submitterEmail")){
+            text.push("<b>Submitter Email</b>: "+ po.get("submitterEmail"));
+        }
         
         
         component.title = "You have a new purchase order!";

@@ -42,6 +42,15 @@
                 </div>
                 <hr>
             </div>
+            <div class="form-group">
+                <h4>Submitter Email</h4>
+                <div class="description">
+                    <a href="mailto:{{vm.state.purchaseOrder.submitterEmail}}">
+                        {{vm.state.purchaseOrder.submitterEmail}}
+                    </a>
+                </div>
+                <hr>
+            </div>
             <div class="form-group" ng-if="!vm.state.orgCardAndPermissions.isVendor && vm.state.purchaseOrder.companyName">
                 <h4>VAR</h4>
                 <div class="description">
