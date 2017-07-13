@@ -50,16 +50,18 @@ function purchaseOrderDetailsController($scope, $state, $attrs, $filter, $modal,
         var date = moment();
         var _noteToPush = {
             note: _note,            
-            date: date.toISOString(),
-            checkEnable: vm.uiState.noteEnable,
+            date: date.toISOString()           
+        };
+        
+        var emails = {};
+        if(vm.uiState.noteEnable){
             emails: {
                 sendTo: vm.state.purchaseOrder.submitterEmail,
                 cC: vm.state.purchaseOrder.submitter.username
             }
-        };
-        
+        }  
 
-        PurchaseOrderService.addPurchaseOrderNote($stateParams.purchaseOrderId, _noteToPush).then(function(response){
+        PurchaseOrderService.addPurchaseOrderNote($stateParams.purchaseOrderId, _noteToPush, emails).then(function(response){
             console.log("Notes added");
             if (!vm.state.purchaseOrder.notes)
                 vm.state.purchaseOrder.notes = [];
