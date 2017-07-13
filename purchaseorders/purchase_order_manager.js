@@ -513,7 +513,7 @@ module.exports = {
 
     },
 
-    addNotesToPurchaseOrder: function(accountId, userId, purchaseOrderId, note, fn){
+    addNotesToPurchaseOrder: function(accountId, userId, purchaseOrderId, note, submitterEmail, cC,fn){
         var self = this;
         log.debug(accountId, userId, '>> addNotesToPurchaseOrder');
         purchaseOrderdao.getById(purchaseOrderId, $$.m.PurchaseOrder, function (err, po) {
@@ -547,6 +547,8 @@ module.exports = {
                                 return fn(null, note);
                             }
                         });
+                        if(submitterEmail)
+                            self._sendEmailNoteToSubmitter(order, accountId, note, submitterEmail, cC);
                     }
                 });
             }
@@ -715,6 +717,38 @@ module.exports = {
             }
         });
 
+    },
+
+    _sendEmailNoteToSubmitter: function(po, accountId, note, toEmail, cC) {
+        var self = this;
+        var fromEmail = notificationConfig.FROM_EMAIL;
+        var fromName =  notificationConfig.WELCOME_FROM_NAME;
+        var emailSubject = notificationConfig.NEW_PURCHASE_NOTE_EMAIL_SUBJECT;
+        var emailTo = toEmail;
+        var emailCc = cC;
+
+        log.debug(note.note, '>> Checking values --');
+        var component = {};
+        component.note = note;
+
+        accountDao.getAccountByID(accountId, function(err, account){
+            if(account && account.get('business') && account.get('business').name) {
+                fromName = account.get('business').name;
+            }
+            app.render('purchaseorders/new_purchase_note', component, function(err, html){
+                if(err) {
+                    log.debug("template not found");
+                    log.error('error rendering html: ' + err);
+                    log.warn('email will not be sent to configured email.');
+                } else {
+                    self.log.debug('sending email to: ', emailTo);
+                    console.log(html);
+                    emailMessageManager.sendNewPurchaseOrderEmail(fromEmail, fromName, emailTo, null, emailSubject, html, accountId, [], '', emailCc, null, function(err, result){
+                        self.log.debug('result: ', result);
+                    });
+                }
+            });
+        });
     },
 
     _sendEmailOnPOCreation: function(po, accountId, adminUrl) {
