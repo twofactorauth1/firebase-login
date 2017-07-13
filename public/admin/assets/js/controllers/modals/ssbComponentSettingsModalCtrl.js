@@ -486,7 +486,7 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
              copyLink.sub_index=0;
              alink.links=[copyLink]
              alink.label="New Parent"
-             alink.linkTo={data:"",type:"sub-nav"}; updateParentPageSettings(alink.linkType,alink.linkTo.data, false);
+             alink.linkTo={data: SimpleSiteBuilderService.getTempUUID(),type:"sub-nav"}; updateParentPageSettings(alink.linkType,alink.linkTo.data, false);
          }
          alink.links.push({
               sub_index:alink.links.length,
