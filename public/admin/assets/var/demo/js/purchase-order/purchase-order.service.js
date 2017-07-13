@@ -105,7 +105,7 @@
             * Create PO notes
         */
 
-        function addPurchaseOrderNote(orderId, note) {
+        function addPurchaseOrderNote(orderId, note, emails) {
 
             function success(data) {                
                 console.log("note added");
@@ -114,12 +114,15 @@
             function error(error) {
                 console.error('PurchaseOrderService getPurchaseOrders error: ', JSON.stringify(error));
             }
-
+            var notes ={
+                note: note,
+                emails: emails
+            }
             return (
                 poRequest($http({
                   url: [basePoAPIUrlv2, 'po', orderId, "notes"].join('/'),
                   method: 'POST',
-                  data: angular.toJson(note)
+                  data: angular.toJson(notes)
                 }).success(success).error(error))
             );
         }

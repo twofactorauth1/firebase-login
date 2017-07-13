@@ -52,20 +52,29 @@ _.extend(api.prototype, baseApi.prototype, {
 
 
     generatePDF: function(req, resp){
-        var component = {};
+        var self = this;
+        var accountId = parseInt(self.accountId(req));
+        var userId = self.userId(req);
+        self.log.debug(accountId, userId, '>> generatePDF');
         var promotionId = req.params.promotionId;
-        promotionManager.generateReportForShipments(promotionId, 'pdf' , function(err, stream){
+        promotionManager.generateReportForShipments(accountId, userId, promotionId, 'pdf' , function(err, stream){
             stream.pipe(resp);
+            self.log.debug(accountId, userId, '<< generatePDF');
         });
     },
 
     generateHTML: function(req, resp){
-        var component = {};
+        var self = this;
+        var accountId = parseInt(self.accountId(req));
+        var userId = self.userId(req);
+        self.log.debug(accountId, userId, '>> generateHTML');
+
         var promotionId = req.params.promotionId;
-        promotionManager.generateReportForShipments(promotionId, 'html', function(err, stream){
+        promotionManager.generateReportForShipments(accountId, userId, promotionId, 'html', function(err, stream){
             resp.writeHead(200, {'Content-Type': 'text/html'});
             resp.write(stream);
             resp.end();
+            self.log.debug(accountId, userId, '<< generateHTML');
         });
     },
 

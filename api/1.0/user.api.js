@@ -473,21 +473,23 @@ _.extend(api.prototype, baseApi.prototype, {
                             } else {
                                 organization = _organization;
                                 product = _product;
-                                var stripePlan = product.get('product_attributes').stripePlans[0];
-                                if(stripePlan) {
-                                    try {
-                                        setupFee = parseInt(stripePlan.signup_fee);
-                                        if(isNaN(setupFee)) {
+                                setupFee = 0;
+                                if(product) {
+                                    var stripePlan = product.get('product_attributes').stripePlans[0];
+                                    if(stripePlan) {
+                                        try {
+                                            setupFee = parseInt(stripePlan.signup_fee);
+                                            if(isNaN(setupFee)) {
+                                                setupFee = 0;
+                                            }
+                                            self.log.debug('Using setupFee:', setupFee);
+                                        } catch(exception) {
                                             setupFee = 0;
+                                            self.log.debug('caught exception.  setupFee:', setupFee);
                                         }
-                                        self.log.debug('Using setupFee:', setupFee);
-                                    } catch(exception) {
-                                        setupFee = 0;
-                                        self.log.debug('caught exception.  setupFee:', setupFee);
                                     }
-                                } else {
-                                    setupFee = 0;
                                 }
+
                                 callback();
                             }
                         });

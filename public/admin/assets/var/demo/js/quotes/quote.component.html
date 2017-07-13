@@ -1,0 +1,114 @@
+<section id="page-title" class="padding-top-15 padding-bottom-15">
+    <div class="row">
+        <div class="col-sm-8">
+            <h1 class="mainTitle">Quotes</h1>
+            <span ng-if="vm.state.quotes.length" class="mainDescription">There {{vm.state.quotes.length > 1 ? 'are' : 'is'}} currently {{vm.state.quotes.length}} qoute<span ng-if="vm.state.quotes.length > 1">s</span>. <span ng-if="vm.showFilteredRecords()"> ({{filteredCollection.length || 0}} in filtered view)</span></span>
+            <span class="mainDescription" ng-if="vm.state.quotes && !vm.state.quotes.length">There are currently no quotes</span>
+        </div>
+    </div>
+</section>
+
+
+<div class="quotes-list securematics-list-container" ng-init="tableView='list'">
+	<div st-table="vm.displayedQuotes" st-safe-src="vm.state.quotes" st-filtered-collection>
+	    <div class="container-fluid container-fullw bg-white padding-top-0 padding-bottom-0 margin-bottom-15">
+	        <div class="row margin-left-0 margin-right-0">
+	            <div class="col-sm-12">
+	                <div class="panel panel-transparent row margin-bottom-0">
+	                    <div class="panel-body">
+	                        <form role="form" class="ng-pristine ng-valid row">
+	                            <div>
+	                                <div class="col-xs-5 col-sm-6 padding-left-0 padding-right-0">
+	                                    <div class="form-group">
+                                            <span class="input-icon">
+		                                        <input type="text" st-search ng-model="vm.uiState.globalSearch" placeholder="Search by title, customer, vendor..." class="form-control">
+		                                        <i class="ti-search"></i>
+                                    		</span>
+	                                    </div>
+	                                </div>
+	                                <div class="form-group col-xs-7 col-sm-6 row margin-bottom-0 padding-right-10 pull-right">
+	                                    <div class="col-xs-6 col-sm-6 center padding-0">
+	                                        <div class="form-group">
+	                                            <div class="btn-group tableView" style="white-space: nowrap;">
+	                                                <button class="btn btn-info" ng-class="{'active': tableView == 'list'}" href="" ng-click="tableView = 'list'" tooltip-placement="top" tooltip="List"> <span class="fa fa-th-list"></span> </button>
+	                                                <button class="btn btn-info" ng-class="{'active': tableView == 'grid'}" href="" ng-click="tableView = 'grid'" tooltip-placement="top" tooltip="Grid"> <span class="fa fa-th"></span> </button>
+	                                            </div>
+	                                        </div>
+	                                    </div>
+	                                    <div class="col-xs-6 col-sm-6 pull-right" ng-if="vm.state.orgCardAndPermissions.permissions.quote.create">
+	                                        <button type="button" class="btn btn-o btn-info btn-scroll btn-scroll-top ti ti-plus ng-click-active pull-right" ng-click="vm.openModal('quote-details-modal', 'QuoteDetailsModalController', 'lg')">
+	                                            <span>New</span>
+	                                        </button>
+	                                    </div>
+	                                </div>
+	                            </div>
+	                        </form>
+	                    </div>
+	                </div>
+	            </div>
+	        </div>
+	    </div>
+	    <table class="table table-hover table-striped table-po-list" ng-class="{'grid': tableView == 'grid', 'bg-white table-list-view': tableView == 'list'}" ng-if="!vm.uiState.loading" fixed-header-table>
+	        <thead ng-class="{'bg-white': tableView == 'grid'}" sticky offset="65" sticky-class="sticky-header-class">
+	            <tr>
+	                <th class="title-col" st-sort="title" style="white-space: nowrap">Title</th>
+	                <th class="partner-col" ng-if="vm.state.orgCardAndPermissions.permissions.quote.showPartner" st-sort="partner" style="white-space: nowrap">Partner</th>
+	                <th class="customer-col" st-sort="customer" style="white-space: nowrap">Customer</th>
+	                <th class="vendor-col" style="white-space: nowrap">Vendors</th>
+	                <th class="items-col" style="white-space: nowrap">Items</th>
+	                <th class="total-col" st-sort="total" style="white-space: nowrap">Total</th>
+	                <th class="status-col">Status</th>
+	                <th class="view-col">View/Edit</th>
+	            </tr>
+	            <tr>
+	                <th class="title-col">
+	                	<input st-search="title" ng-model="vm.uiState.fieldSearch.title" placeholder="Title" class="form-control" type="search" />
+	                </th>
+	                <th class="partner-col" ng-if="vm.state.orgCardAndPermissions.permissions.quote.showPartner">
+	                	<input st-search="partner" ng-model="vm.uiState.fieldSearch.partner" placeholder="Parner" class="form-control" type="search" />
+                	</th>
+	                <th class="customer-col">
+	                	<input st-search="customer" ng-model="vm.uiState.fieldSearch.customer" placeholder="Customer" class="form-control" type="search" />
+	                </th>
+	                <th class="vendor-col"></th>
+	                <th class="items-col"></th>
+	                <th class="total-col"></th>
+	                <th class="status-col"></th>
+	                <th class="view-col"></th>
+	            </tr>
+	        </thead>
+	        <tbody>
+	            <tr ng-repeat="quote in vm.displayedQuotes" class="product-item">
+                    
+                    <td class="title-col"><strong>Title: </strong><div class="name-block-container"><span class="list-name"></span><span class="text-adjust-table" title="{{quote.title}}">{{quote.title || '&nbsp;'}}</span></div></td>
+
+                    <td class="partner-col" ng-if="vm.state.orgCardAndPermissions.permissions.quote.showPartner"><strong>Partner: </strong>{{quote.partner || '&nbsp;'}}</td>
+                    <td class="customer-col"><strong>Customer: </strong>{{quote.customer || '&nbsp;'}}</td>
+
+	                <td class="vendor-col"><strong>Vendors: </strong>{{quote.vendors || '&nbsp;'}}</td>
+
+	                <td class="vendor-col"><strong>Items: </strong>{{quote.items || '&nbsp;'}}</td>
+
+	                <td class="total-col"><strong>Total: </strong>{{quote.total || '&nbsp;'}}</td>
+
+	                <td class="status-col"><strong>Status: </strong>{{quote.status || '&nbsp;'}}</td>
+
+	                <td class="view-col"><strong>View/Edit: </strong>'&nbsp;'</td>
+
+	                
+	            </tr>
+	        </tbody>
+	        <tfoot>
+	            <tr>
+	                <td class="text-center" ng-if="vm.state.quotes.length" st-custom-pagination="" st-displayed-pages="vm.pagingConstant.displayedPages" st-items-by-page="vm.pagingConstant.numberOfRowsPerPage || 50" colspan="6">
+	                </td>
+	                <td ng-if="!vm.state.quotes.length" colspan="6" class="center height-100">
+	            		<h4>There are currently no quotes</h4>
+	            	</td>
+	            </tr>
+	        </tfoot>
+	    </table>
+	    <div class="load1 csspinner height-400" ng-show="vm.uiState.loading"></div>
+	</div>
+</div>
+<div data-ng-include=" 'assets/var/demo/js/quotes/modals/quote-details-modal.html' "></div>
