@@ -55,9 +55,9 @@ function purchaseOrderDetailsController($scope, $state, $attrs, $filter, $modal,
         
         var emails = {};
         if(vm.uiState.noteEnable){
-            emails: {
-                sendTo: vm.state.purchaseOrder.submitterEmail,
-                cC: vm.state.purchaseOrder.submitter.username
+            emails = {
+                sendTo: vm.state.purchaseOrder.submitterEmail || vm.state.purchaseOrder.submitter.username,
+                cC: $scope.$parent.currentUser.email
             }
         }  
 
