@@ -35,8 +35,8 @@
 	                                            </div>
 	                                        </div>
 	                                    </div>
-	                                    <div class="col-xs-6 col-sm-6 pull-right padding-0">
-	                                        <button type="button" class="btn btn-o btn-info btn-scroll btn-scroll-top ti ti-plus ng-click-active pull-right" ng-click="vm.openModal()">
+	                                    <div class="col-xs-6 col-sm-6 pull-right" ng-if="vm.state.orgCardAndPermissions.permissions.quote.create">
+	                                        <button type="button" class="btn btn-o btn-info btn-scroll btn-scroll-top ti ti-plus ng-click-active pull-right" ng-click="vm.openModal('quote-details-modal', 'QuoteDetailsModalController', 'lg')">
 	                                            <span>New</span>
 	                                        </button>
 	                                    </div>
@@ -53,9 +53,9 @@
 	            <tr>
 	                <th class="title-col" st-sort="title" style="white-space: nowrap">Title</th>
 	                <th class="customer-col" st-sort="customer" style="white-space: nowrap">Customer</th>
-	                <th class="vendor-col" st-sort="vendors" style="white-space: nowrap">Vendors</th>
-	                <th class="items-col" st-sort="vendors" style="white-space: nowrap">Items</th>
-	                <th class="total-col" st-sort="vendors" style="white-space: nowrap">Total</th>
+	                <th class="vendor-col" style="white-space: nowrap">Vendors</th>
+	                <th class="items-col" style="white-space: nowrap">Items</th>
+	                <th class="total-col" st-sort="total" style="white-space: nowrap">Total</th>
 	                <th class="status-col">Status</th>
 	                <th class="view-col">View/Edit</th>
 	            </tr>
@@ -104,3 +104,4 @@
 	    <div class="load1 csspinner height-400" ng-show="vm.uiState.loading"></div>
 	</div>
 </div>
+<div data-ng-include=" 'assets/var/demo/js/quotes/modals/quote-details-modal.html' "></div>
