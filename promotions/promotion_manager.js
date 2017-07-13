@@ -389,16 +389,15 @@ var manager = {
         });
     },
 
-    generateReportForShipments: function(promotionId, view, fn) {
+    generateReportForShipments: function(accountId, userId, promotionId, view, fn) {
         var self = this;
-        
-        var component = {};
-        var options = {
-            quality: 100
-        }
+        self.log = log;
+        self.log.debug(accountId, userId, '>> generateReportForShipments(' + view +')');
+
+
         var self = this;
         var query = {
-            'promotionId':promotionId
+            promotionId:promotionId
         };
         promotionDao.findOne({_id: promotionId}, $$.m.Promotion, function(err, value){
             if(err) {
@@ -476,8 +475,7 @@ var manager = {
                             } else {
                                 if(view == 'html'){
                                     fn(null, html);
-                                }
-                                else{
+                                } else{
                                     conversion({ html: html }, function(err, pdf) {
                                       console.log(pdf.logs);
                                       console.log(pdf.numberOfPages);
@@ -574,36 +572,45 @@ var manager = {
                 by:userId
             }
         });
-        promotionDao.saveOrUpdate(promotionReport, function(err, value){
+        promotionDao.findOne({_id:promotionId}, $$.m.Promotion, function(err, promotion){
             if(err) {
-                self.log.error(accountId, userId, 'Error saving promotionReport:', err);
+                self.log.error(accountId, userId, 'Error finding promotion:', err);
                 fn(err);
             } else {
-                self.log.debug(accountId, userId, 'Saved the report.  Scheduling.');
-                var jobString = '$$.u.promotionManager.runReport(\'' + value.id() + '\');';
-                var job = new $$.m.ScheduledJob({
-                    accountId: accountId,
-                    scheduledAt: startOnDate,
-                    runAt: null,
-                    job:jobString,
-                    executing:false,
-                    completedAt: null,
-                    created: {
-                        date: new Date(),
-                        by: userId
-                    }
-                });
-                scheduledJobsManager.scheduleJob(job, function(err, scheduledJob){
+                promotionReport.set('subject', 'Promotion Report: ' + promotion.get('title'));
+                promotionDao.saveOrUpdate(promotionReport, function(err, value){
                     if(err) {
-                        self.log.error(accountId, userId, 'Error scheduling job:', err);
+                        self.log.error(accountId, userId, 'Error saving promotionReport:', err);
                         fn(err);
                     } else {
-                        self.log.debug(accountId, userId, '<< createPromotionReport');
-                        fn(null, value);
+                        self.log.debug(accountId, userId, 'Saved the report.  Scheduling.');
+                        var jobString = '$$.u.promotionManager.runReport(\'' + value.id() + '\');';
+                        var job = new $$.m.ScheduledJob({
+                            accountId: accountId,
+                            scheduledAt: startOnDate,
+                            runAt: null,
+                            job:jobString,
+                            executing:false,
+                            completedAt: null,
+                            created: {
+                                date: new Date(),
+                                by: userId
+                            }
+                        });
+                        scheduledJobsManager.scheduleJob(job, function(err, scheduledJob){
+                            if(err) {
+                                self.log.error(accountId, userId, 'Error scheduling job:', err);
+                                fn(err);
+                            } else {
+                                self.log.debug(accountId, userId, '<< createPromotionReport');
+                                fn(null, value);
+                            }
+                        });
                     }
                 });
             }
         });
+
     },
 
     listReports: function(accountId, userId, fn) {
@@ -700,43 +707,52 @@ var manager = {
                             var toAddressAry = report.get('recipients');
                             var subject = report.get('subject');
                             var content = 'Please find attached promotion report';
-                            emailMessageManager.sendPromotionReport(accountId, fromAddress, fromName, toAddressAry, subject, csv, content, function(err, value){
+                            self.generateReportForShipments(accountId, null, promotionId, 'pdf', function(err, pdf){
                                 if(err) {
-                                    self.log.error('Error sending report:', err);
+                                    self.log.error('Error generating pdf for report:', err);
                                     emailMessageManager.notifyAdmin(null, null, null, 'Error running promotion report', 'Failed to run report with id [' + reportId + ']', err, function(){});
                                     return;
                                 } else {
-                                    self.log.debug('Sent report.  Rescheduling');
-                                    var jobString = '$$.u.promotionManager.runReport(\'' + reportId + '\');';
-                                    var nextRunDate = null;
-                                    if(report.get('repeat') === 'monthly') {
-                                        nextRunDate = moment().add(1, 'month').toDate();
-                                    } else {
-                                        nextRunDate = moment().add(1, 'week').toDate();
-                                    }
-                                    var userId = report.get('created').by;
-                                    var job = new $$.m.ScheduledJob({
-                                        accountId: accountId,
-                                        scheduledAt: nextRunDate,
-                                        runAt: null,
-                                        job:jobString,
-                                        executing:false,
-                                        completedAt: null,
-                                        created: {
-                                            date: new Date(),
-                                            by: userId
-                                        }
-                                    });
-                                    scheduledJobsManager.scheduleJob(job, function(err){
+                                    emailMessageManager.sendPromotionReport(accountId, fromAddress, fromName, toAddressAry, subject, csv, pdf, content, function(err, value){
                                         if(err) {
-                                            self.log.error(accountId, userId, 'Error scheduling job:', err);
-                                            emailMessageManager.notifyAdmin(null, null, null, 'Error scheduling promotion report', 'Failed to reschedule report with id [' + reportId + ']', err, function(){});
+                                            self.log.error('Error sending report:', err);
+                                            emailMessageManager.notifyAdmin(null, null, null, 'Error running promotion report', 'Failed to run report with id [' + reportId + ']', err, function(){});
+                                            return;
                                         } else {
-                                            self.log.debug(accountId, userId, 'Next run date:', nextRunDate);
+                                            self.log.debug('Sent report.  Rescheduling');
+                                            var jobString = '$$.u.promotionManager.runReport(\'' + reportId + '\');';
+                                            var nextRunDate = null;
+                                            if(report.get('repeat') === 'monthly') {
+                                                nextRunDate = moment().add(1, 'month').toDate();
+                                            } else {
+                                                nextRunDate = moment().add(1, 'week').toDate();
+                                            }
+                                            var userId = report.get('created').by;
+                                            var job = new $$.m.ScheduledJob({
+                                                accountId: accountId,
+                                                scheduledAt: nextRunDate,
+                                                runAt: null,
+                                                job:jobString,
+                                                executing:false,
+                                                completedAt: null,
+                                                created: {
+                                                    date: new Date(),
+                                                    by: userId
+                                                }
+                                            });
+                                            scheduledJobsManager.scheduleJob(job, function(err){
+                                                if(err) {
+                                                    self.log.error(accountId, userId, 'Error scheduling job:', err);
+                                                    emailMessageManager.notifyAdmin(null, null, null, 'Error scheduling promotion report', 'Failed to reschedule report with id [' + reportId + ']', err, function(){});
+                                                } else {
+                                                    self.log.debug(accountId, userId, 'Next run date:', nextRunDate);
+                                                }
+                                            });
                                         }
                                     });
                                 }
                             });
+
                         }
                     });
                 }
@@ -760,7 +776,7 @@ var manager = {
     _parseCurrency: function(symbol, value){
         return symbol + " " + value.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, "$1,");
     }
-}    
+} ;
 
 $$.u = $$.u || {};
 $$.u.promotionManager = manager;

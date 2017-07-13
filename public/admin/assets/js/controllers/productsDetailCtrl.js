@@ -106,6 +106,7 @@
           "fromEmail": "",
           "fromName": '',
           "replyTo": '',
+          "cc": '',
           "bcc": '',
           "subject": '',
           "vars": [],
@@ -336,6 +337,7 @@
         stepSettings.fromEmail = newEmail.fromEmail;
         stepSettings.fromName = newEmail.fromName;
         stepSettings.replyTo = newEmail.replyTo;
+        stepSettings.cc = newEmail.cc;
         stepSettings.bcc = newEmail.bcc;
         stepSettings.subject = newEmail.subject;
       }
@@ -667,6 +669,7 @@
       "fromName": "",
       "fromEmail": "",
       "replyTo": "",
+      "cc": "",
       "bcc": "",
       "components": [{
         "_id": CommonService.generateUniqueAlphaNumericShort(),
@@ -896,6 +899,7 @@
            if($scope.product.emailSettings.emailId){
               $scope.emailToSend.fromEmail= $scope.product.emailSettings.fromEmail;
               $scope.emailToSend.fromName= $scope.product.emailSettings.fromName;
+              $scope.emailToSend.cc= $scope.product.emailSettings.cc;
               $scope.emailToSend.bcc= $scope.product.emailSettings.bcc;
               $scope.emailToSend.replyTo= $scope.product.emailSettings.replyTo;
               $scope.emailToSend.subject= $scope.product.emailSettings.subject;
@@ -941,6 +945,7 @@
         $scope.setBusinessDetails(newEmail);
         $scope.emailToSend = $scope.emailToSendCopy;
         $scope.emailToSend.title = $scope.product.name + ' Email';
+        $scope.emailToSend.cc = "";
         $scope.emailToSend.bcc = "";
         $scope.emailToSend.subject = $scope.product.name;
         $scope.checkEmailTitle($scope.emailToSend.title);

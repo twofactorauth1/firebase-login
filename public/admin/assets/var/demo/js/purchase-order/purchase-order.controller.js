@@ -2,9 +2,9 @@
 
 app.controller('PurchaseOrderComponentController', purchaseOrderComponentController);
 
-purchaseOrderComponentController.$inject = ['$scope', '$attrs', '$filter', '$modal', '$timeout', '$location', 'SweetAlert', 'toaster', 'pagingConstant', 'PurchaseOrderService', 'UtilService'];
+purchaseOrderComponentController.$inject = ['$scope', '$attrs', '$filter', '$modal', '$timeout', '$location', 'SweetAlert', 'toaster', 'pagingConstant', 'formValidations', 'PurchaseOrderService', 'UtilService'];
 /* @ngInject */
-function purchaseOrderComponentController($scope, $attrs, $filter, $modal, $timeout, $location, SweetAlert, toaster, pagingConstant, PurchaseOrderService, UtilService) {
+function purchaseOrderComponentController($scope, $attrs, $filter, $modal, $timeout, $location, SweetAlert, toaster, pagingConstant, formValidations, PurchaseOrderService, UtilService) {
 
     var vm = this;
 
@@ -34,7 +34,7 @@ function purchaseOrderComponentController($scope, $attrs, $filter, $modal, $time
     vm.selectCardCode = selectCardCode;
     vm.getSubmitterName = getSubmitterName;
     vm.preventClick = preventClick;
-
+    vm.formValidations = formValidations; 
     vm.bulkActionChoice = {};
 
     vm.bulkActionChoices = [{data: 'archive', label: 'Archive'}];
@@ -76,8 +76,14 @@ function purchaseOrderComponentController($scope, $attrs, $filter, $modal, $time
         }
     });
 
+    function setDefaultsForNewPO(){
+        vm.state.newPurchaseOrder = {
+            submitterEmail: angular.copy($scope.$parent.currentUser.email)
+        };
+    }
+
     function openModal(size){
-        vm.state.newPurchaseOrder = {};
+        setDefaultsForNewPO();
         var templateUrl = 'new-purchase-order-modal';
         var isVendor = vm.state.orgCardAndPermissions && vm.state.orgCardAndPermissions.isVendor;
         if(isVendor){
@@ -100,7 +106,7 @@ function purchaseOrderComponentController($scope, $attrs, $filter, $modal, $time
         if($scope.modalInstance)
             $scope.modalInstance.close();
         vm.uiState.modalLoading = false;
-        vm.state.newPurchaseOrder = {};
+        setDefaultsForNewPO();
     }
 
     function viewArchivedPo(size){

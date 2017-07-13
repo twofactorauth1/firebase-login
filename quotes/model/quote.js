@@ -7,21 +7,18 @@
 
 require('../../models/base.model.js');
 
-var purchaseOrder = $$.m.ModelBase.extend({
+var quote = $$.m.ModelBase.extend({
 
     defaults: function() {
         return {
             _id: null,
             title: null,
-            text: null,
+            customer: null,
             accountId: null,
             userId : null,
-            attachment: null,
-            notes: [],
-            cardCode:null,
-            companyName:null,
-            archived: false,
-            submitterEmail: null,
+            vendors: null,
+            items:null,
+            status:null,
             created: {
                 date: new Date(),
                 by: null
@@ -42,11 +39,11 @@ var purchaseOrder = $$.m.ModelBase.extend({
 }, {
     db: {
         storage: "mongo",
-        table: "purchase_orders",
+        table: "quotes",
         idStrategy: "uuid"
     }
 });
 
-$$.m.PurchaseOrder = purchaseOrder;
+$$.m.Quote = quote;
 
-module.exports = purchaseOrder;
+module.exports = quote;

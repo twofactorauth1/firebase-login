@@ -100,7 +100,7 @@ main(){
 
 	# create a new version and update the environment to use this version
 	aws elasticbeanstalk create-application-version --application-name "${APP_NAME}" --version-label "${APP_VERSION}" --description "${APP_DESCRIPTION}" --source-bundle S3Bucket="${S3_BUCKET}",S3Key="${APP_NAME}-${APP_VERSION}.zip"	|| on_err "$_"
-    aws elasticbeanstalk create-environment --environment-name "${GREEN_ENV_NAME}" --application-name "${APP_NAME}" --version-label "${APP_VERSION}" --description "${APP_DESCRIPTION}" --solution-stack-name "64bit Amazon Linux 2016.03 v2.1.1 running Node.js" --template-name indiweb-test-config --option-settings Namespace=aws:elasticbeanstalk:application:environment,OptionName=ROOT_HOST,Value=preprod.indigenous.io
+    aws elasticbeanstalk create-environment --environment-name "${GREEN_ENV_NAME}" --application-name "${APP_NAME}" --version-label "${APP_VERSION}" --description "${APP_DESCRIPTION}" --solution-stack-name "64bit Amazon Linux 2016.03 v2.1.1 running Node.js" --template-name indiweb-test-config --option-settings Namespace=aws:elasticbeanstalk:application:environment,OptionName=ROOT_HOST,Value=preprod.indigenous.io,Namespace=aws:elasticbeanstalk:environment,OptionName=EnvironmentType,Value=LoadBalanced,Namespace=aws:elb:listener:443,OptionName=ListenerProtocol,Value=HTTPS,Namespace=aws:elb:listener:443,OptionName=SSLCertificateId,Value=20170519_SAN_Indigenous
 
     # NEED TO ADD A WAIT FOR 'Updating' BEFORE WE WAIT FOR 'Ready'
     interval=5; timeout=90; while [[ ! `aws elasticbeanstalk describe-environments --environment-name "${GREEN_ENV_NAME}" | grep -i status | grep -i updating` && $timeout > 0 ]]; do sleep $interval; timeout=$((timeout - interval)); done
