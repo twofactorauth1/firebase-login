@@ -10,6 +10,7 @@ var emailDao = require('../cms/dao/email.dao');
 var campaignDao = require('../campaign/dao/campaign.dao');
 var productDao = require('../products/dao/product.dao');
 var organizationDao = require('../organizations/dao/organization.dao');
+var paymentsManager = require('../payments/payments_manager');
 
 var async = require('async');
 
@@ -44,6 +45,56 @@ var defaultBilling = {
 
 var accountManager = {
     log:LOG,
+
+    cancelAccount: function(accountId, userId, targetAccountId, reason, fn) {
+        var self = this;
+        self.log.debug(accountId, userId, '>> cancelAccount [' + targetAccountId + ']');
+
+        async.waterfall([
+            function(cb) {
+                accountDao.getAccountByID(targetAccountId, function(err, account){
+                    if(err) {
+                        self.log.error(accountId, userId, 'Error finding account:', err);
+                        cb(err);
+                    } else {
+                        cb(null, account);
+                    }
+                });
+            },
+            function(account, cb) {
+                paymentsManager.cancelAccountSubscription(accountId, userId, account, true, function(err, value){
+                    if(err) {
+                        self.log.error(accountId, userId, 'Error cancelling account subscription:', err);
+                        cb(err);
+                    } else {
+                        cb(null, account);
+                    }
+                });
+            },
+            function(account, cb) {
+                var billing = account.get('billing');
+                billing.cancellationDate = new Date();
+                billing.cancellationReason = reason;
+                accountDao.saveOrUpdate(account, function(err, savedAccount){
+                    if(err) {
+                        self.log.error(accountId, userId, 'Error saving account:', err);
+                        cb(err);
+                    } else {
+                        cb(null, savedAccount);
+                    }
+                });
+            }
+        ], function(err, updatedAccount){
+            if(err) {
+                self.log.error(accountId, userId, 'Error cancelling account subscription:', err);
+                fn(err);
+            } else {
+                self.log.debug(accountId, userId, '<< cancelAccount');
+                fn(null, updatedAccount);
+            }
+        });
+
+    },
 
     getOrganizationByAccountId: function(accountId, userId, fn) {
         var self = this;
