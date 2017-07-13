@@ -94,7 +94,13 @@
                 </ul>
                 <div class="user-notes-container" ng-if="!vm.state.orgCardAndPermissions.isVendor">
                     <label><strong>New Note</strong></label>
-                    <textarea id="newNote" rows="5" class="form-control margin-bottom-15" ng-model="vm.newNote.text"></textarea>
+                    <textarea id="newNote" rows="5" class="form-control margin-bottom-0" ng-model="vm.newNote.text"></textarea>
+                    <div class="checkbox clip-check check-success margin-top-5">
+                        <input type="checkbox" id="note-submitter" ng-model="vm.uiState.noteEnable" ng-change="checkValue(vm.uiState.noteEnable)">
+                        <label for="note-submitter">
+                            Send copy of note to Submitter
+                        </label>
+                    </div>
                     <button type="button" ng-disabled="!(vm.newNote.text) || vm.uiState.saveLoading" class="btn btn-info btn-block btn-o btn-wide btn-scroll btn-scroll-top ti-plus" ng-click="vm.addNote(vm.newNote.text)">
                         <span>Add</span>
                     </button>
