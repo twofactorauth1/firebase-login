@@ -1933,6 +1933,20 @@ module.exports = {
                                                 link.label = _label;
                                                 link.linkTo.data = _updatedHandle;
                                                 _exists = true;
+                                            }else if(link.linkTo.type=="sub-nav"){
+                                                _.each(link.links, function(subLink){
+                                                    if(subLink.linkTo.data === _existingHandle){
+                                                        var _label = updatedPage.get('menuTitle');
+                                                        // check if menu title not exists and page title is changed
+                                                        if(!_label){
+                                                            _label = updatedPage.get('title');
+                                                        }
+                                                        subLink.label = _label;
+                                                        subLink.linkTo.data = _updatedHandle;
+                                                        _exists = true;
+                                                    }
+
+                                                });
                                             }
                                             else if(link.linkTo && (link.linkTo.type === 'section') && link.linkTo.page === _existingHandle){
                                                 link.linkTo.page = _updatedHandle;
@@ -1949,8 +1963,17 @@ module.exports = {
                                             }
                                             else if(link.linkTo.type === 'page' || link.linkTo.type === 'home'){
                                                 return _.contains(pageHandles, link.linkTo.data)
-                                            }
-                                            else{
+                                            }else if(link.linkTo.type=="sub-nav"){
+                                                var linkFound=false;
+                                                _.each(link.links, function(subLink){
+                                                    self.log.debug('>> chekcing sub link --' );
+                                                    self.log.debug( subLink );
+                                                    if(!linkFound){
+                                                        linkFound= _.contains(pageHandles, subLink.linkTo.data)
+                                                    }
+                                                });
+                                                return linkFound;
+                                            }else{
                                                 return true;
                                             }
                                         })
