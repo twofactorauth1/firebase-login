@@ -42,7 +42,7 @@
                 </div>
                 <hr>
             </div>
-            <div class="form-group">
+            <div class="form-group" ng-if="vm.state.purchaseOrder.submitterEmail">
                 <h4>Submitter Email</h4>
                 <div class="description">
                     <a href="mailto:{{vm.state.purchaseOrder.submitterEmail}}">
