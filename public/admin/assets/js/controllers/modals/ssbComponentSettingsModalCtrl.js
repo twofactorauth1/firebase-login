@@ -468,7 +468,6 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
   };
 
 
-
     $scope.addSubLink = function (index) {
      //edit[index]=true;
      var alink=undefined;
@@ -500,7 +499,21 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
              $scope.updateSubIndex();
         },1000);
      }
-  };
+    };
+    $scope.addAsParent = function (index,childIndex) {
+        if ($scope.component.customnav) {
+            var copyLink=  angular.copy($scope.component.linkLists[0].links[index].links[childIndex]);
+            $scope.component.linkLists[0].links[index].links.splice(childIndex, 1);
+            $scope.component.linkLists[0].links.push(copyLink);
+        } else {
+            var copyLink=  angular.copy($scope.website.linkLists[0].links[index].links[childIndex]);
+            $scope.website.linkLists[0].links[index].links.splice(childIndex, 1);
+            $scope.website.linkLists[0].links.push(copyLink);
+        }
+        $timeout(function () {
+            $scope.updateSubIndex();
+        },1000);
+    };
     $scope.updateSubIndex=function(){
          $(".subnavs").unbind("sortable").sortable({
             opacity: 0.5,
