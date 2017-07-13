@@ -721,11 +721,13 @@ module.exports = {
 
     _sendEmailNoteToSubmitter: function(po, accountId, note, emails) {
         var self = this;
+        self.log = log;
         var fromEmail = notificationConfig.FROM_EMAIL;
         var fromName =  notificationConfig.WELCOME_FROM_NAME;
         var emailSubject = notificationConfig.NEW_PURCHASE_NOTE_EMAIL_SUBJECT;
         var emailTo = emails.sendTo;
-        var emailCc = emails.cC;
+        var emailCc = [];
+        emailCc.push(emails.cC);
 
         log.debug(note.note, '>> Checking values --');
         var component = {};
