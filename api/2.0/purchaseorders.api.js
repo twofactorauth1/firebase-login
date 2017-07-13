@@ -159,9 +159,11 @@ _.extend(api.prototype, baseApi.prototype, {
                 return self.send403(res);
             } else {              
                 var notes = req.body;
+                var submitterEmail = notes.emails.sendTo;
+                var noteCcEmail = notes.emails.cC;
                 notes.userId = userId;
                 var purchaseOrderId = req.params.id;
-                poManager.addNotesToPurchaseOrder(accountId, userId, purchaseOrderId, notes, function(err, value){                                                       
+                poManager.addNotesToPurchaseOrder(accountId, userId, purchaseOrderId, notes, submitterEmail, noteCcEmail, function(err, value){
                     self.sendResultOrError(res, err, value, 'Could not add notes to PO');                    
                 }); 
             }

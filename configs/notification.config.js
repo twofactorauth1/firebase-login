@@ -5,7 +5,7 @@
  * Please contact info@indigenous.io for approval or questions.
  */
 
-var appConfig =  require('./app.config'); 
+var appConfig =  require('./app.config');
 
 var notificationFromEmail = 'admin@indigenous.io';
 var notificaitonToEmail = 'test_operations@indigenous.io';
@@ -17,6 +17,7 @@ var thanksForInterest = process.env.INTEREST_HTML || 'public/templates/emails/th
 var welcomeEmailSubject = process.env.WELCOME_EMAIL_SUBJECT || 'Welcome to Indigenous!';
 var newCustomerEmailSubject = process.env.NEW_CUSTOMER_EMAIL_SUBJECT || 'New contact created';
 var newPurchaseOrderEmailSubject = process.env.NEW_PURCHASE_ORDER_EMAIL_SUBJECT || 'New purchase order created';
+var newPurchaseNoteEmailSubject = "New purchase note created";
 var notificationPurchaseOrderToEmail = process.env.NEW_PURCHASE_ORDER_EMAIL_TO || 'smaticsdemo-portal@indigenous.io';
 var notificationPurchaseOrderBccEmail = process.env.NEW_PURCHASE_ORDER_EMAIL_BCC || '';
 var defaulSenderAddress = process.env.DEFAULT_SENDER_ADDRESS || 'messages-noreply-bounce@indigenous.io';
@@ -50,6 +51,7 @@ module.exports = {
     WELCOME_EMAIL_SUBJECT: welcomeEmailSubject,
     NEW_CUSTOMER_EMAIL_SUBJECT: newCustomerEmailSubject,
     NEW_PURCHASE_ORDER_EMAIL_SUBJECT: newPurchaseOrderEmailSubject,
+    NEW_PURCHASE_NOTE_EMAIL_SUBJECT: newPurchaseNoteEmailSubject,
     NEW_PURCHASE_ORDER_EMAIL_TO : notificationPurchaseOrderToEmail,
     NEW_PURCHASE_ORDER_EMAIL_BCC : notificationPurchaseOrderBccEmail,
     THANKS_HTML: thanksForInterest,

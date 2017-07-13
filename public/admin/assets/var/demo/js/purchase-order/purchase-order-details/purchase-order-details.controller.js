@@ -35,6 +35,7 @@ function purchaseOrderDetailsController($scope, $state, $attrs, $filter, $modal,
             vm.state.purchaseOrder = response.data;
             renderPdfToContainer(vm.state.purchaseOrder);
             vm.uiState.loading = false;
+            vm.uiState.noteEnable = false;
         })
     }
 
@@ -49,7 +50,12 @@ function purchaseOrderDetailsController($scope, $state, $attrs, $filter, $modal,
         var date = moment();
         var _noteToPush = {
             note: _note,            
-            date: date.toISOString()
+            date: date.toISOString(),
+            checkEnable: vm.uiState.noteEnable,
+            emails: {
+                sendTo: vm.state.purchaseOrder.submitterEmail,
+                cC: vm.state.purchaseOrder.submitter.username
+            }
         };
         
 
@@ -60,6 +66,7 @@ function purchaseOrderDetailsController($scope, $state, $attrs, $filter, $modal,
             vm.state.purchaseOrder.notes.push(response.data);
             vm.newNote.text = '';
             vm.uiState.saveLoading = false;
+            vm.uiState.noteEnable = false;
         })
         
     };
