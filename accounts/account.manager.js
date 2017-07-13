@@ -10,7 +10,7 @@ var emailDao = require('../cms/dao/email.dao');
 var campaignDao = require('../campaign/dao/campaign.dao');
 var productDao = require('../products/dao/product.dao');
 var organizationDao = require('../organizations/dao/organization.dao');
-var paymentsManager = require('../payments/payments_manager');
+
 
 var async = require('async');
 
@@ -49,7 +49,7 @@ var accountManager = {
     cancelAccount: function(accountId, userId, targetAccountId, reason, fn) {
         var self = this;
         self.log.debug(accountId, userId, '>> cancelAccount [' + targetAccountId + ']');
-
+        var paymentsManager = require('../payments/payments_manager');
         async.waterfall([
             function(cb) {
                 accountDao.getAccountByID(targetAccountId, function(err, account){
