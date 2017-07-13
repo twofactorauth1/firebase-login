@@ -726,10 +726,7 @@ module.exports = {
         var fromName =  notificationConfig.WELCOME_FROM_NAME;
         var emailSubject = notificationConfig.NEW_PURCHASE_NOTE_EMAIL_SUBJECT;
         var emailTo = emails.sendTo;
-        var emailCc = [];
-        emailCc.push(emails.cC);
-
-        log.debug(note.note, '>> Checking values --');
+        var emailCc = emails.cC;
         var component = {};
         component.note = note;
 
@@ -744,8 +741,7 @@ module.exports = {
                     log.warn('email will not be sent to configured email.');
                 } else {
                     self.log.debug('sending email to: ', emailTo);
-                    console.log(html);
-                    emailMessageManager.sendNewPurchaseOrderEmail(fromEmail, fromName, emailTo, null, emailSubject, html, accountId, [], '', emailCc, null, function(err, result){
+                    emailMessageManager.sendNewPurchaseOrderEmail(fromEmail, fromName, emailTo, null, emailSubject, html, accountId, [], '', [emailCc], null, function(err, result){
                         self.log.debug('result: ', result);
                     });
                 }

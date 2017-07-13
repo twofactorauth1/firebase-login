@@ -2,14 +2,15 @@
 
 app.controller('QuoteComponentController', quoteComponentController);
 
-quoteComponentController.$inject = ['$scope', '$attrs', '$filter', '$modal', '$timeout', '$location', 'SweetAlert', 'toaster', 'pagingConstant', 'formValidations', 'QuoteService', 'UtilService'];
+quoteComponentController.$inject = ['$scope', '$attrs', '$filter', '$modal', '$timeout', '$location', 'SweetAlert', 'toaster', 'pagingConstant', 'formValidations', 'QuoteService', 'UtilService', 'UserPermissionsConfig'];
 /* @ngInject */
-function quoteComponentController($scope, $attrs, $filter, $modal, $timeout, $location, SweetAlert, toaster, pagingConstant, formValidations, QuoteService, UtilService) {
+function quoteComponentController($scope, $attrs, $filter, $modal, $timeout, $location, SweetAlert, toaster, pagingConstant, formValidations, QuoteService, UtilService, UserPermissionsConfig) {
 
     var vm = this;
 
     vm.state = {
-        newQuote: {}
+        newQuote: {},
+        orgCardAndPermissions: UserPermissionsConfig.orgConfigAndPermissions
     };
     vm.uiState ={
         loading: true,
@@ -45,23 +46,36 @@ function quoteComponentController($scope, $attrs, $filter, $modal, $timeout, $lo
     }, true);
 
 
-    function openModal(size){
+    function openModal(modal, controller, size){
         
-        var templateUrl = 'new-purchase-order-modal';
-        
-        $scope.modalInstance = $modal.open({
-            templateUrl: templateUrl,
-            size: size,
+        var _modal = {
+            templateUrl: modal,
             keyboard: false,
             backdrop: 'static',
-            scope: $scope
+            size: 'lg',
+            resolve: {
+                parentVm: function() {
+                    return vm;
+                }
+            }
+        };
+
+        if (controller) {
+            _modal.controller = controller + ' as vm';
+        }
+
+
+        vm.modalInstance = $modal.open(_modal);
+
+        vm.modalInstance.result.then(null, function () {
+            angular.element('.sp-container').addClass('sp-hidden');
         });
     }
 
 
     function closeModal() {
-        if($scope.modalInstance)
-            $scope.modalInstance.close();
+        if(vm.modalInstance)
+            vm.modalInstance.close();
     }
 
     function showFilteredRecords(){

@@ -35,8 +35,8 @@
 	                                            </div>
 	                                        </div>
 	                                    </div>
-	                                    <div class="col-xs-6 col-sm-6 pull-right padding-0">
-	                                        <button type="button" class="btn btn-o btn-info btn-scroll btn-scroll-top ti ti-plus ng-click-active pull-right" ng-click="vm.openModal()">
+	                                    <div class="col-xs-6 col-sm-6 pull-right" ng-if="vm.state.orgCardAndPermissions.permissions.quote.create">
+	                                        <button type="button" class="btn btn-o btn-info btn-scroll btn-scroll-top ti ti-plus ng-click-active pull-right" ng-click="vm.openModal('quote-details-modal', 'QuoteDetailsModalController', 'lg')">
 	                                            <span>New</span>
 	                                        </button>
 	                                    </div>
@@ -51,28 +51,51 @@
 	    <table class="table table-hover table-striped table-po-list" ng-class="{'grid': tableView == 'grid', 'bg-white table-list-view': tableView == 'list'}" ng-if="!vm.uiState.loading" fixed-header-table>
 	        <thead ng-class="{'bg-white': tableView == 'grid'}" sticky offset="65" sticky-class="sticky-header-class">
 	            <tr>
-	                <th class="title-col" st-sort="title" style="white-space: nowrap">Name</th>
-	                <th class="submitter-col" st-sort="vm.getters.submitter" style="white-space: nowrap">Submitter</th>
-	                <th class="created-col" st-sort="vm.getters.created" style="white-space: nowrap" st-sort-default="reverse">Date</th>
-	                <th class="hidden-xs attachment-col">Attachment</th>
+	                <th class="title-col" st-sort="title" style="white-space: nowrap">Title</th>
+	                <th class="partner-col" ng-if="vm.state.orgCardAndPermissions.permissions.quote.showPartner" st-sort="partner" style="white-space: nowrap">Partner</th>
+	                <th class="customer-col" st-sort="customer" style="white-space: nowrap">Customer</th>
+	                <th class="vendor-col" style="white-space: nowrap">Vendors</th>
+	                <th class="items-col" style="white-space: nowrap">Items</th>
+	                <th class="total-col" st-sort="total" style="white-space: nowrap">Total</th>
+	                <th class="status-col">Status</th>
+	                <th class="view-col">View/Edit</th>
 	            </tr>
 	            <tr>
 	                <th class="title-col">
-	                    <input st-search="title" ng-model="vm.uiState.fieldSearch.title" placeholder="Name" class="form-control" type="search" />
+	                	<input st-search="title" ng-model="vm.uiState.fieldSearch.title" placeholder="Title" class="form-control" type="search" />
 	                </th>
-	                <th class="submitter-col"></th>
-	                <th class="created-col"></th>
-	                <th class="hidden-xs attachment-col"></th>
+	                <th class="partner-col" ng-if="vm.state.orgCardAndPermissions.permissions.quote.showPartner">
+	                	<input st-search="partner" ng-model="vm.uiState.fieldSearch.partner" placeholder="Parner" class="form-control" type="search" />
+                	</th>
+	                <th class="customer-col">
+	                	<input st-search="customer" ng-model="vm.uiState.fieldSearch.customer" placeholder="Customer" class="form-control" type="search" />
+	                </th>
+	                <th class="vendor-col"></th>
+	                <th class="items-col"></th>
+	                <th class="total-col"></th>
+	                <th class="status-col"></th>
+	                <th class="view-col"></th>
 	            </tr>
 	        </thead>
 	        <tbody>
 	            <tr ng-repeat="quote in vm.displayedQuotes" class="product-item">
                     
-                    <td class="title-col"><strong>Name: </strong><div class="name-block-container"><span class="list-name"></span><span class="text-adjust-table" title="{{quote.title}}">{{quote.title || '&nbsp;'}}</span></div></td>
-	                <td class="submitter-col"><strong>Submitter: </strong>{{vm.getSubmitterName(quote.submitter) || '&nbsp;'}}</td>
+                    <td class="title-col"><strong>Title: </strong><div class="name-block-container"><span class="list-name"></span><span class="text-adjust-table" title="{{quote.title}}">{{quote.title || '&nbsp;'}}</span></div></td>
 
-	                <td class="created-col" style="white-space: nowrap"><strong>Date: </strong>{{quote.created.date | date:'MMM d yy hh:mm a'}}</td>
-	                <td class="hidden-xs attachment-col"><strong>Attachment: </strong><span class="text-adjust-table" title="{{quote.attachment.name}}">{{quote.attachment.name || '&nbsp;'}}</span></td>
+                    <td class="partner-col" ng-if="vm.state.orgCardAndPermissions.permissions.quote.showPartner"><strong>Partner: </strong>{{quote.partner || '&nbsp;'}}</td>
+                    <td class="customer-col"><strong>Customer: </strong>{{quote.customer || '&nbsp;'}}</td>
+
+	                <td class="vendor-col"><strong>Vendors: </strong>{{quote.vendors || '&nbsp;'}}</td>
+
+	                <td class="vendor-col"><strong>Items: </strong>{{quote.items || '&nbsp;'}}</td>
+
+	                <td class="total-col"><strong>Total: </strong>{{quote.total || '&nbsp;'}}</td>
+
+	                <td class="status-col"><strong>Status: </strong>{{quote.status || '&nbsp;'}}</td>
+
+	                <td class="view-col"><strong>View/Edit: </strong>'&nbsp;'</td>
+
+	                
 	            </tr>
 	        </tbody>
 	        <tfoot>
@@ -88,3 +111,4 @@
 	    <div class="load1 csspinner height-400" ng-show="vm.uiState.loading"></div>
 	</div>
 </div>
+<div data-ng-include=" 'assets/var/demo/js/quotes/modals/quote-details-modal.html' "></div>

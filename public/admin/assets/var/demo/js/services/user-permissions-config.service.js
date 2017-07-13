@@ -150,6 +150,12 @@
               "shipments":{
                 "edit": !this.orgConfigAndPermissions.isVendorRestrictedUser
               }
+          },
+          quote:{
+            "create": this.orgConfigAndPermissions.isAdminUser,
+            "edit": this.orgConfigAndPermissions.isAdminUser,
+            "delete": this.orgConfigAndPermissions.isAdminUser,
+            "showPartner": this.orgConfigAndPermissions.isAdminUser
           }
       }
 
