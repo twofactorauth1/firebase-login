@@ -729,6 +729,13 @@ app.constant('JS_REQUIRES', {
     'ParticipantsComponent': 'assets/var/demo/js/promotions/participants/participants.component.js',
     'ParticipantsComponentController': 'assets/var/demo/js/promotions/participants/participants.controller.js',
     'SecurematicsParticipantsService': 'assets/var/demo/js/promotions/participants.service.js',  
+
+
+    // Quotes
+
+    'QuoteComponent': 'assets/var/demo/js/quotes/quote.component.js',
+    'QuoteComponentController': 'assets/var/demo/js/quotes/quote.controller.js',
+    'QuoteService': 'assets/var/demo/js/quotes/quote.service.js',
     
     'asideCtrl': 'assets/var/demo/js/controllers/asideCtrl.js',
     'UsersCtrl': 'assets/var/demo/js/users/users.controller.js',

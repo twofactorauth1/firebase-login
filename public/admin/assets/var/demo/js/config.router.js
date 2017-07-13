@@ -263,14 +263,15 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         resolve: loadSequence('InventoryDetailsController', 'InventoryService', 'highcharts', 'chartAnalyticsService')
     }).state('app.managequotes', {
         url: '/quotes',
-        templateUrl: "/admin/assets/var/demo/views/under-construction.html",
+        templateUrl: "/admin/assets/var/demo/js/quotes/quote.html",
         title: 'Quotes',
-        icon: 'ti-layout-media-left-alt'
+        icon: 'ti-layout-media-left-alt',
+        resolve: loadSequence('QuoteComponent', 'QuoteComponentController', 'QuoteService', 'propsFilter')
     }).state('app.quotesnotifications', {
         url: '/quotes/notifications',
         templateUrl: "/admin/assets/var/demo/views/under-construction.html",
         title: 'Notifications',
-        icon: 'ti-layout-media-left-alt'
+        icon: 'ti-layout-media-left-alt',
     }).state('app.viewquotes', {
         url: '/quotes/view',
         templateUrl: "/admin/assets/var/demo/views/under-construction.html",
