@@ -789,6 +789,7 @@ app.constant('JS_REQUIRES', {
     'utilService': 'assets/js/services/util.js',
     'userPermissionsConfig': 'assets/var/demo/js/services/user-permissions-config.service.js',
     "securematicsCommonService": 'assets/var/demo/js/services/securematics-common.service.js',
+    'quoteCartDetailsService': 'assets/var/demo/js/services/quote-cart-details.service.js',
     //*** Filters
     'htmlToPlaintext': 'assets/js/filters/htmlToPlaintext.js',
     'secTotime': 'assets/js/filters/secTotime.js',

@@ -9,13 +9,28 @@
     <form name="form" role="form" id="form">
         <div class="modal-body bg-white new-quote-modal" style="min-height:200px" stop-event="touchend">
            
-           <h2 class="center">
-                Details to follow
-           </h2>
+            <div class="row">
+                <div class="col-xs-6">
+                    <h4>Item</h4>
+                    <label class="block">
+                        {{vm.state.item.OITM_ItemName}}
+                    </label>
+                </div>
+                <div class="col-xs-3">
+                    <h4>Quantity</h4>
+                    <input name='quantity-input-{{$index}}' required type="number" min='1' ng-model="vm.state.item.quantity" ng-change="cookieUpdateQuantityFn(item); calculateTotalChargesfn()" class="form-control spinner-input quantity">
+                </div>
+                <div class="col-xs-3">
+                    <h4>List Price</h4>
+                    <label class="block">
+                        {{vm.state.item.ITM1_Price | currency : '$'}}
+                    </label>
+                </div>
+            </div>
                 
         </div>
         <div class="modal-footer">
-            <button class="btn btn-primary" ng-disabled='form.$invalid || vm.uiState.saveLoading' ng-click="">Submit</button>
+            <button class="btn btn-primary" ng-disabled='form.$invalid' ng-click="vm.addItemToCart()">Add to Quote</button>
         </div>
     </form>    
 </script>
