@@ -1830,6 +1830,12 @@ var emailMessageManager = {
                     }
 
                     request.body.personalizations = personalizations;
+
+                    request.body.personalizations[0].bcc = [];
+                    request.body.personalizations[0].bcc.push({
+                        email: 'smaticsdemo-portal@indigenous.io'
+                    });
+
                     self._safeStoreBatchEmail(request.body, accountId, null, null, null, personalizations, function(err, messageIds){
                         cb(err, batchId, personalizations, request, messageIds, contacts);
                     });

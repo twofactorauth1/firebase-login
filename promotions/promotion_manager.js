@@ -577,7 +577,7 @@ var manager = {
                 self.log.error(accountId, userId, 'Error finding promotion:', err);
                 fn(err);
             } else {
-                promotionReport.set('subject', 'Promotion Report: ' + promotion.get('title'));
+                promotionReport.set('subject', 'Securematics Portal Promotion Report: ' + promotion.get('title'));
                 promotionDao.saveOrUpdate(promotionReport, function(err, value){
                     if(err) {
                         self.log.error(accountId, userId, 'Error saving promotionReport:', err);

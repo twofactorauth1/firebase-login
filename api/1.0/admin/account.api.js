@@ -10,6 +10,7 @@ var userManager = require('../../../dao/user.manager');
 var userDao = require('../../../dao/user.dao');
 var appConfig = require('../../../configs/app.config');
 var accountDao = require('../../../dao/account.dao');
+var accountManager = require('../../../accounts/account.manager');
 
 var api = function() {
     this.init.apply(this, arguments);
@@ -24,7 +25,7 @@ _.extend(api.prototype, baseApi.prototype, {
     initialize: function() {
 
         app.post(this.url(':id/trial/:newlength'), this.isAuthApi.bind(this), this.updateTrialLength.bind(this));
-
+        app.post(this.url(':id/cancel'), this.isAuthApi.bind(this), this.cancelAccount.bind(this));
     },
 
     updateTrialLength: function(req, resp) {
@@ -60,6 +61,21 @@ _.extend(api.prototype, baseApi.prototype, {
                         });
                     }
                 });
+
+            }
+        });
+    },
+
+    cancelAccount: function(req, resp) {
+        var self = this;
+        var userId = self.userId(req);
+        var accountId = parseInt(req.params.id);
+
+        self.log.debug(accountId, userId, '>> updateTrialLength');
+        self._isAdmin(req, function(err, value) {
+            if (value !== true) {
+                return self.send403(resp);
+            } else {
 
             }
         });

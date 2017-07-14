@@ -653,7 +653,7 @@ var insightsManager = {
                         accountList.push(account);
                         includedAccounts.push(account.id());
                         callback();
-                    } else if(billing.stripeCustomerId && billing.subscriptionId) {
+                    } else if(billing.stripeCustomerId && billing.subscriptionId && !billing.cancellationDate) {
                         self.log.debug('Validating subscription for:', billing);
                         sm.isValidSub(account.id(), billing, function(err, isValid){
                             if(isValid && isValid === true) {

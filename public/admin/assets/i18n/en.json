@@ -15,6 +15,12 @@
       "SEEALL": "See All"
     },
 
+    "quotes": {
+      "MAIN": "Build a quote",
+      "HEADER": "Build a quote",
+      "SEEALL": "See All"
+    },
+
     "media": {
       "MAIN": "Media",
       "HEADER": "Upload media",
