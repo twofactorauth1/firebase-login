@@ -734,14 +734,14 @@ module.exports = {
             if(account && account.get('business') && account.get('business').name) {
                 fromName = account.get('business').name;
             }
-            app.render('purchaseorders/new_purchase_order_note', component, function(err, html){
+            app.render('emails/new_purchase_order_note', component, function(err, html){
                 if(err) {
                     log.debug("template not found");
                     log.error('error rendering html: ' + err);
                     log.warn('email will not be sent to configured email.');
                 } else {
                     self.log.debug('sending email to: ', emailTo);
-                    emailMessageManager.sendNewPurchaseOrderEmail(fromEmail, fromName, emailTo, null, emailSubject, html, accountId, [], '', [emailCc], null, function(err, result){
+                    emailMessageManager.sendBasicDetailsEmail(fromEmail, fromName, emailTo, null, emailSubject, html, accountId, [], '', [emailCc], null, function(err, result){
                         self.log.debug('result: ', result);
                     });
                 }
