@@ -137,5 +137,11 @@
       toaster.pop('success', 'Please wait while report is downloading...');
     }
 
+    $scope.getters = {
+      unsubscribes: function (value) {
+          return value.statistics && value.statistics.unsubscribes ? value.statistics.unsubscribes : 0;
+      }
+    };
+
   }]);
 })(angular);
