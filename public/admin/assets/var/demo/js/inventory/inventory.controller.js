@@ -2,15 +2,17 @@
 
 app.controller('InventoryComponentController', inventoryComponentController);
 
-inventoryComponentController.$inject = ['$scope', '$attrs', '$filter', '$modal', '$timeout', '$location', 'pagingConstant', 'toaster', 'InventoryService', 'UtilService'];
+inventoryComponentController.$inject = ['$scope', '$attrs', '$filter', '$modal', '$timeout', '$location', 'pagingConstant', 'toaster', 'InventoryService', 'UtilService', "UserPermissionsConfig"];
 /* @ngInject */
-function inventoryComponentController($scope, $attrs, $filter, $modal, $timeout, $location, pagingConstant, toaster, InventoryService, UtilService) {
+function inventoryComponentController($scope, $attrs, $filter, $modal, $timeout, $location, pagingConstant, toaster, InventoryService, UtilService, UserPermissionsConfig) {
 
     var vm = this;
 
     vm.init = init;
 
-    vm.state = {};
+    vm.state = {
+        orgCardAndPermissions: UserPermissionsConfig.orgConfigAndPermissions
+    };
 
 
 
@@ -27,9 +29,10 @@ function inventoryComponentController($scope, $attrs, $filter, $modal, $timeout,
             OITM_ItemCode: InventoryService.fieldSearch.OITM_ItemCode,
             Available: InventoryService.fieldSearch.Available
         },        
-        inVentoryWatchList: [],
-        userPermissions: $scope.$parent.userPermissions
+        inVentoryWatchList: []
     };
+
+
 
     vm.viewSingleInventory = viewSingleInventory;
     vm.getDimentions = getDimentions;
@@ -60,6 +63,9 @@ function inventoryComponentController($scope, $attrs, $filter, $modal, $timeout,
     vm.setBulkActionChoiceFn=setBulkActionChoiceFn;
     vm.preventClick = preventClick;
     vm.bulkActionChoice = {};
+    vm.openModal = openModal;     
+    vm.closeModal = closeModal;
+    vm.addItemToQuote = addItemToQuote;
 
     vm.bulkActionChoices = [
     {
@@ -389,9 +395,44 @@ function inventoryComponentController($scope, $attrs, $filter, $modal, $timeout,
 
     function preventClick($event){
         $event.stopPropagation();
-
     }
 
+    function addItemToQuote(item, modal, controller, size){
+        vm.state.selectedProductItem = item;
+        openModal(modal, controller, size);
+    }
+
+    function openModal(modal, controller, size){
+        
+        var _modal = {
+            templateUrl: modal,
+            keyboard: false,
+            backdrop: 'static',
+            size: 'lg',
+            resolve: {
+                parentVm: function() {
+                    return vm;
+                }
+            }
+        };
+
+        if (controller) {
+            _modal.controller = controller + ' as vm';
+        }
+
+
+        vm.modalInstance = $modal.open(_modal);
+
+        vm.modalInstance.result.then(null, function () {
+            angular.element('.sp-container').addClass('sp-hidden');
+        });
+    }
+
+
+    function closeModal() {
+        if(vm.modalInstance)
+            vm.modalInstance.close();
+    }
 }
 
 })();

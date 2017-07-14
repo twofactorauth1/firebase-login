@@ -152,10 +152,10 @@
               }
           },
           quote:{
-            "create": this.orgConfigAndPermissions.isAdminUser,
-            "edit": this.orgConfigAndPermissions.isAdminUser,
-            "delete": this.orgConfigAndPermissions.isAdminUser,
-            "showPartner": this.orgConfigAndPermissions.isAdminUser
+            "create": this.orgConfigAndPermissions.quotes && this.orgConfigAndPermissions.isAdminUser,
+            "edit": this.orgConfigAndPermissions.quotes && this.orgConfigAndPermissions.isAdminUser,
+            "delete": this.orgConfigAndPermissions.quotes &&  this.orgConfigAndPermissions.isAdminUser,
+            "showPartner": this.orgConfigAndPermissions.quotes && this.orgConfigAndPermissions.isAdminUser
           }
       }
 

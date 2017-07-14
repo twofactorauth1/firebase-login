@@ -9,6 +9,8 @@
          * -
          */
 
+        $scope.notesEmail = {enable: false};
+
         $scope.openModal = function (modal) {
             $scope.modalInstance = $modal.open({
                 templateUrl: modal,
@@ -107,13 +109,34 @@
 
             $scope.contact_data = $scope.contact_data || {};
             $scope.contact_data.tags = $scope.unsetTags();
+            var sendEmail = {};
+            if($scope.notesEmail.enable) {
+                sendEmail = {
+                    sendTo: $scope.contact.details[0].emails[0].email,
+                    cC: $scope.$parent.currentUser.email,
+                    note_value: _note,
+                    enable_note: $scope.notesEmail.enable
+                }
+            }
+            var contactData = {};
+            contactData = {
+                data_contact : $scope.contact_data._id,
+                email_send : sendEmail
+            }
             console.log('contact_data:', $scope.contact_data);
             ContactService.saveContact($scope.contact_data, function (contact) {
                 $scope.contact = contact;
                 $scope.setTags();
                 $scope.originalContact = angular.copy($scope.contact);
                 toaster.pop('success', 'Notes Added.');
+                $scope.notesEmail = {enable: false};
             });
+            if($scope.notesEmail.enable) {
+                ContactService.addContactNote(contactData, function(response){
+                    console.log('Email sent on note creation.');
+                    $scope.notesEmail = {enable: false};
+                });
+            }
         };
 
         /*
@@ -311,7 +334,7 @@
                     //if contact has a session id get data from Analytics
                     _firstAddress.address2 = '';
                     $scope.convertAddressToLatLon(_firstAddress, function (data) {
-                        if (data) {                           
+                        if (data) {
                             _firstAddress.lat = parseFloat(data.lat);
                             _firstAddress.lon = parseFloat(data.lon);
                             $scope.showMap(data.lat, data.lon);

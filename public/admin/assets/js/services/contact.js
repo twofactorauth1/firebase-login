@@ -205,6 +205,15 @@
             apiFn(this.getCache(), contact, fn);
         };
 
+        this.addContactNote = function (contact, fn) {
+            var apiUrl = baseUrl +'contact/'+ contact.data_contact+ '/contactDetail';
+            $http.post(apiUrl, {
+                note: contact.email_send
+            }).success(function (data) {
+                fn(data);
+            });
+        };
+
         var contactUploading = 0;
         var contactArr = [];
 

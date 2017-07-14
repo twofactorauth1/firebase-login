@@ -320,6 +320,46 @@ module.exports = {
         });
     },
 
+    cancelAccountSubscription: function(accountId, userId, account, atPeriodEnd, fn) {
+        var self = this;
+        self.log = log;
+        self.log.debug(accountId, userId, '>> cancelAccountSubscription');
+        async.waterfall([
+            function(cb) {
+                if(account.get('orgId') && account.get('orgId') > 0) {
+                    self._getOrgAccessToken(account.get('orgId'), function(err, token){
+                        if(err) {
+                            self.log.error(accountId, userId, 'Error getting accessToken:', err);
+                            cb(err);
+                        } else {
+                            cb(null, token);
+                        }
+                    });
+                } else {
+                    cb(null);
+                }
+            },
+            function(accessToken, cb) {
+                var billing = account.get('billing');
+                var customerId = billing.stripeCustomerId;
+                var subscriptionId = billing.subscriptionId;
+                stripeDao.cancelStripeSubscription(accountId, customerId, subscriptionId, atPeriodEnd, accessToken, function(err, value){
+                    if(err) {
+                        self.log.error(accountId, userId, 'Error cancelling stripe subscription:', err);
+                        cb(err);
+                    } else {
+                        cb(null, value);
+                    }
+                });
+            }
+        ], function(err, value){
+            self.log.debug(accountId, userId, '<< cancelAccountSubscription');
+            cb(null, value);
+        });
+
+    },
+
+
     _getOrgAccessToken: function(orgId, fn) {
         var self = this;
         orgDao.getById(orgId, $$.m.Organization, function(err, organization){

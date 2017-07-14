@@ -40,7 +40,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
     $stateProvider.state('app', {
         url: "",
         templateUrl: "/admin/assets/var/demo/views/app.html",
-        resolve: loadSequence('modernizr', 'underscore', 'moment', 'angularMoment', 'uiSwitch', 'perfect-scrollbar-plugin', 'toaster', 'ngAside', 'chartjs', 'tc.chartjs', 'oitozero.ngSweetAlert', 'chatCtrl', 'smart-table', 'touchspin-plugin', 'slugifier', 'commonService', 'timeAgoFilter','angularFileUpload', 'ngTextTruncate', 'infinite-scroll', 'ui.select', 'blueimp', 'ngTagsInput', 'titleCase', 'bootstrap-confirmation', 'ladda', 'angular-ladda', 'uuid', 'formatText', 'asideCtrl', 'settingsCtrl', 'assetsService', 'mediaModalCtrl', 'xeditable', 'angular-percentage-filter', 'angular-clipboard', 'google-fonts', 'dashboardService', 'videogular', 'indi-login-modal', 'productTableFilter', 'ngCurrency', 'DashboardAnalyticTileComponent', 'InventoryComponent', 'InventoryDetailsComponent', 'utilService', 'userPermissionsConfig', 'uiSelectChoices', 'ngSticky', 'fixedHeaderTable', 'securematicsCommonService'),
+        resolve: loadSequence('modernizr', 'underscore', 'moment', 'angularMoment', 'uiSwitch', 'perfect-scrollbar-plugin', 'toaster', 'ngAside', 'chartjs', 'tc.chartjs', 'oitozero.ngSweetAlert', 'chatCtrl', 'smart-table', 'touchspin-plugin', 'slugifier', 'commonService', 'timeAgoFilter','angularFileUpload', 'ngTextTruncate', 'infinite-scroll', 'ui.select', 'blueimp', 'ngTagsInput', 'titleCase', 'bootstrap-confirmation', 'ladda', 'angular-ladda', 'uuid', 'formatText', 'asideCtrl', 'settingsCtrl', 'assetsService', 'mediaModalCtrl', 'xeditable', 'angular-percentage-filter', 'angular-clipboard', 'google-fonts', 'dashboardService', 'videogular', 'indi-login-modal', 'productTableFilter', 'ngCurrency', 'DashboardAnalyticTileComponent', 'InventoryComponent', 'InventoryDetailsComponent', 'utilService', 'userPermissionsConfig', 'uiSelectChoices', 'ngSticky', 'fixedHeaderTable', 'securematicsCommonService', 'QuoteDetailsModalController', 'quoteCartDetailsService'),
         abstract: true
     }).state('app.dashboard', {
         url: "/_dashboard",
@@ -254,7 +254,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         templateUrl: "/admin/assets/var/demo/js/inventory/inventory.html",
         title: 'Inventory',
         icon: 'ti-layout-media-left-alt',
-        resolve: loadSequence('InventoryComponentController', 'InventoryService')
+        resolve: loadSequence('InventoryComponentController', 'InventoryService', 'NewQuoteModalController')
     }).state('app.singleInventory', {
         url: '/inventory/:inventoryId',
         templateUrl: "/admin/assets/var/demo/js/inventory/inventory-details/inventory-details.html",
@@ -266,7 +266,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         templateUrl: "/admin/assets/var/demo/js/quotes/quote.html",
         title: 'Quotes',
         icon: 'ti-layout-media-left-alt',
-        resolve: loadSequence('QuoteComponent', 'QuoteComponentController', 'QuoteService', 'propsFilter', 'QuoteDetailsModalController')
+        resolve: loadSequence('QuoteComponent', 'QuoteComponentController', 'QuoteService', 'propsFilter')
     }).state('app.quotesnotifications', {
         url: '/quotes/notifications',
         templateUrl: "/admin/assets/var/demo/views/under-construction.html",

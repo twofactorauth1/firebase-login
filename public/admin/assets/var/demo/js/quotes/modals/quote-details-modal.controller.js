@@ -1,18 +1,31 @@
 'use strict';
 /*global app*/
-app.controller('QuoteDetailsModalController', ['$scope', '$timeout', 'parentVm', 'toaster', 'SweetAlert', function ($scope, $timeout, parentVm, toaster, SweetAlert) {
+app.controller('QuoteDetailsModalController', ['$scope', '$timeout', 'toaster', 'SweetAlert', 'QuoteCartDetailsService', function ($scope, $timeout, toaster, SweetAlert, QuoteCartDetailsService) {
 
     var vm = this;
 
-    vm.parentVm = parentVm;
-    
-    vm.state = {
-        orgCardAndPermissions: vm.parentVm.state.orgCardAndPermissions
-    };
     vm.uiState = {
         
     };
-    
+
+    vm.state = {};
+    vm.initAttachment = initAttachment;
+    vm.calculateTotalPrice = calculateTotalPrice;
+    vm.state.cartDetail = QuoteCartDetailsService.getCartDetail();
+    vm.removeItemFromCart = removeItemFromCart;
+    vm.attachment = {};
+    function calculateTotalPrice(items){
+    	return QuoteCartDetailsService.calculateTotalPrice(items);
+    }
+
+    function removeItemFromCart(index){
+    	QuoteCartDetailsService.removeItemFromCart(index)
+    }
+    function initAttachment(){
+      
+        vm.attachment = {};
+        document.getElementById("upload_cart_file").value = "";
+    }
     (function init() {
         
     })();

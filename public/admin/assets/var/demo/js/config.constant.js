@@ -736,6 +736,8 @@ app.constant('JS_REQUIRES', {
     'QuoteComponent': 'assets/var/demo/js/quotes/quote.component.js',
     'QuoteComponentController': 'assets/var/demo/js/quotes/quote.controller.js',
     'QuoteService': 'assets/var/demo/js/quotes/quote.service.js',
+
+    "NewQuoteModalController": 'assets/var/demo/js/quotes/modals/new-quote-modal.controller.js',
     "QuoteDetailsModalController": 'assets/var/demo/js/quotes/modals/quote-details-modal.controller.js',
     
     'asideCtrl': 'assets/var/demo/js/controllers/asideCtrl.js',
@@ -787,6 +789,7 @@ app.constant('JS_REQUIRES', {
     'utilService': 'assets/js/services/util.js',
     'userPermissionsConfig': 'assets/var/demo/js/services/user-permissions-config.service.js',
     "securematicsCommonService": 'assets/var/demo/js/services/securematics-common.service.js',
+    'quoteCartDetailsService': 'assets/var/demo/js/services/quote-cart-details.service.js',
     //*** Filters
     'htmlToPlaintext': 'assets/js/filters/htmlToPlaintext.js',
     'secTotime': 'assets/js/filters/secTotime.js',
