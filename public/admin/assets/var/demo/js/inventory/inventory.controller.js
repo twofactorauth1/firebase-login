@@ -65,7 +65,7 @@ function inventoryComponentController($scope, $attrs, $filter, $modal, $timeout,
     vm.bulkActionChoice = {};
     vm.openModal = openModal;     
     vm.closeModal = closeModal;
-    vm.addItemToCart = addItemToCart;
+    vm.addItemToQuote = addItemToQuote;
 
     vm.bulkActionChoices = [
     {
@@ -397,7 +397,8 @@ function inventoryComponentController($scope, $attrs, $filter, $modal, $timeout,
         $event.stopPropagation();
     }
 
-    function addItemToCart(item, modal, controller, size){
+    function addItemToQuote(item, modal, controller, size){
+        vm.state.selectedProductItem = item;
         openModal(modal, controller, size);
     }
 

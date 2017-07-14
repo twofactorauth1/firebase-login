@@ -31,7 +31,7 @@
         
         <li ng-controller="AsideCtrl" ng-if="orgCardAndPermissions.isAdminUser">
             <a class="topbar-settings" ng-click="openModal('quote-details-modal', 'QuoteDetailsModalController', 'lg')">
-                <i class="ti-quote-right"><span class="quote-items-count">9</span></i>                
+                <i class="ti-quote-right"><span ng-if="quotes.length" class="quote-items-count">{{quotes.length}}</span></i>                
                 <span translate="topbar.quotes.MAIN">Build a Quote</span>
             </a>
         </li>

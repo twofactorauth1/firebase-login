@@ -5,7 +5,7 @@
  * controller for angular-aside
  * Off canvas side menu to use with ui-bootstrap. Extends ui-bootstrap's $modal provider.
  */
-app.controller('AsideCtrl', ["$scope", "$modal", "$aside", function ($scope, $modal, $aside) {
+app.controller('AsideCtrl', ["$scope", "$modal", "$aside", "QuoteCartDetailsService", function ($scope, $modal, $aside, QuoteCartDetailsService) {
   $scope.openAside = function (position) {
     $aside.open({
       templateUrl: '/admin/assets/var/demo/views/partials/settings.html',
@@ -57,5 +57,12 @@ app.controller('AsideCtrl', ["$scope", "$modal", "$aside", function ($scope, $mo
       if($scope.modalInstance)
           $scope.modalInstance.close();
   }
+
+
+  $scope.$watch(function() { return QuoteCartDetailsService.items }, function(items) {
+    if(angular.isDefined(items)){
+        $scope.quotes = items;
+    }
+}, true);
 
 }]);
