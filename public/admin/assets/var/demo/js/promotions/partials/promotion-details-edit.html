@@ -18,7 +18,7 @@
                             <small style="text-transform: capitalize;" ng-bind-html="$select.selected"></small>
                         </ui-select-match>
                         <ui-select-choices repeat="vendor in vm.state.vendors | filter: $select.search">
-                            <small style="text-transform: capitalize;" ng-bind-html="vendor | highlight: $select.search"></small>
+                            <small style="text-transform: capitalize;" ng-bind-html="vendor | highlight: $select.selected"></small>
                         </ui-select-choices>
                     </ui-select>
                 </div>
