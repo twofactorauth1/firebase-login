@@ -254,7 +254,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         templateUrl: "/admin/assets/var/demo/js/inventory/inventory.html",
         title: 'Inventory',
         icon: 'ti-layout-media-left-alt',
-        resolve: loadSequence('InventoryComponentController', 'InventoryService')
+        resolve: loadSequence('InventoryComponentController', 'InventoryService', 'NewQuoteModalController')
     }).state('app.singleInventory', {
         url: '/inventory/:inventoryId',
         templateUrl: "/admin/assets/var/demo/js/inventory/inventory-details/inventory-details.html",
