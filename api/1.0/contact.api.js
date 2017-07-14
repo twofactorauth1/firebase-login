@@ -86,6 +86,9 @@ _.extend(api.prototype, baseApi.prototype, {
         // http://localhost:3000/api/1.0/contact/:id/fullcontact
         app.post(this.url(':id/fullcontact'), this.isAuthAndSubscribedApi.bind(this), this.updateContactByFullContactApi.bind(this));
 
+        //send mail on note creation
+        app.post(this.url(':id/contactDetail'), this.isAuthAndSubscribedApi.bind(this), this.addContactNotes.bind(this));
+
         //duplicate check
         app.get(this.url('duplicates/check'), this.isAuthAndSubscribedApi.bind(this), this.checkForDuplicates.bind(this));
         app.post(this.url('duplicates/merge'), this.isAuthAndSubscribedApi.bind(this), this.mergeDuplicates.bind(this));
@@ -162,6 +165,19 @@ _.extend(api.prototype, baseApi.prototype, {
 
     },
 
+    addContactNotes: function (req, resp) {
+        var self = this;
+        var note = req.body.note.note_value;
+        var email = req.body.note.sendTo;
+        var accountId = parseInt(self.accountId(req));
+        self.checkPermissionForAccount(req, self.sc.privs.MODIFY_CONTACT, accountId, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(resp);
+            } else {
+                self._sendNoteEmail(note, accountId, email);
+            }
+        });
+    },
 
     updateContact: function (req, resp) {
         var self = this;
@@ -213,7 +229,6 @@ _.extend(api.prototype, baseApi.prototype, {
                 } else {
                     self.createUserActivity(req, 'UPDATE_CONTACT', null, {id: value.id()}, function(){});
                 }
-
             } else {
                 self.wrapError(resp, 500, "There was an error updating contact", err, value);
             }
@@ -1478,6 +1493,30 @@ _.extend(api.prototype, baseApi.prototype, {
         });
 
     },
+    _sendNoteEmail: function(note, accountId, accountEmail) {
+        var self = this;
+        var component = {};
+        component.note = "";
+
+        app.render('emails/new_user_note', component, function(err, html){
+            if(err) {
+                self.log.error('error rendering html: ' + err);
+                self.log.warn('email will not be sent to account owner.');
+            } else {
+                self.log.debug('sending email to: ', accountEmail);
+
+                var fromEmail = notificationConfig.FROM_EMAIL;
+                var fromName =  notificationConfig.WELCOME_FROM_NAME;
+                var emailSubject = notificationConfig.NEW_NOTE_SUBJECT;
+                var vars = [];
+
+                emailMessageManager.sendBasicDetailsEmail(fromEmail, fromName, accountEmail, null, emailSubject, html, accountId, [], '', null, null, function(err, result){
+                    self.log.debug('result: ', result);
+                });
+            }
+        });
+    },
+
    _sendEmailOnCreateAccount: function(accountEmail, fields, accountId, ccAry, tagSet, accountSubdomain, suppressUnsubscribe, fromName) {
         var self = this;
         var component = {};

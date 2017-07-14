@@ -18,6 +18,7 @@ var welcomeEmailSubject = process.env.WELCOME_EMAIL_SUBJECT || 'Welcome to Indig
 var newCustomerEmailSubject = process.env.NEW_CUSTOMER_EMAIL_SUBJECT || 'New contact created';
 var newPurchaseOrderEmailSubject = process.env.NEW_PURCHASE_ORDER_EMAIL_SUBJECT || 'New purchase order created';
 var newPurchaseNoteEmailSubject = "New purchase order note created";
+var newNoteEmailSubject = "New note created";
 var notificationPurchaseOrderToEmail = process.env.NEW_PURCHASE_ORDER_EMAIL_TO || 'smaticsdemo-portal@indigenous.io';
 var notificationPurchaseOrderBccEmail = process.env.NEW_PURCHASE_ORDER_EMAIL_BCC || '';
 var defaulSenderAddress = process.env.DEFAULT_SENDER_ADDRESS || 'messages-noreply-bounce@indigenous.io';
@@ -52,6 +53,7 @@ module.exports = {
     NEW_CUSTOMER_EMAIL_SUBJECT: newCustomerEmailSubject,
     NEW_PURCHASE_ORDER_EMAIL_SUBJECT: newPurchaseOrderEmailSubject,
     NEW_PURCHASE_NOTE_EMAIL_SUBJECT: newPurchaseNoteEmailSubject,
+    NEW_NOTE_SUBJECT: newNoteEmailSubject,
     NEW_PURCHASE_ORDER_EMAIL_TO : notificationPurchaseOrderToEmail,
     NEW_PURCHASE_ORDER_EMAIL_BCC : notificationPurchaseOrderBccEmail,
     THANKS_HTML: thanksForInterest,

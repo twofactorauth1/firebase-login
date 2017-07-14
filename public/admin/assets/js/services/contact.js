@@ -197,12 +197,21 @@
 
         this.saveContact = function (contact, fn) {
             var apiFn = null;
-            if (contact._id) {
+            if (contact.data_contact._id) {
                 apiFn = this.putContact;
             } else {
                 apiFn = this.postContact;
             }
             apiFn(this.getCache(), contact, fn);
+        };
+
+        this.addContactNote = function (contact, fn) {
+            var apiUrl = baseUrl +'contact/'+ contact.data_contact+ '/contactDetail';
+            $http.post(apiUrl, {
+                note: contact.email_send
+            }).success(function (data) {
+                fn(data);
+            });
         };
 
         var contactUploading = 0;
