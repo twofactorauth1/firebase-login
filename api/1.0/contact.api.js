@@ -174,7 +174,8 @@ _.extend(api.prototype, baseApi.prototype, {
             if (isAllowed !== true) {
                 return self.send403(resp);
             } else {
-                self._sendNoteEmail(note, accountId, email);
+                if(req.body.note.enable_note)
+                    self._sendNoteEmail(note, accountId, email);
             }
         });
     },

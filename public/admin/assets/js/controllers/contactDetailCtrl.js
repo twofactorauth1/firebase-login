@@ -113,7 +113,8 @@
             if($scope.notesEmail.enable) {
                 sendEmail = {
                     sendTo: $scope.$parent.currentUser.email,
-                    note_value: _note
+                    note_value: _note,
+                    enable_note: $scope.notesEmail.enable
                 }
             }
             var contactData = {};
