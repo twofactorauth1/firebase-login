@@ -62,7 +62,7 @@ function purchaseOrderDetailsController($scope, $state, $attrs, $filter, $modal,
         }  
 
         PurchaseOrderService.addPurchaseOrderNote($stateParams.purchaseOrderId, _noteToPush, emails).then(function(response){
-            console.log("Notes added");
+            toaster.pop('success',"Notes added");
             if (!vm.state.purchaseOrder.notes)
                 vm.state.purchaseOrder.notes = [];
             vm.state.purchaseOrder.notes.push(response.data);
