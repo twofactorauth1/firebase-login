@@ -96,6 +96,15 @@
                 "operation": "set",
                 "tags": []
             },
+            "statistics": {
+                "emailsSent": 0,
+                "emailsOpened": 0,
+                "emailsClicked": 0,
+                "emailsBounced": 0,
+                "emailsDropped": 0,
+                "participants": 0,
+                "unsubscribes": 0
+            },
             "contactTags": []
         };
         EmailCampaignService.checkIfDuplicateCampaign(null, campaign.name).then(function (response) {

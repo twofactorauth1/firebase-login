@@ -2192,7 +2192,7 @@ module.exports = {
                 return fn(null, updatedOrder);
             });
             if(note.enable_note){
-                self._sendEmailNote(note.send_to, accountId, note.note_value);
+                self._sendEmailNote(note.send_to, note.cC, accountId, note.note_value);
             }
         });
 
@@ -3018,11 +3018,13 @@ module.exports = {
         });
     },
 
-    _sendEmailNote :function (emailTo, accountId, note) {
+    _sendEmailNote :function (emailTo, cC, accountId, note) {
         var self = this;
         self.log = log;
         var component = {};
         component.note = note;
+        var cC_to = [];
+        cC_to.push(cC);
 
         app.render('emails/new_user_note', component, function(err, html){
             if(err) {
@@ -3036,7 +3038,7 @@ module.exports = {
                 var emailSubject = notificationConfig.NEW_NOTE_SUBJECT;
                 var vars = [];
 
-                emailMessageManager.sendBasicDetailsEmail(fromEmail, fromName, emailTo, null, emailSubject, html, accountId, [], '', null, null, function(err, result){
+                emailMessageManager.sendBasicDetailsEmail(fromEmail, fromName, emailTo, null, emailSubject, html, accountId, [], '', cC_to, null, function(err, result){
                     self.log.debug('result: ', result);
                 });
             }
