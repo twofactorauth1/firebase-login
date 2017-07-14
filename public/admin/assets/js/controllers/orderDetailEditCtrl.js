@@ -6,6 +6,7 @@
 
             $scope.dataLoaded = false;
             $scope.billing = {sameAsBilling: false};
+            $scope.notesEmail = {enable: false};
 
             $scope.showDiscount = false;
             //TODO
@@ -275,7 +276,7 @@
              */
             $scope.navToCustomer = function (cust) {
                 if ($stateParams.orderId) {
-                    
+
                     var cust_url = '/contacts/' + cust._id;
                     $scope.customRedirectUrl = cust_url + "?order=true&id="+$scope.order._id;
                     $location.url(cust_url).search({
@@ -386,13 +387,27 @@
 
                 $scope.pushLocalNote($scope.order, true);
 
+                var note_order = {};
+                if($scope.notesEmail.enable){
+                    note_order = {
+                        send_to: $scope.$parent.currentUser.email,
+                        note_value: $scope.newNote,
+                        enable_note: $scope.notesEmail.enable
+                    }
+                }
+
                 if ($scope.order && $scope.order._id) {
                     OrderService.updateOrder($scope.order, function (updatedOrder) {
                         toaster.pop('success', 'Note added to order.');
                         $scope.newNote = '';
                         $scope.order = updatedOrder;
                         angular.copy($scope.order, $scope.originalOrder);
+                        $scope.notesEmail = {enable: false};
                     });
+                    OrderService.addOrderNote($scope.order._id, note_order, function (updatedOrder) {
+                        console.log('success', 'new order note added');
+                        $scope.notesEmail = {enable: false};
+                    })
                 } else if ($scope.order) {
                     $scope.newNote = '';
                 }
@@ -853,7 +868,7 @@
                     $scope.saveLoading = false;
                     return;
                 }
-                if (!$scope.order.billing_address || (invalid && required)) {                    
+                if (!$scope.order.billing_address || (invalid && required)) {
                     $scope.billingEdit = true;
                     toaster.pop('error', 'Billing details cannot be blank');
                     $scope.saveLoading = false;
@@ -867,7 +882,7 @@
                         console.log('updatedOrder ', updatedOrder);
                         toaster.pop('success', 'Order updated successfully.');
                         $scope.pageSaving = false;
-                        
+
                     });
                 } else {
                     OrderService.createOrder($scope.order, function (updatedOrder) {

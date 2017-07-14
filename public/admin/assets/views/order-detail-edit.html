@@ -527,6 +527,12 @@
                         </div>
                         <div class="panel-footer border-light">
                             <label for="newNote"> New Note </label>
+                            <div class="checkbox clip-check check-success margin-top-5">
+                                <input type="checkbox" id="note-editable" ng-model="notesEmail.enable" >
+                                <label for="note-editable">
+                                    Send Notes to Contact by Email
+                                </label>
+                            </div>
                             <textarea id="newNote" class="form-control margin-bottom-15 autosize area-animated msd-elastic: \n;" ng-model="newNote"></textarea>
                             <button type="button" ng-disabled="!(newNote)" class="btn btn-info btn-block btn-o btn-wide btn-scroll btn-scroll-top ti-plus" ng-click="addNote()">
                                 <span>Add</span>

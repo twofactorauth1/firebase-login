@@ -14,6 +14,7 @@ var contactDao = require('../dao/contact.dao');
 require('./model/order');
 
 var emailMessageManager = require('../emailmessages/emailMessageManager');
+var notificationConfig = require('../configs/notification.config');
 var accountDao = require('../dao/account.dao');
 var cmsManager = require('../cms/cms_manager');
 var productManager = require('../products/product_manager');
@@ -2151,6 +2152,8 @@ module.exports = {
     },
 
     addOrderNote: function (accountId, orderId, note, userId, fn) {
+        var self = this;
+        self.log = log;
         log.debug(accountId, userId, '>> addOrderNote ');
         var query = {
             _id: orderId,
@@ -2168,7 +2171,7 @@ module.exports = {
             }
             if (note) {
                 var noteObj = {
-                    note: note,
+                    note: note.note_value,
                     user_id: userId,
                     date: new Date()
                 };
@@ -2188,7 +2191,9 @@ module.exports = {
                 log.debug(accountId, userId, '<< addOrderNote');
                 return fn(null, updatedOrder);
             });
-
+            if(note.enable_note){
+                self._sendEmailNote(note.send_to, accountId, note.note_value);
+            }
         });
 
     },
@@ -3008,6 +3013,31 @@ module.exports = {
                         self.log.debug(accountId, userId, '<< getRevenueAmount');
                         return fn(null, results);
                     }
+                });
+            }
+        });
+    },
+
+    _sendEmailNote :function (emailTo, accountId, note) {
+        var self = this;
+        self.log = log;
+        var component = {};
+        component.note = note;
+
+        app.render('emails/new_user_note', component, function(err, html){
+            if(err) {
+                self.log.error('error rendering html: ' + err);
+                self.log.warn('email will not be sent to account owner.');
+            } else {
+                self.log.debug('sending email to: ', emailTo);
+
+                var fromEmail = notificationConfig.FROM_EMAIL;
+                var fromName =  notificationConfig.WELCOME_FROM_NAME;
+                var emailSubject = notificationConfig.NEW_NOTE_SUBJECT;
+                var vars = [];
+
+                emailMessageManager.sendBasicDetailsEmail(fromEmail, fromName, emailTo, null, emailSubject, html, accountId, [], '', null, null, function(err, result){
+                    self.log.debug('result: ', result);
                 });
             }
         });
