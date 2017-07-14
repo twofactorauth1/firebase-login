@@ -728,7 +728,7 @@ module.exports = {
         var emailTo = emails.sendTo;
         var emailCc = emails.cC;
         var component = {};
-        component.note = note;
+        component.note = note.note;
 
         accountDao.getAccountByID(accountId, function(err, account){
             if(account && account.get('business') && account.get('business').name) {
