@@ -42,7 +42,7 @@ app.controller('AsideCtrl', ["$scope", "$modal", "$aside", "QuoteCartDetailsServ
       };
 
       if (controller) {
-          _modal.controller = controller;
+          _modal.controller = controller  + ' as vm';
       }
 
 
