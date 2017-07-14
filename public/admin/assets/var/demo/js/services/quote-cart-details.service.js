@@ -15,6 +15,8 @@
 
         quoteCartService.getCartDetail = getCartDetail;
 
+        quoteCartService.calculateTotalPrice = calculateTotalPrice;
+
         quoteCartService.newItem = true;
 
         function getCartItems() {
@@ -54,6 +56,16 @@
             if(!_item){
                 quoteCartService.items.push(item);
             }
+        }
+
+        function calculateTotalPrice(items){
+            var totalPrice = 0;
+            if(items){
+                totalPrice = _.reduce(items, function(m, item) { 
+                    return m + (item.ITM1_Price || 0) *  item.quantity; },
+                0);
+            }
+            return totalPrice || 0;
         }
 
         (function init() {

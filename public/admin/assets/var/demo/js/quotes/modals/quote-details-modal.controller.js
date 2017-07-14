@@ -14,9 +14,12 @@ app.controller('QuoteDetailsModalController', ['$scope', '$timeout', 'toaster', 
     	}
     };
     vm.initAttachment = initAttachment;
-
+    vm.calculateTotalPrice = calculateTotalPrice;
     vm.state.cartDetail = QuoteCartDetailsService.getCartDetail();
     vm.attachment = {};
+    function calculateTotalPrice(items){
+    	return QuoteCartDetailsService.calculateTotalPrice(items);
+    }
     function initAttachment(){
       
         vm.attachment = {};
