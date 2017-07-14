@@ -728,13 +728,13 @@ module.exports = {
         var emailTo = emails.sendTo;
         var emailCc = emails.cC;
         var component = {};
-        component.note = note;
+        component.note = note.note;
 
         accountDao.getAccountByID(accountId, function(err, account){
             if(account && account.get('business') && account.get('business').name) {
                 fromName = account.get('business').name;
             }
-            app.render('emails/new_purchase_order_note', component, function(err, html){
+            app.render('emails/new_user_note', component, function(err, html){
                 if(err) {
                     log.debug("template not found");
                     log.error('error rendering html: ' + err);

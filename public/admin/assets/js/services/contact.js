@@ -197,7 +197,7 @@
 
         this.saveContact = function (contact, fn) {
             var apiFn = null;
-            if (contact.data_contact._id) {
+            if (contact._id) {
                 apiFn = this.putContact;
             } else {
                 apiFn = this.postContact;

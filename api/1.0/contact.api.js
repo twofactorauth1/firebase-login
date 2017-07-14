@@ -168,13 +168,16 @@ _.extend(api.prototype, baseApi.prototype, {
     addContactNotes: function (req, resp) {
         var self = this;
         var note = req.body.note.note_value;
-        var email = req.body.note.sendTo;
+        var emailTo = req.body.note.sendTo;
+        var cC = [];
+        cC.push(req.body.note.cC);
         var accountId = parseInt(self.accountId(req));
         self.checkPermissionForAccount(req, self.sc.privs.MODIFY_CONTACT, accountId, function(err, isAllowed) {
             if (isAllowed !== true) {
                 return self.send403(resp);
             } else {
-                self._sendNoteEmail(note, accountId, email);
+                if(req.body.note.enable_note)
+                    self._sendNoteEmail(note, accountId, emailTo, cC);
             }
         });
     },
@@ -1493,10 +1496,10 @@ _.extend(api.prototype, baseApi.prototype, {
         });
 
     },
-    _sendNoteEmail: function(note, accountId, accountEmail) {
+    _sendNoteEmail: function(note, accountId, accountEmail, cC) {
         var self = this;
         var component = {};
-        component.note = "";
+        component.note = note;
 
         app.render('emails/new_user_note', component, function(err, html){
             if(err) {
@@ -1510,7 +1513,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 var emailSubject = notificationConfig.NEW_NOTE_SUBJECT;
                 var vars = [];
 
-                emailMessageManager.sendBasicDetailsEmail(fromEmail, fromName, accountEmail, null, emailSubject, html, accountId, [], '', null, null, function(err, result){
+                emailMessageManager.sendBasicDetailsEmail(fromEmail, fromName, accountEmail, null, emailSubject, html, accountId, [], '', cC, null, function(err, result){
                     self.log.debug('result: ', result);
                 });
             }

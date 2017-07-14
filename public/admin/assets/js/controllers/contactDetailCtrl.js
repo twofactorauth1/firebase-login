@@ -112,8 +112,10 @@
             var sendEmail = {};
             if($scope.notesEmail.enable) {
                 sendEmail = {
-                    sendTo: $scope.$parent.currentUser.email,
-                    note_value: _note
+                    sendTo: $scope.contact.details[0].emails[0].email,
+                    cC: $scope.$parent.currentUser.email,
+                    note_value: _note,
+                    enable_note: $scope.notesEmail.enable
                 }
             }
             var contactData = {};
