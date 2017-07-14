@@ -734,7 +734,7 @@ module.exports = {
             if(account && account.get('business') && account.get('business').name) {
                 fromName = account.get('business').name;
             }
-            app.render('emails/new_purchase_order_note', component, function(err, html){
+            app.render('emails/new_user_note', component, function(err, html){
                 if(err) {
                     log.debug("template not found");
                     log.error('error rendering html: ' + err);
