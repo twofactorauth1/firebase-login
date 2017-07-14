@@ -8,12 +8,10 @@ app.controller('NewQuoteModalController', ['$scope', 'parentVm', '$timeout', 'to
         
     };
     vm.state = {
-    	
-    };
-    
-    vm.state.item = vm.parentVm.state.selectedProductItem;
-    vm.state.item.quantity = 1;
+    	item: QuoteCartDetailsService.getCartItem(vm.parentVm.state.selectedProductItem)
+    }; 
     vm.addItemToCart = addItemToCart;
+    vm.newItem = QuoteCartDetailsService.newItem;
     function addItemToCart(){
     	QuoteCartDetailsService.addItemToCart(vm.state.item);
     	vm.parentVm.closeModal();
