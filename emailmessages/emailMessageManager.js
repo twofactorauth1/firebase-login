@@ -1196,9 +1196,9 @@ var emailMessageManager = {
     },
 
 
-    sendNewPurchaseOrderEmail: function(fromAddress, fromName, toAddress, toName, subject, htmlContent, accountId, vars, emailId, ccAry, bcc, fn) {
+    sendBasicDetailsEmail: function(fromAddress, fromName, toAddress, toName, subject, htmlContent, accountId, vars, emailId, ccAry, bcc, fn) {
         var self = this;
-        self.log.debug('>> sendNewPurchaseOrderEmail');
+        self.log.debug('>> sendBasicDetailsEmail');
         self._getFromAdressNameAndReplyTo(accountId, fromAddress, fromName, function(err, senderAddress, senderName, replyTo){
             htmlContent = self._replaceMandrillStyleVars(vars, htmlContent);
             juice.juiceResources(htmlContent, {}, function(err, html) {
@@ -1293,7 +1293,7 @@ var emailMessageManager = {
                                 self.log.error('Error sending email:', err);
                                 return fn(err);
                             } else {
-                                self.log.debug(accountId, null, '<< sendNewPurchaseOrderEmail');
+                                self.log.debug(accountId, null, '<< sendBasicDetailsEmail');
                                 return fn(null, response);
                             }
                         });
