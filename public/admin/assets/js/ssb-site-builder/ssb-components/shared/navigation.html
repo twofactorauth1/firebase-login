@@ -130,7 +130,7 @@
                               <input ng-if="sublink.linkTo.type !== 'page'" placeholder="Enter link title" type="text" ng-model="sublink.label" class="form-control" style="margin-bottom: 10px;">
                             </div>
                             <div class="panel-body padding-top-0" ng-show="editNav[$parent.$index].links[$index].isEdit">
-                                <label for="link-title">Link To:{{sublink.linkTo.type}}</label>
+                                <label for="link-title">Link To:</label>
 
                               <div class="radio" >
                                 <label>
@@ -295,7 +295,7 @@
                       <ul  class="setting-nav-sub-menu subnavs" style="list-style:none;" class="setting-nav-sub-menu" style="list-style:none;">
                           <li  data-ng-repeat="sublink  in link.links | orderBy:'sub_index'" class="sub-fragment" parent-index="{{$parent.$index}}">
                               <div class="head-menu-links clearfix"   data-label="{{sublink.label}}">
-                                  <div class="ssb-page-section-settings-item" style="border: 1px solid #eeeeee;">
+                                  <div class="ssb-page-section-settings-item"  >
                                       <div class="sub-reorder ssb-sidebar-item-icon ssb-sidebar-move-handle ti-move display-ib" ng-hide="editNav[$parent.$index].links[$index ].isEdit"></div>
                                       <div class="ssb-sidebar-item-icon ssb-sidebar-item-icon-offset-1 ti-close display-ib"
                                            ng-click="deleteLinkFromSubNav($parent.$index,$index,customMenu.links);"
