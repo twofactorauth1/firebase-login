@@ -40,8 +40,8 @@
             }
         }
 
-        function removeItemFromCart(item) {
-            
+        function removeItemFromCart(index) {
+            quoteCartService.items.splice(index, 1);
         }
 
         function getCartDetail(){
