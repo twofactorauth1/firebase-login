@@ -5,7 +5,7 @@
  * controller for angular-aside
  * Off canvas side menu to use with ui-bootstrap. Extends ui-bootstrap's $modal provider.
  */
-app.controller('AsideCtrl', ["$scope", "$aside", function ($scope, $aside) {
+app.controller('AsideCtrl', ["$scope", "$modal", "$aside", function ($scope, $modal, $aside) {
   $scope.openAside = function (position) {
     $aside.open({
       templateUrl: '/admin/assets/var/demo/views/partials/settings.html',
@@ -24,4 +24,38 @@ app.controller('AsideCtrl', ["$scope", "$aside", function ($scope, $aside) {
       }
     });
   };
+
+  $scope.openModal = openModal;
+  $scope.closeModal = closeModal;
+
+  function openModal(modal, controller, size){
+      
+      var _modal = {
+          templateUrl: modal,
+          keyboard: false,
+          backdrop: 'static',
+          size: 'lg',
+          scope: $scope,
+          resolve: {
+              
+          }
+      };
+
+      if (controller) {
+          _modal.controller = controller;
+      }
+
+
+      $scope.modalInstance = $modal.open(_modal);
+
+      $scope.modalInstance.result.then(null, function () {
+          angular.element('.sp-container').addClass('sp-hidden');
+      });
+  }
+
+  function closeModal() {
+      if($scope.modalInstance)
+          $scope.modalInstance.close();
+  }
+
 }]);

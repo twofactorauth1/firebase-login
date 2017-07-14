@@ -35,7 +35,7 @@
                                                         <small ng-bind-html="action.label | highlight: $select.search"></small>
                                                     </ui-select-choices>
                                                 </ui-select-->
-                                                <div class="btn-group action-btn-con" ng-hide='!vm.uiState.inVentoryWatchList.length' ng-if="vm.uiState.userPermissions.dashboard">
+                                                <div class="btn-group action-btn-con" ng-hide='!vm.uiState.inVentoryWatchList.length' ng-if="vm.state.orgCardAndPermissions.dashboard">
                                                     <button type="button" class="action-btn libtn btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                         Action
                                                     </button>
@@ -60,7 +60,7 @@
 	    <table class="table table-hover table-striped select-placeholder" ng-class="{'grid': tableView == 'grid', 'bg-white table-list-view': tableView == 'list'}" ng-if="!vm.uiState.loading" fixed-header-table>
 	        <thead ng-class="{'bg-white': tableView == 'grid'}" sticky offset="65" sticky-class="sticky-header-class">
 	            <tr class="inventory-header-row">
-	                <th class="select-col hidden-xs" ng-if="vm.uiState.userPermissions.dashboard"></th>
+	                <th class="select-col hidden-xs" ng-if="vm.state.orgCardAndPermissions.dashboard"></th>
 	                <th class="name-col sort" style="white-space: nowrap;" ng-class="{'st-sort-ascent': vm.uiState.sortData.details['name'].direction === 1, 'st-sort-descent': vm.uiState.sortData.details['name'].direction === -1}" ng-click="vm.sortInventory('_itemName', 'name')">Product</th>
 	                <th class="vendor-col sort" style="white-space: nowrap;" ng-class="{'st-sort-ascent': vm.uiState.sortData.details['vendor'].direction === 1, 'st-sort-descent': vm.uiState.sortData.details['vendor'].direction === -1}" ng-click="vm.sortInventory('_shortVendorName', 'vendor')">Vendor</th>
 	                <th class="hidden-xs desc-col">Description</th>
@@ -68,9 +68,10 @@
 	                <th class="hidden-xs hidden-sm weight-col">Weight</th>
                     <th class="hidden-xs hidden-sm price-col" style="white-space: nowrap;">List Price</th>
 	                <th class="qty-col sort" style="white-space: nowrap;" ng-class="{'st-sort-ascent': vm.uiState.sortData.details['available'].direction === 1, 'st-sort-descent': vm.uiState.sortData.details['available'].direction === -1}" ng-click="vm.sortInventory('Available', 'available')"><span class="hidden-xs">Qty </span>Avail</th>
+	                <th class="col-add-btn hidden-xs" ng-if="vm.state.orgCardAndPermissions.permissions.quote.create"></th>
 	            </tr>
 	            <tr class="inventory-header-row">
-	            	<th class="hidden-xs select-col" ng-if="vm.uiState.userPermissions.dashboard"></th>
+	            	<th class="hidden-xs select-col" ng-if="vm.state.orgCardAndPermissions.dashboard"></th>
 	                <th class="name-col">
 	                    <input ng-model="vm.uiState.fieldSearch.OITM_ItemName" ng-model-options="{ debounce: 800 }" placeholder="Product" class="form-control" type="search"/>
 	                </th>
@@ -86,11 +87,12 @@
                             <option value="" selected class="placeholder">Qty Avail</option>
                         </select>
 	                </th>
+	                <th class="col-add-btn hidden-xs" ng-if="vm.state.orgCardAndPermissions.permissions.quote.create"></th>
 	            </tr>
 	        </thead>
 	        <tbody>
 	            <tr ng-repeat="product in vm.displayedProducts" class="product-item" ng-click="vm.viewSingleInventory(product)" ng-class='{"inventory-watch-row": vm.checkIfSelected(product, vm.state.userOrgConfig.watchList)}'>
-	            	<td class="hidden-xs select-col" ng-if="vm.uiState.userPermissions.dashboard">
+	            	<td class="hidden-xs select-col" ng-if="vm.state.orgCardAndPermissions.dashboard">
                         <div ng-click="vm.preventClick($event);" class="checkbox clip-check check-success checkbox-inline">
                             <input type="checkbox" id="modal-select-{{$index}}" ng-checked="vm.checkIfSelected(product, vm.uiState.inVentoryWatchList)" ng-click='vm.productSelectClickFn($event, product)'>
                             <label for="modal-select-{{$index}}">
@@ -98,19 +100,24 @@
                             </label>
                         </div>
                     </td>
-	                <td class="name-col"><strong>Product: </strong><div class="name-block-container"><div class="text-adjust-outerTable">{{product.OITM_ItemName}}</div></div></td>
+	                <td class="name-col"><strong>Product: </strong><div tooltip="{{product.OITM_ItemName}}" class="text-adjust-outerTable">{{product.OITM_ItemName}}</div></td>
 	                <td class="vendor-col" style="white-space: nowrap;"><strong>Vendor: </strong><div class="text-capitalize text-adjust-outerTable">{{product._shortVendorName}}</div></td>
 	                <td class="hidden-xs desc-col"><strong>Description: </strong><div tooltip="{{product.OITM_U_dscription}}" class="text-adjust-outerTable">{{product.OITM_U_dscription}}</div></td>
 	                <td class="hidden-xs hidden-sm dim-col"><strong>Box Dim: </strong>{{vm.getDimentions(product)}}</td>
 	                <td class="weight-col hidden-xs hidden-sm" style="white-space: nowrap;"><strong>Weight: </strong>{{vm.getWeight(product)}}</td>
                     <td class="price-col hidden-xs hidden-sm" style="white-space: nowrap;"><strong>List Price: </strong>{{vm.getPrice(product) | currency : '$'}}</td>
                     <td class="qtyColumn qty-col" style="white-space: nowrap;"><strong>Qty: </strong>
-	                <span ng-if="product.Available <= 0">
-                        <a href='#' ng-click='vm.cancel($event);' onclick='Intercom("showNewMessage","")'>Click to Inquire</a>
-                    </span>
-                    <span ng-if="product.Available > 0">
-                        {{ product.Available }}
-                    </span>
+		                <span ng-if="product.Available <= 0">
+	                        <a href='#' ng-click='vm.cancel($event);' onclick='Intercom("showNewMessage","")'>Click to Inquire</a>
+	                    </span>
+	                    <span ng-if="product.Available > 0">
+	                        {{ product.Available }}
+	                    </span>
+	                </td>
+	                <td class="col-add-btn hidden-xs" ng-if="vm.state.orgCardAndPermissions.permissions.quote.create">
+        				<button type="button" class="btn btn-primary btn-warning pull-right" ng-click="vm.preventClick($event); vm.addItemToCart(product, 'new-quote-modal', 'NewQuoteModalController', 'lg')">
+                            <span>Add</span>
+                        </button>
 	                </td>
 	            </tr>
 	        </tbody>
@@ -137,5 +144,4 @@
 		<h1>loading...</h1>
 	</div>
 </div>
-
-
+<div data-ng-include=" 'assets/var/demo/js/quotes/modals/new-quote-modal.html' "></div>

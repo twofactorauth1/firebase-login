@@ -320,17 +320,17 @@
                                           <label for="link-title">Link To:</label>
                                           <div class="radio">
                                               <label>
-                                                  <input type="radio" name="inlineRadioOptions-{{$index}}" id="inlineRadioOptions1-{{$index}}" ng-model="sublink.linkTo.type" ng-change="editNav[$parent.$index].linkType[$index] = 'page'" value="page" ng-checked="{{sublink.linkTo.type == 'page'}}">Page
+                                                  <input type="radio" name="inlineRadioOptions-{{$parent.$index}}-1-sub-{{$index}}" id="inlineRadioOptions-{{$parent.$index}}-1-{{$index}}" ng-model="sublink.linkTo.type" ng-change="editNav[$parent.$index].linkType[$index] = 'page'" value="page" ng-checked="{{sublink.linkTo.type == 'page'}}">Page
                                               </label>
                                           </div>
                                           <div class="radio">
                                               <label>
-                                                  <input type="radio" name="inlineRadioOptions-{{$index}}" id="inlineRadioOptions2-{{$index}}" ng-change="editNav[$parent.$index].linkType[$index] = 'section'" ng-model="sublink.linkTo.type" value="section" ng-checked="{{sublink.linkTo.type == 'section'}}">Section
+                                                  <input type="radio" name="inlineRadioOptions-{{$parent.$index}}-1-{{$index}}" id="inlineRadioOptions-{{$parent.$index}}-2-{{$index}}" ng-change="editNav[$parent.$index].linkType[$index] = 'section'" ng-model="sublink.linkTo.type" value="section" ng-checked="{{sublink.linkTo.type == 'section'}}">Section
                                             </label>
                                           </div>
                                           <div class="radio">
                                             <label>
-                                                <input type="radio" name="inlineRadioOptions-{{$index}}" id="inlineRadioOptions3-{{$index}}" ng-change="editNav[$parent.$index].linkType[$index] = 'external'" ng-model="sublink.linkTo.type" value="external" ng-checked="{{sublink.linkTo.type == 'external'}}">
+                                                <input type="radio" name="inlineRadioOptions-{{$parent.$index}}-1-{{$index}}" id="inlineRadioOptions-{{$parent.$index}}-3-{{$index}}" ng-change="editNav[$parent.$index].linkType[$index] = 'external'" ng-model="sublink.linkTo.type" value="external" ng-checked="{{sublink.linkTo.type == 'external'}}">
                                                 External
                                             </label>
                                           </div>
