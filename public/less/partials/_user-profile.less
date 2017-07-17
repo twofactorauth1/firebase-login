@@ -93,3 +93,29 @@
         display: inline;
     }
 }
+/* ---------------------------------------------------------------------- */
+/*  Spinner
+/* ---------------------------------------------------------------------- */
+.csspinner {
+    position: relative;
+}
+
+.csspinner:before {
+    content: "";
+    z-index: 1;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-color: rgba(255,255,255, 0.8);
+}
+
+.csspinner:after {
+    z-index: 2;
+    content: "";
+    position: absolute;
+    -webkit-transform-origin: center;
+    -ms-transform-origin: center;
+    transform-origin: center;
+}

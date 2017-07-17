@@ -153,7 +153,7 @@
                         </div>
                     </td>
                     <td class="title-col"><strong>Name: </strong><div class="name-block-container"><span class="list-name"></span><span class="text-adjust-table" title="{{order.title}}">{{order.title || '&nbsp;'}}</span></div></td>
-	                <td class="submitter-col"><strong>Submitter: </strong>{{vm.getSubmitterName(order.submitter) || '&nbsp;'}}</td>
+	                <td class="submitter-col"><strong>Submitter: </strong>{{vm.getSubmitterName(order.submitter, order) || '&nbsp;'}}</td>
 
 	                <td ng-if="!vm.state.orgCardAndPermissions.isVendor" class="company-col"><strong>VAR: </strong><div class="name-block-container"><span class="list-name"></span>
 	                <span class="text-adjust-table" title="{{order.companyName}}">{{order.companyName || '&nbsp;'}}</span>
