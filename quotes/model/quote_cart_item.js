@@ -11,10 +11,10 @@ var quoteCartItem = $$.m.ModelBase.extend({
 
     defaults: function() {
         return {
-            _id: null,            
+            _id: null,
             accountId: null,
             userId : null,
-            items:[],            
+            items:[],
             created: {
                 date: new Date(),
                 by: null

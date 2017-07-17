@@ -8,7 +8,7 @@ app.controller('NewQuoteModalController', ['$scope', 'parentVm', '$timeout', 'to
         
     };
     vm.state = {
-    	
+
     }; 
     vm.addItemToCart = addItemToCart;
     
@@ -18,8 +18,9 @@ app.controller('NewQuoteModalController', ['$scope', 'parentVm', '$timeout', 'to
             vm.uiState.loading = false;
 
             vm.state.item = QuoteCartDetailsService.getCartItem(vm.parentVm.state.selectedProductItem);
+
             vm.newItem = QuoteCartDetailsService.newItem;
-        }        
+        } 
     }, true);
     function addItemToCart(){
         vm.uiState.saveLoading = true;

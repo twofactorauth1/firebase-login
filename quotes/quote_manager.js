@@ -29,9 +29,9 @@ module.exports = {
         log.debug(accountId, userId, '>> listQuoteItems');
         var query = {
             'accountId':accountId,
-            'userId': userId 
+            'userId': userId
         };
-       
+
         quoteCartItemDao.findMany(query, $$.m.QuoteCartItem, function(err, list){
             if(err) {
                 log.error('Exception listing promotions: ' + err);

@@ -23,9 +23,9 @@ _.extend(api.prototype, baseApi.prototype, {
     version: "2.0",
 
     initialize: function () {
-        app.get(this.url('cart/items'), this.isAuthAndSubscribedApi.bind(this), this.listQuoteItems.bind(this));       
+        app.get(this.url('cart/items'), this.isAuthAndSubscribedApi.bind(this), this.listQuoteItems.bind(this));
         app.post(this.url('cart/items'), this.isAuthAndSubscribedApi.bind(this), this.saveUpdateCartQuoteItems.bind(this));
-        //app.get(this.url('po/:id'), this.isAuthAndSubscribedApi.bind(this), this.getPurchaseOrder.bind(this));        
+        //app.get(this.url('po/:id'), this.isAuthAndSubscribedApi.bind(this), this.getPurchaseOrder.bind(this));
     },
 
     listQuoteItems: function(req, resp) {
@@ -58,7 +58,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 self.log.debug(accountId, userId, '<< saveUpdateCartQuoteItems [' + isAllowed + ']');
                 return self.sendResultOrError(resp, err, [], "Error saving quote items");
             } else {
-                
+
             }
         });
         var quoteItems = req.body;
@@ -77,7 +77,7 @@ _.extend(api.prototype, baseApi.prototype, {
         quoteCartItem.set("accountId", accountId);
         quoteCartItem.set("userId", userId);
 
-        
+
         quoteManager.saveUpdateCartQuoteItems(accountId, userId, quoteCartItem, function(err, value){
             self.log.debug(accountId, userId, '<< saveUpdateCartQuoteItems');
             self.sendResultOrError(resp, err, value, "Error saving quote items");
@@ -99,12 +99,12 @@ _.extend(api.prototype, baseApi.prototype, {
                 if (!purchaseOrderId) {
                     self.wrapError(res, 400, null, "Invalid paramater for ID");
                 }
-                
+
                 quoteManager.deletePurchaseOrder(accountId, userId, purchaseOrderId, function(err, value){
                     self.log.debug('<< deletePurchaseOrder');
                     self.sendResultOrError(res, err, {deleted:true}, "Error deleting PO");
                     self.createUserActivity(req, 'DELETE_PO', null, null, function(){});
-                }); 
+                });
             }
         });
     },
@@ -128,7 +128,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         });
     }
-    
+
 
 
 });

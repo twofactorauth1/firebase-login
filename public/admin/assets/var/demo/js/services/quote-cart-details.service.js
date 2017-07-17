@@ -18,7 +18,7 @@
         quoteCartService.newItem = true;
 
         quoteCartService.loading = {value: 0};
-        
+
         var baseQuotesAPIUrlv2 = '/api/2.0/quotes';
         quoteCartService.loading = {value: 0};
 
@@ -68,12 +68,12 @@
             }
 
             var apiUrl = [baseQuotesAPIUrlv2, "cart", "items"].join('/');
-            
+
 
             return quoteServiceRequest($http.post(apiUrl, quoteCartService.cartDetail).success(success).error(error));
-            
+
         }
-  
+
         function addItemToCart(item) {
             return _addUpdateItemCart(item);
         }
@@ -96,6 +96,7 @@
             //return saveUpdateCartQuoteItems();
         }
 
+        
         function _addUpdateItemCart(item){
             quoteCartService.saveLoading = true;
             var _item = _.findWhere(quoteCartService.cartDetail.items, { OITM_ItemCode: item.OITM_ItemCode });
@@ -108,7 +109,7 @@
         function calculateTotalPrice(items){
             var totalPrice = 0;
             if(items){
-                totalPrice = _.reduce(items, function(m, item) { 
+                totalPrice = _.reduce(items, function(m, item) {
                     return m + (item.ITM1_Price || 0) *  item.quantity; },
                 0);
             }
@@ -128,8 +129,3 @@
     return quoteCartService;       
     }
 })();
-
-
-
-
-        

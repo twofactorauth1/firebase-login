@@ -7,7 +7,7 @@
         <h3 class="modal-title">Add to Quote</h3>
     </div>
     <form name="form" role="form" id="form">
-        <div class="modal-body bg-white new-quote-modal quote-cart-details" style="min-height:200px" stop-event="touchend">            
+        <div class="modal-body bg-white new-quote-modal quote-cart-details" style="min-height:200px" stop-event="touchend">
             <ul class="list-unstyled cart-items padding-top-15">
                 <li>
                     <div class="col-xs-12">
@@ -42,7 +42,7 @@
                     <div class="clearfix"></div>
                 </li>
             </ul>
-            <div class="clearfix"></div> 
+            <div class="clearfix"></div>
         </div>
         <div class="modal-footer">
             <button class="btn btn-primary" ng-disabled='form.$invalid || vm.uiState.saveLoading' ng-click="vm.addItemToCart()">{{vm.newItem ? 'Add to Quote' : 'Update Quote'}}</button>

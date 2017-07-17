@@ -528,7 +528,7 @@
                         <div class="panel-footer border-light">
                             <label for="newNote"> New Note </label>
                             <textarea id="newNote" class="form-control margin-bottom-15 autosize area-animated msd-elastic: \n;" ng-model="newNote"></textarea>
-                            <div class="checkbox clip-check check-success margin-top-5" ng-if="order.billing_address.email">
+                            <div class="checkbox clip-check check-success margin-top-5" ng-if="order.customer.details[0].emails[0].email">
                                 <input type="checkbox" id="note-editable" ng-model="notesEmail.enable" >
                                 <label for="note-editable">
                                     Send Notes to Contact by Email
