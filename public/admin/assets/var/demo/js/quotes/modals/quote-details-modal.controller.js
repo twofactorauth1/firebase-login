@@ -43,7 +43,9 @@ app.controller('QuoteDetailsModalController', ['$scope', '$timeout', 'toaster', 
     }
 
     function setDefaults(){
-        $scope.closeModal();
+        QuoteCartDetailsService.deleteCartDetails(vm.state.cartDetail).then(function(){
+            $scope.closeModal();
+        })
     }
 
     function initAttachment(){      

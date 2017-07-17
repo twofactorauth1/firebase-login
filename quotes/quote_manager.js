@@ -57,6 +57,23 @@ module.exports = {
         });
     },
 
+
+    deleteCartQuoteItem: function(accountId, userId, cartId, fn){
+        var self = this;
+        log.debug(accountId, userId, '>> deleteCartQuoteItem');
+        var query = {userId: userId};
+        
+        quoteCartItemDao.removeByQuery(query, $$.m.QuoteCartItem, function(err, value){
+            if(err) {
+                self.log.error('Error deleting cart item: ' + err);
+                return fn(err, null);
+            } else {
+                log.debug(accountId, userId, '<< deleteCartQuoteItem');
+                fn(null, value);
+            }
+        });
+    },
+
     createQuote: function(accountId, userId, quote, fn) {
         var self = this;
         log.debug(accountId, userId, '>> createQuote');
