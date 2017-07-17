@@ -390,7 +390,7 @@
                 var note_order = {};
                 if($scope.notesEmail.enable){
                     note_order = {
-                        send_to: $scope.order.billing_address.email,
+                        send_to: $scope.order.customer.details[0].emails[0].email,
                         cC: $scope.$parent.currentUser.email,
                         note_value: $scope.newNote,
                         enable_note: $scope.notesEmail.enable

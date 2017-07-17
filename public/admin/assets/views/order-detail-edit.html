@@ -527,7 +527,7 @@
                         </div>
                         <div class="panel-footer border-light">
                             <label for="newNote"> New Note </label>
-                            <div class="checkbox clip-check check-success margin-top-5" ng-if="order.billing_address.email">
+                            <div class="checkbox clip-check check-success margin-top-5" ng-if="order.customer.details[0].emails[0].email">
                                 <input type="checkbox" id="note-editable" ng-model="notesEmail.enable" >
                                 <label for="note-editable">
                                     Send Notes to Contact by Email
