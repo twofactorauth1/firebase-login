@@ -80,13 +80,7 @@
                         <h4 class="panel-title">Activities</h4>
                     </div>
                     <div class="panel-body">
-                        <div ng-if="!activities.length">
-                            <div class="panel panel-transparent">
-                                <div class="panel-body">
-                                    <h4 class="center"><span class="fa fa-comment fa-2x"></span> <br><br> No Activity Availiable</h4>
-                                </div>
-                            </div>
-                        </div>
+                        <div class="load1 csspinner height-330" ng-show="!activities.length"></div>
                         <div class="panel-scroll height-330" id="chatBox" perfect-scrollbar wheel-propagation="false" suppress-scroll-x="true">
                             <ul class="timeline-xs padding-left-15 padding-right-15" ng-if="activities.length">
                                 <li class="timeline-item success" ng-repeat="activity in activities | orderBy:'-start' | offset:  curPage * pageSize | limitTo: pageSize">
