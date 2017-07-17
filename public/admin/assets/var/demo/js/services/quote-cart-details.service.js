@@ -92,7 +92,6 @@
                 if(_add){
                     quoteCartService.cartDetail = data;
                 }
-                setVendorSpecialPricing();
             }
 
             function error(error) {
@@ -159,7 +158,7 @@
 
         function removeItemFromCart(index) {
             quoteCartService.cartDetail.items.splice(index, 1);
-            //return saveUpdateCartQuoteItems();
+            setVendorSpecialPricing();
         }
 
 
@@ -169,6 +168,7 @@
             if(!_item){
                 quoteCartService.cartDetail.items.push(item);
             }
+            setVendorSpecialPricing();
             return saveUpdateCartQuoteItems(true);
         }
 
