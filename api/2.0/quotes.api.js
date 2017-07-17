@@ -25,6 +25,7 @@ _.extend(api.prototype, baseApi.prototype, {
     initialize: function () {
         app.get(this.url('cart/items'), this.isAuthAndSubscribedApi.bind(this), this.listQuoteItems.bind(this));
         app.post(this.url('cart/items'), this.isAuthAndSubscribedApi.bind(this), this.saveUpdateCartQuoteItems.bind(this));
+        app.delete(this.url('cart/items/:id'), this.isAuthAndSubscribedApi.bind(this), this.deleteCartQuoteItem.bind(this));
         app.post(this.url(''), this.isAuthAndSubscribedApi.bind(this), this.createQuote.bind(this));
         app.post(this.url('attachment/:id'), this.isAuthApi.bind(this), this.updateQuoteAttachment.bind(this));
     },
@@ -37,11 +38,11 @@ _.extend(api.prototype, baseApi.prototype, {
         self._checkAccess(accountId, userId, 'quotes', function(err, isAllowed){
             if(!isAllowed) {
                 self.log.debug(accountId, userId, '<< listQuoteItems [' + isAllowed + ']');
-                return self.sendResultOrError(resp, err, [], "Error listing items");
+                return self.sendResultOrError(resp, err, [], "Error listing quote items");
             } else {
                 quoteManager.listQuoteItems(accountId, userId, function(err, list){
                     self.log.debug(accountId, userId, '<< listQuoteItems');
-                    return self.sendResultOrError(resp, err, list, "Error listing items");
+                    return self.sendResultOrError(resp, err, list, "Error listing quote items");
                 });
             }
         });
@@ -59,32 +60,55 @@ _.extend(api.prototype, baseApi.prototype, {
                 self.log.debug(accountId, userId, '<< saveUpdateCartQuoteItems [' + isAllowed + ']');
                 return self.sendResultOrError(resp, err, [], "Error saving quote items");
             } else {
+                var quoteItems = req.body;
+                var quoteCartItem = new $$.m.QuoteCartItem(quoteItems);
+                var modified = {
+                    date: new Date(),
+                    by: userId
+                };
+                var created = {
+                    date: new Date(),
+                    by: userId
+                };
 
+                quoteCartItem.set('modified', modified);
+                quoteCartItem.set('created', created);
+                quoteCartItem.set("accountId", accountId);
+                quoteCartItem.set("userId", userId);
+
+
+                quoteManager.saveUpdateCartQuoteItems(accountId, userId, quoteCartItem, function(err, value){
+                    self.log.debug(accountId, userId, '<< saveUpdateCartQuoteItems');
+                    self.sendResultOrError(resp, err, value, "Error saving quote items");
+                });
             }
         });
-        var quoteItems = req.body;
-        var quoteCartItem = new $$.m.QuoteCartItem(quoteItems);
-        var modified = {
-            date: new Date(),
-            by: userId
-        };
-        var created = {
-            date: new Date(),
-            by: userId
-        };
-
-        quoteCartItem.set('modified', modified);
-        quoteCartItem.set('created', created);
-        quoteCartItem.set("accountId", accountId);
-        quoteCartItem.set("userId", userId);
-
-
-        quoteManager.saveUpdateCartQuoteItems(accountId, userId, quoteCartItem, function(err, value){
-            self.log.debug(accountId, userId, '<< saveUpdateCartQuoteItems');
-            self.sendResultOrError(resp, err, value, "Error saving quote items");
-        });
+        
     },
 
+    deleteCartQuoteItem: function(req, resp) {
+        var self = this;
+        self.log.debug('>> deleteCartQuoteItem');
+        var promotionId = req.params.id;
+        var accountId = parseInt(self.accountId(req));
+        var userId = self.userId(req);
+        self._checkAccess(accountId, userId, 'quotes', function(err, isAllowed){
+            if(!isAllowed) {
+                self.log.debug(accountId, userId, '<< deleteCartQuoteItem [' + isAllowed + ']');
+                return self.sendResultOrError(resp, err, [], "Error deleting quote");
+            } else {
+                quoteManager.deleteCartQuoteItem(accountId, userId, promotionId, function(err, value){
+                    if(err) {
+                        self.wrapError(resp, 500, err, "Error deleting quote cart item");
+                    } else {
+                        self.log.debug('<< deleteCartQuoteItem');
+                        self.send200(resp);
+                        //self.createUserActivity(req, 'DELETE_PROMOTION', null, null, function(){});
+                    }
+                });
+             }
+        });
+    },
     createQuote: function(req, resp) {
         var self = this;
         self.log.debug('>> createQuote');
@@ -96,30 +120,30 @@ _.extend(api.prototype, baseApi.prototype, {
                 self.log.debug(accountId, userId, '<< createQuote [' + isAllowed + ']');
                 return self.sendResultOrError(resp, err, [], "Error saving quote");
             } else {
+                var quoteObj = req.body;
+                var quote = new $$.m.Quote(quoteObj);
+                var modified = {
+                    date: new Date(),
+                    by: userId
+                };
+                var created = {
+                    date: new Date(),
+                    by: userId
+                };
 
+                quote.set('modified', modified);
+                quote.set('created', created);
+                quote.set("accountId", accountId);
+                quote.set("userId", userId);
+
+
+                quoteManager.createQuote(accountId, userId, quote, function(err, value){
+                    self.log.debug(accountId, userId, '<< createQuote');
+                    self.sendResultOrError(resp, err, value, "Error saving quote");
+                });
             }
         });
-        var quoteObj = req.body;
-        var quote = new $$.m.Quote(quoteObj);
-        var modified = {
-            date: new Date(),
-            by: userId
-        };
-        var created = {
-            date: new Date(),
-            by: userId
-        };
-
-        quote.set('modified', modified);
-        quote.set('created', created);
-        quote.set("accountId", accountId);
-        quote.set("userId", userId);
-
-
-        quoteManager.createQuote(accountId, userId, quote, function(err, value){
-            self.log.debug(accountId, userId, '<< createQuote');
-            self.sendResultOrError(resp, err, value, "Error saving quote");
-        });
+        
     },
 
     updateQuoteAttachment: function(req, res) {

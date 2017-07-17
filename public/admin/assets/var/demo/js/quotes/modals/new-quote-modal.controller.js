@@ -22,6 +22,7 @@ app.controller('NewQuoteModalController', ['$scope', 'parentVm', '$timeout', 'to
             vm.newItem = QuoteCartDetailsService.newItem;
         } 
     }, true);
+    
     function addItemToCart(){
         vm.uiState.saveLoading = true;
     	QuoteCartDetailsService.addItemToCart(vm.state.item).then(function (response){

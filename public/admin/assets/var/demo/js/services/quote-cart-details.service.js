@@ -23,7 +23,7 @@
 
         quoteCartService.createQuote = createQuote;
         quoteCartService.updateQuoteAttachment = updateQuoteAttachment;
-
+        quoteCartService.deleteCartDetails = deleteCartDetails;
         quoteCartService.saveLoading = false;
 
         quoteCartService.cartDetail = {
@@ -105,6 +105,27 @@
 
         }
 
+
+        function deleteCartDetails(cart) {
+
+            function success(data) {
+                quoteCartService.cartDetail = {
+                    items: []
+                }
+            }
+
+            function error(error) {
+                console.error('quoteCartService deleteCartDetails error: ', JSON.stringify(error));
+            }
+            var apiUrl = [baseQuotesAPIUrlv2, "cart", "items", cart._id].join('/');
+            return quoteServiceRequest(
+                $http({
+                    url: apiUrl,
+                    method: "DELETE"
+                }).success(success).error(error)
+            )
+        }
+
         function createQuote(quote){
             function success(data) {
                 // To do 
@@ -184,7 +205,7 @@
 
 
         $rootScope.$watch(function() { return quoteCartService.cartDetail.items }, _.debounce(function (items, oldItems) {
-            if (!quoteCartService.saveLoading && items && oldItems && !angular.equals(items, oldItems)) {
+            if (!quoteCartService.saveLoading && quoteCartService.cartDetail._id && items && oldItems && !angular.equals(items, oldItems)) {
                 saveUpdateCartQuoteItems();
             }
         }, 1000), true);
