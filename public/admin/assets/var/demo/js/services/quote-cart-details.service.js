@@ -20,7 +20,9 @@
         quoteCartService.loading = {value: 0};
 
         var baseQuotesAPIUrlv2 = '/api/2.0/quotes';
-        quoteCartService.loading = {value: 0};
+
+        quoteCartService.createQuote = createQuote;
+        quoteCartService.updateQuoteAttachment = updateQuoteAttachment;
 
         quoteCartService.saveLoading = false;
 
@@ -75,6 +77,11 @@
                     })
                 }
             })
+
+            quoteCartService.cartDetail.vendorSpecialPricing = _.filter(quoteCartService.cartDetail.vendorSpecialPricing, function(item){
+                return _.contains(_.pluck(keyArr, 'vendor'), item.vendor) 
+            })
+
         }
 
 
@@ -85,7 +92,6 @@
                 if(_add){
                     quoteCartService.cartDetail = data;
                 }
-                setVendorSpecialPricing();
             }
 
             function error(error) {
@@ -97,6 +103,40 @@
 
             return quoteServiceRequest($http.post(apiUrl, quoteCartService.cartDetail).success(success).error(error));
 
+        }
+
+        function createQuote(quote){
+            function success(data) {
+                // To do 
+                // empty active cart
+            }
+
+            function error(error) {
+                console.error('quoteCartService createQuote error: ', JSON.stringify(error));
+            }
+
+            var apiUrl = [baseQuotesAPIUrlv2].join('/');
+
+
+            return quoteServiceRequest($http.post(apiUrl, quote).success(success).error(error));
+        }
+
+        function updateQuoteAttachment(attachment, _id, fn){
+            function success(data) {                
+                console.log(data);
+            }
+
+            function error(error) {
+                console.error('quoteCartService updateQuoteAttachment error: ', JSON.stringify(error));
+            }
+
+            var _formData = new FormData();
+            _formData.append('file', attachment);
+            
+            return quoteServiceRequest($http.post([baseQuotesAPIUrlv2, 'attachment', _id].join('/'), _formData, {
+                transformRequest: angular.identity,
+                headers: {'Content-Type': undefined}
+            }).success(success).error(error));
         }
 
         function addItemToCart(item) {
@@ -118,7 +158,7 @@
 
         function removeItemFromCart(index) {
             quoteCartService.cartDetail.items.splice(index, 1);
-            //return saveUpdateCartQuoteItems();
+            setVendorSpecialPricing();
         }
 
 
@@ -128,6 +168,7 @@
             if(!_item){
                 quoteCartService.cartDetail.items.push(item);
             }
+            setVendorSpecialPricing();
             return saveUpdateCartQuoteItems(true);
         }
 
