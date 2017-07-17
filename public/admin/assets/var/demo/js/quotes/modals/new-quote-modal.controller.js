@@ -11,16 +11,22 @@ app.controller('NewQuoteModalController', ['$scope', 'parentVm', '$timeout', 'to
     	
     }; 
     vm.addItemToCart = addItemToCart;
-    vm.newItem = QuoteCartDetailsService.newItem;
+    
+
     $scope.$watch(function() { return QuoteCartDetailsService.cartDetail.items }, function(data) {
         if(angular.isDefined(data)){
             vm.uiState.loading = false;
+
             vm.state.item = QuoteCartDetailsService.getCartItem(vm.parentVm.state.selectedProductItem);
+            vm.newItem = QuoteCartDetailsService.newItem;
         }        
     }, true);
     function addItemToCart(){
-    	QuoteCartDetailsService.addItemToCart(vm.state.item);
-    	vm.parentVm.closeModal();
+        vm.uiState.saveLoading = true;
+    	QuoteCartDetailsService.addItemToCart(vm.state.item).then(function (response){
+            vm.parentVm.closeModal();
+            vm.uiState.saveLoading = false;
+        });
     }
     (function init() {
         

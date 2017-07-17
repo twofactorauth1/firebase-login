@@ -1,7 +1,7 @@
 (function () {
     app.factory('QuoteCartDetailsService', QuoteCartDetailsService);
-    QuoteCartDetailsService.$inject = ['$http'];
-    function QuoteCartDetailsService($http){
+    QuoteCartDetailsService.$inject = ['$rootScope', '$http'];
+    function QuoteCartDetailsService($rootScope, $http){
         var quoteCartService = {};
 
 
@@ -21,6 +21,8 @@
         
         var baseQuotesAPIUrlv2 = '/api/2.0/quotes';
         quoteCartService.loading = {value: 0};
+
+        quoteCartService.saveLoading = false;
 
         quoteCartService.cartDetail = {
             items: []
@@ -52,10 +54,13 @@
         }
 
 
-        function saveUpdateCartQuoteItems() {
+        function saveUpdateCartQuoteItems(_add) {
 
             function success(data) {
-                quoteCartService.cartDetail.items = data.items;
+                quoteCartService.saveLoading = false;
+                if(_add){
+                    quoteCartService.cartDetail = data;
+                }
             }
 
             function error(error) {
@@ -70,7 +75,7 @@
         }
   
         function addItemToCart(item) {
-            _addUpdateItemCart(item)
+            return _addUpdateItemCart(item);
         }
 
         function getCartItem(item){
@@ -88,16 +93,16 @@
 
         function removeItemFromCart(index) {
             quoteCartService.cartDetail.items.splice(index, 1);
+            //return saveUpdateCartQuoteItems();
         }
 
-        
-
         function _addUpdateItemCart(item){
+            quoteCartService.saveLoading = true;
             var _item = _.findWhere(quoteCartService.cartDetail.items, { OITM_ItemCode: item.OITM_ItemCode });
             if(!_item){
                 quoteCartService.cartDetail.items.push(item);
             }
-            saveUpdateCartQuoteItems(quoteCartService.cartDetail.items);
+            return saveUpdateCartQuoteItems(true);
         }
 
         function calculateTotalPrice(items){
@@ -110,9 +115,21 @@
             return totalPrice || 0;
         }
 
+
+        $rootScope.$watch(function() { return quoteCartService.cartDetail.items }, _.debounce(function (items, oldItems) {
+            if (!quoteCartService.saveLoading && items && oldItems && !angular.equals(items, oldItems)) {
+                saveUpdateCartQuoteItems();
+            }
+        }, 1000), true);
+
         (function init() {
             quoteCartService.getCartItemDetails();
         })();
     return quoteCartService;       
     }
 })();
+
+
+
+
+        
