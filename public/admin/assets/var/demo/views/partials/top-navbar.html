@@ -28,19 +28,19 @@
                 <i class="ti-upload"></i> <span translate="topbar.media.MAIN">Media</span>
             </a>
         </li>
-        
-        <li ng-controller="AsideCtrl" ng-if="orgCardAndPermissions.isAdminUser">
+
+        <li ng-controller="AsideCtrl" ng-if="orgCardAndPermissions.quotes">
             <a class="topbar-settings" ng-click="openModal('quote-details-modal', 'QuoteDetailsModalController', 'lg')">
-                <i class="ti-quote-right"><span ng-if="quotes.length" class="quote-items-count">{{quotes.length}}</span></i>                
+                <i class="ti-quote-right"><span ng-if="quotes.length" class="quote-items-count">{{quotes.length}}</span></i>
                 <span translate="topbar.quotes.MAIN">Build a Quote</span>
             </a>
         </li>
-        <li ng-controller="AsideCtrl" ng-if="orgCardAndPermissions.quotes">
+        <li ng-controller="AsideCtrl" ng-if="orgCardAndPermissions.isAdminUser">
             <a class="topbar-settings" ng-click="openAside('top')">
                 <i class="ti-settings"></i> <span translate="topbar.settings.MAIN">Settings</span>
             </a>
         </li>
-        
+
         <li class="hidden">
             <a class="topbar-help-topics" href="#/support/help-topics">
                 <i class="ti-help-alt"></i> <span translate="topbar.help.MAIN">Help</span>

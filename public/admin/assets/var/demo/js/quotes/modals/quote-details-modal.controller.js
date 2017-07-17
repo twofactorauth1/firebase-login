@@ -8,15 +8,19 @@ app.controller('QuoteDetailsModalController', ['$scope', '$timeout', 'toaster', 
         
     };
 
-    vm.state = {
-    	cartDetail: {
-
-    	}
-    };
+    vm.state = {};
     vm.initAttachment = initAttachment;
-
-    vm.state.cartDetail = QuoteCartDetailsService.getCartDetail();
+    vm.calculateTotalPrice = calculateTotalPrice;
+    vm.state.cartDetail = QuoteCartDetailsService.cartDetail;
+    vm.removeItemFromCart = removeItemFromCart;
     vm.attachment = {};
+    function calculateTotalPrice(items){
+    	return QuoteCartDetailsService.calculateTotalPrice(items);
+    }
+
+    function removeItemFromCart(index){
+    	QuoteCartDetailsService.removeItemFromCart(index)
+    }
     function initAttachment(){
       
         vm.attachment = {};
