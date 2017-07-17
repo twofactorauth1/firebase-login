@@ -14,6 +14,7 @@ app.controller('QuoteDetailsModalController', ['$scope', '$timeout', 'toaster', 
     vm.state.cartDetail = QuoteCartDetailsService.cartDetail;
     vm.removeItemFromCart = removeItemFromCart;
     vm.attachment = {};
+    
     function calculateTotalPrice(items){
     	return QuoteCartDetailsService.calculateTotalPrice(items);
     }

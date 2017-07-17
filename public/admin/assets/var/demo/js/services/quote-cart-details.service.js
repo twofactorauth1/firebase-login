@@ -53,6 +53,30 @@
             return quoteServiceRequest($http.get([baseQuotesAPIUrlv2, "cart", "items"].join('/')).success(success).error(error));
         }
 
+        function setVendorSpecialPricing(){
+            
+            var items =  _.groupBy(quoteCartService.cartDetail.items, function(item){ 
+                return item._shortVendorName; 
+            });
+            var keyArr = _.map(items, function(g, key){return {vendor: key}});
+
+            _.each(keyArr, function(item){
+                if(quoteCartService.cartDetail.vendorSpecialPricing && quoteCartService.cartDetail.vendorSpecialPricing.length){
+                    if(!_.contains(_.pluck(quoteCartService.cartDetail.vendorSpecialPricing, "vendor"), item.vendor)){
+                        quoteCartService.cartDetail.vendorSpecialPricing.push({
+                            "vendor": item.vendor
+                        })
+                    }
+                }
+                else{
+                    quoteCartService.cartDetail.vendorSpecialPricing = [];
+                    quoteCartService.cartDetail.vendorSpecialPricing.push({
+                        "vendor": item.vendor
+                    })
+                }
+            })
+        }
+
 
         function saveUpdateCartQuoteItems(_add) {
 
@@ -61,6 +85,7 @@
                 if(_add){
                     quoteCartService.cartDetail = data;
                 }
+                setVendorSpecialPricing();
             }
 
             function error(error) {
@@ -96,7 +121,7 @@
             //return saveUpdateCartQuoteItems();
         }
 
-        
+
         function _addUpdateItemCart(item){
             quoteCartService.saveLoading = true;
             var _item = _.findWhere(quoteCartService.cartDetail.items, { OITM_ItemCode: item.OITM_ItemCode });
