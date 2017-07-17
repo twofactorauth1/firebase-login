@@ -63,6 +63,6 @@ app.controller('AsideCtrl', ["$scope", "$modal", "$aside", "QuoteCartDetailsServ
     if(angular.isDefined(items) && items.length){
         $scope.quotes = items;
     }
-}, true);
+  }, true);
 
 }]);
