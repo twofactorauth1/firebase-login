@@ -59,10 +59,10 @@ app.controller('AsideCtrl', ["$scope", "$modal", "$aside", "QuoteCartDetailsServ
   }
 
 
-  $scope.$watch(function() { return QuoteCartDetailsService.items }, function(items) {
+  $scope.$watch(function() { return QuoteCartDetailsService.cartDetail.items }, function(items) {
     if(angular.isDefined(items)){
         $scope.quotes = items;
     }
-}, true);
+  }, true);
 
 }]);

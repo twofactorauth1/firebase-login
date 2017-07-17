@@ -113,9 +113,9 @@
                         </div>
                         <div class="form-group typeahead">
                             <label for="form-field-select-1">
-                                Contact <span ng-hide="order.locked" ng-if="selectedCustomer._id" class="customer-info" ng-click="clearCustomer()">(Clear)</span> <span ng-if="selectedCustomer._id" ng-click="navToCustomer(selectedCustomer)" ng-show="!item[$index].editing" class="customer-info">(View Profile)</span>
+                                Contact <span ng-hide="order.locked" ng-if="selectedCustomer._id" class="customer-info" ng-click="clearCustomer()">(Clear)</span> <span ng-if="selectedCustomer._id" ng-show="!item[$index].editing" class="customer-info">(View Profile)</span>
                             </label>
-                            <input type="text" ng-disabled="order.locked" ng-model="selectedCustomer" typeahead="customer as customer for customer in customers | filter:$viewValue" typeahead-min-length="3" typeahead-loading="true" typeahead-template-url="customTemplate.html" typeahead-input-formatter="formatInput($model)" class="form-control">
+                            <div class="ordered-customer">{{order.customer.first}} {{order.customer.last}} (<a ng-click="navToCustomer(selectedCustomer)">#{{order.customer._id}}</a> {{order.customer.details[0].emails[0].email}})</div>
 
                         </div>
                         <div class="form-group row margin-bottom-0">
@@ -505,6 +505,31 @@
                 </div>
             </div>
             <div class="col-sm-4">
+                <div class="panel panel-white" id="notes">
+                    <div class="panel-heading border-light">
+                        <h4 class="panel-title">Contact <span class="text-bold">Notes</span></h4>
+                        <ct-paneltool class="panel-tools" tool-collapse="tool-collapse"></ct-paneltool>
+                    </div>
+                    <div class="panel-wrapper" collapse="notes" ng-init="notes=false">
+                        <div class="panel-body no-padding customer-detail">
+                            <ul class="notes panel-scroll" perfect-scrollbar wheel-propagation="false" suppress-scroll-x="true">
+                                <li ng-repeat="note in order.customer.notes">
+                                    <div class="col-xs-2">
+                                        <img src="{{note.user_profile_photo.url ? note.user_profile_photo.url : note.user_profile_photo ? note.user_profile_photo : '/admin/assets/images/default-user.png'}}" class="img-circle pull-left" width="32">
+                                    </div>
+                                    <div class="col-xs-10">
+                                        <span class="text-small block text-light">{{note.user.first}} {{note.user.last}} <span class="pull-right">{{note.date | date:'dd MMM yy'}}</span></span>
+                                        <span class="user-notes" ng-bind-html="note.note"></span>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div ng-if="order._id">
+                    <contact-activity single-contact="true" current-page="1" num-per-page="10" contact-id="{{order.customer._id}}" hide-new-activity="true"></contact-activity>
+                </div>
                 <div class="panel panel-white" id="orderNotes">
                     <div class="panel-heading border-light">
                         <h4 class="panel-title">Order <span class="text-bold">Notes</span></h4>
@@ -512,7 +537,7 @@
                     </div>
                     <div class="panel-wrapper" collapse="orderNotes" ng-init="orderNotes=false">
                         <div class="panel-body no-padding">
-                            <ul class="order-notes height-330 panel-scroll" perfect-scrollbar wheel-propagation="false" suppress-scroll-x="true">
+                            <ul class="order-notes height-180 panel-scroll" perfect-scrollbar wheel-propagation="false" suppress-scroll-x="true">
                                 <li ng-repeat="note in order.notes | reverse" class="row">
                                     <div class="col-xs-2">
                                         <img src="{{note.user.profilePhotos[0] ? note.user.profilePhotos[0] : '/admin/assets/images/default-user.png'}}" class="img-circle pull-left" width="32">
@@ -527,13 +552,13 @@
                         </div>
                         <div class="panel-footer border-light">
                             <label for="newNote"> New Note </label>
-                            <div class="checkbox clip-check check-success margin-top-5" ng-if="order.billing_address.email">
+                            <textarea id="newNote" class="form-control margin-bottom-15 autosize area-animated msd-elastic: \n;" ng-model="newNote"></textarea>
+                            <div class="checkbox clip-check check-success margin-top-5" ng-if="order.customer.details[0].emails[0].email">
                                 <input type="checkbox" id="note-editable" ng-model="notesEmail.enable" >
                                 <label for="note-editable">
                                     Send Notes to Contact by Email
                                 </label>
                             </div>
-                            <textarea id="newNote" class="form-control margin-bottom-15 autosize area-animated msd-elastic: \n;" ng-model="newNote"></textarea>
                             <button type="button" ng-disabled="!(newNote)" class="btn btn-info btn-block btn-o btn-wide btn-scroll btn-scroll-top ti-plus" ng-click="addNote()">
                                 <span>Add</span>
                             </button>
