@@ -77,6 +77,11 @@
                     })
                 }
             })
+
+            quoteCartService.cartDetail.vendorSpecialPricing = _.filter(quoteCartService.cartDetail.vendorSpecialPricing, function(item){
+                return _.contains(_.pluck(keyArr, 'vendor'), item.vendor) 
+            })
+
         }
 
 
