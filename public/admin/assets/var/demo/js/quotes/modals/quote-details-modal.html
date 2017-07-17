@@ -115,7 +115,8 @@
             <div class="clearfix"></div>
         </div>
         <div class="modal-footer">
-            <button class="btn btn-primary" ng-disabled='form.$invalid || vm.uiState.saveLoading' ng-click="">Submit</button>            
+            <button class="btn btn-wide btn-warning" ng-disabled='form.$invalid || vm.uiState.saveLoading' ng-click="vm.createQuote()">Save</button>
+            <button class="btn btn-wide btn-success" ng-disabled='form.$invalid || vm.uiState.saveLoading' ng-click="">Submit</button>
         </div>
     </form>    
 </script>

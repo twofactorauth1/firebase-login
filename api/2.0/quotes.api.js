@@ -25,7 +25,8 @@ _.extend(api.prototype, baseApi.prototype, {
     initialize: function () {
         app.get(this.url('cart/items'), this.isAuthAndSubscribedApi.bind(this), this.listQuoteItems.bind(this));
         app.post(this.url('cart/items'), this.isAuthAndSubscribedApi.bind(this), this.saveUpdateCartQuoteItems.bind(this));
-        //app.get(this.url('po/:id'), this.isAuthAndSubscribedApi.bind(this), this.getPurchaseOrder.bind(this));
+        app.post(this.url(''), this.isAuthAndSubscribedApi.bind(this), this.createQuote.bind(this));
+        app.post(this.url('attachment/:id'), this.isAuthApi.bind(this), this.updateQuoteAttachment.bind(this));
     },
 
     listQuoteItems: function(req, resp) {
@@ -84,31 +85,73 @@ _.extend(api.prototype, baseApi.prototype, {
         });
     },
 
-    deletePurchaseOrder: function (req, res) {
-
+    createQuote: function(req, resp) {
         var self = this;
-        var purchaseOrderId = req.params.id;
+        self.log.debug('>> createQuote');
         var accountId = parseInt(self.accountId(req));
         var userId = self.userId(req);
-        self.log.debug(accountId, userId, '>> deletePurchaseOrder');
 
-        self.checkPermissionForAccount(req, self.sc.privs.MODIFY_ORDER, accountId, function(err, isAllowed) {
-            if (isAllowed !== true) {
-                return self.send403(res);
+        self._checkAccess(accountId, userId, 'quotes', function(err, isAllowed){
+            if(!isAllowed) {
+                self.log.debug(accountId, userId, '<< createQuote [' + isAllowed + ']');
+                return self.sendResultOrError(resp, err, [], "Error saving quote");
             } else {
-                if (!purchaseOrderId) {
-                    self.wrapError(res, 400, null, "Invalid paramater for ID");
-                }
 
-                quoteManager.deletePurchaseOrder(accountId, userId, purchaseOrderId, function(err, value){
-                    self.log.debug('<< deletePurchaseOrder');
-                    self.sendResultOrError(res, err, {deleted:true}, "Error deleting PO");
-                    self.createUserActivity(req, 'DELETE_PO', null, null, function(){});
+            }
+        });
+        var quoteObj = req.body;
+        var quote = new $$.m.Quote(quoteObj);
+        var modified = {
+            date: new Date(),
+            by: userId
+        };
+        var created = {
+            date: new Date(),
+            by: userId
+        };
+
+        quote.set('modified', modified);
+        quote.set('created', created);
+        quote.set("accountId", accountId);
+        quote.set("userId", userId);
+
+
+        quoteManager.createQuote(accountId, userId, quote, function(err, value){
+            self.log.debug(accountId, userId, '<< createQuote');
+            self.sendResultOrError(resp, err, value, "Error saving quote");
+        });
+    },
+
+    updateQuoteAttachment: function(req, res) {
+        var self = this;
+        self.log.debug('>> updateQuoteAttachment');
+        var form = new formidable.IncomingForm();
+        var accountId = parseInt(self.accountId(req));
+        var userId = self.userId(req);
+        var quoteId = req.params.id;
+        form.parse(req, function(err, fields, files) {
+            if(err) {
+                self.wrapError(res, 500, 'fail', 'The upload failed', err);
+                self = null;
+                return;
+            } else {
+
+                var file = files['file'];
+                console.log(file);
+
+                var fileToUpload = {};
+                fileToUpload.mimeType = file.type;
+                fileToUpload.size = file.size;
+                fileToUpload.name = file.name;
+                fileToUpload.path = file.path;
+                fileToUpload.type = file.type;
+                quoteManager.updateQuoteAttachment(fileToUpload, quoteId, accountId, userId, function(err, value, file){                                                       
+                    self.log.debug('>> updateQuoteAttachment');
+                    self.sendResultOrError(res, err, value, 'Could not update quote attachment');                    
                 });
             }
         });
     },
-
 
     _checkAccess: function(accountId, userId, module, fn) {
         var self = this;
@@ -128,8 +171,6 @@ _.extend(api.prototype, baseApi.prototype, {
 
         });
     }
-
-
 
 });
 

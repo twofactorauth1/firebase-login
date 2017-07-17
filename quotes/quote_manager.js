@@ -34,7 +34,7 @@ module.exports = {
 
         quoteCartItemDao.findMany(query, $$.m.QuoteCartItem, function(err, list){
             if(err) {
-                log.error('Exception listing promotions: ' + err);
+                log.error('Exception listing quotes: ' + err);
                 fn(err, null);
             } else {
     			log.debug(accountId, userId, '<< listQuoteItems');
@@ -55,6 +55,92 @@ module.exports = {
                 fn(null, value);
             }
         });
+    },
+
+    createQuote: function(accountId, userId, quote, fn) {
+        var self = this;
+        log.debug(accountId, userId, '>> createQuote');
+        quoteDao.saveOrUpdate(quote, function(err, value){
+            if(err) {
+                self.log.error('Error saving quote: ' + err);
+                return fn(err, null);
+            } else {
+                log.debug(accountId, userId, '<< createQuote');
+                fn(null, value);
+            }
+        });
+    },
+
+    updateQuoteAttachment: function(file, quoteId, accountId, userId, fn) {
+        var self = this;
+        self.log = log;
+        self.log.debug(accountId, userId, '>> updateQuoteAttachment');
+
+        var uploadPromise = $.Deferred();
+
+        var attachment = {
+            name: file.name,
+            size: file.size,
+            mimeType: file.mimeType
+        };
+
+        if(file.path) {
+            // Need to update bucket
+            var bucket = awsConfig.BUCKETS.PROMOTIONS;
+            //var bucket = awsConfig.BUCKETS.QUOTES;
+            var subdir = 'account_' + accountId;
+            if(appConfig.nonProduction === true) {
+                subdir = 'test_' + subdir;
+            }
+            
+            s3dao.uploadToS3(bucket, subdir, file, true, function(err, value){
+                if(err) {
+                    self.log.error('Error from S3: ' + err);
+                    uploadPromise.reject();
+                    fn(err, null);
+                } else {
+                    self.log.debug('S3 upload complete');
+                    console.dir(value);
+            
+                    if(value && value.url) {
+                        value.url = value.url.replace("s3.amazonaws.com", "s3-us-west-1.amazonaws.com");
+                    }
+
+                    if (value.url.substring(0, 5) == 'http:') {
+                      attachment.url = value.url.substring(5, value.url.length);
+                    } else {
+                      attachment.url = value.url;
+                    }
+                   
+                    uploadPromise.resolve(value);
+                }
+            });
+
+        } else {
+            uploadPromise.resolve();
+        }
+        //update attachment
+        $.when(uploadPromise).done(function(file){
+            console.log(quoteId);
+            quoteDao.getById(quoteId, $$.m.Quote, function(err, quote){
+                if(err) {
+                    log.error(accountId, userId, 'Exception getting quote: ' + err);
+                    fn(err, null);
+                } else {
+                    quote.set("attachment", attachment);
+                    quoteDao.saveOrUpdate(quote, function(err, savedQuote){
+                        if(err) {
+                            self.log.error('Exception during quote creation: ' + err);
+                            fn(err, null);
+                        } else {
+                            self.log.debug(accountId, userId, '<< updateQuoteAttachment');
+                            fn(null, savedQuote, file);
+                        }
+                    });
+                }
+            });
+        });
+
     }
     
 };

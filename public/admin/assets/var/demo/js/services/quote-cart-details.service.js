@@ -20,7 +20,9 @@
         quoteCartService.loading = {value: 0};
 
         var baseQuotesAPIUrlv2 = '/api/2.0/quotes';
-        quoteCartService.loading = {value: 0};
+
+        quoteCartService.createQuote = createQuote;
+        quoteCartService.updateQuoteAttachment = updateQuoteAttachment;
 
         quoteCartService.saveLoading = false;
 
@@ -97,6 +99,40 @@
 
             return quoteServiceRequest($http.post(apiUrl, quoteCartService.cartDetail).success(success).error(error));
 
+        }
+
+        function createQuote(quote){
+            function success(data) {
+                // To do 
+                // empty active cart
+            }
+
+            function error(error) {
+                console.error('quoteCartService createQuote error: ', JSON.stringify(error));
+            }
+
+            var apiUrl = [baseQuotesAPIUrlv2].join('/');
+
+
+            return quoteServiceRequest($http.post(apiUrl, quote).success(success).error(error));
+        }
+
+        function updateQuoteAttachment(attachment, _id, fn){
+            function success(data) {                
+                console.log(data);
+            }
+
+            function error(error) {
+                console.error('quoteCartService updateQuoteAttachment error: ', JSON.stringify(error));
+            }
+
+            var _formData = new FormData();
+            _formData.append('file', attachment);
+            
+            return quoteServiceRequest($http.post([baseQuotesAPIUrlv2, 'attachment', _id].join('/'), _formData, {
+                transformRequest: angular.identity,
+                headers: {'Content-Type': undefined}
+            }).success(success).error(error));
         }
 
         function addItemToCart(item) {

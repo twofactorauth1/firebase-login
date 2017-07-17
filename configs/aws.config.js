@@ -53,7 +53,8 @@ module.exports = {
         DB_ARCHIVES: 'indigenous-db-archives',
         REPORTS: 'indigenous-reports',
         PURCHASE_ORDERS: 'indigenous-purchase-orders',
-        PROMOTIONS: 'indigenous-promotions'
+        PROMOTIONS: 'indigenous-promotions',
+        QUOTES: 'indigenous-quotes'
     },
     "accessKeyId":AWS_ACCESS_KEY,
     "secretAccessKey":AWS_SECRET_ACCESS_KEY,
