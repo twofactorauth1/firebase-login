@@ -137,7 +137,7 @@ function purchaseOrderComponentController($scope, $attrs, $filter, $modal, $time
             return value.created.date;
         },
         submitter: function (value) {
-            return getSubmitterName(value.submitter);
+            return getSubmitterName(value.submitter, value);
         }
     };
 
@@ -268,16 +268,21 @@ function purchaseOrderComponentController($scope, $attrs, $filter, $modal, $time
         vm.state.newPurchaseOrder.companyName = customer.OCRD_CardName;
     }
 
-    function getSubmitterName(user){
+    function getSubmitterName(user, order){
         var _userName = "";
-        if(!user){
-            return _userName;
-        }
-        if(user.first || user.last){
-            _userName = user.first + " " + user.last;
+        if(order.submitterEmail){
+            _userName = order.submitterEmail;
         }
         else{
-            _userName = user.username;
+            if(!user){
+                return _userName;
+            }
+            if(user.first || user.last){
+                _userName = user.first + " " + user.last;
+            }
+            else{
+                _userName = user.username;
+            }
         }
         return _userName.trim();
     }
