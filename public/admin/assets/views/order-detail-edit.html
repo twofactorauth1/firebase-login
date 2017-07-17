@@ -527,6 +527,9 @@
                         </div>
                     </div>
                 </div>
+                <div ng-if="order._id">
+                    <contact-activity single-contact="true" current-page="1" num-per-page="10" contact-id="{{order.customer._id}}" hide-new-activity="true"></contact-activity>
+                </div>
                 <div class="panel panel-white" id="orderNotes">
                     <div class="panel-heading border-light">
                         <h4 class="panel-title">Order <span class="text-bold">Notes</span></h4>
@@ -534,7 +537,7 @@
                     </div>
                     <div class="panel-wrapper" collapse="orderNotes" ng-init="orderNotes=false">
                         <div class="panel-body no-padding">
-                            <ul class="order-notes height-200 panel-scroll" perfect-scrollbar wheel-propagation="false" suppress-scroll-x="true">
+                            <ul class="order-notes height-180 panel-scroll" perfect-scrollbar wheel-propagation="false" suppress-scroll-x="true">
                                 <li ng-repeat="note in order.notes | reverse" class="row">
                                     <div class="col-xs-2">
                                         <img src="{{note.user.profilePhotos[0] ? note.user.profilePhotos[0] : '/admin/assets/images/default-user.png'}}" class="img-circle pull-left" width="32">
