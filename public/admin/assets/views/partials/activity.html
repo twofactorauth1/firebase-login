@@ -278,16 +278,17 @@
     </div>
 </div> -->
 <div ng-if="singleContact && activities">
-    <div class="panel panel-white no-radius">
-        <div class="panel-heading border-bottom">
+    <div class="panel panel-white" id="activity">
+        <div class="panel-heading border-light">
             <h4 class="panel-title">Contact <span class="text-bold">Activities</span></h4>
             <div class="panel-tools" ng-if="!hideNewActivity">
-                <button type="button" class="btn btn-primary btn-o margin-top-neg-5" ng-click="openModal('addActivityModal')">
+                <button type="button" class="btn btn-primary btn-o margin-top-neg-5 margin-right-30" ng-click="openModal('addActivityModal')">
                     Add Activity
                 </button>
             </div>
+            <ct-paneltool class="panel-tools" tool-collapse="tool-collapse"></ct-paneltool>
         </div>
-        <div class="panel-body">
+        <div class="panel-body" collapse="activity" style="max-height:400px;overflow:auto;">
             <div ng-if="!activities.length">
                 <div class="panel panel-transparent">
                     <div class="panel-body">
@@ -296,7 +297,7 @@
                 </div>
             </div>
             <ul class="timeline-xs margin-top-15 margin-bottom-15" ng-if="activities.length">
-                <li ng-if="activity.activityType !== 'PAGE_VIEW'" class="timeline-item success" ng-repeat="activity in activities | filter:orderBy:activity.start:true">
+                <li class="timeline-item success" ng-repeat="activity in activities | filter:orderBy:activity.start:true" ng-if="(activity.activityType) &&  activity.activityType !== 'PAGE_VIEW'">
                     <div class="margin-left-15">
                         <div class="text-muted text-small">
                             {{activity.start | date:'MMM d, y h:mm:ss a'}} {{getActivityName(activity.activityType)}}

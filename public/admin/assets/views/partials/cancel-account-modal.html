@@ -1,0 +1,32 @@
+<script type="text/ng-template" id="cancel-account-modal">
+
+    <div class="modal-header">
+        <button type="button" class="close" ng-click="closeModal()">
+            <span aria-hidden="true">&times;</span>
+            <span class="sr-only">Close</span>
+        </button>
+        <h3 class="modal-title">Cancel Account</h3>
+    </div>
+    <div class="modal-body contact-modal bg-white">
+        <form action="#" name="form" role="form" id="form" autocomplete="off">
+            <div class="form-group">
+                <label class="">Reason:</label>
+                <input name="reason" id="input-reason" class="form-control" ng-model="$parent.cancelaccount.reason" placeholder="Reason (Optional)" type="text" autocomplete="false" >
+            </div>
+            <div class="form-group">
+                <label class="radio-inline">
+                    <input type="radio" id="input-cancelNow" value="true" name="cancelNow" ng-model="$parent.cancelaccount.cancelNow"> Immediately
+                </label>
+                <label class="radio-inline">
+                    <input type="radio" id="input-cancelEOP" value="false" name="cancelNow" ng-model="$parent.cancelaccount.cancelNow" ng-checked="true"> End of Period
+                </label>
+            </div>
+
+        </form>
+    </div>
+    <div class="clearfix"></div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" ng-click="cancelAccountSub()">Cancel Account</button>
+    </div>
+
+</script>
