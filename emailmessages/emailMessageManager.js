@@ -1918,6 +1918,229 @@ var emailMessageManager = {
             }
         });
     },
+
+
+    sendQuoteDetails: function(accountId, fromAddress, fromName, toEmail, subject, attachment, pdf, content, fn) {
+        var self = this;
+        self.log.debug(accountId, null, '>> sendQuoteDetails');
+        var sendgridBatchID = null;
+        var senderAddress, senderName, replyTo;
+        async.waterfall([
+            function(cb) {
+                self._getFromAdressNameAndReplyTo(accountId, fromAddress, fromName, function(err, _senderAddress, _senderName, _replyTo){
+                    senderAddress = _senderAddress;
+                    senderName = _senderName;
+                    replyTo = _replyTo;
+                    cb(null);
+                });
+            },
+            function(cb) {
+                var request = sg.emptyRequest();
+                request.method = 'POST';
+                request.path = '/v3/mail/batch';
+                sg.API(request, function (err, response) {
+                    if(err) {
+                        self.log.warn('Error getting batchId:', err);
+                        self.log.error('Sendgrid says:', response.body);
+                        cb(null, null);
+                    } else {
+                        self.log.debug('BatchID: ', response.body.batch_id);
+                        sendgridBatchID = response.body.batch_id;
+                        cb(null, response.body.batch_id);
+                    }
+                });
+            },
+            function(batchId, cb) {
+                var sendgridSubsAndHtml = {};
+                juice.juiceResources(content, {}, function(err, html){
+                    if(err) {
+                        self.log.error('Error juicing the htmlContent:', err);
+                        cb(err);
+                    } else {
+                        //build personalizations
+                        var personalizations = [];
+                
+                        var p = {
+                            to: [
+                                {email:toEmail}
+                            ]
+                        };
+                        personalizations.push(p);
+
+                        cb(null, batchId, personalizations, html);
+                    }
+                });
+            },
+            function(batchId, personalizations, html, cb) {
+                // var b = new Buffer(attachment);
+                // var s = b.toString('base64');
+                // var chunks = [];
+                // pdf.on('data', function(chunk){chunks.push(chunk)});
+                // pdf.on('end', function(){
+                //     var pdfBase64String = Buffer.concat(chunks).toString('base64');
+                    var request = sg.emptyRequest();
+                    request.body = {
+                        "batch_id": batchId,
+                        "categories": [
+                            "promotionreport"
+                        ],
+
+                        "from": {
+                            "email": senderAddress
+                        },
+                        content: [
+                            {
+                                type:'text/html',
+                                value:html
+                            }
+                        ],
+                        "subject": subjectPrefix + subject,
+                        "headers": {},
+
+                        "tracking_settings": {
+                            "click_tracking": {
+                                "enable": true,
+                                "enable_text": true
+                            }
+                        }
+                        // ,
+                        // "attachments": [
+                        //     {
+                        //         "content": s,
+                        //         "content_id": "ii_139db99fdb5c3704",
+                        //         "disposition": "inline",
+                        //         "filename": "report.csv",
+                        //         "name": "report",
+                        //         "type": "csv"
+                        //     },
+                        //     {
+                        //         content:pdfBase64String,
+                        //         content_id:'ii_2',
+                        //         disposition:'inline',
+                        //         filename:'report.pdf',
+                        //         name:'report',
+                        //         type:'pdf'
+                        //     }
+                        // ]
+                    };
+                    request.method = 'POST';
+                    request.path = '/v3/mail/send';
+
+                    if(senderName && senderName.length > 0) {
+                        request.body.from.name = senderName;
+                    }
+                    if(replyTo) {
+                        request.body.reply_to = {
+                            email: replyTo
+                        };
+                        if(fromName) {
+                            request.body.reply_to.name = fromName;
+                        }
+                    }
+
+                    request.body.personalizations = personalizations;                    
+
+                    self._safeStoreEmail(request.body, accountId, null, null, function(err, emailmessage){
+                        //we should not have an err here
+                        if(err) {
+                            self.log.error('Error storing email (this should not happen):', err);
+                            return fn(err);
+                        } else {
+
+                            request.body.custom_args = {
+                                emailmessageId: emailmessage.id(),
+                                accountId:''+accountId,
+                                date: moment().toISOString()
+                            };
+                            sg.API(request, function (error, response) {
+                                self.log.debug(response.statusCode);
+                                self.log.debug(response.body);
+                                self.log.debug(response.headers);
+                                if (err) {
+                                    self.log.error('Error sending email:', err);
+                                    return fn(err);
+                                } else {
+                                    self.log.debug(accountId, null, '<< sendQuoteDetails');
+                                    return fn(null, response);
+                                }
+                            });
+
+                        }
+                    });
+                //});
+            },
+            function(batchId, personalizations, request, messageIds, contacts, cb) {
+                //Sendgrid doesn't like it when we mess with their chi
+                delete request.body.batchId;
+
+                var i = 0;
+                _.each(contacts, function(contact){
+                    var custom_args= {
+                        emailmessageId: messageIds[i],
+                        accountId:''+accountId,
+                        date: moment().toISOString(),
+                        emailId: null,
+                        campaignId: null,
+                        contactId: null
+                    };
+                    request.body.personalizations[i].custom_args = custom_args;//TODO: defense
+                    i++;
+                });
+                //send it now
+                var send_at = moment().utc().unix();
+                self.log.trace('Sending:', JSON.stringify(request.body));
+                var maxPersonalizations = 1000;
+                if(personalizations.length > maxPersonalizations) {
+                    var requestAry = [];
+                    var i,j,temparray,chunk = maxPersonalizations;
+                    for (i=0,j=personalizations.length; i<j; i+=chunk) {
+                        temparray = personalizations.slice(i,i+chunk);
+                        // do whatever
+                        request.body.personalizations = temparray;
+                        requestAry.push(sg.emptyRequest(request));
+                    }
+                    async.eachSeries(requestAry, function(_request, callback){
+                        self.log.trace('Sending:', JSON.stringify(_request));
+                        sg.API(_request, function(err, response){
+                            if(err) {
+                                self.log.error('Error sending email:', err);
+                                if(err.response && err.response.body) {
+                                    self.log.error(err.response.body.errors);
+                                }
+                            } else {
+                                callback(null, response);
+                            }
+
+                        });
+                    }, function(err, response){
+                        self.log.debug(accountId, null, '<< sendPromotionReport');
+                        cb(null, response);
+                    });
+                } else {
+                    sg.API(request, function (err, response) {
+                        self.log.debug(response.statusCode);
+                        self.log.debug(response.body);
+                        self.log.debug(response.headers);
+                        if (err) {
+                            self.log.error('Error sending email:', err);
+                            cb(err);
+                        } else {
+                            self.log.debug(accountId, null, '<< sendPromotionReport');
+                            cb(null, response);
+                        }
+                    });
+                }
+            }
+        ], function(err, response){
+            if(err) {
+                self.log.error('Error sending campaign emails:', err);
+                return fn(err);
+            } else {
+                self.log.debug(accountId, null, '<< sendPromotionReport');
+                return fn(null, response);
+            }
+        });
+    },
     /* ********************************************************************
      *
      *

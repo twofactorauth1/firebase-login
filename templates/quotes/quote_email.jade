@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+html
+  head
+      meta(http-equiv='Content-Type', content='text/html; charset=UTF-8')
+      meta(property='og:title', content='*|MC:SUBJECT|*')
+      title *|MC:SUBJECT|*
+      style(type='text/css').
+        #outlook a{padding:0;}
+        body{width:100% !important;} .ReadMsgBody{width:100%;} .ExternalClass{width:100%;}
+        body{-webkit-text-size-adjust:none;}
+        body{margin:0; padding:0;}
+        img{border:0; height:auto; line-height:100%; outline:none; text-decoration:none;}
+        table td{border-collapse:collapse;}
+        .center{text-align: center!important;margin:0 auto;}
+        #backgroundTable{height:100% !important; margin:0; padding:0; width:100% !important;}
+        body, #backgroundTable{
+         background-color:#FAFAFA;
+        }
+        #templateContainer{
+         border: 1px solid #DDDDDD;
+        }
+        h1, .h1{
+         color:#202020;
+        display:block;
+         font-family:Arial;
+         font-size:34px;
+         font-weight:bold;
+         line-height:100%;
+        margin-top:0;
+        margin-right:0;
+        margin-bottom:10px;
+        margin-left:0;
+         text-align:left;
+        }
+        h2, .h2{
+         color:#202020;
+        display:block;
+         font-family:Arial;
+         font-size:30px;
+         font-weight:bold;
+         line-height:100%;
+        margin-top:0;
+        margin-right:0;
+        margin-bottom:10px;
+        margin-left:0;
+         text-align:left;
+        }
+        h3, .h3{
+         color:#202020;
+        display:block;
+         font-family:Arial;
+         font-size:26px;
+         font-weight:bold;
+         line-height:100%;
+        margin-top:0;
+        margin-right:0;
+        margin-bottom:10px;
+        margin-left:0;
+         text-align:left;
+        }
+        h4, .h4{
+         color:#202020;
+        display:block;
+         font-family:Arial;
+         font-size:22px;
+         font-weight:bold;
+         line-height:100%;
+        margin-top:0;
+        margin-right:0;
+        margin-bottom:10px;
+        margin-left:0;
+         text-align:left;
+        }
+        .btn {
+        color: white!important;
+        background: #336699;
+        padding: 10px;
+        border-radius: 5px;
+        text-decoration: none!important;
+        margin: 15px auto;
+        max-width: 150px;
+        display: block;
+        text-align: center;
+        }
+        #templateHeader{
+         background-color:#FFFFFF;
+         border-bottom:0;
+        }
+        .headerContent{
+         color:#202020;
+         font-family:Arial;
+         font-size:34px;
+         font-weight:bold;
+         line-height:100%;
+         padding:15px;
+         text-align:center;
+         vertical-align:middle;
+         background-color:#cfecf5;
+         border:1px solid #bbe3f0;
+        }
+        .headerContent a:link, .headerContent a:visited, /* Yahoo! Mail Override */ .headerContent a .yshortcuts /* Yahoo! Mail Override */{
+         color:#336699;
+         font-weight:normal;
+         text-decoration:underline;
+        }
+        #headerImage{
+        height:auto;
+        max-width:600px !important;
+        }
+        #templateContainer, .bodyContent{
+         background-color:#FFFFFF;
+        }
+        .bodyContent div{
+         color:#505050;
+         font-family:Arial;
+         font-size:14px;
+         line-height:150%;
+         text-align:left;
+        }
+        .bodyContent div a:link, .bodyContent div a:visited, /* Yahoo! Mail Override */ .bodyContent div a .yshortcuts /* Yahoo! Mail Override */{
+         color:#336699;
+         font-weight:normal;
+         text-decoration:underline;
+        }
+        .title{
+            font-weight: bold;
+        }
+        .title .value{
+            font-weight: normal !important;
+        }
+
+  body(leftmargin='0', marginwidth='0', topmargin='0', marginheight='0', offset='0')
+    center
+      table#backgroundTable(border='0', cellpadding='0', cellspacing='0', height='100%', width='100%')
+        tr
+          td(align='center', valign='top', style='padding:20px 0;')
+            table#templateContainer(border='0', cellpadding='0', cellspacing='0', width='600', padding='15px')
+              tr
+                td(align='center', valign='top')
+                  table#templateBody(border='0', cellpadding='0', cellspacing='0', width='600')
+                    tr
+                      td(valign='top')
+                        table(border='0', cellpadding='20', cellspacing='0', width='100%')
+                          tr
+                            td.bodyContent(valign='top')
+                              div(mc:edit='std_content00')
+                                if customer
+                                    div
+                                        span.title Quote for #[span.value !{customer}]
+                                if contacts        
+                                    div
+                                        span.title Send Quote to #[span.value !{contacts}]
+                                if items        
+                                    div 
+                                        span.title Products
+                                        ol
+                                            each item in items
+                                                li !{item.quantity} x !{item.OITM_ItemName}
+                                if specialRequests                   
+                                    div
+                                        span.title Special Requests: #[span.value !{specialRequests}]
+                                if showVendorPricing        
+                                    div 
+                                        span.title Vendor Special Pricing
+                                        ol
+                                            each vendor in vendorSpecialPricing
+                                                if vendor.pricing
+                                                    li !{vendor.vendor} - !{vendor.pricing}
