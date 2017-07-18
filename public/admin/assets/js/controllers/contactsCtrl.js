@@ -354,7 +354,7 @@
                     emails: [
                         {
                             _id: CommonService.generateUniqueAlphaNumericShort(),
-                            email: $scope.contact.email
+                            email: $scope.contact.email.toLowerCase()
                         }
                     ]
                 })

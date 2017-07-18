@@ -479,6 +479,15 @@
                     }
 
                     $scope.errorMapData = false;
+                    if($scope.contact_data.details){
+                        for(var i=0;i<$scope.contact_data.details.length;i++){
+                            if($scope.contact_data.details[i].emails){
+                                for(var j=0;j<$scope.contact_data.details[i].emails.length;j++){
+                                    $scope.contact_data.details[i].emails[j].email= $scope.contact_data.details[i].emails[j].email.toLowerCase();
+                                }
+                            }
+                        }
+                    }
                     ContactService.checkDuplicateEmail($scope.contact_data.details[0].emails[0].email, !hideToaster, function (data) {
                         if ($scope.originalContact && !angular.equals($scope.contact_data.details[0].emails[0].email, $scope.originalContact.details[0].emails[0].email) && data && data.length && (data.length > 1 || data[0]._id != $scope.contact_data._id)) {
                             console.log("duplicate email");
