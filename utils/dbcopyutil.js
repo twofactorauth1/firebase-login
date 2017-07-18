@@ -35,6 +35,49 @@ var defaultSubscriptionPrivs = [
     'order',
     'all'
 ];
+var defaultPrivileges = [
+    'VIEW_ACCOUNT',
+    'VIEW_USER',
+    'MODIFY_ACCOUNT',
+    'MODIFY_USER',
+    'VIEW_READINGS',
+    'VIEW_CAMPAIGN',
+    'MODIFY_CAMPAIGN',
+    'VIEW_ANALYTICS',
+    'MODIFY_ANALYTICS',
+    'VIEW_WEBSITE',
+    'MODIFY_WEBSITE',
+    'VIEW_THEME',
+    'MODIFY_THEME',
+    'VIEW_TEMPLATE',
+    'MODIFY_TEMPLATE',
+    'VIEW_CONTACT',
+    'MODIFY_CONTACT',
+    'VIEW_COURSE',
+    'MODIFY_COURSE',
+    'VIEW_EMAIL_SOURCE',
+    'MODIFY_EMAIL_SOURCE',
+    'VIEW_EMAIL_MESSAGE',
+    'MODIFY_PRODUCT',
+    'VIEW_PRODUCT',
+    'VIEW_PAYMENTS',
+    'MODIFY_PAYMENTS',
+    'VIEW_ASSET',
+    'MODIFY_ASSET',
+    'VIEW_DASHBOARD',
+    'MODIFY_DASHBOARD',
+    'VIEW_SOCIALCONFIG',
+    'MODIFY_SOCIALCONFIG',
+    'VIEW_ORDER',
+    'MODIFY_ORDER',
+    'MODIFY_PO',
+    'VIEW_PO',
+    'MODIFY_PROMOTION',
+    'VIEW_PROMOTION',
+    'VIEW_QUOTE',
+    'MODIFY_QUOTE',
+    'ALL'
+];
 
 var copyutil = {
 
@@ -1652,6 +1695,64 @@ var copyutil = {
                 console.log('err?', err);
                 fn();
             });
+        });
+    },
+
+    updatePrivs: function(fn) {
+        var srcDBUrl = mongoConfig.TEST_MONGODB_CONNECT;
+        var srcMongo = mongoskin.db(srcDBUrl, {safe:true});
+        var accountsCollection = srcMongo.collection('accounts');
+        var usersCollection = srcMongo.collection('users');
+        var privsCollection = srcMongo.collection('privileges');
+        async.waterfall([
+            function(cb){
+                var query = {orgId:2};
+                accountsCollection.find(query, {_id:true}).toArray(function(err, accounts){
+                    if(err) {
+                        console.log('Error finding accounts:', err);
+                        cb(err);
+                    } else {
+                        console.log('found ' + accounts.length + ' accounts');
+                        var accountAry = _.pluck(accounts, '_id');
+                        cb(null, accountAry);
+                    }
+                });
+            },
+            function(accounts, cb) {
+                console.log('accounts:', accounts);
+                var query = {'accounts.accountId':{$in:accounts}};
+                usersCollection.find(query, {_id:true}).toArray(function(err, users){
+                    if(err) {
+                        console.log('Error finding users:', err);
+                        cb(err);
+                    } else {
+                        console.log('found ' + users.length + ' users');
+                        var userAry = _.pluck(users, '_id');
+                        cb(null, accounts, userAry);
+                    }
+                });
+            },
+            function(accounts, users, cb) {
+                //console.log('users:', users);
+                var query = {userId:{$in:users}, accountId:{$in:accounts}};
+                console.log('updating...');
+                privsCollection.update(query, {$set:{privs:defaultPrivileges}}, {multi:true}, function(err, result){
+                    if(err) {
+                        console.log('Error updating privs:', err);
+                        cb(err);
+                    } else {
+                        cb();
+                    }
+                });
+
+            }
+        ], function(err){
+            if(err) {
+                console.log('error:', err);
+            } else {
+                console.log('done.');
+            }
+            fn();
         });
     }
 };
