@@ -79,7 +79,7 @@
                                 <tr>
                                     <td class="business-profile-label">Address:</td>
                                     <td>
-                                        <div class="pull-left" ng-repeat="address in account.business.addresses">
+                                        <div class="pull-left" ng-repeat="address in account.business.addresses" ng-if="!($index>0 && address.ssb)">
                                             <a href>
                                                 {{address.address}} {{address.address2}}<br ng-if="(address.address || address.address2) && (address.address || address.state || address.zip)">
                                                 {{address.city}}<span ng-if="address.city && address.state">,</span> {{address.state}} {{address.zip}}
