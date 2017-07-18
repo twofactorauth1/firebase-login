@@ -70,9 +70,26 @@
                 vm.state.filterUsers = _.filter(users, function(user){
                     return user.username.indexOf(vm.state.adminUserEmailFilter) === -1
                 });
+                setUserForUsers();
             }
         }, true)
 
+        function setUserForUsers(){
+            _.each(vm.state.users, function(user){
+                user.userInfo = getFliteredName(user);
+            })
+        }
+
+        function getFliteredName(user) {
+            var _userName = "";
+            if(user.first || user.last){
+                _userName = user.first + " " + user.last;
+            }
+            else{
+                _userName = user.username;
+            }
+            return _userName.trim();
+        }
 
         // $scope.$watch('vm.state.userType', function (type) {
         //     if(type){
