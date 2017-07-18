@@ -150,6 +150,12 @@ function promotionsComponentController($scope, $attrs, $filter, $modal, $timeout
         vm.element = element;
     }
 
+    vm.getters = {
+      shipmentCount: function (value) {
+          return value.shipmentCount ? value.shipmentCount : 0;
+      }
+    };
+
 }
 
 })();
