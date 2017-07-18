@@ -75,14 +75,14 @@
 	        <tbody>
 	            <tr ng-repeat="quote in vm.displayedQuotes" class="product-item">
                     
-                    <td class="title-col text-adjust-col"><strong>Title: </strong><div class="name-block-container"><span class="list-name"></span><span class="text-adjust-table" title="{{quote.title}}">{{quote.title || '&nbsp;'}}</span></div></td>
+                    <td class="title-col text-adjust-col"><strong>Title: </strong><div class="name-block-container"></span><span class="" title="{{quote.title}}">{{quote.title || '&nbsp;'}}</span></div></td>
 
                     <td class="partner-col hidden-xs text-adjust-col" ng-if="vm.state.orgCardAndPermissions.permissions.quote.showPartner"><strong>Partner: </strong>{{quote.partner || '&nbsp;'}}</td>
                     <td class="customer-col text-adjust-col"><strong>Customer: </strong><div>{{quote.customer || '&nbsp;'}}</div></td>
 
 	                <td class="vendor-col hidden-xs text-adjust-col"><strong>Vendors: </strong><div class="text-capitalize" tooltip="{{vm.getVendors(quote)}}">{{vm.getVendors(quote) || '&nbsp;'}}</div></td>
 
-	                <td class="items-col hidden-xs text-adjust-col"><strong>Items: </strong><div class="" tooltip="{{vm.getItems(quote)}}">{{vm.getItems(quote) || '&nbsp;'}}</div></td>
+	                <td class="items-col hidden-xs text-adjust-col"><strong>Items: </strong><div tooltip="{{vm.getItems(quote)}}" >{{vm.getItems(quote) || '&nbsp;'}}</div></td>
 
 	                <td class="total-col hidden-xs text-adjust-col"><strong>Total: </strong><div>{{quote.total | currency : '$'}}</div></td>
 
