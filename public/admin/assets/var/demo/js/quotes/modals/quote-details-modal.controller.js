@@ -49,12 +49,14 @@ app.controller('QuoteDetailsModalController', ['$scope', '$timeout', 'toaster', 
         if(isSubmit){
             QuoteCartDetailsService.submitQuote(vm.state.quote).then(function(){
                 QuoteCartDetailsService.deleteCartDetails(vm.state.cartDetail).then(function(){
+                    toaster.pop("success", "Quote submitted successfully");
                     $scope.closeModal();
                 })
             })
         }
         else{
             QuoteCartDetailsService.deleteCartDetails(vm.state.cartDetail).then(function(){
+                toaster.pop("success", "Quote saved successfully");
                 $scope.closeModal();
             })
         }
