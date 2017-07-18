@@ -46,9 +46,15 @@ function purchaseOrderComponentController($scope, $attrs, $filter, $modal, $time
         if(angular.isDefined(data)){
             vm.uiState.loading = false;
             vm.state.orders = data;    
+            setUserForOrders();
         }        
     }, true);
 
+    function setUserForOrders(){
+        _.each(vm.state.orders, function(order){
+            order.userInfo = getSubmitterName(order.submitter, order);
+        })
+    }
 
     /********** GLOBAL SEARCH RELATED **********/
 
