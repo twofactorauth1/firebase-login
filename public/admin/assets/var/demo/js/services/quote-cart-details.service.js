@@ -198,6 +198,7 @@
                     return m + (item.ITM1_Price || 0) *  item.quantity; },
                 0);
             }
+            quoteCartService.cartDetail.total = totalPrice;
             return totalPrice || 0;
         }
 
