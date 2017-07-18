@@ -55,6 +55,8 @@ var defaultPrivileges = [
     'VIEW_PO',
     'MODIFY_PROMOTION',
     'VIEW_PROMOTION',
+    'VIEW_QUOTE',
+    'MODIFY_QUOTE',
     'ALL'
 
 ];

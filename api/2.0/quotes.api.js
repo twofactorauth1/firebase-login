@@ -26,8 +26,10 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url('cart/items'), this.isAuthAndSubscribedApi.bind(this), this.listQuoteItems.bind(this));
         app.post(this.url('cart/items'), this.isAuthAndSubscribedApi.bind(this), this.saveUpdateCartQuoteItems.bind(this));
         app.delete(this.url('cart/items/:id'), this.isAuthAndSubscribedApi.bind(this), this.deleteCartQuoteItem.bind(this));
+        app.get(this.url(''), this.isAuthAndSubscribedApi.bind(this), this.listQuotes.bind(this));
         app.post(this.url(''), this.isAuthAndSubscribedApi.bind(this), this.createQuote.bind(this));
         app.post(this.url('attachment/:id'), this.isAuthApi.bind(this), this.updateQuoteAttachment.bind(this));
+        app.post(this.url(':id/submit'), this.isAuthAndSubscribedApi.bind(this), this.submitQuote.bind(this));
     },
 
     listQuoteItems: function(req, resp) {
@@ -109,6 +111,50 @@ _.extend(api.prototype, baseApi.prototype, {
              }
         });
     },
+
+    listQuotes: function(req, resp) {
+        var self = this;
+        var accountId = parseInt(self.accountId(req));
+        var userId = self.userId(req);
+        var vendorFilter = null;
+        self._checkAccess(accountId, userId, 'quotes', function(err, isAllowed){
+            if(!isAllowed) {
+                self.log.debug(accountId, userId, '<< quotes [' + isAllowed + ']');
+                return self.sendResultOrError(resp, err, [], "Error listing quotes");
+            } else {
+                self.log.debug(accountId, userId, '>> listQuotes');
+                self._checkUserRole(req, function(err, userObj){
+                    var _isAdmin = false;
+                    var _isVendor = false;
+                    var _isVAR = false;
+                    var _isSecurematics = false;
+                    var userFilter = null;
+                    if(userObj){
+                        _isAdmin = _.contains(userObj.getPermissionsForAccount(accountId), 'admin');
+                        _isVendor = _.contains(userObj.getPermissionsForAccount(accountId), 'vendor-restricted');
+                        _isVAR = _.contains(userObj.getPermissionsForAccount(accountId), 'vendor');
+                        _isSecurematics = _.contains(userObj.getPermissionsForAccount(accountId), 'securematics');
+                    }   
+                    if(_isAdmin || _isSecurematics) {
+                        userFilter = null;
+                    }
+                    else{
+                        if(_isVendor){
+                            userFilter = userId
+                        }
+                        else{
+                            return self.sendResultOrError(resp, err, list, "Error listing quotes");
+                        }
+                    }
+                    quoteManager.listQuotes(accountId, userId, userFilter, function(err, list){
+                        self.log.debug(accountId, userId, '<< listQuotes');
+                        return self.sendResultOrError(resp, err, list, "Error listing quotes");
+                    });
+                }) 
+            }
+        })        
+    },
+
     createQuote: function(req, resp) {
         var self = this;
         self.log.debug('>> createQuote');
@@ -177,6 +223,18 @@ _.extend(api.prototype, baseApi.prototype, {
         });
     },
 
+    submitQuote: function(req, resp) {
+        var self = this;
+        self.log.debug('>> submitQuote');
+        var accountId = parseInt(self.accountId(req));
+        var userId = self.userId(req);
+        var quoteId = req.params.id;
+        quoteManager.submitQuote(accountId, userId, quoteId, function(err, value){
+            self.log.debug(accountId, userId, '<< submitQuote');
+            self.sendResultOrError(resp, err, value, "Error submitting quote");
+        });
+    }, 
+
     _checkAccess: function(accountId, userId, module, fn) {
         var self = this;
         userManager.getUserById(userId, function(err, user){
@@ -193,6 +251,15 @@ _.extend(api.prototype, baseApi.prototype, {
                 }
             });
 
+        });
+    },
+
+    _checkUserRole: function(req, fn) {
+        var self = this;
+        var userId = self.userId(req);
+        var accountId = parseInt(self.accountId(req));
+        userManager.getUserById(userId, function(err, user){
+            fn(null, user);
         });
     }
 

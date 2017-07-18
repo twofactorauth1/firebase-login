@@ -14,6 +14,13 @@
             <div class="col-xs-12 col-sm-7 padding-top-15 border-right">
                 <div class="form-group">
                     <label>
+                        Title
+                    </label>
+                    <input type="text" placeholder="Quote Title" class="form-control" ng-model="vm.state.cartDetail.title">
+                </div>
+                <div class="clearfix"></div>
+                <div class="form-group">
+                    <label>
                         Customer
                     </label>
                     <input type="text" placeholder="Customer" class="form-control" ng-model="vm.state.cartDetail.customer">
@@ -115,8 +122,8 @@
             <div class="clearfix"></div>
         </div>
         <div class="modal-footer">
-            <button class="btn btn-wide btn-warning" ng-disabled='form.$invalid || vm.uiState.saveLoading' ng-click="vm.createQuote()">Save</button>
-            <button class="btn btn-wide btn-success" ng-disabled='form.$invalid || vm.uiState.saveLoading' ng-click="">Submit</button>
+            <button class="btn btn-wide btn-warning" ng-disabled='form.$invalid || vm.uiState.saveLoading' ng-click="vm.createQuote(false)">Save</button>
+            <button class="btn btn-wide btn-success" ng-disabled='form.$invalid || vm.uiState.saveLoading' ng-click="vm.createQuote(true)">Submit</button>
         </div>
     </form>    
 </script>

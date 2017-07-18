@@ -90,6 +90,36 @@ _.extend(apiBase.prototype, {
       return middleware.setup(req, resp, next);
     },
 
+    secureauth: function(requiresSub, requiresPriv, req, resp, next) {
+        var self = this;
+        self.log.debug('secureauth');
+        self.log.debug('requiresSubscription:', requiresSub);
+        self.log.debug('requiresPriv:', requiresPriv);
+        var privCallback = next;
+        var authCallback = privCallback;
+        if(requiresSub === false) {
+            //just a regular setup
+            return middleware.setup(req, resp, next);
+        }
+        if(requiresPriv) {
+            privCallback = self.checkPriv.bind(this, req, requiresPriv, resp, next);
+        }
+        middleware.setup(req, resp, self.isAuthAndSubscribedApi.bind(this, req, resp, privCallback));
+        //next();
+    },
+
+    checkPriv: function(req, priv, resp, cb) {
+        var self = this;
+        self.log.trace('checkpriv');
+        self.checkPermission(req, priv, function(err, isAllowed){
+            if(isAllowed !== true) {
+                return self.send403(resp);
+            } else {
+                return cb();
+            }
+        });
+    },
+
     __setup: function(req,resp, next) {
         var self = this;
         self.nocache(resp);
@@ -157,6 +187,7 @@ _.extend(apiBase.prototype, {
         var self = this;
         self.nocache(resp);
         self.sm = securityManager;
+        self.log.trace('isAuth');
         if(req.isAuthenticated() && this.matchHostToSession(req)) {
             //don't need to verify inidigenous main account
             if(appConfig.mainAccountID === self.accountId(req) || verifySubscription===false) {

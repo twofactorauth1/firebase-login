@@ -47,5 +47,5 @@ module.exports = {
     MONGODB_CONNECT: connectionString,
     MONGODB_SINGLE_HOST: singleHostString,
     PROD_MONGODB_CONNECT: prodString,
-    TEST_MONGODB_CONNECT: testString,
+    TEST_MONGODB_CONNECT: testString
 };

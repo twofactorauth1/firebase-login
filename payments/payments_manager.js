@@ -336,7 +336,7 @@ module.exports = {
                         }
                     });
                 } else {
-                    cb(null);
+                    cb(null, null);
                 }
             },
             function(accessToken, cb) {
@@ -354,7 +354,7 @@ module.exports = {
             }
         ], function(err, value){
             self.log.debug(accountId, userId, '<< cancelAccountSubscription');
-            cb(null, value);
+            fn(err, value);
         });
 
     },

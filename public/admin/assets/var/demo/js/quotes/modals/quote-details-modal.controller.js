@@ -1,6 +1,6 @@
 'use strict';
 /*global app*/
-app.controller('QuoteDetailsModalController', ['$scope', '$timeout', 'toaster', 'SweetAlert', 'QuoteCartDetailsService', function ($scope, $timeout, toaster, SweetAlert, QuoteCartDetailsService) {
+app.controller('QuoteDetailsModalController', ['$scope', '$timeout', 'toaster', 'SweetAlert', 'formValidations', 'QuoteCartDetailsService', function ($scope, $timeout, toaster, SweetAlert, formValidations, QuoteCartDetailsService) {
 
     var vm = this;
 
@@ -15,7 +15,8 @@ app.controller('QuoteDetailsModalController', ['$scope', '$timeout', 'toaster', 
     vm.removeItemFromCart = removeItemFromCart;
     vm.createQuote = createQuote;
     vm.attachment = {};
-    
+    vm.checkIfValidEmail = checkIfValidEmail;
+
     function calculateTotalPrice(items){
     	return QuoteCartDetailsService.calculateTotalPrice(items);
     }
@@ -24,7 +25,9 @@ app.controller('QuoteDetailsModalController', ['$scope', '$timeout', 'toaster', 
     	QuoteCartDetailsService.removeItemFromCart(index);
     }
 
-    function createQuote(){
+    function createQuote(isSubmit){
+
+        
         vm.uiState.saveLoading = true;
         var _quote = angular.copy(vm.state.cartDetail);
         delete _quote._id;
@@ -33,19 +36,42 @@ app.controller('QuoteDetailsModalController', ['$scope', '$timeout', 'toaster', 
             if(vm.attachment && vm.attachment.name){
                 QuoteCartDetailsService.updateQuoteAttachment(vm.attachment, vm.state.quote._id).then(function (quote){
                     vm.state.quote = quote.data;
-                    setDefaults();                 
+                    setDefaults(isSubmit);                 
                 });
             }
             else{
-                setDefaults();
+                setDefaults(isSubmit);
             }         
         });
     }
 
-    function setDefaults(){
-        QuoteCartDetailsService.deleteCartDetails(vm.state.cartDetail).then(function(){
-            $scope.closeModal();
-        })
+    function setDefaults(isSubmit){
+        if(isSubmit){
+            QuoteCartDetailsService.submitQuote(vm.state.quote).then(function(){
+                QuoteCartDetailsService.deleteCartDetails(vm.state.cartDetail).then(function(){
+                    toaster.pop("success", "Quote submitted successfully");
+                    $scope.closeModal();
+                })
+            })
+        }
+        else{
+            QuoteCartDetailsService.deleteCartDetails(vm.state.cartDetail).then(function(){
+                toaster.pop("success", "Quote saved successfully");
+                $scope.closeModal();
+            })
+        }
+        
+    }
+
+    function checkIfValidEmail(email) {
+        if(email){
+            var regex = formValidations.email;
+            var regexValue = regex.test(email.text);
+
+            if(!regexValue){
+                return false;
+            }
+        }
     }
 
     function initAttachment(){      

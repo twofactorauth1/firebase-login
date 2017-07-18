@@ -13,9 +13,7 @@
 
         quoteCartService.getCartItem = getCartItem;
 
-        quoteCartService.calculateTotalPrice = calculateTotalPrice;
-
-        quoteCartService.newItem = true;
+        quoteCartService.calculateTotalPrice = calculateTotalPrice;        
 
         quoteCartService.loading = {value: 0};
 
@@ -25,6 +23,7 @@
         quoteCartService.updateQuoteAttachment = updateQuoteAttachment;
         quoteCartService.deleteCartDetails = deleteCartDetails;
         quoteCartService.saveLoading = false;
+        quoteCartService.submitQuote = submitQuote;
 
         quoteCartService.cartDetail = {
             items: []
@@ -128,8 +127,7 @@
 
         function createQuote(quote){
             function success(data) {
-                // To do 
-                // empty active cart
+                
             }
 
             function error(error) {
@@ -160,18 +158,34 @@
             }).success(success).error(error));
         }
 
+
+        function submitQuote(quote){
+            function success(data) {
+                
+            }
+
+            function error(error) {
+                console.error('quoteCartService submitQuote error: ', JSON.stringify(error));
+            }
+
+            var apiUrl = [baseQuotesAPIUrlv2, quote._id, "submit"].join('/');
+
+
+            return quoteServiceRequest($http.post(apiUrl, quote).success(success).error(error));
+        }
+
         function addItemToCart(item) {
             return _addUpdateItemCart(item);
         }
 
-        function getCartItem(item){
+        function getCartItem(item, state){
             var _item = _.findWhere(quoteCartService.cartDetail.items, { OITM_ItemCode: item.OITM_ItemCode })
             if(_item){
-                quoteCartService.newItem = false;
+                state.newItem = false;
                 return _item
             }
             else{
-                quoteCartService.newItem = true;
+                state.newItem = true;
                 item.quantity = 1;
                 return item;
             }
@@ -200,6 +214,7 @@
                     return m + (item.ITM1_Price || 0) *  item.quantity; },
                 0);
             }
+            quoteCartService.cartDetail.total = totalPrice;
             return totalPrice || 0;
         }
 

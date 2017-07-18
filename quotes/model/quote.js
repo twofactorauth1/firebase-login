@@ -16,9 +16,11 @@ var quote = $$.m.ModelBase.extend({
             customer: null,
             accountId: null,
             userId : null,
-            vendors: null,
             items:null,
             status:null,
+            total: null,
+            attachment: null,
+            specialRequests: null,
             created: {
                 date: new Date(),
                 by: null
@@ -31,6 +33,13 @@ var quote = $$.m.ModelBase.extend({
         }
     },
 
+    getProducts: function() {
+        return _.pluck(this.get("items"), 'OITM_ItemName').join(", ");
+    },
+
+    getContacts: function() {
+        return this.get("recipients") && this.get("recipients").join(", ");
+    },
 
     initialize: function(options) {
 

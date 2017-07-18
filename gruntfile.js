@@ -707,6 +707,12 @@ module.exports = function(grunt) {
         deployUtils.rollbackDeploy(done);
     });
 
+    grunt.registerTask('updatePrivs', 'updatePrivs', function(){
+        var done = this.async();
+        var dbCopyUtil = require('./utils/dbcopyutil');
+        dbCopyUtil.updatePrivs(done);
+    });
+
     // grunt.registerTask('serve', 'Start a custom web server.', function() {
     //     grunt.log.writeln('Starting web server on port 80.');
     //     require('./app.js');

@@ -35,6 +35,14 @@
         font-weight:{{component.nav.font.weight}};
         text-transform:{{component.nav.allowMixedCase ? 'none' : 'uppercase' }}
     }
+    .navigation-v1.nav-header-{{component._id}} .navbar-default .navbar-header .navbar-toggle .icon-bar {
+        background-color: {{component.nav.txtcolor}} !important;
+    }
+
+    .navigation-v1.nav-header-{{component._id}} .navbar-default .navbar-header .navbar-toggle {
+        border-color: {{component.nav.txtcolor}} !important;
+    }
+
 </style>
 <div ng-class="component.type+'-v'+component.version" class="nav-header-{{component._id}}">
     <nav class="navbar navbar-default" role="navigation">

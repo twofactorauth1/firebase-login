@@ -1963,16 +1963,6 @@ module.exports = {
                                             }
                                             else if(link.linkTo.type === 'page' || link.linkTo.type === 'home'){
                                                 return _.contains(pageHandles, link.linkTo.data)
-                                            }else if(link.linkTo.type=="sub-nav"){
-                                                var linkFound=false;
-                                                _.each(link.links, function(subLink){
-                                                    self.log.debug('>> chekcing sub link --' );
-                                                    self.log.debug( subLink );
-                                                    if(!linkFound){
-                                                        linkFound= _.contains(pageHandles, subLink.linkTo.data)
-                                                    }
-                                                });
-                                                return linkFound;
                                             }else{
                                                 return true;
                                             }

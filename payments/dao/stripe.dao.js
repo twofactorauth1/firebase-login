@@ -603,16 +603,21 @@ var dao = {
                         if(err) {
                             self.log.error(accountId, userId, 'error: ' + err);
                             return fn(err, confirmation);
-                        }
-                        sub.set('isActive', false);
-                        subscriptionDao.saveOrUpdate(sub, function(err, sub){
-                            if(err) {
-                                self.log.error(accountId, userId, 'error: ' + err);
-                                return fn(err, confirmation);
-                            }
+                        } else if(!sub) {
                             self.log.debug(accountId, userId, '<< cancelStripeSubscription');
                             return fn(err, confirmation);
-                        });
+                        } else {
+                            sub.set('isActive', false);
+                            subscriptionDao.saveOrUpdate(sub, function(err, sub){
+                                if(err) {
+                                    self.log.error(accountId, userId, 'error: ' + err);
+                                    return fn(err, confirmation);
+                                }
+                                self.log.debug(accountId, userId, '<< cancelStripeSubscription');
+                                return fn(err, confirmation);
+                            });
+                        }
+
                     });
                 } else {
                     self.log.debug(accountId, userId, '<< cancelStripeSubscription');

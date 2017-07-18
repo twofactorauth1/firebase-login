@@ -70,13 +70,21 @@ _.extend(api.prototype, baseApi.prototype, {
         var self = this;
         var userId = self.userId(req);
         var accountId = parseInt(req.params.id);
+        var reason = req.body.reason || '';
+        var cancelNow = false;
+        if(req.body.cancelNow && req.body.cancelNow === 'true') {
+            cancelNow = true;
+        }
 
-        self.log.debug(accountId, userId, '>> updateTrialLength');
+        self.log.debug(accountId, userId, '>> cancelAccount (' + accountId + ','  + reason + ',' + cancelNow + ')');
         self._isAdmin(req, function(err, value) {
             if (value !== true) {
                 return self.send403(resp);
             } else {
-
+                accountManager.cancelAccount(parseInt(self.accountId(req)), userId, accountId, reason, cancelNow, function(err, value){
+                    self.log.debug(accountId, userId, '<< cancelAccount');
+                    return self.sendResultOrError(resp, err, value, 'Error cancelling account');
+                });
             }
         });
     },
