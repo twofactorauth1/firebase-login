@@ -33,6 +33,13 @@ var quote = $$.m.ModelBase.extend({
         }
     },
 
+    getProducts: function() {
+        return _.pluck(this.get("items"), 'OITM_ItemName').join(", ");
+    },
+
+    getContacts: function() {
+        return this.get("recipients").join(", ");
+    },
 
     initialize: function(options) {
 

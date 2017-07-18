@@ -23,6 +23,7 @@
         quoteCartService.updateQuoteAttachment = updateQuoteAttachment;
         quoteCartService.deleteCartDetails = deleteCartDetails;
         quoteCartService.saveLoading = false;
+        quoteCartService.submitQuote = submitQuote;
 
         quoteCartService.cartDetail = {
             items: []
@@ -126,8 +127,7 @@
 
         function createQuote(quote){
             function success(data) {
-                // To do 
-                // empty active cart
+                
             }
 
             function error(error) {
@@ -156,6 +156,22 @@
                 transformRequest: angular.identity,
                 headers: {'Content-Type': undefined}
             }).success(success).error(error));
+        }
+
+
+        function submitQuote(quote){
+            function success(data) {
+                
+            }
+
+            function error(error) {
+                console.error('quoteCartService submitQuote error: ', JSON.stringify(error));
+            }
+
+            var apiUrl = [baseQuotesAPIUrlv2, quote._id, "submit"].join('/');
+
+
+            return quoteServiceRequest($http.post(apiUrl, quote).success(success).error(error));
         }
 
         function addItemToCart(item) {
