@@ -118,7 +118,7 @@
                                                 <tr>
                                                     <td>Address(es):</td>
                                                     <td>
-                                                        <div ng-repeat="address in contact.details[0].addresses track by $index">
+                                                        <div ng-repeat="address in contact.details[0].addresses track by $index" ng-if="!($index>0 && address.ssb)">
                                                             <a href>
                                                                 <span ng-if="address.address">{{address.address}}<br></span>
                                                                 <span ng-if="address.address2">{{address.address2}}<br></span>
