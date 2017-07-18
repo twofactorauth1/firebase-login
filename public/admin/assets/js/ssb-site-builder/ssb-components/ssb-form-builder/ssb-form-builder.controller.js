@@ -340,7 +340,8 @@
                     city: vm.formBuilder.city,
                     state: vm.formBuilder.state,
                     country: vm.formBuilder.country,
-                    zip: vm.formBuilder.zip
+                    zip: vm.formBuilder.zip,
+                    ssb: true
                 });
             }
 
