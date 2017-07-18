@@ -185,7 +185,7 @@
             }).error(function(err){
                 fn(err);
             });
-        }
+        };
 
         this.updateCustomerTemplateAccount = function(customer, generateScreenCap, fn){
             var id = customer._id;
@@ -206,7 +206,20 @@
             }).error(function(err){
                 fn(err);
             });
-        }
+        };
+
+        this.cancelAccountSubscription = function(accountId, reason, cancelNow, fn){
+            var apiUrl = [adminUrl, 'account', accountId, 'cancel'].join('/');
+            var body = {
+                reason:reason,
+                cancelNow:cancelNow
+            };
+            $http.post(apiUrl, body).success(function(data){
+                fn(null, data);
+            }).error(function(err){
+                fn(err);
+            });
+        };
 
     }]);
 }(angular));

@@ -46,7 +46,7 @@ var defaultBilling = {
 var accountManager = {
     log:LOG,
 
-    cancelAccount: function(accountId, userId, targetAccountId, reason, fn) {
+    cancelAccount: function(accountId, userId, targetAccountId, reason, cancelNow, fn) {
         var self = this;
         self.log.debug(accountId, userId, '>> cancelAccount [' + targetAccountId + ']');
         var paymentsManager = require('../payments/payments_manager');
@@ -62,7 +62,11 @@ var accountManager = {
                 });
             },
             function(account, cb) {
-                paymentsManager.cancelAccountSubscription(accountId, userId, account, true, function(err, value){
+                var atPeriodEnd = true;
+                if(cancelNow === true) {
+                    atPeriodEnd = false;
+                }
+                paymentsManager.cancelAccountSubscription(accountId, userId, account, atPeriodEnd, function(err, value){
                     if(err) {
                         self.log.error(accountId, userId, 'Error cancelling account subscription:', err);
                         cb(err);
