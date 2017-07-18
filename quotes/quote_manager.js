@@ -209,13 +209,43 @@ module.exports = {
         })
     },
 
+    exportQuoteItems: function(accountId, userId, items, fn) {
+        var self = this;
+        log.debug(accountId, userId, '>> exportQuoteItems');
+        var headers = ['Product Name', 'Quantity', 'List Price'];
+        var csv = headers + '\n';
+        _.each(items, function(item){
+            csv += self._parseString(item.OITM_ItemName);
+            csv += self._parseString(item.quantity);
+            csv += self._parseString(self._parseCurrency("$", item.ITM1_Price));
+            csv += '\n';
+        });
+        log.debug(accountId, userId, '<< exportQuoteItems');
+        fn(null, csv);
+    },
+
+    _parseString: function(text){
+        if(text==undefined)
+            return ',';
+        // "" added for number value
+        text= "" + text;
+        if(text.indexOf(',')>-1)
+            return "\"" + text + "\",";
+        else
+            return text+",";
+    },
+
+    _parseCurrency: function(symbol, value){
+        return symbol + " " + parseFloat(value).toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, "$1,");
+    },
+
 
     sendQuoteEmail: function(quote, accountId, userId) {
         var self = this;
         var component = {};
         component.customer = quote.get("customer");
         component.items = quote.get("items");
-        component.contacts = quote.getContacts();
+        component.contacts = quote.getContacts() || "";
         component.specialRequests = quote.get("specialRequests") || "";
         component.vendorSpecialPricing = quote.get("vendorSpecialPricing") || [];
         component.showVendorPricing = _.filter(_.pluck(quote.get("vendorSpecialPricing"), 'pricing'), function(item){
@@ -225,24 +255,32 @@ module.exports = {
         var fromEmail = notificationConfig.FROM_EMAIL;
         var fromName =  notificationConfig.WELCOME_FROM_NAME;
         var emailSubject = "Quote Request - Quote " + quote.id();
-        var emailTo = "smanticquote@mailinator.com"; // Need to update email address
+        var emailTo = "ashu8006kumar@gmail.com"; // Need to update email address
 
         accountDao.getAccountByID(accountId, function(err, account){
             if(account && account.get('business') && account.get('business').name) {
                 fromName = account.get('business').name;
             }
-            app.render('quotes/quote_email', component, function(err, html){
+            
+            self.exportQuoteItems(accountId, userId, component.items, function(err, csv){
                 if(err) {
-                    self.log.error('error rendering html: ' + err);
-                    self.log.warn('email will not be sent to configured email.');
-                } else {
-                    self.log.debug('sending email to: ', emailTo);
-                    console.log(html);
-                    emailMessageManager.sendQuoteDetails(accountId, fromEmail, fromName, emailTo, emailSubject, null, null, html, function(err, result){
-                        self.log.debug('result: ', result);
+                    self.log.error('Error generating CSV', err);
+                }
+                else{
+                    app.render('quotes/quote_email', component, function(err, html){
+                        if(err) {
+                            self.log.error('error rendering html: ' + err);
+                            self.log.warn('email will not be sent to configured email.');
+                        } else {
+                            self.log.debug('sending email to: ', emailTo);
+                            console.log(html);
+                            emailMessageManager.sendQuoteDetails(accountId, fromEmail, fromName, emailTo, emailSubject, csv, null, html, function(err, result){
+                                self.log.debug('result: ', result);
+                            });
+                        }
                     });
                 }
-            });
+            })   
         });
 
     }

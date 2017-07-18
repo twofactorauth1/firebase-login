@@ -38,7 +38,7 @@ var quote = $$.m.ModelBase.extend({
     },
 
     getContacts: function() {
-        return this.get("recipients").join(", ");
+        return this.get("recipients") && this.get("recipients").join(", ");
     },
 
     initialize: function(options) {

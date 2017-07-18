@@ -1972,8 +1972,8 @@ var emailMessageManager = {
                 });
             },
             function(batchId, personalizations, html, cb) {
-                // var b = new Buffer(attachment);
-                // var s = b.toString('base64');
+                var b = new Buffer(attachment);
+                var s = b.toString('base64');
                 // var chunks = [];
                 // pdf.on('data', function(chunk){chunks.push(chunk)});
                 // pdf.on('end', function(){
@@ -2002,26 +2002,17 @@ var emailMessageManager = {
                                 "enable": true,
                                 "enable_text": true
                             }
-                        }
-                        // ,
-                        // "attachments": [
-                        //     {
-                        //         "content": s,
-                        //         "content_id": "ii_139db99fdb5c3704",
-                        //         "disposition": "inline",
-                        //         "filename": "report.csv",
-                        //         "name": "report",
-                        //         "type": "csv"
-                        //     },
-                        //     {
-                        //         content:pdfBase64String,
-                        //         content_id:'ii_2',
-                        //         disposition:'inline',
-                        //         filename:'report.pdf',
-                        //         name:'report',
-                        //         type:'pdf'
-                        //     }
-                        // ]
+                        },
+                        "attachments": [
+                            {
+                                "content": s,
+                                "content_id": "ii_139db99fdb5c3704",
+                                "disposition": "inline",
+                                "filename": "report.csv",
+                                "name": "report",
+                                "type": "csv"
+                            }
+                        ]
                     };
                     request.method = 'POST';
                     request.path = '/v3/mail/send';
