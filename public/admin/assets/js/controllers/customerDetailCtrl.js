@@ -4,6 +4,7 @@
 (function (angular) {
     app.controller('CustomerDetailCtrl', ["$scope", "$rootScope", "$location", "$modal", "toaster", "$stateParams", "CustomerService", 'ContactService', 'SweetAlert', '$state', '$window', '$timeout', 'formValidations', 'UserService', function ($scope, $rootScope, $location, $modal, toaster, $stateParams, customerService, contactService, SweetAlert, $state, $window, $timeout, formValidations, UserService) {
         $scope.isDomainChanged = false;
+        $scope.cancelaccount = {cancelNow:false};
         /*
          * @getCustomer
          * -
@@ -181,8 +182,42 @@
             });
         };
 
+        $scope.openCancelAccountModal = function(){
+            $scope.openSimpleModal('cancel-account-modal');
+        };
+        $scope.cancelAccountSub = function() {
+            SweetAlert.swal({
+                    title: "Are you sure?",
+                    text: "Cancel this account's subscription",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "Yes",
+                    cancelButtonText: "No",
+                    noActionButtonText: 'Cancel',
+                    closeOnConfirm: true,
+                    closeOnCancel: true
+                },
+                function (isConfirm) {
+                    //Update template account flag
+                    if (isConfirm) {
+                        customerService.cancelAccountSubscription($scope.customer._id, $scope.cancelaccount.reason, $scope.cancelaccount.cancelNow, function(err, data){
+                            $scope.closeModal();
+                            if(err) {
+                                toaster.pop('warning', err.message);
+                            } else {
+                                toaster.pop('success', 'Account subscription cancelled.');
+                            }
+                        });
+                    } else {
+                        $scope.closeModal();
+                    }
+                });
+
+        };
+
         $scope.updateCustomerTemplateAccount = function(isTemplateAccount) {
-            var text = isTemplateAccount ? "Set this customer as template account" : "Unset this customer as template account"
+            var text = isTemplateAccount ? "Set this customer as template account" : "Unset this customer as template account";
             SweetAlert.swal({
                 title: "Are you sure?",
                 text: text,
@@ -208,7 +243,7 @@
 
         $scope.saveTemplateAccount = function(){
             updateCustomerDetails(false);
-        }
+        };
 
         function updateCustomerDetails(isTemplateAccount){
             customerService.updateCustomerTemplateAccount($scope.customer, isTemplateAccount, function(err, customer){
@@ -437,7 +472,7 @@
                     else {
                         formattedDate = formattedDate.add(options.addNum, options.addType);
                     }
-                    console.log("Formatted date: ")
+                    console.log("Formatted date: ");
                     console.log(formattedDate);
                 }
             }

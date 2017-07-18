@@ -10,7 +10,9 @@ app.directive('contactActivity', ['$filter', 'ContactService', '$modal', 'contac
             newLeads: '=newLeads',
             contactsAtRisk: '=contactsAtRisk',
             currentPage: '=currentPage',
-            numPerPage: '=numPerPage'
+            numPerPage: '=numPerPage',
+            contactId: "@contactId",
+            hideNewActivity: "@hideNewActivity"
         },
         templateUrl: '/admin/assets/views/partials/activity.html',
         link: function(scope, element, attrs, controllers) {
@@ -22,7 +24,7 @@ app.directive('contactActivity', ['$filter', 'ContactService', '$modal', 'contac
                 take: scope.numPerPage
             }
             if (scope.singleContact) {
-                scope.contactId = scope.$parent.contactId;
+                scope.contactId = scope.$parent.contactId || scope.contactId;
                 scope.newActivity = {
                     contactId: parseInt(scope.contactId),
                     start: new Date(),

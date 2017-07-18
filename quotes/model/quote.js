@@ -16,9 +16,11 @@ var quote = $$.m.ModelBase.extend({
             customer: null,
             accountId: null,
             userId : null,
-            vendors: null,
             items:null,
             status:null,
+            total: null,
+            attachment: null,
+            specialRequests: null,
             created: {
                 date: new Date(),
                 by: null

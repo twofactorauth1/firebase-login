@@ -13,15 +13,15 @@
 
         quoteCartService.getCartItem = getCartItem;
 
-        quoteCartService.calculateTotalPrice = calculateTotalPrice;
-
-        quoteCartService.newItem = true;
+        quoteCartService.calculateTotalPrice = calculateTotalPrice;        
 
         quoteCartService.loading = {value: 0};
 
         var baseQuotesAPIUrlv2 = '/api/2.0/quotes';
-        quoteCartService.loading = {value: 0};
 
+        quoteCartService.createQuote = createQuote;
+        quoteCartService.updateQuoteAttachment = updateQuoteAttachment;
+        quoteCartService.deleteCartDetails = deleteCartDetails;
         quoteCartService.saveLoading = false;
 
         quoteCartService.cartDetail = {
@@ -53,6 +53,35 @@
             return quoteServiceRequest($http.get([baseQuotesAPIUrlv2, "cart", "items"].join('/')).success(success).error(error));
         }
 
+        function setVendorSpecialPricing(){
+            
+            var items =  _.groupBy(quoteCartService.cartDetail.items, function(item){ 
+                return item._shortVendorName; 
+            });
+            var keyArr = _.map(items, function(g, key){return {vendor: key}});
+
+            _.each(keyArr, function(item){
+                if(quoteCartService.cartDetail.vendorSpecialPricing && quoteCartService.cartDetail.vendorSpecialPricing.length){
+                    if(!_.contains(_.pluck(quoteCartService.cartDetail.vendorSpecialPricing, "vendor"), item.vendor)){
+                        quoteCartService.cartDetail.vendorSpecialPricing.push({
+                            "vendor": item.vendor
+                        })
+                    }
+                }
+                else{
+                    quoteCartService.cartDetail.vendorSpecialPricing = [];
+                    quoteCartService.cartDetail.vendorSpecialPricing.push({
+                        "vendor": item.vendor
+                    })
+                }
+            })
+
+            quoteCartService.cartDetail.vendorSpecialPricing = _.filter(quoteCartService.cartDetail.vendorSpecialPricing, function(item){
+                return _.contains(_.pluck(keyArr, 'vendor'), item.vendor) 
+            })
+
+        }
+
 
         function saveUpdateCartQuoteItems(_add) {
 
@@ -74,18 +103,73 @@
 
         }
 
+
+        function deleteCartDetails(cart) {
+
+            function success(data) {
+                quoteCartService.cartDetail = {
+                    items: []
+                }
+            }
+
+            function error(error) {
+                console.error('quoteCartService deleteCartDetails error: ', JSON.stringify(error));
+            }
+            var apiUrl = [baseQuotesAPIUrlv2, "cart", "items", cart._id].join('/');
+            return quoteServiceRequest(
+                $http({
+                    url: apiUrl,
+                    method: "DELETE"
+                }).success(success).error(error)
+            )
+        }
+
+        function createQuote(quote){
+            function success(data) {
+                // To do 
+                // empty active cart
+            }
+
+            function error(error) {
+                console.error('quoteCartService createQuote error: ', JSON.stringify(error));
+            }
+
+            var apiUrl = [baseQuotesAPIUrlv2].join('/');
+
+
+            return quoteServiceRequest($http.post(apiUrl, quote).success(success).error(error));
+        }
+
+        function updateQuoteAttachment(attachment, _id, fn){
+            function success(data) {                
+                console.log(data);
+            }
+
+            function error(error) {
+                console.error('quoteCartService updateQuoteAttachment error: ', JSON.stringify(error));
+            }
+
+            var _formData = new FormData();
+            _formData.append('file', attachment);
+            
+            return quoteServiceRequest($http.post([baseQuotesAPIUrlv2, 'attachment', _id].join('/'), _formData, {
+                transformRequest: angular.identity,
+                headers: {'Content-Type': undefined}
+            }).success(success).error(error));
+        }
+
         function addItemToCart(item) {
             return _addUpdateItemCart(item);
         }
 
-        function getCartItem(item){
+        function getCartItem(item, state){
             var _item = _.findWhere(quoteCartService.cartDetail.items, { OITM_ItemCode: item.OITM_ItemCode })
             if(_item){
-                quoteCartService.newItem = false;
+                state.newItem = false;
                 return _item
             }
             else{
-                quoteCartService.newItem = true;
+                state.newItem = true;
                 item.quantity = 1;
                 return item;
             }
@@ -93,16 +177,17 @@
 
         function removeItemFromCart(index) {
             quoteCartService.cartDetail.items.splice(index, 1);
-            //return saveUpdateCartQuoteItems();
+            setVendorSpecialPricing();
         }
 
-        
+
         function _addUpdateItemCart(item){
             quoteCartService.saveLoading = true;
             var _item = _.findWhere(quoteCartService.cartDetail.items, { OITM_ItemCode: item.OITM_ItemCode });
             if(!_item){
                 quoteCartService.cartDetail.items.push(item);
             }
+            setVendorSpecialPricing();
             return saveUpdateCartQuoteItems(true);
         }
 
@@ -113,12 +198,13 @@
                     return m + (item.ITM1_Price || 0) *  item.quantity; },
                 0);
             }
+            quoteCartService.cartDetail.total = totalPrice;
             return totalPrice || 0;
         }
 
 
         $rootScope.$watch(function() { return quoteCartService.cartDetail.items }, _.debounce(function (items, oldItems) {
-            if (!quoteCartService.saveLoading && items && oldItems && !angular.equals(items, oldItems)) {
+            if (!quoteCartService.saveLoading && quoteCartService.cartDetail._id && items && oldItems && !angular.equals(items, oldItems)) {
                 saveUpdateCartQuoteItems();
             }
         }, 1000), true);

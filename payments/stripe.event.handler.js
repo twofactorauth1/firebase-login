@@ -392,7 +392,7 @@ var eventHandler =  {
                 var contactActivity = new $$.m.ContactActivity({
                     accountId: iEvent.get('accountId'),
                     contactId: contactId,
-                    activityType: $$.m.ContactActivity.types.SUBCRIPTION_PAID,
+                    activityType: $$.m.ContactActivity.types.SUBSCRIPTION_PAID,
                     start: new Date()
                 });
                 contactActivytManager.createActivity(contactActivity, function(err, activity){

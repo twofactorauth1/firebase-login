@@ -45,7 +45,7 @@
             <div class="clearfix"></div>
         </div>
         <div class="modal-footer">
-            <button class="btn btn-primary" ng-disabled='form.$invalid || vm.uiState.saveLoading' ng-click="vm.addItemToCart()">{{vm.newItem ? 'Add to Quote' : 'Update Quote'}}</button>
+            <button class="btn btn-primary" ng-disabled='form.$invalid || vm.uiState.saveLoading' ng-click="vm.addItemToCart()">{{vm.uiState.newItem ? 'Add to Quote' : 'Update Quote'}}</button>
         </div>
     </form>    
 </script>

@@ -12,16 +12,16 @@ function quoteComponentController($scope, $attrs, $filter, $modal, $timeout, $lo
         newQuote: {},
         orgCardAndPermissions: UserPermissionsConfig.orgConfigAndPermissions
     };
+
     vm.uiState ={
         loading: true,
         globalSearch: QuoteService.globalSearch,
         fieldSearch: QuoteService.fieldSearch
     }
     
-    
-    vm.openModal = openModal;
-     
-    vm.closeModal = closeModal;
+
+    vm.getItems = getItems;
+    vm.getVendors = getVendors;
     
     vm.init = init;
 
@@ -46,42 +46,24 @@ function quoteComponentController($scope, $attrs, $filter, $modal, $timeout, $lo
     }, true);
 
 
-    function openModal(modal, controller, size){
-        
-        var _modal = {
-            templateUrl: modal,
-            keyboard: false,
-            backdrop: 'static',
-            size: 'lg',
-            resolve: {
-                parentVm: function() {
-                    return vm;
-                }
-            }
-        };
-
-        if (controller) {
-            _modal.controller = controller + ' as vm';
-        }
-
-
-        vm.modalInstance = $modal.open(_modal);
-
-        vm.modalInstance.result.then(null, function () {
-            angular.element('.sp-container').addClass('sp-hidden');
-        });
-    }
-
-
-    function closeModal() {
-        if(vm.modalInstance)
-            vm.modalInstance.close();
-    }
-
     function showFilteredRecords(){
         return UtilService.showFilteredRecords(vm.uiState.globalSearch, vm.uiState.fieldSearch);
     }
 
+    function getQuotes(){
+        QuoteService.getQuotes().then(function(response){
+            vm.state.quotes = response.data;
+            vm.uiState.loading = false;
+        })
+    }
+
+    function getItems(quote){
+        return _.pluck(quote.items, "OITM_ItemName").join(", ");
+    }
+
+    function getVendors(quote){
+        return _.uniq(_.pluck(quote.items, "_shortVendorName")).join(", ");
+    }
     
     function init(element) {
         vm.element = element;
@@ -93,9 +75,8 @@ function quoteComponentController($scope, $attrs, $filter, $modal, $timeout, $lo
             }
             $scope.$broadcast('refreshTableData', params);
         }, 0);
-
-        vm.state.quotes = [];
-        vm.uiState.loading = false;
+        
+        getQuotes();
     }
 
 }

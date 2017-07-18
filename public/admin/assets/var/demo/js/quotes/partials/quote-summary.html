@@ -19,14 +19,33 @@
     <div class="item-line-border">
         <hr>
     </div>
-    <div class="row clearfix mb30">
+    <div class="row clearfix mb30 total-quote-price-container">
         <div class="col-xs-6 col-sm-6">
-            <h4>Total List Price</h4>
+            <h4 class="margin-bottom-0">Total List Price</h4>
+            <span class="small">Tax and shipping exclusive</span>
         </div>
         <div class="col-xs-6 col-sm-6 text-right">
             <span class="quote-total-price">{{vm.calculateTotalPrice(vm.state.cartDetail.items)  | currency : '$'}}</span>
 
         </div>
+        <div class="clearfix"></div>
     </div>
-    <div class="mb15"></div>
+    <div class="item-line-border">
+        <hr>
+    </div>
+    <h4 class="text-center mb20">Vendor Special Pricing</h4>
+
+    <ul class="list-unstyled cart-items">
+        <li ng-repeat="item in vm.state.cartDetail.vendorSpecialPricing track by $index">
+            <div class="col-xs-6">
+                <label class="block text-capitalize">
+                    {{item.vendor}}
+                </label>
+            </div>
+            <div class="col-xs-6 text-right">
+                <input type="text" ng-model="item.pricing" class="form-control spinner-input quantity" placeholder="rssp pps">
+            </div>
+            <div class="clearfix"></div>
+        </li>
+    </ul>
 </div>

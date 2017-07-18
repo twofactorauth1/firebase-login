@@ -38,7 +38,6 @@ var manager = {
         
 
         if(file.path) {
-            // to do-  need to change bucket
             var bucket = awsConfig.BUCKETS.PROMOTIONS;
             var subdir = 'account_' + promotion.get('accountId');
             if(appConfig.nonProduction === true) {
