@@ -239,7 +239,7 @@
                         </tab>
                         <tab heading="Edit Contact" active="editActive">
                             <div class="col-xs-12">
-                                <button class="btn btn-info btn-o pull-right" ng-click="contactSaveFn()" ng-disabled="saveLoading || (form.$invalid && !form.$pristine )"><span ng-class="{'fa fa-spin fa-spinner': saveLoading}"></span> Save</button>
+                                <button class="btn btn-info btn-o pull-right" ng-click="contactSaveFn()" ng-disabled="saveLoading || form.$invalid"><span ng-class="{'fa fa-spin fa-spinner': saveLoading}"></span> Save</button>
                             </div>
                             <div class="clearfix"></div>
                             <form action="#" name="form" role="form" id="form">
@@ -260,10 +260,10 @@
                                                         <i ng-if="!showAddEmail(email)" ng-click="removeEmail($index)" class="ti-minus"></i>
                                                     </span>
                                                 </div>
-                                                <div class="form-group" ng-class="{ 'has-error' : form.email_{{$index}}.$invalid && !form.email_{{$index}}.$pristine }" ng-repeat="email in contact.details[0].emails  track by $index">
+                                                <div class="form-group" ng-class="{ 'has-error' : form.email_{{$index}}.$invalid}" ng-repeat="email in contact.details[0].emails  track by $index">
                                                     <span class="input-icon input-icon-right">
                                                         <input type="email"  ng-pattern="formValidations.email" placeholder="Email address" class="form-control" name="email_{{$index}}" ng-model="contact.details[0].emails[$index].email" ng-blur="updateCustomer()">
-                                                        <p ng-show="form.email_{{$index}}.$invalid && !form.email_{{$index}}.$pristine" class="help-block">Enter a valid email.</p>
+                                                        <p ng-show="form.email_{{$index}}.$invalid" class="help-block">Enter a valid email.</p>
                                                         <i ng-if="showAddEmail(email)" ng-click="contactAddEmailFn()" class="ti-plus"></i>
                                                         <i ng-if="!showAddEmail(email)" ng-click="removeEmail($index)" class="ti-minus"></i>
                                                     </span>
