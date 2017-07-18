@@ -13,9 +13,7 @@
 
         quoteCartService.getCartItem = getCartItem;
 
-        quoteCartService.calculateTotalPrice = calculateTotalPrice;
-
-        quoteCartService.newItem = true;
+        quoteCartService.calculateTotalPrice = calculateTotalPrice;        
 
         quoteCartService.loading = {value: 0};
 
@@ -164,14 +162,14 @@
             return _addUpdateItemCart(item);
         }
 
-        function getCartItem(item){
+        function getCartItem(item, state){
             var _item = _.findWhere(quoteCartService.cartDetail.items, { OITM_ItemCode: item.OITM_ItemCode })
             if(_item){
-                quoteCartService.newItem = false;
+                state.newItem = false;
                 return _item
             }
             else{
-                quoteCartService.newItem = true;
+                state.newItem = true;
                 item.quantity = 1;
                 return item;
             }

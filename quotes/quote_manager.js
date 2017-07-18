@@ -74,6 +74,30 @@ module.exports = {
         });
     },
 
+
+    listQuotes: function(accountId, userId, userFilter, fn) {
+        var self = this;
+        self.log = log;
+        log.debug(accountId, userId, '>> listQuotes');
+        var query = {
+            'accountId':accountId
+        };
+
+        if(userFilter){
+            query.userId = userFilter;
+        }
+
+        quoteDao.findMany(query, $$.m.Quote, function(err, list){
+            if(err) {
+                log.error('Exception listing quotes: ' + err);
+                fn(err, null);
+            } else {
+                log.debug(accountId, userId, '<< listQuotes');
+                fn(null, list);
+            }
+        });
+    },
+
     createQuote: function(accountId, userId, quote, fn) {
         var self = this;
         log.debug(accountId, userId, '>> createQuote');

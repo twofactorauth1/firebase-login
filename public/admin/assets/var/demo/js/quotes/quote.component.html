@@ -80,15 +80,15 @@
                     <td class="partner-col" ng-if="vm.state.orgCardAndPermissions.permissions.quote.showPartner"><strong>Partner: </strong>{{quote.partner || '&nbsp;'}}</td>
                     <td class="customer-col"><strong>Customer: </strong>{{quote.customer || '&nbsp;'}}</td>
 
-	                <td class="vendor-col"><strong>Vendors: </strong>{{quote.vendors || '&nbsp;'}}</td>
+	                <td class="vendor-col"><strong>Vendors: </strong><div class="text-adjust-outerTable" tooltip="{{vm.getVendors(quote)}}">{{vm.getVendors(quote) || '&nbsp;'}}</div></td>
 
-	                <td class="vendor-col"><strong>Items: </strong>{{quote.items || '&nbsp;'}}</td>
+	                <td class="items-col"><strong>Items: </strong><div class="text-adjust-outerTable" tooltip="{{vm.getItems(quote)}}">{{vm.getItems(quote) || '&nbsp;'}}</div></td>
 
 	                <td class="total-col"><strong>Total: </strong>{{quote.total || '&nbsp;'}}</td>
 
-	                <td class="status-col"><strong>Status: </strong>{{quote.status || '&nbsp;'}}</td>
+	                <td class="status-col"><strong>Status: </strong>{{quote.status || '-'}}</td>
 
-	                <td class="view-col"><strong>View/Edit: </strong>'&nbsp;'</td>
+	                <td class="view-col"><strong>View/Edit: </strong>&nbsp;</td>
 
 	                
 	            </tr>

@@ -5,7 +5,7 @@ app.controller('NewQuoteModalController', ['$scope', 'parentVm', '$timeout', 'to
     var vm = this;
     vm.parentVm = parentVm;
     vm.uiState = {
-        
+        newItem: true
     };
     vm.state = {
 
@@ -16,13 +16,10 @@ app.controller('NewQuoteModalController', ['$scope', 'parentVm', '$timeout', 'to
     $scope.$watch(function() { return QuoteCartDetailsService.cartDetail.items }, function(data) {
         if(angular.isDefined(data)){
             vm.uiState.loading = false;
-
-            vm.state.item = QuoteCartDetailsService.getCartItem(vm.parentVm.state.selectedProductItem);
-
-            vm.newItem = QuoteCartDetailsService.newItem;
+            vm.state.item = QuoteCartDetailsService.getCartItem(vm.parentVm.state.selectedProductItem, vm.uiState);            
         } 
     }, true);
-    
+
     function addItemToCart(){
         vm.uiState.saveLoading = true;
     	QuoteCartDetailsService.addItemToCart(vm.state.item).then(function (response){
