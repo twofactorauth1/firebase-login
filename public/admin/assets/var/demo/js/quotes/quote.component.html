@@ -80,7 +80,7 @@
                     <td class="partner-col hidden-xs" ng-if="vm.state.orgCardAndPermissions.permissions.quote.showPartner"><strong>Partner: </strong>{{quote.partner || '&nbsp;'}}</td>
                     <td class="customer-col"><strong>Customer: </strong>{{quote.customer || '&nbsp;'}}</td>
 
-	                <td class="vendor-col hidden-xs"><strong>Vendors: </strong><div class="text-adjust-outerTable" tooltip="{{vm.getVendors(quote)}}">{{vm.getVendors(quote) || '&nbsp;'}}</div></td>
+	                <td class="vendor-col hidden-xs"><strong>Vendors: </strong><div class="text-adjust-outerTable text-capitalize" tooltip="{{vm.getVendors(quote)}}">{{vm.getVendors(quote) || '&nbsp;'}}</div></td>
 
 	                <td class="items-col hidden-xs"><strong>Items: </strong><div class="text-adjust-outerTable" tooltip="{{vm.getItems(quote)}}">{{vm.getItems(quote) || '&nbsp;'}}</div></td>
 
