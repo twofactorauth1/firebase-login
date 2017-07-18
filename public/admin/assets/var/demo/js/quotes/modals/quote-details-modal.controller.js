@@ -1,6 +1,6 @@
 'use strict';
 /*global app*/
-app.controller('QuoteDetailsModalController', ['$scope', '$timeout', 'toaster', 'SweetAlert', 'QuoteCartDetailsService', function ($scope, $timeout, toaster, SweetAlert, QuoteCartDetailsService) {
+app.controller('QuoteDetailsModalController', ['$scope', '$timeout', 'toaster', 'SweetAlert', 'formValidations', 'QuoteCartDetailsService', function ($scope, $timeout, toaster, SweetAlert, formValidations, QuoteCartDetailsService) {
 
     var vm = this;
 
@@ -15,7 +15,8 @@ app.controller('QuoteDetailsModalController', ['$scope', '$timeout', 'toaster', 
     vm.removeItemFromCart = removeItemFromCart;
     vm.createQuote = createQuote;
     vm.attachment = {};
-    
+    vm.checkIfValidEmail = checkIfValidEmail;
+
     function calculateTotalPrice(items){
     	return QuoteCartDetailsService.calculateTotalPrice(items);
     }
@@ -46,6 +47,17 @@ app.controller('QuoteDetailsModalController', ['$scope', '$timeout', 'toaster', 
         QuoteCartDetailsService.deleteCartDetails(vm.state.cartDetail).then(function(){
             $scope.closeModal();
         })
+    }
+
+    function checkIfValidEmail(email) {
+        if(email){
+            var regex = formValidations.email;
+            var regexValue = regex.test(email.text);
+
+            if(!regexValue){
+                return false;
+            }
+        }
     }
 
     function initAttachment(){      
