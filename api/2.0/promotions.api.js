@@ -29,7 +29,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
     initialize: function () {
 
-        app.get(this.url(''), this.isAuthAndSubscribedApi.bind(this), this.listPromotions.bind(this));       
+        app.get(this.url(''), this.secureauth.bind(this, true, 'VIEW_PROMOTION'), this.listPromotions.bind(this));
         app.post(this.url(''), this.isAuthAndSubscribedApi.bind(this), this.createPromotion.bind(this));
 
         app.post(this.url('report'), this.isAuthAndSubscribedApi.bind(this), this.createPromotionReport.bind(this));
