@@ -48,11 +48,9 @@
         $scope.customTagFilert = function(item){
            var showIndropDown=true
            if($scope.contact.tags.length>0){
-            _.each($scope.contact.tags, function (tag) {
-                if(showIndropDown && tag.label==item.label){
-                    showIndropDown=false;
-                }
-            })
+            showIndropDown=_.filter($scope.contact.tags, function(tag){
+                return tag.label == item.label
+            }).length <1;
         }
         return showIndropDown;
     };
