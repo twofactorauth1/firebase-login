@@ -16,12 +16,11 @@ function QuoteDetailsController($scope, $timeout, toaster, SweetAlert, formValid
     vm.parentVm = parentVm;
     vm.initAttachment = initAttachment;
     vm.calculateTotalPrice = calculateTotalPrice;
-    vm.state.cartDetail = {};
     vm.removeItemFromCart = removeItemFromCart;
     vm.updateQuote = updateQuote;
     vm.attachment = {};
     vm.checkIfValidEmail = checkIfValidEmail;
-
+    vm.state.cartDetail = angular.copy(vm.parentVm.state.cartDetails);
     function calculateTotalPrice(items){
 
         var totalPrice = 0;
@@ -119,8 +118,7 @@ function QuoteDetailsController($scope, $timeout, toaster, SweetAlert, formValid
             vm.uiState.loading = false;
         })
     }
-    else{
-        vm.state.cartDetail = angular.copy(vm.parentVm.state.cartDetails);
+    else{        
         checkIfEditMode();
         vm.uiState.loading = false;
     }
