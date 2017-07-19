@@ -98,15 +98,39 @@ module.exports = {
         });
     },
 
-    createQuote: function(accountId, userId, quote, fn) {
+    getQuoteDetails: function(accountId, userId, quoteId, userFilter, fn) {
         var self = this;
-        log.debug(accountId, userId, '>> createQuote');
+        self.log = log;
+        log.debug(accountId, userId, '>> getQuoteDetails');
+        var query = {
+            'accountId':accountId,
+            _id: quoteId
+        };
+
+        if(userFilter){
+            query.userId = userFilter;
+        }
+
+        quoteDao.findOne(query, $$.m.Quote, function(err, value){
+            if(err) {
+                log.error('Exception getting quote details: ' + err);
+                fn(err, null);
+            } else {
+                log.debug(accountId, userId, '<< getQuoteDetails');
+                fn(null, value);
+            }
+        });
+    },
+
+    saveOrUpdateQuote: function(accountId, userId, quote, fn) {
+        var self = this;
+        log.debug(accountId, userId, '>> saveOrUpdateQuote');
         quoteDao.saveOrUpdate(quote, function(err, value){
             if(err) {
                 self.log.error('Error saving quote: ' + err);
                 return fn(err, null);
             } else {
-                log.debug(accountId, userId, '<< createQuote');
+                log.debug(accountId, userId, '<< saveOrUpdateQuote');
                 fn(null, value);
             }
         });

@@ -25,7 +25,9 @@ function quoteComponentController($scope, $attrs, $filter, $modal, $timeout, $lo
     
     vm.init = init;
 
-
+    vm.openModal = openModal;
+    vm.closeModal = closeModal;
+    vm.viewQuoteDetails = viewQuoteDetails;
     /********** GLOBAL SEARCH RELATED **********/
 
     $scope.$watch('vm.uiState.globalSearch', function (term) {
@@ -51,10 +53,7 @@ function quoteComponentController($scope, $attrs, $filter, $modal, $timeout, $lo
     }
 
     function getQuotes(){
-        QuoteService.getQuotes().then(function(response){
-            vm.state.quotes = response.data;
-            vm.uiState.loading = false;
-        })
+        QuoteService.getQuotes();
     }
 
     function getItems(quote){
@@ -64,6 +63,54 @@ function quoteComponentController($scope, $attrs, $filter, $modal, $timeout, $lo
     function getVendors(quote){
         return _.uniq(_.pluck(quote.items, "_shortVendorName")).join(", ");
     }
+
+    function openModal(modal, controller, size){
+
+        var _modal = {
+            templateUrl: modal,
+            keyboard: false,
+            backdrop: 'static',
+            size: 'lg',
+            scope: $scope,
+            resolve: {
+                parentVm: function() {
+                    return vm;
+                }
+            }
+        };
+
+        if (controller) {
+            _modal.controller = controller  + ' as vm';
+        }
+
+
+        vm.modalInstance = $modal.open(_modal);
+
+        vm.modalInstance.result.then(null, function () {
+            angular.element('.sp-container').addClass('sp-hidden');
+        });
+    }
+
+    function closeModal() {
+        if(vm.modalInstance)
+            vm.modalInstance.close();
+    }
+
+    function viewQuoteDetails(quote){
+        vm.state.cartDetails = quote;
+        var _modal = 'quote-details-modal';
+        if(quote.status == "Sent"){
+            _modal = 'quote-details-view-modal';
+        }
+        vm.openModal(_modal, 'QuoteDetailsController', 'lg')
+    }
+
+    $scope.$watch(function() { return QuoteService.quotes }, function(data) {
+        if(angular.isDefined(data)){
+            vm.state.quotes = data;
+            vm.uiState.loading = false;
+        }        
+    }, true);
     
     function init(element) {
         vm.element = element;

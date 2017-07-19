@@ -30,16 +30,16 @@
     .navigation-v4.nav-header-{{component._id}} .navbar-default .navbar-nav > li a{
         color: {{component.nav.txtcolor}} !important;
         background-color: {{component.nav.menubgcolor}};
-        font-size:{{component.nav.font.size}};
+        font-size:{{component.nav.font.size}}px !important;
         font-family:{{component.nav.font.family}};
         font-weight:{{component.nav.font.weight}};
         text-transform:{{component.nav.allowMixedCase ? 'none' : 'uppercase' }}
     }
-    .navigation-v1.nav-header-{{component._id}} .navbar-default .navbar-header .navbar-toggle .icon-bar {
+    .navigation-v4.nav-header-{{component._id}} .navbar-default .navbar-header .navbar-toggle .icon-bar {
         background-color: {{component.nav.txtcolor}} !important;
     }
 
-    .navigation-v1.nav-header-{{component._id}} .navbar-default .navbar-header .navbar-toggle {
+    .navigation-v4.nav-header-{{component._id}} .navbar-default .navbar-header .navbar-toggle {
         border-color: {{component.nav.txtcolor}} !important;
     }
 

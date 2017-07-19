@@ -60,7 +60,7 @@
 	                	<input st-search="title" ng-model="vm.uiState.fieldSearch.title" placeholder="Title" class="form-control" type="search" />
 	                </th>
 	                <th class="partner-col hidden-xs" ng-if="vm.state.orgCardAndPermissions.permissions.quote.showPartner">
-	                	<input st-search="partner" ng-model="vm.uiState.fieldSearch.partner" placeholder="Parner" class="form-control" type="search" />
+	                	<input st-search="partner" ng-model="vm.uiState.fieldSearch.partner" placeholder="Partner" class="form-control" type="search" />
                 	</th>
 	                <th class="customer-col">
 	                	<input st-search="customer" ng-model="vm.uiState.fieldSearch.customer" placeholder="Customer" class="form-control" type="search" />
@@ -75,21 +75,22 @@
 	        <tbody>
 	            <tr ng-repeat="quote in vm.displayedQuotes" class="product-item">
                     
-                    <td class="title-col text-adjust-col"><strong>Title: </strong><div class="name-block-container"></span><span class="" title="{{quote.title}}">{{quote.title || '&nbsp;'}}</span></div></td>
+                    <td class="title-col text-adjust-col"><strong>Title: </strong><div class="name-block-container text-adjust-inner-content"></span><span class="" title="{{quote.title}}">{{quote.title || '&nbsp;'}}</span></div></td>
 
-                    <td class="partner-col hidden-xs text-adjust-col" ng-if="vm.state.orgCardAndPermissions.permissions.quote.showPartner"><strong>Partner: </strong>{{quote.partner || '&nbsp;'}}</td>
-                    <td class="customer-col text-adjust-col"><strong>Customer: </strong><div>{{quote.customer || '&nbsp;'}}</div></td>
+                    <td class="partner-col hidden-xs text-adjust-col" ng-if="vm.state.orgCardAndPermissions.permissions.quote.showPartner"><strong>Partner: </strong><div class="text-adjust-inner-content">{{quote.partner || '&nbsp;'}}</div></td>
+                    <td class="customer-col text-adjust-col"><strong>Customer: </strong><div class="text-adjust-inner-content">{{quote.customer || '&nbsp;'}}</div></td>
 
-	                <td class="vendor-col hidden-xs text-adjust-col"><strong>Vendors: </strong><div class="text-capitalize" tooltip="{{vm.getVendors(quote)}}">{{vm.getVendors(quote) || '&nbsp;'}}</div></td>
+	                <td class="vendor-col hidden-xs text-adjust-col"><strong>Vendors: </strong><div class="text-capitalize text-adjust-inner-content" tooltip="{{vm.getVendors(quote)}}">{{vm.getVendors(quote) || '&nbsp;'}}</div></td>
 
-	                <td class="items-col hidden-xs text-adjust-col"><strong>Items: </strong><div tooltip="{{vm.getItems(quote)}}" >{{vm.getItems(quote) || '&nbsp;'}}</div></td>
+	                <td class="items-col hidden-xs text-adjust-col"><strong>Items: </strong><div class="text-adjust-inner-content" tooltip="{{vm.getItems(quote)}}" >{{vm.getItems(quote) || '&nbsp;'}}</div></td>
 
-	                <td class="total-col hidden-xs text-adjust-col"><strong>Total: </strong><div>{{quote.total | currency : '$'}}</div></td>
+	                <td class="total-col hidden-xs text-adjust-col"><strong>Total: </strong><div class="text-adjust-inner-content">{{quote.total | currency : '$'}}</div></td>
 
-	                <td class="status-col hidden-xs text-adjust-col"><strong>Status: </strong><div>{{quote.status || '-'}}</div></td>
+	                <td class="status-col hidden-xs text-adjust-col"><strong>Status: </strong><div class="text-adjust-inner-content">{{quote.status || '-'}}</div></td>
 
-	                <td class="view-col"><strong>View/Edit: </strong>&nbsp;</td>
-
+	                <td class="view-col view-quote-details"><strong>View/Edit: </strong>
+	                	<span ng-click="vm.viewQuoteDetails(quote)"><i class="fa fa-pencil-square-o"></i></span>
+	                </td>
 	                
 	            </tr>
 	        </tbody>
@@ -107,3 +108,4 @@
 	</div>
 </div>
 <div data-ng-include=" 'assets/var/demo/js/quotes/modals/quote-details-modal.html' "></div>
+<div data-ng-include=" 'assets/var/demo/js/quotes/modals/quote-details-view-modal.html' "></div>

@@ -1,0 +1,26 @@
+<script type="text/ng-template" id="quote-details-view-modal">
+    <div class="modal-header">
+        <button type="button" class="close" ng-click="vm.parentVm.closeModal()">
+            <span aria-hidden="true">&times;</span>
+            <span class="sr-only">Close</span>
+        </button>
+        <h3 class="modal-title">
+            <span class="ti-quote-right"></span>
+            Quote ID: {{vm.state.cartDetail._id}}
+        </h3>
+    </div>
+    <form name="form" role="form" id="form">
+        <div class="modal-body bg-white quote-details-modal quote-cart-details" style="min-height:200px" stop-event="touchend">
+            <div class="col-xs-12 col-sm-7 padding-top-15 border-right">
+                <div data-ng-include=" '/admin/assets/var/demo/js/quotes/partials/quote-details-view.html' "></div>
+            </div>
+            <div class="col-sm-5 col-xs-12 padding-top-15">
+            <div data-ng-include=" '/admin/assets/var/demo/js/quotes/partials/quote-summary.html' "></div>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-wide btn-primary btn-o" ng-click="vm.parentVm.closeModal()">Close</button>
+        </div>
+    </form>    
+</script>

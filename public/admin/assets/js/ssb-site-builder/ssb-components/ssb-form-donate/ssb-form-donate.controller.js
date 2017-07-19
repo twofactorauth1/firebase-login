@@ -330,22 +330,25 @@
                     }
 
 
-                    if (!vm.component.redirect) {
-                        vm.formSuccess = true;
-                        vm.formBuilder = {};
-                        $('#donation-card-details').find("input[type=text]").val("");
-                        form.$setPristine(true);
 
-                        $timeout(function () {
-                            vm.formSuccess = false;
-                        }, 3000);
-                    } else {
-                        if (vm.component.redirectType === 'page') {
-                            window.location.href = vm.component.redirectUrl;
-                        }
-                        if (vm.component.redirectType === 'external') {
-                            window.location.href = 'http://' + vm.component.redirectUrl;
-                        }
+                    vm.formSuccess = true;
+                    vm.formBuilder = {};
+                    $('#donation-card-details').find("input[type=text]").val("");
+                    form.$setPristine(true);
+
+                    $timeout(function () {
+                        vm.formSuccess = false;
+                    }, 3000);
+                    if (!vm.component.redirect) {
+                         $timeout(function () {
+                             if (vm.component.redirectType === 'page') {
+                                window.location.href = vm.component.redirectUrl;
+                            }
+                            if (vm.component.redirectType === 'external') {
+                                window.location.href = 'http://' + vm.component.redirectUrl;
+                            }
+                        }, 2000);
+
                     }
 
                 }

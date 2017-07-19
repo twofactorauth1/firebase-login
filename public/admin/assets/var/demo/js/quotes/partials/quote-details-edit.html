@@ -1,0 +1,101 @@
+<div class="form-group">
+    <label>
+        Title
+    </label>
+    <input type="text" placeholder="Quote Title" class="form-control" ng-model="vm.state.cartDetail.title">
+</div>
+<div class="clearfix"></div>
+<div class="form-group">
+    <label>
+        Customer
+    </label>
+    <input type="text" placeholder="Customer" class="form-control" ng-model="vm.state.cartDetail.customer">
+</div>
+<div class="clearfix"></div>
+<div class="form-group">
+    <label>
+        Contact
+    </label>
+    <tags-input
+        ng-model="vm.state.cartDetail.recipients"
+        add-on-paste="true"
+        placeholder="Add an email"
+        add-on-comma="true"
+        on-tag-adding="vm.checkIfValidEmail($tag)"
+        use-strings="true"
+        >
+    </tags-input>
+</div>
+<div class="clearfix"></div>
+<div class="form-group">
+
+    <label class="block">File Upload</label>
+
+    <label for="upload_quote_file" class="btn btn-primary" style="margin-top:0px;">
+        <span ng-if="!vm.state.cartDetail.attachment.name">Upload File</span>
+        <span ng-if="vm.state.cartDetail.attachment.name">Replace File</span>
+        <input type="file"
+           id="upload_quote_file"
+           class="hidden"
+           file-model='vm.attachment'
+           accept=".pdf"
+           accepted-formats="application/pdf"
+        >
+    </label>
+    
+    <span class="file-name">{{vm.attachment.name || vm.state.cartDetail.attachment.name}}</span>
+    <span class="margin-left-10" ng-if="vm.attachment.name || vm.state.cartDetail.attachment.name" ng-click="vm.initAttachment()"><i class="fa fa-trash-o"></i> </span>
+</div>
+<div class="clearfix"></div>
+<div class="form-group">
+    <label>
+        Special Requests
+    </label>
+    <textarea rows="3" placeholder="Special Requests" class="form-control" ng-model="vm.state.cartDetail.specialRequests"></textarea>
+</div>
+<div class="clearfix"></div>
+<div class="item-line-border">
+    <hr>
+</div>
+<ul class="list-unstyled cart-items">
+    <li>
+        <div>
+            <div class="col-xs-5">
+                <label>Item</label>
+            </div>
+            <div class="col-xs-3">
+                <label>Quantity</label>
+            </div>
+            <div class="col-xs-3 text-right">
+                <label>List Price</label>
+            </div>
+            <div class="col-xs-1"></div>
+        </div>
+        <div class="clearfix"></div>
+    </li>
+    
+    <li class="list-item-items" ng-repeat="item in vm.state.cartDetail.items track by $index">
+        <div>
+            <div class="col-xs-5">
+                <label class="block">
+                    {{item.OITM_ItemName}}
+                </label>
+            </div>
+            <div class="col-xs-3">
+                <input required type="number" min='1' ng-model="item.quantity" class="form-control spinner-input quantity">
+            </div>
+            <div class="col-xs-3 text-right">
+                <label class="block">
+                    {{item.ITM1_Price | currency : '$'}}
+                </label>
+            </div>
+            <div class="col-xs-1">
+            <button type="button" class="close btn-remove-item" aria-hidden="true" ng-click="vm.removeItemFromCart($index)">×</button>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+        <div class="item-line-border">
+            <hr>
+        </div>
+    </li>
+</ul>

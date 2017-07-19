@@ -36,10 +36,21 @@
 	.btn-remove-item{
 		font-size: 20px;
 	}
-}
-.quote-details-modal-header{
-	h4.modal-title{
-		color: #eea236 !important;
-    	margin-top: 8px;
+
+	.form-group{
+		span.description{
+			display: block;
+			&:after{
+				content: "\00a0";
+			}
+		}
 	}
+}
+
+.quote-cart-details .loading-modal{
+    h3{
+	    position: absolute;
+	    top: 40%;
+	    width: 100%;
+    }
 }

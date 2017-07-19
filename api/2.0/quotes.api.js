@@ -28,6 +28,8 @@ _.extend(api.prototype, baseApi.prototype, {
         app.delete(this.url('cart/items/:id'), this.isAuthAndSubscribedApi.bind(this), this.deleteCartQuoteItem.bind(this));
         app.get(this.url(''), this.isAuthAndSubscribedApi.bind(this), this.listQuotes.bind(this));
         app.post(this.url(''), this.isAuthAndSubscribedApi.bind(this), this.createQuote.bind(this));
+        app.post(this.url(':id'), this.isAuthAndSubscribedApi.bind(this), this.updateQuote.bind(this));
+        app.get(this.url(':id'), this.isAuthAndSubscribedApi.bind(this), this.getQuoteDetails.bind(this));
         app.post(this.url('attachment/:id'), this.isAuthApi.bind(this), this.updateQuoteAttachment.bind(this));
         app.post(this.url(':id/submit'), this.isAuthAndSubscribedApi.bind(this), this.submitQuote.bind(this));
     },
@@ -116,7 +118,6 @@ _.extend(api.prototype, baseApi.prototype, {
         var self = this;
         var accountId = parseInt(self.accountId(req));
         var userId = self.userId(req);
-        var vendorFilter = null;
         self._checkAccess(accountId, userId, 'quotes', function(err, isAllowed){
             if(!isAllowed) {
                 self.log.debug(accountId, userId, '<< quotes [' + isAllowed + ']');
@@ -139,16 +140,60 @@ _.extend(api.prototype, baseApi.prototype, {
                         userFilter = null;
                     }
                     else{
-                        if(_isVendor){
+                        if(_isVAR){
                             userFilter = userId
                         }
                         else{
-                            return self.sendResultOrError(resp, err, list, "Error listing quotes");
+                            return self.sendResultOrError(resp, err, [], "Error listing quotes");
                         }
                     }
                     quoteManager.listQuotes(accountId, userId, userFilter, function(err, list){
                         self.log.debug(accountId, userId, '<< listQuotes');
                         return self.sendResultOrError(resp, err, list, "Error listing quotes");
+                    });
+                }) 
+            }
+        })        
+    },
+
+
+    getQuoteDetails: function(req, resp) {
+        var self = this;
+        var accountId = parseInt(self.accountId(req));
+        var userId = self.userId(req);
+        var quoteId = req.params.id;
+        self._checkAccess(accountId, userId, 'quotes', function(err, isAllowed){
+            if(!isAllowed) {
+                self.log.debug(accountId, userId, '<< quotes [' + isAllowed + ']');
+                return self.sendResultOrError(resp, err, [], "Error listing quote details");
+            } else {
+                self.log.debug(accountId, userId, '>> getQuoteDetails');
+                self._checkUserRole(req, function(err, userObj){
+                    var _isAdmin = false;
+                    var _isVendor = false;
+                    var _isVAR = false;
+                    var _isSecurematics = false;
+                    var userFilter = null;
+                    if(userObj){
+                        _isAdmin = _.contains(userObj.getPermissionsForAccount(accountId), 'admin');
+                        _isVendor = _.contains(userObj.getPermissionsForAccount(accountId), 'vendor-restricted');
+                        _isVAR = _.contains(userObj.getPermissionsForAccount(accountId), 'vendor');
+                        _isSecurematics = _.contains(userObj.getPermissionsForAccount(accountId), 'securematics');
+                    }   
+                    if(_isAdmin || _isSecurematics) {
+                        userFilter = null;
+                    }
+                    else{
+                        if(_isVAR){
+                            userFilter = userId
+                        }
+                        else{
+                            return self.sendResultOrError(resp, err, [], "Error listing quote details");
+                        }
+                    }
+                    quoteManager.getQuoteDetails(accountId, userId, quoteId, userFilter, function(err, order){
+                        self.log.debug(accountId, userId, '<< getQuoteDetails');
+                        return self.sendResultOrError(resp, err, order, "Error listing quote details");
                     });
                 }) 
             }
@@ -183,9 +228,38 @@ _.extend(api.prototype, baseApi.prototype, {
                 quote.set("userId", userId);
 
 
-                quoteManager.createQuote(accountId, userId, quote, function(err, value){
+                quoteManager.saveOrUpdateQuote(accountId, userId, quote, function(err, value){
                     self.log.debug(accountId, userId, '<< createQuote');
                     self.sendResultOrError(resp, err, value, "Error saving quote");
+                });
+            }
+        });
+        
+    },
+
+    updateQuote: function(req, resp) {
+        var self = this;
+        self.log.debug('>> updateQuote');
+        var accountId = parseInt(self.accountId(req));
+        var userId = self.userId(req);
+
+        self._checkAccess(accountId, userId, 'quotes', function(err, isAllowed){
+            if(!isAllowed) {
+                self.log.debug(accountId, userId, '<< updateQuote [' + isAllowed + ']');
+                return self.sendResultOrError(resp, err, [], "Error updating quote");
+            } else {
+                var quoteObj = req.body;
+                var quote = new $$.m.Quote(quoteObj);
+                var modified = {
+                    date: new Date(),
+                    by: userId
+                };
+                
+                quote.set('modified', modified);
+
+                quoteManager.saveOrUpdateQuote(accountId, userId, quote, function(err, value){
+                    self.log.debug(accountId, userId, '<< updateQuote');
+                    self.sendResultOrError(resp, err, value, "Error updating quote");
                 });
             }
         });
