@@ -88,8 +88,9 @@
 
 	                <td class="status-col hidden-xs text-adjust-col"><strong>Status: </strong><div class="text-adjust-inner-content">{{quote.status || '-'}}</div></td>
 
-	                <td class="view-col"><strong>View/Edit: </strong>&nbsp;</td>
-
+	                <td class="view-col view-quote-details"><strong>View/Edit: </strong>
+	                	<span ng-click="vm.viewQuoteDetails(quote)"><i class="fa fa-pencil-square-o"></i></span>
+	                </td>
 	                
 	            </tr>
 	        </tbody>
