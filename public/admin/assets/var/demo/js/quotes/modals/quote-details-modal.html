@@ -1,6 +1,6 @@
 <script type="text/ng-template" id="quote-details-modal">
     <div class="modal-header">
-        <button type="button" class="close" ng-click="closeModal()">
+        <button type="button" class="close" ng-click="closeModal() || vm.parentVm.closeModal()">
             <span aria-hidden="true">&times;</span>
             <span class="sr-only">Close</span>
         </button>
