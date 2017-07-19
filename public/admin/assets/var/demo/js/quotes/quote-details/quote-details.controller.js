@@ -9,20 +9,21 @@ function QuoteDetailsController($scope, $timeout, toaster, SweetAlert, formValid
     var vm = this;
 
     vm.uiState = {
-        
+        loading: true
     };
 
     vm.state = {};
     vm.parentVm = parentVm;
     vm.initAttachment = initAttachment;
     vm.calculateTotalPrice = calculateTotalPrice;
-    vm.state.cartDetail = angular.copy(vm.parentVm.state.cartDetails);
+    vm.state.cartDetail = {};
     vm.removeItemFromCart = removeItemFromCart;
     vm.updateQuote = updateQuote;
     vm.attachment = {};
     vm.checkIfValidEmail = checkIfValidEmail;
 
     function calculateTotalPrice(items){
+
         var totalPrice = 0;
         if(items){
             totalPrice = _.reduce(items, function(m, item) {
@@ -111,6 +112,23 @@ function QuoteDetailsController($scope, $timeout, toaster, SweetAlert, formValid
         vm.attachment = {};
         document.getElementById("upload_cart_file").value = "";
     }
+    if(vm.parentVm.state.cartDetails.status != "Sent"){
+        QuoteService.getQuoteDetails(vm.parentVm.state.cartDetails._id).then(function(response){
+            vm.state.cartDetail = response.data;
+            checkIfEditMode();
+            vm.uiState.loading = false;
+        })
+    }
+    else{
+        vm.state.cartDetail = angular.copy(vm.parentVm.state.cartDetails);
+        checkIfEditMode();
+        vm.uiState.loading = false;
+    }
+
+    function checkIfEditMode(){
+        vm.uiState.isViewMode = vm.state.cartDetail.status == "Sent";
+    }
+    
 
     (function init() {
         

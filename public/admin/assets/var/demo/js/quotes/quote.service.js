@@ -16,6 +16,7 @@
 
 
         quoteService.getQuotes = getQuotes;
+        quoteService.getQuoteDetails = getQuoteDetails;
         
         var baseQuoteAPIUrlv2 = '/api/2.0/quotes';
 
@@ -43,6 +44,19 @@
             }
 
             return quoteRequest($http.get([baseQuoteAPIUrlv2].join('/')).success(success).error(error));
+        }
+
+        function getQuoteDetails(_id) {
+
+            function success(data) {
+                quoteService.quotes = data;
+            }
+
+            function error(error) {
+                console.error('quoteService getQuoteDetails error: ', JSON.stringify(error));
+            }
+
+            return quoteRequest($http.get([baseQuoteAPIUrlv2, _id].join('/')).success(success).error(error));
         }
 
 		(function init() {
