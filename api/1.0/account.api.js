@@ -31,6 +31,10 @@ _.extend(api.prototype, baseApi.prototype, {
     dao: accountDao,
 
     initialize: function() {
+
+        //test security
+        //app.get(this.url('secure'), this.secureauth.bind(this, true, 'VIEW_ACCOUNT'), this.getCurrentAccount.bind(this));
+
         //TMP Accont
         app.get(this.url('tmp'), this.getTempAccount.bind(this));
         app.post(this.url('tmp'), this.saveOrUpdateTmpAccount.bind(this));

@@ -255,7 +255,7 @@ module.exports = {
         var fromEmail = notificationConfig.FROM_EMAIL;
         var fromName =  notificationConfig.WELCOME_FROM_NAME;
         var emailSubject = "Quote Request - Quote " + quote.id();
-        var emailTo = "ashu8006kumar@gmail.com"; // Need to update email address
+        var emailTo = notificationConfig.NEW_PURCHASE_ORDER_EMAIL_TO;
 
         accountDao.getAccountByID(accountId, function(err, account){
             if(account && account.get('business') && account.get('business').name) {
