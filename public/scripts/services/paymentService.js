@@ -119,8 +119,8 @@ mainApp.service('paymentService', ['$http', 'ENV', '$timeout',
     };
 
     this.validateIndigenousCoupon = function (couponId, fn) {
-      console.log('validateCoupon');
-      var apiUrl = baseUrl + ['integrations', 'payments', 'indigenous', 'coupons', couponId, 'validate'].join('/');
+      console.log('validateOrgCoupon');
+      var apiUrl = baseUrl + ['integrations', 'payments', 'org', 'coupons', couponId, 'validate'].join('/');
       $http.get(apiUrl)
         .success(function (data, status, headers, config) {
           fn(data);
