@@ -13,7 +13,7 @@ app.controller('QuoteDetailsModalController', ['$scope', '$timeout', 'toaster', 
     vm.calculateTotalPrice = calculateTotalPrice;
     vm.state.cartDetail = QuoteCartDetailsService.cartDetail;
     vm.removeItemFromCart = removeItemFromCart;
-    vm.createQuote = createQuote;
+    vm.saveQuote = saveQuote;
     vm.attachment = {};
     vm.checkIfValidEmail = checkIfValidEmail;
 
@@ -29,7 +29,7 @@ app.controller('QuoteDetailsModalController', ['$scope', '$timeout', 'toaster', 
        vm.state.cartDetail = QuoteCartDetailsService.cartDetail; 
     }
 
-    function createQuote(isSubmit){
+    function saveQuote(isSubmit){
 
         
         vm.uiState.saveLoading = true;

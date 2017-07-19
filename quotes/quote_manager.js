@@ -122,15 +122,15 @@ module.exports = {
         });
     },
 
-    createQuote: function(accountId, userId, quote, fn) {
+    saveOrUpdateQuote: function(accountId, userId, quote, fn) {
         var self = this;
-        log.debug(accountId, userId, '>> createQuote');
+        log.debug(accountId, userId, '>> saveOrUpdateQuote');
         quoteDao.saveOrUpdate(quote, function(err, value){
             if(err) {
                 self.log.error('Error saving quote: ' + err);
                 return fn(err, null);
             } else {
-                log.debug(accountId, userId, '<< createQuote');
+                log.debug(accountId, userId, '<< saveOrUpdateQuote');
                 fn(null, value);
             }
         });
