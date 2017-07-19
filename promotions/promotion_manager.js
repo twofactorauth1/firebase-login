@@ -388,7 +388,7 @@ var manager = {
         });
     },
 
-    generateReportForShipments: function(accountId, userId, promotionId, view, fn) {
+    generateReportForShipments: function(accountId, userId, promotionId, view, cardCodeAry, fn) {
         var self = this;
         self.log = log;
         self.log.debug(accountId, userId, '>> generateReportForShipments(' + view +')');
@@ -398,6 +398,16 @@ var manager = {
         var query = {
             promotionId:promotionId
         };
+        if(cardCodeAry && cardCodeAry.length > 0) {
+            var optRegexp = [];
+            cardCodeAry.forEach(function(opt){
+                optRegexp.push(  new RegExp(opt, "i") );
+            });
+            query = {
+                'promotionId':promotionId,
+                'cardCode': {$in:optRegexp}
+            };
+        } 
         promotionDao.findOne({_id: promotionId}, $$.m.Promotion, function(err, value){
             if(err) {
                 log.error(accountId, userId, 'Exception getting promotion: ' + err);
@@ -706,7 +716,7 @@ var manager = {
                             var toAddressAry = report.get('recipients');
                             var subject = report.get('subject');
                             var content = 'Please find attached promotion report';
-                            self.generateReportForShipments(accountId, null, promotionId, 'pdf', function(err, pdf){
+                            self.generateReportForShipments(accountId, null, promotionId, 'pdf', cardCodeAry, function(err, pdf){
                                 if(err) {
                                     self.log.error('Error generating pdf for report:', err);
                                     emailMessageManager.notifyAdmin(null, null, null, 'Error running promotion report', 'Failed to run report with id [' + reportId + ']', err, function(){});

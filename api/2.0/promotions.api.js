@@ -57,10 +57,49 @@ _.extend(api.prototype, baseApi.prototype, {
         var userId = self.userId(req);
         self.log.debug(accountId, userId, '>> generatePDF');
         var promotionId = req.params.promotionId;
-        promotionManager.generateReportForShipments(accountId, userId, promotionId, 'pdf' , function(err, stream){
-            stream.pipe(resp);
-            self.log.debug(accountId, userId, '<< generatePDF');
-        });
+        self._checkAccess(accountId, userId, 'promotions', function(err, isAllowed){
+            if(!isAllowed) {
+                self.log.debug(accountId, userId, '<< promotions [' + isAllowed + ']');
+                return self.sendResultOrError(resp, err, [], "Error listing shipments");
+            } else {
+                self.log.debug(accountId, userId, '>> generatePDF');
+                     
+                self._checkUserRole(req, function(err, userObj){
+                    var _isAdmin = false;
+                    var _isVendor = false;
+                    var _isVAR = false;
+                    var _isSecurematics = false;
+                    if(userObj){
+                        _isAdmin = _.contains(userObj.getPermissionsForAccount(accountId), 'admin');
+                        _isVendor = _.contains(userObj.getPermissionsForAccount(accountId), 'vendor-restricted');
+                        _isVAR = _.contains(userObj.getPermissionsForAccount(accountId), 'vendor');
+                        _isSecurematics = _.contains(userObj.getPermissionsForAccount(accountId), 'securematics');
+                    }
+                    if(_isAdmin || _isSecurematics || _isVendor) {
+                        promotionManager.generateReportForShipments(accountId, userId, promotionId, 'pdf', [],  function(err, stream){
+                            stream.pipe(resp);
+                            self.log.debug(accountId, userId, '<< generatePDF');
+                        });
+                    }
+                    else{                        
+                        self._getOrgConfig(accountId, userId, function(err, orgConfig){
+                            if(!orgConfig) {
+                                orgConfig = {};
+                            }
+                            var cardCodes = orgConfig.cardCodes || [];
+                            if(cardCodes.length){
+                                cardCodes = _.map(cardCodes, function(code){return code.toLowerCase()});
+                                promotionManager.generateReportForShipments(accountId, userId, promotionId, 'pdf', cardCodes, function(err, stream){
+                                    stream.pipe(resp);
+                                    self.log.debug(accountId, userId, '<< generatePDF');
+                                });
+                            }
+                        });
+                    }
+                }) 
+            }
+        })
+        
     },
 
     generateHTML: function(req, resp){
@@ -70,14 +109,54 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug(accountId, userId, '>> generateHTML');
 
         var promotionId = req.params.promotionId;
-        promotionManager.generateReportForShipments(accountId, userId, promotionId, 'html', function(err, stream){
-            resp.writeHead(200, {'Content-Type': 'text/html'});
-            resp.write(stream);
-            resp.end();
-            self.log.debug(accountId, userId, '<< generateHTML');
-        });
-    },
+        self._checkAccess(accountId, userId, 'promotions', function(err, isAllowed){
+            if(!isAllowed) {
+                self.log.debug(accountId, userId, '<< promotions [' + isAllowed + ']');
+                return self.sendResultOrError(resp, err, [], "Error listing shipments");
+            } else {
+                self.log.debug(accountId, userId, '>> generateHTML');
+                self._checkUserRole(req, function(err, userObj){
+                    var _isAdmin = false;
+                    var _isVendor = false;
+                    var _isVAR = false;
+                    var _isSecurematics = false;
+                    if(userObj){
+                        _isAdmin = _.contains(userObj.getPermissionsForAccount(accountId), 'admin');
+                        _isVendor = _.contains(userObj.getPermissionsForAccount(accountId), 'vendor-restricted');
+                        _isVAR = _.contains(userObj.getPermissionsForAccount(accountId), 'vendor');
+                        _isSecurematics = _.contains(userObj.getPermissionsForAccount(accountId), 'securematics');
+                    }
+                    if(_isAdmin || _isSecurematics || _isVendor) {
+                        promotionManager.generateReportForShipments(accountId, userId, promotionId, 'html', [], function(err, stream){
+                            resp.writeHead(200, {'Content-Type': 'text/html'});
+                            resp.write(stream);
+                            resp.end();
+                            self.log.debug(accountId, userId, '<< generateHTML');
+                        });
+                    }
+                    else{                        
+                        self._getOrgConfig(accountId, userId, function(err, orgConfig){
+                            if(!orgConfig) {
+                                orgConfig = {};
+                            }
+                            var cardCodes = orgConfig.cardCodes || [];
+                            if(cardCodes.length){
+                                cardCodes = _.map(cardCodes, function(code){return code.toLowerCase()});
+                                promotionManager.generateReportForShipments(accountId, userId, promotionId, 'html', cardCodes, function(err, stream){
+                                    resp.writeHead(200, {'Content-Type': 'text/html'});
+                                    resp.write(stream);
+                                    resp.end();
+                                    self.log.debug(accountId, userId, '<< generateHTML');
+                                });
+                            }
+                        });
+                    }
+                })
+            }
+        })    
+    },      
 
+        
     listPromotions: function(req, resp) {
         var self = this;
         var accountId = parseInt(self.accountId(req));

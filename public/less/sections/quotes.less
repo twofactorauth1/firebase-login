@@ -30,12 +30,23 @@
 		    text-overflow: ellipsis;
 		    white-space: nowrap;
 		    max-width: 1px;
-		    div{
+		    div.text-adjust-inner-content{
 		    	display:inline-block;
 		    	max-width: 102%;
 		    }
 		    div.tooltip{
 		    	max-width: 200px !important;
+		    }
+		}
+	}
+
+	.table.grid{
+		td.text-adjust-col{
+		    div.text-adjust-inner-content{
+		    	overflow: hidden;
+			    text-overflow: ellipsis;
+			    white-space: nowrap;
+			    display: inline;
 		    }
 		}
 	}
