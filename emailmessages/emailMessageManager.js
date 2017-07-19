@@ -2517,6 +2517,7 @@ var emailMessageManager = {
         var self = this;
         self.log.debug(accountId, userId, '>> getCampaignPerformanceReport');
         var startTime = null;
+        var tmpCollection = 'cpr_' + accountId + '_' + campaignId;
         async.waterfall([
             function(cb) {
                 var stageAry = [];
@@ -2524,7 +2525,7 @@ var emailMessageManager = {
                 stageAry.push(match);
                 var project = {$project:{receiver:1, deliveredDate:1, openedDate:1, clickedDate:1, emailId:1, _id:1}};
                 stageAry.push(project);
-                var outStage= {"$out": "rjd_opens"};
+                var outStage= {"$out": tmpCollection};
                 stageAry.push(outStage);
                 startTime = new Date().getTime();
                 dao.aggregateWithCustomStages(stageAry, $$.m.Emailmessage, function(err, results){
@@ -2615,7 +2616,8 @@ var emailMessageManager = {
             }
         ], function(err, csv){
             self.log.debug(accountId, userId, '<< getCampaignPerformanceReport');
-            return fn(err, csv);
+            fn(err, csv);
+            dao.dropCollection(tmpCollection, function(err, result){self.log.debug('dropped collection ' + tmpCollection)});
         });
     },
 
