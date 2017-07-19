@@ -49,10 +49,11 @@
         filter issue
         */
         $scope.filterFn = function(item){
-            if(!($scope.contact.tags instanceof Array))
-                return true
-            var isSelected=$scope.contact.tags.filter(tag=>                     tag.label == item.label).length > 0;
-            return !isSelected
+            if(!($scope.contact.tags instanceof Array)){
+                return true;
+            }
+            var isSelected= $scope.contact.tags.filter(tag=>tag.label == item.label).length > 0;
+            return !isSelected;
         };
 
         /*
