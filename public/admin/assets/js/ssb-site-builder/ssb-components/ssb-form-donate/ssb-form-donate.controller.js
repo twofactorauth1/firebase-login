@@ -347,7 +347,7 @@
                             if (vm.component.redirectType === 'external') {
                                 window.location.href = 'http://' + vm.component.redirectUrl;
                             }
-                        }, 1000);
+                        }, 2000);
 
                     }
 
