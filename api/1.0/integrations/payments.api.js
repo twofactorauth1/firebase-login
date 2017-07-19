@@ -102,6 +102,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url('indigenous/plans/:planId'), this.getIndigenousPlan.bind(this));
         app.post(this.url('indigenous/plans/:planId/subscribe'), this.subscribeToIndigenous.bind(this));
         app.get(this.url('indigenous/coupons/:name/validate'), this.setup.bind(this), this.validateIndigenousCoupon.bind(this));
+        app.get(this.url('org/coupons/:name/validate'), this.setup.bind(this), this.validateOrgCoupon.bind(this));
 
         //Coupons
         app.get(this.url('coupons'), this.isAuthApi.bind(this), this.listCoupons.bind(this));
@@ -579,16 +580,56 @@ _.extend(api.prototype, baseApi.prototype, {
     validateIndigenousCoupon: function(req, resp) {
         var self = this;
         self.log.debug('>> validateIndigenousCoupon');
-        var couponName = req.params.name;
-        var accessToken = null;
-        paymentsManager.getStripeCouponByName(couponName, accessToken, function(err, coupon){
-            self.log.debug('<< validateIndigenousCoupon');
+        var accountId = parseInt(self.currentAccountId(req));
+        self._getOrgAccessTokenFromAccountId(accountId, function(err, accessToken){
+            var couponName = req.params.name;
+
+            paymentsManager.getStripeCouponByName(couponName, accessToken, function(err, coupon){
+                self.log.debug('<< validateIndigenousCoupon');
+                if(err) {
+                    self.sendResult(resp, {valid:false});
+                } else {
+                    self.sendResult(resp, coupon);
+                }
+
+            });
+        });
+
+    },
+
+    validateOrgCoupon: function(req, resp) {
+        var self = this;
+        self.log.debug('>> validateOrgCoupon');
+        var accountId = parseInt(self.currentAccountId(req));
+        accountDao.getAccountByID(accountId, function(err, account){
             if(err) {
+                self.log.error('Error getting account:', err);
                 self.sendResult(resp, {valid:false});
             } else {
-                self.sendResult(resp, coupon);
+                if(account.get('orgId') && account.get('orgId') !== 0) {
+                    self._getOrgAccessToken(account.get('orgId'), function(err, accessToken){
+                        var couponName = req.params.name;
+                        paymentsManager.getStripeCouponByName(couponName, accessToken, function(err, coupon){
+                            self.log.debug('<< validateOrgCoupon [' + account.get('orgId') + ']');
+                            if(err) {
+                                self.sendResult(resp, {valid:false});
+                            } else {
+                                self.sendResult(resp, coupon);
+                            }
+                        });
+                    });
+                } else {
+                    var couponName = req.params.name;
+                    paymentsManager.getStripeCouponByName(couponName, null, function(err, coupon){
+                        self.log.debug('<< validateOrgCoupon [0]');
+                        if(err) {
+                            self.sendResult(resp, {valid:false});
+                        } else {
+                            self.sendResult(resp, coupon);
+                        }
+                    });
+                }
             }
-
         });
     },
 
@@ -2317,6 +2358,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
     _getOrgAccessToken: function(orgId, fn) {
         var self = this;
+        self.log.debug('>> getOrgAccessToken(' + orgId + ')');
         orgDao.getById(orgId, $$.m.Organization, function(err, organization){
             if(organization) {
                 accountDao.getAccountByID(organization.get('adminAccount'), function(err, account){
@@ -2329,8 +2371,10 @@ _.extend(api.prototype, baseApi.prototype, {
                             }
                         });
                         if(creds && creds.accessToken) {
+                            self.log.debug('Returning:', creds.accessToken);
                             return fn(null, creds.accessToken);
                         } else {
+                            self.log.debug('Returning null');
                             return fn(null, null);
                         }
                     } else {
@@ -2345,6 +2389,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
     _getOrgAccessTokenFromAccountId: function(accountId, fn) {
         var self = this;
+        self.log.debug('>> getOrgAccessTokenFromAccountId(' + accountId + ')');
         accountDao.getAccountByID(accountId, function(err, account){
             if(err || !account) {
                 fn(err);
