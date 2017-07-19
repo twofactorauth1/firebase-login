@@ -101,7 +101,11 @@ function quoteComponentController($scope, $attrs, $filter, $modal, $timeout, $lo
 
     function viewQuoteDetails(quote){
         vm.state.cartDetails = quote;
-        vm.openModal('quote-details-modal','QuoteDetailsController','lg')
+        var _modal = 'quote-details-modal';
+        if(quote.status == "Sent"){
+            _modal = 'quote-details-view-modal';
+        }
+        vm.openModal(_modal, 'QuoteDetailsController', 'lg')
     }
     
     function init(element) {

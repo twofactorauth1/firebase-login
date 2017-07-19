@@ -42,8 +42,9 @@
                     {{item.vendor}}
                 </label>
             </div>
-            <div class="col-xs-6 text-right">
-                <input type="text" ng-model="item.pricing" class="form-control spinner-input quantity" placeholder="rssp pps">
+            <div class="col-xs-6">
+                <input ng-if="vm.state.cartDetail.status != 'Sent'" type="text" ng-model="item.pricing" class="form-control spinner-input quantity" placeholder="rssp pps">
+                <span ng-if="vm.state.cartDetail.status == 'Sent'">{{item.pricing}}</span>
             </div>
             <div class="clearfix"></div>
         </li>
