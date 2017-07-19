@@ -1164,6 +1164,9 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
               $scope.currentPage = _.find($scope.filteredPages, function (page) {
                   return page.handle === $scope.linkPage;
               });
+            $timeout(function () {
+                $scope.updateSubIndex();
+            },1000);
         })
       })
         

@@ -512,8 +512,7 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
     };
   };
  $scope.addSubLink = function (index) {
-     debugger
-     edit[index]=true;
+     /*edit[index]=true;
      var alink=undefined;
      if ($scope.componentEditing.customnav) {
         if($scope.componentEditing.linkLists.size<=index){
@@ -544,7 +543,7 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
                 $scope.updateLinkList();
               })
           }, 500);
-     }
+     }*/
   };
   /*
    * @setLinkUrl
@@ -687,7 +686,6 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
    */
 
   $scope.addLinkToNav = function () {
-debugger
     if ($scope.newLink && $scope.newLink.linkTitle && $scope.newLink.linkUrl) {
       if($scope.checkDuplicateLinkTitle($scope.newLink.linkTitle, $scope.componentEditing.customnav)){
         return;
