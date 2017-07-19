@@ -152,9 +152,10 @@
               }
           },
           quote:{
-            "create": this.orgConfigAndPermissions.quotes && this.orgConfigAndPermissions.isAdminUser,
-            "edit": this.orgConfigAndPermissions.quotes && this.orgConfigAndPermissions.isAdminUser,
-            "delete": this.orgConfigAndPermissions.quotes &&  this.orgConfigAndPermissions.isAdminUser,
+            "view": this.orgConfigAndPermissions.quotes && (this.orgConfigAndPermissions.isAdminUser || this.orgConfigAndPermissions.isVendorWithCardCodes || this.orgConfigAndPermissions.isSecurematicsUser),
+            "create": this.orgConfigAndPermissions.quotes && (this.orgConfigAndPermissions.isAdminUser || this.orgConfigAndPermissions.isVendorWithCardCodes || this.orgConfigAndPermissions.isSecurematicsUser),
+            "edit": this.orgConfigAndPermissions.quotes && (this.orgConfigAndPermissions.isAdminUser || this.orgConfigAndPermissions.isVendorWithCardCodes || this.orgConfigAndPermissions.isSecurematicsUser),
+            "delete": this.orgConfigAndPermissions.quotes && (this.orgConfigAndPermissions.isAdminUser || this.orgConfigAndPermissions.isVendorWithCardCodes || this.orgConfigAndPermissions.isSecurematicsUser),
             "showPartner": this.orgConfigAndPermissions.quotes && this.orgConfigAndPermissions.isAdminUser
           }
       }
