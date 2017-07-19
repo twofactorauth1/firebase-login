@@ -35,7 +35,7 @@ app.controller('QuoteDetailsModalController', ['$scope', '$timeout', 'toaster', 
         vm.uiState.saveLoading = true;
         var _quote = angular.copy(vm.state.cartDetail);
         delete _quote._id;
-        QuoteCartDetailsService.saveQuote(_quote).then(function (response) {
+        QuoteCartDetailsService.createQuote(_quote).then(function (response) {
             vm.state.quote = response.data;
             if(vm.attachment && vm.attachment.name){
                 QuoteCartDetailsService.updateQuoteAttachment(vm.attachment, vm.state.quote._id).then(function (quote){
