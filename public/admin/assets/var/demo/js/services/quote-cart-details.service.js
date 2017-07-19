@@ -191,9 +191,10 @@
             }
         }
 
-        function removeItemFromCart(index) {
+        function removeItemFromCart(index, callback) {
             quoteCartService.cartDetail.items.splice(index, 1);
             setVendorSpecialPricing();
+            callback();
         }
 
 

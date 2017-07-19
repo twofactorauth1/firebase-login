@@ -22,7 +22,11 @@ app.controller('QuoteDetailsModalController', ['$scope', '$timeout', 'toaster', 
     }
 
     function removeItemFromCart(index){
-    	QuoteCartDetailsService.removeItemFromCart(index);
+    	QuoteCartDetailsService.removeItemFromCart(index, refreshCart);
+    }
+
+    function refreshCart(){
+       vm.state.cartDetail = QuoteCartDetailsService.cartDetail; 
     }
 
     function createQuote(isSubmit){
