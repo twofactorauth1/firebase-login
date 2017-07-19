@@ -128,6 +128,15 @@ if(process.env.ROOT_HOST === 'indigenous.io') {
 }
 
 //---------------------------------------------------------
+//  Scheduled Jobs
+//---------------------------------------------------------
+
+var runJobs = false;
+if(process.env.RUN_SCHEDULED_JOBS === 'true') {
+    runJobs = true;
+}
+
+//---------------------------------------------------------
 //  GROUP ADMIN USERS
 //---------------------------------------------------------
 var groupAdminUserIDs = process.env.GROUP_ADMIN_USERIDS || '1,4';
@@ -155,6 +164,8 @@ module.exports = {
     nonProduction:nonProduction,
     trialLength: 30,
     internalSubscription:'EVERGREEN',
+
+    runJobs: runJobs,
 
     getServerUrl: function (subdomain, domain) {
         if (subdomain == null && domain == null) {
