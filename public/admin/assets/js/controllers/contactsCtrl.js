@@ -45,7 +45,17 @@
             column: '',
             details: {}
         };
-
+        $scope.customTagFilert = function(item){
+           var showIndropDown=true
+           if($scope.contact.tags.length>0){
+            _.each($scope.contact.tags, function (tag) {
+                if(showIndropDown && tag.label==item.label){
+                    showIndropDown=tag=false;
+                }
+            })
+        }
+        return showIndropDown;
+    };
 
         /*
          * @getContacts
@@ -307,7 +317,7 @@
          */
 
         $scope.contact = {};
-        $scope.contact.tags = {};
+        $scope.contact.tags = [];
 
 
         $scope.tagToContact = function (value) {
@@ -363,7 +373,7 @@
             ContactService.saveContact(tempContact, function (returnedContact) {
                 $scope.saveLoading = false;
                 $scope.fullName = '';
-                $scope.contact.tags = {};
+                $scope.contact.tags = [];
                 $scope.contact.email = '';
                 $scope.duplicateContact = false;
                 $scope.closeModal();
