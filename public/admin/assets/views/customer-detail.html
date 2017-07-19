@@ -55,6 +55,10 @@
                                                     <td ng-if="customer.billing.plan == 'NO_PLAN_ARGUMENT'">{{customer.trialDaysRemaining}}  <a ng-click="openSimpleModal('edit-trial-days-modal')"><i class="fa fa-pencil"></i></a></td>
                                                     <td ng-if="customer.billing.plan != 'NO_PLAN_ARGUMENT'">NA</td>
                                                 </tr>
+                                                <tr ng-if="customer.billing.cancellationDate">
+                                                    <td>Cancellation Date:</td>
+                                                    <td>{{customer.billing.cancellationDate | date:'M/d/yy'}}<span ng-if="customer.billing.cancellationReason"> ({{customer.billing.cancellationReason}})</span></td>
+                                                </tr>
                                                 <tr>
                                                     <td>Account Locked</td>
                                                     <td>{{customer.locked_sub}}</td>
