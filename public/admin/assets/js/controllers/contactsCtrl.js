@@ -50,7 +50,7 @@
            if($scope.contact.tags.length>0){
             _.each($scope.contact.tags, function (tag) {
                 if(showIndropDown && tag.label==item.label){
-                    showIndropDown=tag=false;
+                    showIndropDown=false;
                 }
             })
         }
