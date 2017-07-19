@@ -2,7 +2,7 @@
     <div class="row">
         <div class="col-sm-8">
             <h1 class="mainTitle">Quotes</h1>
-            <span ng-if="vm.state.quotes.length" class="mainDescription">There {{vm.state.quotes.length > 1 ? 'are' : 'is'}} currently {{vm.state.quotes.length}} qoute<span ng-if="vm.state.quotes.length > 1">s</span>. <span ng-if="vm.showFilteredRecords()"> ({{filteredCollection.length || 0}} in filtered view)</span></span>
+            <span ng-if="vm.state.quotes.length" class="mainDescription">There {{vm.state.quotes.length > 1 ? 'are' : 'is'}} currently {{vm.state.quotes.length}} quote<span ng-if="vm.state.quotes.length > 1">s</span>. <span ng-if="vm.showFilteredRecords()"> ({{filteredCollection.length || 0}} in filtered view)</span></span>
             <span class="mainDescription" ng-if="vm.state.quotes && !vm.state.quotes.length">There are currently no quotes</span>
         </div>
     </div>
@@ -74,7 +74,7 @@
 	        </thead>
 	        <tbody>
 	            <tr ng-repeat="quote in vm.displayedQuotes" class="product-item">
-                    
+
                     <td class="title-col text-adjust-col"><strong>Title: </strong><div class="name-block-container text-adjust-inner-content"></span><span class="" title="{{quote.title}}">{{quote.title || '&nbsp;'}}</span></div></td>
 
                     <td class="partner-col hidden-xs text-adjust-col" ng-if="vm.state.orgCardAndPermissions.permissions.quote.showPartner"><strong>Partner: </strong><div class="text-adjust-inner-content">{{quote.partner || '&nbsp;'}}</div></td>
@@ -91,7 +91,7 @@
 	                <td class="view-col view-quote-details"><strong>View/Edit: </strong>
 	                	<span ng-click="vm.viewQuoteDetails(quote)"><i class="fa fa-pencil-square-o"></i></span>
 	                </td>
-	                
+
 	            </tr>
 	        </tbody>
 	        <tfoot>
