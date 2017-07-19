@@ -474,7 +474,7 @@ var mongodao = {
         var collection = this.getTable(type);
         var mongoColl = this.mongo(collection);
 
-        mongoColl.aggregate(stageAry, function (err, value) {
+        mongoColl.aggregate(stageAry, {allowDiskUse:true}, function (err, value) {
             if (!err) {
                 fn(null, value);
             } else {
