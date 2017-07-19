@@ -13,7 +13,7 @@ app.controller('QuoteDetailsModalController', ['$scope', '$timeout', 'toaster', 
     vm.calculateTotalPrice = calculateTotalPrice;
     vm.state.cartDetail = QuoteCartDetailsService.cartDetail;
     vm.removeItemFromCart = removeItemFromCart;
-    vm.createQuote = createQuote;
+    vm.saveQuote = saveQuote;
     vm.attachment = {};
     vm.checkIfValidEmail = checkIfValidEmail;
 
@@ -29,13 +29,13 @@ app.controller('QuoteDetailsModalController', ['$scope', '$timeout', 'toaster', 
        vm.state.cartDetail = QuoteCartDetailsService.cartDetail; 
     }
 
-    function createQuote(isSubmit){
+    function saveQuote(isSubmit){
 
         
         vm.uiState.saveLoading = true;
         var _quote = angular.copy(vm.state.cartDetail);
         delete _quote._id;
-        QuoteCartDetailsService.createQuote(_quote).then(function (response) {
+        QuoteCartDetailsService.saveQuote(_quote).then(function (response) {
             vm.state.quote = response.data;
             if(vm.attachment && vm.attachment.name){
                 QuoteCartDetailsService.updateQuoteAttachment(vm.attachment, vm.state.quote._id).then(function (quote){
