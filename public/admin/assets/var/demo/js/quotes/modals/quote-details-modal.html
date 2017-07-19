@@ -1,13 +1,13 @@
 <script type="text/ng-template" id="quote-details-modal">
-    <div class="modal-header quote-details-modal-header">
+    <div class="modal-header">
         <button type="button" class="close" ng-click="closeModal()">
             <span aria-hidden="true">&times;</span>
             <span class="sr-only">Close</span>
         </button>
-        <h4 class="modal-title">
+        <h3 class="modal-title">
             <span class="ti-quote-right"></span>
             Quote ID: {{vm.state.cartDetail._id}}
-        </h4>
+        </h3>
     </div>
     <form name="form" role="form" id="form">
         <div class="modal-body bg-white quote-details-modal quote-cart-details" style="min-height:200px" stop-event="touchend">
