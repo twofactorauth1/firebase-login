@@ -98,6 +98,30 @@ module.exports = {
         });
     },
 
+    getQuoteDetails: function(accountId, userId, quoteId, userFilter, fn) {
+        var self = this;
+        self.log = log;
+        log.debug(accountId, userId, '>> getQuoteDetails');
+        var query = {
+            'accountId':accountId,
+            _id: quoteId
+        };
+
+        if(userFilter){
+            query.userId = userFilter;
+        }
+
+        quoteDao.findOne(query, $$.m.Quote, function(err, value){
+            if(err) {
+                log.error('Exception getting quote details: ' + err);
+                fn(err, null);
+            } else {
+                log.debug(accountId, userId, '<< getQuoteDetails');
+                fn(null, value);
+            }
+        });
+    },
+
     createQuote: function(accountId, userId, quote, fn) {
         var self = this;
         log.debug(accountId, userId, '>> createQuote');

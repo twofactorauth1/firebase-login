@@ -43,8 +43,8 @@
                 </label>
             </div>
             <div class="col-xs-6">
-                <input ng-if="vm.state.cartDetail.status != 'Sent'" type="text" ng-model="item.pricing" class="form-control spinner-input quantity" placeholder="rssp pps">
-                <span ng-if="vm.state.cartDetail.status == 'Sent'">{{item.pricing}}</span>
+                <input ng-if="!vm.uiState.isViewMode" type="text" ng-model="item.pricing" class="form-control spinner-input quantity" placeholder="rssp pps">
+                <span ng-if="vm.uiState.isViewMode">{{item.pricing}}</span>
             </div>
             <div class="clearfix"></div>
         </li>
