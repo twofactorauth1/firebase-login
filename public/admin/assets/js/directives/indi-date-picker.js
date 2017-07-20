@@ -31,9 +31,18 @@ app.directive('indiDatepicker',function($compile,$timeout){
            */
 
           scope.open = function ($event) {
+            var ele = element;
             $event.preventDefault();
             $event.stopPropagation();
-            scope.datePicker.isOpen = true;
+            if($("div[click-input][show-single] ul.dropdown-menu").length){
+              $("div[click-input][show-single] ul.dropdown-menu").hide();
+              $timeout(function() {
+                scope.datePicker.isOpen = true;
+                $(element).find("ul.dropdown-menu").show();
+              }, 0);
+            }
+            else            
+              scope.datePicker.isOpen = true;
           };
 
           /*
