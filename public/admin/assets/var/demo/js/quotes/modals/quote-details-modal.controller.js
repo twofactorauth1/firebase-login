@@ -1,6 +1,6 @@
 'use strict';
 /*global app*/
-app.controller('QuoteDetailsModalController', ['$scope', '$timeout', 'toaster', 'SweetAlert', 'formValidations', 'QuoteCartDetailsService', 'UserPermissionsConfig', function ($scope, $timeout, toaster, SweetAlert, formValidations, QuoteCartDetailsService, UserPermissionsConfig) {
+app.controller('QuoteDetailsModalController', ['$scope', '$rootScope', '$timeout', 'toaster', 'SweetAlert', 'formValidations', 'QuoteCartDetailsService', 'UserPermissionsConfig', function ($scope, $rootScope, $timeout, toaster, SweetAlert, formValidations, QuoteCartDetailsService, UserPermissionsConfig) {
 
     var vm = this;
 
@@ -63,6 +63,7 @@ app.controller('QuoteDetailsModalController', ['$scope', '$timeout', 'toaster', 
             QuoteCartDetailsService.submitQuote(vm.state.quote).then(function(){
                 QuoteCartDetailsService.deleteCartDetails(vm.state.cartDetail).then(function(){
                     toaster.pop("success", "Quote submitted successfully");
+                    $rootScope.$broadcast('$quoteAddedFromCart');
                     $scope.closeModal();
                 })
             })
@@ -70,6 +71,7 @@ app.controller('QuoteDetailsModalController', ['$scope', '$timeout', 'toaster', 
         else{
             QuoteCartDetailsService.deleteCartDetails(vm.state.cartDetail).then(function(){
                 toaster.pop("success", "Quote saved successfully");
+                $rootScope.$broadcast('$quoteAddedFromCart');
                 $scope.closeModal();
             })
         }
