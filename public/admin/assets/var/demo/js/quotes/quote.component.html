@@ -47,7 +47,7 @@
 	        <thead ng-class="{'bg-white': tableView == 'grid'}" sticky offset="65" sticky-class="sticky-header-class">
 	            <tr>
 	                <th class="title-col" st-sort="title" style="white-space: nowrap">Title</th>
-	                <th class="partner-col hidden-xs" ng-if="vm.state.orgCardAndPermissions.permissions.quote.showPartner" st-sort="partner" style="white-space: nowrap">Partner</th>
+	                <th class="partner-col hidden-xs" ng-if="vm.state.orgCardAndPermissions.permissions.quote.showPartner" st-sort="companyName" style="white-space: nowrap">Partner</th>
 	                <th class="customer-col" st-sort="customer" style="white-space: nowrap">Customer</th>
 	                <th class="vendor-col hidden-xs" style="white-space: nowrap">Vendors</th>
 	                <th class="items-col hidden-xs" style="white-space: nowrap">Items</th>
@@ -60,7 +60,7 @@
 	                	<input st-search="title" ng-model="vm.uiState.fieldSearch.title" placeholder="Title" class="form-control" type="search" />
 	                </th>
 	                <th class="partner-col hidden-xs" ng-if="vm.state.orgCardAndPermissions.permissions.quote.showPartner">
-	                	<input st-search="partner" ng-model="vm.uiState.fieldSearch.partner" placeholder="Partner" class="form-control" type="search" />
+	                	<input st-search="companyName" ng-model="vm.uiState.fieldSearch.companyName" placeholder="Partner" class="form-control" type="search" />
                 	</th>
 	                <th class="customer-col">
 	                	<input st-search="customer" ng-model="vm.uiState.fieldSearch.customer" placeholder="Customer" class="form-control" type="search" />
@@ -77,7 +77,8 @@
 
                     <td class="title-col text-adjust-col"><strong>Title: </strong><div class="name-block-container text-adjust-inner-content"></span><span class="" title="{{quote.title}}">{{quote.title || '&nbsp;'}}</span></div></td>
 
-                    <td class="partner-col hidden-xs text-adjust-col" ng-if="vm.state.orgCardAndPermissions.permissions.quote.showPartner"><strong>Partner: </strong><div class="text-adjust-inner-content">{{quote.partner || '&nbsp;'}}</div></td>
+                    <td class="partner-col hidden-xs text-adjust-col" ng-if="vm.state.orgCardAndPermissions.permissions.quote.showPartner"><strong>Partner: </strong><div tooltip="{{quote.companyName}}" class="text-adjust-inner-content">{{quote.companyName || '&nbsp;'}}</div></td>
+
                     <td class="customer-col text-adjust-col"><strong>Customer: </strong><div class="text-adjust-inner-content">{{quote.customer || '&nbsp;'}}</div></td>
 
 	                <td class="vendor-col hidden-xs text-adjust-col"><strong>Vendors: </strong><div class="text-capitalize text-adjust-inner-content" tooltip="{{vm.getVendors(quote)}}">{{vm.getVendors(quote) || '&nbsp;'}}</div></td>

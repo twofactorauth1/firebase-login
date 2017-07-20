@@ -128,6 +128,9 @@ html
         .title .value{
             font-weight: normal !important;
         }
+        .pdfLink{
+            text-align: center;
+        }
 
   body(leftmargin='0', marginwidth='0', topmargin='0', marginheight='0', offset='0')
     center
@@ -166,3 +169,6 @@ html
                                             each vendor in vendorSpecialPricing
                                                 if vendor.pricing
                                                     li !{vendor.vendor} - !{vendor.pricing}
+                                if attachment.url
+                                    div.pdfLink
+                                        a(href='#{attachment.url}') !{attachment.name}                                                    

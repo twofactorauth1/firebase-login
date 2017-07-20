@@ -18,13 +18,14 @@
         quoteCartService.loading = {value: 0};
 
         var baseQuotesAPIUrlv2 = '/api/2.0/quotes';
+        var baseCustomerAPIUrl = '/api/1.0/integrations/zi';
 
         quoteCartService.createQuote = createQuote;
         quoteCartService.updateQuoteAttachment = updateQuoteAttachment;
         quoteCartService.deleteCartDetails = deleteCartDetails;
         quoteCartService.saveLoading = false;
         quoteCartService.submitQuote = submitQuote;
-
+        quoteCartService.getCustomers = getCustomers;
         quoteCartService.cartDetail = {
             items: []
         }
@@ -219,6 +220,23 @@
             return totalPrice || 0;
         }
 
+        /**
+            * Get list of all VARs
+        */
+        function getCustomers() {
+
+            function success(data) {
+                quoteCartService.customers = data.results;
+            }
+
+            function error(error) {
+                quoteCartService.customers = [];
+                console.error('quoteCartService getCustomers error: ', JSON.stringify(error));
+            }
+
+            return quoteServiceRequest($http.get([baseCustomerAPIUrl, 'customers'].join('/')).success(success).error(error));
+        }
+
 
         $rootScope.$watch(function() { return quoteCartService.cartDetail.items }, _.debounce(function (items, oldItems) {
             if (!quoteCartService.saveLoading && quoteCartService.cartDetail._id && items && oldItems && !angular.equals(items, oldItems)) {
@@ -228,6 +246,7 @@
 
         (function init() {
             quoteCartService.getCartItemDetails();
+            quoteCartService.getCustomers();
         })();
     return quoteCartService;       
     }

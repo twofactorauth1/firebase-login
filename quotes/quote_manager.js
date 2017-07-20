@@ -150,9 +150,7 @@ module.exports = {
         };
 
         if(file.path) {
-            // Need to update bucket
-            var bucket = awsConfig.BUCKETS.PROMOTIONS;
-            //var bucket = awsConfig.BUCKETS.QUOTES;
+            var bucket = awsConfig.BUCKETS.QUOTES;
             var subdir = 'account_' + accountId;
             if(appConfig.nonProduction === true) {
                 subdir = 'test_' + subdir;
@@ -275,7 +273,7 @@ module.exports = {
         component.showVendorPricing = _.filter(_.pluck(quote.get("vendorSpecialPricing"), 'pricing'), function(item){
             return item != null
         }).length;
-        
+        component.attachment = quote.get("attachment") || {};
         var fromEmail = notificationConfig.FROM_EMAIL;
         var fromName =  notificationConfig.WELCOME_FROM_NAME;
         var emailSubject = "Quote Request - Quote " + quote.id();

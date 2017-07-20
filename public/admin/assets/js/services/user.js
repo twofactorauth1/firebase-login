@@ -245,6 +245,15 @@
         });
     };
 
+    this.checkUserByUsername=function(username,fn){
+        var findUserUrl=baseUrl+['user','exists',username].join('/');
+        $http.get(findUserUrl).success(function(data){
+            fn(data);
+        }).error(function(err){
+            fn(err);
+        });
+    };
+
     this.getUserOrganizationConfig = function(fn){
         var apiUrl = baseUrl + ['user','orgConfig'].join('/');
         $http.get(apiUrl).success(function(data){

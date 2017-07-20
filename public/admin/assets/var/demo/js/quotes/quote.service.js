@@ -14,14 +14,16 @@
             
         };
 
-
+        var baseQuoteAPIUrlv2 = '/api/2.0/quotes';
+        var baseCustomerAPIUrl = '/api/1.0/integrations/zi';
+        
         quoteService.getQuotes = getQuotes;
         quoteService.getQuoteDetails = getQuoteDetails;
         quoteService.updateQuote = updateQuote;
         quoteService.updateQuoteAttachment = updateQuoteAttachment;
         quoteService.submitQuote = submitQuote;
+        quoteService.getCustomers = getCustomers;
         
-        var baseQuoteAPIUrlv2 = '/api/2.0/quotes';
 
         quoteService.loading = {value: 0};
 
@@ -68,7 +70,7 @@
             }
 
             function error(error) {
-                console.error('quoteCartService updateQuote error: ', JSON.stringify(error));
+                console.error('quoteService updateQuote error: ', JSON.stringify(error));
             }
 
             var apiUrl = [baseQuoteAPIUrlv2, quote._id].join('/');
@@ -83,7 +85,7 @@
             }
 
             function error(error) {
-                console.error('quoteCartService updateQuoteAttachment error: ', JSON.stringify(error));
+                console.error('quoteService updateQuoteAttachment error: ', JSON.stringify(error));
             }
 
             var _formData = new FormData();
@@ -102,7 +104,7 @@
             }
 
             function error(error) {
-                console.error('quoteCartService submitQuote error: ', JSON.stringify(error));
+                console.error('quoteService submitQuote error: ', JSON.stringify(error));
             }
 
             var apiUrl = [baseQuoteAPIUrlv2, quote._id, "submit"].join('/');
@@ -111,8 +113,25 @@
             return quoteServiceRequest($http.post(apiUrl, quote).success(success).error(error));
         }
 
+        /**
+            * Get list of all VARs
+        */
+        function getCustomers() {
+
+            function success(data) {
+                quoteService.customers = data.results;
+            }
+
+            function error(error) {
+                quoteService.customers = [];
+                console.error('quoteService getCustomers error: ', JSON.stringify(error));
+            }
+
+            return quoteServiceRequest($http.get([baseCustomerAPIUrl, 'customers'].join('/')).success(success).error(error));
+        }
+
 		(function init() {
-           
+           quoteService.getCustomers();
 		})();
 
 

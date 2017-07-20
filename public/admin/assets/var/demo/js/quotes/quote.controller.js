@@ -126,6 +126,10 @@ function quoteComponentController($scope, $attrs, $filter, $modal, $timeout, $lo
         getQuotes();
     }
 
+        $scope.$on('$quoteAddedFromCart', function(event, account) {
+            vm.uiState.loading = true;
+            getQuotes();
+        });
 }
 
 })();

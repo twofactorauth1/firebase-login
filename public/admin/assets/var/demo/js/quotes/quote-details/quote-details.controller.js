@@ -2,17 +2,18 @@
 
 app.controller('QuoteDetailsController', QuoteDetailsController);
 
-QuoteDetailsController.$inject = ['$scope', '$timeout', 'toaster', 'SweetAlert', 'formValidations', 'parentVm', 'QuoteService'];
+QuoteDetailsController.$inject = ['$scope', '$timeout', 'toaster', 'SweetAlert', 'formValidations', 'parentVm', 'QuoteService', 'UserPermissionsConfig'];
 /* @ngInject */
-function QuoteDetailsController($scope, $timeout, toaster, SweetAlert, formValidations, parentVm, QuoteService) {
+function QuoteDetailsController($scope, $timeout, toaster, SweetAlert, formValidations, parentVm, QuoteService, UserPermissionsConfig) {
 
     var vm = this;
 
     vm.uiState = {
-        loading: true
+        loading: true,
+        loadingDetailsModal: true
     };
 
-    vm.state = {};
+    
     vm.parentVm = parentVm;
     vm.initAttachment = initAttachment;
     vm.calculateTotalPrice = calculateTotalPrice;
@@ -20,7 +21,16 @@ function QuoteDetailsController($scope, $timeout, toaster, SweetAlert, formValid
     vm.saveQuote = saveQuote;
     vm.attachment = {};
     vm.checkIfValidEmail = checkIfValidEmail;
+    vm.state = {
+        orgCardAndPermissions: UserPermissionsConfig.orgConfigAndPermissions
+    };
     vm.state.cartDetail = angular.copy(vm.parentVm.state.cartDetails);
+    vm.selectCardCode = selectCardCode;
+
+    function selectCardCode(customer){
+        vm.state.cartDetail.companyName = customer.OCRD_CardName;
+    }
+
     function calculateTotalPrice(items){
 
         var totalPrice = 0;
@@ -124,6 +134,24 @@ function QuoteDetailsController($scope, $timeout, toaster, SweetAlert, formValid
             vm.state.cartDetail = response.data;
             checkIfEditMode();
             vm.uiState.loading = false;
+            $scope.$watch(function() { return QuoteService.customers }, function(customers) {
+                if(angular.isDefined(customers)){
+                    vm.state.customers = _.map(
+                        customers, 
+                        function(customer) {
+                            return { OCRD_CardName: customer.OCRD_CardName, OCRD_CardCode: customer.OCRD_CardCode };
+                        }
+                    );
+                    vm.uiState.loadingDetailsModal = false;   
+                    var isVendor = vm.state.orgCardAndPermissions && vm.state.orgCardAndPermissions.isVendor;
+                    if(isVendor){
+                        if(vm.state.customers && vm.state.customers.length == 1){
+                            vm.state.cartDetail.cardCode = vm.state.customers[0].OCRD_CardCode;
+                            vm.state.cartDetail.companyName = vm.state.customers[0].OCRD_CardName;
+                        }
+                    }         
+                }
+            }, true);
         })
     }
     else{        
@@ -134,7 +162,6 @@ function QuoteDetailsController($scope, $timeout, toaster, SweetAlert, formValid
     function checkIfEditMode(){
         vm.uiState.isViewMode = vm.state.cartDetail.status == "Sent";
     }
-    
 
     (function init() {
         
