@@ -340,7 +340,7 @@ _.extend(api.prototype, baseApi.prototype, {
         }
 
         var cardCodeAry = [];
-        self._isUserAdmin(req, function(err, isAdmin){
+        self._isUserAdminOrSecurematics(req, function(err, isAdmin){
             if(isAdmin && isAdmin === true) {
                 manager.getLedgerWithLimit(accountId, userId, cardCodeAry, dateString, limit, function(err, value){
                     self.log.debug(accountId, userId, '<< getTopInvoices');
@@ -441,7 +441,7 @@ _.extend(api.prototype, baseApi.prototype, {
         delete fieldSearch.sortDir;
         var term = req.query.term;
 
-        self._isUserAdmin(req, function(err, isAdmin){
+        self._isUserAdminOrSecurematics(req, function(err, isAdmin){
             if(isAdmin && isAdmin === true) {
                 manager.getCustomers(accountId, userId, ['admin'], skip, limit, sortBy, sortDir, term, fieldSearch, function(err, value){
                     self.log.debug(accountId, userId, '<< customersFilter');
@@ -500,7 +500,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 self.log.debug(accountId, userId, '<< ledger [' + isAllowed + ']');
                 return self.sendResultOrError(resp, err, [], "Error calling ledgerItem");
             } else {
-                self._isUserAdmin(req, function(err, isAdmin){
+                self._isUserAdminOrSecurematics(req, function(err, isAdmin){
                     if(isAdmin && isAdmin === true) {
                         manager.getLedgerItem(accountId, userId, itemId, function(err, value){
                             self.log.debug(accountId, userId, '<< ledgerItem');
@@ -523,7 +523,6 @@ _.extend(api.prototype, baseApi.prototype, {
                                 return self.wrapError(resp, 400, 'Bad Request', 'User does not have any matching cardCodes');
                             }
                         });
-
                     }
                 });
             }
@@ -541,7 +540,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 self.log.debug(accountId, userId, '<< ledger [' + isAllowed + ']');
                 return self.sendResultOrError(resp, err, [], "Error calling customerItem");
             } else {
-                self._isUserAdmin(req, function(err, isAdmin){
+                self._isUserAdminOrSecurematics(req, function(err, isAdmin){
                     if(isAdmin && isAdmin === true) {
                         manager.getCustomerItem(accountId, userId, itemId, function(err, value){
                             self.log.debug(accountId, userId, '<< customerItem');
@@ -583,7 +582,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 self.log.debug(accountId, userId, '<< ledger [' + isAllowed + ']');
                 return self.sendResultOrError(resp, err, [], "Error calling invoices");
             } else {
-                self._isUserAdmin(req, function(err, isAdmin){
+                self._isUserAdminOrSecurematics(req, function(err, isAdmin){
                     if(isAdmin && isAdmin === true) {
                         manager.getCustomerInvoices(accountId, userId, customerId, transactionId, function(err, value){
                             self.log.debug(accountId, userId, '<< getCustomerInvoices');
@@ -606,7 +605,6 @@ _.extend(api.prototype, baseApi.prototype, {
                                 return self.wrapError(resp, 400, 'Bad Request', 'User does not have any matching cardCodes');
                             }
                         });
-
                     }
                 });
             }
@@ -673,6 +671,19 @@ _.extend(api.prototype, baseApi.prototype, {
         var accountId = parseInt(self.accountId(req));
         userManager.getUserById(userId, function(err, user){
             if(user && _.contains(user.getPermissionsForAccount(accountId), 'admin')) {
+                fn(null, true);
+            } else {
+                fn(null, false);
+            }
+        });
+    },
+
+    _isUserAdminOrSecurematics: function(req, fn) {
+        var self = this;
+        var userId = self.userId(req);
+        var accountId = parseInt(self.accountId(req));
+        userManager.getUserById(userId, function(err, user){
+            if(user && _.contains(user.getPermissionsForAccount(accountId), 'admin') || _.contains(user.getPermissionsForAccount(accountId), 'securematics')) {
                 fn(null, true);
             } else {
                 fn(null, false);
