@@ -90,22 +90,18 @@ _.extend(apiBase.prototype, {
       return middleware.setup(req, resp, next);
     },
 
-    secureauth: function(requiresSub, requiresPriv, req, resp, next) {
+    secureauth: function(authInfo, req, resp, next) {
         var self = this;
-        self.log.debug('secureauth');
-        self.log.debug('requiresSubscription:', requiresSub);
-        self.log.debug('requiresPriv:', requiresPriv);
+        self.log.debug('secureauth', authInfo);
         var privCallback = next;
-        var authCallback = privCallback;
-        if(requiresSub === false) {
+        if(authInfo.requiresSub === false) {
             //just a regular setup
             return middleware.setup(req, resp, next);
         }
-        if(requiresPriv) {
-            privCallback = self.checkPriv.bind(this, req, requiresPriv, resp, next);
+        if(authInfo.requiresPriv) {
+            privCallback = self.checkPriv.bind(this, req, authInfo.requiresPriv, resp, next);
         }
         middleware.setup(req, resp, self.isAuthAndSubscribedApi.bind(this, req, resp, privCallback));
-        //next();
     },
 
     checkPriv: function(req, priv, resp, cb) {
