@@ -2534,7 +2534,7 @@ var emailMessageManager = {
                         cb(err);
                     } else {
                         self.log.debug('aggregate done');
-                        dao.findRawWithFieldsLimitAndOrder({}, 0, null, null, null, 'rjd_opens', null, function(err, results){
+                        dao.findRawWithFieldsLimitAndOrder({}, 0, null, null, null, tmpCollection, null, function(err, results){
                             self.log.debug('query done');
                             if(results) {
                                 results = results.results;
