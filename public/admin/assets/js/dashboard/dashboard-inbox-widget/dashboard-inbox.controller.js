@@ -27,7 +27,8 @@ function dashboardInboxComponentController($scope, $attrs, $filter, $modal, $tim
                 angular.element(".slick-swipe").slick("unslick");
             }
             $timeout(function() {
-                $(".slick-swipe").slick({ adaptiveHeight: true, slidesToShow:1, dots:false, arrows:true, autoplay:false, touchMove:true, draggable:true });
+                if(angular.element(".slick-swipe").length)
+                    angular.element(".slick-swipe").slick({ adaptiveHeight: true, slidesToShow:1, dots:false, arrows:true, autoplay:false, touchMove:true, draggable:true });
             }, 500);
         }
     }, true);
