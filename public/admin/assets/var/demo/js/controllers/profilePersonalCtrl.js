@@ -131,25 +131,40 @@
         toaster.pop("error", "Email is required.");
         return;
       }
+      if($scope.profileUser.username != $scope.profileUser.email) {
+          UserService.checkUserByUsername($scope.profileUser.email, function(value){
+              if(value){
+                  toaster.pop("error", "Email already exist");
+                  return;
+              }else {
+                  checkDuplicateUsername();
+              }
+          })
+      }else {
+          checkDuplicateUsername();
+      }
+
       if($scope.profileImage && $scope.profileImage.attachment && !$scope.profileImage.attachment.type.match('image.*')){
         toaster.pop("warning", "Profile should have a valid image");
         return;
       }
-      if($scope.profileUser.email)
-        $scope.profileUser.username = $scope.profileUser.email;
-      UserService.putUser($scope.profileUser, function (user) {
-        if($scope.profileImage && $scope.profileImage.attachment){
-          UserService.updateUserProfileImage($scope.profileImage.attachment, $scope.profileUser._id, function(user){
-            setProfileImage(user)
-            setDefaults();
-            $scope.initAttachment();
+     function checkDuplicateUsername() {
+          if($scope.profileUser.email)
+            $scope.profileUser.username = $scope.profileUser.email;
+          UserService.putUser($scope.profileUser, function (user) {
+            if($scope.profileImage && $scope.profileImage.attachment){
+              UserService.updateUserProfileImage($scope.profileImage.attachment, $scope.profileUser._id, function(user){
+                setProfileImage(user)
+                setDefaults();
+                $scope.initAttachment();
+              });
+            }
+            else{
+              setDefaults();
+            }
+
           });
-        }
-        else{
-          setDefaults();
-        }
-        
-      });
+      }
 
       function setProfileImage(user){
         if(user && user.profilePhotos && user.profilePhotos[0]){          
