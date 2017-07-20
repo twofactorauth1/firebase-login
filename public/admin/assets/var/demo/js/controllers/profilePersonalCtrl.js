@@ -131,7 +131,7 @@
         toaster.pop("error", "Email is required.");
         return;
       }
-      if($scope.profileUser.username != $scope.profileUser.email) {
+      if(angular.equals($scope.profileUser.username.toLowerCase() != $scope.profileUser.email.toLowerCase())) {
           UserService.checkUserByUsername($scope.profileUser.email, function(value){
               if(value){
                   toaster.pop("error", "Email already exist");
