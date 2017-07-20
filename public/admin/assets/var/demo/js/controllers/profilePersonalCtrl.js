@@ -137,18 +137,18 @@
                   toaster.pop("error", "Email already exist");
                   return;
               }else {
-                  checkDuplicateUsername();
+                  saveUserProfileDetails();
               }
           })
       }else {
-          checkDuplicateUsername();
+          saveUserProfileDetails();
       }
 
       if($scope.profileImage && $scope.profileImage.attachment && !$scope.profileImage.attachment.type.match('image.*')){
         toaster.pop("warning", "Profile should have a valid image");
         return;
       }
-     function checkDuplicateUsername() {
+     function saveUserProfileDetails() {
           if($scope.profileUser.email)
             $scope.profileUser.username = $scope.profileUser.email;
           UserService.putUser($scope.profileUser, function (user) {
