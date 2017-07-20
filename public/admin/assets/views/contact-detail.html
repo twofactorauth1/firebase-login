@@ -21,131 +21,224 @@
             <div class="col-md-12">
                 <div>
                     <tabset class="tabbable">
-                        <tab heading="Overview" select="resizeMap()">
+                        <tab heading="Contact Details" select="resizeMap()">
                             <div class="row">
                                 <div class="col-md-6">
-                                    <div class="user-left">
-                                        <div class="center">
-                                            <h4>{{contact.first}} {{contact.last}}</h4>
-                                            <div class="user-image">
-                                                <img ng-src="{{ contact.photo }}" err-src="/admin/assets/images/default-user.png" alt="" class="thumbnail img-circle">
+                                    <form action="#" name="form" role="form" id="form">
+                                        <fieldset>
+                                            <legend>
+                                                Image Upload
+                                            </legend>
+                                            <div class="form-group center">
+                                                <div flow-init flow-object="obj.flow">
+                                                    <div class="user-image">
+                                                        <div class="thumbnail margin-bottom-5">
+                                                            <img ng-src="{{ contact.photo }}" err-src="/admin/assets/images/default-user.png">
+                                                        </div>
+                                                    </div>
+                                                    <div class="user-image-buttons-edit">
+                                                        <span class="btn btn-primary" ng-click="openMediaModal()"><i class="fa fa-pencil"></i></span>
+                                                        <span class="btn btn-danger" ng-click="removePhoto()"><i class="fa fa-times"></i> </span>
+                                                    </div>
+                                                </div>
                                             </div>
-                                            <div class="social-icons block" ng-if="checkTwitterId(contact) || checkFacebookId(contact) || checkGoogleId(contact) || checkLinkedInId(contact)">
-                                                <ul>
-                                                    <li data-placement="top" data-original-title="Twitter" class="social-twitter tooltips" ng-if="checkTwitterId(contact)">
-                                                        <a href="#" target="_blank">
-                                                        Twitter
-                                                    </a>
-                                                    </li>
-                                                    <li data-placement="top" data-original-title="Facebook" class="social-facebook tooltips" ng-if="checkFacebookId(contact)">
-                                                        <a href="#" target="_blank">
-                                                        Facebook
-                                                    </a>
-                                                    </li>
-                                                    <li data-placement="top" data-original-title="Google" class="social-google tooltips" ng-if="checkGoogleId(contact)">
-                                                        <a href="#" target="_blank">
-                                                        Google+
-                                                    </a>
-                                                    </li>
-                                                    <li data-placement="top" data-original-title="LinkedIn" class="social-linkedin tooltips" ng-if="checkLinkedInId(contact)">
-                                                        <a href="{{contact.linkedInUrl}}" target="_blank">
-                                                        LinkedIn
-                                                    </a>
-                                                    </li>
-                                                    </li>
-                                                </ul>
-                                                <hr>
+                                        </fieldset>
+                                        <div class="form-group">
+                                            <label class="">Contact</label>
+                                            <input id="input-fullname" class="form-control" ng-model="data.fullName" placeholder="Full name" type="text" ng-change="setFullName()">
+                                            <small>
+                                                <strong>First:</strong>
+                                                <code>
+                                                    <span id="hint-first">{{contact.first}}</span>
+                                                </code>
+                                                <strong>Middle:</strong>
+                                                <code>
+                                                    <span id="hint-middle">{{contact.middle}}</span>
+                                                </code>
+                                                <strong>Last:</strong>
+                                                <code>
+                                                    <span id="hint-last">{{contact.last}}</span>
+                                                </code>
+                                            </small>
+                                            <span class="links cl-effect-1">
+                                            <a href="" ng-click="showSplitName = true" ng-show="!showSplitName">Modify</a>
+                                            </span>
+                                                <span class="links cl-effect-1">
+                                                <a href="" ng-click="showSplitName = false" ng-show="showSplitName">Cancel</a>
+                                            </span>
+                                        </div>
+                                        <div class="form-group" ng-show="showSplitName">
+                                            <label class="">First Name</label>
+                                            <input id="input-first" class="form-control" ng-model="contact.first" placeholder="First name" type="text" ng-change="updateFullName()">
+                                        </div>
+                                        <div class="form-group" ng-show="showSplitName">
+                                            <label class="">Middle Name</label>
+                                            <input id="input-middle" class="form-control" ng-model="contact.middle" placeholder="Middle name" type="text" ng-change="updateFullName()">
+                                        </div>
+                                        <div class="form-group" ng-show="showSplitName">
+                                            <label class="">Last Name</label>
+                                            <input id="input-last" class="form-control" ng-model="contact.last" placeholder="Last name" type="text" ng-change="updateFullName()">
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="block">
+                                                Gender
+                                            </label>
+                                            <div class="clip-radio radio-primary">
+                                                <input type="radio" ng-checked="contact.gender.toLowerCase() == 'female'" id="us-female" name="gender" value="female" ng-model="contact.gender">
+                                                <label for="us-female">
+                                                    Female
+                                                </label>
+                                                <input type="radio" ng-checked="contact.gender.toLowerCase() == 'male'" id="us-male" name="gender" value="male" ng-model="contact.gender">
+                                                <label for="us-male">
+                                                    Male
+                                                </label>
                                             </div>
                                         </div>
-                                        <div class="map margin-bottom-15">
-                                            <span class="text-bold">Location</span>
-                                            <hr class="margin-top-5">
-                                            <map zoom="10" center="{{location.lat}}, {{location.lon}}" disable-default-u-i="true" scale-control="false" pan-control="false" zoom-control="false" class="height-155" ng-if="!loadingMap && location.lat" scrollwheel="false">
-                                                <marker position="{{location.lat}}, {{location.lon}}"></marker>
-                                            </map>
-                                            <div class="load1 csspinner height-155" ng-if="loadingMap"></div>
-                                            <div class="height-155" ng-if="!loadingMap && !location.lat">
-                                                <h4 class="center text-bold no-location">No Location</h4></div>
+                                        <div class="form-group customer-tags">
+                                            <label class="block">
+                                                Tags
+                                            </label>
+                                            <ui-select tagging="tagToContact" tagging-match-to-key="label" multiple ng-model="contact.tags" theme="bootstrap" ng-disabled="disabled">
+                                                <ui-select-match placeholder="Select tags...">{{$item.label}}</ui-select-match>
+                                                <ui-select-choices repeat="tag in contactTags | orderBy:'label' | filter:$select.search">
+                                                    {{tag.label}}
+                                                </ui-select-choices>
+                                            </ui-select>
                                         </div>
-                                        <table class="table table-condensed">
-                                            <thead>
-                                                <tr>
-                                                    <th colspan="3">General Information</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr>
-                                                    <td>ID:</td>
-                                                    <td>{{contact._id}}</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Tags:</td>
-                                                    <td>{{myContactTags}}</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Gender:</td>
-                                                    <td>{{contact.gender}}</td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                        <table class="table table-condensed">
-                                            <thead>
-                                                <tr>
-                                                    <th colspan="3">Contact Information</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr>
-                                                    <td>Email:</td>
-                                                    <td>
-                                                        <div ng-repeat="email in contact.details[0].emails | uniq: 'email' track by $index">
-                                                            <a href="mailto:{{email.email}}">{{email.email}}</a>
-                                                            <br>
+                                        <div>
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <div>
+                                                        <label class="control-label">
+                                                            Email Address
+                                                        </label>
+                                                        <div class="form-group" ng-if="!contact.details[0].emails">
+                                                            <span class="input-icon input-icon-right">
+                                                                <input type="email" placeholder="Email address" class="form-control" name="email" ng-model="contact.details[0].emails[$index].email" ng-blur="updateCustomer()">
+                                                                <i ng-if="showAddEmail(email)" ng-click="contactAddEmailFn()" class="ti-plus"></i>
+                                                                <i ng-if="!showAddEmail(email)" ng-click="removeEmail($index)" class="ti-minus"></i>
+                                                            </span>
                                                         </div>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Phone:</td>
-                                                    <td>
-                                                        <div ng-repeat="phone in contact.details[0].phones | uniq: 'number' track by $index">
-                                                            <a ng-if="phone.number" href="tel:{{phone.number}}">{{phone.number}}</a>
-                                                            <span ng-if="phone.extension && !phone.number"> N/A </span>
-                                                            <span ng-if="phone.extension"> x{{phone.extension}}</span>
-                                                            <br>
+                                                        <div class="form-group" ng-class="{ 'has-error' : form.email_{{$index}}.$invalid}" ng-repeat="email in contact.details[0].emails  track by $index">
+                                                            <span class="input-icon input-icon-right">
+                                                                <input type="email"  ng-pattern="formValidations.email" placeholder="Email address" class="form-control" name="email_{{$index}}" ng-model="contact.details[0].emails[$index].email" ng-blur="updateCustomer()">
+                                                                <p ng-show="form.email_{{$index}}.$invalid" class="help-block">Enter a valid email.</p>
+                                                                <i ng-if="showAddEmail(email)" ng-click="contactAddEmailFn()" class="ti-plus"></i>
+                                                                <i ng-if="!showAddEmail(email)" ng-click="removeEmail($index)" class="ti-minus"></i>
+                                                            </span>
                                                         </div>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Address(es):</td>
-                                                    <td>
-                                                        <div ng-repeat="address in contact.details[0].addresses track by $index" ng-if="!($index>0 && address.ssb)">
-                                                            <a href>
-                                                                <span ng-if="address.address">{{address.address}}<br></span>
-                                                                <span ng-if="address.address2">{{address.address2}}<br></span>
-                                                                {{address.city}} {{address.state}} {{address.country}} {{address.zip}}</a>
-                                                            <br/><br ng-if="($index+1 < contact.details[0].addresses.length)"/>
+                                                    </div>
+                                                    <div ng-repeat="phone in contact.details[0].phones  track by $index">
+                                                        <div class="row">
+                                                            <div class="col-md-8">
+                                                                <div class="form-group" ng-class="{ 'has-error' : form.phone_{{$index}}.$invalid && !form.phone_{{$index}}.$pristine}">
+                                                                    <label class="control-label">
+                                                                        Phone Number
+                                                                    </label>
+                                                                   <input type="text" placeholder="Phone number" class="form-control"  name="phone_{{$index}}" ng-model="contact.details[0].phones[$index].number" ng-blur="updateCustomer()">
+                                                                   <p ng-show="form.phone_{{$index}}.$invalid && !form.phone_{{$index}}.$pristine" class="help-block">Enter a valid phone number.</p>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                                <div class="form-group" ng-class="{ 'has-error' : form.extension_{{$index}}.$invalid && !form.extension_{{$index}}.$pristine}">
+                                                                    <label class="control-label">
+                                                                        Extension
+                                                                    </label>
+                                                                    <input type="text" placeholder="Extension" class="form-control" ng-pattern="formValidations.extension" name="extension_{{$index}}" ng-model="contact.details[0].phones[$index].extension" ng-blur="updateCustomer()">
+                                                                    <p ng-show="form.extension_{{$index}}.$invalid && !form.extension_{{$index}}.$pristine" class="help-block">Enter a valid extension.</p>
+                                                                </div>
+                                                            </div>
                                                         </div>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Website:</td>
-                                                    <td>
                                                         <div>
-                                                            <a href="http://{{contact.details[0].websites[0].website}}">{{contact.details[0].websites[0].website}}</a>
-                                                            <br>
+                                                            <div ng-if="showAddPhone(phone)" class="btn btn-wide btn-o btn-primary pull-right" ng-click="addContactPhoneFn()">Add another phone</div>
+                                                            <div ng-if="!showAddPhone(phone)" class="btn btn-wide btn-o btn-warning pull-right" ng-click="removePhone($index)">Remove phone</div>
                                                         </div>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Company:</td>
-                                                    <td>
+                                                        <div class="clearfix"></div>
+                                                    </div>
+                                                    <div>
+                                                        <label class="control-label">
+                                                            Website URL
+                                                        </label>
+                                                        <div class="form-group">
+                                                            <span class="input-icon input-icon-right">
+                                                                <input type="text" placeholder="Website URL" class="form-control" name="website" ng-model="contact.details[0].websites[0].website" ng-blur="updateCustomer()">
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                    <div>
+                                                        <label class="control-label">
+                                                            Company Name
+                                                        </label>
+                                                        <div class="form-group">
+                                                            <span class="input-icon input-icon-right">
+                                                                <input type="text" placeholder="Company name" class="form-control" name="company" ng-model="contact.details[0].company" ng-blur="updateCustomer()">
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                    <div ng-repeat="address in contact.details[0].addresses  track by $index">
+                                                        <div class="row">
+                                                            <div class="col-md-4">
+                                                                <div class="form-group" ng-class="{'has-error':errorMapData}">
+                                                                    <label class="control-label">
+                                                                        Address Line 1
+                                                                    </label>
+                                                                    <input class="form-control" placeholder="Address line 1" type="text" name="addressline1" ng-model="address.address">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-8">
+                                                                <div class="form-group" ng-class="{'has-error':errorMapData}">
+                                                                    <label class="control-label">
+                                                                        Address Line 2
+                                                                    </label>
+                                                                    <input class="form-control" placeholder="Address line 2" type="text" name="addressline2" ng-model="address.address2">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-md-4">
+                                                                <div class="form-group" ng-class="{'has-error':errorMapData}">
+                                                                    <label class="control-label">
+                                                                        City
+                                                                    </label>
+                                                                    <input class="form-control" placeholder="Enter city" type="text" name="city" ng-model="address.city">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-8">
+                                                                <div class="form-group" ng-class="{'has-error':errorMapData}">
+                                                                    <label class="control-label">
+                                                                        State
+                                                                    </label>
+                                                                    <input class="form-control" placeholder="Enter state" type="text" name="state" ng-model="address.state">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-md-4">
+                                                                <div class="form-group" ng-class="{'has-error':errorMapData}">
+                                                                    <label class="control-label">
+                                                                        Country
+                                                                    </label>
+                                                                    <input class="form-control" placeholder="Enter country" type="text" name="country" ng-model="address.country">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-8">
+                                                                <div class="form-group" ng-class="{'has-error':errorMapData}">
+                                                                    <label class="control-label">
+                                                                        Zip Code
+                                                                    </label>
+                                                                    <input class="form-control" placeholder="Enter postcode" type="text" name="zip" ng-model="address.zip">
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                         <div>
-                                                            {{contact.details[0].company}}
+                                                            <div ng-if="showAddAddress(address)" class="btn btn-wide btn-o btn-primary pull-right" ng-click="contactAddAddressFn()">Add another address</div>
+                                                            <div ng-if="!showAddAddress(address)" class="btn btn-wide btn-o btn-warning pull-right" ng-click="removeAddress($index)">Remove address</div>
                                                         </div>
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
+                                                        <div class="clearfix"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                         <table class="table table-condensed hidden">
                                             <thead>
                                                 <tr>
@@ -171,16 +264,28 @@
                                                 </tr>
                                             </tbody>
                                         </table>
-                                        <div class="btn-group btn-group-justified margin-top-10">
-                                            <div class="btn-group">
-                                                <button type="button" class="btn btn-danger btn-o btn-wide btn-scroll btn-scroll-top ti-trash" ng-click="deleteContactFn(contact)">
-                                                    <span>Delete Contact</span>
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    </form>
                                 </div>
                                 <div class="col-md-6">
+                                    <div class="col-xs-12">
+                                        <button class="btn btn-info btn-o pull-right margin-top-5 margin-left-5" ng-click="contactSaveFn()" ng-disabled="saveLoading || form.$invalid"><span ng-class="{'fa fa-spin fa-spinner': saveLoading}"></span> Save</button>
+                                        <button type="button" class="btn btn-primary btn-o pull-right btn btn-primary btn-o margin-top-5 margin-bottom-5 margin-left-5" ng-click="undoContacts()">
+                                            Undo Changes
+                                        </button>
+                                        <button type="button" class="btn btn-danger btn-o pull-right btn-scroll btn-scroll-top ti-trash margin-top-5" ng-click="deleteContactFn(contact)">
+                                            <span>Delete Contact</span>
+                                        </button>
+                                    </div>
+                                    <div class="map margin-bottom-15">
+                                        <span class="text-bold">Location</span>
+                                        <hr class="margin-top-5">
+                                        <map zoom="10" center="{{location.lat}}, {{location.lon}}" disable-default-u-i="true" scale-control="false" pan-control="false" zoom-control="false" class="height-155" ng-if="!loadingMap && location.lat" scrollwheel="false">
+                                            <marker position="{{location.lat}}, {{location.lon}}"></marker>
+                                        </map>
+                                        <div class="load1 csspinner height-155" ng-if="loadingMap"></div>
+                                        <div class="height-155" ng-if="!loadingMap && !location.lat">
+                                            <h4 class="center text-bold no-location">No Location</h4></div>
+                                    </div>
                                     <div class="panel panel-white" id="notes">
                                         <div class="panel-heading border-light">
                                             <h4 class="panel-title">Contact <span class="text-bold">Notes</span></h4>
@@ -236,292 +341,6 @@
                                     </div>
                                 </div>
                             </div>
-                        </tab>
-                        <tab heading="Edit Contact" active="editActive">
-                            <div class="col-xs-12">
-                                <button class="btn btn-info btn-o pull-right" ng-click="contactSaveFn()" ng-disabled="saveLoading || form.$invalid"><span ng-class="{'fa fa-spin fa-spinner': saveLoading}"></span> Save</button>
-                            </div>
-                            <div class="clearfix"></div>
-                            <form action="#" name="form" role="form" id="form">
-                                <fieldset>
-                                    <legend>
-                                        Account Info
-                                    </legend>
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <div>
-                                                <label class="control-label">
-                                                    Email Address
-                                                </label>
-                                                <div class="form-group" ng-if="!contact.details[0].emails">
-                                                    <span class="input-icon input-icon-right">
-                                                        <input type="email" placeholder="Email address" class="form-control" name="email" ng-model="contact.details[0].emails[$index].email" ng-blur="updateCustomer()">
-                                                        <i ng-if="showAddEmail(email)" ng-click="contactAddEmailFn()" class="ti-plus"></i>
-                                                        <i ng-if="!showAddEmail(email)" ng-click="removeEmail($index)" class="ti-minus"></i>
-                                                    </span>
-                                                </div>
-                                                <div class="form-group" ng-class="{ 'has-error' : form.email_{{$index}}.$invalid}" ng-repeat="email in contact.details[0].emails  track by $index">
-                                                    <span class="input-icon input-icon-right">
-                                                        <input type="email"  ng-pattern="formValidations.email" placeholder="Email address" class="form-control" name="email_{{$index}}" ng-model="contact.details[0].emails[$index].email" ng-blur="updateCustomer()">
-                                                        <p ng-show="form.email_{{$index}}.$invalid" class="help-block">Enter a valid email.</p>
-                                                        <i ng-if="showAddEmail(email)" ng-click="contactAddEmailFn()" class="ti-plus"></i>
-                                                        <i ng-if="!showAddEmail(email)" ng-click="removeEmail($index)" class="ti-minus"></i>
-                                                    </span>
-                                                </div>
-                                            </div>
-                                            <div ng-repeat="phone in contact.details[0].phones  track by $index">
-                                                <div class="row">
-                                                    <div class="col-md-8">
-                                                        <div class="form-group" ng-class="{ 'has-error' : form.phone_{{$index}}.$invalid && !form.phone_{{$index}}.$pristine}">
-                                                            <label class="control-label">
-                                                                Phone Number
-                                                            </label>
-                                                           <input type="text" placeholder="Phone number" class="form-control"  name="phone_{{$index}}" ng-model="contact.details[0].phones[$index].number" ng-blur="updateCustomer()">
-                                                           <p ng-show="form.phone_{{$index}}.$invalid && !form.phone_{{$index}}.$pristine" class="help-block">Enter a valid phone number.</p>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-4">
-                                                        <div class="form-group" ng-class="{ 'has-error' : form.extension_{{$index}}.$invalid && !form.extension_{{$index}}.$pristine}">
-                                                            <label class="control-label">
-                                                                Extension
-                                                            </label>
-                                                            <input type="text" placeholder="Extension" class="form-control" ng-pattern="formValidations.extension" name="extension_{{$index}}" ng-model="contact.details[0].phones[$index].extension" ng-blur="updateCustomer()">
-                                                            <p ng-show="form.extension_{{$index}}.$invalid && !form.extension_{{$index}}.$pristine" class="help-block">Enter a valid extension.</p>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div>
-                                                    <div ng-if="showAddPhone(phone)" class="btn btn-wide btn-o btn-primary pull-right" ng-click="addContactPhoneFn()">Add another phone</div>
-                                                    <div ng-if="!showAddPhone(phone)" class="btn btn-wide btn-o btn-warning pull-right" ng-click="removePhone($index)">Remove phone</div>
-                                                </div>
-                                                <div class="clearfix"></div>
-                                            </div>
-                                            <div>
-                                                <label class="control-label">
-                                                    Website URL
-                                                </label>
-                                                <div class="form-group">
-                                                    <span class="input-icon input-icon-right">
-                                                        <input type="text" placeholder="Website URL" class="form-control" name="website" ng-model="contact.details[0].websites[0].website" ng-blur="updateCustomer()">
-                                                    </span>
-                                                </div>
-                                            </div>
-                                            <div>
-                                                <label class="control-label">
-                                                    Company Name
-                                                </label>
-                                                <div class="form-group">
-                                                    <span class="input-icon input-icon-right">
-                                                        <input type="text" placeholder="Company name" class="form-control" name="company" ng-model="contact.details[0].company" ng-blur="updateCustomer()">
-                                                    </span>
-                                                </div>
-                                            </div>
-                                            <div ng-repeat="address in contact.details[0].addresses  track by $index">
-                                                <div class="row">
-                                                    <div class="col-md-4">
-                                                        <div class="form-group" ng-class="{'has-error':errorMapData}">
-                                                            <label class="control-label">
-                                                                Address Line 1
-                                                            </label>
-                                                            <input class="form-control" placeholder="Address line 1" type="text" name="addressline1" ng-model="address.address">
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-8">
-                                                        <div class="form-group" ng-class="{'has-error':errorMapData}">
-                                                            <label class="control-label">
-                                                                Address Line 2
-                                                            </label>
-                                                            <input class="form-control" placeholder="Address line 2" type="text" name="addressline2" ng-model="address.address2">
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col-md-4">
-                                                        <div class="form-group" ng-class="{'has-error':errorMapData}">
-                                                            <label class="control-label">
-                                                                City
-                                                            </label>
-                                                            <input class="form-control" placeholder="Enter city" type="text" name="city" ng-model="address.city">
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-8">
-                                                        <div class="form-group" ng-class="{'has-error':errorMapData}">
-                                                            <label class="control-label">
-                                                                State
-                                                            </label>
-                                                            <input class="form-control" placeholder="Enter state" type="text" name="state" ng-model="address.state">
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col-md-4">
-                                                        <div class="form-group" ng-class="{'has-error':errorMapData}">
-                                                            <label class="control-label">
-                                                                Country
-                                                            </label>
-                                                            <input class="form-control" placeholder="Enter country" type="text" name="country" ng-model="address.country">
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-8">
-                                                        <div class="form-group" ng-class="{'has-error':errorMapData}">
-                                                            <label class="control-label">
-                                                                Zip Code
-                                                            </label>
-                                                            <input class="form-control" placeholder="Enter postcode" type="text" name="zip" ng-model="address.zip">
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div>
-                                                    <div ng-if="showAddAddress(address)" class="btn btn-wide btn-o btn-primary pull-right" ng-click="contactAddAddressFn()">Add another address</div>
-                                                    <div ng-if="!showAddAddress(address)" class="btn btn-wide btn-o btn-warning pull-right" ng-click="removeAddress($index)">Remove address</div>
-                                                </div>
-                                                <div class="clearfix"></div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <fieldset>
-                                                <legend>
-                                                    Image Upload
-                                                </legend>
-                                                <div class="form-group center">
-                                                    <div flow-init flow-object="obj.flow">
-                                                        <div class="user-image">
-                                                            <div class="thumbnail margin-bottom-5">
-                                                                <img ng-src="{{ contact.photo }}" err-src="/admin/assets/images/default-user.png">
-                                                            </div>
-                                                        </div>
-                                                        <div class="user-image-buttons-edit">
-                                                            <span class="btn btn-primary" ng-click="openMediaModal()"><i class="fa fa-pencil"></i></span>
-                                                            <span class="btn btn-danger" ng-click="removePhoto()"><i class="fa fa-times"></i> </span>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </fieldset>
-                                            <div class="form-group">
-                                                <label class="">Contact Name</label>
-                                                <input id="input-fullname" class="form-control" ng-model="data.fullName" placeholder="Full name" type="text" ng-change="setFullName()">
-                                                <small>
-                                                    <strong>First:</strong>
-                                                    <code>
-                                                        <span id="hint-first">{{contact.first}}</span>
-                                                    </code>
-                                                    <strong>Middle:</strong>
-                                                    <code>
-                                                        <span id="hint-middle">{{contact.middle}}</span>
-                                                    </code>
-                                                    <strong>Last:</strong>
-                                                    <code>
-                                                        <span id="hint-last">{{contact.last}}</span>
-                                                    </code>
-                                                </small>
-                                                <span class="links cl-effect-1">
-                                            <a href="" ng-click="showSplitName = true" ng-show="!showSplitName">Modify</a>
-                                            </span>
-                                                <span class="links cl-effect-1">
-                                                <a href="" ng-click="showSplitName = false" ng-show="showSplitName">Cancel</a>
-                                            </span>
-                                            </div>
-                                            <div class="form-group" ng-show="showSplitName">
-                                                <label class="">First Name</label>
-                                                <input id="input-first" class="form-control" ng-model="contact.first" placeholder="First name" type="text" ng-change="updateFullName()">
-                                            </div>
-                                            <div class="form-group" ng-show="showSplitName">
-                                                <label class="">Middle Name</label>
-                                                <input id="input-middle" class="form-control" ng-model="contact.middle" placeholder="Middle name" type="text" ng-change="updateFullName()">
-                                            </div>
-                                            <div class="form-group" ng-show="showSplitName">
-                                                <label class="">Last Name</label>
-                                                <input id="input-last" class="form-control" ng-model="contact.last" placeholder="Last name" type="text" ng-change="updateFullName()">
-                                            </div>
-                                            <div class="form-group">
-                                                <label class="block">
-                                                    Gender
-                                                </label>
-                                                <div class="clip-radio radio-primary">
-                                                    <input type="radio" ng-checked="contact.gender.toLowerCase() == 'female'" id="us-female" name="gender" value="female" ng-model="contact.gender">
-                                                    <label for="us-female">
-                                                        Female
-                                                    </label>
-                                                    <input type="radio" ng-checked="contact.gender.toLowerCase() == 'male'" id="us-male" name="gender" value="male" ng-model="contact.gender">
-                                                    <label for="us-male">
-                                                        Male
-                                                    </label>
-                                                </div>
-                                            </div>
-                                            <div class="form-group customer-tags">
-                                                <label class="block">
-                                                    Tags
-                                                </label>
-                                                <ui-select tagging="tagToContact" tagging-match-to-key="label" multiple ng-model="contact.tags" theme="bootstrap" ng-disabled="disabled">
-                                                    <ui-select-match placeholder="Select tags...">{{$item.label}}</ui-select-match>
-                                                    <ui-select-choices repeat="tag in contactTags | orderBy:'label' | filter:$select.search">
-                                                        {{tag.label}}
-                                                    </ui-select-choices>
-                                                </ui-select>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </fieldset>
-                                <fieldset class="hidden">
-                                    <legend>
-                                        Additional Info
-                                    </legend>
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <label class="control-label">
-                                                    Twitter
-                                                </label>
-                                                <span class="input-icon">
-                                                <input class="form-control" type="text" placeholder="Twitter" name="twitter" ng-model="userInfo.twitter">
-                                                <i class="fa fa-twitter"></i> </span>
-                                            </div>
-                                            <div class="form-group">
-                                                <label class="control-label">
-                                                    Facebook
-                                                </label>
-                                                <span class="input-icon">
-                                                <input class="form-control" type="text" placeholder="Facebook" name="facebook" ng-model="userInfo.facebook">
-                                                <i class="fa fa-facebook"></i> </span>
-                                            </div>
-                                            <div class="form-group">
-                                                <label class="control-label">
-                                                    Google Plus
-                                                </label>
-                                                <span class="input-icon">
-                                                <input class="form-control" type="text" placeholder="Google Plus" name="google" ng-model="userInfo.google">
-                                                <i class="fa fa-google-plus"></i> </span>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <label class="control-label">
-                                                    Github
-                                                </label>
-                                                <span class="input-icon">
-                                                <input class="form-control" type="text" placeholder="Github" name="github" ng-model="userInfo.github">
-                                                <i class="fa fa-github"></i> </span>
-                                            </div>
-                                            <div class="form-group">
-                                                <label class="control-label">
-                                                    Linkedin
-                                                </label>
-                                                <span class="input-icon">
-                                                <input class="form-control" type="text" placeholder="Linkedin" name="linkedin" ng-model="userInfo.linkedin">
-                                                <i class="fa fa-linkedin"></i> </span>
-                                            </div>
-                                            <div class="form-group">
-                                                <label class="control-label">
-                                                    Skype
-                                                </label>
-                                                <span class="input-icon">
-                                                <input class="form-control" type="text" placeholder="Skype" name="skype" ng-model="userInfo.skype">
-                                                <i class="fa fa-skype"></i> </span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </fieldset>
-                            </form>
                         </tab>
                         <tab ng-if="orders.length">
                             <tab-heading>
