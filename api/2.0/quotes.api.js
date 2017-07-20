@@ -23,15 +23,15 @@ _.extend(api.prototype, baseApi.prototype, {
     version: "2.0",
 
     initialize: function () {
-        app.get(this.url('cart/items'), this.isAuthAndSubscribedApi.bind(this), this.listQuoteItems.bind(this));
-        app.post(this.url('cart/items'), this.isAuthAndSubscribedApi.bind(this), this.saveUpdateCartQuoteItems.bind(this));
-        app.delete(this.url('cart/items/:id'), this.isAuthAndSubscribedApi.bind(this), this.deleteCartQuoteItem.bind(this));
-        app.get(this.url(''), this.isAuthAndSubscribedApi.bind(this), this.listQuotes.bind(this));
-        app.post(this.url(''), this.isAuthAndSubscribedApi.bind(this), this.createQuote.bind(this));
-        app.post(this.url(':id'), this.isAuthAndSubscribedApi.bind(this), this.updateQuote.bind(this));
-        app.get(this.url(':id'), this.isAuthAndSubscribedApi.bind(this), this.getQuoteDetails.bind(this));
-        app.post(this.url('attachment/:id'), this.isAuthApi.bind(this), this.updateQuoteAttachment.bind(this));
-        app.post(this.url(':id/submit'), this.isAuthAndSubscribedApi.bind(this), this.submitQuote.bind(this));
+        app.get(this.url('cart/items'), this.secureauth.bind(this, {requiresSub:true, requiresPriv:'VIEW_QUOTE'}), this.listQuoteItems.bind(this));
+        app.post(this.url('cart/items'), this.secureauth.bind(this, {requiresSub:true, requiresPriv:'MODIFY_QUOTE'}), this.saveUpdateCartQuoteItems.bind(this));
+        app.delete(this.url('cart/items/:id'), this.secureauth.bind(this, {requiresSub:true, requiresPriv:'MODIFY_QUOTE'}), this.deleteCartQuoteItem.bind(this));
+        app.get(this.url(''), this.secureauth.bind(this, {requiresSub:true, requiresPriv:'VIEW_QUOTE'}), this.listQuotes.bind(this));
+        app.post(this.url(''), this.secureauth.bind(this, {requiresSub:true, requiresPriv:'MODIFY_QUOTE'}), this.createQuote.bind(this));
+        app.post(this.url(':id'), this.secureauth.bind(this, {requiresSub:true, requiresPriv:'MODIFY_QUOTE'}), this.updateQuote.bind(this));
+        app.get(this.url(':id'), this.secureauth.bind(this, {requiresSub:true, requiresPriv:'VIEW_QUOTE'}), this.getQuoteDetails.bind(this));
+        app.post(this.url('attachment/:id'), this.secureauth.bind(this, {requiresSub:true, requiresPriv:'MODIFY_QUOTE'}), this.updateQuoteAttachment.bind(this));
+        app.post(this.url(':id/submit'), this.secureauth.bind(this, {requiresSub:true, requiresPriv:'MODIFY_QUOTE'}), this.submitQuote.bind(this));
     },
 
     listQuoteItems: function(req, resp) {
