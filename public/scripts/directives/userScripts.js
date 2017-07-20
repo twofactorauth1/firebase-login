@@ -16,7 +16,8 @@ angular.module('mainApp')
                         if($location.$$path.indexOf("/blog/") > -1){
                             handle = 'blog-post'
                         }
-                        else if($location.$$path.indexOf("/author/") > -1 || $location.$$path.indexOf("/tag/") > -1){
+                        else if($location.$$path.indexOf("/author/") > -1 || $location.$$path.indexOf("/category/") > -1
+                        || $location.$$path.indexOf("/tag/") > -1){
                             handle = 'blog'
                         }
                         if(!handle){

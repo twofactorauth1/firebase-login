@@ -46,7 +46,7 @@ _.extend(router.prototype, BaseRouter.prototype, {
         app.get("/page/blog/:postName", this.setupForPages.bind(this), this.renderBlogPost.bind(this));
         app.get("/blog/:postName", this.setupForPages.bind(this), this.renderBlogPost.bind(this));
         app.get("/tag/*", this.setupForPages.bind(this), this.renderBlogByAuthorOrPost.bind(this));
-        app.get("/category/*", this.setupForPages.bind(this), this.optimizedIndex.bind(this));
+        app.get("/category/*", this.setupForPages.bind(this), this.renderBlogByAuthorOrPost.bind(this));
         app.get("/author/*", this.setupForPages.bind(this), this.renderBlogByAuthorOrPost.bind(this));
         app.get("/page/*", [sitemigration_middleware.checkForRedirect, this.setupForPages.bind(this)], this.optimizedIndex.bind(this));
         app.get("/signup", this.setupForSocialSignup.bind(this), this.optimizedIndex.bind(this));

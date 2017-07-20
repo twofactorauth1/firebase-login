@@ -153,6 +153,24 @@ var mainApp = angular
                 },
                 controller: 'CacheCtrl as cacheCtrl'
             })
+            .when('/category/:category', {
+                template: function(urlattr) {
+                    var _pageName = 'blog';
+                    if(window.indigenous.ssbBlog === true) {
+                        _pageName = 'blog-list';
+                    }
+
+                    var s = '<div class="main-include" ssb-data-styles data-ng-include="';
+                    s += " '/template/" + _pageName;
+                        if(urlattr.cachebuster) {
+                            s+='?cachebuster=' + urlattr.cachebuster;
+                        }
+                        s+= "'";
+                        s += ' "></div>';
+                        return s;
+                },
+                controller: 'CacheCtrl as cacheCtrl'
+            })
             .when('/blog/:postName', {
                 template: function(urlattr) {
                     if(window.indigenous.ssbBlog === true) {
