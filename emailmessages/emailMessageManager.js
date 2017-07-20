@@ -2525,8 +2525,14 @@ var emailMessageManager = {
                 stageAry.push(match);
                 var project = {$project:{receiver:1, deliveredDate:1, openedDate:1, clickedDate:1, emailId:1, _id:1}};
                 stageAry.push(project);
+                var lookup = {$lookup:{from:'contacts', as:'contactInfo', localField:'receiver', foreignField:'details.emails.email'}};
+                stageAry.push(lookup);
+                var project2 = {$project:{"receiver":1,"deliveredDate":1,"openedDate":1,"clickedDate":1,"emailId":1,"_id":1, 'first':{$arrayElemAt:['$contactInfo.first',0]}, 'last':{$arrayElemAt:['$contactInfo.last',0]}, 'phone':{$arrayElemAt:['$details.phones.number',0]}}};
+                stageAry.push(project2);
                 var outStage= {"$out": tmpCollection};
                 stageAry.push(outStage);
+                //{$lookup:{from:'contacts', as:'contactInfo', localField:'receiver', foreignField:'details.emails.email'}},
+                // {$project:{"receiver":1,"deliveredDate":1,"openedDate":1,"clickedDate":1,"emailId":1,"_id":1, 'first':{$arrayElemAt:['$contactInfo.first',0]}, 'last':{$arrayElemAt:['$contactInfo.last',0]}, 'phone':{$arrayElemAt:['$details.phones.number',0]}}}
                 startTime = new Date().getTime();
                 dao.aggregateWithCustomStages(stageAry, $$.m.Emailmessage, function(err, results){
                     if(err) {
@@ -2584,7 +2590,27 @@ var emailMessageManager = {
                         if(unsubscriptions[message.receiver]) {
                             isUnsubscribed = true;
                         }
+                        if(message.first && message.last) {
+                            contactName = (message.first + ' ' + message.last).trim() + ' ';
+                        } else if(message.first) {
+                            contactName = (message.first).trim() + ' ';
+                        } else if (message.last) {
+                            contactName = (message.last).trim() + ' ';
+                        }
 
+                        if(message.phone) {
+                            phone = message.phone;
+                        }
+                        csv += contactName + '<' + message.receiver + '>,';
+                        csv += phone + ',';
+                        csv += (message.deliveredDate || false) + ',';
+                        csv += (message.openedDate || false) + ',';
+                        csv += (message.clickedDate || false) + ',';
+                        csv += isUnsubscribed;
+                        csv += '\n';
+
+                        callback();
+                        /*
                         contactDao.getContactByEmailAndAccount(message.receiver, accountId, function(err, contact){
                             if(err || !contact) {
                                 self.log.debug('Error getting contact for email:' + message.receiver, err);
@@ -2596,17 +2622,8 @@ var emailMessageManager = {
                                     phone = phones[0];
                                 }
                             }
-
-                            csv += contactName + '<' + message.receiver + '>,';
-                            csv += phone + ',';
-                            csv += (message.deliveredDate || false) + ',';
-                            csv += (message.openedDate || false) + ',';
-                            csv += (message.clickedDate || false) + ',';
-                            csv += isUnsubscribed;
-                            csv += '\n';
-
-                            callback();
-                        });
+                         });
+                        */
 
                     }, function(err) {
                         cb(err, csv);
