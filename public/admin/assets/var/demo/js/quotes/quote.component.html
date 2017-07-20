@@ -77,7 +77,8 @@
 
                     <td class="title-col text-adjust-col"><strong>Title: </strong><div class="name-block-container text-adjust-inner-content"></span><span class="" title="{{quote.title}}">{{quote.title || '&nbsp;'}}</span></div></td>
 
-                    <td class="partner-col hidden-xs text-adjust-col" ng-if="vm.state.orgCardAndPermissions.permissions.quote.showPartner"><strong>Partner: </strong><div class="text-adjust-inner-content">{{quote.companyName || '&nbsp;'}}</div></td>
+                    <td class="partner-col hidden-xs text-adjust-col" ng-if="vm.state.orgCardAndPermissions.permissions.quote.showPartner"><strong>Partner: </strong><div tooltip="{{quote.companyName}}" class="text-adjust-inner-content">{{quote.companyName || '&nbsp;'}}</div></td>
+
                     <td class="customer-col text-adjust-col"><strong>Customer: </strong><div class="text-adjust-inner-content">{{quote.customer || '&nbsp;'}}</div></td>
 
 	                <td class="vendor-col hidden-xs text-adjust-col"><strong>Vendors: </strong><div class="text-capitalize text-adjust-inner-content" tooltip="{{vm.getVendors(quote)}}">{{vm.getVendors(quote) || '&nbsp;'}}</div></td>
