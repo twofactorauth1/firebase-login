@@ -129,28 +129,44 @@
         toaster.pop("error", "Email is required.");
         return;
       }
-      if($scope.profileUser.email)
-        $scope.profileUser.username = $scope.profileUser.email;
-      UserService.putUser($scope.profileUser, function (user) {
-        $scope.refreshUser();
-        toaster.pop('success', 'Profile Saved.');
-        angular.copy($scope.profileUser, $scope.originalprofileUser);
-        $scope.pageSaving = false;
-        $rootScope.$broadcast('$personalProfileChanged');
-      });
 
-      // check if password needs to be changed
-      if($scope.passwordChanged()) {
-        if($scope.checkPasswordLength($scope.auth) && $scope.validatePasswords()) {
-          UserService.setPassword($scope.auth.password, function(user) {
-            console.log('---- changed password successfully -----');
-            toaster.pop('success', 'Password changed.');
+      if($scope.profileUser.username != $scope.profileUser.email) {
+          UserService.checkUserByUsername($scope.profileUser.email, function(value){
+              if(value){
+                  toaster.pop("error", "Email already exist");
+                  return;
+              }else {
+                  saveUserProfileDetails();
+              }
+          })
+      }else {
+          saveUserProfileDetails();
+      }
+
+      function saveUserProfileDetails() {
+          if($scope.profileUser.email)
+            $scope.profileUser.username = $scope.profileUser.email;
+          UserService.putUser($scope.profileUser, function (user) {
+            $scope.refreshUser();
+            toaster.pop('success', 'Profile Saved.');
+            angular.copy($scope.profileUser, $scope.originalprofileUser);
+            $scope.pageSaving = false;
+            $rootScope.$broadcast('$personalProfileChanged');
           });
-        }
-        else {
-          console.log('passwords are not valid');
-          toaster.pop('error', 'Passwords are not valid.');
-        }
+
+          // check if password needs to be changed
+          if($scope.passwordChanged()) {
+            if($scope.checkPasswordLength($scope.auth) && $scope.validatePasswords()) {
+              UserService.setPassword($scope.auth.password, function(user) {
+                console.log('---- changed password successfully -----');
+                toaster.pop('success', 'Password changed.');
+              });
+            }
+            else {
+              console.log('passwords are not valid');
+              toaster.pop('error', 'Passwords are not valid.');
+            }
+          }
       }
     };
 
