@@ -150,9 +150,7 @@ module.exports = {
         };
 
         if(file.path) {
-            // Need to update bucket
-            var bucket = awsConfig.BUCKETS.PROMOTIONS;
-            //var bucket = awsConfig.BUCKETS.QUOTES;
+            var bucket = awsConfig.BUCKETS.QUOTES;
             var subdir = 'account_' + accountId;
             if(appConfig.nonProduction === true) {
                 subdir = 'test_' + subdir;
