@@ -3,6 +3,10 @@
         <h4> Displaying blog posts with the following tag: </h4>
         <span class="currently-viewing-item" ng-bind-html="vm.blog.currentTag"></span> 
     </div>
+     <div class="ssb-blog-currently-viewing" ng-if="vm.blog.currentCategory">
+        <h4> Displaying blog posts with the following category: </h4>
+        <span class="currently-viewing-item" ng-bind-html="vm.blog.currentCategory"></span>
+    </div>
     <div class="ssb-blog-currently-viewing" ng-if="vm.blog.currentAuthor">
         <h4> Displaying blog posts with the following author: </h4>
         <span class="currently-viewing-item" ng-bind-html="vm.blog.currentAuthor"></span> 
