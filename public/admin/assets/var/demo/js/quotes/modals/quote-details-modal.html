@@ -11,7 +11,7 @@
     </div>
     <form name="form" role="form" id="form">
         <div class="modal-body bg-white quote-details-modal quote-cart-details" style="min-height:200px" stop-event="touchend">
-            <div ng-if="!vm.uiState.loading">
+            <div ng-if="!vm.uiState.loading && !vm.uiState.loadingDetailsModal">
                 <div class="col-xs-12 col-sm-7 padding-top-15 border-right">
                     <div ng-if="vm.uiState.isViewMode" data-ng-include=" '/admin/assets/var/demo/js/quotes/partials/quote-details-view.html' "></div>
                     <div ng-if="!vm.uiState.isViewMode" data-ng-include=" '/admin/assets/var/demo/js/quotes/partials/quote-details-edit.html' "></div>
@@ -20,7 +20,7 @@
                     <div data-ng-include=" '/admin/assets/var/demo/js/quotes/partials/quote-summary.html' "></div>
                 </div>
             </div>
-            <div class="loading-modal center" ng-if="vm.uiState.loading">
+            <div class="loading-modal center" ng-if="vm.uiState.loading || vm.uiState.loadingDetailsModal">
                 <h3>Loading details. Please wait...</h3>
             </div>    
             <div class="clearfix"></div>
