@@ -53,10 +53,7 @@ function quoteComponentController($scope, $attrs, $filter, $modal, $timeout, $lo
     }
 
     function getQuotes(){
-        QuoteService.getQuotes().then(function(response){
-            vm.state.quotes = response.data;
-            vm.uiState.loading = false;
-        })
+        QuoteService.getQuotes();
     }
 
     function getItems(quote){
@@ -107,6 +104,13 @@ function quoteComponentController($scope, $attrs, $filter, $modal, $timeout, $lo
         }
         vm.openModal(_modal, 'QuoteDetailsController', 'lg')
     }
+
+    $scope.$watch(function() { return QuoteService.quotes }, function(data) {
+        if(angular.isDefined(data)){
+            vm.state.quotes = data;
+            vm.uiState.loading = false;
+        }        
+    }, true);
     
     function init(element) {
         vm.element = element;

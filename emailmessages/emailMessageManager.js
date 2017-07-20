@@ -313,7 +313,7 @@ var emailMessageManager = {
                                 personalizations.push(p);
                                 i++;
                             } else {
-                                contactDao.setInvalidEmailTag(accountId, userId, contact.id(), function(err, value){});
+                                //contactDao.setInvalidEmailTag(accountId, userId, contact.id(), function(err, value){});
                             }
 
                         });
@@ -2517,6 +2517,7 @@ var emailMessageManager = {
         var self = this;
         self.log.debug(accountId, userId, '>> getCampaignPerformanceReport');
         var startTime = null;
+        var tmpCollection = 'cpr_' + accountId + '_' + campaignId;
         async.waterfall([
             function(cb) {
                 var stageAry = [];
@@ -2524,13 +2525,23 @@ var emailMessageManager = {
                 stageAry.push(match);
                 var project = {$project:{receiver:1, deliveredDate:1, openedDate:1, clickedDate:1, emailId:1, _id:1}};
                 stageAry.push(project);
+                var outStage= {"$out": tmpCollection};
+                stageAry.push(outStage);
                 startTime = new Date().getTime();
-                dao.aggregateWithCustomStages(stageAry,$$.m.Emailmessage, function(err, results){
+                dao.aggregateWithCustomStages(stageAry, $$.m.Emailmessage, function(err, results){
                     if(err) {
                         self.log.error(accountId, userId, 'Error in aggregation:', err);
                         cb(err);
                     } else {
-                        cb(null, results);
+                        self.log.debug('aggregate done');
+                        dao.findRawWithFieldsLimitAndOrder({}, 0, null, null, null, tmpCollection, null, function(err, results){
+                            self.log.debug('query done');
+                            if(results) {
+                                results = results.results;
+                            }
+                            cb(err, results);
+                        });
+
                     }
                 });
             },
@@ -2578,7 +2589,7 @@ var emailMessageManager = {
                             if(err || !contact) {
                                 self.log.debug('Error getting contact for email:' + message.receiver, err);
                             } else {
-                                self.log.debug('Found contact');
+                                //self.log.debug('Found contact');
                                 contactName = (contact.get('first') + ' ' + contact.get('last')).trim() + ' ';
                                 var phones = contact.getPhones();
                                 if (phones.length > 0) {
@@ -2605,7 +2616,8 @@ var emailMessageManager = {
             }
         ], function(err, csv){
             self.log.debug(accountId, userId, '<< getCampaignPerformanceReport');
-            return fn(err, csv);
+            fn(err, csv);
+            dao.dropCollection(tmpCollection, function(err, result){self.log.debug('dropped collection ' + tmpCollection)});
         });
     },
 

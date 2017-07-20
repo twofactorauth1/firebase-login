@@ -17,7 +17,7 @@ function QuoteDetailsController($scope, $timeout, toaster, SweetAlert, formValid
     vm.initAttachment = initAttachment;
     vm.calculateTotalPrice = calculateTotalPrice;
     vm.removeItemFromCart = removeItemFromCart;
-    vm.updateQuote = updateQuote;
+    vm.saveQuote = saveQuote;
     vm.attachment = {};
     vm.checkIfValidEmail = checkIfValidEmail;
     vm.state.cartDetail = angular.copy(vm.parentVm.state.cartDetails);
@@ -66,10 +66,9 @@ function QuoteDetailsController($scope, $timeout, toaster, SweetAlert, formValid
 
     }
 
-    function updateQuote(isSubmit){
+    function saveQuote(isSubmit){
         vm.uiState.saveLoading = true;
-        var _quote = angular.copy(vm.state.cartDetail);
-        QuoteService.createQuote(_quote).then(function (response) {
+        QuoteService.updateQuote(vm.state.cartDetail).then(function (response) {
             vm.state.quote = response.data;
             if(vm.attachment && vm.attachment.name){
                 QuoteService.updateQuoteAttachment(vm.attachment, vm.state.quote._id).then(function (quote){
@@ -86,12 +85,18 @@ function QuoteDetailsController($scope, $timeout, toaster, SweetAlert, formValid
     function setDefaults(isSubmit){
         if(isSubmit){
             QuoteService.submitQuote(vm.state.quote).then(function(){
+                vm.parentVm.uiState.loading = true;
+                QuoteService.getQuotes();
                 toaster.pop("success", "Quote submitted successfully");
-                $scope.closeModal();
+                vm.parentVm.closeModal();
+
             })
         }
         else{
-            $scope.closeModal();
+            vm.parentVm.uiState.loading = true;
+            QuoteService.getQuotes();
+            vm.parentVm.closeModal();
+            toaster.pop("success", "Quote saved successfully");
         }
         
     }
@@ -109,8 +114,11 @@ function QuoteDetailsController($scope, $timeout, toaster, SweetAlert, formValid
 
     function initAttachment(){      
         vm.attachment = {};
-        document.getElementById("upload_cart_file").value = "";
+        vm.state.cartDetail.attachment = {};
+        if(document.getElementById("upload_quote_file"))
+            document.getElementById("upload_quote_file").value = "";
     }
+
     if(vm.parentVm.state.cartDetails.status != "Sent"){
         QuoteService.getQuoteDetails(vm.parentVm.state.cartDetails._id).then(function(response){
             vm.state.cartDetail = response.data;

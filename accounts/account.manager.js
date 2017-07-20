@@ -79,6 +79,10 @@ var accountManager = {
                 var billing = account.get('billing');
                 billing.cancellationDate = new Date();
                 billing.cancellationReason = reason;
+                if(cancelNow === true) {
+                    account.set('locked_sub', true);
+                }
+
                 accountDao.saveOrUpdate(account, function(err, savedAccount){
                     if(err) {
                         self.log.error(accountId, userId, 'Error saving account:', err);

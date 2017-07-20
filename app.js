@@ -381,7 +381,7 @@ require('./routers/page.server.router');
 //-----------------------------------------------------
 //  SETUP Persistent Scheduling
 //-----------------------------------------------------
-if (process.env.NODE_ENV != "testing") {
+if (process.env.NODE_ENV != "testing" && appConfig.runJobs === true) {
     var drone = require('schedule-drone');
     var scheduledjobs_manager = require('./scheduledjobs/scheduledjobs_manager');
     drone.setConfig(
@@ -407,6 +407,8 @@ if (process.env.NODE_ENV != "testing") {
     });
     */
     scheduledjobs_manager.startup(function(){log.debug('scheduledjobs_manager initialized')});
+} else {
+    log.debug('Skipping scheduler');
 }
 
 //-----------------------------------------------------
