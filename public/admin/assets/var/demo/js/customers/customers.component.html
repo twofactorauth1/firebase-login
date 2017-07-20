@@ -44,8 +44,8 @@
 	                <th class="code-col sort" style="white-space: nowrap;" ng-class="{'st-sort-ascent': vm.uiState.sortData.details['OCRD_CardCode'].direction === 1, 'st-sort-descent': vm.uiState.sortData.details['OCRD_CardCode'].direction === -1}" ng-click="vm.sortCustomers('OCRD_CardCode', 'OCRD_CardCode')">Id</th>
 	                <th class="name-col sort" style="white-space: nowrap;" ng-class="{'st-sort-ascent': vm.uiState.sortData.details['OCRD_CardName'].direction === 1, 'st-sort-descent': vm.uiState.sortData.details['OCRD_CardName'].direction === -1}" ng-click="vm.sortCustomers('_cardName', 'OCRD_CardName')">Name</th>
 	                <th class="hidden-xs address-col" style="white-space: nowrap;">Address</th>
-	                <th class="city-col sort" style="white-space: nowrap;" ng-class="{'st-sort-ascent': vm.uiState.sortData.details['OCRD_City'].direction === 1, 'st-sort-descent': vm.uiState.sortData.details['OCRD_City'].direction === -1}" ng-click="vm.sortCustomers('_city', 'OCRD_City')">City</th>
-	                <th class="state-col sort" style="white-space: nowrap;" ng-class="{'st-sort-ascent': vm.uiState.sortData.details['OCRD_State1'].direction === 1, 'st-sort-descent': vm.uiState.sortData.details['OCRD_State1'].direction === -1}" ng-click="vm.sortCustomers('_state', 'OCRD_State1')">State</th>
+	                <th class="city-col sort hidden-xs" style="white-space: nowrap;" ng-class="{'st-sort-ascent': vm.uiState.sortData.details['OCRD_City'].direction === 1, 'st-sort-descent': vm.uiState.sortData.details['OCRD_City'].direction === -1}" ng-click="vm.sortCustomers('_city', 'OCRD_City')">City</th>
+	                <th class="state-col sort hidden-xs" style="white-space: nowrap;" ng-class="{'st-sort-ascent': vm.uiState.sortData.details['OCRD_State1'].direction === 1, 'st-sort-descent': vm.uiState.sortData.details['OCRD_State1'].direction === -1}" ng-click="vm.sortCustomers('_state', 'OCRD_State1')">State</th>
 	                <th class="hidden-xs zip-col sort" style="white-space: nowrap;" ng-class="{'st-sort-ascent': vm.uiState.sortData.details['OCRD_ZipCode'].direction === 1, 'st-sort-descent': vm.uiState.sortData.details['OCRD_ZipCode'].direction === -1}" ng-click="vm.sortCustomers('_zip', 'OCRD_ZipCode')">ZipCode</th>
 	            </tr>
 	            <tr>
@@ -56,8 +56,8 @@
 	                    <input ng-model="vm.uiState.fieldSearch.OCRD_CardName" placeholder="Name" ng-model-options="{ debounce: 800 }" class="form-control" type="search" />
 	                </th>
 	                <th class="hidden-xs address-col"></th>
-	                <th class="city-col"></th>
-	                <th class="state-col"></th>
+	                <th class="city-col hidden-xs"></th>
+	                <th class="state-col hidden-xs"></th>
 	                <th class="hidden-xs zip-col"></th>
 	            </tr>
 	        </thead>
@@ -66,8 +66,8 @@
 	                <td class="code-col"><strong>Id: </strong>{{customer.OCRD_CardCode}}</td>
 	                <td class="name-col"><strong>Name: </strong><div class="name-block-container"><span class="list-name"></span><span class="text-adjust-table" title="{{customer.OCRD_CardName}}">{{customer.OCRD_CardName}}</span></div></td>
 	                <td class="hidden-xs address-col"><strong>Address: </strong><div class="name-block-container"><span class="list-name"></span><span class="text-adjust-table" title="{{customer.OCRD_Address}}">{{customer.OCRD_Address}}</span></div></td>
-	                <td class="city-col"><strong>City: </strong>{{customer.OCRD_City}}</td>
-	                <td class="state-col"><strong>State: </strong>{{customer.OCRD_State1}}</td>
+	                <td class="city-col hidden-xs"><strong>City: </strong>{{customer.OCRD_City}}</td>
+	                <td class="state-col hidden-xs"><strong>State: </strong>{{customer.OCRD_State1}}</td>
 	                <td class="hidden-xs zip-col"><strong>ZipCode: </strong>{{customer.OCRD_ZipCode}}</td>
 	            </tr>
 	        </tbody>

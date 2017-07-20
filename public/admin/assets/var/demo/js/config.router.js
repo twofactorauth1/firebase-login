@@ -40,7 +40,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
     $stateProvider.state('app', {
         url: "",
         templateUrl: "/admin/assets/var/demo/views/app.html",
-        resolve: loadSequence('modernizr', 'underscore', 'moment', 'angularMoment', 'uiSwitch', 'perfect-scrollbar-plugin', 'toaster', 'ngAside', 'chartjs', 'tc.chartjs', 'oitozero.ngSweetAlert', 'chatCtrl', 'smart-table', 'touchspin-plugin', 'slugifier', 'commonService', 'timeAgoFilter','angularFileUpload', 'ngTextTruncate', 'infinite-scroll', 'ui.select', 'blueimp', 'ngTagsInput', 'titleCase', 'bootstrap-confirmation', 'ladda', 'angular-ladda', 'uuid', 'formatText', 'asideCtrl', 'settingsCtrl', 'assetsService', 'mediaModalCtrl', 'xeditable', 'angular-percentage-filter', 'angular-clipboard', 'google-fonts', 'dashboardService', 'videogular', 'indi-login-modal', 'productTableFilter', 'ngCurrency', 'DashboardAnalyticTileComponent', 'InventoryComponent', 'InventoryDetailsComponent', 'utilService', 'userPermissionsConfig', 'uiSelectChoices', 'ngSticky', 'fixedHeaderTable', 'securematicsCommonService', 'QuoteDetailsModalController', 'quoteCartDetailsService', 'QuoteDetailsController'),
+        resolve: loadSequence('modernizr', 'underscore', 'moment', 'angularMoment', 'uiSwitch', 'perfect-scrollbar-plugin', 'toaster', 'ngAside', 'chartjs', 'tc.chartjs', 'oitozero.ngSweetAlert', 'chatCtrl', 'smart-table', 'touchspin-plugin', 'slugifier', 'commonService', 'timeAgoFilter','angularFileUpload', 'ngTextTruncate', 'infinite-scroll', 'ui.select', 'blueimp', 'ngTagsInput', 'titleCase', 'bootstrap-confirmation', 'ladda', 'angular-ladda', 'uuid', 'formatText', 'asideCtrl', 'settingsCtrl', 'assetsService', 'mediaModalCtrl', 'xeditable', 'angular-percentage-filter', 'angular-clipboard', 'google-fonts', 'dashboardService', 'videogular', 'indi-login-modal', 'productTableFilter', 'ngCurrency', 'DashboardAnalyticTileComponent', 'InventoryComponent', 'InventoryDetailsComponent', 'utilService', 'userPermissionsConfig', 'uiSelectChoices', 'ngSticky', 'fixedHeaderTable', 'securematicsCommonService', 'QuoteDetailsModalController', 'quoteCartDetailsService', 'QuoteDetailsController', 'propsFilter'),
         abstract: true
     }).state('app.dashboard', {
         url: "/_dashboard",
@@ -127,7 +127,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         templateUrl: "/admin/assets/views/product-detail.html",
         title: 'Products',
         icon: 'ti-layout-media-left-alt',
-        resolve: loadSequence('productsDetailCtrl', 'productService', 'dateRangePicker', 'bootstrap-icon-picker', 'campaignService', 'addComponentModalCtrl', 'componentSettingsModalCtrl', 'toTrusted', 'propsFilter', 'angularCircularNavigation', 'string_score', 'htmlToPlaintext', 'spectrum')
+        resolve: loadSequence('productsDetailCtrl', 'productService', 'dateRangePicker', 'bootstrap-icon-picker', 'campaignService', 'addComponentModalCtrl', 'componentSettingsModalCtrl', 'toTrusted', 'angularCircularNavigation', 'string_score', 'htmlToPlaintext', 'spectrum')
     }).state('app.commerce.orders', {
         url: '/orders',
         templateUrl: "/admin/assets/views/orders.html",
@@ -173,13 +173,13 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         template: "<indi-email-campaign></indi-email-campaign>",
         title: 'Email Campaign',
         icon: 'ti-layout-media-left-alt',
-        resolve: loadSequence('froala-wysiwyg-editor', 'froala-wysiwyg-editor-plugins', 'custom-froala-wysiwyg-editor', 'propsFilter')
+        resolve: loadSequence('froala-wysiwyg-editor', 'froala-wysiwyg-editor-plugins', 'custom-froala-wysiwyg-editor')
     }).state('app.marketing.campaigns', {
         url: '/campaigns',
         templateUrl: "/admin/assets/views/campaigns.html",
         title: 'Campaigns',
         icon: 'ti-layout-media-left-alt',
-        resolve: loadSequence('campaignsCtrl', 'campaignService', 'propsFilter')
+        resolve: loadSequence('campaignsCtrl', 'campaignService')
     }).state('app.account', {
         url: '/account',
         template: '<div ui-view class="fade-in-up"></div>',
@@ -266,7 +266,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         templateUrl: "/admin/assets/var/demo/js/quotes/quote.html",
         title: 'Quotes',
         icon: 'ti-layout-media-left-alt',
-        resolve: loadSequence('QuoteComponent', 'QuoteComponentController', 'QuoteService', 'propsFilter')
+        resolve: loadSequence('QuoteComponent', 'QuoteComponentController', 'QuoteService')
     }).state('app.quotesnotifications', {
         url: '/quotes/notifications',
         templateUrl: "/admin/assets/var/demo/views/under-construction.html",
@@ -288,7 +288,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         templateUrl: "/admin/assets/var/demo/js/promotions/promotion-details/promotion-details.html",
         title: 'Promotion Details',
         icon: 'ti-layout-media-left-alt',
-        resolve: loadSequence('PromotionDetailsComponent', 'PromotionDetailsController', 'PromotionsService', 'PromotionProductModalController', 'PromotionShipmentModalController', 'SecurematicsProductService', 'pdfobject', 'ShipmentsComponent', 'ShipmentsComponentController', 'propsFilter', 'ParticipantsComponent', 'ParticipantsComponentController', 'SecurematicsParticipantsService', 'PromotionParticipantModalController')
+        resolve: loadSequence('PromotionDetailsComponent', 'PromotionDetailsController', 'PromotionsService', 'PromotionProductModalController', 'PromotionShipmentModalController', 'SecurematicsProductService', 'pdfobject', 'ShipmentsComponent', 'ShipmentsComponentController', 'ParticipantsComponent', 'ParticipantsComponentController', 'SecurematicsParticipantsService', 'PromotionParticipantModalController')
     }).state('app.rmas', {
         url: '/rmas',
         templateUrl: "/admin/assets/var/demo/views/under-construction.html",
@@ -299,7 +299,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         templateUrl: "/admin/assets/var/demo/js/purchase-order/purchase-order.html",
         title: 'Purchase Order',
         icon: 'ti-layout-media-left-alt',
-        resolve: loadSequence('PurchaseOrderComponent', 'PurchaseOrderComponentController', 'PurchaseOrderService', 'propsFilter')
+        resolve: loadSequence('PurchaseOrderComponent', 'PurchaseOrderComponentController', 'PurchaseOrderService')
     }).state('app.purchaseOrderDetails', {
         url: '/purchase-orders/:purchaseOrderId',
         templateUrl: "/admin/assets/var/demo/js/purchase-order/purchase-order-details/purchase-order-details.html",

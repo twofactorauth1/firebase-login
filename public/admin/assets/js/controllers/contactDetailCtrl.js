@@ -1117,6 +1117,13 @@
             $state.go('app.commerce.orderdetail', {orderId: orderId});
         }
 
+        $scope.undoContacts = function() {
+            $scope.contact = angular.copy($scope.originalContact);
+            $scope.getContact();
+            $timeout(function () {
+                toaster.pop('success', 'Changes undo');
+            }, 2000);
+        }
 
         $scope.getters = {
             total: function (value) {

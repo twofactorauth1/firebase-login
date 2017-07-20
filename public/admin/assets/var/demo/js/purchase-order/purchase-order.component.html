@@ -126,9 +126,9 @@
                         </div>
                     </th>
 	                <th class="title-col" st-sort="title" style="white-space: nowrap">Name</th>
-	                <th class="submitter-col" st-sort="vm.getters.submitter" style="white-space: nowrap">Submitter</th>
+	                <th class="submitter-col hidden-xs" st-sort="vm.getters.submitter" style="white-space: nowrap">Submitter</th>
 	                <th class="company-col" st-sort="companyName" ng-if="!vm.state.orgCardAndPermissions.isVendor" style="white-space: nowrap">VAR</th>
-	                <th class="created-col" st-sort="vm.getters.created" style="white-space: nowrap" st-sort-default="reverse">Date</th>
+	                <th class="created-col hidden-xs" st-sort="vm.getters.created" style="white-space: nowrap" st-sort-default="reverse">Date</th>
 	                <th class="hidden-xs attachment-col">Attachment</th>
 	            </tr>
 	            <tr>
@@ -136,9 +136,9 @@
 	                <th class="title-col">
 	                    <input st-search="title" ng-model="vm.uiState.fieldSearch.title" placeholder="Name" class="form-control" type="search" />
 	                </th>
-	                <th class="submitter-col"></th>
+	                <th class="submitter-col hidden-xs"></th>
 	                <th class="company-col" ng-if="!vm.state.orgCardAndPermissions.isVendor"></th>
-	                <th class="created-col"></th>
+	                <th class="created-col hidden-xs"></th>
 	                <th class="hidden-xs attachment-col"></th>
 	            </tr>
 	        </thead>
@@ -153,13 +153,13 @@
                         </div>
                     </td>
                     <td class="title-col"><strong>Name: </strong><div class="name-block-container"><span class="list-name"></span><span class="text-adjust-table" title="{{order.title}}">{{order.title || '&nbsp;'}}</span></div></td>
-	                <td class="submitter-col"><strong>Submitter: </strong>{{vm.getSubmitterName(order.submitter, order) || '&nbsp;'}}</td>
+	                <td class="submitter-col hidden-xs"><strong>Submitter: </strong>{{vm.getSubmitterName(order.submitter, order) || '&nbsp;'}}</td>
 
 	                <td ng-if="!vm.state.orgCardAndPermissions.isVendor" class="company-col"><strong>VAR: </strong><div class="name-block-container"><span class="list-name"></span>
 	                <span class="text-adjust-table" title="{{order.companyName}}">{{order.companyName || '&nbsp;'}}</span>
 	                </div></td>
 
-	                <td class="created-col" style="white-space: nowrap"><strong>Date: </strong>{{order.created.date | date:'MMM d yy hh:mm a'}}</td>
+	                <td class="created-col hidden-xs" style="white-space: nowrap"><strong>Date: </strong>{{order.created.date | date:'MMM d yy hh:mm a'}}</td>
 	                <td class="hidden-xs attachment-col"><strong>Attachment: </strong><span class="text-adjust-table" title="{{order.attachment.name}}">{{order.attachment.name || '&nbsp;'}}</span></td>
 	            </tr>
 	        </tbody>

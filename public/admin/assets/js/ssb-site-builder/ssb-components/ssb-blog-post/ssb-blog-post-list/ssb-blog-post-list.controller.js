@@ -38,6 +38,10 @@ function ssbBlogPostListComponentController(SimpleSiteBuilderBlogService, $scope
         vm.blog.currentAuthor = path.replace('/author/', '');
         vm.filteredPostView = true;
     }
+    if (path.indexOf("category/") > -1) {
+        vm.blog.currentCategory = path.replace('/category/', '');
+        vm.filteredPostView = true;
+    }
 
     $scope.$watchCollection('vm.blog.posts', function(newValue) {
         if (newValue) {
@@ -67,6 +71,20 @@ function ssbBlogPostListComponentController(SimpleSiteBuilderBlogService, $scope
                         }
                     })
                 }
+                if(vm.blog.currentCategory){
+                    posts = posts.filter(function(post){
+                        if (post.post_categories) {
+                            return _.some(post.post_categories, function(tag) {
+                                if(tag.text){
+                                     return tag.text.toLowerCase() === vm.blog.currentCategory.toLowerCase();
+                                }else{
+                                     return tag.toLowerCase() === vm.blog.currentCategory.toLowerCase();
+                                }
+                            })
+                        }
+                    })
+                }
+
             }
             
             vm.blog.posts = posts;

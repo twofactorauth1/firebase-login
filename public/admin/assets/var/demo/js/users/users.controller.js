@@ -123,17 +123,7 @@
                 if(err){
                    toaster.pop('warning', err.message);
                 }else if(exitinguser){
-                    //copy exiting
-                    AccountService.copyExitingUser(exitinguser._id, function(err, user){
-                        if(err) {
-                            toaster.pop('warning', err.message);
-                        } else {
-                            $timeout(function() {
-                                vm.state.users.push(user);
-                            }, 0);
-                            $scope.closeModal();
-                        }
-                    });
+                    toaster.pop('warning', "User already exists");
                 }else{
                     //add new
                     /*

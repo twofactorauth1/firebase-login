@@ -52,11 +52,11 @@
 	            <tr>
 	                <th class="col-title" st-sort="title" style="white-space: nowrap;">Name</th>
 	                <th class="col-vendor" st-sort="vendor" style="white-space: nowrap;">Vendor</th>
-	                <th class="col-promo-code" style="white-space: nowrap;">Promo Code</th>
+	                <th class="col-promo-code hidden-xs" style="white-space: nowrap;">Promo Code</th>
 	                <th class="hidden-xs col-products" style="white-space: nowrap;">Products</th>
 	                <th class="hidden-xs col-start-date" st-sort="startDate" style="white-space: nowrap;">Start Date</th>
 	                <th class="hidden-xs col-exp-date" st-sort="expirationDate" style="white-space: nowrap;">Expiration Date</th>
-	                <th class="col-shipment" st-sort="vm.getters.shipmentCount" style="white-space: nowrap;">Shipments</th>
+	                <th class="col-shipment hidden-xs" st-sort="vm.getters.shipmentCount" style="white-space: nowrap;">Shipments</th>
 	            </tr>
 	            <tr>
 	                <th class="col-title">
@@ -66,7 +66,7 @@
 	                    <input st-search="vendor" ng-model="vm.uiState.fieldSearch.vendor" placeholder="Vendor" class="form-control" type="search" />
 	                </th>
 
-	                <th class="col-promo-code">
+	                <th class="col-promo-code hidden-xs">
 
 	                </th>
 	                <th class="col-products hidden-xs">
@@ -78,7 +78,7 @@
 	                <th class="col-exp-date hidden-xs">
 
 	                </th>
-	                <th class="col-shipment">
+	                <th class="col-shipment hidden-xs">
 
 	                </th>
 	            </tr>
@@ -87,11 +87,11 @@
 	            <tr ng-repeat="promotion in vm.displayedPromotions" class="product-item" ng-click="vm.viewPromotionDetails(promotion)">
 	                <td class="col-title"><strong>Name: </strong>{{promotion.title}}</td>
 	                <td class="col-vendor"><strong>Vendor: </strong><div class="name-block-container"><span class="list-name"></span><span class="text-adjust-table text-capitalize">{{promotion.vendor}}</span></div></td>
-	                <td class="col-promo-code"><strong>Promo Code: </strong>{{promotion.promoCode}}</td>
+	                <td class="col-promo-code hidden-xs"><strong>Promo Code: </strong>{{promotion.promoCode}}</td>
 	                <td class="hidden-xs col-products"><strong>Products: </strong><div class="name-block-container"><span class="list-name"></span><span class="text-adjust-table" tooltip="{{vm.getProductsName(promotion.products)}}">{{vm.getProductsName(promotion.products)}}</span></div></td>
 	                <td class="hidden-xs col-start-date"><strong>Start Date: </strong>{{vm.parseValueToDate(promotion.startDate) | date:'M/d/yyyy'}}</td>
 	                <td class="hidden-xs col-exp-date"><strong>Start Date: </strong>{{vm.parseValueToDate(promotion.expirationDate) | date:'M/d/yyyy'}}</td>
-	                <td class="col-shipment"><strong>Shipments: </strong>{{promotion.shipmentCount || 0}}</td>
+	                <td class="col-shipment hidden-xs"><strong>Shipments: </strong>{{promotion.shipmentCount || 0}}</td>
 	            </tr>
 	        </tbody>
 	        <tfoot>

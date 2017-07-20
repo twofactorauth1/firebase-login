@@ -6,6 +6,46 @@
 </div>
 <div class="clearfix"></div>
 <div class="form-group">
+    <label class="">VAR</label>
+        <ui-select ng-if="vm.state.customers.length >= 200"
+            ng-model="vm.state.cartDetail.cardCode"
+            theme="bootstrap"
+            on-select="vm.selectCardCode($select.selected)"
+            ng-disabled="vm.state.orgCardAndPermissions.cardCodes.length <= 1 && vm.state.orgCardAndPermissions.isVendor"
+            >
+            <ui-select-match
+                placeholder="VAR Name">
+                {{$select.selected.OCRD_CardName || vm.state.cartDetail.companyName}}
+            </ui-select-match>
+            <ui-select-choices  all-choices="vm.state.customers" repeat="customer.OCRD_CardCode as customer in $select.pageOptions.customers | propsFilter: {OCRD_CardName: $select.search}" refresh-delay="0">
+                <div ng-bind-html="customer.OCRD_CardName | highlight: $select.search"></div>
+              </small>
+            </ui-select-choices>
+
+        </ui-select>
+
+        <ui-select ng-if="vm.state.customers.length < 200 && vm.state.customers.length > 1"
+            ng-model="vm.state.cartDetail.cardCode"
+            theme="bootstrap"
+            on-select="vm.selectCardCode($select.selected)"
+            ng-disabled="vm.state.orgCardAndPermissions.cardCodes.length <= 1 && vm.state.orgCardAndPermissions.isVendor"
+            >
+            <ui-select-match
+                placeholder="VAR Name">
+                {{$select.selected.OCRD_CardName || vm.state.cartDetail.companyName}}
+            </ui-select-match>
+            <ui-select-choices repeat="customer.OCRD_CardCode as customer in vm.state.customers | propsFilter: {OCRD_CardName: $select.search}" refresh-delay="0">
+                <div ng-bind-html="customer.OCRD_CardName | highlight: $select.search"></div>
+              </small>
+            </ui-select-choices>
+
+        </ui-select>
+        <label class="block form-control margin-top-0" ng-if="vm.state.customers.length <= 1">
+            {{vm.state.cartDetail.companyName}}
+        </label>
+</div>
+<div class="clearfix"></div>
+<div class="form-group">
     <label>
         Customer
     </label>
