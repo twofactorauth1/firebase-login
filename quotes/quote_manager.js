@@ -275,7 +275,7 @@ module.exports = {
         component.showVendorPricing = _.filter(_.pluck(quote.get("vendorSpecialPricing"), 'pricing'), function(item){
             return item != null
         }).length;
-        
+        component.attachment = quote.get("attachment") || {};
         var fromEmail = notificationConfig.FROM_EMAIL;
         var fromName =  notificationConfig.WELCOME_FROM_NAME;
         var emailSubject = "Quote Request - Quote " + quote.id();
