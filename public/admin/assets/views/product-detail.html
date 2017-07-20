@@ -12,7 +12,7 @@
     </section>
     <!-- end: PAGE TITLE -->
     <!-- start: YOUR CONTENT HERE -->
-    <div class="container-fluid container-fullw bg-white ng-scope  padding-top-0 padding-bottom-0">
+    <div class="container-fluid container-fullw bg-white ng-scope margin-bottom-15 padding-top-0 padding-bottom-0">
         <div class="row">
             <div class="col-sm-12">
                 <div class="panel panel-transparent row margin-bottom-0">
@@ -49,11 +49,13 @@
         </div>
     </div>
     <form role="form" name="productDetail">
-        <div class="container-fluid container-fullw ng-scope">
-            <div class="clearfix"></div>
-            <div class="row">
-                <div class="col-md-12">
-                    <h5 class="over-title margin-bottom-15">Product <span class="text-bold">Details</span></h5>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="panel panel-white">
+                <div class="panel-heading border-light">
+                    <h4 class="panel-title">Product <span class="text-bold">Details</span></h5>
+                </div>
+                <div class="panel-body">
                     <div class="row">
                         <div class="col-sm-4">
                             <div ng-show="!product.is_image">
@@ -254,20 +256,20 @@
                         </div>
                     </div>
                 </div>
+                </div>
             </div>
         </div>
     </form>
     <div data-ng-include=" 'assets/views/partials/variations.html' "></div>
     <div data-ng-include=" 'assets/views/partials/attributes.html' "></div>
-    <div class="container-fluid container-fullw">
-        <div class="row">
-            <div data-ng-include=" 'assets/views/partials/external-link.html' "></div>
-            <div data-ng-include=" 'assets/views/partials/subscription.html' "></div>
-            <div data-ng-include=" 'assets/views/partials/digital.html' "></div>
-            <div data-ng-include=" 'assets/views/partials/fulfillment-email.html' "></div>
-            <div data-ng-include=" 'assets/views/partials/subject-score-modal.html' "></div>
-            <div data-ng-include=" 'assets/views/partials/donation.html' "></div>
-        </div>
+
+    <div class="row">
+        <div data-ng-include=" 'assets/views/partials/external-link.html' "></div>
+        <div data-ng-include=" 'assets/views/partials/subscription.html' "></div>
+        <div data-ng-include=" 'assets/views/partials/digital.html' "></div>
+        <div data-ng-include=" 'assets/views/partials/fulfillment-email.html' "></div>
+        <div data-ng-include=" 'assets/views/partials/subject-score-modal.html' "></div>
+        <div data-ng-include=" 'assets/views/partials/donation.html' "></div>
     </div>
     <div class="clearfix"></div>
 </div>
