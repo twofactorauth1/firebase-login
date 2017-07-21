@@ -284,6 +284,19 @@
         };
 
         $scope.updateUser = function(){
+            if(vm.state.userType === 'vendor' && vm.state.cardCodes.length){
+                UserService.customerExists(vm.state.cardCodes, function(response){
+                    if(checkIfValidCardCodes(response.results)){
+                        updateUserDetails();
+                    }
+                })
+            }
+            else{
+                updateUserDetails();
+            }            
+        };
+
+        function updateUserDetails(){
             setOrgConfig(vm.state.account.orgId);
             var _permissions = getUserPermissions();
             UserService.editUser($scope.editUser, $scope.currentUserId, function(){
@@ -293,7 +306,7 @@
                     $scope.closeUserCardModal();
                 })
             })
-        };
+        }
 
         $scope.checkPasswordLength = function() {
             $scope.passwordInValid = false;
