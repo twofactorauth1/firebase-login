@@ -447,6 +447,7 @@ var manager = {
                             }
                             if(shipment.get("status") === "RMA"){
                                 component.rmaState += 1;
+                                component.lostCost += shipment.getShipmentPrice();
                             }
                             if(shipment.get("configDate")){
                                 component.configured += 1;
@@ -466,15 +467,11 @@ var manager = {
                             shipment.customerPartner = shipment.getCustomerPartner();
                             shipment.customerJuniperRep = shipment.getCustomerJuniperRep();
                             shipment.products = shipment.getProductsWithSerialNumber();
-
                         });
 
-                        var lostShipment = _.last(_.sortBy(list, function(result) {
-                            return result.get("created") && Date.parse(result.get("created").date) })
-                        );
                         component.wonCost = self._parseCurrency("$", component.wonCost);
                         component.openCost = self._parseCurrency("$", component.openCost);
-                        component.lostCost = self._parseCurrency("$", lostShipment.getShipmentPrice());
+                        component.lostCost = self._parseCurrency("$", component.lostCost);
 
                         component.shipments = list;
 
