@@ -7,7 +7,7 @@
 
 var baseApi = require('../base.api');
 var userActivityManager = require('../../useractivities/useractivity_manager');
-
+var userManager = require('../../dao/user.manager');
 var api = function () {
     this.init.apply(this, arguments);
 };
@@ -62,17 +62,44 @@ _.extend(api.prototype, baseApi.prototype, {
         if(req.query.limit) {
             limit = parseInt(req.query.limit);
         }
+        self._isUserAdminOrSecurematics(req, function(err, isAllowed){
+            if(isAllowed && isAllowed === true) {
+                userActivityManager.listActivities(accountId, skip, limit, function(err, list){
+                    if(err) {
+                        self.log.error('Error listing user activities: ' + err);
+                        return self.wrapError(resp, 500, "An error occurred listing user activities", err);
+                    } else {
+                        self.log.debug('<< findUserActivities');
+                        return resp.send(list);
+                    }
+                })
+            }
+            else{
+                userActivityManager.listUserActivities(accountId, userId, skip, limit, function(err, list){
+                    if(err) {
+                        self.log.error('Error listing user activities: ' + err);
+                        return self.wrapError(resp, 500, "An error occurred listing user activities", err);
+                    } else {
+                        self.log.debug('<< findUserActivities');
+                        return resp.send(list);
+                    }
+                });
+            }
+        })        
+    },
 
-        userActivityManager.listUserActivities(accountId, userId, skip, limit, function(err, list){
-            if(err) {
-                self.log.error('Error listing user activities: ' + err);
-                return self.wrapError(resp, 500, "An error occurred listing user activities", err);
+    _isUserAdminOrSecurematics: function(req, fn) {
+        var self = this;
+        var userId = self.userId(req);
+        var accountId = parseInt(self.accountId(req));
+        userManager.getUserById(userId, function(err, user){
+            if(user && _.contains(user.getPermissionsForAccount(accountId), 'admin') || _.contains(user.getPermissionsForAccount(accountId), 'securematics')) {
+                fn(null, true);
             } else {
-                self.log.debug('<< findUserActivities');
-                return resp.send(list);
+                fn(null, false);
             }
         });
-    }
+    },
 });
 
 module.exports = new api();
