@@ -140,22 +140,52 @@
                         roleAry: roleAry,
                         orgConfig: setNewOrgConfig()
                     };
-                    AccountService.addNewUserWithParams(vm.state.account._id, $scope.newuser.username, $scope.newuser.password, params, function(err, newuser){
-                        if(err) {
-                            toaster.pop('warning', err.message);
-                        } else {
-                            $timeout(function() {
-                                vm.state.users.push(newuser);
-                            }, 0);
-                            $scope.closeModal();
-                        }
-                    });
+                    if(vm.state.userType === 'vendor' && vm.state.cardCodes.length){
+                        UserService.customerExists(vm.state.cardCodes, function(response){
+                            if(checkIfValidCardCodes(response.results)){
+                                createNewUser(params);
+                            }
+                        })
+                    }
+                    else{
+                        createNewUser(params);
+                    }
                 }
-                setDefaults();
+                
             });
         };
+        
+        function checkIfValidCardCodes(list){
+            if(list.length){
+                var cardCodes = _.map(_.pluck(list, "OCRD_CardCode"), function(code){return code.toLowerCase()});
+                var userCardCodes = _.map(vm.state.cardCodes, function(code){return code.toLowerCase()});
+                var unMatchedCardCodes = _.difference(cardCodes, userCardCodes);
+                if(unMatchedCardCodes.length){
+                    toaster.pop("warning", "Invalid card codes " + unMatchedCardCodes.join(", "));
+                    return false;
+                }
+                else{
+                    return true;
+                }
+            }else{
+                toaster.pop("warning", "Invalid card codes " + vm.state.cardCodes.join(", "));
+                return false;
+            }
+        }            
 
-
+        function createNewUser(params){
+            AccountService.addNewUserWithParams(vm.state.account._id, $scope.newuser.username, $scope.newuser.password, params, function(err, newuser){
+                if(err) {
+                    toaster.pop('warning', err.message);
+                } else {
+                    setDefaults();
+                    $timeout(function() {
+                        vm.state.users.push(newuser);
+                    }, 0);
+                    $scope.closeModal();
+                }
+            });
+        }        
         function setDefaults(){
             $scope.newuser = null;
             vm.state.userType = null;

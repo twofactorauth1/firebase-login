@@ -46,6 +46,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url('vendors'), this.isAuthAndSubscribedApi.bind(this), this.listVendors.bind(this));
         app.get(this.url('promotions/participants/search'), this.isAuthAndSubscribedApi.bind(this), this.participantSearch.bind(this));
         app.post(this.url('inventory/useractivity'), this.isAuthAndSubscribedApi.bind(this), this.createActivity.bind(this));
+        app.get(this.url('vars/exists'), this.isAuthAndSubscribedApi.bind(this), this.customerExists.bind(this));
         
     },
 
@@ -679,6 +680,21 @@ _.extend(api.prototype, baseApi.prototype, {
             return self.sendResultOrError(resp, err, value, "Error searching participants");
         });
 
+    },
+
+    customerExists: function(req, resp) {
+        var self = this;
+        var accountId = parseInt(self.accountId(req));
+        var userId = self.userId(req);
+        self.log.debug(accountId, userId, '>> customerExists');
+        
+        var cardCodes = req.query.codes.split(",");
+        console.log(cardCodes);
+        cardCodes = _.map(cardCodes, function(code){return code.toLowerCase()});
+        manager.customerExists(accountId, userId, cardCodes, function(err, list){
+            self.log.debug(accountId, userId, '<< customerExists');
+            return self.sendResultOrError(resp, err, list, "Error checking customers if exists");
+        });
     },
 
     createActivity: function(req, resp) {

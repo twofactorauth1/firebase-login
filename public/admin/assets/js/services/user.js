@@ -6,7 +6,7 @@
   app.service('UserService', function($http) {
     var account, that = this;
     var baseUrl = '/api/1.0/';
-    var baseVendorAPIUrlv2 = '/api/1.0/integrations/zi/vendors';
+    var baseAPIUrlv2 = '/api/1.0/integrations/zi';
     this.getUser = function(fn) {
       var apiUrl = baseUrl + ['user'].join('/');
       $http.get(apiUrl)
@@ -302,7 +302,16 @@
     }
 
     this.getVendors = function(fn){
-      $http.get(baseVendorAPIUrlv2).success(function(data){
+        $http.get([baseAPIUrlv2, 'vendors'].join("/")).success(function(data){
+            fn(data);
+        }).error(function(err){
+            fn(err);
+        });
+    }
+
+    this.customerExists = function(cardCodes, fn){
+        var _qString = "?codes=" + cardCodes.join(",")
+        $http.get([baseAPIUrlv2, 'vars', 'exists'].join("/") + _qString).success(function(data){
             fn(data);
         }).error(function(err){
             fn(err);
