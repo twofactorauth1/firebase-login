@@ -235,6 +235,14 @@
         fn(data);
       });
     };
+
+    this.getLoggedInUserActivity = function(fn) {
+      var apiUrl = baseUrl + ['useractivity', 'user'].join('/');
+      $http.get(apiUrl)
+      .success(function(data, status, headers, config) {
+        fn(data);
+      });
+    };
     
     this.findUserByUsername=function(username,fn){
         var findUserUrl=baseUrl+['user','email',username].join('/');

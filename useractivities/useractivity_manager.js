@@ -122,6 +122,26 @@ module.exports = {
             });
     },
 
+    listUserActivities: function(accountId, userId, skip, limit, fn) {
+        var self = this;
+        log.debug('>> listUserActivities(' + accountId  +', ' + userId  +', ' + skip + ', ' + limit + ')');
+
+
+        dao.findAllWithFieldsAndLimit({
+                'accountId': accountId,
+                'userId': userId
+            }, skip, limit, 'start', null, $$.m.UserActivity,
+            function(err, list) {
+                if (err) {
+                    log.error('Error listing user activities: ' + err);
+                    fn(err, null);
+                } else {
+                    log.debug('<< listUserActivities');
+                    fn(null, list);
+                }
+            });
+    },
+
     countNonAdminLogins: function(accountId, userId, startDate, endDate, fn) {
         var self = this;
         self.log = log;

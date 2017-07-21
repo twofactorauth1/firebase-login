@@ -19,7 +19,7 @@
     };
     $scope.invoices = [];
     $scope.profileUser = {};
-    UserService.getUserActivity(function (activities) {
+    UserService.getLoggedInUserActivity(function (activities) {
       $scope.activities = activities;
     });
 
