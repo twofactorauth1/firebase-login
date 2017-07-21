@@ -159,7 +159,7 @@
             if(list.length){
                 var cardCodes = _.map(_.pluck(list, "OCRD_CardCode"), function(code){return code.toLowerCase()});
                 var userCardCodes = _.map(vm.state.cardCodes, function(code){return code.toLowerCase()});
-                var unMatchedCardCodes = _.difference(cardCodes, userCardCodes);
+                var unMatchedCardCodes = _.difference(userCardCodes, cardCodes);
                 if(unMatchedCardCodes.length){
                     toaster.pop("warning", "Invalid card codes " + unMatchedCardCodes.join(", "));
                     return false;
