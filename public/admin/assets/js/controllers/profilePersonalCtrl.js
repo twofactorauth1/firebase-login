@@ -130,7 +130,7 @@
         return;
       }
 
-      if(angular.equals($scope.profileUser.username.toLowerCase() != $scope.profileUser.email.toLowerCase())) {
+      if(!angular.equals($scope.profileUser.username.toLowerCase(), $scope.profileUser.email.toLowerCase())) {
           UserService.checkUserByUsername($scope.profileUser.email, function(value){
               if(value){
                   toaster.pop("error", "Email already exist");
@@ -145,7 +145,7 @@
 
       function saveUserProfileDetails() {
           if($scope.profileUser.email)
-            $scope.profileUser.username = $scope.profileUser.email;
+            $scope.profileUser.username = angular.copy($scope.profileUser.email.toLowerCase());
           UserService.putUser($scope.profileUser, function (user) {
             $scope.refreshUser();
             toaster.pop('success', 'Profile Saved.');
