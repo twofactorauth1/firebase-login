@@ -29,7 +29,8 @@ function inventoryComponentController($scope, $attrs, $filter, $modal, $timeout,
             OITM_ItemCode: InventoryService.fieldSearch.OITM_ItemCode,
             Available: InventoryService.fieldSearch.Available
         },        
-        inVentoryWatchList: []
+        inVentoryWatchList: [],
+        inVentoryWatchListDetails: []
     };
 
 
@@ -302,12 +303,15 @@ function inventoryComponentController($scope, $attrs, $filter, $modal, $timeout,
 
         if(_.contains(vm.uiState.inVentoryWatchList, product["@id"])){
             vm.uiState.inVentoryWatchList = _.without(vm.uiState.inVentoryWatchList, product["@id"]);
+            vm.uiState.inVentoryWatchListDetails = _.without(vm.uiState.inVentoryWatchListDetails, product)
         }
         else{
             if(vm.uiState.inVentoryWatchList.length == 5){
                 vm.uiState.inVentoryWatchList.shift();
+                vm.uiState.inVentoryWatchListDetails.shift();
             }
             vm.uiState.inVentoryWatchList.push(product["@id"]);
+            vm.uiState.inVentoryWatchListDetails.push(product);
         }
         showWatchOptions();
     };
@@ -358,22 +362,31 @@ function inventoryComponentController($scope, $attrs, $filter, $modal, $timeout,
         vm.bulkActionSelectFn();
     }
     function bulkActionSelectFn() {
-
+        vm.state.userActivity = {};
         var toasterMessage = 'Items added to inventory watch list';
         if (vm.bulkActionChoice.action.data == 'unwatch'){
             toasterMessage = 'Items removed from inventory watch list';
         }
 
         if (vm.bulkActionChoice.action.data == 'unwatch') {
-
+            vm.state.userActivity = {
+                activityType: 'INV_UNWATCH',
+                note: "Product Name: " + _.pluck(vm.uiState.inVentoryWatchListDetails, 'OITM_ItemName').join(", ")
+            }
             vm.state.userOrgConfig.watchList = _.difference(vm.state.userOrgConfig.watchList || [], vm.uiState.inVentoryWatchList);
         }
         if (vm.bulkActionChoice.action.data == 'watch') {
+            vm.state.userActivity = {
+                activityType: 'INV_WATCH',
+                note: "Product Name: " + _.pluck(vm.uiState.inVentoryWatchListDetails, 'OITM_ItemName').join(", ")
+            }
             vm.state.userOrgConfig.watchList = _.first(_.union(vm.uiState.inVentoryWatchList, vm.state.userOrgConfig.watchList || []), 5);
         }
 
         vm.uiState.inVentoryWatchList = [];
+        vm.uiState.inVentoryWatchListDetails = [];
         InventoryService.updateUserOrgConfig(vm.state.userOrgConfig).then(function(response){
+            InventoryService.createUserActivity(vm.state.userActivity);
             vm.bulkActionChoice = null;
             vm.bulkActionChoice = {};
             toaster.pop('success', toasterMessage);
