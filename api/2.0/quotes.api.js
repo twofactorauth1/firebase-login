@@ -32,6 +32,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url(':id'), this.secureauth.bind(this, {requiresSub:true, requiresPriv:'VIEW_QUOTE'}), this.getQuoteDetails.bind(this));
         app.post(this.url('attachment/:id'), this.secureauth.bind(this, {requiresSub:true, requiresPriv:'MODIFY_QUOTE'}), this.updateQuoteAttachment.bind(this));
         app.post(this.url(':id/submit'), this.secureauth.bind(this, {requiresSub:true, requiresPriv:'MODIFY_QUOTE'}), this.submitQuote.bind(this));
+        app.delete(this.url(':id'), this.secureauth.bind(this, {requiresSub:true, requiresPriv:'MODIFY_QUOTE'}), this.deleteQuote.bind(this));
     },
 
     listQuoteItems: function(req, resp) {
@@ -308,6 +309,25 @@ _.extend(api.prototype, baseApi.prototype, {
             self.sendResultOrError(resp, err, value, "Error submitting quote");
         });
     }, 
+
+
+    deleteQuote: function(req, resp) {
+        var self = this;
+        self.log.debug('>> deleteQuote');
+        var quoteId = req.params.id;
+        var accountId = parseInt(self.accountId(req));
+        var userId = self.userId(req);
+        
+        quoteManager.deleteQuote(accountId, userId, quoteId, function(err, value){
+            if(err) {
+                self.wrapError(resp, 500, err, "Error deleting promotion");
+            } else {
+                self.log.debug('<< deleteQuote');
+                self.send200(resp);
+                self.createUserActivity(req, 'DELETE_QUOTE', null, null, function(){});
+            }
+        });
+    },
 
     _checkAccess: function(accountId, userId, module, fn) {
         var self = this;

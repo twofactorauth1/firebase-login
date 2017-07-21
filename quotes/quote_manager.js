@@ -231,6 +231,21 @@ module.exports = {
         })
     },
 
+    deleteQuote: function(accountId, userId, quoteId, fn){
+        var self = this;
+        log.debug(accountId, userId, '>> deleteQuote');
+        var query = {_id: quoteId};
+        
+        quoteDao.removeByQuery(query, $$.m.Quote, function(err, value){
+            if(err) {
+                self.log.error('Error deleting quote: ' + err);
+                return fn(err, null);
+            } else {
+                log.debug(accountId, userId, '<< deleteQuote');
+                fn(null, value);
+            }
+        });
+    },
     exportQuoteItems: function(accountId, userId, items, fn) {
         var self = this;
         log.debug(accountId, userId, '>> exportQuoteItems');

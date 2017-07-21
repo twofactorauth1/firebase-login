@@ -26,6 +26,7 @@ function QuoteDetailsController($scope, $timeout, toaster, SweetAlert, formValid
     };
     vm.state.cartDetail = angular.copy(vm.parentVm.state.cartDetails);
     vm.selectCardCode = selectCardCode;
+    vm.deleteQuote = deleteQuote;
 
     function selectCardCode(customer){
         vm.state.cartDetail.companyName = customer.OCRD_CardName;
@@ -122,6 +123,31 @@ function QuoteDetailsController($scope, $timeout, toaster, SweetAlert, formValid
         }
     }
 
+    function deleteQuote(){
+        SweetAlert.swal({
+            title: "Are you sure?",
+            text: "Do you want to delete this quote?",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#DD6B55",
+            confirmButtonText: "Yes, delete quote!",
+            cancelButtonText: "No, do not delete quote!",
+            closeOnConfirm: true,
+            closeOnCancel: true
+        },
+        function (isConfirm) {
+            if (isConfirm) {
+                vm.uiState.saveLoading = true;
+                QuoteService.deleteQuote(vm.state.cartDetail).then(function (data) {
+                    toaster.pop('success', "Quote deleted.", "Quote was deleted successfully.");
+                    vm.parentVm.closeModal();
+                });
+            } else {
+                SweetAlert.swal("Not Deleted", "The quote was not deleted.", "error");
+            }
+        });
+    }
+
     function initAttachment(){      
         vm.attachment = {};
         vm.state.cartDetail.attachment = {};
@@ -160,6 +186,7 @@ function QuoteDetailsController($scope, $timeout, toaster, SweetAlert, formValid
     }
 
     function checkIfEditMode(){
+        vm.uiState.showDeleteBtn = vm.state.cartDetail.status != "Sent";
         vm.uiState.isViewMode = vm.state.cartDetail.status == "Sent";
     }
 
