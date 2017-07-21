@@ -46,10 +46,9 @@
                     </ul>
                 </div>
 
-                <button ng-disabled="saveLoading" type="button" class="btn btn-o btn-primary visible-xs-inline-block" ng-click="saveOrder(0,null,myform.$invalid, myform.$error.required.length)">Save</button>
-
-                <button ng-disabled="saveLoading" type="button" class="btn btn-wide btn-o btn-primary hidden-xs" ng-click="saveOrder(0,null,myform.$invalid, myform.$error.required.length)">Save</button>
-
+                <button type="button" ng-disabled="saveLoading" ng-click="saveOrder(0,null,myform.$invalid)" class="btn btn-primary ng-scope" tooltip-placement="bottom" tooltip="Save this order">
+                    <i class="ti-save"></i><span> Save</span>
+                </button>
                 <button type="button" class="btn btn-primary btn-o btn btn-primary btn-o margin-right-5" ng-click="backToOrders()">
                 Back to Orders
                 </button>
