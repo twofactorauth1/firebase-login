@@ -31,7 +31,7 @@
         inventoryService.getSingleInventoryByName = getSingleInventoryByName;
         inventoryService.getUserOrgConfig = getUserOrgConfig;
         inventoryService.updateUserOrgConfig = updateUserOrgConfig;
-
+        inventoryService.createUserActivity = createUserActivity;
         function inventoryRequest(fn) {
             inventoryService.loading.value = inventoryService.loading.value + 1;
             console.info('service | loading +1 : ' + inventoryService.loading.value);
@@ -159,6 +159,24 @@
                   url: [baseOrgConfigAPIUrl].join('/'),
                   method: "POST",
                   data: angular.toJson(orgConfig)
+                }).success(success).error(error))
+            );
+        }
+
+        function createUserActivity(activity){
+            function success(data) {
+                
+            }
+
+            function error(error) {
+                console.error('inventoryService createUserActivity error: ', JSON.stringify(error));
+            }
+
+            return (
+                inventoryRequest($http({
+                  url: [baseInventoryAPIUrl, 'useractivity'].join('/'),
+                  method: "POST",
+                  data: angular.toJson(activity)
                 }).success(success).error(error))
             );
         }

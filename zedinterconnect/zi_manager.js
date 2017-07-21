@@ -1226,6 +1226,28 @@ var ziManager = {
         });
     },
 
+    customerExists: function(accountId, userId, cardCodes, fn) {
+        var self = this;
+        self.log.debug(accountId, userId, '>> customerExists [' + cardCodes + ']');
+        var query = {};
+        var optRegexp = [];
+        cardCodes.forEach(function(opt){
+            optRegexp.push(  new RegExp(opt, "i") );
+        });
+        query.OCRD_CardCode = {$in: optRegexp};
+        
+        var collection = 'customer';
+        ziDao.findRawWithFieldsLimitAndOrder(query, null, null, null, null, collection, null, function(err, resp){
+            if(err) {
+                self.log.error(accountId, userId, 'Error getting customer:', err);
+                fn(err);
+            } else {
+                self.log.debug(accountId, userId, '<< customerExists');
+                fn(null, resp);
+            }
+        });
+    },
+
     _ziRequest: function(path, fn) {
         var self = this;
         var url = ziConfig.ZED_PROTOCOL + ziConfig.ZED_USERNAME + ':' + ziConfig.ZED_PASSWORD + '@' + ziConfig.ZED_ENDPOINT;

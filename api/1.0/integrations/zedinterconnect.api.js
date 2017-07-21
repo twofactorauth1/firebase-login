@@ -45,6 +45,8 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url('inventory/products/search'), this.isAuthAndSubscribedApi.bind(this), this.productSearch.bind(this));
         app.get(this.url('vendors'), this.isAuthAndSubscribedApi.bind(this), this.listVendors.bind(this));
         app.get(this.url('promotions/participants/search'), this.isAuthAndSubscribedApi.bind(this), this.participantSearch.bind(this));
+        app.post(this.url('inventory/useractivity'), this.isAuthAndSubscribedApi.bind(this), this.createActivity.bind(this));
+        app.get(this.url('vars/exists'), this.isAuthAndSubscribedApi.bind(this), this.customerExists.bind(this));
         
     },
 
@@ -131,6 +133,8 @@ _.extend(api.prototype, baseApi.prototype, {
         //TODO: security
         manager.getInventoryItem(accountId, userId, itemId, function(err, value){
             self.log.debug(accountId, userId, '<< inventory');
+            var note = "Product Name: " + value.OITM_ItemName;
+            self.createUserActivity(req, 'INV_DETAIL', note, null, function(){});
             return self.sendResultOrError(resp, err, value, "Error calling inventory");
         });
     },
@@ -144,6 +148,8 @@ _.extend(api.prototype, baseApi.prototype, {
         //TODO: security
         manager.getInventoryItemByName(accountId, userId, name, function(err, value){
             self.log.debug(accountId, userId, '<< inventory');
+            var note = "Product Name: " + value.OITM_ItemName;
+            self.createUserActivity(req, 'INV_DETAIL', note, null, function(){});
             return self.sendResultOrError(resp, err, value, "Error calling inventory");
         });
     },
@@ -171,6 +177,8 @@ _.extend(api.prototype, baseApi.prototype, {
             //TODO: security
             manager.inventorySearch(accountId, userId, term, null, skip, limit, sortBy, sortDir, function(err, value){
                 self.log.debug(accountId, userId, '<< inventorySearch');
+                var note = "Search: " + req.query.term;
+                self.createUserActivity(req, 'INV_SEARCH', note, null, function(){});
                 return self.sendResultOrError(resp, err, value, "Error searching inventory");
             });
         } else {
@@ -181,7 +189,9 @@ _.extend(api.prototype, baseApi.prototype, {
             //TODO: security
             manager.inventoryFilter(accountId, userId, query, skip, limit, sortBy, sortDir, function(err, value){
                 self.log.debug(accountId, userId, '<< inventoryFilter');
+
                 return self.sendResultOrError(resp, err, value, "Error searching inventory");
+
             });
         }
 
@@ -214,7 +224,14 @@ _.extend(api.prototype, baseApi.prototype, {
         //TODO: security
         manager.inventorySearch(accountId, userId, term, fieldSearch, skip, limit, sortBy, sortDir, function(err, value){
             self.log.debug(accountId, userId, '<< inventorySearch');
+            var note = "Search: ";
+            if(term){
+                note += JSON.stringify(fieldSearch) + ", ";
+            }
+            note += JSON.stringify(fieldSearch);
+            self.createUserActivity(req, 'INV_SEARCH', note, null, function(){});
             return self.sendResultOrError(resp, err, value, "Error searching inventory");
+
         });
     },
 
@@ -663,6 +680,32 @@ _.extend(api.prototype, baseApi.prototype, {
             return self.sendResultOrError(resp, err, value, "Error searching participants");
         });
 
+    },
+
+    customerExists: function(req, resp) {
+        var self = this;
+        var accountId = parseInt(self.accountId(req));
+        var userId = self.userId(req);
+        self.log.debug(accountId, userId, '>> customerExists');
+        
+        var cardCodes = req.query.codes.split(",");
+        console.log(cardCodes);
+        cardCodes = _.map(cardCodes, function(code){return code.toLowerCase()});
+        manager.customerExists(accountId, userId, cardCodes, function(err, list){
+            self.log.debug(accountId, userId, '<< customerExists');
+            return self.sendResultOrError(resp, err, list, "Error checking customers if exists");
+        });
+    },
+
+    createActivity: function(req, resp) {
+        var self = this;
+        var accountId = parseInt(self.accountId(req));
+        var userId = self.userId(req);
+        self.log.debug(accountId, userId, '>> createActivity');
+        
+        var activity = req.body;
+        self.createUserActivity(req, activity.activityType, activity.note, null, function(){});
+        self.send200(resp);
     },
 
     _isUserAdmin: function(req, fn) {

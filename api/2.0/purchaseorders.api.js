@@ -27,15 +27,15 @@ _.extend(api.prototype, baseApi.prototype, {
 
     initialize: function () {
 
-        app.get(this.url(''), this.isAuthAndSubscribedApi.bind(this), this.listPurchaseOrders.bind(this));       
-        app.post(this.url(''), this.isAuthAndSubscribedApi.bind(this), this.createPurchaseOrder.bind(this));
-        app.get(this.url('po/:id'), this.isAuthAndSubscribedApi.bind(this), this.getPurchaseOrder.bind(this));
-        app.post(this.url('po/:id/notes'), this.isAuthAndSubscribedApi.bind(this), this.addPurchaseOrderNotes.bind(this));
-        app.post(this.url('po/archivepurchaseorders'), this.isAuthAndSubscribedApi.bind(this), this.archiveBulkPurchaseOrders.bind(this));
-        app.delete(this.url('po/:id'), this.isAuthAndSubscribedApi.bind(this), this.deletePurchaseOrder.bind(this));
-        app.put(this.url('po/archive/:id'), this.isAuthAndSubscribedApi.bind(this), this.archivePurchaseOrder.bind(this));
-        app.get(this.url('dashboard/listpurchaseorders'), this.isAuthAndSubscribedApi.bind(this), this.getDashboardPurchaseOrders.bind(this));
-        app.get(this.url('archived'), this.isAuthAndSubscribedApi.bind(this), this.listArchivedPurchaseOrders.bind(this));       
+        app.get(this.url(''), this.secureauth.bind(this, {requiresSub:true, requiresPriv:'VIEW_PO'}), this.listPurchaseOrders.bind(this));
+        app.post(this.url(''), this.secureauth.bind(this, {requiresSub:true, requiresPriv:'MODIFY_PO'}), this.createPurchaseOrder.bind(this));
+        app.get(this.url('po/:id'), this.secureauth.bind(this, {requiresSub:true, requiresPriv:'VIEW_PO'}), this.getPurchaseOrder.bind(this));
+        app.post(this.url('po/:id/notes'), this.secureauth.bind(this, {requiresSub:true, requiresPriv:'MODIFY_PO'}), this.addPurchaseOrderNotes.bind(this));
+        app.post(this.url('po/archivepurchaseorders'), this.secureauth.bind(this, {requiresSub:true, requiresPriv:'MODIFY_PO'}), this.archiveBulkPurchaseOrders.bind(this));
+        app.delete(this.url('po/:id'), this.secureauth.bind(this, {requiresSub:true, requiresPriv:'MODIFY_PO'}), this.deletePurchaseOrder.bind(this));
+        app.put(this.url('po/archive/:id'), this.secureauth.bind(this, {requiresSub:true, requiresPriv:'MODIFY_PO'}), this.archivePurchaseOrder.bind(this));
+        app.get(this.url('dashboard/listpurchaseorders'), this.secureauth.bind(this, {requiresSub:true, requiresPriv:'VIEW_PO'}), this.getDashboardPurchaseOrders.bind(this));
+        app.get(this.url('archived'), this.secureauth.bind(this, {requiresSub:true, requiresPriv:'VIEW_PO'}), this.listArchivedPurchaseOrders.bind(this));
     },
 
     listPurchaseOrders: function(req, resp) {

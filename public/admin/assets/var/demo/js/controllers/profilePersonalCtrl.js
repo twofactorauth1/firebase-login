@@ -19,7 +19,7 @@
     };
     $scope.invoices = [];
     $scope.profileUser = {};
-    UserService.getUserActivity(function (activities) {
+    UserService.getLoggedInUserActivity(function (activities) {
       $scope.activities = activities;
     });
 
@@ -131,7 +131,7 @@
         toaster.pop("error", "Email is required.");
         return;
       }
-      if(angular.equals($scope.profileUser.username.toLowerCase() != $scope.profileUser.email.toLowerCase())) {
+      if(!angular.equals($scope.profileUser.username.toLowerCase(), $scope.profileUser.email.toLowerCase())) {
           UserService.checkUserByUsername($scope.profileUser.email, function(value){
               if(value){
                   toaster.pop("error", "Email already exist");
@@ -150,7 +150,7 @@
       }
      function saveUserProfileDetails() {
           if($scope.profileUser.email)
-            $scope.profileUser.username = $scope.profileUser.email;
+            $scope.profileUser.username = angular.copy($scope.profileUser.email.toLowerCase());
           UserService.putUser($scope.profileUser, function (user) {
             if($scope.profileImage && $scope.profileImage.attachment){
               UserService.updateUserProfileImage($scope.profileImage.attachment, $scope.profileUser._id, function(user){

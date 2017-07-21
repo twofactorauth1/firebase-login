@@ -29,25 +29,25 @@ _.extend(api.prototype, baseApi.prototype, {
 
     initialize: function () {
 
-        app.get(this.url(''), this.secureauth.bind(this, true, 'VIEW_PROMOTION'), this.listPromotions.bind(this));
-        app.post(this.url(''), this.isAuthAndSubscribedApi.bind(this), this.createPromotion.bind(this));
+        app.get(this.url(''), this.secureauth.bind(this, {requiresSub:true, requiresPriv:'VIEW_PROMOTION'}), this.listPromotions.bind(this));
+        app.post(this.url(''), this.secureauth.bind(this, {requiresSub:true, requiresPriv:'MODIFY_PROMOTION'}), this.createPromotion.bind(this));
 
-        app.post(this.url('report'), this.isAuthAndSubscribedApi.bind(this), this.createPromotionReport.bind(this));
-        app.get(this.url('reports'), this.isAuthAndSubscribedApi.bind(this), this.listPromotionReports.bind(this));
-        app.post(this.url('report/:id'), this.isAuthAndSubscribedApi.bind(this), this.updatePromotionReport.bind(this));
-        app.delete(this.url('report/:id'), this.isAuthAndSubscribedApi.bind(this), this.deletePromotionReport.bind(this));
-        app.post(this.url(':id'), this.isAuthAndSubscribedApi.bind(this), this.updatePromotion.bind(this));
-        app.get(this.url(':id'), this.isAuthAndSubscribedApi.bind(this), this.getPromotionDetails.bind(this));
-        app.delete(this.url(':id'), this.isAuthAndSubscribedApi.bind(this), this.deletePromotion.bind(this));
-        app.post(this.url('attachment/:id'), this.isAuthApi.bind(this), this.updatePromotionAttachment.bind(this));
-        app.post(this.url('promotion/shipment'), this.isAuthApi.bind(this), this.createShipment.bind(this));
-        app.post(this.url('promotion/shipment/:id'), this.isAuthApi.bind(this), this.updateShipment.bind(this));
-        app.post(this.url('promotion/shipment/attachment/:id'), this.isAuthApi.bind(this), this.updateShipmentAttachment.bind(this));
-        app.get(this.url(':promotionId/shipments'), this.isAuthAndSubscribedApi.bind(this), this.listShipments.bind(this));       
-        app.delete(this.url('promotion/shipment/:id'), this.isAuthApi.bind(this), this.deleteShipment.bind(this));
-        app.get(this.url(':promotionId/shipments/export/csv'), this.isAuthAndSubscribedApi.bind(this), this.exportShipments.bind(this));
-        app.get(this.url(':promotionId/shipments/pdf'), this.isAuthAndSubscribedApi.bind(this), this.generatePDF.bind(this));
-        app.get(this.url(':promotionId/shipments/html'), this.isAuthAndSubscribedApi.bind(this), this.generateHTML.bind(this));
+        app.post(this.url('report'), this.secureauth.bind(this, {requiresSub:true, requiresPriv:'MODIFY_PROMOTION'}), this.createPromotionReport.bind(this));
+        app.get(this.url('reports'), this.secureauth.bind(this, {requiresSub:true, requiresPriv:'VIEW_PROMOTION'}), this.listPromotionReports.bind(this));
+        app.post(this.url('report/:id'), this.secureauth.bind(this, {requiresSub:true, requiresPriv:'MODIFY_PROMOTION'}), this.updatePromotionReport.bind(this));
+        app.delete(this.url('report/:id'), this.secureauth.bind(this, {requiresSub:true, requiresPriv:'MODIFY_PROMOTION'}), this.deletePromotionReport.bind(this));
+        app.post(this.url(':id'), this.secureauth.bind(this, {requiresSub:true, requiresPriv:'MODIFY_PROMOTION'}), this.updatePromotion.bind(this));
+        app.get(this.url(':id'), this.secureauth.bind(this, {requiresSub:true, requiresPriv:'VIEW_PROMOTION'}), this.getPromotionDetails.bind(this));
+        app.delete(this.url(':id'), this.secureauth.bind(this, {requiresSub:true, requiresPriv:'MODIFY_PROMOTION'}), this.deletePromotion.bind(this));
+        app.post(this.url('attachment/:id'), this.secureauth.bind(this, {requiresSub:true, requiresPriv:'MODIFY_PROMOTION'}), this.updatePromotionAttachment.bind(this));
+        app.post(this.url('promotion/shipment'), this.secureauth.bind(this, {requiresSub:true, requiresPriv:'MODIFY_PROMOTION'}), this.createShipment.bind(this));
+        app.post(this.url('promotion/shipment/:id'), this.secureauth.bind(this, {requiresSub:true, requiresPriv:'MODIFY_PROMOTION'}), this.updateShipment.bind(this));
+        app.post(this.url('promotion/shipment/attachment/:id'), this.secureauth.bind(this, {requiresSub:true, requiresPriv:'MODIFY_PROMOTION'}), this.updateShipmentAttachment.bind(this));
+        app.get(this.url(':promotionId/shipments'), this.secureauth.bind(this, {requiresSub:true, requiresPriv:'VIEW_PROMOTION'}), this.listShipments.bind(this));
+        app.delete(this.url('promotion/shipment/:id'), this.secureauth.bind(this, {requiresSub:true, requiresPriv:'MODIFY_PROMOTION'}), this.deleteShipment.bind(this));
+        app.get(this.url(':promotionId/shipments/export/csv'), this.secureauth.bind(this, {requiresSub:true, requiresPriv:'VIEW_PROMOTION'}), this.exportShipments.bind(this));
+        app.get(this.url(':promotionId/shipments/pdf'), this.secureauth.bind(this, {requiresSub:true, requiresPriv:'VIEW_PROMOTION'}), this.generatePDF.bind(this));
+        app.get(this.url(':promotionId/shipments/html'), this.secureauth.bind(this, {requiresSub:true, requiresPriv:'VIEW_PROMOTION'}), this.generateHTML.bind(this));
     },
 
 

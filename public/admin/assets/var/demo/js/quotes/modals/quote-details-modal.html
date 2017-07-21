@@ -25,9 +25,11 @@
             </div>    
             <div class="clearfix"></div>
         </div>
-        <div class="modal-footer">
-            <button class="btn btn-wide btn-warning" ng-disabled='form.$invalid || vm.uiState.saveLoading || vm.uiState.loading || vm.uiState.isViewMode || !vm.state.cartDetail.items.length' ng-click="vm.saveQuote(false)">Save</button>
-            <button class="btn btn-wide btn-success" ng-disabled='form.$invalid || vm.uiState.saveLoading || vm.uiState.loading || vm.uiState.isViewMode || !vm.state.cartDetail.items.length' ng-click="vm.saveQuote(true)">Submit</button>
+        <div class="modal-footer quote-cart-details-footer">
+            <button ng-if="vm.uiState.showDeleteBtn" class="btn btn-wide btn-danger" ng-disabled='vm.uiState.saveLoading || vm.uiState.loading || vm.uiState.isViewMode' ng-click="vm.deleteQuote()"><i class="fa fa-trash-o"></i> Delete</button>
+            <button class="btn btn-warning btn-wide" ng-disabled='form.$invalid || vm.uiState.saveLoading || vm.uiState.loading || vm.uiState.isViewMode || !vm.state.cartDetail.items.length' ng-click="vm.saveQuote(false)"><i class="fa fa-floppy-o"></i> Save</button>
+            <button class="btn btn-wide btn-success" ng-disabled='form.$invalid || vm.uiState.saveLoading || vm.uiState.loading || vm.uiState.isViewMode || !vm.state.cartDetail.items.length' ng-click="vm.saveQuote(true)"><i class="fa fa-send-o"></i> Submit</button>
+
         </div>
     </form>    
 </script>

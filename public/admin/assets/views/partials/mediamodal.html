@@ -99,6 +99,9 @@
                                     <li>
                                         <a href="" ng-click="m.deleteAsset(asset)"><i class="fa fa-trash-o"></i> Delete</a>
                                     </li>
+                                    <li>
+                                        <a href="" ng-click="m.addRemoveAssetFromCache(asset)"><i class="fa fa-database"></i> {{asset.isCached? "Don't ":" " }}Cache</a>
+                                    </li>
                                 </ul>
                             </div>
                             <div class="thmb-prev">
@@ -107,12 +110,12 @@
                                     <span ng-switch-when="octet-stream" class="fa fa-file-text-o" style="font-size: 96px;"></span>
                                     <span ng-switch-when="audio" class="fa fa-file-audio-o" style="font-size: 96px;"></span>
                                     <span ng-switch-when="video" class="fa fa-file-video-o" style="font-size: 96px;"></span>                                    
-                                    <img ng-if="asset.url" ng-switch-when="image" img-lazy-load="{{ asset.url }}?v{{ cachebuster }}" alt="">
+                                    <img ng-if="asset.url" ng-switch-when="image" img-lazy-load="{{ asset.url }}?v{{asset.isCached==true?'':cachebuster}}" alt="">
                                     <span ng-switch-default class="fa fa-file-o" style="font-size: 96px;"></span>
                                 </div>
                             </div>
                             <h5 class="fm-title">
-                                    <a editable-text='asset.filename' e-required e-placeholder='Enter name' onaftersave='m.onAssetUpdateCallback(asset)' onbeforesave="validateAsset($data)"><span class="text-adjust-span">{{asset.filename}}</span></a>
+                                    <a editable-text='asset.filename' e-required e-placeholder='Enter name' onaftersave='m.onAssetUpdateCallback(asset)' onbeforesave="validateAsset($data)"><span class="text-adjust-span">{{asset.filename}}{{asset.isCached?'':' (Uncached)'}}</span></a>
                                 </h5>
                             <small class="text-muted">{{asset.created.date | timeAgoFilter}}</small>
                         </div>

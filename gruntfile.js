@@ -713,6 +713,12 @@ module.exports = function(grunt) {
         dbCopyUtil.updatePrivs(done);
     });
 
+    grunt.registerTask('updateUnsubedContacts', 'updateUnsubedContacts', function(){
+        var done = this.async();
+        var dbCopyUtil = require('./utils/dbcopyutil');
+        dbCopyUtil.updateUnsubedContacts(done);
+    });
+
     // grunt.registerTask('serve', 'Start a custom web server.', function() {
     //     grunt.log.writeln('Starting web server on port 80.');
     //     require('./app.js');

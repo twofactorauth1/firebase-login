@@ -64,18 +64,28 @@ function inventoryDetailsController($scope, $state, $attrs, $filter, $modal, $ti
 
     function watchInventoryItem() {
         vm.uiState.savingWatchInventory = true;
+        vm.state.userActivity = {};
         if(vm.uiState.watched){
             var toasterMessage = 'Item removed from inventory watch list';
-            vm.uiState.inVentoryWatchList = _.without(vm.uiState.inVentoryWatchList, $stateParams.inventoryId);            
+            vm.uiState.inVentoryWatchList = _.without(vm.uiState.inVentoryWatchList, $stateParams.inventoryId); 
+            vm.state.userActivity = {
+                activityType: 'INV_UNWATCH',
+                note: "Product Name: " + vm.inventory.OITM_ItemName
+            }           
         }
         else{
             var toasterMessage = 'Item add to inventory watch list';
             vm.uiState.inVentoryWatchList = _.first(_.union([$stateParams.inventoryId], vm.uiState.inVentoryWatchList), 5);    
+            vm.state.userActivity = {
+                activityType: 'INV_WATCH',
+                note: "Product Name: " + vm.inventory.OITM_ItemName
+            } 
         }
         
         vm.state.userOrgConfig.watchList = vm.uiState.inVentoryWatchList;
         vm.uiState.loadingWatchInventory = true;
-        InventoryService.updateUserOrgConfig(vm.state.userOrgConfig).then(function(response){                    
+        InventoryService.updateUserOrgConfig(vm.state.userOrgConfig).then(function(response){    
+            InventoryService.createUserActivity(vm.state.userActivity);             
             toaster.pop('success', toasterMessage);
             vm.uiState.watched  = checkIfSelected();
             vm.uiState.savingWatchInventory = false;

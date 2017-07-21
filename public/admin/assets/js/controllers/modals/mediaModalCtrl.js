@@ -521,6 +521,18 @@ app.controller('MediaModalCtrl', ['$scope', 'mediaManagerConstant', '$injector',
       return "Please fill this field";
     }
   }
+  $scope.m.addRemoveAssetFromCache = function (asset) {
+    var originalAsset = angular.copy(asset);
+    originalAsset.isCached = !originalAsset.isCached;
+    originalAsset.accountId = $scope.account._id;
+    AssetsService.updateAsset(originalAsset, function (data, status) {
+      if (status == 200) {
+        asset.url=data.url;
+        asset.isCached=data.isCached;
+        ToasterService.show('success', 'Asset updated.');
+      }
+    });
+  };
 
 
 
