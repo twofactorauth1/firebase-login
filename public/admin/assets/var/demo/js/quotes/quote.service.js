@@ -23,7 +23,7 @@
         quoteService.updateQuoteAttachment = updateQuoteAttachment;
         quoteService.submitQuote = submitQuote;
         quoteService.getCustomers = getCustomers;
-        
+        quoteService.deleteQuote = deleteQuote;
 
         quoteService.loading = {value: 0};
 
@@ -95,6 +95,25 @@
                 transformRequest: angular.identity,
                 headers: {'Content-Type': undefined}
             }).success(success).error(error));
+        }
+
+
+        function deleteQuote(quote) {
+
+            function success(data) {
+                quoteService.quotes = _.reject(quoteService.quotes, function(c){ return c._id == quote._id });
+            }
+
+            function error(error) {
+                console.error('quoteService deleteQuote error: ', JSON.stringify(error));
+            }
+
+            return quoteServiceRequest(
+                $http({
+                    url: [baseQuoteAPIUrlv2, quote._id].join('/'),
+                    method: "DELETE"
+                }).success(success).error(error)
+            )
         }
 
 

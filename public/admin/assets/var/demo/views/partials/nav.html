@@ -47,7 +47,7 @@
     </li>
 
     <li ng-class="{'active open':$state.includes('app.managequotes') || $state.includes('app.quotesnotifications') || $state.includes('app.viewquotes')}" ng-if="userPermissions.quotes">
-        <a href="javascript:void(0)">
+        <a ui-sref="app.managequotes">
             <div class="item-content">
                 <div class="item-media">
                     <i class="ti-quote-right"></i>
@@ -57,25 +57,6 @@
                 </div>
             </div>
         </a>
-        <ul class="sub-menu">
-            <li ui-sref-active="active" ng-class="{'active': $state.includes('app.managequotes')}" ng-if="userPermissions.permissions.quote.view">
-                <a ui-sref="app.managequotes">
-                    <span class="title" translate="sidebar.nav.quotes.MANAGE"> Manage Quotes </span>
-                </a>
-            </li>
-            <li ui-sref-active="active" ng-class="{'active': $state.includes('app.quotesnotifications')}" ng-if="userPermissions.permissions.quote.view">
-                <a ui-sref="app.quotesnotifications">
-                    <span class="title" translate="sidebar.nav.quotes.NOTIFICATIONS"> Notifications </span>
-                </a>
-            </li>
-            <li ui-sref-active="active" ng-class="{'active': $state.includes('app.viewquotes')}" ng-if="userPermissions.isVendorWithCardCodes" class="hidden">
-                <a ui-sref="app.viewquotes">
-                    <span class="title" translate="sidebar.nav.quotes.VIEW"> View Quotes </span>
-                </a>
-
-            </li>
-
-        </ul>
     </li>
     <li ng-class="{'active open':$state.includes('app.purchaseorders')}" ng-if="userPermissions.purchaseorders">
         <a ui-sref="app.purchaseorders">

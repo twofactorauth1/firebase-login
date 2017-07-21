@@ -1646,6 +1646,37 @@ var copyutil = {
         });
     },
 
+    updateUnsubedContacts: function(fn) {
+        var fs = require('fs');
+        var srcDBUrl = mongoConfig.PROD_MONGODB_CONNECT;
+        var srcMongo = mongoskin.db(srcDBUrl, {safe:true});
+        var contactsCollection = srcMongo.collection('contacts');
+        var stream = fs.createReadStream("/Users/millkyl/Downloads/suppression_unsubscribes.csv");
+        var emailAry = [];
+
+        var csv = require('fast-csv');
+        csv
+            .fromStream(stream, {headers : ["email", "created"]})
+            .on("data", function(data){
+                emailAry.push(data.email);
+                console.log(data.email);
+            })
+            .on("end", function(){
+                console.log("done with stream");
+                async.eachSeries(emailAry, function(email, cb){
+                    var query = {'details.emails.email':email, unsubscribed:{$ne:true}};
+                    contactsCollection.update(query, {$set:{unsubscribed:true}}, {multi:true}, function(err, result){
+                        console.log('updated ' + email);
+                        cb(err);
+                    });
+                }, function(err){
+                    console.log('done with updating contacts');
+                    fn();
+                });
+            });
+
+    },
+
     getBouncedContactIDs: function(fn) {
         var emailMessageQuery = {$or:[{'events.event':'bounce'}, {'events.event':'dropped', 'events.reason':'Bounced Address'}]};
         var srcDBUrl = mongoConfig.PROD_MONGODB_CONNECT;

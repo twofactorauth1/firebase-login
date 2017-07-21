@@ -14,7 +14,7 @@
 
     $scope.isProductDirty = {
       dirty : false
-    }
+    };
 
     $scope.slickConfig = {
         infinite: false,
@@ -89,7 +89,7 @@
       $timeout(function() {
         $scope.myform.$dirty = false;
       }, 0);
-    }
+    };
 
     $scope.selectedDate = {};
     var startDate =  moment();
@@ -468,7 +468,7 @@
         $state.go('account');
       }
       $scope.newSubscription = newSubscription;
-      var subscription_fee = $scope.signup_fee;
+      var subscription_fee = parseInt($scope.signup_fee)*100;
       $scope.newSubscription.amount = $scope.newSubscription.amount * 100;
       PaymentService.postCreatePlan($scope.newSubscription, function (subscription) {
         $scope.signup_fee = subscription_fee;
@@ -480,14 +480,14 @@
             id: subscription.id,
             active: true,
             signup_fee: subscription_fee,
-            price: price,
+            price: price
           });
         } else {
           $scope.product.product_attributes.stripePlans = [{
             id: subscription.id,
             active: true,
             signup_fee: subscription_fee,
-            price: price,
+            price: price
           }];
         }
 
@@ -628,6 +628,7 @@
     $scope.setDefault = function(){
       if ($scope.product.is_image) {
         $scope.product.icon = $scope.originalIcon ? $scope.originalIcon : $scope.product.assets[0];
+        $scope.product.assets[0] = $scope.product.icon;
       } else {
         $scope.product.icon = 'fa-cube';
         angular.element('#convert').iconpicker('setIcon', 'fa-cube');

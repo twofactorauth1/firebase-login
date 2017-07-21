@@ -213,7 +213,26 @@
                                                         <span ng-if="activity.customer.first">{{activity.customer.first+' '+activity.customer.last}}</span>
                                                         <span ng-if="!activity.customer.first">{{activity.customer.details[0].emails[0].email}}</span>.
                                                     </p>
-                                                    <!-- <a href="javascript:void(0);" class="btn btn-xs btn-green"><i class="fa fa-file"></i> Read the Email</a> -->
+                                                </div>
+                                                <div ng-switch-when="INV_SEARCH">
+                                                    <p>
+                                                        <span class="label label-default">INVENTORY SEARCH</span> {{activity.note}}
+                                                    </p>
+                                                </div>
+                                                <div ng-switch-when="INV_DETAIL">
+                                                    <p>
+                                                        <span class="label label-default">INVENTORY DETAILS</span> {{activity.note}}
+                                                    </p>
+                                                </div>
+                                                <div ng-switch-when="INV_WATCH">
+                                                    <p>
+                                                        <span class="label label-default">INVENTORY WATCH</span> {{activity.note}}
+                                                    </p>
+                                                </div>
+                                                <div ng-switch-when="INV_UNWATCH">
+                                                    <p>
+                                                        <span class="label label-default">INVENTORY UNWATCH</span> {{activity.note}}
+                                                    </p>
                                                 </div>
                                             </div>
                                         </p>
