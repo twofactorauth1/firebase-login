@@ -628,6 +628,7 @@
     $scope.setDefault = function(){
       if ($scope.product.is_image) {
         $scope.product.icon = $scope.originalIcon ? $scope.originalIcon : $scope.product.assets[0];
+        $scope.product.assets[0] = $scope.product.icon;
       } else {
         $scope.product.icon = 'fa-cube';
         angular.element('#convert').iconpicker('setIcon', 'fa-cube');

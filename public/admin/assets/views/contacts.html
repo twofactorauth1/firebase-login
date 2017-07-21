@@ -180,7 +180,7 @@
                                 </th>
                                 <th class="column-width hidden-xs" ng-show="column.tags">
 
-                                    <ui-select ng-model-options="{ debounce: 800 }" ng-model="pagingParams.fieldSearch.tags" on-select="triggerInput('#searchType')" theme="bootstrap">
+                                    <ui-select ng-model="pagingParams.fieldSearch.tags" on-select="triggerInput('#searchType')" theme="bootstrap">
                                         <ui-select-match placeholder="Select Type">
                                             <small ng-bind-html="$select.selected.label"></small>
                                             <span class="fa fa-times text-danger" ng-click=" clearSearchFilter($event, '#searchType', 'tags')"></span>
