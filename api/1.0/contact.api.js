@@ -274,7 +274,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
             var csv = headers.concat(extraHeaders).join(',') + '\n';
             _.each(contacts, function(contact){
-                 self.log.debug(contact);
+                 //self.log.debug(contact);
                 var tags = _.map(contact.get('tags'), function (x) {
                   var tag = _.findWhere($$.constants.contact.contact_types.dp, {data: x});
                   if (tag) {
@@ -292,7 +292,7 @@ _.extend(api.prototype, baseApi.prototype, {
                         return "\""+text+"\",";
                     else
                         return text+",";
-                }
+                };
                 csv += parseString(contact.get('first'));
                 csv += parseString(contact.get('middle'));
                 csv += parseString(contact.get('last'));
@@ -319,7 +319,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 csv += '\n';
             });
             return csv;
-        }
+        };
         if (req.query.ids) {
             var query = {accountId: accountId};
             if (_.isArray(req.query.ids)) {
