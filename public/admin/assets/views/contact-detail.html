@@ -44,7 +44,7 @@
                                             </div>
                                         </fieldset>
                                         <div class="form-group">
-                                            <label class="">Contact</label>
+                                            <label class="">Name</label>
                                             <input id="input-fullname" class="form-control" ng-model="data.fullName" placeholder="Full name" type="text" ng-change="setFullName()">
                                             <small>
                                                 <strong>First:</strong>
@@ -280,11 +280,11 @@
                                     <div class="map margin-bottom-15">
                                         <span class="text-bold">Location</span>
                                         <hr class="margin-top-5">
-                                        <map zoom="10" center="{{location.lat}}, {{location.lon}}" disable-default-u-i="true" scale-control="false" pan-control="false" zoom-control="false" class="height-155" ng-if="!loadingMap && location.lat" scrollwheel="false">
+                                        <map zoom="10" center="{{location.lat}}, {{location.lon}}" disable-default-u-i="true" scale-control="false" pan-control="false" zoom-control="false" class="height-330" ng-if="!loadingMap && location.lat" scrollwheel="false">
                                             <marker position="{{location.lat}}, {{location.lon}}"></marker>
                                         </map>
-                                        <div class="load1 csspinner height-155" ng-if="loadingMap"></div>
-                                        <div class="height-155" ng-if="!loadingMap && !location.lat">
+                                        <div class="load1 csspinner height-330" ng-if="loadingMap"></div>
+                                        <div class="height-330" ng-if="!loadingMap && !location.lat">
                                             <h4 class="center text-bold no-location">No Location</h4></div>
                                     </div>
                                     <div class="panel panel-white" id="notes">
