@@ -283,10 +283,10 @@ var ziManager = {
     productSearch: function(accountId, userId, term, skip, limit, sortBy, sortDir, filter, fn) {
         var self = this;
         self.log.debug(accountId, userId, '>> productSearch');
-        
-        var query = {
-            _shortVendorName: new RegExp('^' + filter)
-        };
+        var query = {};
+        if(filter){
+            query._shortVendorName = new RegExp('^' + filter);
+        }
         
         if(term){
             term = term.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
@@ -294,6 +294,12 @@ var ziManager = {
             var orQuery = [                    
                 {OITM_ItemName:regex}
             ];
+            if(!filter){
+                orQuery = [                    
+                    {OITM_ItemName:regex},
+                    {_shortVendorName:regex}
+                ];
+            }
             query["$or"] = orQuery;
         }
 

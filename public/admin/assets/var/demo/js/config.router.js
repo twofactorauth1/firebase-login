@@ -266,7 +266,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         templateUrl: "/admin/assets/var/demo/js/quotes/quote.html",
         title: 'Quotes',
         icon: 'ti-layout-media-left-alt',
-        resolve: loadSequence('QuoteComponent', 'QuoteComponentController', 'QuoteService')
+        resolve: loadSequence('QuoteComponent', 'QuoteComponentController', 'QuoteService', 'QuoteProductModalController', 'SecurematicsProductService')
     }).state('app.quotesnotifications', {
         url: '/quotes/notifications',
         templateUrl: "/admin/assets/var/demo/views/under-construction.html",
