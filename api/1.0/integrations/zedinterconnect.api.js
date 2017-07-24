@@ -208,14 +208,13 @@ _.extend(api.prototype, baseApi.prototype, {
         var sortBy = req.query.sortBy || null;
         var sortDir = parseInt(req.query.sortDir) || null;
         var fieldSearch = req.query;
-
-        var fieldSearch = req.query;
+        var term = req.query.term;
         delete fieldSearch.term;
         delete fieldSearch.skip;
         delete fieldSearch.limit;
         delete fieldSearch.sortBy;
         delete fieldSearch.sortDir;
-        var term = req.query.term;
+        
         /*
          * Search across the fields
          */
@@ -224,11 +223,8 @@ _.extend(api.prototype, baseApi.prototype, {
         //TODO: security
         manager.inventorySearch(accountId, userId, term, fieldSearch, skip, limit, sortBy, sortDir, function(err, value){
             self.log.debug(accountId, userId, '<< inventorySearch');
-            var note = "Search: ";
-            if(term){
-                note += JSON.stringify(fieldSearch) + ", ";
-            }
-            note += JSON.stringify(fieldSearch);
+            
+            var note = self._formatActivityString(fieldSearch, term);
             self.createUserActivity(req, 'INV_SEARCH', note, null, function(){});
             return self.sendResultOrError(resp, err, value, "Error searching inventory");
 
@@ -821,6 +817,27 @@ _.extend(api.prototype, baseApi.prototype, {
         resp.set('Content-Type', 'text/csv');
         resp.set("Content-Disposition", "attachment;filename=csv.csv");
         self.sendResult(resp, csv);
+    },
+
+    _formatActivityString: function (fieldSearch, term){
+        var _string = "Search: ";
+        if(term)
+            _string += term;
+        var _obj = {};
+        for(var i=0; i <= Object.keys(fieldSearch).length - 1; i++){
+            var key = Object.keys(fieldSearch)[i];
+            var value = fieldSearch[key];
+            if(value){
+                _obj[key] = value;
+            }
+        }
+        if(Object.keys(_obj).length){
+            if(term){
+                _string += ", ";
+            }
+            _string += JSON.stringify(_obj);
+        }
+        return _string;
     }
 });
 
