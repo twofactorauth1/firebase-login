@@ -47,7 +47,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url('promotions/participants/search'), this.isAuthAndSubscribedApi.bind(this), this.participantSearch.bind(this));
         app.post(this.url('inventory/useractivity'), this.isAuthAndSubscribedApi.bind(this), this.createActivity.bind(this));
         app.get(this.url('vars/exists'), this.isAuthAndSubscribedApi.bind(this), this.customerExists.bind(this));
-        
+        app.get(this.url('customer/:id/export/csv'), this.isAuthAndSubscribedApi.bind(this), this.exportCustomerStatement.bind(this));
     },
 
     demo: function(req, resp) {
@@ -546,6 +546,47 @@ _.extend(api.prototype, baseApi.prototype, {
         })
     },
 
+
+    exportCustomerStatement: function(req, resp) {
+        var self = this;
+        var accountId = parseInt(self.accountId(req));
+        var userId = self.userId(req);
+        self.log.debug(accountId, userId, '>> exportCustomerStatement');
+        var itemId = req.params.id;
+        self._checkAccess(accountId, userId, 'ledger', function(err, isAllowed){
+            if(!isAllowed) {
+                self.log.debug(accountId, userId, '<< ledger [' + isAllowed + ']');
+                return self.sendResultOrError(resp, err, [], "Error calling exportCustomerStatement");
+            } else {
+                self._isUserAdminOrSecurematics(req, function(err, isAdmin){
+                    if(isAdmin && isAdmin === true) {
+                        manager.exportCustomerStatement(accountId, userId, itemId, function(err, list){
+                            self.log.debug(accountId, userId, '<< exportCustomerStatement');
+                            self._exportToCSV(req, resp, list);
+                        });
+                    } else {
+                        self._getOrgConfig(accountId, userId, function(err, orgConfig){
+                            if(!orgConfig){
+                                orgConfig = {};
+                            }
+                            var cardCodes = orgConfig.cardCodes || [];
+                            cardCodes = _.map(cardCodes, function(code){return code.toLowerCase()});
+                            if(_.contains(cardCodes, itemId.toLowerCase())){
+                                manager.exportCustomerStatement(accountId, userId, itemId, function(err, list){
+                                    self.log.debug(accountId, userId, '<< exportCustomerStatement');
+                                    self._exportToCSV(req, resp, list);
+                                });
+                            }
+                            else{
+                                return self.wrapError(resp, 400, 'Bad Request', 'User does not have any matching cardCodes');
+                            }
+                        });
+                    }
+                });
+            }
+        })
+    },
+
     customerItem: function(req, resp) {
         var self = this;
         var accountId = parseInt(self.accountId(req));
@@ -773,6 +814,13 @@ _.extend(api.prototype, baseApi.prototype, {
         userManager.getUserById(userId, function(err, user){
             fn(null, user);
         });
+    },
+
+    _exportToCSV: function(req, resp, csv){
+        var self = this;
+        resp.set('Content-Type', 'text/csv');
+        resp.set("Content-Disposition", "attachment;filename=csv.csv");
+        self.sendResult(resp, csv);
     }
 });
 

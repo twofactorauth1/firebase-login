@@ -20,10 +20,14 @@ function ledgerDetailsController($scope, $state, $attrs, $filter, $modal, $timeo
     vm.parseValueToDate = parseValueToDate;
     vm.viewInventoryDetails = viewInventoryDetails;
     vm.calculateLedgerTotal = calculateLedgerTotal;
-
+    vm.exportCSV = exportCSV;
 
     function backToCustomers(){
         $state.go("app.customers");
+    }
+
+    function exportCSV(){
+        LedgerService.exportCustomerStatement(vm.customerId);
     }
 
     function init(element) {
