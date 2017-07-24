@@ -86,7 +86,12 @@
           if(m.promotions !== undefined) {
               this.orgConfigAndPermissions.promotions = m.promotions;
           } else {
-              this.orgConfigAndPermissions.promotions = false;
+              if(this.orgConfigAndPermissions.isVendor){
+                this.orgConfigAndPermissions.promotions = false;  
+              }
+              else{
+                this.orgConfigAndPermissions.promotions = true;
+              }
           }
           if(m.dashboard !== undefined) {
               this.orgConfigAndPermissions.dashboard = m.dashboard;
