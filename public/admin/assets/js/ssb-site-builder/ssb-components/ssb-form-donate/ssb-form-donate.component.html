@@ -46,7 +46,7 @@
                     </div>
                 </div>
 
-                <div ng-if="vm.product._id" class="donate-social-share">
+                <div ng-if="vm.product._id && vm.product.status != 'inactive'" class="donate-social-share">
                     <a class="btn btn-xs btn-twitter"
                            socialshare
                            socialshare-via="indigenous_io"
