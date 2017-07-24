@@ -5,7 +5,6 @@
             <span class="sr-only">Close</span>
         </button>
         <h3 class="modal-title">
-            <span class="ti-quote-right"></span>
             Quote ID: {{vm.state.cartDetail._id}}
         </h3>
     </div>
@@ -22,7 +21,7 @@
             </div>
             <div class="loading-modal center" ng-if="vm.uiState.loading || vm.uiState.loadingDetailsModal">
                 <h3>Loading details. Please wait...</h3>
-            </div>    
+            </div>
             <div class="clearfix"></div>
         </div>
         <div class="modal-footer quote-cart-details-footer">
@@ -32,5 +31,5 @@
             <button class="btn btn-wide btn-success" ng-disabled='form.$invalid || vm.uiState.saveLoading || vm.uiState.loading || vm.uiState.isViewMode || !vm.state.cartDetail.items.length' ng-click="vm.saveQuote(true)"><i class="fa fa-send-o"></i> Submit</button>
 
         </div>
-    </form>    
+    </form>
 </script>
