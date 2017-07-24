@@ -22,8 +22,8 @@ var promotionReport = $$.m.ModelBase.extend({
             fromAddress:'admin@securematics.com',
             subject: 'Promotion Report',
             sendAt:{
-                hourOfDay:15,
-                minuteOfDay:0
+                hourOfDay:23,
+                minuteOfDay:59
             },
             created: {
                 date: new Date(),

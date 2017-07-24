@@ -22,6 +22,7 @@ var emailMessageManager = require('../../emailmessages/emailMessageManager');
 var notificationConfig = require('../../configs/notification.config');
 var fs = require('fs');
 var geoIPUtil = require('../../utils/geoiputil');
+var async = require('async');
 
 var api = function () {
     this.init.apply(this, arguments);
@@ -258,94 +259,22 @@ _.extend(api.prototype, baseApi.prototype, {
 
     exportCsvContacts: function(req, resp) {
         var self = this;
-        self.log.debug('>> exportCsvContacts');
         var accountId = parseInt(self.accountId(req));
+        var userId = self.userId(req);
+        self.log.debug(accountId, userId, '>> exportCsvContacts');
         var query = {accountId: accountId};
-        var makeCsv=function(contacts){
-            var headers = ['first', 'middle', 'last', 'email', 'created', 'type', 'tags', 'phone', 'unsubscribed', 'website', 'company', 'address', 'notes'];
-            var extras = _.pluck(_.pluck(contacts, 'attributes'), 'extra');
-            var extraHeaders = [];
-
-            _.each(extras, function (extra) {
-              extraHeaders = extraHeaders.concat(_.pluck(extra, 'label'));
-            });
-
-            extraHeaders = _.uniq(extraHeaders);
-
-            var csv = headers.concat(extraHeaders).join(',') + '\n';
-            _.each(contacts, function(contact){
-                 self.log.debug(contact);
-                var tags = _.map(contact.get('tags'), function (x) {
-                  var tag = _.findWhere($$.constants.contact.contact_types.dp, {data: x});
-                  if (tag) {
-                    return tag.label;
-                  } else {
-                    return x;
-                  }
-                });
-                var parseString=function (text){
-                    if(text==undefined)
-                        return ',';
-                    // "" added for number value
-                    text=""+text;
-                    if(text.indexOf(',')>-1)
-                        return "\""+text+"\",";
-                    else
-                        return text+",";
-                }
-                csv += parseString(contact.get('first'));
-                csv += parseString(contact.get('middle'));
-                csv += parseString(contact.get('last'));
-                csv += parseString(contact.getPrimaryEmail());
-                csv += parseString(contact.get('created').date);
-                csv += parseString(contact.get('type'));
-                csv += parseString(tags.join(' | '));
-                csv += parseString(contact.getPrimaryPhone());
-                csv += parseString(contact.get('unsubscribed'));
-                csv += parseString(contact.get('details').length && contact.get('details')[0].websites && contact.get('details')[0].websites[0] && contact.get('details')[0].websites[0].website ? contact.get('details')[0].websites[0].website  : '');
-                csv += parseString(contact.get('details').length && contact.get('details')[0].company ? contact.get('details')[0].company : '');
-                csv +=parseString( contact.getPrimaryAddress() );
-                csv += parseString(contact.getNotes() );
-
-                _.each(extraHeaders, function (header) {
-                    var extraField = _.findWhere(contact.get('extra'), {label: header});
-
-                    if (extraField) {
-                      csv += parseString(extraField.value);
-                    } else {
-                      csv += parseString('');
-                    }
-                });
-                csv += '\n';
-            });
-            return csv;
+        var sortBy = req.query.sortBy || null;
+        var sortDir = null;
+        if(req.query.sortDir) {
+            sortDir = parseInt(req.query.sortDir);
         }
-        if (req.query.ids) {
-            var query = {accountId: accountId};
+        if(req.query.ids) {
             if (_.isArray(req.query.ids)) {
                 query['_id'] = {'$in': _.map(req.query.ids, function (x) {return parseInt(x);})};
-              } else {
+            } else {
                 query['_id'] = parseInt(req.query.ids);
-              }
-            self.log.debug('export query >>', query);
-            self.checkPermissionForAccount(req, self.sc.privs.VIEW_CONTACT, accountId, function(err, isAllowed) {
-                    if (isAllowed !== true) {
-                        return self.send403(resp);
-                    } else {
-                        contactDao.findMany(query, $$.m.Contact, function(err, contacts){
-                            self.log.debug('<< exportCsvContacts');
-                            resp.set('Content-Type', 'text/csv');
-                            resp.set("Content-Disposition",  "attachment;filename=csv.csv");
-                            self.sendResult(resp, makeCsv(contacts));
-                        });
-                    }
-            });
-        }else{
-            var userId = self.userId(req);
-            self.log.debug(accountId, userId, '>> contactsFilter export');
-            var skip = 0;
-            var sortBy = req.query.sortBy || null;
-            var sortDir = parseInt(req.query.sortDir) || null;
+            }
+        } else {
             var term = req.query.term;
             var fieldSearch = req.query;
             delete fieldSearch.term;
@@ -353,90 +282,141 @@ _.extend(api.prototype, baseApi.prototype, {
             delete fieldSearch.limit;
             delete fieldSearch.sortBy;
             delete fieldSearch.sortDir;
-
-            self.log.debug('>> term');
-             self.log.debug(term);
-            /*
-             * Search across the fields
-             */
-
-            self.checkPermissionForAccount(req, self.sc.privs.VIEW_CONTACT, accountId, function(err, isAllowed) {
-                if (isAllowed !== true) {
-                    return self.send403(res);
-                } else {
-                    self.log.debug('>> listContacts');
-                    var query = {accountId: accountId };
-                    if(term){
-                        term = term.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
-                        var regex = new RegExp('\.*'+term+'\.*', 'i');
-                        var orQuery = [
-                            {_id:parseInt(term)},
-                            {first:regex},
-                            {middle:regex},
-                            {last:regex},
-                            {tags:regex},
-                            {'details.emails.email':regex},
-                            {'details.phones.number':regex},
-                            {'details.addresses.address':regex},
-                            {'details.addresses.address2':regex},
-                            {'details.addresses.city':regex},
-                            {'details.addresses.state':regex},
-                            {'details.addresses.zip':regex},
-                            {'details.addresses.country':regex}
-                        ];
-                        query["$or"] = orQuery;
+            if(term){
+                term = term.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+                var regex = new RegExp('\.*'+term+'\.*', 'i');
+                var orQuery = [
+                    {_id:parseInt(term)},
+                    {first:regex},
+                    {middle:regex},
+                    {last:regex},
+                    {tags:regex},
+                    {'details.emails.email':regex},
+                    {'details.phones.number':regex},
+                    {'details.addresses.address':regex},
+                    {'details.addresses.address2':regex},
+                    {'details.addresses.city':regex},
+                    {'details.addresses.state':regex},
+                    {'details.addresses.zip':regex},
+                    {'details.addresses.country':regex}
+                ];
+                query["$or"] = orQuery;
+            }
+            if(fieldSearch){
+                var fieldSearchArr = [];
+                for(var i=0; i <= Object.keys(fieldSearch).length - 1; i++){
+                    var key = Object.keys(fieldSearch)[i];
+                    var value = fieldSearch[key];
+                    self.log.debug('value:', value);
+                    var obj = {};
+                    value = value.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+                    // Filter on email address
+                    if(key == 'email'){
+                        key = 'details.emails.email'
                     }
-                    if(fieldSearch){
-                        var fieldSearchArr = [];
-                        for(var i=0; i <= Object.keys(fieldSearch).length - 1; i++){
-                            var key = Object.keys(fieldSearch)[i];
-                            var value = fieldSearch[key];
-                            self.log.debug('value:', value);
-                            var obj = {};
-                            value = value.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
-                            // Filter on email address
-                            if(key == 'email'){
-                                key = 'details.emails.email'
-                            }
-                            if(value){
-                                if(key == "_id"){
-                                    obj[key] = parseInt(value);
-                                } else if(key === 'tags'){
-                                    obj[key] = value;
-                                } else {
-                                    obj[key] = new RegExp(value, 'i');
-                                }
+                    if(value){
+                        if(key == "_id"){
+                            obj[key] = parseInt(value);
+                        } else if(key === 'tags'){
+                            obj[key] = value;
+                        } else {
+                            obj[key] = new RegExp(value, 'i');
+                        }
 
-                                fieldSearchArr.push(obj);
-                            }
-                        }
-                        if(fieldSearchArr.length){
-                            query["$and"] = fieldSearchArr;
-                        }
+                        fieldSearchArr.push(obj);
                     }
-                    self.log.debug("-------------------------");
-                    self.log.debug(query);
-                    contactDao.findMany(query, $$.m.Contact, function(err, contacts){
-                            if(sortDir && sortBy){
-                                contacts.sort(function(a,b) {
-                                    if(sortDir==1){
-                                        return (a.get(sortBy) > b.get(sortBy)) ? 1 : ((b.get(sortBy) > a.get(sortBy)) ? -1 : 0);
-                                    }else{
-                                        return (a.get(sortBy) < b.get(sortBy)) ? 1 : ((b.get(sortBy) < a.get(sortBy)) ? -1 : 0);
-                                    }
-                                });
-                          }
-                        self.log.debug('<< exportCsvContacts');
-                        resp.set('Content-Type', 'text/csv');
-                        resp.set("Content-Disposition",  "attachment;filename=csv.csv");
-                        self.sendResult(resp, makeCsv(contacts));
-                    });
                 }
-            });
-
+                if(fieldSearchArr.length){
+                    query["$and"] = fieldSearchArr;
+                }
+            }
         }
+        self.log.debug(accountId, userId, 'Using query:', query);
+        self.checkPermissionForAccount(req, self.sc.privs.VIEW_CONTACT, accountId, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(resp);
+            } else {
+                contactDao.findAndOrder(query, null, $$.m.Contact, sortBy, sortDir, function(err, contacts){
+                    if(err) {
+                        self.log.error(accountId, userId, 'Error finding contacts:', err);
+                        self.wrapError(resp, 500, 'Error finding contacts', err);
+                    } else {
+                        self._asyncMakeCSV(contacts, function(err, csv){
+                            self.log.debug(accountId, userId, '<< exportCsvContacts');
+                            resp.set('Content-Type', 'text/csv');
+                            resp.set("Content-Disposition",  "attachment;filename=csv.csv");
+                            self.sendResult(resp, csv);
+                        });
+                    }
+                });
+            }
+        });
+
     },
 
+    _asyncMakeCSV: function(contacts, cb) {
+        var headers = ['first', 'middle', 'last', 'email', 'created', 'type', 'tags', 'phone', 'unsubscribed', 'website', 'company', 'address', 'notes'];
+        var extras = _.pluck(_.pluck(contacts, 'attributes'), 'extra');
+        var extraHeaders = [];
+
+        _.each(extras, function (extra) {
+            extraHeaders = extraHeaders.concat(_.pluck(extra, 'label'));
+        });
+
+        extraHeaders = _.uniq(extraHeaders);
+
+        var csv = headers.concat(extraHeaders).join(',') + '\n';
+
+        async.eachLimit(contacts, 10, function(contact, callback){
+            var tags = _.map(contact.get('tags'), function (x) {
+                var tag = _.findWhere($$.constants.contact.contact_types.dp, {data: x});
+                if (tag) {
+                    return tag.label;
+                } else {
+                    return x;
+                }
+            });
+            var parseString=function (text){
+                if(text==undefined)
+                    return ',';
+                // "" added for number value
+                text=""+text;
+                if(text.indexOf(',')>-1)
+                    return "\""+text+"\",";
+                else
+                    return text+",";
+            };
+            csv += parseString(contact.get('first'));
+            csv += parseString(contact.get('middle'));
+            csv += parseString(contact.get('last'));
+            csv += parseString(contact.getPrimaryEmail());
+            csv += parseString(contact.get('created').date);
+            csv += parseString(contact.get('type'));
+            csv += parseString(tags.join(' | '));
+            csv += parseString(contact.getPrimaryPhone());
+            csv += parseString(contact.get('unsubscribed'));
+            csv += parseString(contact.get('details').length && contact.get('details')[0].websites && contact.get('details')[0].websites[0] && contact.get('details')[0].websites[0].website ? contact.get('details')[0].websites[0].website  : '');
+            csv += parseString(contact.get('details').length && contact.get('details')[0].company ? contact.get('details')[0].company : '');
+            csv += parseString( contact.getPrimaryAddress() );
+            csv += parseString(contact.getNotes() );
+
+            _.each(extraHeaders, function (header) {
+                var extraField = _.findWhere(contact.get('extra'), {label: header});
+
+                if (extraField) {
+                    csv += parseString(extraField.value);
+                } else {
+                    csv += parseString('');
+                }
+            });
+            csv += '\n';
+            callback();
+        }, function(err){
+            cb(err, csv);
+        });
+
+
+    },
 
     deleteContact: function (req, resp) {
 

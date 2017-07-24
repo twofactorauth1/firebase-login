@@ -138,6 +138,7 @@ $.FroalaEditor.build = _.memoize(function(type) {
             "'Merriweather',serif": 'Merriweather',
             "'Montserrat',sans-serif": 'Montserrat',
             "'Neucha',cursive": 'Neucha',
+            "'Nunito',sans-serif": 'Nunito',
             "'Open Sans Condensed',sans-serif": 'Open Sans Condensed',
             "'Open Sans',sans-serif": 'Open Sans',
             "'Oswald',sans-serif": 'Oswald',
