@@ -40,7 +40,7 @@
                         </div>
                     </div>
                     <div class="clearfix"></div>
-                    <div ng-if="!vm.product._id" class="ssb-in-context-info">
+                    <div ng-if="!vm.product._id || vm.product.status == 'inactive'" class="ssb-in-context-info">
                         <span class="fa fa-info-circle"></span>
                         <span>To accept donations, be sure to set up a payment provider and <a ui-sref="app.commerce.products" href>create a donation product</a>.</span>
                     </div>
