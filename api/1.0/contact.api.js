@@ -498,12 +498,13 @@ _.extend(api.prototype, baseApi.prototype, {
         var sortBy = req.query.sortBy || null;
         var sortDir = parseInt(req.query.sortDir) || null;
         var fieldSearch = req.query;
+        var term = req.query.term;
         delete fieldSearch.term;
         delete fieldSearch.skip;
         delete fieldSearch.limit;
         delete fieldSearch.sortBy;
         delete fieldSearch.sortDir;
-        var term = req.query.term;
+        
         /*
          * Search across the fields
          */

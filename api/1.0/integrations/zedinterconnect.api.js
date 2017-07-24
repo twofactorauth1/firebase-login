@@ -446,13 +446,13 @@ _.extend(api.prototype, baseApi.prototype, {
         var sortDir = parseInt(req.query.sortDir) || null;
         var fieldSearch = req.query;
 
-        var fieldSearch = req.query;
+        var term = req.query.term;
         delete fieldSearch.term;
         delete fieldSearch.skip;
         delete fieldSearch.limit;
         delete fieldSearch.sortBy;
         delete fieldSearch.sortDir;
-        var term = req.query.term;
+        
 
         self._isUserAdminOrSecurematics(req, function(err, isAdmin){
             if(isAdmin && isAdmin === true) {
