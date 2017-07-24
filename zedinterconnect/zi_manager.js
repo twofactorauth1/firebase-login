@@ -105,7 +105,7 @@ var ziManager = {
                             watchList = orgConfig.watchList || [];
                         }
                         query = {
-                            '@id': {'$in': watchList} 
+                            'OITM_ItemCode': {'$in': watchList} 
                         };
                         self._addUserInventoryFilter(accountId, userId, query, function(err, query){
                             ziDao.findRawWithFieldsLimitAndOrder(query, null, null, null, fields, collection, null, function(err, value){

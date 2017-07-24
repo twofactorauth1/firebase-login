@@ -59,7 +59,8 @@ function inventoryDetailsController($scope, $state, $attrs, $filter, $modal, $ti
 
 
     function checkIfSelected(){
-        return _.contains(vm.uiState.inVentoryWatchList, $stateParams.inventoryId);
+        if(vm.inventory && vm.uiState.inVentoryWatchList)
+            return _.contains(vm.uiState.inVentoryWatchList, vm.inventory.OITM_ItemCode);
     }
 
     function watchInventoryItem() {
@@ -67,7 +68,7 @@ function inventoryDetailsController($scope, $state, $attrs, $filter, $modal, $ti
         vm.state.userActivity = {};
         if(vm.uiState.watched){
             var toasterMessage = 'Item removed from inventory watch list';
-            vm.uiState.inVentoryWatchList = _.without(vm.uiState.inVentoryWatchList, $stateParams.inventoryId); 
+            vm.uiState.inVentoryWatchList = _.without(vm.uiState.inVentoryWatchList, vm.inventory.OITM_ItemCode); 
             vm.state.userActivity = {
                 activityType: 'INV_UNWATCH',
                 note: "Product Name: " + vm.inventory.OITM_ItemName
@@ -75,7 +76,7 @@ function inventoryDetailsController($scope, $state, $attrs, $filter, $modal, $ti
         }
         else{
             var toasterMessage = 'Item add to inventory watch list';
-            vm.uiState.inVentoryWatchList = _.first(_.union([$stateParams.inventoryId], vm.uiState.inVentoryWatchList), 5);    
+            vm.uiState.inVentoryWatchList = _.first(_.union([vm.inventory.OITM_ItemCode], vm.uiState.inVentoryWatchList), 5);    
             vm.state.userActivity = {
                 activityType: 'INV_WATCH',
                 note: "Product Name: " + vm.inventory.OITM_ItemName
@@ -109,6 +110,7 @@ function inventoryDetailsController($scope, $state, $attrs, $filter, $modal, $ti
         vm.element = element;
         InventoryService.getSingleInventory($stateParams.inventoryId).then(function(response){
             vm.inventory = response.data;
+            vm.uiState.watched  = checkIfSelected();
             vm.uiState.loading = false;
         }) 
     }
