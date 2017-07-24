@@ -105,7 +105,7 @@ var ziManager = {
                             watchList = orgConfig.watchList || [];
                         }
                         query = {
-                            '@id': {'$in': watchList} 
+                            'OITM_ItemCode': {'$in': watchList} 
                         };
                         self._addUserInventoryFilter(accountId, userId, query, function(err, query){
                             ziDao.findRawWithFieldsLimitAndOrder(query, null, null, null, fields, collection, null, function(err, value){
@@ -283,10 +283,10 @@ var ziManager = {
     productSearch: function(accountId, userId, term, skip, limit, sortBy, sortDir, filter, fn) {
         var self = this;
         self.log.debug(accountId, userId, '>> productSearch');
-        
-        var query = {
-            _shortVendorName: new RegExp('^' + filter)
-        };
+        var query = {};
+        if(filter){
+            query._shortVendorName = new RegExp('^' + filter);
+        }
         
         if(term){
             term = term.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
@@ -294,6 +294,12 @@ var ziManager = {
             var orQuery = [                    
                 {OITM_ItemName:regex}
             ];
+            if(!filter){
+                orQuery = [                    
+                    {OITM_ItemName:regex},
+                    {_shortVendorName:regex}
+                ];
+            }
             query["$or"] = orQuery;
         }
 
@@ -1168,6 +1174,33 @@ var ziManager = {
         });
     },
 
+    exportCustomerStatement: function(accountId, userId, itemId, fn) {
+        var self = this;
+        self.log.debug(accountId, userId, '>> exportCustomerStatement');
+        self.getLedgerItem(accountId, userId, itemId, function(err, value){
+            var results = value.results;
+            var ledgerDetails = _.uniq(results, function(ld){
+                return ld._CustStatmentDtl_TransId;
+            });
+            _.each(ledgerDetails, function(ledger){
+                ledger.invoiceTotal = self._calculateInvoiceTotal(ledger, results);
+            })
+            var headers = ['Invoice', 'VAR PO', 'Invoice Date', 'Due Date', 'Invoice Total'];
+            var csv = headers + '\n';
+            _.each(ledgerDetails, function(item){
+                csv += self._parseString(item._CustStatmentDtl_Document_ID);
+                csv += self._parseString(item.OINV_U_VARPO);
+                csv += self._parseString(self._parseValueToDate(item._CustStatmentDtl_RefDate));
+                csv += self._parseString(self._parseValueToDate(item._CustStatmentDtl_DueDate));
+                csv += self._parseString(self._parseCurrency("$", item.invoiceTotal));
+                csv += '\n';
+            });
+            
+            self.log.debug(accountId, userId, '<< exportCustomerStatement');
+            fn(null, csv);
+        })
+    },
+
 
     getCustomerItem: function(accountId, userId, itemId, fn) {
         var self = this;
@@ -1306,8 +1339,48 @@ var ziManager = {
         var regexString = _textToRemoveArray.join("|");
         var regex = new RegExp(regexString + "\s*$", "gi");
         return name.replace(regex, "");
-    }
+    },
 
+    _calculateInvoiceTotal: function(ledger, results){
+        var _sum = 0;
+        if(results){
+            var invoiceDetails = _.filter(results, function(row){
+                return row._CustStatmentDtl_TransId == ledger._CustStatmentDtl_TransId
+            })
+
+            if(invoiceDetails && invoiceDetails.length){
+                ledger.lineItems = invoiceDetails.length;
+
+                _.each(invoiceDetails, function(order){
+                    if(order.INV1_LineTotal)
+                        _sum+= parseFloat(order.INV1_LineTotal);
+                })
+            }
+        }
+        return _sum;
+    },
+
+    _parseString: function(text){
+        if(text==undefined)
+            return ',';
+        // "" added for number value
+        text= "" + text;
+        if(text.indexOf(',')>-1)
+            return "\"" + text + "\",";
+        else
+            return text+",";
+    },
+
+    _parseCurrency: function(symbol, value){
+        return symbol + " " + parseFloat(value).toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, "$1,");
+    },
+
+    _parseValueToDate: function(value){
+        if(value){
+            var formattedDate = moment(Date.parse(value)).format("M/DD/YYYY");
+            return formattedDate;
+        }
+    }
 
 };
 $$.u = $$.u || {};

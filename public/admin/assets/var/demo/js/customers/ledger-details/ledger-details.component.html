@@ -1,7 +1,7 @@
 <section id="page-title" class="padding-top-15 padding-bottom-15">
     <div class="row">
         <div class="col-sm-8">
-            <h1 class="mainTitle">Ledger Summary</h1>
+            <h1 class="mainTitle">Customer Statement</h1>
             <span class="mainDescription">{{vm.ledger[0]._CustStatmentHdr_CardName || vm.listledger.OCRD_CardName}}</span>
         </div>
     </div>
@@ -15,6 +15,9 @@
             <a class="btn btn-primary btn-o pull-right margin-bottom-5 margin-left-5" href="https://app.behalf.com/users/signup/?utm_source=securematics:9c0MsQBW&utm_medium=ledger&utm_campaign=portal" ng-disabled="!vm.state.orgCardAndPermissions.isVendor" style="cursor: inherit;">
             Pay with Behalf
             </a>
+            <button type="button" class="btn btn-primary btn-o pull-right margin-bottom-5 margin-left-5" ng-click="vm.exportCSV()" ng-disabled="vm.uiState.loading || !vm.ledgerDetails.length">
+            Export CSV
+            </button>
         </div>
     </div>
     <div class="clearfix"></div>

@@ -301,8 +301,8 @@ function inventoryComponentController($scope, $attrs, $filter, $modal, $timeout,
     function productSelectClickFn($event, product) {
         $event.stopPropagation();
 
-        if(_.contains(vm.uiState.inVentoryWatchList, product["@id"])){
-            vm.uiState.inVentoryWatchList = _.without(vm.uiState.inVentoryWatchList, product["@id"]);
+        if(_.contains(vm.uiState.inVentoryWatchList, product["OITM_ItemCode"])){
+            vm.uiState.inVentoryWatchList = _.without(vm.uiState.inVentoryWatchList, product["OITM_ItemCode"]);
             vm.uiState.inVentoryWatchListDetails = _.without(vm.uiState.inVentoryWatchListDetails, product)
         }
         else{
@@ -310,7 +310,7 @@ function inventoryComponentController($scope, $attrs, $filter, $modal, $timeout,
                 vm.uiState.inVentoryWatchList.shift();
                 vm.uiState.inVentoryWatchListDetails.shift();
             }
-            vm.uiState.inVentoryWatchList.push(product["@id"]);
+            vm.uiState.inVentoryWatchList.push(product["OITM_ItemCode"]);
             vm.uiState.inVentoryWatchListDetails.push(product);
         }
         showWatchOptions();
@@ -318,7 +318,7 @@ function inventoryComponentController($scope, $attrs, $filter, $modal, $timeout,
 
 
     function checkIfSelected(product, list){
-        return _.contains(list, product["@id"]);
+        return _.contains(list, product["OITM_ItemCode"]);
     }
 
     function showWatchOptions(){

@@ -32,14 +32,17 @@
                   });
               }
           }else {
-              if (this.format.is('span', {class: 'fontWeight_' + val})) {
+              if($("span [class*='fontWeight_']")) {
+                  $("span [class*='fontWeight_']").removeAttr('class');
+                  selection.attr('class', 'fontWeight_'+val);
+              }else if (this.format.is('span', {class: 'fontWeight_' + val})) {
                   this.format.remove('span', {
                       class: 'fontWeight_' + val
                   });
               }
-              this.format.apply('span', {
+              /*this.format.apply('span', {
                   class: 'fontWeight_' + val
-              });
+              });*/
           }
       },
       // Callback on refresh.

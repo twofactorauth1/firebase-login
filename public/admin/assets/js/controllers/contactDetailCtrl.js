@@ -64,7 +64,8 @@
         $scope.loadingMap = true;
 
         $scope.data = {
-            fullName: ''
+            fullName: '',
+            loaded: false
         };
 
         if ($location.search().order) {
@@ -204,6 +205,7 @@
                 $scope.setTags();
                 $scope.setDefaults();
                 $scope.data.fullName = [$scope.contact.first, $scope.contact.middle, $scope.contact.last].join(' ').trim();
+                $scope.data.loaded = true;
                 $scope.getMapData();
                 // $scope.contactLabel = ContactService.contactLabel(contact);
                 // $scope.checkBestEmail = ContactService.checkBestEmail(contact);
