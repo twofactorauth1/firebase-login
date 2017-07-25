@@ -692,7 +692,7 @@ app.constant('JS_REQUIRES', {
 
     // Campaign Recipient Details
 
-    'CampaignRecipientDetailsController': 'assets/js/indi-email-campaign/campaign-recipient-details/campaign-recipient.controller.js',    
+    'CampaignRecipientDetailsController': 'assets/js/indi-email-campaign/campaign-recipient-details/campaign-recipient.controller.js',
 
     //*** Services
     'accountService': 'assets/js/services/account.js',
@@ -742,8 +742,8 @@ app.constant('JS_REQUIRES', {
     'filterSsbSections': 'assets/js/filters/filterSsbSections.js',
 
     //*** Directives
-    'mediaModal': 'assets/js/directives/mediadirective.js'
-
+    'mediaModal': 'assets/js/directives/mediadirective.js',
+    'fixedHeaderTable': 'assets/js/directives/fixed-header-table.js'
 
   },
   //*** angularJS Modules
