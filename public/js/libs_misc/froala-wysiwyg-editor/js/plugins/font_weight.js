@@ -32,17 +32,18 @@
                   });
               }
           }else {
-              if($("span [class*='fontWeight_']")) {
-                  $("span [class*='fontWeight_']").removeAttr('class');
+              if(selection.is('span') && $(selection[0], "span [class*='fontWeight_']")) {
+                  $(selection[0], "span [class*='fontWeight_']").removeAttr('class');
                   selection.attr('class', 'fontWeight_'+val);
               }else if (this.format.is('span', {class: 'fontWeight_' + val})) {
                   this.format.remove('span', {
                       class: 'fontWeight_' + val
                   });
+              }else {
+                  this.format.apply('span', {
+                      class: 'fontWeight_' + val
+                  });
               }
-              /*this.format.apply('span', {
-                  class: 'fontWeight_' + val
-              });*/
           }
       },
       // Callback on refresh.
