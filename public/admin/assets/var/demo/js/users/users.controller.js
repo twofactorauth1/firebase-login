@@ -26,7 +26,7 @@
         vm.pagingConstant = pagingConstant;
         vm.validateUserDetails = validateUserDetails;
         vm.setDefaults = setDefaults;
-
+        vm.downloadActivityReport = downloadActivityReport;
         $scope.$watch("$parent.orgCardAndPermissions", function(orgCardAndPermissions){
             if(orgCardAndPermissions){
               if(_.contains(orgCardAndPermissions.userPermissions.vendorRestrictedStates, $state.current.name)){
@@ -469,6 +469,10 @@
 
         function showFilteredRecords(){
             return UtilService.showFilteredRecords(vm.uiState.globalSearch, vm.uiState.fieldSearch);
+        }
+
+        function downloadActivityReport(userId){
+            UserService.downloadUserActivities(userId);
         }
 
         (function init() {

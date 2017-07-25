@@ -318,5 +318,10 @@
         });
     }
 
+    this.downloadUserActivities = function(userId, fn) {
+      var apiUrl = baseUrl + ['useractivity', 'user', userId, "csv"].join('/');
+      window.location = apiUrl;
+    };
+
   });
 })(angular);

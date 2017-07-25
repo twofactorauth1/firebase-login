@@ -21,6 +21,7 @@ _.extend(api.prototype, baseApi.prototype, {
     initialize: function () {
         app.get(this.url(''), this.isAuthApi.bind(this), this.findActivities.bind(this));
         app.get(this.url('user'), this.isAuthApi.bind(this), this.findUserActivities.bind(this));
+        app.get(this.url('user/:id/csv'), this.isAuthApi.bind(this), this.downloadUserActivities.bind(this));
     },
 
     findActivities: function(req, resp) {
@@ -88,6 +89,39 @@ _.extend(api.prototype, baseApi.prototype, {
         })        
     },
 
+    downloadUserActivities: function(req, resp) {
+        var self = this;
+
+        self.log.debug('>> downloadUserActivities ');
+        var accountId = parseInt(self.accountId(req));
+        var userId = parseInt(req.params.id);
+        var skip = 0;
+        if(req.query.skip) {
+            skip = parseInt(req.query.skip);
+        }
+        var limit = 0;
+        if(req.query.limit) {
+            limit = parseInt(req.query.limit);
+        }
+        self._isUserAdminOrSecurematics(req, function(err, isAllowed){
+            if(isAllowed && isAllowed === true) {
+                userActivityManager.listUserActivities(accountId, userId, skip, limit, function(err, list){
+                    if(err) {
+                        self.log.error('Error listing user activities: ' + err);
+                        return self.wrapError(resp, 500, "An error occurred listing user activities", err);
+                    } else {
+                        self.log.debug('<< downloadUserActivities');
+                        return self._exportToCSV(req, resp, list, userId)
+                    }
+                });
+            }
+            else{
+                self.log.error('Error listing user activities: ' + err);
+                return self.wrapError(resp, 500, "An error occurred listing user activities", null);
+            }
+        })        
+    },
+
     _isUserAdminOrSecurematics: function(req, fn) {
         var self = this;
         var userId = self.userId(req);
@@ -100,6 +134,33 @@ _.extend(api.prototype, baseApi.prototype, {
             }
         });
     },
+
+    _exportToCSV: function(req, resp, list, userId){
+        var self = this;
+        var headers = ['Activity Type', 'Notes', 'Activity Date'];
+        var csv = headers + '\n';
+        _.each(list, function(activity){
+            csv += self._parseString(activity.get('activityType'));
+            csv += self._parseString(activity.get("note"));
+            csv += self._parseString(activity.getFormattedDate("start"));
+            csv += '\n';
+        });
+        resp.set('Content-Type', 'text/csv');
+        var _fileName = "user-activity-"+userId+".csv";
+        resp.set("Content-Disposition", "attachment;filename="+_fileName);
+        self.sendResult(resp, csv);
+    },
+
+    _parseString: function(text){
+        if(text==undefined)
+            return ',';
+        // "" added for number value
+        text= "" + text;
+        if(text.indexOf(',')>-1)
+            return "\"" + text + "\",";
+        else
+            return text+",";
+    }
 });
 
 module.exports = new api();

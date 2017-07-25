@@ -28,6 +28,10 @@ var userActivity = $$.m.ModelBase.extend({
 
     initialize: function(options) {
 
+    },
+
+    getFormattedDate: function(dateField){
+        return this.get(dateField) ? moment(this.get(dateField)).format("MM/DD/YYYY HH:mm A") : '';
     }
 
 }, {
