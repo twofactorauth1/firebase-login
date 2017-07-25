@@ -29,9 +29,9 @@ _.extend(view.prototype, BaseView.prototype, {
             if(data.account && data.account.orgId){
                 self.getOrganizationByAccountId(data.account._id, function(err, org){
                     if (!err && org != null) {
-                        var _orgDomain = org.get("orgDomain");
+                        var _orgDomain = org.get("orgTitle");
                         if(_orgDomain){
-                            data.title = _orgDomain + ".io"
+                            data.title = _orgDomain;
                         }
                     }
                     data.message = self.req.session.errorMsg;
