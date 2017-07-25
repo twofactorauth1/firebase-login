@@ -320,6 +320,62 @@ module.exports = {
             })   
         });
 
+    },
+
+    getCartItemTitle: function(accountId, userId, title, fn) {
+        var self = this;
+        self.log = log;
+        log.debug(accountId, userId, '>> getCartItemTitle');
+        var regex = new RegExp('\^'+title+'\*', 'i');
+        var query = {
+            'accountId':accountId,
+            "title": regex
+        };
+        console.log(query);
+        var _newTitle = title;
+        quoteDao.findMany(query, $$.m.Quote, function(err, list){
+            if(err) {
+                log.error('Exception listing quotes: ' + err);
+                fn(err, null);
+            } else {
+                log.debug(accountId, userId, '<< getCartItemTitle');
+                var index = 0;
+                if(list.length){
+                    var _listTitles = _.filter(_.map(list, function(item){
+                        return parseInt(item.get("title").replace(title, "").replace("(", "").replace(")", ""))
+                    }), function(value){
+                        return _.isFinite(value)
+                    });
+                    if(_listTitles.length){
+                        index = _.max(_listTitles) + 1;
+                        _newTitle = _newTitle + " ("+ index +")"; 
+                    }
+                    else{
+                        index = 1;
+                        _newTitle = _newTitle + " (1)"; 
+                    }
+                }
+                
+                query = {
+                    'accountId':accountId,
+                    "title": _newTitle
+                };
+
+                quoteCartItemDao.exists(query, $$.m.QuoteCartItem, function(err, value){
+                    if(err) {
+                        log.error('Exception listing quotes: ' + err);
+                        fn(err, null);
+                    } else {
+                        log.debug(accountId, userId, '<< getCartItemTitle');
+                        
+                        if(value === true){
+                            index += 1;
+                            _newTitle = title + " ("+ index +")"; 
+                        }
+                        fn(null, _newTitle);
+                    }
+                })
+            }
+        });
     }
-    
 };
