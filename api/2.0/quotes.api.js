@@ -33,6 +33,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.post(this.url('attachment/:id'), this.secureauth.bind(this, {requiresSub:true, requiresPriv:'MODIFY_QUOTE'}), this.updateQuoteAttachment.bind(this));
         app.post(this.url(':id/submit'), this.secureauth.bind(this, {requiresSub:true, requiresPriv:'MODIFY_QUOTE'}), this.submitQuote.bind(this));
         app.delete(this.url(':id'), this.secureauth.bind(this, {requiresSub:true, requiresPriv:'MODIFY_QUOTE'}), this.deleteQuote.bind(this));
+        app.get(this.url('cart/items/:title'), this.secureauth.bind(this, {requiresSub:true, requiresPriv:'VIEW_QUOTE'}), this.getCartItemTitle.bind(this));
     },
 
     listQuoteItems: function(req, resp) {
@@ -48,6 +49,26 @@ _.extend(api.prototype, baseApi.prototype, {
                 quoteManager.listQuoteItems(accountId, userId, function(err, list){
                     self.log.debug(accountId, userId, '<< listQuoteItems');
                     return self.sendResultOrError(resp, err, list, "Error listing quote items");
+                });
+            }
+        });
+
+    },
+
+    getCartItemTitle: function(req, resp) {
+        var self = this;
+        var accountId = parseInt(self.accountId(req));
+        var userId = self.userId(req);
+        var itemTitle = req.params.title;
+        self.log.debug(accountId, userId, '>> getCartItemTitle');
+        self._checkAccess(accountId, userId, 'quotes', function(err, isAllowed){
+            if(!isAllowed) {
+                self.log.debug(accountId, userId, '<< getCartItemTitle [' + isAllowed + ']');
+                return self.sendResultOrError(resp, err, [], "Error getting quote item title");
+            } else {
+                quoteManager.getCartItemTitle(accountId, userId, itemTitle, function(err, list){
+                    self.log.debug(accountId, userId, '<< getCartItemTitle');
+                    return self.sendResultOrError(resp, err, list, "Error getting quote item title");
                 });
             }
         });

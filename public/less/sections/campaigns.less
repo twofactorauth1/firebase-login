@@ -9,6 +9,31 @@
             width: 25% !important;
         }
     }
+    .table-list-view {
+        .sticky-header-class {
+            tr > th {
+                width: 10%;
+            }
+        }
+        tbody {
+            tr > td {
+                width: 10%;
+            }
+        }
+        td.name-col {
+            width: 11%;
+        }
+        td.text-adjust-col{
+		    overflow: hidden;
+		    text-overflow: ellipsis;
+		    white-space: nowrap;
+		    max-width: 1px;
+        }
+        span.text-adjust-inner-content{
+            display:inline-block;
+            max-width: 102%;
+        }
+    }
 }
 
 .disabled {

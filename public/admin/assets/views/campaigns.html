@@ -50,11 +50,11 @@
                     </div>
             </div>
         </div>
-        <div class="container-fluid container-fullw padding-top-0 padding-bottom-0">
+        <div class="container-fluid container-fullw padding-top-0 padding-bottom-0 padding-left-15 padding-right-15">
             <div class="panel panel-transparent row margin-bottom-0">
-                <div class="panel-body">
-                    <table class="table table-hover table-striped margin-bottom-0" ng-class="{'grid': tableView == 'grid', 'bg-white table-list-view': tableView != 'grid'}" ng-show="displayedCampaigns">
-                        <thead ng-class="{'bg-white': tableView == 'grid'}">
+                <div class="panel-body padding-left-0 padding-right-0 padding-top-0">
+                    <table class="table table-hover table-striped margin-bottom-0" ng-class="{'grid': tableView == 'grid', 'bg-white table-list-view': tableView != 'grid'}" ng-show="displayedCampaigns" fixed-header-table>
+                        <thead ng-class="{'bg-white': tableView == 'grid'}" sticky offset="65" sticky-class="sticky-header-class">
                             <tr>
                                 <th st-sort="status" class="center" translate="tableFields.STATUS" style="white-space: nowrap;">Status</th>
                                 <th st-sort="name" translate="tableFields.NAME">Name</th>
@@ -209,7 +209,7 @@
                                         </span>
                                     </span>
                                 </td>
-                                <td ng-if="tableView != 'grid'" class=""><strong>Title: </strong> <span tooltip-placement="top" tooltip="{{campaign.name | titleCase}}" class="text-adjust-complexTable">{{campaign.name}}</span></td>
+                                <td ng-if="tableView != 'grid'" class="text-adjust-col name-col"><strong>Title: </strong> <span tooltip-placement="top" tooltip="{{campaign.name | titleCase}}" class="text-adjust-inner-content">{{campaign.name}}</span></td>
                                 <td class="hidden-xs hidden-sm hidden-md" ng-if="tableView != 'grid'"><strong>Type: </strong> <span>{{campaign.type | titleCase}}</span></td>
                                 <td ng-if="tableView != 'grid'"><strong>Participants: </strong><span class=" text-bold">{{campaign.statistics.participants || 0}}</span></td>
                                 <td class="hidden-xs"  ng-if="tableView != 'grid'"><strong>Sent: </strong><span class=" text-bold">{{campaign.statistics.emailsSent || 0}}</span><span ng-if="campaign.statistics.participants && campaign.type !== 'autoresponder'" class="text-small muted"> ({{percentCalFn(campaign.statistics.emailsSent, campaign.statistics.participants)}}%)</span></td>

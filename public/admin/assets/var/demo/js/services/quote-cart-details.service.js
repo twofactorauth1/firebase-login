@@ -26,6 +26,7 @@
         quoteCartService.saveLoading = false;
         quoteCartService.submitQuote = submitQuote;
         quoteCartService.getCustomers = getCustomers;
+        quoteCartService.getCartItemTitle = getCartItemTitle;
         quoteCartService.cartDetail = {
             items: []
         }
@@ -237,6 +238,19 @@
             return quoteServiceRequest($http.get([baseCustomerAPIUrl, 'customers'].join('/')).success(success).error(error));
         }
 
+        function getCartItemTitle(title) {
+
+            function success(data) {
+                
+            }
+
+            function error(error) {
+                console.error('quoteCartService getCartItemTitle error: ', JSON.stringify(error));
+            }
+
+            return quoteServiceRequest($http.get([baseQuotesAPIUrlv2, "cart", 'items', title].join('/')).success(success).error(error));
+        }
+
 
         $rootScope.$watch(function() { return quoteCartService.cartDetail.items }, _.debounce(function (items, oldItems) {
             if (!quoteCartService.saveLoading && quoteCartService.cartDetail._id && items && oldItems && !angular.equals(items, oldItems)) {
@@ -248,6 +262,6 @@
             quoteCartService.getCartItemDetails();
             quoteCartService.getCustomers();
         })();
-    return quoteCartService;       
+    return quoteCartService;
     }
 })();

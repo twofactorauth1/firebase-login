@@ -732,11 +732,18 @@ var dao = {
 
     listAccountTemplates: function(accountId, userId, fn){
         var self = this;
-        var query = {
-            isTemplateAccount: true
-        };
-
-        self.findMany(query, fn);
+        
+        this.getAccountByID(accountId, function(err, account){
+            if(err) {
+                self.log.error('Exception retrieving current account: ' + err);
+            } else {
+                var query = {
+                    isTemplateAccount: true,
+                    orgId: account.get("orgId") || 0                   
+                };
+                self.findMany(query, fn);
+            }
+        })
     },
 
     getAccountsByOrg: function(orgId, fn) {

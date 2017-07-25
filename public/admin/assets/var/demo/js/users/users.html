@@ -53,6 +53,7 @@
                         <th class="hidden-xs" st-sort="vm.getters.loginDate" style="white-space: nowrap">Last Login</th>
                         <th class="hidden-xs" st-sort="vm.getters.ip">Last IP</th>
                         <th>Actions</th>
+                        <th class="hidden-xs"  ng-if="vm.state.orgCardAndPermissions.isAdminUser || vm.state.orgCardAndPermissions.isSecurematicsUser">Activity</th>
                     </tr>
                     <tr>
                         <th class="hidden-xs">
@@ -67,6 +68,7 @@
                         <th class="hidden-xs"></th>
                         <th class="hidden-xs"></th>
                         <th class="hidden-xs"></th>
+                        <th class="hidden-xs"  ng-if="vm.state.orgCardAndPermissions.isAdminUser || vm.state.orgCardAndPermissions.isSecurematicsUser"></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -82,6 +84,9 @@
                             <a ng-if="vm.uiState.isAdminUser || currentUser._id === user._id" ng-click="openEditUserModal(user._id)"><span tooltip-placement="top" tooltip="Change Password"><i class="fa fa-pencil"></i></span></a>
                             <a  ng-if="currentUser._id !== user._id && vm.uiState.isAdminUser" ng-click="openEditUserCardModal(user._id)"><span tooltip-placement="top" tooltip="Edit User's Detail"><i class="fa fa-address-book-o"></i></span></a>
                             <a ng-if="currentUser._id !== user._id && vm.uiState.isAdminUser" ng-click="vm.removeUserFromAccount(user._id)" class="delete-row"><span tooltip-placement="top" tooltip="Delete User"><i class="fa fa-trash-o"></i></span></a>
+                        </td>
+                        <td class="table-action" ng-if="vm.state.orgCardAndPermissions.isAdminUser || vm.state.orgCardAndPermissions.isSecurematicsUser">
+                            <a ng-click="vm.downloadActivityReport(user._id)" class="delete-row"><span tooltip-placement="top" tooltip="Download user activities"><i class="fa fa-download"></i></span></a>
                         </td>
                     </tr>
                 </tbody>
