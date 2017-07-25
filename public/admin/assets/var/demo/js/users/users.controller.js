@@ -2,7 +2,7 @@
 /*global app, moment, angular, window*/
 /*jslint unparam:true*/
 (function (angular) {
-    app.controller('usersCtrl', ['$scope', '$state', '$http', "toaster", "$filter", "$modal", "$timeout", "AccountService","UserService", "userConstant", "formValidations", "SweetAlert", "pagingConstant", "UtilService", function ($scope, $state, $http, toaster, $filter, $modal, $timeout, AccountService,UserService, userConstant, formValidations, SweetAlert, pagingConstant, UtilService) {
+    app.controller('usersCtrl', ['$scope', '$state', '$http', "toaster", "$filter", "$modal", "$timeout", "AccountService","UserService", "userConstant", "formValidations", "SweetAlert", "pagingConstant", "UtilService", "UserPermissionsConfig", function ($scope, $state, $http, toaster, $filter, $modal, $timeout, AccountService,UserService, userConstant, formValidations, SweetAlert, pagingConstant, UtilService, UserPermissionsConfig) {
 
         var vm = this;
 
@@ -10,7 +10,8 @@
             adminUserName: userConstant.admin_user.userName,
             adminUserEmailFilter: userConstant.admin_user.emailDomain,
             cardCodes: null,
-            isAdmin: false
+            isAdmin: false,
+            orgCardAndPermissions: UserPermissionsConfig.orgConfigAndPermissions
         };
 
         vm.uiState = {
