@@ -103,6 +103,7 @@ _.extend(api.prototype, baseApi.prototype, {
         if(req.query.limit) {
             limit = parseInt(req.query.limit);
         }
+        var offset = req.query.offset || null;
         self._isUserAdminOrSecurematics(req, function(err, isAllowed){
             if(isAllowed && isAllowed === true) {
                 userActivityManager.listUserActivities(accountId, userId, skip, limit, function(err, list){
@@ -111,7 +112,7 @@ _.extend(api.prototype, baseApi.prototype, {
                         return self.wrapError(resp, 500, "An error occurred listing user activities", err);
                     } else {
                         self.log.debug('<< downloadUserActivities');
-                        return self._exportToCSV(req, resp, list, userId)
+                        return self._exportToCSV(req, resp, list, userId, offset)
                     }
                 });
             }
@@ -135,16 +136,17 @@ _.extend(api.prototype, baseApi.prototype, {
         });
     },
 
-    _exportToCSV: function(req, resp, list, userId){
+    _exportToCSV: function(req, resp, list, userId, offset){
         var self = this;
         var headers = ['Activity Type', 'Notes', 'Activity Date'];
         var csv = headers + '\n';
         _.each(list, function(activity){
             csv += self._parseString(activity.get('activityType'));
             csv += self._parseString(activity.get("note"));
-            csv += self._parseString(activity.get("start"));
+            csv += self._parseString(activity.getFormattedDate("start", offset));
             csv += '\n';
         });
+
         resp.set('Content-Type', 'text/csv');
         var _fileName = "user-activity-"+userId+".csv";
         resp.set("Content-Disposition", "attachment;filename="+_fileName);

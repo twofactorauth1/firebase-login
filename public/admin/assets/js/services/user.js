@@ -319,7 +319,9 @@
     }
 
     this.downloadUserActivities = function(userId, fn) {
-      var apiUrl = baseUrl + ['useractivity', 'user', userId, "csv"].join('/');
+      var offset = moment().utcOffset();
+      var qString = "?offset="+offset;
+      var apiUrl = baseUrl + ['useractivity', 'user', userId, "csv"].join('/')+qString;
       window.location = apiUrl;
     };
 
