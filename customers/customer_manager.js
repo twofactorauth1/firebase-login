@@ -21,8 +21,8 @@ var fs = require('fs');
 
 var tmp = require('temporary');
 var awsConfig = require('../configs/aws.config');
-//var webshot = require('webshot');
-var urlToImage = require('url-to-image');
+var webshot = require('webshot');
+
 module.exports = {
 
     log:log,
@@ -506,6 +506,7 @@ module.exports = {
             var bucket = awsConfig.BUCKETS.ASSETS;
             var subdir = 'account_' + accountId;
             
+            
                 
             self._download(serverUrl, tempFileName, function(){
                 log.debug('stored screenshot at ' + tempFileName);
@@ -527,15 +528,23 @@ module.exports = {
 
     _download: function(uri, file, callback){
         var options = {
-            requestTimeout: 10000
-        }
-        urlToImage(uri, file, options)
-        .then(function() {
+            screenSize: {
+                width: 1280,
+                height: 768
+            },
+            shotSize: {
+                width: 'window',
+                height: 'all'
+            },
+            renderDelay: 10000,
+            phantomConfig: {
+                  "ignore-ssl-errors": "true",
+                  "ssl-protocol": "any"
+            }
+        }    
+        webshot(uri, file, options, function(err) {
             callback(file);
-        })
-        .catch(function(err) {
-            console.error(err);
-        }); 
-    }
+        });
+    },
 
 };
