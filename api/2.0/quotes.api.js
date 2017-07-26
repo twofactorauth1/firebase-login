@@ -128,8 +128,7 @@ _.extend(api.prototype, baseApi.prototype, {
                         self.wrapError(resp, 500, err, "Error deleting quote cart item");
                     } else {
                         self.log.debug('<< deleteCartQuoteItem');
-                        self.send200(resp);
-                        //self.createUserActivity(req, 'DELETE_PROMOTION', null, null, function(){});
+                        self.send200(resp);                        
                     }
                 });
              }
@@ -253,6 +252,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 quoteManager.saveOrUpdateQuote(accountId, userId, quote, function(err, value){
                     self.log.debug(accountId, userId, '<< createQuote');
                     self.sendResultOrError(resp, err, value, "Error saving quote");
+                    self.createUserActivity(req, 'CREATE_QUOTE', null, null, function(){});
                 });
             }
         });
@@ -282,6 +282,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 quoteManager.saveOrUpdateQuote(accountId, userId, quote, function(err, value){
                     self.log.debug(accountId, userId, '<< updateQuote');
                     self.sendResultOrError(resp, err, value, "Error updating quote");
+                    self.createUserActivity(req, 'UPDATE_QUOTE', null, null, function(){});
                 });
             }
         });
@@ -328,6 +329,7 @@ _.extend(api.prototype, baseApi.prototype, {
         quoteManager.submitQuote(accountId, userId, quoteId, function(err, value){
             self.log.debug(accountId, userId, '<< submitQuote');
             self.sendResultOrError(resp, err, value, "Error submitting quote");
+            self.createUserActivity(req, 'SUBMIT_QUOTE', null, null, function(){});
         });
     }, 
 
