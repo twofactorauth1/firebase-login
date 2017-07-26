@@ -485,16 +485,46 @@ module.exports = {
         var self = this;
         log.debug('>> generateScreenshot');
         
-        accountDao.getServerUrlByAccount(customerId, function(err, serverUrl){
-            if(err) {
-                log.error('Error getting server url: ' + err);
-                return fn(err, null);
-            }
-            log.debug('got server url');
+        // accountDao.getServerUrlByAccount(customerId, function(err, serverUrl){
+        //     if(err) {
+        //         log.error('Error getting server url: ' + err);
+        //         return fn(err, null);
+        //     }
+        //     log.debug('got server url');
+        //     if(serverUrl.indexOf('.local') >0) {
+        //         serverUrl = serverUrl.replace('indigenous.local:3000', 'test.indigenous.io');
+        //     }
+        //     var serverUrl = "http://jupiter.test.gorvlvr.com";
 
-            if(serverUrl.indexOf('.local') >0) {
-                serverUrl = serverUrl.replace('indigenous.local:3000', 'test.indigenous.io');
-            }
+        //     var name = customerId + "_" + new Date().getTime() + '.png';
+        //     var tempFile = {
+        //         name: name,
+        //         path: 'tmp/' + name
+        //     };
+        //     var tempFileName = tempFile.path;
+        //     //var ssURL = "http://bozu.test.indigenous.io/";
+        //     var bucket = awsConfig.BUCKETS.ASSETS;
+        //     var subdir = 'account_' + accountId;
+            
+                
+        //     self._download(serverUrl, tempFileName, function(){
+        //         log.debug('stored screenshot at ' + tempFileName);
+        //         tempFile.type = 'image/png';
+        //         s3dao.uploadToS3(bucket, subdir, tempFile, null, function(err, value){
+        //             fs.unlink(tempFile.path, function(err, value){});
+        //             if(err) {
+        //                 log.error('Error uploading to s3: ' + err);
+        //                 fn(err, null);
+        //             } else {
+        //                 log.debug('Got the following from S3', value);
+        //                 log.debug('<< generateScreenshot');
+        //                 fn(null, 'http://' + bucket + '.s3.amazonaws.com/' + subdir + '/' + tempFile.name);
+        //             }
+        //         });
+        //     });
+        // });
+
+            var serverUrl = "http://jupiter.test.gorvlvr.com";
 
             var name = customerId + "_" + new Date().getTime() + '.png';
             var tempFile = {
@@ -522,7 +552,6 @@ module.exports = {
                     }
                 });
             });
-        });
     },
 
     _download: function(uri, file, callback){
@@ -535,7 +564,7 @@ module.exports = {
                 width: 'window',
                 height: 'all'
             },
-            renderDelay: 5000
+            renderDelay: 10000
         }    
         webshot(uri, file, options, function(err) {
             callback(file);
