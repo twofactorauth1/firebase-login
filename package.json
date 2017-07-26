@@ -87,7 +87,8 @@
     "webshot": "0.18.0",
     "wiredep": "^1.8.6",
     "xml2js": "^0.4.4",
-    "phantom-html-to-pdf": "0.5.4"
+    "phantom-html-to-pdf": "0.5.4",
+    "url-to-image": "1.0.0"
   },
   "devDependencies": {
     "autoprefixer": "^6.3.6",
