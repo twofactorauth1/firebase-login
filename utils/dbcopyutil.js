@@ -111,7 +111,10 @@ var copyutil = {
         var self = this;
         self._convertAccountToSiteTemplate(accountId, cb);
     },
-
+    updateBlogPages: function(cb) {
+        var self = this;
+        self._updateBlogPages(cb);
+    },
     enableSiteBuilderOnLegacyAccountOnTest : function(accountId, cb) {
         var self = this;
         self._enableSiteBuilderOnLegacyAccount(accountId, mongoConfig.TEST_MONGODB_CONNECT, cb);
@@ -797,7 +800,186 @@ var copyutil = {
             });
         });
     },
+    _updateBlogPages :function(fn) {
 
+        var srcURL = mongoConfig.PROD_MONGODB_CONNECT,
+        //var srcURL = mongoConfig.PROD_MONGODB_CONNECT
+            srcMongo = mongoskin.db(srcURL, {safe: true}) ,
+            pagesCollection = srcMongo.collection('pages'),
+            sectionCollection = srcMongo.collection('sections'),
+            recentPost ,recentTag,recentCategory;
+        async.waterfall([
+            function getCategorySection(cb){
+                console.log("getCategorySection");
+                sectionCollection.find({ "accountId": 0, "components.type":"ssb-recent-category"}).toArray(function(err, rp){
+                   if(err) {
+                        console.log('Error finding category in test:', err);
+                        cb(err);
+                    } else {
+                        console.log("data");
+                         console.log(rp);
+                        recentCategory=rp[0];
+                        cb();
+                    }
+                });
+            },
+            function getPostSection(cb){
+                console.log("getPostSection");
+                sectionCollection.find({ "accountId": 0, "components.type":"ssb-recent-post"}).toArray(function(err, rp){
+                   if(err) {
+                        console.log('Error finding post in test:', err);
+                        cb(err);
+                    } else {
+                        recentPost=rp[0];
+                        cb();
+                    }
+                });
+            },
+            function getTagSection(cb){
+                console.log("getTagSection");
+                sectionCollection.find({ "accountId": 0, "components.type":"ssb-recent-tag"}).toArray(function(err, rp){
+                   if(err) {
+                        console.log('Error finding tag in test:', err);
+                        cb(err);
+                    } else {
+                        recentTag=rp[0];
+                        cb();
+                    }
+                });
+            },
+            function getAndUpdate(cb){
+                 //utils.idutils.generateUUID(); db.getCollection('pages').find({ handle: 'blog-list', accountId:2616,latest:true})
+                //{_id:'1c7ed756-ad0b-4b5a-967b-47e794c5280d'}   {"handle":'blog-list',$where: '(this.sections.length ==9),latest:true'}
+                pagesCollection.find({"handle":'blog-list',$where: '(this.sections.length ==9)',latest:true}).toArray(function(err, pagesA){
+                    console.log(pagesA.length);
+                    async.eachSeries(pagesA, function(page, callback){
+                        var section=JSON.parse(JSON.stringify(recentCategory)),id=utils.idutils.generateUUID();
+                        section._id=id;
+                        section.anchor = id;
+                        section.accountId = page.accountId;
+                        console.log("post"+recentPost._id);
+                        console.log("tag"+recentTag._id);
+                        console.log("category"+recentCategory._id);
+                        sectionCollection.save(section, function(err, savedSection){
+                            if(err) {
+                                console.log('Error section save:', err);
+                                callback(err);
+                            } else {
+                                pagesCollection.update(
+                                    { handle: 'blog-list', _id: page._id },
+                                    { $push: {
+                                        sections: {
+                                            $each: [{
+                                                _id: section._id
+                                            }],
+                                            $position: 6
+                                        },
+                                        "layoutModifiers.2-col-2": 8
+                                    },
+                                     $set: {
+                                         "layoutModifiers.footer":[9]
+                                     }
+                                    });
+                                callback();
+                            }
+                        });
+                    }, function(err){
+                        if(err){
+                            cb(err);
+                        }else{
+                            cb();
+                        }
+                    });
+                });
+            },
+            function getAndUpdateRemaining(cb){
+                 //utils.idutils.generateUUID(); db.getCollection('pages').find({ handle: 'blog-list', accountId:2616,latest:true})
+                //{_id:'1c7ed756-ad0b-4b5a-967b-47e794c5280d'}
+
+                pagesCollection.find({"handle":'blog-list',$where: '(this.sections.length ==7)',latest:true}).toArray(function(err, pagesArray){
+                     async.eachSeries(pagesArray, function(page, callback){
+                        var sectionCat=JSON.parse(JSON.stringify(recentCategory)),cat_id=utils.idutils.generateUUID();
+                        sectionCat._id=cat_id;
+                        sectionCat.anchor = cat_id;
+                        sectionCat.accountId = page.accountId;
+
+                        var sectionPost=JSON.parse(JSON.stringify(recentPost)),post_id=utils.idutils.generateUUID();
+                        sectionPost._id=post_id;
+                        sectionPost.anchor = post_id;
+                        sectionPost.accountId = page.accountId;
+
+                        var sectionTag=JSON.parse(JSON.stringify(recentTag)),tag_id=utils.idutils.generateUUID();
+                        sectionTag._id=tag_id;
+                        sectionTag.anchor = tag_id;
+                        sectionTag.accountId = page.accountId;
+                         async.waterfall([
+                             function saveCategory(_cb){
+                                 sectionCollection.save(sectionCat, function(err, savedSection){
+                                      if(err) {
+                                          _cb(err);
+                                      } else {
+                                          _cb();
+                                      }
+                                });
+                             },
+                             function savePost(_cb){
+                                 sectionCollection.save(sectionPost, function(err, savedSection){
+                                     if(err) {
+                                          _cb(err);
+                                      } else {
+                                          _cb();
+                                      }
+                                });
+                             },
+                             function saveTag(_cb){
+                                 sectionCollection.save(sectionTag, function(err, savedSection){
+                                     if(err) {
+                                          _cb(err);
+                                      } else {
+                                          _cb();
+                                      }
+                                });
+                             },
+                             function updatePage(_cb){
+                                 var secArray=page.sections;
+                                 secArray.splice(3, 0, { "_id" : sectionPost._id });
+                                 secArray.splice(5, 0, { "_id" : sectionTag._id });
+                                 secArray.splice(6, 0, { "_id" : sectionCat._id });
+                                 pagesCollection.update({
+                                   handle: 'blog-list',
+                                    _id: page._id
+                                }, {
+                                     $set: {
+                                         sections: secArray,
+                                        "layoutModifiers.2-col-2": [0,1,2,3,4,5,6,7,8],
+                                         "layoutModifiers.footer":[9]
+                                     }
+                                 });
+                                 _cb();
+                             }
+                         ], function done(err){
+                              if(err){
+                                  callback(err);
+                              }else{
+                                  callback();
+                              }
+
+                         });
+                     }, function(err){
+                         if(err){
+                            cb(err);
+                        }else{
+                            cb();
+                        }
+                    });
+                });
+            }
+
+        ], function done(err){
+            srcMongo.close();
+            fn(err);
+        });
+    },
     syncSSBArtifacts: function(fn) {
         var srcDBUrl = mongoConfig.TEST_MONGODB_CONNECT;
         var destDBUrl = mongoConfig.PROD_MONGODB_CONNECT;
