@@ -74,7 +74,7 @@
                         <th st-sort="type">Type</th>
                         <th class="hidden-xs" st-sort-default="{{defaultSortorder}}" st-sort="modified.date">Modified</th>
                     </tr>
-                    <tr ng-if="showFilter">
+                    <tr ng-if="showFilter" class="products-filter-header">
                         <th>
                             <input st-search="hasImage" placeholder="Image" class="form-control hidden" type="search" id="searchImage" ng-model="filterProduct.image.selected.data" />
                             <ui-select ng-model="filterProduct.image.selected" on-select="triggerInput('#searchImage')" theme="bootstrap">
