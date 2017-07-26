@@ -8,6 +8,12 @@
             <button class="btn btn-primary btn-o btn-wide btn-lg margin-top-10" ng-click="socailRedirect('Paypal')">Connect Paypal</button>
         </div>
     </div>
+    <style>
+        .main-content > div.container {
+            padding-left: 0;
+            padding-right: 0;
+        }
+    </style>
     <section id="page-title" class="padding-top-15 padding-bottom-15">
         <div class="row">
             <div class="col-sm-8">
@@ -19,7 +25,7 @@
     </section>
     <div class="products-inner" ng-class="{'blurred':noPaymentAccount}">
         <div st-table="displayedProducts" st-safe-src="products" st-set-filter='productTableFilter' st-filtered-collection>
-            <div class="container-fluid container-fullw bg-white padding-top-0 padding-bottom-0 margin-bottom-15">
+            <div class="container-fluid container-fullw bg-white padding-top-0 padding-bottom-0">
                 <div class="col-sm-12">
                     <div class="panel panel-transparent row margin-bottom-0 btn-area-res">
                         <div class="panel-body padding-left-0 padding-right-0">
@@ -59,8 +65,8 @@
                     </div>
                 </div>
             </div>
-            <table class="table table-striped table-hover bg-white margin-bottom-0" ng-class="{'grid': tableView == 'grid', 'bg-white table-list-view': tableView == 'list'}">
-                <thead ng-class="{'bg-white': tableView == 'grid'}">
+            <table class="table table-striped table-hover bg-white margin-bottom-0" ng-class="{'grid': tableView == 'grid', 'bg-white table-list-view': tableView == 'list'}" fixed-header-table>
+                <thead ng-class="{'bg-white': tableView == 'grid'}" sticky offset="65" sticky-class="sticky-header-class">
                     <tr>
                         <th class="center" ng-hide='tableView == "grid"'>Image</th>
                         <th class="hidden-xs" st-sort="status">Status</th>
@@ -68,7 +74,7 @@
                         <th st-sort="type">Type</th>
                         <th class="hidden-xs" st-sort-default="{{defaultSortorder}}" st-sort="modified.date">Modified</th>
                     </tr>
-                    <tr ng-if="showFilter">
+                    <tr ng-if="showFilter" class="products-filter-header">
                         <th>
                             <input st-search="hasImage" placeholder="Image" class="form-control hidden" type="search" id="searchImage" ng-model="filterProduct.image.selected.data" />
                             <ui-select ng-model="filterProduct.image.selected" on-select="triggerInput('#searchImage')" theme="bootstrap">
@@ -121,7 +127,7 @@
                             <h3 ng-if="!product.is_image && product.icon"><span class="fa {{product.icon}}"></span></h3>
                         </td>
                         <td class="hidden-xs"><strong>Status: </strong>{{formatStatus(product.status)}}</td>
-                        <td><strong>Name: </strong><span class="text-adjust-table">{{product.name}}</span></td>
+                        <td class="text-adjust-col"><strong>Name: </strong><span class="text-adjust-inner-content">{{product.name}}</span></td>
                         <td><strong>Type: </strong>{{product.type}}</td>
                         <td class="hidden-xs"><strong>Modified: </strong>{{product.modified.date | date:'MMM d yy'}}</td>
                     </tr>

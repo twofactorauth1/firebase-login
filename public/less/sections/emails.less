@@ -14,8 +14,57 @@
     	.email-title{
     		line-height: 38px;
     	}
-        thead:first-child>tr:first-child>th {
-            width: 15%;
+        .sticky-header-class {
+            tr > th {
+                width: 20%;
+            }
+        }
+        tbody {
+            tr td {
+                width: 20%;
+            }
+        }
+        td.text-adjust-col{
+		    overflow: hidden;
+		    text-overflow: ellipsis;
+		    white-space: nowrap;
+		    max-width: 1px;
+        }
+        span.text-adjust-inner-content{
+            display:inline-block;
+            max-width: 100%;
+        }
+        .email-filter-header{
+            th:first-child {
+                width: 15%;
+            }
         }
     }
+    .email-panel-body {
+        padding-left: 0;
+        padding-right: 0;
+    }
+    .email-filter-header{
+        background: #fff;
+        th:first-child {
+            width: 15%;
+        }
+        th {
+            height: 53px;
+        }
+    }
+    .table.grid{
+		td.text-adjust-col{
+			overflow: hidden;
+    		text-overflow: ellipsis;
+    		white-space: nowrap;
+		    div.text-adjust-inner-content{
+		    	overflow: hidden;
+			    text-overflow: ellipsis;
+			    white-space: nowrap;
+			    display: block;
+			    max-width: 300px;
+		    }
+		}
+	}
 }

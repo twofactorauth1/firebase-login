@@ -2,6 +2,74 @@
     .column-width {
         width: 14%;    
     }    
+    table.table-list-view{
+        .sticky-header-class {
+            .customer-filter-header {
+                th.check-col {
+                    width: 5%;
+                }
+                th.id-col {
+                    width: 10%;
+                }
+                th.subDomain-col {
+                    width: 17%;
+                }
+                th.customDomain-col {
+                    width: 20%;
+                }
+                th.column-last {
+                    width: 48%;
+                }
+            }
+        }
+        tbody {
+            tr > td {
+                width: 16%;
+            }
+            td.check-col, td.id-col, td.trial-col {
+                width: 10%;
+            }
+            td.customDomain-col {
+                width: 22%;
+            }
+        }
+        td.text-adjust-col{
+		    overflow: hidden;
+		    text-overflow: ellipsis;
+		    white-space: nowrap;
+		    max-width: 1px;
+        }
+        span.text-adjust-inner-content{
+            display:inline-block;
+            max-width: 100%;
+        }
+    }
+    table {
+        .sticky-header-class {
+            tr > th {
+                width: 16%;
+            }
+            th.id-col, th.trial-col {
+                width: 10%;
+            }
+            th.check-col {
+                width: 5%;
+            }
+            th.customDomain-col {
+                width: 22%;
+            }
+            th.signup-col {
+                width: 15%;
+            }
+        }
+    }
+    .customer-filter-header {
+        background: #fff;
+    }
+    .customer-panel-body {
+        padding-left: 0;
+        padding-right: 0;
+    }
 }
 
 
@@ -15,10 +83,22 @@
             }
 
             .column-width {
-                width: 13.9%;    
+                width: 13%;
             } 
 
+            table.grid {
+                th.check-col {
+                    width: 7%;
+                }
+                th.customDomain-col {
+                    width: 25%;
+                }
+            }
+
         }    
+    }
+    th.customDomain-col {
+        width: 25% !important;
     }
 }
 
