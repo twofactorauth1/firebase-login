@@ -737,7 +737,8 @@ app.constant('JS_REQUIRES', {
     'filterSsbSections': 'assets/js/filters/filterSsbSections.js',
 
     //*** Directives
-    'mediaModal': 'assets/js/directives/mediadirective.js'
+    'mediaModal': 'assets/js/directives/mediadirective.js',
+    'fixedHeaderTable': 'assets/js/directives/fixed-header-table.js'
   },
   //*** angularJS Modules
   modules: [
