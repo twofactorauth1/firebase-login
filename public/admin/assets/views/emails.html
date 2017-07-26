@@ -49,7 +49,7 @@
                 </div>
             </div>
         </div>
-        <div class="container-fluid container-fullw padding-top-0 padding-bottom-0">
+        <div class="container-fluid container-fullw padding-top-0 padding-bottom-0 padding-left-15 padding-right-15">
             <div class="panel panel-transparent row margin-bottom-0">
                 <div class="panel-body email-panel-body padding-top-0">
                     <table class="table table-striped table-hover bg-white margin-bottom-0" ng-class="{'grid': tableView == 'grid', 'bg-white table-list-view': tableView != 'grid'}" ng-show="displayedEmails" fixed-header-table>
@@ -62,7 +62,7 @@
                                 <th class="hidden-xs" st-sort="getters.created" ng-class="{'center': tableView != 'grid'}">Created</th>
                                 <th class="hidden-xs" st-sort-default="{{order}}" st-sort="getters.modified" ng-class="{'center': tableView != 'grid'}">Modified</th>
                             </tr>
-                            <tr ng-if="showFilter">
+                            <tr ng-if="showFilter" class="email-filter-header">
 
                                 <th>
                                     <input st-search="title" placeholder="Title" class="form-control" type="search" />
