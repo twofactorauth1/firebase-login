@@ -326,7 +326,8 @@ module.exports = {
         var self = this;
         self.log = log;
         log.debug(accountId, userId, '>> getCartItemTitle');
-        var regex = new RegExp('\^'+title+'\*', 'i');
+        var formatted_title = title.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+        var regex = new RegExp('\^'+formatted_title+'\*', 'i');
         var query = {
             'accountId':accountId,
             "title": regex
