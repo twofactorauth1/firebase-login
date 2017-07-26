@@ -536,22 +536,8 @@ module.exports = {
             var bucket = awsConfig.BUCKETS.ASSETS;
             var subdir = 'account_' + accountId;
             
-                
-            self._download(serverUrl, tempFileName, function(){
-                log.debug('stored screenshot at ' + tempFileName);
-                tempFile.type = 'image/png';
-                s3dao.uploadToS3(bucket, subdir, tempFile, null, function(err, value){
-                    fs.unlink(tempFile.path, function(err, value){});
-                    if(err) {
-                        log.error('Error uploading to s3: ' + err);
-                        fn(err, null);
-                    } else {
-                        log.debug('Got the following from S3', value);
-                        log.debug('<< generateScreenshot');
-                        fn(null, 'http://' + bucket + '.s3.amazonaws.com/' + subdir + '/' + tempFile.name);
-                    }
-                });
-            });
+            fn(null, 'http://' + bucket + '.s3.amazonaws.com/' + subdir + '/' + tempFile.name);    
+            
     },
 
     _download: function(uri, file, callback){
