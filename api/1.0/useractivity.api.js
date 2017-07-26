@@ -142,7 +142,7 @@ _.extend(api.prototype, baseApi.prototype, {
         _.each(list, function(activity){
             csv += self._parseString(activity.get('activityType'));
             csv += self._parseString(activity.get("note"));
-            csv += self._parseString(activity.getFormattedDate("start"));
+            csv += self._parseString(activity.get("start"));
             csv += '\n';
         });
         resp.set('Content-Type', 'text/csv');

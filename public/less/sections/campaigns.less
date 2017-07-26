@@ -3,7 +3,7 @@
 /* ---------------------------------------------------------------------- */
 .campaigns {
     table.grid thead th {
-        width: 12.5%;
+        width: 11%;
         float:left;
         @media (max-width: 767px) {
             width: 25% !important;
@@ -31,7 +31,25 @@
         }
         span.text-adjust-inner-content{
             display:inline-block;
-            max-width: 102%;
+            max-width: 100%;
+        }
+        tr.campaign-filter-header {
+            th:first-child, th:nth-child(2) {
+                width: 5%;
+            }
+            @media (min-width: 768px) and (max-width: 1023px) {
+                th:first-child, th:nth-child(2) {
+                    width: 7%;
+                }
+            }
+        }
+    }
+    .campaign-filter-header {
+        background: #fff;
+    }
+    .table.grid{
+        tr.campaign-filter-header th {
+            height: 53px;
         }
     }
 }
