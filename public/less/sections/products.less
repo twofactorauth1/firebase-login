@@ -35,4 +35,30 @@
             margin-top: 60px;
         }
     }
+    .table-list-view {
+        .sticky-header-class {
+            tr > th {
+                width: 20%;
+            }
+        }
+        tbody {
+            tr td {
+                width: 15%;
+            }
+        }
+        td.text-adjust-col{
+		    overflow: hidden;
+		    text-overflow: ellipsis;
+		    white-space: nowrap;
+		    max-width: 1px;
+        }
+        span.text-adjust-inner-content{
+            display:inline-block;
+            max-width: 102%;
+        }
+    }
+}
+.main-content > div.container {
+    padding-left: 0;
+    padding-right: 0;
 }
