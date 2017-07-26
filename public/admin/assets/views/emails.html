@@ -51,9 +51,9 @@
         </div>
         <div class="container-fluid container-fullw padding-top-0 padding-bottom-0">
             <div class="panel panel-transparent row margin-bottom-0">
-                <div class="panel-body">
-                    <table class="table table-striped table-hover bg-white margin-bottom-0" ng-class="{'grid': tableView == 'grid', 'bg-white table-list-view': tableView != 'grid'}" ng-show="displayedEmails">
-                        <thead ng-class="{'bg-white': tableView == 'grid'}">
+                <div class="panel-body email-panel-body padding-top-0">
+                    <table class="table table-striped table-hover bg-white margin-bottom-0" ng-class="{'grid': tableView == 'grid', 'bg-white table-list-view': tableView != 'grid'}" ng-show="displayedEmails" fixed-header-table>
+                        <thead ng-class="{'bg-white': tableView == 'grid'}" sticky offset="65" sticky-class="sticky-header-class">
                             <tr>
                                 <!--<th class="center">Screenshot</th>-->
                                 <th st-sort="title">Title</th>
@@ -83,7 +83,7 @@
                                <!-- <td class="center">
                                     <img id="template_screenshot_{{template._id}}" ng-src="{{ template.previewUrl }}" err-src="/admin/assets/images/default-page.jpg" class="img-thumbnail screenshot" alt="image">
                                 </td> -->
-                                <td><strong>Title: </strong><span class="email-title text-adjust-table" tooltip-placement="top" tooltip="{{template.title}}" tooltip-enable="template.title.length > 50">{{template.title}}</span></td>
+                                <td class="text-adjust-col"><strong>Title: </strong><span class="email-title text-adjust-inner-content" tooltip-placement="top" tooltip="{{template.title}}" tooltip-enable="template.title.length > 50">{{template.title}}</span></td>
                                 <td><strong>Sent: </strong><span >{{template.stats.sends}}</span></td>
                                 <td><strong>Clicks: </strong><span>{{template.stats.clicks}}</span></td>
                                 <td class="hidden-xs" ng-class="{'center': tableView != 'grid'}"><strong>Created: </strong> {{template.created.date | date:'MMM d yy'}}</td>
