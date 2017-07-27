@@ -430,7 +430,7 @@ app.directive('simpleFormComponent', ["ipCookie", '$window', '$timeout', 'userSe
         if(extra.length){
           formatted.extra = extra;
         }
-
+        formatted.optIn=$scope.user._optin;
         //create contact
         userService.addContact(formatted, function (data, err) {
           scope.isBusy = false;
