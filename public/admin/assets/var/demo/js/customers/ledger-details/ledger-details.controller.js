@@ -70,6 +70,7 @@ function ledgerDetailsController($scope, $state, $attrs, $filter, $modal, $timeo
             _.each(vm.ledgerDetails, function(ledger){
                 calculateInvoiceTotal(ledger);
             })
+            calculateLedgerTotal(vm.ledgerDetails);
         }
     }, true);
 
@@ -122,14 +123,19 @@ function ledgerDetailsController($scope, $state, $attrs, $filter, $modal, $timeo
     }
 
     function calculateLedgerTotal(ledger){
-        console.log('inside', ledger);
+        //console.log('inside', ledger);
         var _sum = 0;
         _.each(ledger, function(invoice){
             if(invoice.invoiceTotal)
                 _sum+= parseFloat(invoice.invoiceTotal)
         });
         vm.ledgerTotal = _sum;
-        return _sum;
+        var _dueSum = 0;
+        _.each(ledger, function(invoice){
+            if(invoice.invoiceDue)
+                _dueSum+= parseFloat(invoice.invoiceDue)
+        });
+        vm.ledgerDueTotal = _dueSum;
     }
 
 

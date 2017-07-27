@@ -100,7 +100,7 @@
                             <th style="white-space: nowrap;" st-sort="vm.getters.invoiceDate"><span class="hidden-xs">Invoice </span>Date</th>
                             <th style="white-space: nowrap;" st-sort="vm.getters.dueDate">Due <span class="hidden-xs">Date</span></th>
                             <th st-sort="invoiceTotal" style="white-space: nowrap;"><span class="hidden-xs">Invoice </span>Total</th>
-                            <th st-sort="invoiceTotal" style="white-space: nowrap;"><span class="hidden-xs">Invoice </span>Due</th>
+                            <th st-sort="invoiceDue" style="white-space: nowrap;"><span class="hidden-xs">Invoice </span>Due</th>
                         </tr>
                         <tr ng-if="showFilter">
                             <th>
@@ -128,8 +128,15 @@
                             </td>
                         </tr>
                         <tr ng-if="vm.ledgerDetails">
-                            <td class="text-right padding-right-20" colspan="10">
-                                 <span class="order-total-text">Total</span><span class="order-total-value">{{vm.ledgerTotal || vm.calculateLedgerTotal(vm.ledgerDetails) | currency : ledger._CustStatmentHdr_Currency }}</span>
+                            <td></td>
+                            <td class="hidden-xs"></td>
+                            <td></td>
+                            <td><span class="order-total-text">Total</span></td>
+                            <td class="">
+                                <span class="order-total-text"></span><span class="order-total-value">{{vm.ledgerTotal | currency : ledger._CustStatmentHdr_Currency }}</span>
+                            </td>
+                            <td class="">
+                                <span class="order-total-text"></span><span class="order-total-value">{{vm.ledgerDueTotal | currency : ledger._CustStatmentHdr_Currency }}</span>
                             </td>
                         </tr>
 
