@@ -271,20 +271,44 @@ function promotionDetailsController($scope, $window, $state, $attrs, $filter, $m
                 return shipment.deployDate
             }));
             // Promo Sales
-            vm.state.shipmentStats.promoSales = getPromoSales();
+            getPromoSales();
         }
     }
 
     function getPromoSales(){
-        var promoShipments = _.filter(vm.state.shipments, function(shipment) {
+        var promoWonShipments = _.filter(vm.state.shipments, function(shipment) {
             return shipment.status === vm.shipmentStatusOptions.BUY
         })
-        if(promoShipments){
-            var products = _.without(_.flatten(_.pluck(promoShipments, "products")), null);
+        var promoOpenShipments = _.filter(vm.state.shipments, function(shipment) {
+            return shipment.status === vm.shipmentStatusOptions.TRY
+        })
+        var promoLostShipments = _.filter(vm.state.shipments, function(shipment) {
+            return shipment.status === vm.shipmentStatusOptions.RMA
+        })
+        if(promoWonShipments){
+            var products = _.without(_.flatten(_.pluck(promoWonShipments, "products")), null);
             var totalPrice = _.reduce(products, function(m, product) { 
                 return m + parseFloat(product.itemPrice || 0) ; }, 0);
-            return totalPrice;
+            vm.state.shipmentStats.promoWonShipments = parseFloat(totalPrice);
         }
+        if(promoOpenShipments){
+            var products = _.without(_.flatten(_.pluck(promoOpenShipments, "products")), null);
+            var totalPrice = _.reduce(products, function(m, product) { 
+                return m + parseFloat(product.itemPrice || 0) ; }, 0);
+            vm.state.shipmentStats.promoOpenShipments = parseFloat(totalPrice);
+        }
+        if(promoLostShipments){
+            var products = _.without(_.flatten(_.pluck(promoLostShipments, "products")), null);
+            var totalPrice = _.reduce(products, function(m, product) { 
+                return m + parseFloat(product.itemPrice || 0) ; }, 0);
+            vm.state.shipmentStats.promoLostShipments = parseFloat(totalPrice);
+        }
+        if(vm.state.shipments){
+            var products = _.without(_.flatten(_.pluck(vm.state.shipments, "products")), null);
+            var totalPrice = _.reduce(products, function(m, product) { 
+                return m + parseFloat(product.itemPrice || 0) ; }, 0);
+            vm.state.shipmentStats.promoSales = parseFloat(totalPrice);
+        } 
     }
 
     function exportShipments(){

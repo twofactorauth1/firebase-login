@@ -783,6 +783,11 @@
             @media screen and (max-width: 767px){
                 margin-right: -15px;
             }
+            .message-text-container{
+                a{
+                    color: inherit;
+                }
+            }
         }
 
         .active-message{
@@ -860,6 +865,10 @@
          display: none;
     }
     .slick-swipe {
+        .slick-list .slick-slide{
+            max-height: 400px;
+            overflow-y: auto;
+        }
         li {
             border-bottom: none;
         }
@@ -868,8 +877,7 @@
         }
         button.slick-prev.slick-arrow:before,
         button.slick-next.slick-arrow:before {
-            color: #555555
-
+            color: #8f8f8f;
         }
     }
 }
