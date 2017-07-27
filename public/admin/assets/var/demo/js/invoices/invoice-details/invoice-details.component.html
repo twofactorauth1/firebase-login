@@ -143,10 +143,10 @@
                                         <span class="order-total-text">Tax/Vat</span><span class="order-total-value">{{vm.totalTax | currency : vm.invoiceDetails[0]._CustStatmentHdr_Currency}}</span>
                                     </div>
                                     <div ng-if="vm.totalDiscount > 0">
-                                        <span class="order-total-text">Discount</span><span class="order-total-value">({{vm.totalDiscount | currency : vm.invoiceDetails[0]._CustStatmentHdr_Currency}})</span>
+                                        <span class="order-total-text">Discount</span><span class="order-total-value">(<span class="text-negative">{{vm.totalDiscount | currency : vm.invoiceDetails[0]._CustStatmentHdr_Currency}}</span>)</span>
                                     </div>
                                     <div ng-if="vm.totalPaidToDate > 0">
-                                        <span class="order-total-text">Total Paid To Date</span><span class="order-total-value">{{vm.totalPaidToDate | currency : vm.invoiceDetails[0]._CustStatmentHdr_Currency}}</span>
+                                        <span class="order-total-text">Total Paid To Date</span><span class="order-total-value">(<span class="text-negative">{{vm.totalPaidToDate | currency : vm.invoiceDetails[0]._CustStatmentHdr_Currency}}</span>)</span>
                                     </div>
                                     <div>
                                         <span class="order-total-text">Total</span><span class="order-total-value">{{vm.total | currency : vm.invoiceDetails[0]._CustStatmentHdr_Currency}}</span>
