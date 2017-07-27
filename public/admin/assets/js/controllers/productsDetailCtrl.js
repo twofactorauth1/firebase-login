@@ -841,7 +841,7 @@
           $scope.emailToSend.fromEmail = account.business.emails[0].email;
           $scope.emailToSendCopy.fromEmail = account.business.emails[0].email;
         }
-        if (fromEmail && ($scope.emailToSend.replyTo == '' || update)) {
+        if (fromEmail && update) {
           $scope.emailToSend.replyTo = account.business.emails[0].email;
           $scope.emailToSendCopy.replyTo = account.business.emails[0].email;
         }
