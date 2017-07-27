@@ -1183,9 +1183,9 @@ var ziManager = {
                 return ld._CustStatmentDtl_TransId;
             });
             _.each(ledgerDetails, function(ledger){
-                ledger.invoiceTotal = self._calculateInvoiceTotal(ledger, results);
+                self._calculateInvoiceTotal(ledger, results);
             })
-            var headers = ['Invoice', 'VAR PO', 'Invoice Date', 'Due Date', 'Invoice Total'];
+            var headers = ['Invoice', 'VAR PO', 'Invoice Date', 'Due Date', 'Invoice Total', 'Invoice Due'];
             var csv = headers + '\n';
             _.each(ledgerDetails, function(item){
                 csv += self._parseString(item._CustStatmentDtl_Document_ID);
@@ -1193,6 +1193,7 @@ var ziManager = {
                 csv += self._parseString(self._parseValueToDate(item._CustStatmentDtl_RefDate));
                 csv += self._parseString(self._parseValueToDate(item._CustStatmentDtl_DueDate));
                 csv += self._parseString(self._parseCurrency("$", item.invoiceTotal));
+                csv += self._parseString(self._parseCurrency("$", item.invoiceDue));
                 csv += '\n';
             });
             
@@ -1343,6 +1344,10 @@ var ziManager = {
 
     _calculateInvoiceTotal: function(ledger, results){
         var _sum = 0;
+        var totalTax = 0;
+        var totalFreight = 0;
+        var totalDiscount = 0;
+        var totalPaidToDate = 0;
         if(results){
             var invoiceDetails = _.filter(results, function(row){
                 return row._CustStatmentDtl_TransId == ledger._CustStatmentDtl_TransId
@@ -1355,9 +1360,20 @@ var ziManager = {
                     if(order.INV1_LineTotal)
                         _sum+= parseFloat(order.INV1_LineTotal);
                 })
+                totalTax = invoiceDetails[0].OINV_VatSum || 0;
+                totalFreight = invoiceDetails[0].OINV_TotalExpns || 0;
+                totalDiscount = invoiceDetails[0].OINV_DiscSum || 0;
+                totalPaidToDate = invoiceDetails[0].OINV_PaidToDate || 0;
             }
         }
-        return _sum;
+        ledger.invoiceTotal = parseFloat(_sum) + parseFloat(totalTax) + parseFloat(totalFreight) - parseFloat(totalDiscount);
+        var invoiceDue = parseFloat(ledger.invoiceTotal) - parseFloat(totalPaidToDate);
+        if(invoiceDue >= 0){
+            ledger.invoiceDue = invoiceDue;
+        }
+        else{
+            ledger.invoiceDue = 0
+        }
     },
 
     _parseString: function(text){
