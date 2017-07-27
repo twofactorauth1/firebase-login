@@ -1210,7 +1210,7 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
         _.each(data, function (product) {
           if (product.status === 'active' && product.tags && product.tags.length > 0) {
             _.each(product.tags, function (tag) {
-              if ($scope.availableProductTags.indexOf(tag) === -1) {
+              if ($scope.availableProductTags.indexOf(tag.toLowerCase()) === -1) {
                 $scope.availableProductTags.push(tag);
               }
             });

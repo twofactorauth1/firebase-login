@@ -24,8 +24,10 @@ app.directive('productsComponent', ['ProductService', '$location', '$timeout', '
 
       function filterTags(_product) {
         var _tags = scope.component.productTags;
+        _tags = convertInLowerCase(_tags);
         if (_tags && _tags.length > 0) {
           if (_product.tags) {
+            _product.tags = convertInLowerCase(_product.tags);
             if (_.intersection(_tags, _product.tags).length > 0) {
               return true;
             }
@@ -218,6 +220,19 @@ app.directive('productsComponent', ['ProductService', '$location', '$timeout', '
           }
         }
         return styleString;
+      }
+
+      /*
+       * @convertInLowerCase
+       * - convert array value in lowercase
+       */
+
+      function convertInLowerCase(dataItem) {
+          var _item = [];
+          _.each(dataItem, function(tagItem) {
+              _item.push(tagItem.toLowerCase());
+          });
+          return _item;
       }
     }
   };
