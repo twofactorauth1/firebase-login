@@ -34,7 +34,7 @@
                 <p ng-if="simpleForm.email.$invalid && !simpleForm.email.$pristine && !userExists" class="help-block">Enter a valid email.</p>
                 <p ng-if="userExists" class="help-block">Email already exists.</p>
             </div>
-            <div   class="form-group  input-field-container" ng-if="vm.component.optInRequired"  ng-class="{ 'has-error' : (simpleForm._optin.$invalid || simpleForm._optin.$error.$required) && !simpleForm._optin.$pristine }">
+            <div   class="form-group  input-field-container" ng-if="component.optInRequired"  ng-class="{ 'has-error' : (simpleForm._optin.$invalid || simpleForm._optin.$error.$required) && !simpleForm._optin.$pristine }">
                 <span class="required">*</span>
                 <input   type="checkbox" ng-model="user._optin"   name="_optin" ng-required='true' ng-change="clearValidations()">
 
