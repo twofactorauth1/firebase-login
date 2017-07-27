@@ -68,7 +68,7 @@ function ledgerDetailsController($scope, $state, $attrs, $filter, $modal, $timeo
             });
 
             _.each(vm.ledgerDetails, function(ledger){
-                ledger.invoiceTotal = calculateInvoiceTotal(ledger);
+                calculateInvoiceTotal(ledger);
             })
         }
     }, true);
@@ -76,6 +76,10 @@ function ledgerDetailsController($scope, $state, $attrs, $filter, $modal, $timeo
 
     function calculateInvoiceTotal(ledger){
         var _sum = 0;
+        var totalTax = 0;
+        var totalFreight = 0;
+        var totalDiscount = 0;
+        var totalPaidToDate = 0;
         if(vm.ledger){
             var invoiceDetails = _.filter(vm.ledger, function(row){
                 return row._CustStatmentDtl_TransId == ledger._CustStatmentDtl_TransId
@@ -88,9 +92,16 @@ function ledgerDetailsController($scope, $state, $attrs, $filter, $modal, $timeo
                     if(order.INV1_LineTotal)
                         _sum+= parseFloat(order.INV1_LineTotal);
                 })
+                totalTax = invoiceDetails[0].OINV_VatSum || 0;
+                totalFreight = invoiceDetails[0].OINV_TotalExpns || 0;
+                totalDiscount = invoiceDetails[0].OINV_DiscSum || 0;
+                totalPaidToDate = invoiceDetails[0].OINV_PaidToDate || 0;
+
             }
         }
-        return _sum;
+        ledger.invoiceTotal = parseFloat(_sum) + parseFloat(totalTax) + parseFloat(totalFreight) - parseFloat(totalDiscount);
+        ledger.invoiceDue = ledger.invoiceTotal - parseFloat(totalPaidToDate);
+        
     }
 
     function parseValueToFloat(value){
