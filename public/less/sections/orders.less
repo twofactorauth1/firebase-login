@@ -31,7 +31,7 @@
                 width: 18%;
             }
             tr th.center-col{
-                text-align: center;
+                text-align: initial;
             }
             tr.order-filter-header {
                 th {
@@ -55,6 +55,39 @@
                     text-align: initial;
                 }
             }
+            @media (min-width: 769px) and (max-width: 1024px) {
+                tr th:first-child {
+                    width: 7%;
+                }
+            }
+        }
+        @media (min-width: 769px) and (max-width: 1024px) {
+            tr{
+                th {
+                    width: 12%;
+                }
+                th:first-child {
+                    width: 7% !important;
+                }
+                th.item-col {
+                    width: 36% !important;
+                }
+                th.center-col{
+                    text-align: center;
+                }
+            }
+        }
+        tr > th {
+            width: 11%;
+        }
+        tr th:first-child {
+            width: 7%;
+        }
+        tr th.customer-col {
+            width: 18%;
+        }
+        tr th.item-col {
+            width: 20%;
         }
         tbody {
             tr > td {
