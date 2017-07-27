@@ -47,7 +47,14 @@
                                 <p ng-if="userExists" class="help-block">Email already exists.</p>
                             </div>
                         </div>
+                        <div   class="form-group  input-field-container" ng-if="vm.component.optInRequired"  ng-class="{ 'has-error' : (simpleForm._optin.$invalid || simpleForm._optin.$error.$required) && !simpleForm._optin.$pristine }">
+                            <span class="required">*</span>
+                            <input   type="checkbox" ng-model="user._optin"   name="_optin" ng-required='true' ng-change="clearValidations()">
 
+                            <div  elem
+                                 ng-model="component.optInText">
+                            </div>
+                        </div>
                         <div class="clearfix mb15 visible-xs"></div>
                         <div class="col-sm-12">
                             <button ng-if="!isEditing" type="submit" ng-attr-style="{{buttonStyle(component.btn, component.formSettings.btnStyle)}}" class="btn btn-form btn-block ssb-theme-btn form-submit-button" ng-disabled="simpleForm.$invalid || isBusy" ng-class="{'custom-orange': component.customBtn, 'btn-no-bg-color': !component.submitBtn}">
@@ -108,6 +115,14 @@
                                     <input type="email" name="email" ng-model="user.email" class="form-control" ng-pattern="formValidations.email" placeholder="Email" ng-change="clearValidations()" required>
                                     <p ng-if="simpleForm.email.$invalid && !simpleForm.email.$pristine && !userExists" class="help-block">Enter a valid email.</p>
                                     <p ng-if="userExists" class="help-block">Email already exists.</p>
+                                </div>
+                                <div   class="form-group  input-field-container" ng-if="vm.component.optInRequired"  ng-class="{ 'has-error' : (simpleForm._optin.$invalid || simpleForm._optin.$error.$required) && !simpleForm._optin.$pristine }">
+                                    <span class="required">*</span>
+                                    <input   type="checkbox" ng-model="user._optin"   name="_optin" ng-required='true' ng-change="clearValidations()">
+
+                                    <div  elem
+                                         ng-model="component.optInText">
+                                    </div>
                                 </div>
                                 <div class="clearfix mb15 visible-xs"></div>
                                 <div class="col-xs-12">
