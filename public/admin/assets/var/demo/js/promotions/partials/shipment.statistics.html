@@ -45,8 +45,26 @@
         </div>
         <div class="col-shipment">
 	    	<div class=" promotions-stats-item">
-	    		<span class="promotions-stats-value">{{vm.state.shipmentStats.promoSales | currency : '$'}}</span>
-			  	<span class="promotions-stats-label">Promo Sales</span>
+	    		<span class="promotions-stats-value">{{vm.state.shipmentStats.promoOpenShipments | currency : '$' : 0}}</span>
+			  	<span class="promotions-stats-label">Total Open</span>
+	    	</div>
+        </div>
+        <div class="col-shipment">
+	    	<div class=" promotions-stats-item">
+	    		<span class="promotions-stats-value">{{vm.state.shipmentStats.promoWonShipments | currency : '$' : 0}}</span>
+			  	<span class="promotions-stats-label">Total Won</span>
+	    	</div>
+        </div>
+        <div class="col-shipment">
+	    	<div class=" promotions-stats-item">
+	    		<span class="promotions-stats-value">{{vm.state.shipmentStats.promoLostShipments | currency : '$' : 0}}</span>
+			  	<span class="promotions-stats-label">Total Lost</span>
+	    	</div>
+        </div>
+        <div class="col-shipment">
+	    	<div class=" promotions-stats-item">
+	    		<span class="promotions-stats-value">{{vm.state.shipmentStats.promoSales | currency : '$' : 0}}</span>
+			  	<span class="promotions-stats-label">Promo Potential</span>
 	    	</div>
         </div>
 </div>
