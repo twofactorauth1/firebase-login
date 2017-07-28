@@ -6,26 +6,32 @@
 *
 -->
 <div data-edit ng-class="component.type+'-v'+component.version">
-    <div class="title">
-        <div elem ng-model="component.title"></div>
-    </div>
+    <div class="blog-teaser-container">
+        <div class="col-xs-12 col-md-8">
+            <div class="title">
+                <div elem ng-model="component.title"></div>
+            </div>
 
-    <div ng-if="!teaserposts.length && !loading" class="ssb-in-context-info margin-top-20 padding-30">
-        <span class="fa fa-info-circle"> No published posts were found.</span>
-    </div>
+            <div ng-if="!teaserposts.length && !loading" class="ssb-in-context-info margin-top-20 padding-30">
+                <span class="fa fa-info-circle"> No published posts were found.</span>
+            </div>
 
-    <section class="ssb-media-stacked ssb-blog-post-list list-unstyled">
-        <article ng-attr-style="{{vm.listArticleStyle(vm.component)}}"
-            ssb-blog-post-card-component
-                 component="component"
-            post="post"
-            filtered-post-view="false" 
-            ng-repeat="post in teaserposts | orderBy : sortBlogFn(component):customSortOrder(component) | limitTo: 3">
-        </article>
-    </section>
-    <div class="clearfix mb30"></div>
-    <div class="center col-xs-12 padding-15">
-        <a class="btn ssb-theme-btn center" target="_self" href="/blog">See Full Blog</a>
+            <section class="ssb-media-stacked ssb-blog-post-list list-unstyled">
+                <article ng-attr-style="{{vm.listArticleStyle(vm.component)}}"
+                    ssb-blog-post-card-component
+                         component="component"
+                    post="post"
+                    filtered-post-view="false" 
+                    ng-repeat="post in teaserposts | orderBy : sortBlogFn(component):customSortOrder(component) | limitTo: 3">
+                </article>
+            </section>
+            <div class="clearfix mb30"></div>
+            <div class="center col-xs-12 padding-15">
+                <a class="btn ssb-theme-btn center" target="_self" href="/blog">See Full Blog</a>
+            </div>
+            <div class="clearfix"></div>
+        </div>
     </div>
-    <div class="clearfix"></div>
+    
+    
 </div>
