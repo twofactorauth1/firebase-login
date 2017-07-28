@@ -12,7 +12,9 @@ app.directive('footerComponent', ['$window','websiteService', '$location', funct
       var defaultAccountUrl = "//www.indigenous.io";
       if(scope.orgId==1){
           defaultAccountUrl = "//www.gorvlvr.com";
-      }
+      } else if (scope.orgId==4){
+          defaultAccountUrl = "//techevent.us";
+        }
       scope.footerLinkUrl = defaultAccountUrl + "?utm_source=" + accountHost + "&utm_medium=footer_link";
       WebsiteService(function (err, data) {
         if (err) {
