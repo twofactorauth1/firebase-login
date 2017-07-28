@@ -38,7 +38,7 @@
                  component="vm.component"
             post="post"
             filtered-post-view="vm.filteredPostView" 
-            ng-repeat="post in vm.blog.posts | orderBy:vm.sortBlogPosts:true track by $index">
+            ng-repeat="post in vm.blog.posts | orderBy:'-created.date' | orderBy:vm.sortBlogPosts:true track by $index">
         </article>
     </section>
     <style>

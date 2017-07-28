@@ -126,7 +126,7 @@ function ssbBlogRecentPostComponentController(SimpleSiteBuilderBlogService, $sco
     }
 
     function sortBlogPosts(blogpost){
-        return blogpost.modified.date && blogpost.modified.date.split && new Date(blogpost.modified.date).getTime();
+        return new Date(blogpost.publish_date || blogpost.created.date).getTime();
     }
 
     function showNumberOfPosts(){

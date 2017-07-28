@@ -534,7 +534,7 @@ var manager = {
                 log.error(accountId, userId, 'Exception listing shipments: ', err);
                 fn(err, null);
             } else {
-                var headers = ['VAR', 'Products', 'Ship Date', 'Config Date', 'Deploy Date', 'End Date', 'Status', 'Customer', 'Project', 'Partner Sales Rep', 'Juniper Rep'];
+                var headers = ['VAR', 'Products', 'Ship Date', 'Config Date', 'Deploy Date', 'End Date', 'Status', 'Total', 'Customer', 'Project', 'Partner Sales Rep', 'Juniper Rep'];
                 var csv = headers + '\n';
                 _.each(list, function(shipment){
                     csv += self._parseString(shipment.get('companyName'));
@@ -544,6 +544,7 @@ var manager = {
                     csv += self._parseString(shipment.getFormattedDate("deployDate"));
                     csv += self._parseString(shipment.getFormattedDate("endDate"));
                     csv += self._parseString(shipment.getStatus());
+                    csv += self._parseString(self._parseCurrency("$", shipment.getShipmentPrice()));
                     csv += self._parseString(shipment.getCustomerDetails());
                     csv += self._parseString(shipment.getCustomerProject());
                     csv += self._parseString(shipment.getCustomerPartner());

@@ -46,7 +46,7 @@ function ssbSiteBuilderBlogEditorController($scope, $rootScope, $timeout, Simple
     vm.refreshPost = refreshPost;
     vm.draftPost = draftPost;
     vm.tagsAdded = tagsAdded;
-
+    vm.sortBlogPosts = sortBlogPosts;
     vm.uiState.cleanBlogPanel = cleanBlogPanel;
 
     vm.defaultPost = {
@@ -402,6 +402,10 @@ function ssbSiteBuilderBlogEditorController($scope, $rootScope, $timeout, Simple
         post.post_status = 'DRAFT';
         post.publish_date = null;
         vm.savePost(post);
+    }
+
+    function sortBlogPosts(blogpost){
+        return new Date(blogpost.publish_date || blogpost.created.date).getTime();
     }
 
     function init(element) {
