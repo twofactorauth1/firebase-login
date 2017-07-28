@@ -30,6 +30,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url(''), this.isAuthAndSubscribedApi.bind(this), this.listAssets.bind(this));
         app.get(this.url('paged/list'), this.isAuthAndSubscribedApi.bind(this), this.listPagedAssets.bind(this));
         app.post(this.url(':id'), this.isAuthAndSubscribedApi.bind(this), this.updateAsset.bind(this));
+        app.post(this.url('cache/:id'), this.isAuthAndSubscribedApi.bind(this), this.updateAssetMetadata.bind(this));
         app.delete(this.url(':id'), this.isAuthAndSubscribedApi.bind(this), this.deleteAsset.bind(this));
 
         app.get(this.url('type/:type'), this.isAuthAndSubscribedApi.bind(this), this.getAssetsByType.bind(this));
@@ -37,6 +38,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url('source/:source'), this.isAuthAndSubscribedApi.bind(this), this.getAssetsBySource.bind(this));
         app.post(this.url('editor/upload'), this.isAuthAndSubscribedApi.bind(this), this.uploadImage.bind(this));
         app.post(this.url('editor/image/upload'), this.isAuthAndSubscribedApi.bind(this), this.uploadEditorImage.bind(this));
+
 
     },
 
@@ -312,6 +314,37 @@ _.extend(api.prototype, baseApi.prototype, {
                         self.log.debug('<< updateAsset');
                         self.sendResultOrError(res, err, value, "Error updating Asset");
                         self.createUserActivity(req, 'UPDATE_ASSET', null, null, function(){});
+                    });
+                }
+            });
+        });
+    },
+     updateAssetMetadata: function(req, res) {
+        var self = this;
+        self.log.debug('>> updateAsset');
+
+        var assetId = req.params.id;
+        var accountId = parseInt(self.accountId(req));
+        var userId = self.userId(req);
+        assetManager.getAsset(assetId, function(err, savedAsset){
+            if(err) {
+                return self.wrapError(res, 404, 'Asset not found', 'Could not find asset with id [' + assetId + '].');
+            }
+            self.checkPermissionForAccount(req, self.sc.privs.MODIFY_ASSET, savedAsset.get('accountId'), function(err, isAllowed){
+                if(isAllowed !== true) {
+                    return self.send403(res);
+                } else {
+                    var asset = new $$.m.Asset(req.body);
+                    asset.set('_id', assetId);
+                    self.log.debug('<< updateAsset metadata');
+                    assetManager.metadataS3Asset( asset.get('accountId'), userId, asset,function(err, value) {
+                        self.log.debug('<< updateAsset metadata');
+                        if(err) {
+                            return self.wrapError(res, 404, 'Asset not found', 'Could not find asset with id [' + assetId + '].');
+                        }else{
+                            self.sendResultOrError(res, err, value, "Error updating Asset");
+                            self.createUserActivity(req, 'UPDATE_ASSET', null, null, function(){});
+                        }
                     });
                 }
             });
