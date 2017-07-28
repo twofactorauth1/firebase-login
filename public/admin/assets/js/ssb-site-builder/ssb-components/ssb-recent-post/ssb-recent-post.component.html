@@ -3,7 +3,7 @@
         <h3>
             <div elem ng-model="vm.component.title"></div>
         </h3>
-        <div class="margin-bottom-5" ng-repeat="post in vm.blog.posts | orderBy:vm.sortBlogPosts:true | limitTo:(vm.showNumberOfPosts())" ng-hide="$first">
+        <div class="margin-bottom-5" ng-repeat="post in vm.blog.posts | orderBy:'-created.date' | orderBy:vm.sortBlogPosts:true | limitTo:(vm.showNumberOfPosts())" ng-hide="$first">
             <a ng-if="!vm.compactView" ng-class="{'ssb-theme-btn' : post.display_title || post.post_title}" class="btn-link" href="/blog/{{post.post_url}}" target="_self" ng-attr-style="{{vm.descriptionStyle()}}">{{post.display_title || post.post_title}}</a>
             <hr ng-if="((vm.component && vm.component.settings && vm.component.settings.hr && vm.component.settings.hr === true) && !$last)">
         </div>

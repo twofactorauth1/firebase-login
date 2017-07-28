@@ -149,6 +149,75 @@ module.exports = {
 
     },
 
+    metadataS3Asset: function(accountId, userId, asset, fn) {
+        var self = this;
+        self.log = log;
+        self.log.debug(accountId, userId, '>> update metadata');
+        var file = {};
+
+        async.waterfall([
+            function(cb){
+                assetDao.getById(asset.id(), function(err, dbAsset){
+                    cb(err, dbAsset);
+                });
+            },
+            function(existingAsset, cb) {
+
+                //Keep the same filename in AWS
+                var fileName = existingAsset.get('filename');
+                // get filename using image url
+                var _fileurl = existingAsset.get('url');
+                if(_fileurl){
+                    var fNameArr = _fileurl.split("/");
+                    if(fNameArr.length){
+                        fileName = fNameArr.pop();
+                    }
+                }
+                file.name = fileName;
+                file.type = asset.get('mimeType');
+                file.size = asset.get('size');
+                if (asset.get("url").substring(0, 5) == 'http:') {
+                    file.path=asset.get('url');
+                } else {
+                    file.path='http:'+asset.get('url');
+                }
+                var bucket = awsConfig.BUCKETS.ASSETS;
+                var subdir = 'account_' + accountId;
+                if(appConfig.nonProduction === true) {
+                    subdir = 'test_' + subdir;
+                }
+                asset.set('source', 'S3');
+                existingAsset.set('mimeType', file.type);
+                existingAsset.set('size', file.size);
+                existingAsset.set('isCached', asset.get("isCached"));
+                existingAsset.set('modified', {modified:new Date(), by:userId});
+                self.log.error(asset);
+                s3dao.updateMetadataS3(bucket, subdir, file, asset.get("isCached"), function(err, value){
+                    if(err) {
+                        self.log.error(accountId, userId, 'Error from S3: ' + err);
+                        cb(err, null);
+                    } else {
+                        self.log.debug(accountId, userId, 'S3 metadata complete');
+                        cb(null, existingAsset);
+                    }
+                });
+            }
+        ], function(err, existingAsset){
+            assetDao.saveOrUpdate(existingAsset, function(err, value){
+                if(err) {
+                    self.log.error(accountId, userId, 'Exception during asset replacement: ' + err);
+                    fn(err, null);
+                } else {
+                    self.log.debug(accountId, userId, '<< replaceS3Asset');
+                    //self.log.debug('new file: ', file);
+                    fn(null, value);
+                }
+            });
+        });
+
+
+    },
+
     getAsset: function(assetId, fn) {
         var self = this;
         self.log = log;

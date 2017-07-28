@@ -286,28 +286,67 @@ function promotionDetailsController($scope, $window, $state, $attrs, $filter, $m
             return shipment.status === vm.shipmentStatusOptions.RMA
         })
         if(promoWonShipments){
-            var products = _.without(_.flatten(_.pluck(promoWonShipments, "products")), null);
+            var _nonPricedWonShipments = _.filter(promoWonShipments, function(shipment) {
+                return !shipment.actualPrice
+            })
+            var _pricedWonShipments = _.filter(promoWonShipments, function(shipment) {
+                return shipment.actualPrice
+            })
+            var products = _.without(_.flatten(_.pluck(_nonPricedWonShipments, "products")), null);
             var totalPrice = _.reduce(products, function(m, product) { 
                 return m + parseFloat(product.itemPrice || 0) ; }, 0);
-            vm.state.shipmentStats.promoWonShipments = parseFloat(totalPrice);
+
+            var totalActualPrice = _.reduce(_pricedWonShipments, function(m, shipment) { 
+                return m + parseFloat(shipment.actualPrice || 0) ; }, 0);
+
+            vm.state.shipmentStats.promoWonShipments = parseFloat(totalPrice) + parseFloat(totalActualPrice);
         }
         if(promoOpenShipments){
-            var products = _.without(_.flatten(_.pluck(promoOpenShipments, "products")), null);
+            var _nonPricedOpenShipments = _.filter(promoOpenShipments, function(shipment) {
+                return !shipment.actualPrice
+            })
+            var _pricedOpenShipments = _.filter(promoOpenShipments, function(shipment) {
+                return shipment.actualPrice
+            })
+            var products = _.without(_.flatten(_.pluck(_nonPricedOpenShipments, "products")), null);
             var totalPrice = _.reduce(products, function(m, product) { 
                 return m + parseFloat(product.itemPrice || 0) ; }, 0);
-            vm.state.shipmentStats.promoOpenShipments = parseFloat(totalPrice);
+
+            var totalActualPrice = _.reduce(_pricedOpenShipments, function(m, shipment) { 
+                return m + parseFloat(shipment.actualPrice || 0) ; }, 0);
+
+            vm.state.shipmentStats.promoOpenShipments = parseFloat(totalPrice) + parseFloat(totalActualPrice);
         }
         if(promoLostShipments){
-            var products = _.without(_.flatten(_.pluck(promoLostShipments, "products")), null);
+            var _nonPricedLostShipments = _.filter(promoLostShipments, function(shipment) {
+                return !shipment.actualPrice
+            })
+            var _pricedLostShipments = _.filter(promoLostShipments, function(shipment) {
+                return shipment.actualPrice
+            })
+            var products = _.without(_.flatten(_.pluck(_nonPricedLostShipments, "products")), null);
             var totalPrice = _.reduce(products, function(m, product) { 
                 return m + parseFloat(product.itemPrice || 0) ; }, 0);
-            vm.state.shipmentStats.promoLostShipments = parseFloat(totalPrice);
+
+            var totalActualPrice = _.reduce(_pricedLostShipments, function(m, shipment) { 
+                return m + parseFloat(shipment.actualPrice || 0) ; }, 0);
+
+            vm.state.shipmentStats.promoLostShipments = parseFloat(totalPrice) + parseFloat(totalActualPrice);
         }
         if(vm.state.shipments){
-            var products = _.without(_.flatten(_.pluck(vm.state.shipments, "products")), null);
+            var _nonPricedShipments = _.filter(vm.state.shipments, function(shipment) {
+                return !shipment.actualPrice
+            })
+            var _pricedShipments = _.filter(vm.state.shipments, function(shipment) {
+                return shipment.actualPrice
+            })
+            var products = _.without(_.flatten(_.pluck(_nonPricedShipments, "products")), null);
             var totalPrice = _.reduce(products, function(m, product) { 
                 return m + parseFloat(product.itemPrice || 0) ; }, 0);
-            vm.state.shipmentStats.promoSales = parseFloat(totalPrice);
+
+            var totalActualPrice = _.reduce(_pricedShipments, function(m, shipment) { 
+                return m + parseFloat(shipment.actualPrice || 0) ; }, 0);
+            vm.state.shipmentStats.promoSales = parseFloat(totalPrice) + parseFloat(totalActualPrice);
         } 
     }
 
