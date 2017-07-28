@@ -18,6 +18,21 @@ app.directive('blogTeaserComponent', ['WebsiteService', '$filter', function (Web
         $scope.loading = false;
       });
 
+      $scope.listArticleStyle = listArticleStyle;
+
+      function listArticleStyle(item){
+        var styleString = ' ';
+
+        if(item && item.articleBorder && item.articleBorder.show && item.articleBorder.color){
+            styleString += 'border-color: ' + item.articleBorder.color + ';';
+            styleString += 'border-width: ' + item.articleBorder.width + 'px;';
+            styleString += 'border-style: ' + item.articleBorder.style + ';';
+            styleString += 'border-radius: ' + item.articleBorder.radius + '%;';
+        }
+
+        return styleString;
+    }
+
       $scope.sortBlogFn = function (component) {
         return function (blogpost) {
           if (component.postorder) {
