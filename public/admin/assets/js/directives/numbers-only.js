@@ -12,6 +12,11 @@ app.directive('numbersOnly', function () {
            // again, and the 2nd time, the value will be undefined
            if (inputValue == undefined) return ''
            var transformedInput = inputValue.replace(/[^0-9\.]/g, '');
+           var decimalCheck = transformedInput.split('.');
+           if(!angular.isUndefined(decimalCheck[1])) {
+                decimalCheck[1] = decimalCheck[1].slice(0);
+                transformedInput = decimalCheck[0] + '.' + decimalCheck[1];
+           }
            if (transformedInput!=inputValue) {
               modelCtrl.$setViewValue(transformedInput);
               modelCtrl.$render();
