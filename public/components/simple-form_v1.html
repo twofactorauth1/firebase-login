@@ -119,7 +119,7 @@
                                 </div>
                                 <div class="form-group  input-field-container" ng-if="component.optInRequired"  ng-class="{ 'has-error' : (simpleForm._optin.$invalid || simpleForm._optin.$error.$required) && !simpleForm._optin.$pristine }" style="padding-left: 15px;">
                                     <div class="form-checkbox-field">
-                                        <input type="checkbox" ng-model="user._optin"   name="_optin" ng-required='true' ng-change="clearValidations()">
+                                        <input class="optin-checkbox" type="checkbox" ng-model="user._optin" name="_optin" ng-required='true' ng-change="clearValidations()">
                                     </div>
                                     <div class="form-checkbox-label">
                                         <div elem ng-model="component.optInText">
