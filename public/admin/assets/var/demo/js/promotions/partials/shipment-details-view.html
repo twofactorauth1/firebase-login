@@ -3,7 +3,7 @@
         <div class="col-xs-12">
             <h4>Shipment Details</h4>
         </div>
-        
+
         <div class="form-group col-sm-12">
             <label class="block">VAR</label>
             <span class="">
@@ -46,7 +46,7 @@
                 {{vm.state.shipment.shipDate | date:'M/d/yyyy'}}
             </span>
         </div>
-        
+
 
         <div class="form-group col-sm-6" >
             <label class="block">
@@ -65,7 +65,7 @@
                 {{vm.state.shipment.deployDate | date:'M/d/yyyy'}}
             </span>
         </div>
-        
+
 
         <div class="form-group col-sm-6" >
             <label class="block">
@@ -80,10 +80,10 @@
             <label class="block">
                 One Config
             </label>
-            
+
             <span class="file-name">{{vm.attachment.name || vm.state.shipment.attachment.name}}</span>
         </div>
-        
+
 
         <div class="form-group col-sm-6">
             <label class="block">
@@ -94,7 +94,7 @@
         <div class="clearfix"></div>
         <div class="form-group col-sm-6">
             <label class="block">
-                Actual Price(not List)
+                Actual Price (not List)
             </label>
             <span>{{vm.state.shipment.actualPrice}}</span>
         </div>
@@ -136,7 +136,7 @@
                 City
             </label>
             <span>{{vm.state.shipment.customerDetails.city}}</span>
-            
+
         </div>
         <div class="form-group col-sm-6">
             <label class="block">
@@ -151,7 +151,7 @@
                 Zip
             </label>
             <span>{{vm.state.shipment.customerDetails.zip}}</span>
-            
+
         </div>
         <div class="form-group col-sm-6">
             <label class="block">
@@ -164,7 +164,7 @@
             <label class="block">
                 Partner Sales Rep
             </label>
-            <span>{{vm.state.shipment.customerDetails.partnerSalesRep}}</span>            
+            <span>{{vm.state.shipment.customerDetails.partnerSalesRep}}</span>
         </div>
         <div class="form-group col-sm-6">
             <label class="block">
