@@ -105,7 +105,9 @@ app.directive('blogTeaserComponent', ['WebsiteService', '$filter', function (Web
         var _filteredPosts = [];
         _.each(data, function (post) {
           if (filterTags(post)) {
-            _filteredPosts.push(post);
+            if(filterCategory(post)){
+              _filteredPosts.push(post);
+            }     
           }
         });
         $scope.posts = _filteredPosts;
@@ -114,11 +116,23 @@ app.directive('blogTeaserComponent', ['WebsiteService', '$filter', function (Web
 
       function filterTags(post) {
         var _tags = $scope.component.postTags;
-        _tags = convertInLowerCase(_tags);
         if (_tags && _tags.length > 0) {
           if (post.post_tags) {
-            post.post_tags = convertInLowerCase(post.post_tags);
             if (_.intersection(_tags, post.post_tags).length > 0) {
+              return true;
+            }
+          }
+        } else {
+          return true;
+        }
+      }
+
+
+      function filterCategory(post) {
+        var _categories = $scope.component.postCategories;        
+        if (_categories && _categories.length > 0) {
+          if (post.post_categories) {
+            if (_.intersection(_categories, _.pluck(post.post_categories, "text")).length > 0) {
               return true;
             }
           }
@@ -148,7 +162,6 @@ app.directive('blogTeaserComponent', ['WebsiteService', '$filter', function (Web
 
       $scope.$watch('component.postTags', function (newValue, oldValue) {
         if (newValue !== oldValue) {
-          //$scope.component.productTags = newValue;
           filterPosts($scope.originalTeaserposts, function () {
             $scope.pageChanged(1);
           });
@@ -158,7 +171,6 @@ app.directive('blogTeaserComponent', ['WebsiteService', '$filter', function (Web
 
       $scope.$watch('component.postCategories', function (newValue, oldValue) {
         if (newValue !== oldValue) {
-          //$scope.component.productTags = newValue;
           filterPosts($scope.originalTeaserposts, function () {
             $scope.pageChanged(1);
           });
@@ -167,11 +179,22 @@ app.directive('blogTeaserComponent', ['WebsiteService', '$filter', function (Web
 
       $scope.$watch('component.numberOfTotalPosts', function (newValue, oldValue) {
         if (newValue !== oldValue) {
+          $scope.component.numberOfTotalPosts = parseInt(newValue) > 0 ? parseInt(newValue) : 0;
           filterPosts($scope.originalTeaserposts, function () {
             $scope.pageChanged(1);
           });
         }
       });
+
+      $scope.$watch('component.numberOfPostsPerPage', function (newValue, oldValue) {
+        if (newValue !== oldValue) {
+          $scope.component.numberOfPostsPerPage = parseInt(newValue) > 0 ? parseInt(newValue) : 0;
+          filterPosts($scope.originalTeaserposts, function () {
+            $scope.pageChanged(1);
+          });
+        }
+      });
+
       /*
        * @convertInLowerCase
        * - convert array value in lowercase
