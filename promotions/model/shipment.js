@@ -154,6 +154,20 @@ var shipment = $$.m.ModelBase.extend({
         return totalPrice || 0;
     },
 
+    getCustomerName: function(){
+        var details = this.get("customerDetails");
+        if(details){
+            return details.customerName ? details.customerName.trim().toLowerCase() : "";
+        }
+        else{
+            return "";
+        }
+    },
+
+    getShipmentVar: function(){
+        return this.get("cardCode") ? this.get("cardCode").toLowerCase() : ""; 
+    },
+
     initialize: function(options) {
         var details = this.get("customerDetails");
     }

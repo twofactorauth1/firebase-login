@@ -49,10 +49,10 @@ if (process.env.IS_PROXIED == null) {
 if (process.env.ROOT_HOST == null) {
     if (process.env.NODE_ENV == environments.DEVELOPMENT || process.env.NODE_ENV == environments.TESTING) {
         process.env.ROOT_HOST = "indigenous.local";
-        process.env.ORG_ROOT_HOSTS = 'test.gorvlvr.com,gorvlvr.com';
+        process.env.ORG_ROOT_HOSTS = 'test.gorvlvr.com,gorvlvr.com,test.techevent.us,techevent.us';
     } else {
         process.env.ROOT_HOST = "indigenous.io";
-        process.env.ORG_ROOT_HOSTS = 'gorvlvr.com';
+        process.env.ORG_ROOT_HOSTS = 'gorvlvr.com,techevent.us';
     }
 
 }
@@ -218,7 +218,7 @@ module.exports = {
         if (subdomain == null && domain == null) {
             return wwwUrl;
         }
-        
+
         var _serverUrl = protocol + "://";
         if (!String.isNullOrEmpty(domain)) {
             _serverUrl += domain;

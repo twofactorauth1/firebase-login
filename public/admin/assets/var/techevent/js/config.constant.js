@@ -665,9 +665,9 @@ app.constant('JS_REQUIRES', {
 
     'DashboardInboxComponentController': 'assets/js/dashboard/dashboard-inbox-widget/dashboard-inbox.controller.js',
 
-     
 
-    'asideCtrl': 'assets/var/rvlvr/js/controllers/asideCtrl.js',
+
+    'asideCtrl': 'assets/var/techevent/js/controllers/asideCtrl.js',
     'toasterCtrl': 'assets/js/controllers/toasterCtrl.js',
     'sweetAlertCtrl': 'assets/js/controllers/sweetAlertCtrl.js',
     'mapsCtrl': 'assets/js/controllers/mapsCtrl.js',
@@ -688,7 +688,7 @@ app.constant('JS_REQUIRES', {
     // Campaign Recipient Details
 
     'CampaignRecipientDetailsController': 'assets/js/indi-email-campaign/campaign-recipient-details/campaign-recipient.controller.js',
-    
+
     //*** Services
     'accountService': 'assets/js/services/account.js',
     'productService': 'assets/js/services/product.js',

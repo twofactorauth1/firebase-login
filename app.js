@@ -210,6 +210,17 @@ function virtualHostSession(req, res, next) {
                 key: 'securematics_connect.sid'
             };
             hostSession = mwCache[host] = express.session(sess);
+        } else if(host.replace(':3000', '').endsWith('techevent.us')){
+            var sess = {
+                store: mongoStore,
+                secret: 'mys3cr3t',
+                cookie: {
+                    maxAge: 24 * 60 * 60 * 1000,
+                    domain: '.techevent.us'
+                }, //stay open for 1 day of inactivity across all subdomains
+                key: 'techevent_connect.sid'
+            };
+            hostSession = mwCache[host] = express.session(sess);
         } else {
             //console.log('creating session for ' + appConfig.cookie_subdomain);
             var sess1 = {
