@@ -11,10 +11,6 @@
             </div>
         </div>
     </section>
-    <style>
-
-
-    </style>
     <div st-table="displayedContacts" st-safe-src="contacts">
         <div class="container-fluid container-fullw bg-white padding-top-0 padding-bottom-0">
             <div class="col-sm-12">
@@ -133,26 +129,26 @@
                 </div>
             </div>
         </div>
-        <div class="container-fluid container-fullw padding-top-0 padding-bottom-0">
+        <div class="container-fluid container-fullw padding-top-0 padding-bottom-0 padding-left-15 padding-right-15">
             <div class="panel panel-transparent row margin-bottom-0">
-                <div class="panel-body">
-                    <table class="table table-striped table-hover bg-white margin-bottom-0" ng-class="{'grid': tableView == 'grid', 'bg-white table-list-view': tableView == 'list'}" ng-show="displayedContacts">
-                        <thead ng-class="{'bg-white': tableView == 'grid'}">
+                <div class="panel-body contact-panel-body padding-top-0">
+                    <table class="table table-striped table-hover bg-white margin-bottom-0" ng-class="{'grid': tableView == 'grid', 'bg-white table-list-view': tableView == 'list'}" ng-show="displayedContacts" fixed-header-table>
+                        <thead ng-class="{'bg-white': tableView == 'grid'}" sticky offset="65" sticky-class="sticky-header-class">
                             <tr>
                                 <th ng-class="{'column-width': tableView == 'grid'}" ng-click='selectAllClickFn($event)' ng-show='displayedContacts.length'><i class="fa fa-2x" ng-class='{"fa-check-circle": selectAllChecked, "fa-circle-o": !selectAllChecked}'></i></th>
                                 <th class="hidden-xs hidden-sm hidden-md sort" ng-class="{'column-width': tableView == 'grid', 'st-sort-ascent': sortData.details['_id'].direction === 1, 'st-sort-descent': sortData.details['_id'].direction === -1}" ng-click="sortContacts('_id', '_id')">ID</th>
                                 <th ng-show="column.name" style="margin-top: 1px;" ng-class="{'column-width': tableView == 'grid'}">Photo</th>
-                                <th class="sort" ng-show="column.name" ng-class="{'column-width': tableView == 'grid', 'st-sort-ascent': sortData.details['first'].direction === 1, 'st-sort-descent': sortData.details['first'].direction === -1}" ng-click="sortContacts('_first', '_first')">First</th>
-                                <th class="sort" ng-class="{'column-width': tableView == 'grid', 'st-sort-ascent': sortData.details['last'].direction === 1, 'st-sort-descent': sortData.details['last'].direction === -1}" ng-click="sortContacts('_last', '_last')">Last</th>
-                                <th ng-show="column.tags" ng-class="{'column-width': tableView == 'grid', 'tag-width': tableView == 'list'}">Tags</th>
+                                <th class="sort" ng-show="column.name" ng-class="{'column-width': tableView == 'grid', 'st-sort-ascent': sortData.details['_first'].direction === 1, 'st-sort-descent': sortData.details['_first'].direction === -1}" ng-click="sortContacts('_first', '_first')">First</th>
+                                <th class="sort" ng-class="{'column-width': tableView == 'grid', 'st-sort-ascent': sortData.details['_last'].direction === 1, 'st-sort-descent': sortData.details['_last'].direction === -1}" ng-click="sortContacts('_last', '_last')">Last</th>
+                                <th ng-show="column.tags" ng-class="{'column-width': tableView == 'grid', 'tag-width': tableView == 'list'}" class="tags-col">Tags</th>
                                 <th ng-show="column.email" class="hidden-xs sort" ng-class="{'column-width': tableView == 'grid', 'st-sort-ascent': sortData.details['email'].direction === 1, 'st-sort-descent': sortData.details['email'].direction === -1}" ng-click="sortContacts('details.emails.email', 'email')">Email</th>
                                 <th class="hidden-xs" ng-show="column.address" ng-class="{'column-width': tableView == 'grid'}">Address</th>
-                                <th class="hidden-xs hidden-sm hidden-md center" ng-show="column.phone" ng-class="{'column-width': tableView == 'grid'}">Phone</th>
+                                <th class="hidden-xs hidden-sm hidden-md" ng-show="column.phone" ng-class="{'column-width': tableView == 'grid'}">Phone</th>
                                 <th class="hidden-xs sort" ng-show="column.unsubscribed" ng-class="{'column-width': tableView == 'grid', 'st-sort-ascent': sortData.details['unsubscribed'].direction === 1, 'st-sort-descent': sortData.details['unsubscribed'].direction === -1}" ng-click="sortContacts('unsubscribed', 'unsubscribed')" style="white-space: nowrap;">Unsub</th>
                                 <th class="hidden-xs sort" ng-show="column.created" ng-class="{'column-width': tableView == 'grid', 'st-sort-ascent': sortData.details['created'].direction === 1, 'st-sort-descent': sortData.details['created'].direction === -1}" ng-click="sortContacts('created.date', 'created')" style="white-space: nowrap;">Created</th>
                                 <!-- <th class="hidden-xs" st-sort="getters.modified" ng-show="column.modified">Modified</th> -->
                             </tr>
-                            <tr ng-if="pagingParams.showFilter" class="filter-row-header">
+                            <tr ng-if="pagingParams.showFilter" class="filter-row-header sticky-filter-header">
                                 <th ng-if="displayedContacts.length" class="column-width" ng-show="column.name">
 
                                 </th>
@@ -210,20 +206,20 @@
                         <tr ng-repeat="contact in displayedContacts" ng-click="viewSingle(contact)">
                             <td ng-show='displayedContacts.length'><i class="fa fa-2x" ng-click='contactSelectClickFn($event, contact)' ng-class='{"fa-check-circle": contact.isSelected, "fa-circle-o": !contact.isSelected}'></i></td>
                             <td ng-show="column.name" class="hidden-xs hidden-sm hidden-md"><strong>ID: </strong>{{contact._id}}</td>
-                            <td class="center" ng-show="column.photo && tableView == 'list'">
+                            <td ng-show="column.photo && tableView == 'list'">
                                 <img ng-src="{{ contact.photo }}" id="contact_photo_{{contact._id}}" err-src="/admin/assets/images/default-user.png" is-contact="contact" err-contact="contact" class="img-thumbnail screenshot" alt="image">
                             </td>
-                            <td ng-show="column.name"><strong>First: </strong> <span class="text-adjust-complexTable">{{contact.first}}</span><span ng-if="!contact.first">--</span></td>
-                            <td ng-show="column.name"><strong>Last: </strong> <span class="text-adjust-complexTable">{{contact.last}}</span><span ng-if="!contact.last">--</span></td>
-                            <td ng-show="column.tags"><strong>Tags: </strong>
-                                <span class="text-adjust-complexTable">{{contactTagsFn(contact)||'--'}}</span></td>
-                            <td ng-show="column.email" class="hidden-xs"><strong>Email: </strong> <span ng-if="contact.bestEmail"><a href="mailto:{{contact.bestEmail}}"><span class="text-adjust-complexTable" tooltip-placement="top" tooltip="{{contact.bestEmail}}">{{contact.bestEmail}}</span></a>
+                            <td ng-show="column.name" class="text-adjust-col"><strong>First: </strong> <span class="text-adjust-inner-content">{{contact.first}}</span><span ng-if="!contact.first">--</span></td>
+                            <td ng-show="column.name" class="text-adjust-col"><strong>Last: </strong> <span class="text-adjust-inner-content">{{contact.last}}</span><span ng-if="!contact.last">--</span></td>
+                            <td ng-show="column.tags" class="text-adjust-col tags-col"><strong>Tags: </strong>
+                                <span class="text-adjust-inner-content">{{contactTagsFn(contact)||'--'}}</span></td>
+                            <td ng-show="column.email" class="hidden-xs text-adjust-col email-col"><strong>Email: </strong> <span ng-if="contact.bestEmail"><a href="mailto:{{contact.bestEmail}}"><span class="text-adjust-inner-content" tooltip-placement="top" tooltip="{{contact.bestEmail}}">{{contact.bestEmail}}</span></a>
                                     </span><span ng-if="!contact.bestEmail">--</span></td>
-                            <td ng-show="column.address" class="hidden-xs"><strong>Address: </strong>
-                                <span ng-if="contact.details[0].addresses[0]" tooltip-placement="top" tooltip="{{contact.bestAddress}}" class="text-adjust-complexTable">{{contact.bestAddress}}</span>
+                            <td ng-show="column.address" class="hidden-xs text-adjust-col address-col"><strong>Address: </strong>
+                                <span ng-if="contact.details[0].addresses[0]" tooltip-placement="top" tooltip="{{contact.bestAddress}}" class="text-adjust-inner-content">{{contact.bestAddress}}</span>
                                 <span ng-if="!contact.details[0].addresses[0]">--</span>
                             </td>
-                            <td ng-show="column.phone" class="hidden-xs hidden-sm hidden-md" ng-class="{'center': tableView != 'grid'}"><strong>Phone: </strong> <a href="tel:{{contact.details[0].phones[0].number || '--'}}">{{contact.details[0].phones[0].number || '--'}}</a></td>
+                            <td ng-show="column.phone" class="hidden-xs hidden-sm hidden-md"><strong>Phone: </strong> <a href="tel:{{contact.details[0].phones[0].number || '--'}}">{{contact.details[0].phones[0].number || '--'}}</a></td>
                             <td ng-show="column.unsubscribed" class="hidden-xs"><strong>Unsub: </strong> <span ng-if="contact.unsubscribed" style="white-space: nowrap;">{{contact.unsubscribed}}</span><span ng-if="!contact.unsubscribed">--</span></td>
                             <td ng-show="column.created" class="hidden-xs" style="white-space: nowrap;"><strong>Created: </strong> {{contact.created.date | date:'MMM d yy' || '--'}}</td>
                         </tr>

@@ -126,6 +126,37 @@ var dao = {
         });
     },
 
+    updateMetadataS3: function (bucket, subdirectory, file, isCache, fn) {
+        var self = this;
+        var AWS = require('aws-sdk');
+        var name = file.name;
+        var key = name;
+        if (!$$.u.stringutils.isNullOrEmpty(subdirectory)) {
+            key = subdirectory + "/" + name;
+        }
+        AWS.config.region = "";
+        var s3 = new AWS.S3();
+
+        var params = {
+            Bucket: bucket ,
+            CopySource: bucket + "/" + key,
+            Key: key,
+            CacheControl: (isCache?"max-age=3600":'no-cache'),
+            ContentType: file.type,
+            MetadataDirective:'REPLACE'
+        };
+        s3.copyObject(params, function(err, value){
+            if(err) {
+                self.log.error('Failed to copy object:', err);
+                fn(err);
+            } else {
+                self.log.error("DONE");
+                self.log.error(value);
+                fn(null, value);
+            }
+        });
+    },
+
     copyObject: function(sourceBucket, sourceKey, destBucket, destKey, contentType, fn) {
         var self = this;
         var AWS = require('aws-sdk');

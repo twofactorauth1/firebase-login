@@ -53,7 +53,6 @@
 	                <th class="items-col hidden-xs" style="white-space: nowrap">Items</th>
 	                <th class="total-col hidden-xs" st-sort="total" style="white-space: nowrap">Total</th>
 	                <th class="status-col hidden-xs">Status</th>
-	                <th class="view-col">View/Edit</th>
 	            </tr>
 	            <tr>
 	                <th class="title-col">
@@ -69,11 +68,10 @@
 	                <th class="items-col hidden-xs"></th>
 	                <th class="total-col hidden-xs"></th>
 	                <th class="status-col hidden-xs"></th>
-	                <th class="view-col"></th>
 	            </tr>
 	        </thead>
 	        <tbody>
-	            <tr ng-repeat="quote in vm.displayedQuotes" class="product-item">
+	            <tr ng-repeat="quote in vm.displayedQuotes" class="product-item" ng-click="vm.viewQuoteDetails(quote)">
 
                     <td class="title-col text-adjust-col"><strong>Title: </strong><div class="name-block-container text-adjust-inner-content"></span><span class="" title="{{quote.title}}">{{quote.title || '&nbsp;'}}</span></div></td>
 
@@ -88,11 +86,6 @@
 	                <td class="total-col hidden-xs text-adjust-col"><strong>Total: </strong><div class="text-adjust-inner-content">{{quote.total | currency : '$'}}</div></td>
 
 	                <td class="status-col hidden-xs text-adjust-col"><strong>Status: </strong><div class="text-adjust-inner-content">{{quote.status || '-'}}</div></td>
-
-	                <td class="view-col view-quote-details"><strong>View/Edit: </strong>
-	                	<span ng-click="vm.viewQuoteDetails(quote)"><i class="fa fa-pencil-square-o"></i></span>
-	                </td>
-
 	            </tr>
 	        </tbody>
 	        <tfoot>
@@ -110,3 +103,4 @@
 </div>
 <div data-ng-include=" 'assets/var/demo/js/quotes/modals/quote-details-modal.html' "></div>
 <div data-ng-include=" 'assets/var/demo/js/quotes/modals/quote-details-view-modal.html' "></div>
+<div data-ng-include=" 'assets/var/demo/js/quotes/modals/new-quote-product-modal.html' "></div>

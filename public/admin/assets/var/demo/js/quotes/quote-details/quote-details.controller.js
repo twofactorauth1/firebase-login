@@ -2,9 +2,9 @@
 
 app.controller('QuoteDetailsController', QuoteDetailsController);
 
-QuoteDetailsController.$inject = ['$scope', '$timeout', 'toaster', 'SweetAlert', 'formValidations', 'parentVm', 'QuoteService', 'UserPermissionsConfig'];
+QuoteDetailsController.$inject = ['$scope', '$timeout', 'toaster', 'SweetAlert', 'formValidations', 'parentVm', '$modal', 'QuoteService', 'UserPermissionsConfig'];
 /* @ngInject */
-function QuoteDetailsController($scope, $timeout, toaster, SweetAlert, formValidations, parentVm, QuoteService, UserPermissionsConfig) {
+function QuoteDetailsController($scope, $timeout, toaster, SweetAlert, formValidations, parentVm, $modal, QuoteService, UserPermissionsConfig) {
 
     var vm = this;
 
@@ -27,7 +27,9 @@ function QuoteDetailsController($scope, $timeout, toaster, SweetAlert, formValid
     vm.state.cartDetail = angular.copy(vm.parentVm.state.cartDetails);
     vm.selectCardCode = selectCardCode;
     vm.deleteQuote = deleteQuote;
-
+    vm.closeModal = closeModal;
+    vm.addProducts = addProducts;
+    vm.addItemsToCart = addItemsToCart;
     function selectCardCode(customer){
         vm.state.cartDetail.companyName = customer.OCRD_CardName;
     }
@@ -186,10 +188,58 @@ function QuoteDetailsController($scope, $timeout, toaster, SweetAlert, formValid
     }
 
     function checkIfEditMode(){
-        vm.uiState.showDeleteBtn = vm.state.cartDetail.status != "Sent";
+        vm.uiState.showDeleteBtn = vm.uiState.showAddBtn = vm.state.cartDetail.status != "Sent";
         vm.uiState.isViewMode = vm.state.cartDetail.status == "Sent";
     }
 
+    function addProducts(){
+        openModal("new-quote-product-modal", "QuoteProductModalController", 'lg')
+    }
+
+    function addItemsToCart(items) {
+        if(items.length){
+           _.each(items, function(item){
+                var _item = _.findWhere(vm.state.cartDetail.items, { OITM_ItemCode: item.OITM_ItemCode });
+                if(!_item){
+                    item.quantity = 1;
+                    vm.state.cartDetail.items.push(item);
+                }
+            })
+            setVendorSpecialPricing(); 
+        }        
+    }
+
+    function openModal(modal, controller, size){
+
+        var _modal = {
+            templateUrl: modal,
+            keyboard: false,
+            backdrop: 'static',
+            size: 'lg',
+            scope: $scope,
+            resolve: {
+                parentVm: function() {
+                    return vm;
+                }
+            }
+        };
+
+        if (controller) {
+            _modal.controller = controller  + ' as vm';
+        }
+
+
+        vm.modalInstance = $modal.open(_modal);
+
+        vm.modalInstance.result.then(null, function () {
+            angular.element('.sp-container').addClass('sp-hidden');
+        });
+    }
+
+    function closeModal() {
+        if(vm.modalInstance)
+            vm.modalInstance.close();
+    }
     (function init() {
         
     })();

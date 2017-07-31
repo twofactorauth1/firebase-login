@@ -17,6 +17,7 @@
 
         ledgerService.getLedgerDetails = getLedgerDetails;
         ledgerService.getCustomerDetails = getCustomerDetails;
+        ledgerService.exportCustomerStatement = exportCustomerStatement;
         ledgerService.loading = {value: 0};
 
         function ledgerRequest(fn) {
@@ -54,6 +55,10 @@
             return ledgerRequest($http.get([baseLedgerAPIUrl, 'customer', customerId].join('/')).success(success).error(error));
         }
 
+        function exportCustomerStatement(customerId){
+            var apiUrl = [baseLedgerAPIUrl, 'customer', customerId, 'export', 'csv'].join('/');
+            window.location = apiUrl;
+        }
 
 		(function init() {
            

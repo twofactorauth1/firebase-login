@@ -1,0 +1,108 @@
+<script type="text/ng-template" id="new-quote-product-modal">
+    <div class="modal-header">
+        <button type="button" class="close" ng-click="vm.parentVm.closeModal()">
+            <span aria-hidden="true">&times;</span>
+            <span class="sr-only">Close</span>
+        </button>
+        <h3 class="modal-title">Add Product</h3>
+    </div>
+    <form name="form" role="form" id="form">
+        <div class="modal-body bg-white new-quote-product-modal" stop-event="touchend" style="max-height: 400px;overflow: auto;overflow-x: hidden;">
+        
+            <div class="inventory inventory-container securematics-list-container " ng-init="tableView='list'">
+                <div st-table="vm.displayedProducts" st-safe-src="vm.state.products" >
+                    <div class="bg-white padding-top-0 padding-bottom-0 margin-bottom-15">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="panel panel-transparent row margin-bottom-0">
+                                    <div class="panel-body">
+                                        <form role="form" class="ng-pristine ng-valid row">
+                                            <div>
+                                                <div class="col-xs-12 col-sm-12 padding-left-0">
+                                                    <div class="form-group">
+                                                        <div class="col-xs-6 col-sm-6 padding-right-0">
+                                                            <span class="input-icon">
+                                                                <input type="text" ng-model="globalSearch" placeholder="Search by name, vendor..." id="form-field-14" class="form-control">
+                                                                <i class="ti-search"></i>
+                                                            </span>
+                                                        </div>
+                                                        <div class="col-xs-6 col-sm-6 padding-right-0">
+                                                            <button type="button" class="btn btn-o btn-primary" ng-click="vm.filterProducts(globalSearch)">
+                                                                <span>Find</span>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <div style="margin-left: 5%; margin-right: 5%;">
+                                        <hr>
+                                    </div>                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div ng-if="!vm.uiState.loading" class="table-heading col-xs-12" style="margin-top:-15px;">
+                        <h4>LIST OF PRODUCTS</h4>
+                        <div style="margin-left:-15px; margin-right:-15px; margin-bottom: -15px;"><hr></div>
+                    </div>
+                    <table class="table table-hover table-striped" ng-class="{'grid': tableView == 'grid', 'bg-white table-list-view': tableView == 'list'}" ng-if="!vm.uiState.loading">
+                        <thead ng-class="{'bg-white': tableView == 'grid'}">
+                            <tr class="inventory-header-row">
+                                <th class=""></th>
+                                <th class="" style="white-space: nowrap;">Name</th>
+                                <th class="" style="white-space: nowrap;" >Vendor</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="product in vm.displayedProducts" class="product-item">
+                                <td class="">
+                                    <div class="checkbox clip-check check-success checkbox-inline">
+                                        <input type="checkbox" id="modal-select-{{$index}}" ng-checked="vm.checkIfSelected(product)" ng-click='vm.productSelectClickFn($event, product)'>
+                                        <label for="modal-select-{{$index}}">
+
+                                        </label>
+                                    </div>
+                                </td>
+                                <td class=""><strong>Product: </strong><div class="name-block-container"><div class="text-adjust-outerTable">{{product.OITM_ItemName}}</div></div></td>
+                                <td class="text-adjust-outerTable" style="white-space: nowrap;"><strong>Vendor: </strong><div class="text-adjust-outerTable text-capitalize">{{product._shortVendorName}}</div></td>
+                            </tr>
+                        </tbody>
+                        <tfoot ng-hide="vm.uiState.loading">
+                            <tr>
+                                <td colspan="10" class="center" ng-if="vm.state.totalProducts">
+                                    <nav ng-if="vm.numberOfPages() && vm.pages.length >= 2">
+                                        <ul class="pagination">
+                                            <li ng-repeat="page in vm.pages" ng-class="{active: page == vm.uiState.curPage}">
+                                                <a ng-click="vm.selectPage(page)" class="ng-binding">{{page}}</a>
+                                            </li>
+                                        </ul>
+                                    </nav>
+                                </td>
+                                <td ng-if="!vm.state.totalProducts" colspan="6" class="center height-100">
+                                    <h4>There are currently no products</h4>
+                                </td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                    <div class="load1 csspinner height-400" ng-show="vm.uiState.loading"></div>
+                </div>
+                
+            </div>
+
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-o btn-primary" ng-click="vm.addProductsToPromotions()">
+                <span>Add Products</span>
+            </button>
+            
+        </div>
+    </form>
+    <div class="server-side-pagination-container">
+        <div class="custom-paging-overlay center" style="min-height: auto;" ng-if="vm.uiState.pageLoading">
+            <h1>loading...</h1>
+        </div>
+    </div>
+    
+</script>

@@ -97,7 +97,7 @@ function ssbBlogPostListComponentController(SimpleSiteBuilderBlogService, $scope
     }
 
     function sortBlogPosts(blogpost){
-        return new Date(blogpost.modified.date || blogpost.created.date).getTime();
+        return new Date(blogpost.publish_date || blogpost.created.date).getTime();
     }
 
     function listArticleStyle(item){

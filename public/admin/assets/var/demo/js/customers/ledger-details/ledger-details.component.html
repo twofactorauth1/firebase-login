@@ -1,7 +1,7 @@
 <section id="page-title" class="padding-top-15 padding-bottom-15">
     <div class="row">
         <div class="col-sm-8">
-            <h1 class="mainTitle">Ledger Summary</h1>
+            <h1 class="mainTitle">Customer Statement</h1>
             <span class="mainDescription">{{vm.ledger[0]._CustStatmentHdr_CardName || vm.listledger.OCRD_CardName}}</span>
         </div>
     </div>
@@ -15,6 +15,9 @@
             <a class="btn btn-primary btn-o pull-right margin-bottom-5 margin-left-5" href="https://app.behalf.com/users/signup/?utm_source=securematics:9c0MsQBW&utm_medium=ledger&utm_campaign=portal" ng-disabled="!vm.state.orgCardAndPermissions.isVendor" style="cursor: inherit;">
             Pay with Behalf
             </a>
+            <button type="button" class="btn btn-primary btn-o pull-right margin-bottom-5 margin-left-5" ng-click="vm.exportCSV()" ng-disabled="vm.uiState.loading || !vm.ledgerDetails.length">
+            Export CSV
+            </button>
         </div>
     </div>
     <div class="clearfix"></div>
@@ -97,6 +100,7 @@
                             <th style="white-space: nowrap;" st-sort="vm.getters.invoiceDate"><span class="hidden-xs">Invoice </span>Date</th>
                             <th style="white-space: nowrap;" st-sort="vm.getters.dueDate">Due <span class="hidden-xs">Date</span></th>
                             <th st-sort="invoiceTotal" style="white-space: nowrap;"><span class="hidden-xs">Invoice </span>Total</th>
+                            <th st-sort="invoiceDue" style="white-space: nowrap;"><span class="hidden-xs">Invoice </span>Due</th>
                         </tr>
                         <tr ng-if="showFilter">
                             <th>
@@ -114,6 +118,7 @@
                             <td><strong>Invoice Date: </strong>{{vm.parseValueToDate(ledger._CustStatmentDtl_RefDate) | date:'M/d/yyyy'}}</td>
                             <td><strong>Due Date: </strong>{{vm.parseValueToDate(ledger._CustStatmentDtl_DueDate) | date:'M/d/yyyy'}}</td>
                             <td><strong>Invoice Total: </strong>{{ledger.invoiceTotal | currency : ledger._CustStatmentHdr_Currency}}</td>
+                            <td><strong>Invoice Due: </strong>{{ledger.invoiceDue | currency : ledger._CustStatmentHdr_Currency}}</td>
                         </tr>
                     </tbody>
                     <tfoot>
@@ -123,8 +128,15 @@
                             </td>
                         </tr>
                         <tr ng-if="vm.ledgerDetails">
-                            <td class="text-right padding-right-20" colspan="10">
-                                 <span class="order-total-text">Total</span><span class="order-total-value">{{vm.ledgerTotal || vm.calculateLedgerTotal(vm.ledgerDetails) | currency : ledger._CustStatmentHdr_Currency }}</span>
+                            <td></td>
+                            <td class="hidden-xs"></td>
+                            <td></td>
+                            <td><span class="order-total-text">Total</span></td>
+                            <td class="">
+                                <span class="order-total-text"></span><span class="order-total-value">{{vm.ledgerTotal | currency : ledger._CustStatmentHdr_Currency }}</span>
+                            </td>
+                            <td class="">
+                                <span class="order-total-text"></span><span class="order-total-value">{{vm.ledgerDueTotal | currency : ledger._CustStatmentHdr_Currency }}</span>
                             </td>
                         </tr>
 

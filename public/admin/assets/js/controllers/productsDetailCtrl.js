@@ -391,6 +391,9 @@
     };
 
     $scope.saveProduct = function(){
+        if (!$scope.product.is_image) {
+            $scope.product.assets = [$scope.product.icon];
+        }
         ProductService.saveProduct($scope.product, function (product) {
           //format variation attributes
           $scope.product = product;
@@ -627,8 +630,9 @@
 
     $scope.setDefault = function(){
       if ($scope.product.is_image) {
-        $scope.product.icon = $scope.originalIcon ? $scope.originalIcon : $scope.product.assets[0];
-        $scope.product.assets[0] = $scope.product.icon;
+        $scope.product.icon = $scope.originalProduct.icon ? $scope.originalProduct.icon : $scope.product.assets[0];
+        if($scope.product.assets.length < 2)
+           $scope.product.assets[0] = $scope.product.icon;
       } else {
         $scope.product.icon = 'fa-cube';
         angular.element('#convert').iconpicker('setIcon', 'fa-cube');
@@ -837,7 +841,7 @@
           $scope.emailToSend.fromEmail = account.business.emails[0].email;
           $scope.emailToSendCopy.fromEmail = account.business.emails[0].email;
         }
-        if (fromEmail && ($scope.emailToSend.replyTo == '' || update)) {
+        if (fromEmail && update) {
           $scope.emailToSend.replyTo = account.business.emails[0].email;
           $scope.emailToSendCopy.replyTo = account.business.emails[0].email;
         }

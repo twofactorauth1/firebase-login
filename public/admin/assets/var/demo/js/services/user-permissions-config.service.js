@@ -86,7 +86,12 @@
           if(m.promotions !== undefined) {
               this.orgConfigAndPermissions.promotions = m.promotions;
           } else {
-              this.orgConfigAndPermissions.promotions = false;
+              if(this.orgConfigAndPermissions.isVendor){
+                this.orgConfigAndPermissions.promotions = false;  
+              }
+              else{
+                this.orgConfigAndPermissions.promotions = true;
+              }
           }
           if(m.dashboard !== undefined) {
               this.orgConfigAndPermissions.dashboard = m.dashboard;
@@ -99,7 +104,12 @@
           this.orgConfigAndPermissions.ledger = true;
           this.orgConfigAndPermissions.quotes = false;
           this.orgConfigAndPermissions.rmas = false;
-          this.orgConfigAndPermissions.promotions = false;
+          if(this.orgConfigAndPermissions.isVendor){
+            this.orgConfigAndPermissions.promotions = false;  
+          }
+          else{
+            this.orgConfigAndPermissions.promotions = true;
+          }
           this.orgConfigAndPermissions.dashboard = true;
       }
       if(!this.orgConfigAndPermissions.dashboard){

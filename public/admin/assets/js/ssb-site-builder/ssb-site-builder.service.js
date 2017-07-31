@@ -1345,7 +1345,7 @@
                 return angular.isDefined(window.WebFont);
             }, function(newValue, oldValue) {
                 if (newValue) {
-                    var defaultFamilies = ['Roboto', 'Roboto Condensed', 'Roboto Slab', 'Oswald', 'Montserrat:200,400,700', 'Droid Serif', 'Open Sans', 'Open Sans Condensed', 'Lato', 'Raleway', 'Quicksand', 'Ubuntu', 'Merriweather', 'Quattrocento', 'Lora', 'Playfair Display', 'Pacifico', 'Satisfy', 'Parisienne', 'Petit Formal Script', 'Indie Flower', 'Shadows Into Light Two', 'Amatic SC', 'Delius Swash Caps', 'Itim', 'Neucha', 'Patrick Hand SC', 'Schoolbell', 'PT Sans'];
+                    var defaultFamilies = ['Roboto:200,400,700', 'Roboto Condensed:200,400,700', 'Roboto Slab:200,400,700', 'Oswald:200,400,700', 'Montserrat:200,400,700', 'Droid Serif:200,400,700', 'Open Sans:200,400,700', 'Open Sans Condensed:200,400,700', 'Lato:200,400,700', 'Raleway:200,400,700', 'Quicksand:200,400,700', 'Ubuntu:200,400,700', 'Merriweather:200,400,700', 'Quattrocento:200,400,700', 'Lora:200,400,700', 'Playfair Display:200,400,700', 'Pacifico:200,400,700', 'Satisfy:200,400,700', 'Parisienne:200,400,700', 'Petit Formal Script:200,400,700', 'Indie Flower:200,400,700', 'Shadows Into Light Two:200,400,700', 'Amatic SC:200,400,700', 'Delius Swash Caps:200,400,700', 'Itim:200,400,700', 'Neucha:200,400,700', 'Patrick Hand SC:200,400,700', 'Schoolbell:200,400,700', 'PT Sans:200,400,700','Nunito:200,400,700'];
                     if (theme.name && theme.hasCustomFonts) {
                       var _fontStack = theme.defaultFontStack.split(',')[0].replace(/"/g, '');
                       if(defaultFamilies.indexOf(_fontStack) === -1)
@@ -1426,6 +1426,7 @@
                 "'Arial',Helvetica,sans-serif": "Arial",
                 "'Amatic SC', cursive": "Amatic SC",
                 "'Berlin', sans-serif": "Berlin",
+                "'Calibri','Open Sans',sans-serif": "Calibri",
                 "'Delius Swash Caps', cursive": 'Delius Swash Caps',
                 "'Droid Serif',serif": 'Droid Serif',
                 "'Georgia',serif": "Georgia",

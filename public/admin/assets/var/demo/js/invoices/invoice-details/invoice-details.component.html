@@ -106,10 +106,10 @@
                     <thead ng-class="{'bg-white': tableView == 'grid'}" sticky offset="65" sticky-class="sticky-header-class">
                         <tr>
                             <th class="name-col">Product Name</th>
-                            <th class="desc-col">Description</th>
+                            <th class="desc-col hidden-xs">Description</th>
                             <th class="qty-col">Qty</th>
-                            <th class="price-col" style="white-space: nowrap;">Unit Price</th>
-                            <th class="hidden-xs total-col">Line Total</th>
+                            <th class="price-col hidden-xs" style="white-space: nowrap;">Unit Price</th>
+                            <th class="total-col">Line Total</th>
                         </tr>
                         <tr ng-if="showFilter">
                             <th>
@@ -123,16 +123,36 @@
                     <tbody>
                         <tr ng-repeat="order in vm.displayedOrders" class="product-item">
                             <td class="name-col"><strong>Product Name: </strong><a ng-click="vm.goToInventory(order.INV1_Dscription)"><span class="text-adjust-table">{{order.INV1_Dscription}}</span></a></td>
-                            <td class="desc-col"><strong>Description: </strong><span class="hidden-xs text-adjust-table" title="{{order.INV1_U_dscription}}">{{order.INV1_U_dscription}}</span></td>
+                            <td class="desc-col hidden-xs"><strong>Description: </strong><span class="hidden-xs text-adjust-table" title="{{order.INV1_U_dscription}}">{{order.INV1_U_dscription}}</span></td>
                             <td class="qty-col"><strong>Qty: </strong>{{vm.parseValueToFloat(order.INV1_Quantity)}}</td>
-                            <td class="price-col"><strong>Unit Price: </strong>{{order.INV1_Price | currency : vm.invoiceDetails[0]._CustStatmentHdr_Currency}}</td>
-                            <td class="hidden-xs total-col"><strong>Line Total: </strong>{{order.INV1_LineTotal | currency : vm.invoiceDetails[0]._CustStatmentHdr_Currency}}</td>
+                            <td class="price-col hidden-xs"><strong>Unit Price: </strong>{{order.INV1_Price | currency : vm.invoiceDetails[0]._CustStatmentHdr_Currency}}</td>
+                            <td class="total-col"><strong>Line Total: </strong>{{order.INV1_LineTotal | currency : vm.invoiceDetails[0]._CustStatmentHdr_Currency}}</td>
                         </tr>
                     </tbody>
                     <tfoot>
-                        <tr ng-if="vm.totalLineOrder">
-                            <td class="text-right padding-right-20" colspan="10">
-                                <span class="order-total-text">Total</span><span class="order-total-value">{{vm.totalLineOrder | currency : vm.invoiceDetails[0]._CustStatmentHdr_Currency}}</span>
+                        <tr ng-if="vm.subTotalLineOrder"> 
+                            <td colspan="6" style="padding: 8px;">
+                                <div class="col-sm-4 col-xs-6 text-right pull-right">
+                                    <div ng-if="vm.subTotalLineOrder > 0">
+                                        <span class="order-total-text">Sub Total</span><span class="order-total-value">{{vm.subTotalLineOrder | currency : vm.invoiceDetails[0]._CustStatmentHdr_Currency}}</span>
+                                    </div>
+                                    <div ng-if="vm.totalFreight > 0">
+                                        <span class="order-total-text">Freight</span><span class="order-total-value">{{vm.totalFreight | currency : vm.invoiceDetails[0]._CustStatmentHdr_Currency}}</span>
+                                    </div>
+                                    <div ng-if="vm.totalTax > 0">
+                                        <span class="order-total-text">Tax/Vat</span><span class="order-total-value">{{vm.totalTax | currency : vm.invoiceDetails[0]._CustStatmentHdr_Currency}}</span>
+                                    </div>
+                                    <div ng-if="vm.totalDiscount > 0">
+                                        <span class="order-total-text">Discount</span><span class="order-total-value">(<span class="text-negative">{{vm.totalDiscount | currency : vm.invoiceDetails[0]._CustStatmentHdr_Currency}}</span>)</span>
+                                    </div>
+                                    <div ng-if="vm.totalPaidToDate > 0">
+                                        <span class="order-total-text">Total Paid To Date</span><span class="order-total-value">(<span class="text-negative">{{vm.totalPaidToDate | currency : vm.invoiceDetails[0]._CustStatmentHdr_Currency}}</span>)</span>
+                                    </div>
+                                    <div>
+                                        <span class="order-total-text">Total</span><span class="order-total-value">{{vm.total | currency : vm.invoiceDetails[0]._CustStatmentHdr_Currency}}</span>
+                                    </div>
+
+                                </div>
                             </td>
                         </tr>
                     </tfoot>

@@ -53,7 +53,8 @@
                 _qString += "&term=" + encodeURIComponent(pagingParams.globalSearch);
                 
             }
-             _qString += '&vendor=' + encodeURIComponent(pagingParams.filter);
+            if(pagingParams.filter)
+                _qString += '&vendor=' + encodeURIComponent(pagingParams.filter);
             urlParts.push('products/search');
             return (
                 productRequest($http({

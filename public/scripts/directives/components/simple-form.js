@@ -14,7 +14,7 @@ app.directive('simpleFormComponent', ["ipCookie", '$window', '$timeout', 'userSe
       scope.isBusy = false;
       scope.originalData = {
           bg: {
-             
+
           }
       };
 
@@ -132,7 +132,7 @@ app.directive('simpleFormComponent', ["ipCookie", '$window', '$timeout', 'userSe
             }
         }
         return styleString;
-        
+
       };
 
       scope.formStyle = function(form){
@@ -154,13 +154,13 @@ app.directive('simpleFormComponent', ["ipCookie", '$window', '$timeout', 'userSe
 
 
       angular.element(document).ready(function() {
-          var unbindWatcher = scope.$watch(function() {              
+          var unbindWatcher = scope.$watch(function() {
               return angular.element(scope.elementClass).length;
           }, function(newValue, oldValue) {
               if (newValue) {
                   unbindWatcher();
                   $timeout(function() {
-                    
+
                     var element = angular.element(scope.elementClass);
 
 
@@ -171,14 +171,14 @@ app.directive('simpleFormComponent', ["ipCookie", '$window', '$timeout', 'userSe
                         txtcolor: element.css('color'),
                         borderColor: element.css('border-color')
                     };
-                    
+
                     var btnActiveStyle = null;
                     if(element)
                     {
                       // bind hover and active events to button
 
                         element.hover(function(){
-                            var btnHoverStyle = null;                    
+                            var btnHoverStyle = null;
                             if(scope.component.formSettings && scope.component.formSettings.btnStyle && scope.component.formSettings.btnStyle.hover)
                             {
                               btnHoverStyle = scope.component.formSettings.btnStyle.hover;
@@ -374,14 +374,14 @@ app.directive('simpleFormComponent', ["ipCookie", '$window', '$timeout', 'userSe
 
         var params = $location.$$search;
 
-        
+
         var activityFields = angular.copy(scope.user);
 
 
         if(angular.isObject(params) && Object.keys(params).length){
-            _.each(params, function(value, key){ 
+            _.each(params, function(value, key){
                 extra.push({
-                    name: formatString(key),                        
+                    name: formatString(key),
                     value: formatString(value)
                 });
                 activityFields[key] = value;
@@ -430,7 +430,9 @@ app.directive('simpleFormComponent', ["ipCookie", '$window', '$timeout', 'userSe
         if(extra.length){
           formatted.extra = extra;
         }
-
+        if (scope.user._optin) {
+            formatted.optIn=scope.user._optin;
+        }
         //create contact
         userService.addContact(formatted, function (data, err) {
           scope.isBusy = false;

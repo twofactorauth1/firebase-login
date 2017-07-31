@@ -110,6 +110,10 @@ html
         .orderTd {
           text-align: center;
         }
+        .crossLine {
+          text-decoration: line-through;    
+          margin-right: 10px;
+        }
         .orderProductName{
           max-width: 300px;
         }
@@ -440,7 +444,12 @@ html
                                       each val, index in email.order.line_items
                                         tr
                                           td(class="orderProductName")= val.name
-                                          td(class="orderTd")= '$' + val.regular_price
+                                          if val.on_sale
+                                            td(class="orderTd") 
+                                                span.crossLine $!{val.regular_price} 
+                                                span $!{val.sale_price}
+                                          else
+                                            td(class="orderTd")= '$' + val.regular_price
                                           td(class="orderTd")= val.quantity
                                           td(class="orderTd")= '$' + val.total
                                     tr

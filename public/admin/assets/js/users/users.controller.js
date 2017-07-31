@@ -2,7 +2,7 @@
 /*global app, moment, angular, window*/
 /*jslint unparam:true*/
 (function (angular) {
-    app.controller('usersCtrl', ['$scope', "toaster", "$filter", "$modal", "$timeout", "AccountService","UserService", "userConstant", "formValidations", "SweetAlert", "pagingConstant", function ($scope, toaster, $filter, $modal, $timeout, AccountService,UserService, userConstant, formValidations, SweetAlert ,pagingConstant) {
+    app.controller('usersCtrl', ['$scope', "toaster", "$filter", "$modal", "$timeout", "AccountService","UserService", "userConstant", "formValidations", "SweetAlert", "pagingConstant", function ($scope, toaster, $filter, $modal, $timeout, AccountService,UserService, userConstant, formValidations, SweetAlert, pagingConstant) {
 
         var vm = this;
 

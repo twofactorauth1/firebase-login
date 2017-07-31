@@ -525,8 +525,9 @@ app.controller('MediaModalCtrl', ['$scope', 'mediaManagerConstant', '$injector',
     var originalAsset = angular.copy(asset);
     originalAsset.isCached = !originalAsset.isCached;
     originalAsset.accountId = $scope.account._id;
-    AssetsService.updateAsset(originalAsset, function (data, status) {
+    AssetsService.updateMatadata(originalAsset, function (data, status) {
       if (status == 200) {
+        $scope.cachebuster = new Date().getTime();
         asset.url=data.url;
         asset.isCached=data.isCached;
         ToasterService.show('success', 'Asset updated.');

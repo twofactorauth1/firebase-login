@@ -33,7 +33,8 @@ function invoiceDetailsController($scope, $state, $attrs, $filter, $modal, $time
             var customer = response.data;
             if(customer && customer.results){
                 vm.invoiceDetails = customer.results;
-                vm.totalLineOrder = calculateTotal(vm.invoiceDetails);
+                //vm.totalLineOrder = calculateTotal(vm.invoiceDetails);
+                calculateTotal(vm.invoiceDetails);
                 vm.uiState.loading = false;
             }
             else{
@@ -57,11 +58,26 @@ function invoiceDetailsController($scope, $state, $attrs, $filter, $modal, $time
     }
 
     function calculateTotal(orders){
+        
         var _sum = 0;
+        vm.totalTax = 0;
+        vm.totalFreight = 0;
+        vm.totalDiscount = 0;
+        vm.totalPaidToDate = 0;
         _.each(orders, function(order){
-            _sum+= parseFloat(order.INV1_LineTotal)
+            _sum += parseFloat(order.INV1_LineTotal || 0);           
         })
-        return _sum;
+        vm.subTotalLineOrder = _sum;
+        if(orders.length){
+            vm.totalTax = orders[0].OINV_VatSum || 0;
+            vm.totalFreight = orders[0].OINV_TotalExpns || 0;
+            vm.totalDiscount = orders[0].OINV_DiscSum || 0;
+            vm.totalPaidToDate = orders[0].OINV_PaidToDate || 0;
+        }
+        
+        vm.total = parseFloat(vm.subTotalLineOrder) + parseFloat(vm.totalTax) + parseFloat(vm.totalFreight) - parseFloat(vm.totalDiscount) - parseFloat(vm.totalPaidToDate);
+        
+        //return _sum;
     }
 
     function parseValueToFloat(value){

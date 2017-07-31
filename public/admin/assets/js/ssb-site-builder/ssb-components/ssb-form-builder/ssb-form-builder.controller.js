@@ -344,7 +344,7 @@
                     ssb: true
                 });
             }
-
+            formatted.optIn=vm.formBuilder._optin;
             //create contact
             userService.addContact(formatted, function (data, err) {
                 if (err && err.code === 409) {

@@ -143,9 +143,29 @@ var shipment = $$.m.ModelBase.extend({
     },
 
     getShipmentPrice: function(){
-        var totalPrice = _.reduce(this.get("products"), function(m, product) { 
-            return m + parseFloat(product.itemPrice || 0) ; }, 0);
+        var totalPrice = 0; 
+        if(this.get("actualPrice")){
+            totalPrice = parseFloat(this.get("actualPrice"));
+        }
+        else{
+            totalPrice = _.reduce(this.get("products"), function(m, product) { 
+                return m + parseFloat(product.itemPrice || 0) ; }, 0);
+        }
         return totalPrice || 0;
+    },
+
+    getCustomerName: function(){
+        var details = this.get("customerDetails");
+        if(details){
+            return details.customerName ? details.customerName.trim().toLowerCase() : "";
+        }
+        else{
+            return "";
+        }
+    },
+
+    getShipmentVar: function(){
+        return this.get("cardCode") ? this.get("cardCode").toLowerCase() : ""; 
     },
 
     initialize: function(options) {

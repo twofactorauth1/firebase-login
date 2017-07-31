@@ -109,6 +109,9 @@ _.extend(view.prototype, BaseView.prototype, {
                             } else if(data.account.orgId && data.account.orgId === 1){
                                 logger.debug('Rendering rvlvr admin');
                                 self.resp.render('var/rvlvr/admin', data);
+                            } else if(data.account.orgId && data.account.orgId === 4){
+                                logger.debug('Rendering techevent admin');
+                                self.resp.render('var/techevent/admin', data);
                             } else {
                                 self.resp.render('admin', data);
                             }

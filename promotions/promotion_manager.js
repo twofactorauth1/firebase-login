@@ -22,7 +22,7 @@ require('./model/promotionReport');
 //var pdfGenerator = require('html-pdf');
 var conversion = require("phantom-html-to-pdf")();
 var manager = {
-    
+
     createPromotion: function(file, adminUrl, promotion, accountId, userId, fn) {
         var self = this;
         self.log = log;
@@ -35,7 +35,7 @@ var manager = {
             size: file.size,
             mimeType: file.mimeType
         };
-        
+
 
         if(file.path) {
             var bucket = awsConfig.BUCKETS.PROMOTIONS;
@@ -43,7 +43,7 @@ var manager = {
             if(appConfig.nonProduction === true) {
                 subdir = 'test_' + subdir;
             }
-            
+
             s3dao.uploadToS3(bucket, subdir, file, true, function(err, value){
                 if(err) {
                     self.log.error('Error from S3: ' + err);
@@ -52,7 +52,7 @@ var manager = {
                 } else {
                     self.log.debug('S3 upload complete');
                     console.dir(value);
-            
+
                     if(value && value.url) {
                         value.url = value.url.replace("s3.amazonaws.com", "s3-us-west-1.amazonaws.com");
                     }
@@ -74,7 +74,7 @@ var manager = {
         }
         //create record
         $.when(uploadPromise).done(function(file){
-            
+
             promotionDao.saveOrUpdate(promotion, function(err, savedPromotion){
                 if(err) {
                     self.log.error('Exception during promotion creation: ' + err);
@@ -152,9 +152,9 @@ var manager = {
             query = {
                 'accountId':accountId,
                 'participants.cardCode': {$in:optRegexp}
-            }; 
+            };
         }
-        
+
         if(vendorFilter){
             query.vendor = new RegExp(vendorFilter, "i");
         }
@@ -167,14 +167,14 @@ var manager = {
                 log.debug(accountId, userId, '<< getPromotionDetails');
                 fn(null, value);
             }
-        });    
+        });
     },
 
     deletePromotion: function(accountId, userId, promotionId, fn){
         var self = this;
         log.debug(accountId, userId, '>> deletePromotion');
         var query = {_id: promotionId};
-        
+
         promotionDao.removeByQuery(query, $$.m.Promotion, function(err, value){
             if(err) {
                 self.log.error('Error deleting promotion: ' + err);
@@ -220,7 +220,7 @@ var manager = {
             if(appConfig.nonProduction === true) {
                 subdir = 'test_' + subdir;
             }
-            
+
             s3dao.uploadToS3(bucket, subdir, file, true, function(err, value){
                 if(err) {
                     self.log.error('Error from S3: ' + err);
@@ -229,7 +229,7 @@ var manager = {
                 } else {
                     self.log.debug('S3 upload complete');
                     console.dir(value);
-            
+
                     if(value && value.url) {
                         value.url = value.url.replace("s3.amazonaws.com", "s3-us-west-1.amazonaws.com");
                     }
@@ -239,7 +239,7 @@ var manager = {
                     } else {
                       attachment.url = value.url;
                     }
-                   
+
                     uploadPromise.resolve(value);
                 }
             });
@@ -268,8 +268,8 @@ var manager = {
                     });
                 }
             });
-            
-            
+
+
         });
 
     },
@@ -308,7 +308,7 @@ var manager = {
             if(appConfig.nonProduction === true) {
                 subdir = 'test_' + subdir;
             }
-            
+
             s3dao.uploadToS3(bucket, subdir, file, true, function(err, value){
                 if(err) {
                     self.log.error('Error from S3: ' + err);
@@ -317,7 +317,7 @@ var manager = {
                 } else {
                     self.log.debug('S3 upload complete');
                     console.dir(value);
-            
+
                     if(value && value.url) {
                         value.url = value.url.replace("s3.amazonaws.com", "s3-us-west-1.amazonaws.com");
                     }
@@ -327,7 +327,7 @@ var manager = {
                     } else {
                       attachment.url = value.url;
                     }
-                   
+
                     uploadPromise.resolve(value);
                 }
             });
@@ -355,8 +355,8 @@ var manager = {
                         }
                     });
                 }
-            });            
-            
+            });
+
         });
 
     },
@@ -376,7 +376,7 @@ var manager = {
                 'promotionId':promotionId,
                 'cardCode': {$in:optRegexp}
             };
-        } 
+        }
         shipmentDao.findMany(query, $$.m.Shipment, function(err, list){
             if(err) {
                 log.error(accountId, userId, 'Exception listing shipments: ', err);
@@ -407,7 +407,7 @@ var manager = {
                 'promotionId':promotionId,
                 'cardCode': {$in:optRegexp}
             };
-        } 
+        }
         promotionDao.findOne({_id: promotionId}, $$.m.Promotion, function(err, value){
             if(err) {
                 log.error(accountId, userId, 'Exception getting promotion: ' + err);
@@ -421,7 +421,7 @@ var manager = {
                     if(err) {
                         fn(err, null);
                     } else {
-                        
+
                         component.totalShipments = list.length;
                         component.reports = 0;
                         component.tryState = 0;
@@ -431,8 +431,11 @@ var manager = {
                         component.deployed = 0;
                         component.wonCost = 0;
                         component.openCost = 0;
-                        component.lastCost = 0;
-                        
+                        component.lostCost = 0;
+                        component.uniqueVars = 0;
+                        component.uniqueCustomers = 0;
+                        var vars = [];
+                        var customers = [];
                         _.each(list, function (shipment) {
                             if(shipment.get("attachment") && shipment.get("attachment").name){
                                 component.reports += 1;
@@ -447,14 +450,22 @@ var manager = {
                             }
                             if(shipment.get("status") === "RMA"){
                                 component.rmaState += 1;
+                                component.lostCost += shipment.getShipmentPrice();
                             }
                             if(shipment.get("configDate")){
                                 component.configured += 1;
-
                             }
                             if(shipment.get("deployDate")){
                                 component.deployed += 1;
                             }
+
+                            if(shipment.getShipmentVar()){
+                                vars.push(shipment.getShipmentVar())
+                            }
+                            if(shipment.getCustomerName()){
+                                customers.push(shipment.getCustomerName());
+                            }
+
                             shipment.configDate = shipment.getFormattedDate("configDate");
                             shipment.deployDate = shipment.getFormattedDate("deployDate");
                             shipment.shipDate = shipment.getFormattedDate("shipDate");
@@ -466,18 +477,15 @@ var manager = {
                             shipment.customerPartner = shipment.getCustomerPartner();
                             shipment.customerJuniperRep = shipment.getCustomerJuniperRep();
                             shipment.products = shipment.getProductsWithSerialNumber();
-
                         });
 
-                        var lastShipment = _.last(_.sortBy(list, function(result) { 
-                            return result.get("created") && Date.parse(result.get("created").date) })
-                        );
                         component.wonCost = self._parseCurrency("$", component.wonCost);
                         component.openCost = self._parseCurrency("$", component.openCost);
-                        component.lastCost = self._parseCurrency("$", lastShipment.getShipmentPrice());
-                
+                        component.lostCost = self._parseCurrency("$", component.lostCost);
+                        component.uniqueVars = _.uniq(vars).length;
+                        component.uniqueCustomers = _.uniq(customers).length;
                         component.shipments = list;
-                        
+
                         app.render('promotions/shipment-html-view', component, function(err, html){
                             if(err) {
                                 console.log(err);
@@ -497,14 +505,14 @@ var manager = {
                 });
             }
         });
-        
+
     },
 
     deleteShipment: function(accountId, userId, shipmentId, fn){
         var self = this;
         log.debug(accountId, userId, '>> deleteShipment');
         var query = {_id: shipmentId};
-        
+
         shipmentDao.removeByQuery(query, $$.m.Shipment, function(err, value){
             if(err) {
                 self.log.error('Error deleting shipment: ' + err);
@@ -531,13 +539,13 @@ var manager = {
                 'promotionId':promotionId,
                 'cardCode': {$in:optRegexp}
             };
-        } 
+        }
         shipmentDao.findMany(query, $$.m.Shipment, function(err, list){
             if(err) {
                 log.error(accountId, userId, 'Exception listing shipments: ', err);
                 fn(err, null);
             } else {
-                var headers = ['VAR', 'Products', 'Ship Date', 'Config Date', 'Deploy Date', 'End Date', 'Status', 'Customer', 'Project', 'Partner Sales Rep', 'Juniper Rep'];
+                var headers = ['VAR', 'Products', 'Ship Date', 'Config Date', 'Deploy Date', 'End Date', 'Status', 'Total', 'Customer', 'Project', 'Partner Sales Rep', 'Juniper Rep'];
                 var csv = headers + '\n';
                 _.each(list, function(shipment){
                     csv += self._parseString(shipment.get('companyName'));
@@ -547,6 +555,7 @@ var manager = {
                     csv += self._parseString(shipment.getFormattedDate("deployDate"));
                     csv += self._parseString(shipment.getFormattedDate("endDate"));
                     csv += self._parseString(shipment.getStatus());
+                    csv += self._parseString(self._parseCurrency("$", shipment.getShipmentPrice()));
                     csv += self._parseString(shipment.getCustomerDetails());
                     csv += self._parseString(shipment.getCustomerProject());
                     csv += self._parseString(shipment.getCustomerPartner());

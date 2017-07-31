@@ -5,8 +5,7 @@
             <span class="sr-only">Close</span>
         </button>
         <h3 class="modal-title">
-            <span class="ti-quote-right"></span>
-            Quote ID: {{vm.state.cartDetail._id}}
+            Quote: {{vm.state.cartDetail.title}}
         </h3>
     </div>
     <form name="form" role="form" id="form">
@@ -22,14 +21,15 @@
             </div>
             <div class="loading-modal center" ng-if="vm.uiState.loading || vm.uiState.loadingDetailsModal">
                 <h3>Loading details. Please wait...</h3>
-            </div>    
+            </div>
             <div class="clearfix"></div>
         </div>
         <div class="modal-footer quote-cart-details-footer">
+            <button ng-if="vm.uiState.showAddBtn" class="btn btn-wide btn-primary pull-left" ng-disabled='vm.uiState.saveLoading || vm.uiState.loading || vm.uiState.isViewMode' ng-click="vm.addProducts()"><i class="ti-plus"></i> Add Products</button>
             <button ng-if="vm.uiState.showDeleteBtn" class="btn btn-wide btn-danger" ng-disabled='vm.uiState.saveLoading || vm.uiState.loading || vm.uiState.isViewMode' ng-click="vm.deleteQuote()"><i class="fa fa-trash-o"></i> Delete</button>
             <button class="btn btn-warning btn-wide" ng-disabled='form.$invalid || vm.uiState.saveLoading || vm.uiState.loading || vm.uiState.isViewMode || !vm.state.cartDetail.items.length' ng-click="vm.saveQuote(false)"><i class="fa fa-floppy-o"></i> Save</button>
             <button class="btn btn-wide btn-success" ng-disabled='form.$invalid || vm.uiState.saveLoading || vm.uiState.loading || vm.uiState.isViewMode || !vm.state.cartDetail.items.length' ng-click="vm.saveQuote(true)"><i class="fa fa-send-o"></i> Submit</button>
 
         </div>
-    </form>    
+    </form>
 </script>

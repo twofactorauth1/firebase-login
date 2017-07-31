@@ -28,6 +28,18 @@ var userActivity = $$.m.ModelBase.extend({
 
     initialize: function(options) {
 
+    },
+
+    getFormattedDate: function(dateField, offset){
+        var dateString = "";
+        if(offset){
+            offset = parseInt(offset);
+            dateString = moment.utc(this.get("start")).utcOffset(offset).format("MM/DD/YYYY HH:mm a");
+        }
+        else{
+            dateString = this.get(dateField) ? moment(this.get(dateField)).format("MM/DD/YYYY HH:mm A") : '';
+        }
+        return dateString;
     }
 
 }, {

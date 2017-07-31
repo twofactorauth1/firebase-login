@@ -477,7 +477,9 @@ module.exports = function(grunt) {
                 }
             }
         },
+        doUpdateBlogPages: {
 
+        },
         postcss: {
             options: {
                 // map: true,
@@ -555,6 +557,13 @@ module.exports = function(grunt) {
         var done = this.async();
         var accountId = parseInt(grunt.config('doConvertAccountToSiteTemplate.accountId'));
         dbcopyutil.convertAccountToSiteTemplate(accountId, done);
+
+    });
+
+    grunt.registerTask('doUpdateBlogPages', 'A task to update blocg pages', function(){
+
+        var done = this.async();
+        dbcopyutil.updateBlogPages( done);
 
     });
 

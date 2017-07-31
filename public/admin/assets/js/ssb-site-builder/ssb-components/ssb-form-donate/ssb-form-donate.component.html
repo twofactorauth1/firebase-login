@@ -10,7 +10,7 @@
                 <div class="form-subtitle">
                     <div elem ng-model="vm.component.subtitle"></div>
                 </div>
-                <div class="form-donate-layout" ng-class="{ 'has-ssb-in-context-info': !vm.product._id }">
+                <div class="form-donate-layout" ng-class="{ 'has-ssb-in-context-info': !vm.product._id || vm.product.status == 'inactive' }">
                     <div class="form-layout-custom input-fields {{vm.nthRow}}" ng-attr-style="{{vm.inputContainerStyle(vm.component.formSettings)}}">
                         <div ng-if="vm.component.productSettings.goal" class="ssb-form-donate-progress col-sm-12 margin-bottom-20">
                             <h3 class="ssb-form-donate-progress-total" ng-class="{ 'on': vm.total }">{{vm.total | currency:undefined:0}}</h3>
@@ -40,13 +40,13 @@
                         </div>
                     </div>
                     <div class="clearfix"></div>
-                    <div ng-if="!vm.product._id" class="ssb-in-context-info">
+                    <div ng-if="!vm.product._id || vm.product.status == 'inactive'" class="ssb-in-context-info">
                         <span class="fa fa-info-circle"></span>
                         <span>To accept donations, be sure to set up a payment provider and <a ui-sref="app.commerce.products" href>create a donation product</a>.</span>
                     </div>
                 </div>
 
-                <div ng-if="vm.product._id" class="donate-social-share">
+                <div ng-if="vm.product._id && vm.product.status != 'inactive'" class="donate-social-share">
                     <a class="btn btn-xs btn-twitter"
                            socialshare
                            socialshare-via="indigenous_io"
