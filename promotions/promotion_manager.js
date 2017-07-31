@@ -432,7 +432,10 @@ var manager = {
                         component.wonCost = 0;
                         component.openCost = 0;
                         component.lostCost = 0;
-
+                        component.uniqueVars = 0;
+                        component.uniqueCustomers = 0;
+                        var vars = [];
+                        var customers = [];
                         _.each(list, function (shipment) {
                             if(shipment.get("attachment") && shipment.get("attachment").name){
                                 component.reports += 1;
@@ -451,11 +454,18 @@ var manager = {
                             }
                             if(shipment.get("configDate")){
                                 component.configured += 1;
-
                             }
                             if(shipment.get("deployDate")){
                                 component.deployed += 1;
                             }
+
+                            if(shipment.getShipmentVar()){
+                                vars.push(shipment.getShipmentVar())
+                            }
+                            if(shipment.getCustomerName()){
+                                customers.push(shipment.getCustomerName());
+                            }
+
                             shipment.configDate = shipment.getFormattedDate("configDate");
                             shipment.deployDate = shipment.getFormattedDate("deployDate");
                             shipment.shipDate = shipment.getFormattedDate("shipDate");
@@ -472,7 +482,8 @@ var manager = {
                         component.wonCost = self._parseCurrency("$", component.wonCost);
                         component.openCost = self._parseCurrency("$", component.openCost);
                         component.lostCost = self._parseCurrency("$", component.lostCost);
-
+                        component.uniqueVars = _.uniq(vars).length;
+                        component.uniqueCustomers = _.uniq(customers).length;
                         component.shipments = list;
 
                         app.render('promotions/shipment-html-view', component, function(err, html){
