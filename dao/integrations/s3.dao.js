@@ -141,7 +141,7 @@ var dao = {
             Bucket: bucket ,
             CopySource: bucket + "/" + key,
             Key: key,
-            CacheControl:"max-age="+(isCache?(3600):60),
+            CacheControl: (isCache?"max-age=3600":'no-cache'),
             ContentType: file.type,
             MetadataDirective:'REPLACE'
         };
