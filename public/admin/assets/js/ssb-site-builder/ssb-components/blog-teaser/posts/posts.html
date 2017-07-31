@@ -1,0 +1,52 @@
+<div ng-controller="ssbPostSettingsModalCtrl" class="container-fluid">
+
+<div class="row padding-10">
+    <div class="form-group">
+        <label># of Posts to show</label>
+        <div>
+            <input type='number' class='form-control' ng-model="component.numberOfTotalPosts" min='1' />
+        </div>
+    </div>
+</div>
+<div class="row padding-10">
+    <div class="form-group">
+        <label># of Posts per Page</label>
+        <div>
+            <input type='number' class='form-control' ng-model="component.numberOfPostsPerPage" min='1' />
+        </div>
+    </div>
+</div>
+<div class="row padding-10">
+    <div class="form-group">
+        <label>Show Posts by Tags</label>
+        <div class="post-tags-ui-select">
+            <ui-select multiple ng-model="component.postTags" theme="bootstrap" ng-disabled="disabled">
+                <ui-select-match placeholder="Select tags...">
+                    {{$item}}
+                </ui-select-match>
+                <ui-select-choices repeat="tag in availablePostTags | filter:$select.search">
+                    {{tag}}
+                </ui-select-choices>
+            </ui-select>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+</div>
+<div class="row padding-10">
+    <div class="form-group">
+        <label>Show Posts by Categories</label>
+        <div class="post-categories-ui-select">
+            <ui-select multiple ng-model="component.postCategories" theme="bootstrap" ng-disabled="disabled">
+                <ui-select-match placeholder="Select categories...">
+                    {{$item}}
+                </ui-select-match>
+                <ui-select-choices repeat="category in availablePostCategories | filter:$select.search">
+                    {{category}}
+                </ui-select-choices>
+            </ui-select>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+</div>
+
+</div>
