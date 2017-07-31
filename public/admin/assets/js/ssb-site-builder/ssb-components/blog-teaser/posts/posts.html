@@ -19,7 +19,7 @@
 <div class="row padding-10">
     <div class="form-group">
         <label>Show Posts by Tags</label>
-        <div class="product-ui-select">
+        <div class="post-tags-ui-select">
             <ui-select multiple ng-model="component.postTags" theme="bootstrap" ng-disabled="disabled">
                 <ui-select-match placeholder="Select tags...">
                     {{$item}}
@@ -35,13 +35,13 @@
 <div class="row padding-10">
     <div class="form-group">
         <label>Show Posts by Categories</label>
-        <div class="product-ui-select">
+        <div class="post-categories-ui-select">
             <ui-select multiple ng-model="component.postCategories" theme="bootstrap" ng-disabled="disabled">
-                <ui-select-match placeholder="Select tags...">
+                <ui-select-match placeholder="Select categories...">
                     {{$item}}
                 </ui-select-match>
-                <ui-select-choices repeat="tag in availablePostCategories | filter:$select.search">
-                    {{tag}}
+                <ui-select-choices repeat="category in availablePostCategories | filter:$select.search">
+                    {{category}}
                 </ui-select-choices>
             </ui-select>
         </div>
