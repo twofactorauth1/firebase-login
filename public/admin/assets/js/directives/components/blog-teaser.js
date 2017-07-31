@@ -101,7 +101,6 @@ app.directive('blogTeaserComponent', ['WebsiteService', '$filter', function (Web
       };
 
       function filterPosts(data, fn) {
-        data = $filter('limitTo')(data, $scope.component.numberOfTotalPosts || data.length);
         var _filteredPosts = [];
         _.each(data, function (post) {
           if (filterTags(post)) {
@@ -110,6 +109,7 @@ app.directive('blogTeaserComponent', ['WebsiteService', '$filter', function (Web
             }     
           }
         });
+        _filteredPosts = $filter('limitTo')(_filteredPosts, $scope.component.numberOfTotalPosts || $scope.teaserposts.length);
         $scope.posts = _filteredPosts;
         return fn();
       }
