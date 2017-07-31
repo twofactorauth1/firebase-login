@@ -330,7 +330,7 @@ module.exports = function(grunt) {
                 constants: {
                     ENV: {
                         name: 'development',
-                        stripeKey: [STRIPE_CONFIG.STRIPE_PUBLISHABLE_KEY, STRIPE_CONFIG.RVLVR.STRIPE_PUBLISHABLE_KEY],
+                        stripeKey: [STRIPE_CONFIG.STRIPE_PUBLISHABLE_KEY, STRIPE_CONFIG.RVLVR.STRIPE_PUBLISHABLE_KEY,null,null, STRIPE_CONFIG.RVLVR.STRIPE_PUBLISHABLE_KEY],
                         googleAnalyticsId: GOOGLE_CONFIG.ANALYTICS_ID,
                         googleAnalyticsScope: GOOGLE_CONFIG.ANALYTICS_SCOPE,
                         googleClientId: GOOGLE_CONFIG.CLIENT_ID,
@@ -349,7 +349,7 @@ module.exports = function(grunt) {
                 constants: {
                     ENV: {
                         name: 'production',
-                        stripeKey: [STRIPE_CONFIG.STRIPE_PUBLISHABLE_KEY, STRIPE_CONFIG.RVLVR.STRIPE_PUBLISHABLE_KEY],
+                        stripeKey: [STRIPE_CONFIG.STRIPE_PUBLISHABLE_KEY, STRIPE_CONFIG.RVLVR.STRIPE_PUBLISHABLE_KEY,null,null,STRIPE_CONFIG.RVLVR.STRIPE_PUBLISHABLE_KEY],
                         googleAnalyticsId: GOOGLE_CONFIG.ANALYTICS_ID,
                         googleAnalyticsScope: GOOGLE_CONFIG.ANALYTICS_SCOPE,
                         googleClientId: GOOGLE_CONFIG.PROD_CLIENT_ID,
