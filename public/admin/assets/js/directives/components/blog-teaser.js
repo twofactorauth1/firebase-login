@@ -143,7 +143,7 @@ app.directive('blogTeaserComponent', ['WebsiteService', '$filter', function (Web
 
       $scope.pageChanged = function (pageNo) {
         $scope.currentPostPage = pageNo;
-        if ($scope.posts) {
+        if ($scope.posts && $scope.component.numberOfPostsPerPage) {
           var begin = (($scope.currentPostPage - 1) * $scope.component.numberOfPostsPerPage);
           var numDisplay = $scope.component.numberOfPostsPerPage;
           //check if set to 0 and change to all posts
@@ -152,6 +152,9 @@ app.directive('blogTeaserComponent', ['WebsiteService', '$filter', function (Web
           }
           var end = begin + numDisplay;
           $scope.filteredPosts = $scope.posts.slice(begin, end);
+        }
+        else{
+          $scope.filteredPosts = $scope.posts;
         }
       };
 
