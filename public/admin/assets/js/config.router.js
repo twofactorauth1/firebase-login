@@ -284,6 +284,12 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         title: 'Message Single',
         icon: 'ti-layout-media-left-alt',
         resolve: loadSequence('froala-wysiwyg-editor', 'froala-wysiwyg-editor-plugins', 'custom-froala-wysiwyg-editor', 'spectrum', 'BroadcastMessageEditorCtrl', 'broadcastMessagesService')
+    }).state('app.jobs', {
+         url: '/jobs',
+         templateUrl: '/admin/assets/js/jobs/jobs.html',
+         title: 'Jobs',
+         icon: 'ti-layout-media-left-alt',
+         resolve: loadSequence('MessagesCtrl', 'broadcastMessagesService')
     })
 
     // Login routes

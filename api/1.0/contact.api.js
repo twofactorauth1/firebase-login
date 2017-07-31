@@ -23,6 +23,7 @@ var notificationConfig = require('../../configs/notification.config');
 var fs = require('fs');
 var geoIPUtil = require('../../utils/geoiputil');
 var async = require('async');
+var formidable = require('formidable');
 
 var api = function () {
     this.init.apply(this, arguments);
@@ -96,6 +97,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         app.post(this.url('importcsv'), this.isAuthApi.bind(this), this.importCsvContacts.bind(this));
         app.get(this.url('export/csv'), this.isAuthApi.bind(this), this.exportCsvContacts.bind(this));
+        app.post(this.url('import/csv'), this.secureauth.bind(this, {requiresSub:true, requiresPriv:'MODIFY_CONTACT'}), this.importCSV.bind(this));
     },
 
     getMyIp: function(req, resp) {
@@ -255,6 +257,39 @@ _.extend(api.prototype, baseApi.prototype, {
             }
         });
 
+    },
+
+    importCSV: function(req, resp) {
+        var self = this;
+
+        var form = new formidable.IncomingForm();
+        var accountId = parseInt(self.accountId(req));
+        var userId = self.userId(req);
+        self.log.debug(accountId, userId, '>> importCSV');
+
+        var promotionId = req.params.id;
+        form.parse(req, function(err, fields, files) {
+            if(err) {
+                self.wrapError(res, 500, 'fail', 'The upload failed', err);
+                self = null;
+                return;
+            } else {
+
+                var file = files['file'];
+                console.log(file);
+
+                var fileToUpload = {};
+                fileToUpload.mimeType = file.type;
+                fileToUpload.size = file.size;
+                fileToUpload.name = file.name;
+                fileToUpload.path = file.path;
+                fileToUpload.type = file.type;
+                promotionManager.updatePromotionAttachment(fileToUpload, promotionId, accountId, userId, function(err, value, file){
+                    self.log.debug('>> updatePromotionAttachment');
+                    self.sendResultOrError(res, err, value, 'Could not update promotion attachment');
+                });
+            }
+        });
     },
 
     exportCsvContacts: function(req, resp) {
