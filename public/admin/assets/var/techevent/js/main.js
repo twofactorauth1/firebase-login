@@ -44,7 +44,8 @@ function ($rootScope, $state, $stateParams, $injector, $window, ENV) {
             theme: 'theme-6', // indicate the theme chosen for your project
             logo: 'assets/var/techevent/images/techevent-logo.png', // relative path of the project logo
             logo2: 'assets/var/techevent/images/techevent-logo.png', // relative path of the project logo
-            isAnalyticsDashboardMode: false // relative path of the project logo
+            isAnalyticsDashboardMode: false, // relative path of the project logo
+            dashboardLogoText: "Techevent.us"
         }
     };
     $rootScope.user = {
