@@ -220,7 +220,7 @@ module.exports = {
             self.log.error(accountId, userId, 'No stripe customerId found for account: ' + accountId);
             return fn('No stripe customerId found');
         }
-        if(account.get('orgId') && account.get('orgId') === 1 && account.get('billing').stripeParent !== 6) {
+        if(account.get('orgId') && account.get('orgId') >= 1 && account.get('billing').stripeParent !== 6) {
             self._getOrgAccessToken(account.get('orgId'), function(err, accessToken){
                 self.log.debug('using the accessToken:', accessToken);
                 stripeDao.listInvoices(customerId, dateFilter, ending_before, limit, starting_after, accessToken, function(err, invoices){
