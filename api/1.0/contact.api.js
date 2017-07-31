@@ -277,7 +277,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
                 var file = files['file'];
                 console.log(file);
-
+                /*
                 var fileToUpload = {};
                 fileToUpload.mimeType = file.type;
                 fileToUpload.size = file.size;
@@ -288,6 +288,7 @@ _.extend(api.prototype, baseApi.prototype, {
                     self.log.debug('>> updatePromotionAttachment');
                     self.sendResultOrError(res, err, value, 'Could not update promotion attachment');
                 });
+                */
             }
         });
     },
