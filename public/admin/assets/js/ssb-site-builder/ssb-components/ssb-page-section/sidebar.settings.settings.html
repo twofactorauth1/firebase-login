@@ -75,21 +75,4 @@
         <div class="form-control" style="height:auto;" ng-bind-html="component._id"></div>
     </div> 
 
-    <div ng-if="component.components[0].type === 'blog-teaser'">
-        
-        <div class="form-group">
-            <label># of items per Page</label>
-            <div>
-                <input type='number' class='form-control' ng-model="component.components[0].numberPerPage" min="1" />
-            </div>
-        </div>
-
-        <div class="form-group">
-            <label># of articles to display</label>
-            <div>
-                <input type='number' class='form-control' ng-model="component.components[0].numberOfItems" min="1" />
-            </div>
-        </div>
-    </div>
-
 </div>

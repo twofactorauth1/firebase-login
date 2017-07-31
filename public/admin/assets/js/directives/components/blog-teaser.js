@@ -13,9 +13,15 @@ app.directive('blogTeaserComponent', ['WebsiteService', '$filter', function (Web
     },
     controller: function ($scope, WebsiteService, $compile) {
       $scope.loading = true;
+      $scope.currentPostPage = 1;
       WebsiteService.getPosts(function (posts) {
-        $scope.teaserposts = posts;
-        $scope.loading = false;
+        $scope.originalTeaserposts = angular.copy(posts);
+        $scope.teaserposts = angular.copy(posts);
+        filterPosts(posts, function () {
+          $scope.pageChanged(1);
+          $scope.loading = false;
+        });
+        
       });
 
       $scope.listArticleStyle = listArticleStyle;
@@ -93,6 +99,91 @@ app.directive('blogTeaserComponent', ['WebsiteService', '$filter', function (Web
         }
         return true;
       };
+
+      function filterPosts(data, fn) {
+        data = $filter('limitTo')(data, $scope.component.numberOfTotalPosts || data.length);
+        var _filteredPosts = [];
+        _.each(data, function (post) {
+          if (filterTags(post)) {
+            _filteredPosts.push(post);
+          }
+        });
+        $scope.posts = _filteredPosts;
+        return fn();
+      }
+
+      function filterTags(post) {
+        var _tags = $scope.component.postTags;
+        _tags = convertInLowerCase(_tags);
+        if (_tags && _tags.length > 0) {
+          if (post.post_tags) {
+            post.post_tags = convertInLowerCase(post.post_tags);
+            if (_.intersection(_tags, post.post_tags).length > 0) {
+              return true;
+            }
+          }
+        } else {
+          return true;
+        }
+      }
+
+      $scope.pageChanged = function (pageNo) {
+        $scope.currentPostPage = pageNo;
+        if ($scope.posts) {
+          var begin = (($scope.currentPostPage - 1) * $scope.component.numberOfPostsPerPage);
+          var numDisplay = $scope.component.numberOfPostsPerPage;
+          //check if set to 0 and change to all posts
+          if (numDisplay === 0) {
+            numDisplay = $scope.posts.length;
+          }
+          var end = begin + numDisplay;
+          $scope.filteredPosts = $scope.posts.slice(begin, end);
+        }
+      };
+
+      /*
+       * @watch:productTags
+       * - watch for product tags to change in component settings and filter products
+       */
+
+      $scope.$watch('component.postTags', function (newValue, oldValue) {
+        if (newValue !== oldValue) {
+          //$scope.component.productTags = newValue;
+          filterPosts($scope.originalTeaserposts, function () {
+            $scope.pageChanged(1);
+          });
+        }
+      });
+
+
+      $scope.$watch('component.postCategories', function (newValue, oldValue) {
+        if (newValue !== oldValue) {
+          //$scope.component.productTags = newValue;
+          filterPosts($scope.originalTeaserposts, function () {
+            $scope.pageChanged(1);
+          });
+        }
+      });
+
+      $scope.$watch('component.numberOfTotalPosts', function (newValue, oldValue) {
+        if (newValue !== oldValue) {
+          filterPosts($scope.originalTeaserposts, function () {
+            $scope.pageChanged(1);
+          });
+        }
+      });
+      /*
+       * @convertInLowerCase
+       * - convert array value in lowercase
+       */
+
+      function convertInLowerCase(dataItem) {
+          var _item = [];
+          _.each(dataItem, function(tagItem) {
+              _item.push(tagItem.toLowerCase());
+          });
+          return _item;
+      }
     }
   };
 }]);
