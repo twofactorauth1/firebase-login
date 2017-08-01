@@ -26,6 +26,7 @@ const not404s=[ "/404",
              "/apple-touch-icon.png",
              "/favicon.ico",
              "/apple-touch-icon-120X120-precomposed.png",
+             "/apple-touch-icon-precomposed.png",
              "/favicon-32x32.png",
              "/favicon-16x16.png",
              "/safari-pinned-tab.svg" ];
@@ -428,7 +429,7 @@ module.exports = {
         if(orgId !== null) {
             match.$match.orgId = orgId;
         }
-        
+
 
         stageAry.push(match);
 
@@ -456,7 +457,7 @@ module.exports = {
                                 _pageEvents.push({
                                     pageTime : pEvent.get('server_time_dt'),
                                     pageRequested : pEvent.get('url').source
-                                }) 
+                                })
                             });
                             _resultDetails.push({
                                 "_id": sessionEvent._id,

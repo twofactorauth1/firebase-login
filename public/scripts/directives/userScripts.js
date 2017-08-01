@@ -26,7 +26,7 @@ angular.module('mainApp')
                         console.info('User Script >>>', handle);
 
                         accountService(function(err, account) {
-                            if (account && (typeof account.showhide.userScripts !== 'undefined') && account.showhide.userScripts) {
+                            if (account && (typeof account.showhide !== 'undefined') && (typeof account.showhide.userScripts !== 'undefined') && account.showhide.userScripts) {
                                 websiteService(function(err, website) {
                                     if (website.resources && website.resources.userScripts && website.resources.toggles && website.resources.toggles.userScripts) {
                                         if (angular.isDefined(website.resources.userScripts[handle])) {
