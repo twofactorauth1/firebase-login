@@ -94,14 +94,6 @@
 
         $scope.newNote = {};
 
-        function getUserName(){
-            var _userName = $scope.$parent.currentUser.email;
-            if($scope.$parent.currentUser.first || $scope.$parent.currentUser.last){
-                _userName = $scope.$parent.currentUser.first + " " + $scope.$parent.currentUser.last;
-            }
-            return _userName.trim();
-        }
-
         $scope.addNote = function (_note) {
             var date = moment();
             var _noteToPush = {
@@ -122,8 +114,7 @@
             if($scope.notesEmail.enable) {
                 sendEmail = {
                     sendTo: $scope.contact.details[0].emails[0].email,
-                    fromEmail: $scope.$parent.currentUser.email,
-                    fromName: getUserName(),
+                    cC: $scope.$parent.currentUser.email,
                     note_value: _note,
                     enable_note: $scope.notesEmail.enable
                 }

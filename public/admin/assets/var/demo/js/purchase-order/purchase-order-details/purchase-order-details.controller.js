@@ -39,13 +39,6 @@ function purchaseOrderDetailsController($scope, $state, $attrs, $filter, $modal,
         })
     }
 
-    function getUserName(){
-        var _userName = $scope.$parent.currentUser.email;
-        if($scope.$parent.currentUser.first || $scope.$parent.currentUser.last){
-            _userName = $scope.$parent.currentUser.first + " " + $scope.$parent.currentUser.last;
-        }
-        return _userName.trim();
-    }
 
     /*
      * @addNote
@@ -64,8 +57,7 @@ function purchaseOrderDetailsController($scope, $state, $attrs, $filter, $modal,
         if(vm.uiState.noteEnable){
             emails = {
                 sendTo: vm.state.purchaseOrder.submitterEmail || vm.state.purchaseOrder.submitter.username,
-                fromEmail: $scope.$parent.currentUser.email,
-                fromName: getUserName() 
+                cC: $scope.$parent.currentUser.email
             }
         }  
 

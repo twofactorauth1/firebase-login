@@ -121,12 +121,12 @@
                     note: note
                 }
             })
-            .success(function (data, status, headers, config) {
-                fn(data);
-            })
-            .error(function (error) {
-                console.error('OrderService: addOrderNote error >>> ', error);
-            });
+                .success(function (data, status, headers, config) {
+                    fn(data);
+                })
+                .error(function (error) {
+                    console.error('OrderService: addOrderNote error >>> ', error);
+                });
         };
 
         this.exportToCSV = function () {

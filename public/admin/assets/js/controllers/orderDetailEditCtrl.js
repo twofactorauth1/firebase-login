@@ -390,9 +390,8 @@
                 var note_order = {};
                 if($scope.notesEmail.enable){
                     note_order = {
-                        sendTo: $scope.order.customer.details[0].emails[0].email,
-                        fromEmail: $scope.$parent.currentUser.email,
-                        fromName: getUserName(),
+                        send_to: $scope.order.customer.details[0].emails[0].email,
+                        cC: $scope.$parent.currentUser.email,
                         note_value: $scope.newNote,
                         enable_note: $scope.notesEmail.enable
                     }
@@ -917,14 +916,6 @@
                 var isDonation = _.findWhere($scope.order.line_items, {type: 'DONATION'}) ? true : false;
                 return isDonation;
             };
-
-            function getUserName(){
-                var _userName = $scope.$parent.currentUser.email;
-                if($scope.$parent.currentUser.first || $scope.$parent.currentUser.last){
-                    _userName = $scope.$parent.currentUser.first + " " + $scope.$parent.currentUser.last;
-                }
-                return _userName.trim();
-            }
 
         }]);
 }(angular));

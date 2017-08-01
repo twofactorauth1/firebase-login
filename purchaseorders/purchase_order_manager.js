@@ -722,24 +722,30 @@ module.exports = {
     _sendEmailNoteToSubmitter: function(po, accountId, note, emails) {
         var self = this;
         self.log = log;
-        var fromEmail = emails.fromEmail;
+        var fromEmail = notificationConfig.FROM_EMAIL;
+        var fromName =  notificationConfig.WELCOME_FROM_NAME;
         var emailSubject = notificationConfig.NEW_PURCHASE_NOTE_EMAIL_SUBJECT;
         var emailTo = emails.sendTo;
-        var fromName =  emails.fromName;
+        var emailCc = emails.cC;
         var component = {};
         component.note = note.note;
 
-        app.render('emails/new_user_note', component, function(err, html){
-            if(err) {
-                log.debug("template not found");
-                log.error('error rendering html: ' + err);
-                log.warn('email will not be sent to configured email.');
-            } else {
-                self.log.debug('sending email to: ', emailTo);
-                emailMessageManager.sendBasicDetailsEmail(fromEmail, fromName, emailTo, null, emailSubject, html, accountId, [], '', null, null, function(err, result){
-                    self.log.debug('result: ', result);
-                });
+        accountDao.getAccountByID(accountId, function(err, account){
+            if(account && account.get('business') && account.get('business').name) {
+                fromName = account.get('business').name;
             }
+            app.render('emails/new_user_note', component, function(err, html){
+                if(err) {
+                    log.debug("template not found");
+                    log.error('error rendering html: ' + err);
+                    log.warn('email will not be sent to configured email.');
+                } else {
+                    self.log.debug('sending email to: ', emailTo);
+                    emailMessageManager.sendBasicDetailsEmail(fromEmail, fromName, emailTo, null, emailSubject, html, accountId, [], '', [emailCc], null, function(err, result){
+                        self.log.debug('result: ', result);
+                    });
+                }
+            });
         });
     },
 
