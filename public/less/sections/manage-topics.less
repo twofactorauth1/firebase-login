@@ -2,9 +2,36 @@
 /*  Topics
 /* ---------------------------------------------------------------------- */
 
-.manage-topics { 
+.manage-topics {
+	.topics-panel-body {
+        padding-left: 0;
+        padding-right: 0;
+    }
     table.grid thead th {
         width: 12.5%;
         float:left;
+    }
+    table.bg-white {
+    	th, td{
+    		width: 10%;
+    	}
+        .col-title{
+        	width: 20% !important;
+        }
+
+        td.text-adjust-col{
+		    overflow: hidden;
+		    text-overflow: ellipsis;
+		    white-space: nowrap;
+		    max-width: 1px;
+    	}
+	    span.text-adjust-inner-content{
+	        display:inline-block;
+	        max-width: 102%;
+	    }
+    }
+
+    .table thead tr.sticky-filter-header {
+        background: #fff;
     }
 }
