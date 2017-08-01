@@ -20,7 +20,13 @@ var orderDao = require('../orders/dao/order.dao');
 var emailMessageManager = require('../emailmessages/emailMessageManager');
 var accountManager = require('../accounts/account.manager');
 var geoiputil = require('../utils/geoiputil');
-
+const not404s=[ "/404",
+             "/apple-touch-icon.png",
+             "/favicon.ico",
+             "/apple-touch-icon-precomposed.png",
+             "/favicon-32x32.png",
+             "/favicon-16x16.png",
+             "/safari-pinned-tab.svg" ];
 module.exports = {
 
 
@@ -2547,7 +2553,8 @@ module.exports = {
                     $gte:start,
                     $lte:end
                 },
-                'url.path':'/404'
+                'url.path':'/404',
+                "requestedUrl.path": {  $nin:  not404s }
             }
         };
         if(isAggregate === true) {
@@ -2603,7 +2610,8 @@ module.exports = {
                     $gte:start,
                     $lte:end
                 },
-                'url.path':'/404'
+                'url.path':'/404',
+                "requestedUrl.path": {  $nin:  not404s }
             }
         };
         if(isAggregate === true) {
