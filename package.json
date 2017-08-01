@@ -67,6 +67,8 @@
     "passport-twitter": "~1.0.2",
     "password-hash-and-salt": "^0.1.2",
     "paypal-adaptive": "^0.4.2",
+    "phantom-html-to-pdf": "0.5.4",
+    "phantomjs-prebuilt": "^2.1.14",
     "prerender-node": "^1.2.1",
     "req-flash": "0.0.3",
     "request": "^2.34.0",
@@ -86,8 +88,7 @@
     "validate.js": "^0.5.0",
     "webshot": "0.18.0",
     "wiredep": "^1.8.6",
-    "xml2js": "^0.4.4",
-    "phantom-html-to-pdf": "0.5.4"
+    "xml2js": "^0.4.4"
   },
   "devDependencies": {
     "autoprefixer": "^6.3.6",
