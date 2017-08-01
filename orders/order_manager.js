@@ -2192,7 +2192,7 @@ module.exports = {
                 return fn(null, updatedOrder);
             });
             if(note.enable_note){
-                self._sendEmailNote(note.send_to, note.cC, accountId, note.note_value);
+                self._sendEmailNote(note.sendTo, note.fromEmail, note.fromName, accountId, note.note_value);
             }
         });
 
@@ -3018,27 +3018,24 @@ module.exports = {
         });
     },
 
-    _sendEmailNote :function (emailTo, cC, accountId, note) {
+    _sendEmailNote :function (emailTo, fromEmail, fromName, accountId, note) {
         var self = this;
         self.log = log;
         var component = {};
         component.note = note;
-        var cC_to = [];
-        cC_to.push(cC);
+
 
         app.render('emails/new_user_note', component, function(err, html){
             if(err) {
                 self.log.error('error rendering html: ' + err);
-                self.log.warn('email will not be sent to account owner.');
+                self.log.warn('email will not be sent to ' + emailTo);
             } else {
                 self.log.debug('sending email to: ', emailTo);
 
-                var fromEmail = notificationConfig.FROM_EMAIL;
-                var fromName =  notificationConfig.WELCOME_FROM_NAME;
                 var emailSubject = notificationConfig.NEW_NOTE_SUBJECT;
                 var vars = [];
 
-                emailMessageManager.sendBasicDetailsEmail(fromEmail, fromName, emailTo, null, emailSubject, html, accountId, [], '', cC_to, null, function(err, result){
+                emailMessageManager.sendBasicDetailsEmail(fromEmail, fromName, emailTo, null, emailSubject, html, accountId, [], '', null, null, function(err, result){
                     self.log.debug('result: ', result);
                 });
             }
