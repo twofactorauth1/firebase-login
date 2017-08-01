@@ -106,10 +106,43 @@ app.directive('blogTeaserComponent', ['postsService', '$filter', function (posts
             }     
           }
         });
+        _filteredPosts = sortTeaserPosts(_filteredPosts);
         _filteredPosts = $filter('limitTo')(_filteredPosts, $scope.component.numberOfTotalPosts || $scope.teaserposts.length);
         $scope.posts = _filteredPosts;
         return fn();
       }
+
+      function sortTeaserPosts(posts){
+        var sortOrder = customSortOrder();
+        var sortBy = sortBlogFn($scope.component);
+        return $filter('orderBy')(posts, [sortBy, "date_created"], sortOrder);
+      }
+
+      function sortBlogFn(component) {
+          if (component.postorder) {
+              if (component.postorder == 1 || component.postorder == 2) {
+                return "date_modified";
+              }
+              if (component.postorder == 3 || component.postorder == 4) {
+                return "date_created";
+              }
+              if (component.postorder == 5 || component.postorder == 6) {
+                return "date_published";
+              }
+          } else {
+              return "date_published";
+          }
+      };
+
+      function customSortOrder() {
+        if ($scope.component.postorder == 1 || $scope.component.postorder == 3 || $scope.component.postorder == 5) {
+          return false;
+        }
+        if ($scope.component.postorder == 2 || $scope.component.postorder == 4 || $scope.component.postorder == 6) {
+          return true;
+        }
+        return true;
+      };
 
       function filterTags(post) {
         var _tags = $scope.component.postTags;

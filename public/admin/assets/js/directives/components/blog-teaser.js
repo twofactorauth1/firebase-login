@@ -15,6 +15,12 @@ app.directive('blogTeaserComponent', ['WebsiteService', '$filter', function (Web
       $scope.loading = true;
       $scope.currentPostPage = 1;
       WebsiteService.getPosts(function (posts) {
+        _.each(posts, function(blogpost){
+          blogpost.date_published = new Date(blogpost.publish_date || blogpost.created.date).getTime();
+          blogpost.date_created = new Date(blogpost.created.date).getTime();
+          blogpost.date_modified = new Date(blogpost.modified.date).getTime();
+        })
+        //$scope.defaultSortOrder = $scope.customSortOrder(component);
         $scope.originalTeaserposts = angular.copy(posts);
         $scope.teaserposts = angular.copy(posts);
         filterPosts(posts, function () {
@@ -39,22 +45,20 @@ app.directive('blogTeaserComponent', ['WebsiteService', '$filter', function (Web
         return styleString;
     }
 
-      $scope.sortBlogFn = function (component) {
-        return function (blogpost) {
+      function sortBlogFn(component) {
           if (component.postorder) {
-            if (component.postorder == 1 || component.postorder == 2) {
-              return Date.parse($filter('date')(blogpost.modified.date, "MM/dd/yyyy HH:mm:ss"));
-            }
-            if (component.postorder == 3 || component.postorder == 4) {
-              return Date.parse($filter('date')(blogpost.created.date, "MM/dd/yyyy HH:mm:ss"));
-            }
-            if (component.postorder == 5 || component.postorder == 6) {
-              return Date.parse($filter('date')(blogpost.publish_date || blogpost.created.date, "MM/dd/yyyy"));
-            }
+              if (component.postorder == 1 || component.postorder == 2) {
+                return "date_modified";
+              }
+              if (component.postorder == 3 || component.postorder == 4) {
+                return "date_created";
+              }
+              if (component.postorder == 5 || component.postorder == 6) {
+                return "date_published";
+              }
           } else {
-            return Date.parse($filter('date')(blogpost.publish_date || blogpost.created.date, "MM/dd/yyyy"));
+              return "date_published";
           }
-        };
       };
       $scope.titleStyle = function (component) {
         var styleString = ' ';
@@ -90,11 +94,13 @@ app.directive('blogTeaserComponent', ['WebsiteService', '$filter', function (Web
     		}
     		return styleString;
       };
-      $scope.customSortOrder = function (component) {
-        if (component.postorder == 1 || component.postorder == 3 || component.postorder == 5) {
+
+
+      function customSortOrder() {
+        if ($scope.component.postorder == 1 || $scope.component.postorder == 3 || $scope.component.postorder == 5) {
           return false;
         }
-        if (component.postorder == 2 || component.postorder == 4 || component.postorder == 6) {
+        if ($scope.component.postorder == 2 || $scope.component.postorder == 4 || $scope.component.postorder == 6) {
           return true;
         }
         return true;
@@ -109,9 +115,16 @@ app.directive('blogTeaserComponent', ['WebsiteService', '$filter', function (Web
             }     
           }
         });
+        _filteredPosts = sortTeaserPosts(_filteredPosts);
         _filteredPosts = $filter('limitTo')(_filteredPosts, $scope.component.numberOfTotalPosts || $scope.teaserposts.length);
         $scope.posts = _filteredPosts;
         return fn();
+      }
+
+      function sortTeaserPosts(posts){
+        var sortOrder = customSortOrder();
+        var sortBy = sortBlogFn($scope.component);
+        return $filter('orderBy')(posts, [sortBy, "date_created"], sortOrder);
       }
 
       function filterTags(post) {
@@ -192,6 +205,14 @@ app.directive('blogTeaserComponent', ['WebsiteService', '$filter', function (Web
       $scope.$watch('component.numberOfPostsPerPage', function (newValue, oldValue) {
         if (newValue !== oldValue) {
           $scope.component.numberOfPostsPerPage = parseInt(newValue) > 0 ? parseInt(newValue) : 0;
+          filterPosts($scope.originalTeaserposts, function () {
+            $scope.pageChanged(1);
+          });
+        }
+      });
+
+      $scope.$watch('component.postorder', function (newValue, oldValue) {
+        if (newValue !== oldValue) {          
           filterPosts($scope.originalTeaserposts, function () {
             $scope.pageChanged(1);
           });
