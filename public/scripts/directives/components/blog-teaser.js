@@ -107,7 +107,14 @@ app.directive('blogTeaserComponent', ['postsService', '$filter', function (posts
           }
         });
         _filteredPosts = sortTeaserPosts(_filteredPosts);
-        _filteredPosts = $filter('limitTo')(_filteredPosts, $scope.component.numberOfTotalPosts || $scope.teaserposts.length);
+        var _numberOfPostsToshow = 0;
+        if($scope.component.version == 2){
+          _numberOfPostsToshow = $scope.component.numberOfTotalPosts || $scope.teaserposts.length;
+        }
+        else{
+          _numberOfPostsToshow = $scope.component.numberOfTotalPosts || 3;          
+        }
+        _filteredPosts = $filter('limitTo')(_filteredPosts, _numberOfPostsToshow);
         $scope.posts = _filteredPosts;
         return fn();
       }

@@ -14,6 +14,7 @@ app.directive('blogTeaserComponent', ['WebsiteService', '$filter', function (Web
     controller: function ($scope, WebsiteService, $compile) {
       $scope.loading = true;
       $scope.currentPostPage = 1;
+
       WebsiteService.getPosts(function (posts) {
         _.each(posts, function(blogpost){
           blogpost.date_published = new Date(blogpost.publish_date || blogpost.created.date).getTime();
@@ -116,7 +117,14 @@ app.directive('blogTeaserComponent', ['WebsiteService', '$filter', function (Web
           }
         });
         _filteredPosts = sortTeaserPosts(_filteredPosts);
-        _filteredPosts = $filter('limitTo')(_filteredPosts, $scope.component.numberOfTotalPosts || $scope.teaserposts.length);
+        var _numberOfPostsToshow = 0;
+        if($scope.component.version == 2){
+          _numberOfPostsToshow = $scope.component.numberOfTotalPosts || $scope.teaserposts.length;
+        }
+        else{
+          _numberOfPostsToshow = $scope.component.numberOfTotalPosts || 3;          
+        }
+        _filteredPosts = $filter('limitTo')(_filteredPosts, _numberOfPostsToshow);
         $scope.posts = _filteredPosts;
         return fn();
       }
