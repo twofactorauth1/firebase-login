@@ -14,8 +14,8 @@ app.controller('ssbPostSettingsModalCtrl', ['$scope', '$rootScope', '$http', '$t
       categories.push  (_.pluck(posts, "post_categories"));
       
       $scope.availablePostTags = _.uniq(_.flatten(tags));
-      $scope.availablePostCategories = _.uniq(_.without(_.flatten(categories), null));
-      $scope.availablePostCategories = _uniq(_.without(_.pluck($scope.availablePostCategories, "text"), null));
+      var availablePostCategories = _.uniq(_.without(_.flatten(categories), null));
+      $scope.availablePostCategories = _.uniq(_.without(_.pluck(availablePostCategories, "text"), null));
     });
 
 }]);
