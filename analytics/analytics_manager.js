@@ -22,8 +22,10 @@ var accountManager = require('../accounts/account.manager');
 var geoiputil = require('../utils/geoiputil');
 const not404s=[ "/404",
              "/apple-touch-icon.png",
+             "/apple-touch-icon-120X120.png",
+             "/apple-touch-icon.png",
              "/favicon.ico",
-             "/apple-touch-icon-precomposed.png",
+             "/apple-touch-icon-120X120-precomposed.png",
              "/favicon-32x32.png",
              "/favicon-16x16.png",
              "/safari-pinned-tab.svg" ];
