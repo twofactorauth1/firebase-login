@@ -13,7 +13,11 @@ app.directive('blogTeaserComponent', ['postsService', '$filter', function (posts
       $scope.loading = true;
       $scope.currentPostPage = 1;
       postsService(function (err, posts) {
-        $scope.originalTeaserposts = angular.copy(posts);
+        _.each(posts, function(blogpost){
+          blogpost.date_published = new Date(blogpost.publish_date || blogpost.created.date).getTime();
+          blogpost.date_created = new Date(blogpost.created.date).getTime();
+          blogpost.date_modified = new Date(blogpost.modified.date).getTime();
+        })
         $scope.teaserposts = angular.copy(posts);
         filterPosts(posts, function () {
           $scope.pageChanged(1);
@@ -36,23 +40,7 @@ app.directive('blogTeaserComponent', ['postsService', '$filter', function (posts
         return styleString;
       }
 
-      $scope.sortBlogFn = function (component) {
-        return function (blogpost) {
-          if (component.postorder) {
-            if (component.postorder == 1 || component.postorder == 2) {
-              return Date.parse($filter('date')(blogpost.modified.date, "MM/dd/yyyy HH:mm:ss"));
-            }
-            if (component.postorder == 3 || component.postorder == 4) {
-              return Date.parse($filter('date')(blogpost.created.date, "MM/dd/yyyy HH:mm:ss"));
-            }
-            if (component.postorder == 5 || component.postorder == 6) {
-              return Date.parse($filter('date')(blogpost.publish_date || blogpost.created.date, "MM/dd/yyyy"));
-            }
-          } else {
-            return Date.parse($filter('date')(blogpost.publish_date || blogpost.created.date, "MM/dd/yyyy"));
-          }
-        };
-      };
+     
       $scope.titleStyle = function (component) {
         var styleString = ' ';
         if(component && component.settings){
@@ -87,16 +75,7 @@ app.directive('blogTeaserComponent', ['postsService', '$filter', function (posts
         }
         return styleString;
       };
-      $scope.customSortOrder = function (component) {
-        if (component.postorder == 1 || component.postorder == 3 || component.postorder == 5) {
-          return false;
-        }
-        if (component.postorder == 2 || component.postorder == 4 || component.postorder == 6) {
-          return true;
-        }
-        return true;
-      };
-
+      
       function filterPosts(data, fn) {
         var _filteredPosts = [];
         _.each(data, function (post) {

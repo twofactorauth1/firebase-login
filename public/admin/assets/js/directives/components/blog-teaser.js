@@ -21,8 +21,6 @@ app.directive('blogTeaserComponent', ['WebsiteService', '$filter', function (Web
           blogpost.date_created = new Date(blogpost.created.date).getTime();
           blogpost.date_modified = new Date(blogpost.modified.date).getTime();
         })
-        //$scope.defaultSortOrder = $scope.customSortOrder(component);
-        $scope.originalTeaserposts = angular.copy(posts);
         $scope.teaserposts = angular.copy(posts);
         filterPosts(posts, function () {
           $scope.pageChanged(1);
@@ -186,7 +184,7 @@ app.directive('blogTeaserComponent', ['WebsiteService', '$filter', function (Web
 
       $scope.$watch('component.postTags', function (newValue, oldValue) {
         if (newValue !== oldValue) {
-          filterPosts($scope.originalTeaserposts, function () {
+          filterPosts($scope.teaserposts, function () {
             $scope.pageChanged(1);
           });
         }
@@ -195,7 +193,7 @@ app.directive('blogTeaserComponent', ['WebsiteService', '$filter', function (Web
 
       $scope.$watch('component.postCategories', function (newValue, oldValue) {
         if (newValue !== oldValue) {
-          filterPosts($scope.originalTeaserposts, function () {
+          filterPosts($scope.teaserposts, function () {
             $scope.pageChanged(1);
           });
         }
@@ -204,7 +202,7 @@ app.directive('blogTeaserComponent', ['WebsiteService', '$filter', function (Web
       $scope.$watch('component.numberOfTotalPosts', function (newValue, oldValue) {
         if (newValue !== oldValue) {
           $scope.component.numberOfTotalPosts = parseInt(newValue) > 0 ? parseInt(newValue) : 0;
-          filterPosts($scope.originalTeaserposts, function () {
+          filterPosts($scope.teaserposts, function () {
             $scope.pageChanged(1);
           });
         }
@@ -213,7 +211,7 @@ app.directive('blogTeaserComponent', ['WebsiteService', '$filter', function (Web
       $scope.$watch('component.numberOfPostsPerPage', function (newValue, oldValue) {
         if (newValue !== oldValue) {
           $scope.component.numberOfPostsPerPage = parseInt(newValue) > 0 ? parseInt(newValue) : 0;
-          filterPosts($scope.originalTeaserposts, function () {
+          filterPosts($scope.teaserposts, function () {
             $scope.pageChanged(1);
           });
         }
@@ -221,7 +219,7 @@ app.directive('blogTeaserComponent', ['WebsiteService', '$filter', function (Web
 
       $scope.$watch('component.postorder', function (newValue, oldValue) {
         if (newValue !== oldValue) {          
-          filterPosts($scope.originalTeaserposts, function () {
+          filterPosts($scope.teaserposts, function () {
             $scope.pageChanged(1);
           });
         }
