@@ -172,15 +172,16 @@ _.extend(api.prototype, baseApi.prototype, {
         var self = this;
         var note = req.body.note.note_value;
         var emailTo = req.body.note.sendTo;
-        var cC = [];
-        cC.push(req.body.note.cC);
+        var fromEmail = req.body.note.fromEmail;
+        var fromName = req.body.note.fromName;
+
         var accountId = parseInt(self.accountId(req));
         self.checkPermissionForAccount(req, self.sc.privs.MODIFY_CONTACT, accountId, function(err, isAllowed) {
             if (isAllowed !== true) {
                 return self.send403(resp);
             } else {
                 if(req.body.note.enable_note)
-                    self._sendNoteEmail(note, accountId, emailTo, cC);
+                    self._sendNoteEmail(note, accountId, emailTo, fromEmail, fromName);
             }
         });
     },
@@ -1513,24 +1514,21 @@ _.extend(api.prototype, baseApi.prototype, {
         });
 
     },
-    _sendNoteEmail: function(note, accountId, accountEmail, cC) {
+    _sendNoteEmail: function(note, accountId, emailTo, fromEmail, fromName) {
         var self = this;
         var component = {};
         component.note = note;
-
         app.render('emails/new_user_note', component, function(err, html){
             if(err) {
                 self.log.error('error rendering html: ' + err);
-                self.log.warn('email will not be sent to account owner.');
+                self.log.warn('email will not be sent to ' + emailTo);
             } else {
-                self.log.debug('sending email to: ', accountEmail);
+                self.log.debug('Sending email to: ' + emailTo);
 
-                var fromEmail = notificationConfig.FROM_EMAIL;
-                var fromName =  notificationConfig.WELCOME_FROM_NAME;
                 var emailSubject = notificationConfig.NEW_NOTE_SUBJECT;
                 var vars = [];
 
-                emailMessageManager.sendBasicDetailsEmail(fromEmail, fromName, accountEmail, null, emailSubject, html, accountId, [], '', cC, null, function(err, result){
+                emailMessageManager.sendBasicDetailsEmail(fromEmail, fromName, emailTo, null, emailSubject, html, accountId, [], '', null, null, function(err, result){
                     self.log.debug('result: ', result);
                 });
             }

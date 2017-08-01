@@ -49,23 +49,23 @@
                 </div>
             </div>
         </div>
-        <div class="container-fluid container-fullw padding-top-0 padding-bottom-0">
+        <div class="container-fluid container-fullw padding-top-0 padding-bottom-0 padding-left-15 padding-right-15">
             <div class="panel panel-transparent row margin-bottom-0">
-                <div class="panel-body">
-                    <table class="table table-striped table-hover bg-white margin-bottom-0" ng-class="{'grid': tableView == 'grid', 'bg-white table-list-view': tableView != 'grid'}" ng-show="displayedTopics">
-                        <thead>
+                <div class="panel-body topics-panel-body">
+                    <table class="table table-striped table-hover bg-white margin-bottom-0" ng-class="{'grid': tableView == 'grid', 'bg-white table-list-view': tableView != 'grid'}" ng-show="displayedTopics" fixed-header-table>
+                        <thead sticky offset="65" sticky-class="sticky-header-class">
                             <tr>
-                                <th st-sort="title">Title</th>
-                                <th class="hidden-xs" st-sort="isPublic" style="white-space: nowrap;">Public</th>
-                                <th class="hidden-xs" st-sort="category">Category</th>
-                                <th class="hidden-xs text-center" st-sort="statistics.views" style="white-space: nowrap;">Views</th>
-                                <th class="hidden-xs text-center" st-sort="statistics.helpful" style="white-space: nowrap;">Helpful</th>
-                                <th class="hidden-xs text-center" st-sort="statistics.nothelpful" style="white-space: nowrap;">Not Helpful</th>
-                                <th class="hidden-xs" st-sort="getters.created" ng-class="{'center': tableView != 'grid'}" style="white-space: nowrap;">Created</th>
-                                <th class="hidden-xs" st-sort-default="reverse" st-sort="getters.updated" ng-class="{'center': tableView != 'grid'}" style="white-space: nowrap;">Updated</th>
+                                <th class="col-title" st-sort="title">Title</th>
+                                <th class="hidden-xs col-public" st-sort="isPublic" style="white-space: nowrap;">Public</th>
+                                <th class="hidden-xs col-category" st-sort="category">Category</th>
+                                <th class="hidden-xs col-view" st-sort="statistics.views" style="white-space: nowrap;">Views</th>
+                                <th class="hidden-xs col-helpful" st-sort="statistics.helpful" style="white-space: nowrap;">Helpful</th>
+                                <th class="hidden-xs col-not-helpful" st-sort="statistics.nothelpful" style="white-space: nowrap;">Not Helpful</th>
+                                <th class="hidden-xs col-created" st-sort="getters.created" ng-class="{'center': tableView != 'grid'}" style="white-space: nowrap;">Created</th>
+                                <th class="hidden-xs col-modified" st-sort-default="reverse" st-sort="getters.updated" ng-class="{'center': tableView != 'grid'}" style="white-space: nowrap;">Updated</th>
                             </tr>
-                            <tr ng-if="showFilter">
-                                <th>
+                            <tr ng-if="showFilter" class="sticky-filter-header">
+                                <th class="col-title">
                                     <input st-search="title" placeholder="Title" class="form-control" type="search" />
                                 </th>
                                 <th class="hidden-xs">
@@ -93,14 +93,14 @@
                         </thead>
                         <tbody>
                             <tr ng-repeat="topic in displayedTopics" ng-click="viewSingle(topic)" ng-class="{'height-50': tableView != 'grid'}">
-                                <td><strong>Title: </strong><span class="text-adjust-table">{{topic.title}}</span></td>
-                                <td class="hidden-xs"><strong>Public: </strong><span>{{topic.isPublic}}</span></td>
-                                <td class="hidden-xs"><strong>Category: </strong><span class="text-adjust-table">{{topic.category}}</span></td>
-                                <td><strong>Views: </strong><span class="text-bold"><span class="fa fa-eye"></span> {{topic.statistics.views}} </span></td>
-                                <td><strong>Helpful: </strong><span class="text-success text-bold"><span class="fa fa-thumbs-up"></span> {{topic.statistics.helpful}} </span></td>
-                                <td><strong>Not Helpful: </strong><span class="text-danger text-bold"><span class="fa fa-thumbs-down"></span> {{topic.statistics.nothelpful}}</span></td>
-                                <td class="hidden-xs" ng-class="{'center': tableView != 'grid'}" style="white-space: nowrap;"><strong>Created: </strong> {{topic.created.date | date:'MMM d yy'}}</td>
-                                <td class="hidden-xs" ng-class="{'center': tableView != 'grid'}" style="white-space: nowrap;"><strong>Updated: </strong>{{topic.updated.date | date:'MMM d yy'}}</td>
+                                <td class="text-adjust-col col-title"><strong>Title: </strong><span class="text-adjust-inner-content">{{topic.title}}</span></td>
+                                <td class="hidden-xs text-adjust-col"><strong>Public: </strong><span>{{topic.isPublic}}</span></td>
+                                <td class="hidden-xs text-adjust-col"><strong>Category: </strong><span class="text-adjust-inner-content">{{topic.category}}</span></td>
+                                <td class="hidden-xs text-adjust-col"><strong>Views: </strong><span class="text-bold"><span class="fa fa-eye"></span> {{topic.statistics.views}} </span></td>
+                                <td class="hidden-xs text-adjust-col"><strong>Helpful: </strong><span class="text-success text-bold"><span class="fa fa-thumbs-up"></span> {{topic.statistics.helpful}} </span></td>
+                                <td class="hidden-xs text-adjust-col"><strong>Not Helpful: </strong><span class="text-danger text-bold"><span class="fa fa-thumbs-down"></span> {{topic.statistics.nothelpful}}</span></td>
+                                <td class="hidden-xs text-adjust-col" ng-class="{'center': tableView != 'grid'}" style="white-space: nowrap;"><strong>Created: </strong> {{topic.created.date | date:'MMM d yy'}}</td>
+                                <td class="hidden-xs text-adjust-col" ng-class="{'center': tableView != 'grid'}" style="white-space: nowrap;"><strong>Updated: </strong>{{topic.updated.date | date:'MMM d yy'}}</td>
                             </tr>
                         </tbody>
                     </table>

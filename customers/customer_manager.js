@@ -505,7 +505,10 @@ module.exports = {
             //var ssURL = "http://bozu.test.indigenous.io/";
             var bucket = awsConfig.BUCKETS.ASSETS;
             var subdir = 'account_' + accountId;
-                
+            
+            if(serverUrl.substring(0, 5) == 'http:') {
+              serverUrl = serverUrl.substring(5, serverUrl.length);
+            }
             self._download(serverUrl, tempFileName, function(){
                 log.debug('stored screenshot at ' + tempFileName);
                 tempFile.type = 'image/png';
@@ -534,10 +537,7 @@ module.exports = {
                 width: 'window',
                 height: 'all'
             },
-            renderDelay: 5000,
-            phantomConfig: {
-                "ignore-ssl-errors": "true"
-            }
+            renderDelay: 25000
         }    
         webshot(uri, file, options, function(err) {
             callback(file);
