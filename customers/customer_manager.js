@@ -488,11 +488,12 @@ module.exports = {
                 log.error('Error getting server url: ' + err);
                 return fn(err, null);
             }
-            log.debug('got server url', serverUrl);
+
 
             if(serverUrl.indexOf('.local') >0) {
                 serverUrl = serverUrl.replace('indigenous.local:3000', 'test.indigenous.io');
             }
+            log.debug('got server url', serverUrl);
 
             var name = customerId + "_" + new Date().getTime() + '.png';
             var tempFile = {
@@ -507,6 +508,7 @@ module.exports = {
             if(serverUrl.substring(0, 5) == 'http:') {
               serverUrl = serverUrl.substring(5, serverUrl.length);
             }
+            //serverUrl = 'http://jupiter.test.indigenous.io';
             self._download(serverUrl, tempFileName, function(){
                 log.debug('stored screenshot at ' + tempFileName, tempFile.path);
                 tempFile.type = 'image/png';
@@ -539,7 +541,7 @@ module.exports = {
             renderDelay: 25000,
             phantomConfig:{'ignore-ssl-errors': 'true', 'debug':'true', 'ssl-protocol':'any'}
         };
-        self.log.debug('calling webshot');
+        self.log.debug('calling webshot [' + uri + ']');
         webshot(uri, file, options, function(err) {
             self.log.debug('returned from webshot');
             if(err) {
