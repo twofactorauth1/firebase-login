@@ -536,9 +536,12 @@ module.exports = {
                 width: 'window',
                 height: 'all'
             },
-            renderDelay: 25000
+            renderDelay: 25000,
+            phantomConfig:{'ignore-ssl-errors': 'true'}
         };
+        self.log.debug('calling webshot');
         webshot(uri, file, options, function(err) {
+            self.log.debug('returned from webshot');
             if(err) {
                 self.log.error('Error during webshot:', err);
             }
