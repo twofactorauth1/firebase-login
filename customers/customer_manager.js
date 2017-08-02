@@ -453,8 +453,7 @@ module.exports = {
                                 if(err) {
                                     self.log.error(accountId, userId, 'Error saving customer template account:', err);
                                     return fn(err);
-                                }
-                                else{
+                                } else{
                                     savedCustomer.set("templateImageUrl", url);
                                     accountDao.saveOrUpdate(account, function(err, updatedCustomer){
                                         if(err) {
@@ -466,9 +465,8 @@ module.exports = {
                                         }
                                     })
                                 }
-                            })
-                        }
-                        else{
+                            });
+                        } else{
                           return fn(null, savedCustomer);  
                         }
                         
@@ -490,7 +488,7 @@ module.exports = {
                 log.error('Error getting server url: ' + err);
                 return fn(err, null);
             }
-            log.debug('got server url');
+            log.debug('got server url', serverUrl);
 
             if(serverUrl.indexOf('.local') >0) {
                 serverUrl = serverUrl.replace('indigenous.local:3000', 'test.indigenous.io');
@@ -499,7 +497,7 @@ module.exports = {
             var name = customerId + "_" + new Date().getTime() + '.png';
             var tempFile = {
                 name: name,
-                path: 'tmp/' + name
+                path: './tmp/' + name
             };
             var tempFileName = tempFile.path;
             //var ssURL = "http://bozu.test.indigenous.io/";
@@ -510,10 +508,10 @@ module.exports = {
               serverUrl = serverUrl.substring(5, serverUrl.length);
             }
             self._download(serverUrl, tempFileName, function(){
-                log.debug('stored screenshot at ' + tempFileName);
+                log.debug('stored screenshot at ' + tempFileName, tempFile.path);
                 tempFile.type = 'image/png';
                 s3dao.uploadToS3(bucket, subdir, tempFile, null, function(err, value){
-                    fs.unlink(tempFile.path, function(err, value){});
+                    //fs.unlink(tempFile.path, function(err, value){});
                     if(err) {
                         log.error('Error uploading to s3: ' + err);
                         fn(err, null);
@@ -528,6 +526,7 @@ module.exports = {
     },
 
     _download: function(uri, file, callback){
+        var self = this;
         var options = {
             screenSize: {
                 width: 1280,
@@ -537,11 +536,17 @@ module.exports = {
                 width: 'window',
                 height: 'all'
             },
-            renderDelay: 25000
-        }    
+            renderDelay: 25000,
+            phantomConfig:{'ignore-ssl-errors': 'true', 'debug':'true'}
+        };
+        self.log.debug('calling webshot');
         webshot(uri, file, options, function(err) {
+            self.log.debug('returned from webshot');
+            if(err) {
+                self.log.error('Error during webshot:', err);
+            }
             callback(file);
         });
-    },
+    }
 
 };

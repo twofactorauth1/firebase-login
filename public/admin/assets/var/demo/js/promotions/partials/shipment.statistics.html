@@ -43,6 +43,22 @@
 			  	<span class="promotions-stats-label">RMA</span>
 	    	</div>
         </div>
+
+
+        <div class="col-shipment">
+	    	<div class=" promotions-stats-item">
+	    		<span class="promotions-stats-value">{{vm.state.shipmentStats.uniqCustomers}}</span>
+			  	<span class="promotions-stats-label">Unique Customers</span>
+	    	</div>
+        </div>
+        <div class="col-shipment">
+	    	<div class=" promotions-stats-item">
+	    		<span class="promotions-stats-value">{{vm.state.shipmentStats.uniqVars}}</span>
+			  	<span class="promotions-stats-label">Unique Vars</span>
+	    	</div>
+        </div>
+
+
         <div class="col-shipment">
 	    	<div class=" promotions-stats-item">
 	    		<span class="promotions-stats-value">{{vm.state.shipmentStats.promoOpenShipments | currency : '$' : 0}}</span>
