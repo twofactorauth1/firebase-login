@@ -508,7 +508,7 @@ module.exports = {
               serverUrl = serverUrl.substring(5, serverUrl.length);
             }
             self._download(serverUrl, tempFileName, function(){
-                log.debug('stored screenshot at ' + tempFileName);
+                log.debug('stored screenshot at ' + tempFileName, tempFile.path);
                 tempFile.type = 'image/png';
                 s3dao.uploadToS3(bucket, subdir, tempFile, null, function(err, value){
                     fs.unlink(tempFile.path, function(err, value){});
