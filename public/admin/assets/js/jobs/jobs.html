@@ -29,7 +29,7 @@
 
                         </thead>
                         <tbody>
-                        <tr ng-repeat="job in vm.state.jobs" ng-click="viewSingle(job)">
+                        <tr ng-repeat="job in displayedJobs" ng-click="viewSingle(job)">
                             <td ng-show='vm.state.jobs.length'><i class="fa fa-2x" ng-click='customerSelectClickFn($event, job)' ng-class='{"fa-check-circle": job.isSelected, "fa-circle-o": !job.isSelected}'></i></td>
                             <td><strong>Job: </strong>{{job._id}}</td>
                             <td><strong>Count: </strong>{{job.count}}</td>
