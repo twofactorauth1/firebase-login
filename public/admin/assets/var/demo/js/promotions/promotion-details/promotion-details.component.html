@@ -12,13 +12,13 @@
         <button type="button" class="btn btn-primary btn-o pull-right margin-top-5 margin-bottom-5 margin-left-5 btn-wide" ng-click="vm.backToPromotions()">
             Back to Promotions
         </button>    
-        <button type="button" class="btn btn-primary btn-o pull-right margin-top-5 margin-bottom-5 margin-left-5 btn-wide" ng-click="vm.exportShipments()" ng-disabled="vm.uiState.saveLoading">
-            <i class="ti-export"></i><span> Export Shipments</span>
-        </button>    
+        <button type="button" class="btn btn-primary btn-o pull-right margin-top-5 margin-bottom-5 margin-left-5 btn-wide" ng-click="vm.generatePdf('pdf')" ng-if="vm.state.promotion._id" ng-disabled="vm.uiState.saveLoading">
+            <i class="ti-export"></i><span> PDF Report</span>
+        </button>
         <button type="button" class="btn btn-primary btn-o pull-right margin-top-5 margin-bottom-5 margin-left-5 btn-wide" ng-click="vm.updatePromotion()" ng-disabled="vm.uiState.saveLoading" ng-if="vm.state.orgCardAndPermissions.permissions.promotion.edit">
             <i class="fa fa-check"></i><span> Save</span>
         </button>
-        <button type="button" class="btn btn-primary btn-o pull-right margin-top-5 margin-bottom-5 margin-left-5 btn-wide" ng-click="vm.deletePromotion()" ng-if="vm.state.orgCardAndPermissions.permissions.promotion.delete">
+        <button type="button" class="btn btn-primary btn-o pull-right margin-top-5 margin-bottom-5 margin-left-5 btn-wide" ng-click="vm.deletePromotion()" ng-if="vm.state.promotion._id && vm.state.orgCardAndPermissions.permissions.promotion.delete">
             <i class="fa fa-trash-o"></i><span> Delete</span>
         </button>
         <button type="button" ng-if="vm.state.promotion._id && vm.state.orgCardAndPermissions.permissions.promotion.shipments.edit" class="btn btn-primary btn-o pull-right margin-top-5 margin-bottom-5 margin-left-5 btn-wide" ng-click="vm.openModal('new-promotion-shipment-modal', 'PromotionShipmentModalController', 'lg')">

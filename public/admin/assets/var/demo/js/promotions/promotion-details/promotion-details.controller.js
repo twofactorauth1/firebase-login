@@ -35,6 +35,12 @@ function promotionDetailsController($scope, $window, $state, $attrs, $filter, $m
     vm.shipmentStatusOptions = PromotionsService.shipmentStatusOptions;
     vm.getPromoType = getPromoType;
     vm.exportShipments = exportShipments;
+    vm.generatePdf = generatePdf;
+
+    function generatePdf(view){
+        PromotionsService.generatePdf(vm.promotionId, view);
+    }
+    
     function backToPromotions(){
         $state.go("app.promotions");
     }
@@ -272,6 +278,30 @@ function promotionDetailsController($scope, $window, $state, $attrs, $filter, $m
             }));
             // Promo Sales
             getPromoSales();
+
+            // get unique VARs & customers
+
+            getUniqStats();
+        }
+    }
+
+    function getUniqStats(){
+        var shipmentsWithVars = _.filter(vm.state.shipments, function(shipment) {
+            return shipment.cardCode
+        })
+        if(shipmentsWithVars){
+           var _vars = _.pluck(shipmentsWithVars, "cardCode");
+           _vars = _.map(_vars, function(_var){return _var.toLowerCase()});
+           vm.state.shipmentStats.uniqVars = _.uniq(_vars).length;
+        }
+
+        var shipmentsWithCustomers = _.filter(vm.state.shipments, function(shipment) {
+            return shipment.customerDetails && shipment.customerDetails.customerName
+        })
+        if(shipmentsWithCustomers){
+           var _customers = _.pluck(_.pluck(shipmentsWithCustomers, "customerDetails"), "customerName");           
+           _customers = _.map(_customers, function(customer){return customer.trim().toLowerCase()});
+           vm.state.shipmentStats.uniqCustomers = _.uniq(_customers).length;
         }
     }
 
