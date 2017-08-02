@@ -21,6 +21,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
     initialize: function() {
         app.get(this.url('scheduled'), this.secureauth.bind(this, {requiresSub:true}), this.listScheduledJobs.bind(this));
+        app.post(this.url(':id/reschedule'), this.secureauth.bind(this, {requiresSub:true}), this.rescheduleJob.bind(this));
     },
 
     listScheduledJobs: function(req, resp) {
@@ -40,6 +41,28 @@ _.extend(api.prototype, baseApi.prototype, {
         });
     },
 
+    rescheduleJob: function(req, resp) {
+        var self = this;
+        var userId = self.userId(req);
+        var accountId = parseInt(self.accountId(req));
+        var jobId = req.params.id;
+        self.log.debug(accountId, userId, '>> rescheduleJob [' + jobId + ']');
+        self._isAdmin(req, function(err, value) {
+            if (value !== true) {
+                return self.send403(resp);
+            } else {
+                var newDate = null;
+                if(req.body.date) {
+                    newDate = moment(req.body.date).toDate();
+                }
+                manager.rescheduleJob(accountId, userId, jobId, newDate, function(err, value){
+                    self.log.debug(accountId, userId, '<< rescheduleJob');
+                    return self.sendResultOrError(resp, err, value, "Error rescheduling job");
+                });
+
+            }
+        });
+    },
 
 
     /**

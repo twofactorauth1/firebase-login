@@ -24,7 +24,7 @@
                             <th st-sort="count" style="margin-top: 1px;" ng-class="{'column-width': tableView == 'grid'}">Count</th>
                             <th class="hidden-xs" st-sort="lastRun"  ng-class="{'column-width': tableView == 'grid'}">Last Run</th>
                             <th class="hidden-xs" st-sort="nextRun"  ng-class="{'column-width': tableView == 'grid'}" style="white-space: nowrap;">Next Run</th>
-
+                            <th ng-class="{'column-width': tableView == 'grid'}" style="white-space: nowrap;"> </th>
                         </tr>
 
                         </thead>
@@ -35,7 +35,7 @@
                             <td><strong>Count: </strong>{{job.count}}</td>
                             <td class="hidden-xs"><strong>Last Run: </strong> <span class="text-adjust-table">{{job.lastRun}}</span><span ng-if="!job.lastRun">--</span></td>
                             <td class="hidden-xs"><strong>Next Run: </strong>{{job.nextRun}}</td>
-
+                            <td><a type="button" class="btn btn-success btn-block center" ng-click="vm.rescheduleJob('{{job.docid}}')">Run Now</a></td>
                         </tr>
                         </tbody>
                         <tfoot>
