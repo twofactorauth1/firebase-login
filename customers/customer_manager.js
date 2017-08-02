@@ -497,7 +497,7 @@ module.exports = {
             var name = customerId + "_" + new Date().getTime() + '.png';
             var tempFile = {
                 name: name,
-                path: 'tmp/' + name
+                path: './tmp/' + name
             };
             var tempFileName = tempFile.path;
             //var ssURL = "http://bozu.test.indigenous.io/";
@@ -511,7 +511,7 @@ module.exports = {
                 log.debug('stored screenshot at ' + tempFileName, tempFile.path);
                 tempFile.type = 'image/png';
                 s3dao.uploadToS3(bucket, subdir, tempFile, null, function(err, value){
-                    fs.unlink(tempFile.path, function(err, value){});
+                    //fs.unlink(tempFile.path, function(err, value){});
                     if(err) {
                         log.error('Error uploading to s3: ' + err);
                         fn(err, null);
@@ -537,7 +537,7 @@ module.exports = {
                 height: 'all'
             },
             renderDelay: 25000,
-            phantomConfig:{'ignore-ssl-errors': 'true'}
+            phantomConfig:{'ignore-ssl-errors': 'true', 'debug':'true'}
         };
         self.log.debug('calling webshot');
         webshot(uri, file, options, function(err) {
