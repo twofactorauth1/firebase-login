@@ -106,7 +106,8 @@
           "MAIN": "Platform",
           "MANAGE": "Customers",
           "ANALYTICS": "Platform Analytics",
-          "BROADCAST": "Broadcast Message"
+          "BROADCAST": "Broadcast Message",
+          "JOBS": "Jobs"
       },
       "commerce": {
         "MAIN": "Commerce",

@@ -116,6 +116,11 @@
                     <span class="title" translate="sidebar.nav.customers.BROADCAST"> Broadcast Message </span>
                 </a>
             </li>
+            <li ui-sref-active="active" ng-class="{'active': $state.includes('app.jobs')}">
+                <a ui-sref="app.jobs">
+                    <span class="title" translate="sidebar.nav.customers.JOBS"> Jobs </span>
+                </a>
+            </li>
         </ul>
     </li>
 	<li ng-class="{'active open':$state.includes('app.commerce.products') || $state.includes('app.commerce.orders') || $state.includes('app.commerce.orderdetail')}">
