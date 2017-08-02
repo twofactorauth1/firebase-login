@@ -453,8 +453,7 @@ module.exports = {
                                 if(err) {
                                     self.log.error(accountId, userId, 'Error saving customer template account:', err);
                                     return fn(err);
-                                }
-                                else{
+                                } else{
                                     savedCustomer.set("templateImageUrl", url);
                                     accountDao.saveOrUpdate(account, function(err, updatedCustomer){
                                         if(err) {
@@ -466,9 +465,8 @@ module.exports = {
                                         }
                                     })
                                 }
-                            })
-                        }
-                        else{
+                            });
+                        } else{
                           return fn(null, savedCustomer);  
                         }
                         
@@ -490,7 +488,7 @@ module.exports = {
                 log.error('Error getting server url: ' + err);
                 return fn(err, null);
             }
-            log.debug('got server url');
+            log.debug('got server url', serverUrl);
 
             if(serverUrl.indexOf('.local') >0) {
                 serverUrl = serverUrl.replace('indigenous.local:3000', 'test.indigenous.io');
@@ -528,6 +526,7 @@ module.exports = {
     },
 
     _download: function(uri, file, callback){
+        var self = this;
         var options = {
             screenSize: {
                 width: 1280,
@@ -538,10 +537,13 @@ module.exports = {
                 height: 'all'
             },
             renderDelay: 25000
-        }    
+        };
         webshot(uri, file, options, function(err) {
+            if(err) {
+                self.log.error('Error during webshot:', err);
+            }
             callback(file);
         });
-    },
+    }
 
 };
