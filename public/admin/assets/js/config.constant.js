@@ -690,6 +690,7 @@ app.constant('JS_REQUIRES', {
     'UsersCtrl': 'assets/js/users/users.controller.js',
     'MessagesCtrl': 'assets/js/messages/messages.controller.js',
     'BroadcastMessageEditorCtrl': 'assets/js/messages/broadcast-message-editor/broadcast-message-editor.controller.js',
+    'JobsCtrl' : 'assets/js/jobs/jobs.controller.js',
 
     // Campaign Recipient Details
 
@@ -723,6 +724,7 @@ app.constant('JS_REQUIRES', {
     'broadcastMessagesService': 'assets/js/messages/messages.service.js',
     'utilService': 'assets/js/services/util.js',
     'contactPagingService': 'assets/js/services/contactPagingService.js',
+    'jobsService' : 'assets/js/jobs/jobs.service.js',
     //*** Filters
     'htmlToPlaintext': 'assets/js/filters/htmlToPlaintext.js',
     'secTotime': 'assets/js/filters/secTotime.js',

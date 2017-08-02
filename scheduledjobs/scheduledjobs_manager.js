@@ -157,6 +157,27 @@ var scheduledJobManager = {
         });
     },
 
+    listUniqueJobs: function(accountId, userId, fn) {
+        var self = this;
+        self.log.debug(accountId, userId, '>> listUniqueJobs');
+        var stageAry = [];
+        var group = {$group:{_id:{$substr:['$job', 0, 50]}, count:{$sum:1}, lastRun:{$max:'$completedAt'}, nextRun:{$max:'$scheduledAt'}}};
+        stageAry.push(group);
+        var match = {$match:{_id:{$ne:''}}};
+        stageAry.push(match);
+        var sort = {$sort:{nextRun:-1}};
+        stageAry.push(sort);
+        dao.aggregateWithCustomStages(stageAry, $$.m.ScheduledJob, function(err, list){
+            if(err) {
+                self.log.error(accountId, userId, 'Error in aggregation:', err);
+                fn(err);
+            } else {
+                self.log.debug(accountId, userId, '<< listUniqueJobs');
+                fn(null, list);
+            }
+        });
+    },
+
     _findAllIncompleteJobs: function(callback) {
         var self = this;
         self.log.debug('>> _findAllIncompleteJobs');

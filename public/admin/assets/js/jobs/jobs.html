@@ -1,0 +1,50 @@
+<div class="contacts customers jobs" ng-controller="jobsCtrl as vm">
+    <section id="page-title" class="padding-top-15 padding-bottom-15">
+        <div class="row">
+            <div class="col-sm-8">
+                <h1 class="mainTitle" translate="sidebar.nav.customers.JOBS"></h1>
+                <span ng-if="vm.state.jobs" class="mainDescription"><widget-header-label count="{{vm.state.jobs.length}}" item="job"></widget-header-label>. <span ng-if="showFilteredRecords()"> ({{filteredCollection.length || 0 | number : 0}} in filtered view)</span></span>
+                    <span ng-if="!vm.state.jobs" class="mainDescription">
+                    Loading jobs...
+                    </span>
+            </div>
+        </div>
+    </section>
+
+    <div st-table="displayedJobs" st-sort-table st-safe-src="vm.state.jobs" st-filtered-collection>
+
+        <div class="container-fluid container-fullw padding-top-0 padding-bottom-0">
+            <div class="panel panel-transparent row margin-bottom-0">
+                <div class="panel-body">
+                    <table class="table table-striped table-hover bg-white margin-bottom-0" ng-class="{'grid': tableView == 'grid', 'bg-white table-list-view': tableView == 'list'}" ng-show="vm.state.jobs">
+                        <thead ng-class="{'bg-white': tableView == 'grid'}">
+                        <tr>
+                            <th ng-class="{'column-width': tableView == 'grid'}" ng-click='selectAllClickFn($event)' ng-show='vm.state.jobs.length'><i class="fa fa-2x" ng-class='{"fa-check-circle": selectAllChecked, "fa-circle-o": !selectAllChecked}'></i></th>
+                            <th st-sort="_id" st-sort-default="reverse"  ng-class="{'column-width': tableView == 'grid'}">Job</th>
+                            <th st-sort="count" style="margin-top: 1px;" ng-class="{'column-width': tableView == 'grid'}">Count</th>
+                            <th class="hidden-xs" st-sort="lastRun"  ng-class="{'column-width': tableView == 'grid'}">Last Run</th>
+                            <th class="hidden-xs" st-sort="nextRun"  ng-class="{'column-width': tableView == 'grid'}" style="white-space: nowrap;">Next Run</th>
+
+                        </tr>
+
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="job in vm.state.jobs" ng-click="viewSingle(job)">
+                            <td ng-show='vm.state.jobs.length'><i class="fa fa-2x" ng-click='customerSelectClickFn($event, job)' ng-class='{"fa-check-circle": job.isSelected, "fa-circle-o": !job.isSelected}'></i></td>
+                            <td><strong>Job: </strong>{{job._id}}</td>
+                            <td><strong>Count: </strong>{{job.count}}</td>
+                            <td class="hidden-xs"><strong>Last Run: </strong> <span class="text-adjust-table">{{job.lastRun}}</span><span ng-if="!job.lastRun">--</span></td>
+                            <td class="hidden-xs"><strong>Next Run: </strong>{{job.nextRun}}</td>
+
+                        </tr>
+                        </tbody>
+                        <tfoot>
+
+                        </tfoot>
+                    </table>
+                    <div class="load1 csspinner height-400" ng-show="!vm.state.jobs"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

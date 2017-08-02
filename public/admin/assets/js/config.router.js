@@ -289,7 +289,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
          templateUrl: '/admin/assets/js/jobs/jobs.html',
          title: 'Jobs',
          icon: 'ti-layout-media-left-alt',
-         resolve: loadSequence('MessagesCtrl', 'broadcastMessagesService')
+         resolve: loadSequence('JobsCtrl', 'jobsService')
     })
 
     // Login routes

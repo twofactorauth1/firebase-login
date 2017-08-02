@@ -53,6 +53,7 @@ var userActivityApi = require('./1.0/useractivity.api');
 //Admin
 var adminUserApi = require('./1.0/admin/user.api');
 var adminAccountApi = require('./1.0/admin/account.api');
+var adminJobsApi = require('./1.0/admin/jobs.api');
 
 //2.0
 var cms2Api = require('./2.0/cms.api');
