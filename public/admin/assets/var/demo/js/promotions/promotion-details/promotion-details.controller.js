@@ -35,6 +35,12 @@ function promotionDetailsController($scope, $window, $state, $attrs, $filter, $m
     vm.shipmentStatusOptions = PromotionsService.shipmentStatusOptions;
     vm.getPromoType = getPromoType;
     vm.exportShipments = exportShipments;
+    vm.generatePdf = generatePdf;
+
+    function generatePdf(view){
+        PromotionsService.generatePdf(vm.promotionId, view);
+    }
+    
     function backToPromotions(){
         $state.go("app.promotions");
     }
