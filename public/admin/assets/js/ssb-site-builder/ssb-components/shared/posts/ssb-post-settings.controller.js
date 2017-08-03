@@ -6,7 +6,6 @@ app.controller('ssbPostSettingsModalCtrl', ['$scope', '$rootScope', '$http', '$t
     $scope.availablePostTags = [];
     $scope.availablePostCategories = [];
     WebsiteService.getPosts(function (posts) {
-      //$scope.posts = posts;
       var tags = [];
       var categories = [];
       
@@ -17,5 +16,4 @@ app.controller('ssbPostSettingsModalCtrl', ['$scope', '$rootScope', '$http', '$t
       var availablePostCategories = _.uniq(_.without(_.flatten(categories), null));
       $scope.availablePostCategories = _.uniq(_.without(_.pluck(availablePostCategories, "text"), null));
     });
-
 }]);
