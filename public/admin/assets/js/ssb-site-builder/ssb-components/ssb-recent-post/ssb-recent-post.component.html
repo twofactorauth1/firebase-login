@@ -1,6 +1,6 @@
 <div ng-class="component.type+'-v'+component.version">
-    <div  class="col-xs-12" ng-if="vm.blog.posts.length>0" >
-        <h3>
+    <div  class="col-xs-12 r-post" ng-if="vm.blog.posts.length>0" >
+        <h3 ng-attr-style="{{vm.titleStyle()}}">
             <div elem ng-model="vm.component.title"></div>
         </h3>
         <div class="margin-bottom-5" ng-repeat="post in vm.blog.posts | orderBy:'-created.date' | orderBy:vm.sortBlogPosts:true | limitTo:(vm.showNumberOfPosts())" ng-hide="$first">
