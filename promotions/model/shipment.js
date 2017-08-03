@@ -165,7 +165,7 @@ var shipment = $$.m.ModelBase.extend({
     },
 
     getShipmentVar: function(){
-        return this.get("companyName") ? this.get("companyName").toLowerCase() : ""; 
+        return this.get("cardCode") ? this.get("cardCode").toLowerCase() : ""; 
     },
 
     initialize: function(options) {
