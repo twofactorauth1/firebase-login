@@ -711,7 +711,7 @@ var ziManager = {
             self.log.error('Error scheduling inventoryjob:', exception);
             emailMessageManager.notifyAdmin('devops@indigenous.io', 'devops@indigenous.io', null,
                 'Error loading scheduled inventory:', '', exception, function(_err, value){
-                    fn(err);
+                    //fn(err);
                 });
         }
     },

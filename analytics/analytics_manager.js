@@ -210,7 +210,7 @@ module.exports = {
                                             country: ''
                                         };
                                         sessionEvent.set('maxmind', replacementObject);
-                                        log.warn('Could not find geo info for ' + sessionEvent.get('ip_address'));
+                                        _log.warn('Could not find geo info for ' + sessionEvent.get('ip_address'));
                                     }
                                     dao.saveOrUpdate(sessionEvent, fn);
                                 });
