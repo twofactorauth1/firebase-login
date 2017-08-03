@@ -290,7 +290,7 @@ function promotionDetailsController($scope, $window, $state, $attrs, $filter, $m
             return shipment.cardCode
         })
         if(shipmentsWithVars){
-           var _vars = _.pluck(shipmentsWithVars, "cardCode");
+           var _vars = _.pluck(shipmentsWithVars, "companyName");
            _vars = _.map(_vars, function(_var){return _var.toLowerCase()});
            vm.state.shipmentStats.uniqVars = _.uniq(_vars).length;
         }
