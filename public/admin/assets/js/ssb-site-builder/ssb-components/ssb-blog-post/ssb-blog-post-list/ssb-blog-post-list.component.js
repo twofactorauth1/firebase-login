@@ -13,7 +13,8 @@ function ssbBlogPostListComponent() {
         ssbEditor: '=',
         componentClass: '&',
         component: '=',
-        blog: '=?'
+        blog: '=?',
+        website: '='
     },
     templateUrl: '/admin/assets/js/ssb-site-builder/ssb-components/ssb-blog-post/ssb-blog-post-list/ssb-blog-post-list.component.html',
     replace: true,

@@ -26,7 +26,7 @@
             ind-slider='{ adaptiveHeight: true, slidesToShow:1, dots:true, arrows:false, autoplay:false, touchMove:true, draggable:true }'>
             <section
                 class="img-row col-sm-12 col-xs-12"
-                ng-repeat="post in vm.blog.posts | filter:{ featured: true } | ssbPostFilter:vm.component track by $index"
+                ng-repeat="post in vm.blog.posts | ssbPostFilter:vm.component:true track by $index"
                 ssb-blog-post-card-component
                 post="post">
             </section>
