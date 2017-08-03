@@ -13,6 +13,8 @@
 
     </div> -->
 
+
+
     <div class="row padding-10">
         <div ng-if="childComponent.type !== 'ssb-recent-post' &&
                     childComponent.type !== 'ssb-recent-tag'  &&
@@ -21,7 +23,17 @@
                 <i class="fa {{vm.uiState.componentIcons[childComponent.type].icon || 'fa-align-justify'}} display-ib"></i> Manage {{childComponent.type | cleanType}}
             </button>
         </div>
-
+        
+        <button ng-if=" ( component.components[0] &&
+                            (
+                                component.components[0].type == 'ssb-recent-post'||
+                                component.components[0].type == 'ssb-recent-tag' ||
+                                component.components[0].type == 'ssb-recent-category' ||
+                                component.components[0].type == 'ssb-blog-post-list'
+                            )
+                         )" ng-click="vm.uiState.navigation.sectionPanel.loadPanel({ name: 'posts', id: 'blog-post-filter'});" class="ssb-sidebar-section-panel-btn btn btn-link">
+            <i class="fa fa-align-justify display-ib"></i> Posts
+        </button>
         <button ng-click="vm.uiState.navigation.sectionPanel.loadPanel({ name: 'Style', id: 'design' })" class="ssb-sidebar-section-panel-btn btn btn-link">
             <i class="fa fa-magic display-ib"></i> Style {{component.component[0].type}}
         </button>
@@ -37,6 +49,9 @@
                          component.title === 'Blog Post Detail'" ng-click="vm.uiState.navigation.sectionPanel.loadPanel({ name: 'Layout', id: 'version' })" class="ssb-sidebar-section-panel-btn btn btn-link">
             <i class="fa fa-clone display-ib"></i> Layout
         </button>
+
+
+        
 
         <button ng-click="vm.uiState.navigation.sectionPanel.loadPanel({ name: 'Size &amp; Padding', id: 'layout' })" class="ssb-sidebar-section-panel-btn btn btn-link">
             <i class="fa fa-arrows-alt display-ib"></i> Size &amp; Padding

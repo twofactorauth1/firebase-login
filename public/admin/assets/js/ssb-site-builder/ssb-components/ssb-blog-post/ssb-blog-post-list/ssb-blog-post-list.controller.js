@@ -53,12 +53,13 @@ function ssbBlogPostListComponentController(SimpleSiteBuilderBlogService, $scope
     });
 
     function initData() {
-        var posts = SimpleSiteBuilderBlogService.loadDataFromPage('#indigenous-precache-sitedata-posts') || window.indigenous.precache.siteData.posts;
-        if (posts) {
-            if(vm.filteredPostView){
+        var totalPosts = SimpleSiteBuilderBlogService.loadDataFromPage('#indigenous-precache-sitedata-posts') || window.indigenous.precache.siteData.posts;
+        vm.orginalPosts = angular.copy(totalPosts);
+        if (totalPosts) {
+            filterPosts(totalPosts, function (posts) {
+              if(vm.filteredPostView){
                 if(vm.blog.currentAuthor){
                     posts =  posts.filter(function(post){
-                        // console.log(post)
                         return post.post_author === vm.blog.currentAuthor
                     })
                 }
@@ -89,6 +90,8 @@ function ssbBlogPostListComponentController(SimpleSiteBuilderBlogService, $scope
             
             vm.blog.posts = posts;
             checkHasFeaturedPosts();
+            });
+            
         }
     }
 
@@ -112,7 +115,65 @@ function ssbBlogPostListComponentController(SimpleSiteBuilderBlogService, $scope
 
         return styleString;
     }
+
+    function filterPosts(data, fn) {
+        var _filteredPosts = [];
+        _.each(data, function (post) {
+            if (filterTags(post)) {
+                if(filterCategory(post)){
+                    _filteredPosts.push(post);
+                }     
+            }
+        });
+        return fn(_filteredPosts);
+    }
     
+
+    function filterTags(post) {
+        var _tags = vm.component.postTags;
+        if (_tags && _tags.length > 0) {
+            if (post.post_tags) {
+                if (_.intersection(_tags, post.post_tags).length > 0) {
+                    return true;
+                }
+            }
+        } else {
+            return true;
+        }
+    }
+
+
+    function filterCategory(post) {
+        var _categories = vm.component.postCategories;        
+        if (_categories && _categories.length > 0) {
+            if (post.post_categories) {
+                if (_.intersection(_categories, _.pluck(post.post_categories, "text")).length > 0) {
+                    return true;
+                }
+            }
+        } else {
+            return true;
+        }
+    }
+
+    $scope.$watch('vm.component.postTags', function (newValue, oldValue) {
+        if (newValue !== oldValue) {
+          filterPosts(vm.orginalPosts, function (posts) {
+            vm.blog.posts = posts;
+            checkHasFeaturedPosts();
+          });
+        }
+      });
+
+
+      $scope.$watch('vm.component.postCategories', function (newValue, oldValue) {
+        if (newValue !== oldValue) {
+          filterPosts(vm.orginalPosts, function (posts) {
+            vm.blog.posts = posts;
+            checkHasFeaturedPosts();
+          });
+        }
+      });
 
     function init(element) {
 

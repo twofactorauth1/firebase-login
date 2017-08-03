@@ -87,6 +87,16 @@
             ui-state="vm.uiState">
         </ssb-sidebar-settings-panel>
 
+        <!-- Section Settings POSTS -->
+        <ssb-sidebar-settings-panel
+            class="ssb-sidebar-section-panel-component-panel container-fluid"
+            ng-if="'blog-post-filter' === vm.uiState.openSidebarSectionPanel.id"
+            settings-template="assets/js/ssb-site-builder/ssb-components/shared/posts/section-posts.html"
+            component="vm.state.page.sections[vm.uiState.activeSectionIndex]"
+            state="vm.state"
+            ui-state="vm.uiState">
+        </ssb-sidebar-settings-panel>
+
         <!-- Component Settings Home -->
         <ssb-sidebar-settings-panel
             class="ssb-sidebar-section-panel-component-panel container-fluid"
