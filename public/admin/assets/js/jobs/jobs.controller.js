@@ -2,7 +2,7 @@
 /*global app, moment, angular, window*/
 /*jslint unparam:true*/
 (function (angular) {
-    app.controller('jobsCtrl', ['$scope', "JobsService", function ($scope, JobsService) {
+    app.controller('jobsCtrl', ['$scope', "JobsService", 'toaster', function ($scope, JobsService, toaster) {
 
         var vm = this;
 
@@ -11,6 +11,13 @@
 
         vm.uiState = {
             loading: true
+        };
+        vm.rescheduleJob = rescheduleJob;
+
+        function rescheduleJob(jobId) {
+            console.log('controller reschedule job');
+            JobsService.rescheduleJob(jobId);
+            toaster.pop('success', 'Job rescheduled.');
         };
 
 

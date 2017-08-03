@@ -17,6 +17,7 @@
         jobsService.loading = {value:0};
 
         jobsService.listJobs = listJobs;
+        jobsService.rescheduleJob = rescheduleJob;
 
         function jobsRequest(fn) {
             jobsService.loading.value = jobsService.loading.value + 1;
@@ -37,6 +38,18 @@
             }
 
             return jobsRequest($http.get(baseJobsUrl).success(success).error(error));
+        }
+
+        function rescheduleJob(jobId) {
+            var url = [baseAPIUrl, jobId, 'reschedule'].join('/');
+            function success(data) {
+                console.log('successfully rescheduled');
+            }
+            function error(error) {
+                console.error('jobsService listJobs error: ', JSON.stringify(error));
+            }
+
+            return jobsRequest($http.post(url).success(success).error(error));
         }
 
 

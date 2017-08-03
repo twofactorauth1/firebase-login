@@ -636,7 +636,7 @@ app.constant('JS_REQUIRES', {
     'addComponentModalCtrl': 'assets/js/controllers/modals/addComponentModalCtrl.js',
     'componentSettingsModalCtrl': 'assets/js/controllers/modals/componentSettingsModalCtrl.js',
     'ssbComponentSettingsModalCtrl': 'assets/js/controllers/modals/ssbComponentSettingsModalCtrl.js',
-    'ssbPostSettingsModalCtrl': 'assets/js/ssb-site-builder/ssb-components/blog-teaser/posts/ssb-post-settings.controller.js',
+    'ssbPostSettingsModalCtrl': 'assets/js/ssb-site-builder/ssb-components/shared/posts/ssb-post-settings.controller.js',
     'mediaModalCtrl': 'assets/js/controllers/modals/mediaModalCtrl.js',
     'templateSettingsModalCtrl': 'assets/js/controllers/modals/templateSettingsModalCtrl.js',
     'importContactModalCtrl': 'assets/js/controllers/modals/importContactModalCtrl.js',
@@ -810,7 +810,8 @@ app.constant('JS_REQUIRES', {
     'filterPages': 'assets/js/filters/filterPages.js',
     'sortListPages': 'assets/js/filters/sortListPages.js',
     'productTableFilter': 'assets/js/filters/productTableFilter.js',
-
+    'ssbPostFilter': 'assets/js/ssb-site-builder/ssb-components/ssb-filters/ssb-post-filter.js',
+    
     //*** Directives
     'mediaModal': 'assets/js/directives/mediadirective.js',
     'uiSelectChoices': 'assets/var/demo/js/directives/uiSelectChoices.js',

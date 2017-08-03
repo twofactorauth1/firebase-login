@@ -161,12 +161,13 @@ var scheduledJobManager = {
         var self = this;
         self.log.debug(accountId, userId, '>> listUniqueJobs');
         var stageAry = [];
-        var group = {$group:{_id:{$substr:['$job', 0, 50]}, count:{$sum:1}, lastRun:{$max:'$completedAt'}, nextRun:{$max:'$scheduledAt'}}};
-        stageAry.push(group);
-        var match = {$match:{_id:{$ne:''}}};
+
+        var match = {$match:{_id:{$ne:'__counter__'}}};
         stageAry.push(match);
-        var sort = {$sort:{nextRun:-1}};
+        var sort = {$sort:{scheduledAt:-1}};
         stageAry.push(sort);
+        var group = {$group:{_id:{$substr:['$job', 0, 50]}, count:{$sum:1}, lastRun:{$max:'$completedAt'}, nextRun:{$max:'$scheduledAt'}, docid:{$first:'$_id'}}};
+        stageAry.push(group);
         dao.aggregateWithCustomStages(stageAry, $$.m.ScheduledJob, function(err, list){
             if(err) {
                 self.log.error(accountId, userId, 'Error in aggregation:', err);
@@ -174,6 +175,38 @@ var scheduledJobManager = {
             } else {
                 self.log.debug(accountId, userId, '<< listUniqueJobs');
                 fn(null, list);
+            }
+        });
+    },
+
+    rescheduleJob: function(accountId, userId, jobId, newDate, fn) {
+        var self = this;
+        self.log.debug(accountId, userId, '>> rescheduleJob');
+        if(!jobId) {
+            self.log.error(accountId, userId, 'No jobId supplied');
+            return fn('No jobId supplied');
+        }
+        dao.findOne({_id:jobId}, $$.m.ScheduledJob, function(err, job){
+            if(err) {
+                self.log.error(accountId, userId, 'Error finding job:', err);
+                fn(err);
+            } else {
+                if(!newDate) {
+                    newDate = new Date();
+                }
+                job.set('scheduledAt', newDate);
+                job.set('runAt',null);
+                job.set('completedAt', null);
+                job.set('executing', false);
+                self.scheduleJob(job, function(err, value){
+                    if(err) {
+                        self.log.error(accountId, userId, 'Error saving job:', err);
+                        fn(err);
+                    } else {
+                        self.log.debug(accountId, userId, '<< rescheduleJob');
+                        return fn(null, value);
+                    }
+                });
             }
         });
     },
@@ -199,8 +232,12 @@ var scheduledJobManager = {
     _scheduleJob:function(job, fn) {
         var self = this;
         self.log.debug('>> _scheduleJob');
-        self.scheduler.schedule(job.get('scheduledAt'), self.JOB_KEY, {jobId:job.id()});
-        self.log.debug('Scheduling: [' + job.id() + '] at ' + job.get('scheduledAt'));
+        if(self.scheduler) {
+            self.scheduler.schedule(job.get('scheduledAt'), self.JOB_KEY, {jobId:job.id()});
+            self.log.debug('Scheduling: [' + job.id() + '] at ' + job.get('scheduledAt'));
+        } else {
+            self.log.warn('Cannot schedule job. No scheduler set.');
+        }
         self.log.debug('<< _scheduleJob');
         fn();
     },
