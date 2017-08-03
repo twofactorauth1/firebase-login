@@ -810,7 +810,8 @@ app.constant('JS_REQUIRES', {
     'filterPages': 'assets/js/filters/filterPages.js',
     'sortListPages': 'assets/js/filters/sortListPages.js',
     'productTableFilter': 'assets/js/filters/productTableFilter.js',
-
+    'ssbPostFilter': 'assets/js/ssb-site-builder/ssb-components/ssb-filters/ssb-post-filter.js',
+    
     //*** Directives
     'mediaModal': 'assets/js/directives/mediadirective.js',
     'uiSelectChoices': 'assets/var/demo/js/directives/uiSelectChoices.js',

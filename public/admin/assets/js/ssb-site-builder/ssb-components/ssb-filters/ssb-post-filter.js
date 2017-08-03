@@ -3,8 +3,8 @@
 app.filter('ssbPostFilter', function () {
     return function (posts, component) {
 
-        return filterPosts(posts);
-
+        //return filterPosts(posts);
+        return posts;
         function filterPosts(posts) {
             var _filteredPosts = [];
             _.each(posts, function (post) {
