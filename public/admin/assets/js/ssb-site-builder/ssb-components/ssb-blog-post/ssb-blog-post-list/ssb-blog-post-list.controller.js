@@ -54,11 +54,12 @@ function ssbBlogPostListComponentController(SimpleSiteBuilderBlogService, $scope
 
     function initData() {
         var posts = SimpleSiteBuilderBlogService.loadDataFromPage('#indigenous-precache-sitedata-posts') || window.indigenous.precache.siteData.posts;
+        
         if (posts) {
+           
             if(vm.filteredPostView){
                 if(vm.blog.currentAuthor){
                     posts =  posts.filter(function(post){
-                        // console.log(post)
                         return post.post_author === vm.blog.currentAuthor
                     })
                 }
@@ -89,6 +90,7 @@ function ssbBlogPostListComponentController(SimpleSiteBuilderBlogService, $scope
             
             vm.blog.posts = posts;
             checkHasFeaturedPosts();
+            
         }
     }
 
@@ -112,8 +114,8 @@ function ssbBlogPostListComponentController(SimpleSiteBuilderBlogService, $scope
 
         return styleString;
     }
-    
 
+    
     function init(element) {
 
     	vm.element = element;
