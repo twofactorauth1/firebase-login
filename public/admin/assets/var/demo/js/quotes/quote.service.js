@@ -5,9 +5,9 @@
 
 	app.factory('QuoteService', QuoteService);
 
-	QuoteService.$inject = ['$rootScope', '$http', '$q', '$timeout', '$location'];
+	QuoteService.$inject = ['$rootScope', '$http', '$timeout', '$location', '$filter'];
 	/* @ngInject */
-	function QuoteService($rootScope, $http, $q, $timeout, $location) {
+	function QuoteService($rootScope, $http, $timeout, $location, $filter) {
 
 
         var quoteService = {
@@ -138,7 +138,9 @@
         function getCustomers() {
 
             function success(data) {
-                quoteService.customers = data.results;
+                var _list = data.results;
+                _list = $filter('orderBy')(_list, ["OCRD_CardName", "OCRD_CardCode"]);
+                quoteService.customers = _list;
             }
 
             function error(error) {

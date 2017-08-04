@@ -32,11 +32,10 @@
                         >
                         <ui-select-match
                             placeholder="VAR Name">
-                            {{$select.selected.OCRD_CardName}}
+                            {{$select.selected.OCRD_CardName}} ({{$select.selected.OCRD_CardCode}})
                         </ui-select-match>
                         <ui-select-choices  all-choices="vm.state.customers" repeat="customer.OCRD_CardCode as customer in $select.pageOptions.customers | propsFilter: {OCRD_CardName: $select.search}" refresh-delay="0">
-                            <div ng-bind-html="customer.OCRD_CardName | highlight: $select.search"></div>
-                          </small>
+                            <span ng-bind-html="customer.OCRD_CardName"></span><span> ({{customer.OCRD_CardCode}})</span>
                         </ui-select-choices>
 
                     </ui-select>
@@ -49,11 +48,10 @@
                         >
                         <ui-select-match
                             placeholder="VAR Name">
-                            {{$select.selected.OCRD_CardName}}
+                            {{$select.selected.OCRD_CardName}} ({{$select.selected.OCRD_CardCode}})
                         </ui-select-match>
                         <ui-select-choices repeat="customer.OCRD_CardCode as customer in vm.state.customers | propsFilter: {OCRD_CardName: $select.search}" refresh-delay="0">
-                            <div ng-bind-html="customer.OCRD_CardName | highlight: $select.search"></div>
-                          </small>
+                            <span ng-bind-html="customer.OCRD_CardName"></span><span> ({{customer.OCRD_CardCode}})</span>
                         </ui-select-choices>
 
                     </ui-select>

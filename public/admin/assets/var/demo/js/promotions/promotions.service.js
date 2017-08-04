@@ -5,9 +5,9 @@
 
 	app.factory('PromotionsService', PromotionsService);
 
-	PromotionsService.$inject = ['$http', '$location', '$timeout'];
+	PromotionsService.$inject = ['$http', '$location', '$timeout', '$filter'];
 	/* @ngInject */
-	function PromotionsService($http, $location, $timeout) {
+	function PromotionsService($http, $location, $timeout, $filter) {
         var promotionsService = {};
         promotionsService.loading = {value: 0};
         
@@ -306,7 +306,10 @@
         function getCustomers() {
 
             function success(data) {
-                promotionsService.customers = data.results;
+                // Sort list on basis of name
+                var _list = data.results;
+                _list = $filter('orderBy')(_list, ["OCRD_CardName", "OCRD_CardCode"]);
+                promotionsService.customers = _list;
             }
 
             function error(error) {

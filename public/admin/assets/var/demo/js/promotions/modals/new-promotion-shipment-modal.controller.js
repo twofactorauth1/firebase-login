@@ -58,6 +58,15 @@ app.controller('PromotionShipmentModalController', ['$scope', '$timeout', 'paren
     $scope.$watch(function() { return PromotionsService.customers }, function(customers) {
         
         if(angular.isDefined(customers)){
+
+            //Filter customers on basis of participants
+
+            if(vm.parentVm.state.promotion && vm.parentVm.state.promotion.participants && vm.parentVm.state.promotion.participants.length){
+                customers = _.filter(customers, function(customer){
+                    return _.contains(_.pluck(vm.parentVm.state.promotion.participants, "cardCode"), customer.OCRD_CardCode)
+                })
+            }
+
             vm.state.customers = _.map(
                 customers, 
                 function(customer) {
@@ -65,13 +74,11 @@ app.controller('PromotionShipmentModalController', ['$scope', '$timeout', 'paren
                 }
             );
             vm.uiState.loadingShipmentModal = false;   
-            var isVendor = vm.state.orgCardAndPermissions && vm.state.orgCardAndPermissions.isVendor;
-            if(isVendor){
-                if(vm.state.customers && vm.state.customers.length == 1){
-                    vm.state.shipment.cardCode = vm.state.customers[0].OCRD_CardCode;
-                    vm.state.shipment.companyName = vm.state.customers[0].OCRD_CardName;
-                }
-            }         
+            
+            if(vm.state.customers && vm.state.customers.length == 1){
+                vm.state.shipment.cardCode = vm.state.customers[0].OCRD_CardCode;
+                vm.state.shipment.companyName = vm.state.customers[0].OCRD_CardName;
+            }    
         }
     }, true);
 
