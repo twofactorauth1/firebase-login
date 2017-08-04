@@ -96,7 +96,8 @@ var account = $$.m.ModelBase.extend({
                 new_orders: true,
                 helpful_tips: true,
                 no_notifications: false,
-                senderAddress:null
+                senderAddress:null,
+                receiveInsights: true
             },
             commerceSettings : {
                 taxes : false,
