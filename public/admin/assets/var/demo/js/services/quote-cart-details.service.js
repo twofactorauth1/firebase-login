@@ -1,7 +1,7 @@
 (function () {
     app.factory('QuoteCartDetailsService', QuoteCartDetailsService);
-    QuoteCartDetailsService.$inject = ['$rootScope', '$http'];
-    function QuoteCartDetailsService($rootScope, $http){
+    QuoteCartDetailsService.$inject = ['$rootScope', '$http', '$filter'];
+    function QuoteCartDetailsService($rootScope, $http, $filter){
         var quoteCartService = {};
 
 
@@ -227,7 +227,9 @@
         function getCustomers() {
 
             function success(data) {
-                quoteCartService.customers = data.results;
+                var _list = data.results;
+                _list = $filter('orderBy')(_list, ["OCRD_CardName", "OCRD_CardCode"]);
+                quoteCartService.customers = _list;
             }
 
             function error(error) {

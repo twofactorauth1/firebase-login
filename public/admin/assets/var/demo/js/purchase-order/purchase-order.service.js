@@ -5,9 +5,9 @@
 
 	app.factory('PurchaseOrderService', PurchaseOrderService);
 
-	PurchaseOrderService.$inject = ['$rootScope', '$http', '$q', '$timeout', '$location'];
+	PurchaseOrderService.$inject = ['$rootScope', '$http', '$timeout', '$location', '$filter'];
 	/* @ngInject */
-	function PurchaseOrderService($rootScope, $http, $q, $timeout, $location) {
+	function PurchaseOrderService($rootScope, $http, $timeout, $location, $filter) {
 
 
         var poService = {
@@ -211,7 +211,9 @@
         function getCustomers() {
 
             function success(data) {
-                poService.customers = data.results;
+                var _list = data.results;
+                _list = $filter('orderBy')(_list, ["OCRD_CardName", "OCRD_CardCode"]);
+                poService.customers = _list;
             }
 
             function error(error) {

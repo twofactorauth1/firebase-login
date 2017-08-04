@@ -1,10 +1,10 @@
 'use strict';
 
 app.filter('ssbPostFilter', function () {
-    return function (posts, component) {
+    return function (posts, component, featured) {
 
-        //return filterPosts(posts);
-        return posts;
+        return filterPosts(posts);
+        //return posts;
         function filterPosts(posts) {
             var _filteredPosts = [];
             _.each(posts, function (post) {
@@ -14,6 +14,11 @@ app.filter('ssbPostFilter', function () {
                     }     
                 }
             });
+            if(featured){
+                _filteredPosts = _.filter(_filteredPosts, function(post){
+                    return post.featured
+                })
+            }
             return _filteredPosts;
         }
 
@@ -22,7 +27,10 @@ app.filter('ssbPostFilter', function () {
             var _tags = component.postTags;
             if (_tags && _tags.length > 0) {
                 if (post.post_tags) {
-                    if (_.intersection(_tags, post.post_tags).length > 0) {
+                    var post_tags = _.map(post.post_tags, function(tag){
+                        return tag.text ? tag.text : tag
+                    })
+                    if (_.intersection(_tags, post_tags).length > 0) {
                         return true;
                     }
                 }

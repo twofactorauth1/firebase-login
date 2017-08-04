@@ -24,7 +24,7 @@
             </button>
         </div>
         
-        <button ng-if="component.components[0] && component.components[0].type == 'ssb-blog-post-list'" ng-click="vm.uiState.navigation.sectionPanel.loadPanel({ name: 'posts', id: 'blog-post-filter'});" class="ssb-sidebar-section-panel-btn btn btn-link">
+        <button ng-if="component.components[0] && (component.components[0].type == 'ssb-blog-post-list' || component.components[0].type == 'ssb-recent-post')" ng-click="vm.uiState.navigation.sectionPanel.loadPanel({ name: 'posts', id: 'blog-post-filter'});" class="ssb-sidebar-section-panel-btn btn btn-link">
             <i class="fa fa-align-justify display-ib"></i> Posts
         </button>
         <button ng-click="vm.uiState.navigation.sectionPanel.loadPanel({ name: 'Style', id: 'design' })" class="ssb-sidebar-section-panel-btn btn btn-link">

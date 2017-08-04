@@ -33,8 +33,8 @@
                             <td ng-show='vm.state.jobs.length'><i class="fa fa-2x" ng-click='customerSelectClickFn($event, job)' ng-class='{"fa-check-circle": job.isSelected, "fa-circle-o": !job.isSelected}'></i></td>
                             <td><strong>Job: </strong>{{job._id}}</td>
                             <td><strong>Count: </strong>{{job.count}}</td>
-                            <td class="hidden-xs"><strong>Last Run: </strong> <span class="text-adjust-table">{{job.lastRun}}</span><span ng-if="!job.lastRun">--</span></td>
-                            <td class="hidden-xs"><strong>Next Run: </strong>{{job.nextRun}}</td>
+                            <td class="hidden-xs"><strong>Last Run: </strong> <span class="text-adjust-table">{{job.lastRun | date: 'MM/dd/yyyy HH:mm:ss Z'}}</span><span ng-if="!job.lastRun">--</span></td>
+                            <td class="hidden-xs"><strong>Next Run: </strong><span ng-class="{'text-red' : vm.isDateInPast(job.nextRun), 'text-green': !vm.isDateInPast(job.nextRun)}">{{job.nextRun | date: 'MM/dd/yyyy HH:mm:ss Z'}}</span></td>
                             <td><a type="button" class="btn btn-success btn-block center" ng-click="vm.rescheduleJob('{{job.docid}}')">Run Now</a></td>
                         </tr>
                         </tbody>

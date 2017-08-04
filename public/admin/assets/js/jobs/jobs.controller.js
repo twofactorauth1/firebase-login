@@ -13,11 +13,19 @@
             loading: true
         };
         vm.rescheduleJob = rescheduleJob;
+        vm.isDateInPast = isDateInPast;
 
         function rescheduleJob(jobId) {
             console.log('controller reschedule job');
             JobsService.rescheduleJob(jobId);
             toaster.pop('success', 'Job rescheduled.');
+        };
+
+        function isDateInPast(date) {
+            if(moment(date).isBefore(moment())) {
+                return true;
+            }
+            return false;
         };
 
 
