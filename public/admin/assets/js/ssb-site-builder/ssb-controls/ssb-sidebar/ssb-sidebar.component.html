@@ -239,6 +239,13 @@
                             tooltip-placement="left"
                             tooltip="Create duplicate page">
                         </div>
+                        <div
+                            class="ssb-sidebar-item-icon ssb-sidebar-item-icon-offset-1 display-ib ti-files"
+                            ng-if="page._id === vm.state.page._id && page.handle === 'blog-list'"
+                            ng-click="vm.duplicatePage()"
+                            tooltip-placement="left"
+                            tooltip="Create duplicate page">
+                        </div>
                         <div class="panel-group">
                             <div class="ssb-sidebar-sortable-item panel panel-default">
                                 <div class="panel-heading">

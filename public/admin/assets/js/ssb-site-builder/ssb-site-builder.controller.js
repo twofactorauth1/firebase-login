@@ -33,6 +33,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
     vm.pageChanged = pageChanged;
     vm.toggleSectionVisiblity = toggleSectionVisiblity;
     vm.isBlogPage = isBlogPage;
+    vm.isBlogCopy = isBlogCopy;
     vm.isBlogEditMode = isBlogEditMode;
     vm.isBlogEditWritingMode = isBlogEditWritingMode;
     vm.saveAndLoadPage = saveAndLoadPage;
@@ -147,6 +148,8 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
 
         isBlogPage: false,
 
+        isBlogCopy: false,
+
         isBlogEditMode: false,
 
         isBlogEditWritingMode: false,
@@ -156,6 +159,8 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
         openPageSettingsModal: vm.openPageSettingsModal,
 
         checkIfBlogPage: vm.isBlogPage,
+
+        checkIfBlogCopy: vm.isBlogCopy,
 
         isDuplicateGlobalHeader: false,
 
@@ -355,6 +360,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
         vm.state.page = page;
         vm.state.originalPage = null;
         vm.uiState.isBlogPage = vm.isBlogPage(vm.state.page);
+        vm.uiState.isBlogCopy = vm.isBlogCopy(vm.state.page);
         $timeout(function() {
             vm.state.originalPage = angular.copy(page);
         }, 1000);
@@ -1203,7 +1209,11 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
     }
 
     function isBlogPage(page) {
-        return page.handle === 'blog-list' || page.handle === 'blog-post';
+        return page.handle === 'blog-list' || page.handle === 'blog-post' || page.isBlogCopy;
+    }
+
+    function isBlogCopy(page) {
+        return page.isBlogCopy;
     }
 
     function isNavHero(section){
@@ -1463,8 +1473,6 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
         vm.state.permissions = SimpleSiteBuilderService.permissions;
 
     }
-
-   
 
 
 }

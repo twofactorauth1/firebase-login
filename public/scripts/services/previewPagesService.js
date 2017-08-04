@@ -46,7 +46,13 @@ mainApp.factory('previewPagesService', ['$http', '$location', '$cacheFactory', f
         return $http.get(apiURL + 'pages/' + pageId, {
             cache: true
         }).success(function (page) {
-            if (page.handle === 'blog-list' || page.handle === 'blog-post') {
+            var componentTypes = _.pluck(_.flatten(_.pluck(page.sections, "components")), "type");
+
+            var _blogComponents = _.contains(componentTypes, "ssb-blog-post-list") || _.contains(componentTypes, "ssb-recent-post")
+             || _.contains(componentTypes, "ssb-recent-tag") || _.contains(componentTypes, "ssb-recent-category");
+
+            
+            if (page.handle === 'blog-list' || page.handle === 'blog-post' || _blogComponents) {
                 setPostsData(page, function(err, page) {
                     callback(err, page);
                 });
