@@ -5,8 +5,7 @@
 app.controller('ssbPostSettingsModalCtrl', ['$scope', '$rootScope', '$http', '$timeout', '$q', '$compile', '$filter', 'SimpleSiteBuilderBlogService', function ($scope, $rootScope, $http, $timeout, $q, $compile, $filter, SimpleSiteBuilderBlogService) {
     $scope.availablePostTags = [];
     $scope.availablePostCategories = [];
-
-    var posts = SimpleSiteBuilderBlogService.loadDataFromPage('#indigenous-precache-sitedata-posts') || [];
+    var posts = SimpleSiteBuilderBlogService.blog.posts || [];
     
     var tags = [];
     var categories = [];

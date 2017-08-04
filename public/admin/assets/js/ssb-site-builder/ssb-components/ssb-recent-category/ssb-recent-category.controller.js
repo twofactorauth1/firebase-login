@@ -21,9 +21,6 @@ function ssbBolgRecentCategoryComponentController(SimpleSiteBuilderBlogService, 
     vm.descriptionStyle=descriptionStyle;
     $scope.$watchCollection('vm.blog.posts', function(newValue) {
         if (newValue) {
-            $timeout(function () {
-                $scope.$broadcast('$refreshSlickSlider');
-            }, 2000)
             vm.blog_categories=blogCategories();
              if(vm.blog_categories.length<1){
                  vm.element.closest("div.ssb-page-section").css({'display': 'none'});

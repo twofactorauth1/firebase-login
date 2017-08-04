@@ -1,10 +1,10 @@
 'use strict';
 
 app.filter('ssbPostFilter', function () {
-    return function (posts, component) {
+    return function (posts, component, featured) {
 
-        //return filterPosts(posts);
-        return posts;
+        return filterPosts(posts);
+        //return posts;
         function filterPosts(posts) {
             var _filteredPosts = [];
             _.each(posts, function (post) {
@@ -14,6 +14,11 @@ app.filter('ssbPostFilter', function () {
                     }     
                 }
             });
+            if(featured){
+                _filteredPosts = _.filter(_filteredPosts, function(post){
+                    return post.featured
+                })
+            }
             return _filteredPosts;
         }
 
