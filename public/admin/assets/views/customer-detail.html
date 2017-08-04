@@ -125,6 +125,14 @@
                                                         </div>
                                                     </td>
                                                 </tr>
+                                                <tr>
+                                                    <td>Insight Emails Enabled:</td>
+                                                    <td>
+                                                        <div ng-show="customer">
+                                                            <switch ng-model="customer.email_preferences.receiveInsights" ng-change="updateCustomerReceiveInsights(customer.email_preferences.receiveInsights)" class="pull-right margin-bottom-10"></switch>
+                                                        </div>
+                                                    </td>
+                                                </tr>
                                             </tbody>
                                         </table>
                                         <table class="table table-condensed">

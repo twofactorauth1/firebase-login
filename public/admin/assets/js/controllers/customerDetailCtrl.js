@@ -241,6 +241,16 @@
             });
         };
 
+        $scope.updateCustomerReceiveInsights = function(isReceiveInsights) {
+            customerService.updateCustomerReceiveInsights($scope.customer, isReceiveInsights, function(err, customer){
+                if(err) {
+                    toaster.pop('warning', err.message);
+                } else {
+                    toaster.pop('success', 'Insights preferences saved.');
+                }
+            });
+        };
+
         $scope.saveTemplateAccount = function(){
             updateCustomerDetails(false);
         };

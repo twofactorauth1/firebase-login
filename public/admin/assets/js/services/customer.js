@@ -190,7 +190,7 @@
         this.updateCustomerTemplateAccount = function(customer, generateScreenCap, fn){
             var id = customer._id;
             
-            var apiUrl = [baseUrl, 'customer', id].join('/');
+            var apiUrl = [baseUrl, 'customer', id, 'templateAccount'].join('/');
             var body = {
                 isTemplateAccount:customer.isTemplateAccount,
                 templateImageUrl: customer.templateImageUrl,
@@ -206,6 +206,25 @@
             }).error(function(err){
                 fn(err);
             });
+        };
+
+        this.updateCustomerReceiveInsights = function(customer, receiveInsights, fn) {
+            var id = customer._id;
+
+            var apiUrl = [baseUrl, 'customer', id, 'insights'].join('/');
+            var body = {
+                receiveInsights:receiveInsights
+            };
+            var cache = this.getCache();
+            $http.post(apiUrl, body).success(function(data){
+                if(cache) {
+                    cache.get(id).email_preferences.receiveInsights = receiveInsights;
+                }
+                fn(null, data);
+            }).error(function(err){
+                fn(err);
+            });
+
         };
 
         this.cancelAccountSubscription = function(accountId, reason, cancelNow, fn){
