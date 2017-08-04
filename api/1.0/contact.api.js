@@ -419,7 +419,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 // "" added for number value
                 text=""+text;
                 if(text.indexOf(',')>-1 ||  /\r|\n/.exec(text))
-                    return "\""+text+"\",";
+                    return "\""+text.replace(/\r?\n|\r/g, " ")+"\",";
                 else
                     return text+",";
             };
