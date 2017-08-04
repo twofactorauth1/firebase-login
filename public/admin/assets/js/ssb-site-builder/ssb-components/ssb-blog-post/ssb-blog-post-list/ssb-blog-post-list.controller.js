@@ -43,12 +43,21 @@ function ssbBlogPostListComponentController(SimpleSiteBuilderBlogService, $scope
         vm.filteredPostView = true;
     }
 
-    $scope.$watchCollection('vm.blog.posts', function(newValue) {
-        if (newValue) {
-            $timeout(function () {
-                $scope.$broadcast('$refreshSlickSlider');
-            }, 2000)
-            checkHasFeaturedPosts();
+    $scope.$watchCollection('vm.filtered.posts', function(posts) {
+        if (posts) {
+            if(vm.website){
+                $timeout(function () {
+                    vm.featuredPosts = angular.copy(_.filter(posts, function(post){
+                        return post.featured
+                    }))
+                    $scope.$broadcast('$refreshSlickSlider');
+                }, 0)
+            }
+            else{
+                vm.featuredPosts = _.filter(posts, function(post){
+                    return post.featured
+                })
+            }            
         }
     });
 
@@ -86,17 +95,12 @@ function ssbBlogPostListComponentController(SimpleSiteBuilderBlogService, $scope
                     })
                 }
 
-            }
-            
+            }            
             vm.blog.posts = posts;
-            checkHasFeaturedPosts();
             
         }
     }
 
-    function checkHasFeaturedPosts() {
-        vm.hasFeaturedPosts = vm.blog.posts.filter(function(post){ return post.featured; }).length;
-    }
 
     function sortBlogPosts(blogpost){
         return new Date(blogpost.publish_date || blogpost.created.date).getTime();
@@ -117,11 +121,8 @@ function ssbBlogPostListComponentController(SimpleSiteBuilderBlogService, $scope
 
     
     function init(element) {
-
+       
     	vm.element = element;
-
-        checkHasFeaturedPosts();
-
         if (!vm.blog.posts.length) {
             vm.initData();
         }
