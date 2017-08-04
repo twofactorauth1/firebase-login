@@ -227,6 +227,22 @@
 
         };
 
+        this.updateCustomerShowHide = function(customer, fn) {
+            var id = customer._id;
+
+            var apiUrl = [baseUrl, 'customer', id, 'showhide'].join('/');
+            var body = {showhide: customer.showhide};
+            var cache = this.getCache();
+            $http.post(apiUrl, body).success(function(data){
+                if(cache) {
+                    cache.get(id).showHide = customer.showHide;
+                }
+                fn(null, data);
+            }).error(function(err){
+                fn(err);
+            });
+        };
+
         this.cancelAccountSubscription = function(accountId, reason, cancelNow, fn){
             var apiUrl = [adminUrl, 'account', accountId, 'cancel'].join('/');
             var body = {

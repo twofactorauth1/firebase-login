@@ -34,6 +34,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.post(this.url('customer/:id/notes'), this.isAuthAndSubscribedApi.bind(this), this.addCustomerNotes.bind(this));
         app.post(this.url('customer/:id/templateAccount'), this.isAuthAndSubscribedApi.bind(this), this.updateCustomerTemplateAccount.bind(this));
         app.post(this.url('customer/:id/insights'), this.isAuthAndSubscribedApi.bind(this), this.updateCustomerInsights.bind(this));
+        app.post(this.url('customer/:id/showhide'), this.isAuthAndSubscribedApi.bind(this), this.updateCustomerShowHide.bind(this));
         //app.delete(this.url(':type/:key'), this.isAuthAndSubscribedApi.bind(this), this.deleteComponentData.bind(this));
 
 
@@ -256,6 +257,33 @@ _.extend(api.prototype, baseApi.prototype, {
                     manager.updateCustomerInsights(accountId, userId, customerId, customerDetails, function(err, updatedCustomer){
                         self.log.debug(accountId, userId, '<< updateCustomerInsights');
                         self.sendResultOrError(resp, err, updatedCustomer, 'Error updating insights');
+                    });
+                } else {
+                    self.wrapError(resp, 400, 'Unsupported Method', 'This method is unsupported');
+                }
+            });
+        }
+    },
+
+    updateCustomerShowHide: function(req, resp) {
+        var self = this;
+        var accountId = parseInt(self.accountId(req));
+        var userId = self.userId(req);
+        self.log.debug(accountId, userId, '>> updateCustomerShowHide');
+        var customerId = parseInt(req.params.id);
+        var customerDetails = req.body.showhide;
+        if(accountId === appConfig.mainAccountID) {
+            manager.updateCustomerShowHide(accountId, userId, customerId, customerDetails, function(err, updatedCustomer){
+                self.log.debug(accountId, userId, '<< updateCustomerShowHide');
+                self.sendResultOrError(resp, err, updatedCustomer, 'Error updating showhide');
+            });
+        } else {
+            self.isOrgAdmin(accountId, userId, req, function(err, val) {
+                if (val === true) {
+                    var orgDomain = urlUtils.getSubdomainFromRequest(req).orgDomain;
+                    manager.updateCustomerShowHide(accountId, userId, customerId, customerDetails, function(err, updatedCustomer){
+                        self.log.debug(accountId, userId, '<< updateCustomerShowHide');
+                        self.sendResultOrError(resp, err, updatedCustomer, 'Error updating showhide');
                     });
                 } else {
                     self.wrapError(resp, 400, 'Unsupported Method', 'This method is unsupported');

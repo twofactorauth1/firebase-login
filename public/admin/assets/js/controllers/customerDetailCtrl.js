@@ -251,6 +251,28 @@
             });
         };
 
+        $scope.updateCustomerUserScripts = function(isEnabled) {
+            $scope.customer.showhide.userScripts = isEnabled;
+            customerService.updateCustomerShowHide($scope.customer, function(err, customer){
+                if(err) {
+                    toaster.pop('warning', err.message);
+                } else {
+                    toaster.pop('success', 'UserScripts updated.');
+                }
+            });
+        };
+
+        $scope.updateCustomerHTML = function(isEnabled) {
+            $scope.customer.showhide.editHTML = isEnabled;
+            customerService.updateCustomerShowHide($scope.customer, function(err, customer){
+                if(err) {
+                    toaster.pop('warning', err.message);
+                } else {
+                    toaster.pop('success', 'Edit HTML updated.');
+                }
+            });
+        };
+
         $scope.saveTemplateAccount = function(){
             updateCustomerDetails(false);
         };
