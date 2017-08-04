@@ -43,17 +43,14 @@ function ssbBlogPostListComponentController(SimpleSiteBuilderBlogService, $scope
         vm.filteredPostView = true;
     }
 
-    $scope.$watchCollection('vm.posts', function(newValue) {
-        if (newValue) {
+    $scope.$watchCollection('vm.filtered.posts', function(posts) {
+        if (posts) {
             $timeout(function () {
+                vm.featuredPosts = angular.copy(_.filter(posts, function(post){
+                    return post.featured
+                }))
                 $scope.$broadcast('$refreshSlickSlider');
-            }, 2000)
-        }
-    });
-
-    $scope.$watchCollection('vm.website', function(website) {
-        if (website) {
-            console.log("value changed");
+            }, 0)
         }
     });
 
@@ -117,7 +114,7 @@ function ssbBlogPostListComponentController(SimpleSiteBuilderBlogService, $scope
 
     
     function init(element) {
-
+       
     	vm.element = element;
         if (!vm.blog.posts.length) {
             vm.initData();
