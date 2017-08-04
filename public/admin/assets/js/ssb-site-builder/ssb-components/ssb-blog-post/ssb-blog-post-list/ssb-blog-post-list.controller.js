@@ -45,12 +45,19 @@ function ssbBlogPostListComponentController(SimpleSiteBuilderBlogService, $scope
 
     $scope.$watchCollection('vm.filtered.posts', function(posts) {
         if (posts) {
-            $timeout(function () {
-                vm.featuredPosts = angular.copy(_.filter(posts, function(post){
+            if(vm.website){
+                $timeout(function () {
+                    vm.featuredPosts = angular.copy(_.filter(posts, function(post){
+                        return post.featured
+                    }))
+                    $scope.$broadcast('$refreshSlickSlider');
+                }, 0)
+            }
+            else{
+                vm.featuredPosts = _.filter(posts, function(post){
                     return post.featured
-                }))
-                $scope.$broadcast('$refreshSlickSlider');
-            }, 0)
+                })
+            }            
         }
     });
 
