@@ -27,7 +27,10 @@ app.filter('ssbPostFilter', function () {
             var _tags = component.postTags;
             if (_tags && _tags.length > 0) {
                 if (post.post_tags) {
-                    if (_.intersection(_tags, post.post_tags).length > 0) {
+                    var post_tags = _.map(post.post_tags, function(tag){
+                        return tag.text ? tag.text : tag
+                    })
+                    if (_.intersection(_tags, post_tags).length > 0) {
                         return true;
                     }
                 }
