@@ -432,6 +432,52 @@ module.exports = {
         });
     },
 
+    updateCustomerInsights: function(accountId, userId, customerId, customerDetails, fn) {
+        var self = this;
+        self.log.debug(accountId, userId, '>> updateCustomerInsights');
+        accountDao.getAccountByID(customerId, function(err, account){
+            if(account) {
+                var emailPreferences = account.get('email_preferences');
+                emailPreferences.receiveInsights = customerDetails.receiveInsights;
+                accountDao.saveOrUpdate(account, function(err, savedCustomer){
+                    if(err) {
+                        self.log.error("Error saving account:", err);
+                        return fn(err);
+                    } else {
+                        self.log.debug(accountId, userId, '<< updateCustomerInsights');
+                        fn(null, savedCustomer);
+                    }
+                });
+            } else {
+                self.log.error('Account not found');
+                return fn('account not found');
+            }
+        });
+
+    },
+
+    updateCustomerShowHide: function(accountId, userId, customerId, customerDetails, fn) {
+        var self = this;
+        self.log.debug(accountId, userId, '>> updateCustomerShowHide');
+        accountDao.getAccountByID(customerId, function(err, account){
+            if(account) {
+                account.set('showhide', customerDetails);
+                accountDao.saveOrUpdate(account, function(err, savedCustomer){
+                    if(err) {
+                        self.log.error("Error saving account:", err);
+                        return fn(err);
+                    } else {
+                        self.log.debug(accountId, userId, '<< updateCustomerShowHide');
+                        fn(null, savedCustomer);
+                    }
+                });
+            } else {
+                self.log.error('Account not found');
+                return fn('account not found');
+            }
+        });
+    },
+
     updateCustomerTemplateAccount: function(accountId, userId, customerId, customerDetails, fn) {
         var self = this;
         self.log.debug(accountId, userId, '>> updateCustomerTemplateAccount');

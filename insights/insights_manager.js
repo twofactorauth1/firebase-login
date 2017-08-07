@@ -625,8 +625,15 @@ var insightsManager = {
                 var includedAccounts = [];//IDs only
                 var expiredTrials = [];//IDs only
                 var invalidSubscriptions = []; //IDs only
+                var configExcluded = []; //IDs only
                 async.eachSeries(accounts, function(account, callback){
                     var billing = account.get('billing');
+                    var emailPreferences = account.get('email_preferences');
+                    var receiveInsights = true;
+                    if(emailPreferences && emailPreferences.receiveInsights === false) {
+                        receiveInsights = false;
+                    }
+
                     /*
                      * Figure out if we should include them:
                      *  - billing.plan === NO_PLAN_ARGUMENT
@@ -636,7 +643,10 @@ var insightsManager = {
                      *  - otherwise
                      *  -- verify stripeCustomerId and stripeSubscriptionId
                      */
-                    if(account.id() === appConfig.mainAccountID) {
+                    if(!receiveInsights) {
+                        configExcluded.push(account.id());
+                        callback();
+                    } else if(account.id() === appConfig.mainAccountID) {
                         accountList.push(account);
                         includedAccounts.push(account.id());
                         callback();
@@ -678,6 +688,7 @@ var insightsManager = {
                         insightJob.set('includedAccounts', includedAccounts);
                         insightJob.set('expiredTrials', expiredTrials);
                         insightJob.set('invalidSubscriptions', invalidSubscriptions);
+                        insightJob.set('configExcluded', configExcluded);
                         cb(null, accountList);
                     }
                 });
