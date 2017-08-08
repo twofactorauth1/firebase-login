@@ -692,6 +692,47 @@ var manager = {
         });
     },
 
+    saveOrUpdateReport: function(accountId, userId, promotionId, patchObject, fn) {
+        var self = this;
+        self.log = log;
+        self.log.debug(accountId, userId, '>> saveOrUpdateReport');
+        promotionDao.findOne({promotionId:promotionId}, $$.m.PromotionReport, function(err, report){
+            if(err) {
+                self.log.error(accountId, userId, 'Error finding report:', err);
+                fn(err);
+            } else if (!report) {
+                // create a new report
+                var report = new $$.m.PromotionReport(patchObject);
+                report.set('accountId', accountId);
+                report.set('modified', {date:new Date(), by:userId});
+                report.set('created', {date:new Date(), by:userId});
+                promotionDao.saveOrUpdate(report, function(err, value){
+                    if(err) {
+                        self.log.error(accountId, userId, 'Error saving report:', err);
+                        fn(err);
+                    } else {
+                        self.log.debug(accountId, userId, '<< saveOrUpdateReport');
+                        fn(null, value);
+                    }
+                });
+            } else {
+                _.each(patchObject, function(value, key){
+                    report.set(key, value);
+                });
+                report.set('modified', {date:new Date(), by:userId});
+                promotionDao.saveOrUpdate(report, function(err, value){
+                    if(err) {
+                        self.log.error(accountId, userId, 'Error saving report:', err);
+                        fn(err);
+                    } else {
+                        self.log.debug(accountId, userId, '<< saveOrUpdateReport');
+                        fn(null, value);
+                    }
+                });
+            }
+        });
+    },
+
     removeReport: function(accountId, userId, reportId, fn) {
         var self = this;
         self.log = log;

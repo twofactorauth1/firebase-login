@@ -196,25 +196,30 @@ function promotionDetailsController($scope, $window, $state, $attrs, $filter, $m
         vm.initAttachment();
         vm.uiState.saveLoading = false;
         toaster.pop('success', "Promotion saved.", "Promotion was saved successfully.");
+        var _report = vm.state.promotion.report || {};
+        
+        var cardCodes = [];
+        if(vm.state.orgCardAndPermissions.isVendor){
+            cardCodes = vm.state.orgCardAndPermissions.cardCodes;
+        }
+        var promotionReport = {
+            promotionId: vm.state.promotion._id,
+            recipientAry: _report.recipients,
+            startOnDate: _report.startDate,
+            cardCodeRestrictions: cardCodes,
+            repeatInterval: _report.schedule ? _report.schedule.toLowerCase() : null
+        }
         if(vm.promotionId == 'new'){
-            if(vm.state.promotion.report && vm.state.promotion.report.recipients && vm.state.promotion.report.recipients.length){
-                var cardCodes = [];
-                if(vm.state.orgCardAndPermissions.isVendor){
-                    cardCodes = vm.state.orgCardAndPermissions.cardCodes;
-                }
-                var promotionReport ={
-                    promotionId: vm.state.promotion._id,
-                    recipientAry: vm.state.promotion.report.recipients,
-                    startOnDate: vm.state.promotion.report.startDate,
-                    cardCodeRestrictions: cardCodeRestrictions,
-                    repeatInterval: vm.state.promotion.report.schedule ? vm.state.promotion.report.schedule.toLowerCase() : null
-                }
-                PromotionsService.createPromotionReport(promotionReport).then(function (){
-                                     
-                });
-                
-            }
+            
+            PromotionsService.createPromotionReport(promotionReport).then(function (){
+                                 
+            });
             $state.go('app.promotions');
+        }
+        else{
+            PromotionsService.updatePromotionReport(promotionReport, vm.promotionId).then(function (){
+                                 
+            });
         } 
     }
 

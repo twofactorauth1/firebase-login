@@ -31,6 +31,7 @@
         promotionsService.exportShipments = exportShipments;
         promotionsService.generatePdf = generatePdf;
         promotionsService.createPromotionReport = createPromotionReport;
+        promotionsService.updatePromotionReport = updatePromotionReport;
         promotionsService.promoTypeOptions = {
             TRY_AND_BUY: "TRY_AND_BUY",
             MILESTONE: "MILESTONE",
@@ -330,6 +331,25 @@
             var apiUrl = basePromotionAPIUrlv2;
             
             apiUrl = [basePromotionAPIUrlv2, "report"].join('/');
+            
+
+            return promotionsRequest($http.post(apiUrl, report).success(success).error(error));
+            
+        }
+
+        function updatePromotionReport(report, promotionId) {
+
+            function success(data) {
+                
+            }
+
+            function error(error) {
+                console.error('promotionsService updatePromotionReport error: ', JSON.stringify(error));
+            }
+
+            var apiUrl = basePromotionAPIUrlv2;
+            
+            apiUrl = [basePromotionAPIUrlv2, "report", promotionId].join('/');
             
 
             return promotionsRequest($http.post(apiUrl, report).success(success).error(error));
