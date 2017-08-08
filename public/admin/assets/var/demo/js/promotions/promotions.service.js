@@ -16,7 +16,6 @@
         var baseCustomerAPIUrl = '/api/1.0/integrations/zi';
 
         promotionsService.getPromotions = getPromotions;
-        promotionsService.createPromotion = createPromotion;
         promotionsService.viewPromotionDetails = viewPromotionDetails;
         promotionsService.deletePromotion = deletePromotion;
         promotionsService.getVendors = getVendors;
@@ -31,6 +30,7 @@
         promotionsService.getCustomers = getCustomers;
         promotionsService.exportShipments = exportShipments;
         promotionsService.generatePdf = generatePdf;
+        promotionsService.createPromotionReport = createPromotionReport;
         promotionsService.promoTypeOptions = {
             TRY_AND_BUY: "TRY_AND_BUY",
             MILESTONE: "MILESTONE",
@@ -116,30 +116,7 @@
 
             return promotionsRequest($http.get([basePromotionAPIUrlv2].join('/')).success(success).error(error));
         }
-
-        /**
-            * Create new Promotion
-        */
-        function createPromotion(promotion) {
-
-            function success(data) {                
-                promotionsService.promotions.splice(0, 0, data);
-            }
-
-            function error(error) {
-                console.error('PromotionService getPromotions error: ', JSON.stringify(error));
-            }
-
-            var _formData = new FormData();
-            _formData.append('file', promotion.attachment);
-            _formData.append('promotion', angular.toJson(promotion));
-            _formData.append('adminUrl', $location.$$absUrl.split("#")[0]);
-            return promotionsRequest($http.post(basePromotionAPIUrlv2, _formData, {
-                transformRequest: angular.identity,
-                headers: {'Content-Type': undefined}
-            }).success(success).error(error));
-        }
-        
+ 
         /**
             * Get promotion details
         */
@@ -239,15 +216,7 @@
         function saveShipment(shipment) {
 
             function success(data) {
-                // var index = _.findIndex(promotionsService.shipments, {
-                //     _id: data._id
-                // });
-
-                // if (index > -1) {
-                //     promotionsService.promotions[index] = data;
-                // } else {
-                //     promotionsService.promotions.splice(0, 0, data);
-                // }
+                
             }
 
             function error(error) {
@@ -345,6 +314,26 @@
                     method: "DELETE"
                 }).success(success).error(error)
             )
+        }
+
+
+        function createPromotionReport(report) {
+
+            function success(data) {
+                
+            }
+
+            function error(error) {
+                console.error('promotionsService createPromotionReport error: ', JSON.stringify(error));
+            }
+
+            var apiUrl = basePromotionAPIUrlv2;
+            
+            apiUrl = [basePromotionAPIUrlv2, "report"].join('/');
+            
+
+            return promotionsRequest($http.post(apiUrl, report).success(success).error(error));
+            
         }
 
         function clearShipmentList(){
