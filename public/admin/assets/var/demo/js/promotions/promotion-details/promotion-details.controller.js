@@ -196,8 +196,30 @@ function promotionDetailsController($scope, $window, $state, $attrs, $filter, $m
         vm.initAttachment();
         vm.uiState.saveLoading = false;
         toaster.pop('success', "Promotion saved.", "Promotion was saved successfully.");
+        var _report = vm.state.promotion.report || {};
+        
+        var cardCodes = [];
+        if(vm.state.orgCardAndPermissions.isVendor){
+            cardCodes = vm.state.orgCardAndPermissions.cardCodes;
+        }
+        var promotionReport = {
+            promotionId: vm.state.promotion._id,
+            recipientAry: _report.recipients,
+            startOnDate: _report.startDate,
+            cardCodeRestrictions: cardCodes,
+            repeatInterval: _report.schedule ? _report.schedule.toLowerCase() : null
+        }
         if(vm.promotionId == 'new'){
+            
+            PromotionsService.createPromotionReport(promotionReport).then(function (){
+                                 
+            });
             $state.go('app.promotions');
+        }
+        else{
+            PromotionsService.updatePromotionReport(promotionReport, vm.promotionId).then(function (){
+                                 
+            });
         } 
     }
 

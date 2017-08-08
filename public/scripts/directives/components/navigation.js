@@ -48,6 +48,22 @@ app.directive('navigationComponent', ['websiteService', 'accountService', '$time
                 $scope.scrollOffsetTop = offset;
             }, true);
 
+            $scope.checkIfReloadPage = function(link, type){
+                if(link){
+                    if(link === 'blog'){
+                        return true;
+                    }
+                    else{
+                        if(window.indigenous && window.indigenous.precache && window.indigenous.precache.siteData && window.indigenous.precache.siteData.pages){
+                            var cPage = window.indigenous.precache.siteData.pages[link];
+                            if(cPage && cPage.isBlogCopy){
+                                return true;
+                            }
+                        }
+                    }
+                }
+            }
+
         }
     }
 }]);

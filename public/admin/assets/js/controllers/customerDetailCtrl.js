@@ -5,6 +5,7 @@
     app.controller('CustomerDetailCtrl', ["$scope", "$rootScope", "$location", "$modal", "toaster", "$stateParams", "CustomerService", 'ContactService', 'SweetAlert', '$state', '$window', '$timeout', 'formValidations', 'UserService', function ($scope, $rootScope, $location, $modal, toaster, $stateParams, customerService, contactService, SweetAlert, $state, $window, $timeout, formValidations, UserService) {
         $scope.isDomainChanged = false;
         $scope.cancelaccount = {cancelNow:false};
+        $scope.dataloaded= false;
         /*
          * @getCustomer
          * -
@@ -34,6 +35,7 @@
                 $scope.matchUsers(customer);
                 $scope.originalCustomer = angular.copy($scope.customer);
                 $scope.subdomainURL = $scope.generateSubdomainURL($scope.data.subdomain);
+                $scope.dataloaded = true;
             });
 
         };

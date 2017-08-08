@@ -34,7 +34,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         app.post(this.url('report'), this.secureauth.bind(this, {requiresSub:true, requiresPriv:'MODIFY_PROMOTION'}), this.createPromotionReport.bind(this));
         app.get(this.url('reports'), this.secureauth.bind(this, {requiresSub:true, requiresPriv:'VIEW_PROMOTION'}), this.listPromotionReports.bind(this));
-        app.post(this.url('report/:id'), this.secureauth.bind(this, {requiresSub:true, requiresPriv:'MODIFY_PROMOTION'}), this.updatePromotionReport.bind(this));
+        app.post(this.url('report/:id'), this.secureauth.bind(this, {requiresSub:true, requiresPriv:'MODIFY_PROMOTION'}), this.saveOrUpdateReport.bind(this));
         app.delete(this.url('report/:id'), this.secureauth.bind(this, {requiresSub:true, requiresPriv:'MODIFY_PROMOTION'}), this.deletePromotionReport.bind(this));
         app.post(this.url(':id'), this.secureauth.bind(this, {requiresSub:true, requiresPriv:'MODIFY_PROMOTION'}), this.updatePromotion.bind(this));
         app.get(this.url(':id'), this.secureauth.bind(this, {requiresSub:true, requiresPriv:'VIEW_PROMOTION'}), this.getPromotionDetails.bind(this));
@@ -750,13 +750,13 @@ _.extend(api.prototype, baseApi.prototype, {
         });
     },
 
-    updatePromotionReport: function(req, resp) {
+    saveOrUpdateReport: function(req, resp) {
         var self = this;
         var userId = self.userId(req);
         var accountId = parseInt(self.accountId(req));
-        var reportId = req.params.id;
-        self.log.debug(accountId, userId, '>> updatePromotionReport(' + reportId + ')', req.body);
-        promotionManager.updateReport(accountId, userId, reportId, req.body, function(err, report){
+        var promotionId = req.params.id;
+        self.log.debug(accountId, userId, '>> updatePromotionReport(' + promotionId + ')', req.body);
+        promotionManager.saveOrUpdateReport(accountId, userId, promotionId, req.body, function(err, report){
             self.log.debug(accountId, userId, '<< updatePromotionReport');
             return self.sendResultOrError(resp, err, report, "Error updating report");
         });

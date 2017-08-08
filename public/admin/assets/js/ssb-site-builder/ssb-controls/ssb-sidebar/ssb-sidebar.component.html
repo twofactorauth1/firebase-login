@@ -189,7 +189,7 @@
                         </label>
                     </li>
                     <li>
-                        <label ng-class="{'disabled': vm.uiState.isBlogPage}">
+                        <label ng-class="{'disabled': vm.uiState.isBlogPage && !vm.uiState.isBlogCopy}">
                             <h5>URL:</h5>
                             <span editable-text="vm.state.page.handle" onbeforesave="vm.validateDuplicatePage($data)" e-required e-placeholder="Enter url">{{vm.state.page.handle || 'Enter url'}}</span>
                         </label>
@@ -197,7 +197,7 @@
                     <li>
                         <label>
                             <h5>Visit Published Page:</h5>
-                            <a ng-if="!vm.uiState.isBlogPage" href="/{{vm.state.page.handle}}" target="_blank">/{{vm.state.page.handle}}</a>
+                            <a ng-if="!vm.uiState.isBlogPage || vm.uiState.isBlogCopy" href="/{{vm.state.page.handle}}" target="_blank">/{{vm.state.page.handle}}</a>
                             <a ng-if="vm.state.page.handle === 'blog-list' || vm.state.page.handle === 'blog-post'" href="/blog" target="_blank">/blog</a>
                         </label>
                     </li>
@@ -214,27 +214,34 @@
                         <div ng-click="vm.uiState.openPageSettingsModal('ssb-page-settings-modal', 'SiteBuilderPageSettingsModalController', null, 'lg', page._id);" class="ssb-sidebar-item-icon ti-settings display-ib" tooltip-placement="left" tooltip="Page Settings"></div>
                         <div
                             class="ssb-sidebar-item-icon ssb-sidebar-item-icon-offset-1 ti-close display-ib"
-                            ng-if="page._id === vm.state.page._id && !vm.uiState.isBlogPage" ng-click="vm.deletePage()"
+                            ng-if="page._id === vm.state.page._id && (!vm.uiState.isBlogPage || vm.uiState.isBlogCopy)" ng-click="vm.deletePage()"
                             tooltip-placement="left"
                             tooltip="Delete page">
                         </div>
                         <div
                             class="ssb-sidebar-item-icon ssb-sidebar-item-icon-offset-2 display-ib ti-eye"
-                            ng-if="page._id === vm.state.page._id && vm.state.page.mainmenu !== false && !vm.uiState.isBlogPage"
+                            ng-if="page._id === vm.state.page._id && vm.state.page.mainmenu !== false && (!vm.uiState.isBlogPage || vm.uiState.isBlogCopy)"
                             ng-click="vm.hideFromMenu()"
                             tooltip-placement="left"
                             tooltip="Hide this page from main menu">
                         </div>
                         <div
                             class="ssb-sidebar-item-icon ssb-sidebar-item-icon-offset-2 display-ib ti-eye"
-                            ng-if="page._id === vm.state.page._id && vm.state.page.mainmenu === false && !vm.uiState.isBlogPage"
+                            ng-if="page._id === vm.state.page._id && vm.state.page.mainmenu === false && (!vm.uiState.isBlogPage || vm.uiState.isBlogCopy)"
                             ng-click="vm.showPageOnMenu()"
                             tooltip-placement="left"
                             tooltip="Show this page on main menu">
                         </div>
                         <div
                             class="ssb-sidebar-item-icon ssb-sidebar-item-icon-offset-3 display-ib ti-files"
-                            ng-if="page._id === vm.state.page._id && !vm.uiState.isBlogPage"
+                            ng-if="page._id === vm.state.page._id && (!vm.uiState.isBlogPage || vm.uiState.isBlogCopy)"
+                            ng-click="vm.duplicatePage()"
+                            tooltip-placement="left"
+                            tooltip="Create duplicate page">
+                        </div>
+                        <div
+                            class="ssb-sidebar-item-icon ssb-sidebar-item-icon-offset-1 display-ib ti-files"
+                            ng-if="page._id === vm.state.page._id && page.handle === 'blog-list'"
                             ng-click="vm.duplicatePage()"
                             tooltip-placement="left"
                             tooltip="Create duplicate page">
