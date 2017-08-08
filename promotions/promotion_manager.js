@@ -174,7 +174,7 @@ var manager = {
         var self = this;
         log.debug(accountId, userId, '>> deletePromotion');
         var query = {promotionId: promotionId};
-                
+
         shipmentDao.removeByQuery(query, $$.m.Shipment, function(err, value1){
             if(err) {
                 self.log.error('Error deleting shipments: ' + err);
@@ -195,7 +195,7 @@ var manager = {
                             else{
                                 fn(null, value);
                             }
-                        })    
+                        })
                     }
                 });
             }
@@ -781,7 +781,7 @@ var manager = {
                             var fromAddress = report.get('fromAdddress');
                             var toAddressAry = report.get('recipients');
                             var subject = report.get('subject');
-                            var content = 'Please find attached promotion report';
+                            var content = 'Promotion reports attached';
                             self.generateReportForShipments(accountId, null, promotionId, 'pdf', cardCodeAry, function(err, pdf){
                                 if(err) {
                                     self.log.error('Error generating pdf for report:', err);
