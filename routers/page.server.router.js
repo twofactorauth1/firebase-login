@@ -39,6 +39,9 @@ _.extend(router.prototype, BaseRouter.prototype, {
         app.get('/investors', [this.setupForPages.bind(this), this._handleBasicAuth.bind(this)], this.optimizedIndex.bind(this));
 
         app.get("/:page", [sitemigration_middleware.checkForRedirect, this.setupForPages.bind(this)], this.optimizedIndex.bind(this));
+        //app.get(/^\/(?!api.*|static)(.*)$/, [sitemigration_middleware.checkForRedirect, this.setupForPages.bind(this)], this.optimizedRegexpIndex.bind(this));
+        app.get('/:page/:page1', [sitemigration_middleware.checkForRedirect, this.setupForPages.bind(this)], this.optimizedSubpathIndex.bind(this));
+        app.get('/:page/:page1/:page2', [sitemigration_middleware.checkForRedirect, this.setupForPages.bind(this)], this.optimizedSubpathIndex.bind(this));
         app.get('/preview/:pageId', this.isAuth.bind(this), this.previewIndex.bind(this));
         app.get('/preview/:pageId/:postId', this.isAuth.bind(this), this.previewIndex.bind(this));
         return this;
@@ -77,7 +80,37 @@ _.extend(router.prototype, BaseRouter.prototype, {
         self.log.debug('<< index ... req.session.accountId:' + req.session.accountId);
     },
 
+    optimizedSubpathIndex: function(req, resp) {
+        var self = this;
+        var accountId = self.unAuthAccountId(req) || appConfig.mainAccountID;
+        if(accountId === 'new') {//we are on the signup page
+            accountId = appConfig.mainAccountID;
+        }
+        var pageName = req.params.page;
+        if(req.params.page1) {
+            pageName += '/' + req.params.page1;
+        }
+        if(req.params.page2) {
+            pageName += '/' + req.params.page2;
+        }
+        self.log.debug('>> optimizedIndex ' + accountId + ', ' + pageName);
+        new WebsiteView(req, resp).renderCachedPage(accountId, pageName);
 
+        self.log.debug('<< optimizedIndex');
+    },
+
+    optimizedRegexpIndex: function(req,resp) {
+        var self = this;
+        var accountId = self.unAuthAccountId(req) || appConfig.mainAccountID;
+        if(accountId === 'new') {//we are on the signup page
+            accountId = appConfig.mainAccountID;
+        }
+        var pageName = req.params[0];//req.params.page || 'index';
+        self.log.debug('>> optimizedIndex ' + accountId + ', ' + pageName);
+        new WebsiteView(req, resp).renderCachedPage(accountId, pageName);
+
+        self.log.debug('<< optimizedIndex');
+    },
 
     optimizedIndex: function(req,resp) {
         var self = this;
