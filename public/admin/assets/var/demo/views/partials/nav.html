@@ -114,7 +114,7 @@
         </a>
     </li>
 
-    <li ng-class="{'active open':$state.includes('app.promotions')}" ng-if="userPermissions.promotions">
+    <li ng-class="{'active open':$state.includes('app.promotions') || $state.includes('app.promotionDetails')}" ng-if="userPermissions.promotions">
         <a ui-sref="app.promotions">
             <div class="item-content">
                 <div class="item-media">
