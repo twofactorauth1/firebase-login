@@ -504,13 +504,17 @@ module.exports = {
 
         var pageHandle = slug(page.get('handle')) +  '-' + $$.u.idutils.generateUniqueAlphaNumeric(5, true, true);
         var sections = page.get('sections');
-
+        if(page.get('handle') == 'blog-list'){
+            page.set("isBlogCopy", true);
+        }
         page.set('_id', null);
         page.set('handle', pageHandle);
         page.set('title', page.get('title') + ' (copy)');
         page.set('created', created);
         page.set('modified', created);
         page.set('ssb', true);
+
+
 
         //reset all section _id's for duplicate page
 
@@ -1577,7 +1581,7 @@ module.exports = {
                 });
 
                 // We should never delete global sections on other pages while saving 'blog' pages
-                if(updatedPage.get("handle") ==='blog-list' || updatedPage.get("handle") ==='blog-post' && sectionsToBeDeleted.length > 0){
+                if(updatedPage.get("handle") ==='blog-list' || updatedPage.get("handle") ==='blog-post' || updatedPage.get("isBlogCopy") === true && sectionsToBeDeleted.length > 0){
                     var nonBlogGlobalSections = [];
                     _.each(sectionsToBeDeleted, function(gSection){                        
                         if(gSection.get('globalHeader') === true || gSection.get('globalFooter') === true){
@@ -1594,7 +1598,8 @@ module.exports = {
                         latest:true,
                         'sections._id': {$in:idAry},
                         _id:{$ne:pageId},
-                        handle: {$nin: ['signup', 'single-post', 'blog', 'blog-list', 'blog-post']}
+                        handle: {$nin: ['signup', 'single-post', 'blog', 'blog-list', 'blog-post']},
+                        isBlogCopy: {$ne:true}
                     };
                     self.log.debug('using this query:', query);
                     pageDao.findMany(query, $$.m.ssb.Page, function(err, pages){
@@ -1667,7 +1672,8 @@ module.exports = {
                         accountId:accountId,
                         latest:true,
                         _id:{$ne:pageId},
-                        handle: {$nin: ['signup', 'single-post', 'blog', 'blog-list', 'blog-post']}
+                        handle: {$nin: ['signup', 'single-post', 'blog', 'blog-list', 'blog-post']},
+                        isBlogCopy:{$ne:true}
                     };
 
                     pageDao.findMany(query, $$.m.ssb.Page, function(err, pages){

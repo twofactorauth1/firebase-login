@@ -125,6 +125,39 @@
                                                         </div>
                                                     </td>
                                                 </tr>
+                                                <tr>
+                                                    <td>Insight Emails Enabled:</td>
+                                                    <td>
+                                                        <div ng-show="customer">
+                                                            <switch ng-model="customer.email_preferences.receiveInsights" ng-change="updateCustomerReceiveInsights(customer.email_preferences.receiveInsights)" class="pull-right margin-bottom-10"></switch>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                        <table class="table table-condensed">
+                                            <thead>
+                                                <tr>
+                                                    <th colspan="3">Website Information</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>Enable Custom Scripts:</td>
+                                                    <td>
+                                                        <div ng-show="customer">
+                                                            <switch ng-model="customer.showhide.userScripts" ng-change="updateCustomerUserScripts(customer.showhide.userScripts)" class="pull-right margin-bottom-10"></switch>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Enable HTML Mode:</td>
+                                                    <td>
+                                                        <div ng-show="customer">
+                                                            <switch ng-model="customer.showhide.editHTML" ng-change="updateCustomerHTML(customer.showhide.editHTML)" class="pull-right margin-bottom-10"></switch>
+                                                        </div>
+                                                    </td>
+                                                </tr>
                                             </tbody>
                                         </table>
                                         <table class="table table-condensed">

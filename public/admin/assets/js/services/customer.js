@@ -190,7 +190,7 @@
         this.updateCustomerTemplateAccount = function(customer, generateScreenCap, fn){
             var id = customer._id;
             
-            var apiUrl = [baseUrl, 'customer', id].join('/');
+            var apiUrl = [baseUrl, 'customer', id, 'templateAccount'].join('/');
             var body = {
                 isTemplateAccount:customer.isTemplateAccount,
                 templateImageUrl: customer.templateImageUrl,
@@ -201,6 +201,41 @@
                 if(cache) {
                     cache.get(id).isTemplateAccount = data.isTemplateAccount;
                     cache.get(id).templateImageUrl = data.templateImageUrl;
+                }
+                fn(null, data);
+            }).error(function(err){
+                fn(err);
+            });
+        };
+
+        this.updateCustomerReceiveInsights = function(customer, receiveInsights, fn) {
+            var id = customer._id;
+
+            var apiUrl = [baseUrl, 'customer', id, 'insights'].join('/');
+            var body = {
+                receiveInsights:receiveInsights
+            };
+            var cache = this.getCache();
+            $http.post(apiUrl, body).success(function(data){
+                if(cache) {
+                    cache.get(id).email_preferences.receiveInsights = receiveInsights;
+                }
+                fn(null, data);
+            }).error(function(err){
+                fn(err);
+            });
+
+        };
+
+        this.updateCustomerShowHide = function(customer, fn) {
+            var id = customer._id;
+
+            var apiUrl = [baseUrl, 'customer', id, 'showhide'].join('/');
+            var body = {showhide: customer.showhide};
+            var cache = this.getCache();
+            $http.post(apiUrl, body).success(function(data){
+                if(cache) {
+                    cache.get(id).showHide = customer.showHide;
                 }
                 fn(null, data);
             }).error(function(err){
