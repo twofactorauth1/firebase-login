@@ -404,6 +404,27 @@ _.extend(view.prototype, BaseView.prototype, {
                 });
             },
 
+            function getBlogPosts(webpageData, pages, cb) {
+                var pageHandle = handle || 'index';
+                var currentPage = _.find(pages, function(page){
+                    return page.get('handle') === pageHandle;
+                });
+                var componentTypes = _.pluck(_.flatten(_.pluck(currentPage.get("sections"), "components")), "type");
+
+                var _blogComponents = _.contains(componentTypes, "ssb-blog-post-list") || _.contains(componentTypes, "ssb-recent-post")
+                || _.contains(componentTypes, "ssb-recent-tag") || _.contains(componentTypes, "ssb-recent-category");
+
+                if(_blogComponents){
+                    ssbManager.getPublishedPosts(accountId, null, null, function(err, posts){                
+                        data.posts = posts;
+                        cb(null, webpageData, pages);
+                    });
+                }
+                else{
+                    cb(null, webpageData, pages);
+                }
+            },
+
             function(value, pages, cb) {
                 var pageHolder = {};
                 _.each(pages, function(page){
