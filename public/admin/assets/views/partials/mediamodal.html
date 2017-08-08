@@ -100,7 +100,7 @@
                                         <a href="" ng-click="m.deleteAsset(asset)"><i class="fa fa-trash-o"></i> Delete</a>
                                     </li>
                                     <li>
-                                        <a href="" ng-click="m.addRemoveAssetFromCache(asset)"><i class="fa fa-database"></i> {{asset.isCached? "Don't ":" " }}Cache</a>
+                                        <a href="" ng-click="m.addRemoveAssetFromCache(asset)"><i class="fa fa-database"></i> {{asset.isCached==false? "Cache ":"Don't Cache"}}</a>
                                     </li>
                                 </ul>
                             </div>
@@ -115,7 +115,7 @@
                                 </div>
                             </div>
                             <h5 class="fm-title">
-                                    <a editable-text='asset.filename' e-required e-placeholder='Enter name' onaftersave='m.onAssetUpdateCallback(asset)' onbeforesave="validateAsset($data)"><span class="text-adjust-span">{{asset.filename}}{{asset.isCached?'':' (Uncached)'}}</span></a>
+                                    <a editable-text='asset.filename' e-required e-placeholder='Enter name' onaftersave='m.onAssetUpdateCallback(asset)' onbeforesave="validateAsset($data)"><span class="text-adjust-span">{{asset.filename}}{{asset.isCached==false?' (Uncached)':''}}</span></a>
                                 </h5>
                             <small class="text-muted">{{asset.created.date | timeAgoFilter}}</small>
                         </div>
