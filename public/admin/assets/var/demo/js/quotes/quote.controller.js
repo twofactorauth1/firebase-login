@@ -7,7 +7,7 @@ quoteComponentController.$inject = ['$scope', '$attrs', '$filter', '$modal', '$t
 function quoteComponentController($scope, $attrs, $filter, $modal, $timeout, $location, SweetAlert, toaster, pagingConstant, formValidations, QuoteService, UtilService, UserPermissionsConfig) {
 
     var vm = this;
-
+    vm.showFilteredRecords = showFilteredRecords;
     vm.state = {
         newQuote: {},
         orgCardAndPermissions: UserPermissionsConfig.orgConfigAndPermissions
