@@ -464,6 +464,10 @@
                             returningCustomers.push(result.count);
                         }
                     });
+                    if(newCustomers.length<2){
+                        newCustomers.push(0);
+                        returningCustomers.push(0);
+                    }
                     var newVsReturning = [
                         newCustomers,
                         returningCustomers
@@ -542,10 +546,16 @@
                     osData = osData.concat(_.pairs(osMap));
                     osData = _.sortBy(osData, function(pair){return pair[1];});
                     $scope.osData = osData;
-                    var osLength = osData.length - 1;
-                    $scope.topOS = osData[osLength][0];
-                    var osPercent = Math.floor((osData[osLength][1] / osTotal) * 100);
-                    $scope.osPercent = osPercent;
+                   if(osData &&osData.length >0){
+                            var osLength = osData.length - 1;
+                            $scope.topOS = osData[osLength];
+                            var osPercent = Math.floor((osData[osLength][1] / osTotal) * 100);
+                            $scope.osPercent = osPercent;
+                    }else{
+                       $scope.topOS ="__";
+                       var osPercent = 0;
+                        $scope.osPercent = "_";;
+                    }
 
                     ChartAnalyticsService.osChart(osData, function(config){
                         $scope.osConfig = config;
