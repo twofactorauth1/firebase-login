@@ -189,7 +189,7 @@
                         </label>
                     </li>
                     <li>
-                        <label ng-class="{'disabled': vm.uiState.isBlogPage}">
+                        <label ng-class="{'disabled': vm.uiState.isBlogPage && !vm.uiState.isBlogCopy}">
                             <h5>URL:</h5>
                             <span editable-text="vm.state.page.handle" onbeforesave="vm.validateDuplicatePage($data)" e-required e-placeholder="Enter url">{{vm.state.page.handle || 'Enter url'}}</span>
                         </label>
