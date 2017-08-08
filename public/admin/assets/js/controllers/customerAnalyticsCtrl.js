@@ -507,7 +507,7 @@
                         $scope.browserPercent = browserPercent;
                     } else {
                         $scope.topBrowser = '--';
-                        var browserPercent = Math.round((userAgentData[uadLength][1] / browserTotal) * 100);
+                        var browserPercent = 0;
                         $scope.browserPercent = '--';
                     }
 
