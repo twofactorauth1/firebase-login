@@ -523,7 +523,7 @@ app.controller('MediaModalCtrl', ['$scope', 'mediaManagerConstant', '$injector',
   }
   $scope.m.addRemoveAssetFromCache = function (asset) {
     var originalAsset = angular.copy(asset);
-    originalAsset.isCached = !originalAsset.isCached;
+    originalAsset.isCached = originalAsset.isCached==false?true:false;
     originalAsset.accountId = $scope.account._id;
     AssetsService.updateMatadata(originalAsset, function (data, status) {
       if (status == 200) {
