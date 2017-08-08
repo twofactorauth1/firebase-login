@@ -218,6 +218,16 @@
 
         };
 
+        $scope.makeEvergreen = function() {
+            customerService.makeEvergreen($scope.customer._id, function(err, value){
+                if(err) {
+                    toaster.pop('warning', err.message);
+                } else {
+                    toaster.pop('success', 'Account converted to Evergreen.  If there is currently a Stripe Subscription, please manually cancel.');
+                }
+            });
+        };
+
         $scope.updateCustomerTemplateAccount = function(isTemplateAccount) {
             var text = isTemplateAccount ? "Set this customer as template account" : "Unset this customer as template account";
             SweetAlert.swal({

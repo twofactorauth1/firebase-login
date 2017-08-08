@@ -256,5 +256,14 @@
             });
         };
 
+        this.makeEvergreen = function(accountId, fn) {
+            var apiUrl = [adminUrl, 'user', 'account', accountId, 'evergreen'].join('/');
+            $http.post(apiUrl).success(function(data){
+                fn(null, data);
+            }).error(function(err){
+                fn(err);
+            });
+        };
+
     }]);
 }(angular));
