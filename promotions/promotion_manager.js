@@ -173,21 +173,29 @@ var manager = {
     deletePromotion: function(accountId, userId, promotionId, fn){
         var self = this;
         log.debug(accountId, userId, '>> deletePromotion');
-        var query = {_id: promotionId};
-
-        promotionDao.removeByQuery(query, $$.m.Promotion, function(err, value){
+        var query = {promotionId: promotionId};
+                
+        shipmentDao.removeByQuery(query, $$.m.Shipment, function(err, value1){
             if(err) {
-                self.log.error('Error deleting promotion: ' + err);
+                self.log.error('Error deleting shipments: ' + err);
                 return fn(err, null);
             } else {
                 log.debug(accountId, userId, '<< deletePromotion');
-                shipmentDao.removeByQuery(query, $$.m.Shipment, function(err, value){
+                promotionDao.removeByQuery(query, $$.m.PromotionReport, function(err, value2){
                     if(err) {
-                        self.log.error('Error deleting shipments: ' + err);
+                        self.log.error('Error deleting promotion reports: ' + err);
                         return fn(err, null);
                     } else {
                         log.debug(accountId, userId, '<< deletePromotion');
-                        fn(null, value);
+                        promotionDao.removeByQuery({_id: promotionId}, $$.m.Promotion, function(err, value){
+                            if(err) {
+                                self.log.error('Error deleting promotion: ' + err);
+                                return fn(err, null);
+                            }
+                            else{
+                                fn(null, value);
+                            }
+                        })    
                     }
                 });
             }
