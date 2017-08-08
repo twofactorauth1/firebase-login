@@ -181,7 +181,15 @@ var manager = {
                 return fn(err, null);
             } else {
                 log.debug(accountId, userId, '<< deletePromotion');
-                fn(null, value);
+                shipmentDao.removeByQuery(query, $$.m.Shipment, function(err, value){
+                    if(err) {
+                        self.log.error('Error deleting shipments: ' + err);
+                        return fn(err, null);
+                    } else {
+                        log.debug(accountId, userId, '<< deletePromotion');
+                        fn(null, value);
+                    }
+                });
             }
         });
     },
