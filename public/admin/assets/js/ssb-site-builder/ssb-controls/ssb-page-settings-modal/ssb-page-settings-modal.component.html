@@ -35,7 +35,7 @@
                                 </label>
                             </div>
                         </div>
-                        <div class="form-group"  ng-if="!vm.isBlogPage">
+                        <div class="form-group"  ng-if="!vm.isBlogPage || vm.isBlogCopy">
                             <div class="checkbox clip-check check-info checkbox-inline">
                                 <input id="checkbox2" ng-change="vm.setAsHomePage()" type="checkbox" ng-model="vm.page.homePage" checked>
                                 <label for="checkbox2">
@@ -101,7 +101,7 @@
                         </div>
                         <div class="form-group" ng-class="{'has-error': vm.inValidPageHandle}">
                             <label>Url:</label>
-                            <input ng-disabled="vm.isBlogPage" class="form-control input-lg" type="text" ng-model="vm.page.handle">
+                            <input ng-disabled="vm.isBlogPage && !vm.isBlogCopy" class="form-control input-lg" type="text" ng-model="vm.page.handle">
                             <span class="help-block" ng-if="vm.inValidPageHandle">{{vm.inValidPageHandle}}</span>
                         </div>
                         <div class="form-group">
@@ -145,9 +145,9 @@
     <div class="clearfix"></div>
     <div ng-class="{'disabled' : vm.loading || vm.saveLoading}" class="modal-footer ssb-footer-page-settings-modal">
         <ul class="list-unstyled page-settings">
-            <li ng-if="!vm.isBlogPage"><a tooltip-placement="bottom" tooltip="Create a duplicate page" href="javascript:void(0)" ng-click="vm.duplicatePage()"><i class="fa fa-copy"></i> Duplicate</a></li>
+            <li ng-if="!vm.isBlogPage || vm.isBlogCopy"><a tooltip-placement="bottom" tooltip="Create a duplicate page" href="javascript:void(0)" ng-click="vm.duplicatePage()"><i class="fa fa-copy"></i> Duplicate</a></li>
             <li ng-hide="vm.isBlogPage && vm.page.handle === 'blog-post'"><a tooltip-placement="bottom" tooltip="Hide this page from main menu" ng-click="vm.hideFromMenu()" href="javascript:void(0)"><i class="fa fa-eye"></i> Hide</a></li>
-            <li ng-if="!vm.isBlogPage"><a tooltip-placement="bottom" tooltip="Delete this page" href="javascript:void(0)" ng-click="vm.deletePage()" ><i class="fa fa-trash"></i> Delete</a></li>
+            <li ng-if="!vm.isBlogPage || vm.isBlogCopy"><a tooltip-placement="bottom" tooltip="Delete this page" href="javascript:void(0)" ng-click="vm.deletePage()" ><i class="fa fa-trash"></i> Delete</a></li>
         </ul>
         <div class="pull-right">
             <button class="btn btn-primary" ng-click="vm.parentVm.closeModal()">Close</button>
