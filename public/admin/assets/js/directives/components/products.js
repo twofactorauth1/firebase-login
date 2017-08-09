@@ -1,6 +1,6 @@
 'use strict';
 /*global app, moment*/
-app.directive('productsComponent', ['ProductService', '$location', '$timeout', 'AccountService', function (ProductService, $location, $timeout, AccountService) {
+app.directive('productsComponent', ['ProductService', '$location', '$timeout', '$filter', 'AccountService', function (ProductService, $location, $timeout, $filter, AccountService) {
   return {
     scope: {
       component: '=',
@@ -80,17 +80,23 @@ app.directive('productsComponent', ['ProductService', '$location', '$timeout', '
           }
         });
         var activeProducts =_.filter(_filteredProducts, function(product){ return product.type !== 'DONATION'})
-        var sortOrder = "created.date";
-        var sortDir = true;
-        if(scope.productSortOrder.order == "price_low"){
-            sortOrder = "actualSalesPrice";
-            sortDir = false;
+        if(scope.productSortOrder.order){
+          var sortOrder = "created.date";
+          var sortDir = true;
+          if(scope.productSortOrder.order == "price_low"){
+              sortOrder = "actualSalesPrice";
+              sortDir = false;
+          }
+          else if(scope.productSortOrder.order == "price_high"){
+              sortOrder = "actualSalesPrice";
+              sortDir = true;
+          }
+          scope.products = $filter('orderBy')(activeProducts, [sortOrder, "created.date"], sortDir);
         }
-        else if(scope.productSortOrder.order == "price_high"){
-            sortOrder = "actualSalesPrice";
-            sortDir = true;
-        }
-        scope.products = activeProducts;
+        else{
+          scope.products = activeProducts;
+        }  
+        
         if (fn) {
           fn();
         }

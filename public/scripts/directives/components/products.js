@@ -19,7 +19,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
             var cookieData = ""; //localStorageService.get(cookieKey);
             var orderCookieData = ""; //localStorageService.get(orderCookieKey);
             var productComponentCookieKey = "";
-            var productComponentCookieData = "";
+            var productComponentCookieData = {};
 
 
 
@@ -48,7 +48,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
             initializeCouponDetails();
 
             scope.productSortOrder = {
-
+                order: "most_recent"
             }
 
             scope.calculateTotalChargesfn = CartDetailsService.calculateTotalCharges;
@@ -149,17 +149,24 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                     }
                 });
                 var activeProducts =_.filter(_filteredProducts, function(product){ return product.type !== 'DONATION'})
-                var sortOrder = "created.date";
-                var sortDir = true;
-                if(scope.productSortOrder.order == "price_low"){
-                    sortOrder = "actualSalesPrice";
-                    sortDir = false;
+                if(scope.productSortOrder.order){
+                    var sortOrder = "created.date";
+                    var sortDir = true;
+                    if(scope.productSortOrder.order == "price_low"){
+                        sortOrder = "actualSalesPrice";
+                        sortDir = false;
+                    }
+                    else if(scope.productSortOrder.order == "price_high"){
+                        sortOrder = "actualSalesPrice";
+                        sortDir = true;
+                    }
+                    scope.products = $filter('orderBy')(activeProducts, [sortOrder, "created.date"], sortDir);
                 }
-                else if(scope.productSortOrder.order == "price_high"){
-                    sortOrder = "actualSalesPrice";
-                    sortDir = true;
+                else{
+                    scope.products = activeProducts;
                 }
-                scope.products = $filter('orderBy')(activeProducts, [sortOrder, "created.date"], sortDir);
+                
+                
                 
                 if (fn) {
                     fn();
@@ -174,7 +181,12 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
             ProductService.getActiveProducts(function(data) {
                 
                 scope.originalProducts = data;
-
+                if(productComponentCookieData && productComponentCookieData.productSortOrder){
+                    scope.productSortOrder.order = productComponentCookieData.productSortOrder;
+                }
+                else{
+                    scope.productSortOrder.order = "most_recent";
+                }
                 filterProducts(scope.originalProducts, function() {
                     scope.pageChanged(1);
                 });
