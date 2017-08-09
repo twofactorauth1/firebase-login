@@ -40,8 +40,8 @@ _.extend(router.prototype, BaseRouter.prototype, {
 
         app.get("/:page", [sitemigration_middleware.checkForRedirect, this.setupForPages.bind(this)], this.optimizedIndex.bind(this));
         //app.get(/^\/(?!api.*|static)(.*)$/, [sitemigration_middleware.checkForRedirect, this.setupForPages.bind(this)], this.optimizedRegexpIndex.bind(this));
-        app.get('/:page/:page1', [sitemigration_middleware.checkForRedirect, this.setupForPages.bind(this)], this.optimizedSubpathIndex.bind(this));
-        app.get('/:page/:page1/:page2', [sitemigration_middleware.checkForRedirect, this.setupForPages.bind(this)], this.optimizedSubpathIndex.bind(this));
+        //app.get('/:page/:page1', [sitemigration_middleware.checkForRedirect, this.setupForPages.bind(this)], this.optimizedSubpathIndex.bind(this));
+        //app.get('/:page/:page1/:page2', [sitemigration_middleware.checkForRedirect, this.setupForPages.bind(this)], this.optimizedSubpathIndex.bind(this));
         app.get('/preview/:pageId', this.isAuth.bind(this), this.previewIndex.bind(this));
         app.get('/preview/:pageId/:postId', this.isAuth.bind(this), this.previewIndex.bind(this));
         return this;
