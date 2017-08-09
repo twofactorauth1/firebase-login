@@ -46,7 +46,6 @@ var mainApp = angular
         if (window.history && window.history.pushState) {
             $locationProvider.html5Mode(true).hashPrefix('!');
         }
-
         //$httpProvider.interceptors.push('noCacheInterceptor');
         $routeProvider
             .when('/', {
@@ -191,9 +190,9 @@ var mainApp = angular
             })
             .when('/:name', {
                 template: function(urlattr) {
-
+                    urlattr.name="index/new";
                     var s = '<div class="main-include" ssb-data-styles data-ng-include="';
-                    s += " '/template/" + urlattr.name.toLowerCase();
+                    s += " '/template/"+ encodeURIComponent(urlattr.name.toLowerCase());
                     if(urlattr.cachebuster) {
                         s+='?cachebuster=' + urlattr.cachebuster;
                     }
@@ -219,8 +218,20 @@ var mainApp = angular
                 templateUrl: '../views/main.html'
             })
             .otherwise({
-                templateUrl: '../views/main.html',
-                controller: 'LayoutCtrl as layout'
+               template: function(urlattr) {
+                   if(window.location.pathname.length>1)
+                    urlattr.name=window.location.pathname.substr(1);
+                    var s = '<div class="main-include" ssb-data-styles data-ng-include="';
+                    s += " '/template/"+ encodeURIComponent(urlattr.name.toLowerCase());
+                    if(urlattr.cachebuster) {
+                        s+='?cachebuster=' + urlattr.cachebuster;
+                    }
+                    s+= "'";
+                    s += ' "></div>';
+                    return s;
+                },
+                controller: 'CacheCtrl as cacheCtrl',
+                reloadOnSearch: false
             });
 
             localStorageServiceProvider.setPrefix('indi');
