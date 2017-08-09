@@ -149,7 +149,7 @@ _.extend(api.prototype, baseApi.prototype, {
         manager.getInventoryItemByName(accountId, userId, name, function(err, value){
             self.log.debug(accountId, userId, '<< inventory');
             var note = "Product Name: " + value.OITM_ItemName;
-            self.createUserActivity(req, 'INV_DETAIL', note, null, function(){});
+            //self.createUserActivity(req, 'INV_DETAIL', note, null, function(){});
             return self.sendResultOrError(resp, err, value, "Error calling inventory");
         });
     },
