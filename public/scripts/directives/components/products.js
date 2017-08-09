@@ -1,6 +1,6 @@
 'use strict';
 /*global app*/
-app.directive('productsComponent', ['$timeout', 'paymentService', 'productService', 'accountService', 'CartDetailsService', 'userService', 'orderService', 'formValidations', '$routeParams', '$location', 'ENV', '$sce', 'localStorageService', '$modal', 'shippingStates', function($timeout, PaymentService, ProductService, AccountService, CartDetailsService, UserService, OrderService, formValidations, $routeParams, $location, ENV, $sce, localStorageService, $modal, shippingStates) {
+app.directive('productsComponent', ['$timeout', 'paymentService', 'productService', 'accountService', 'CartDetailsService', 'userService', 'orderService', 'formValidations', '$routeParams', '$location', 'ENV', '$sce', 'localStorageService', '$modal', 'shippingStates', '$filter', function($timeout, PaymentService, ProductService, AccountService, CartDetailsService, UserService, OrderService, formValidations, $routeParams, $location, ENV, $sce, localStorageService, $modal, shippingStates, $filter) {
     return {
         require: [],
         scope: {
@@ -18,6 +18,10 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
             var orderCookieKey = ""; //'order_cookie_' + scope.component._id;
             var cookieData = ""; //localStorageService.get(cookieKey);
             var orderCookieData = ""; //localStorageService.get(orderCookieKey);
+            var productComponentCookieKey = "";
+            var productComponentCookieData = {};
+
+
 
             //assign and hold the checkout modal state
             scope.checkoutModalState = 1;
@@ -43,6 +47,9 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
             scope.taxPercent = 0;
             initializeCouponDetails();
 
+            scope.productSortOrder = {
+                order: "most_recent"
+            }
 
             scope.calculateTotalChargesfn = CartDetailsService.calculateTotalCharges;
             scope.currentPath = angular.copy($location);
@@ -133,12 +140,34 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                     if (filterTags(product)) {
                         if (CartDetailsService.checkOnSale(product)) {
                             product.onSaleToday = true;
+                            product.actualSalesPrice = product.sale_price;
+                        }
+                        else{
+                            product.actualSalesPrice = product.regular_price;
                         }
                         _filteredProducts.push(product);
                     }
                 });
                 var activeProducts =_.filter(_filteredProducts, function(product){ return product.type !== 'DONATION'})
-                scope.products = activeProducts;
+                if(scope.productSortOrder.order){
+                    var sortOrder = "created.date";
+                    var sortDir = true;
+                    if(scope.productSortOrder.order == "price_low"){
+                        sortOrder = "actualSalesPrice";
+                        sortDir = false;
+                    }
+                    else if(scope.productSortOrder.order == "price_high"){
+                        sortOrder = "actualSalesPrice";
+                        sortDir = true;
+                    }
+                    scope.products = $filter('orderBy')(activeProducts, [sortOrder, "created.date"], sortDir);
+                }
+                else{
+                    scope.products = activeProducts;
+                }
+                
+                
+                
                 if (fn) {
                     fn();
                 }
@@ -150,14 +179,29 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
              */
 
             ProductService.getActiveProducts(function(data) {
+                
                 scope.originalProducts = data;
+                if(productComponentCookieData && productComponentCookieData.productSortOrder){
+                    scope.productSortOrder.order = productComponentCookieData.productSortOrder;
+                }
+                else{
+                    scope.productSortOrder.order = "most_recent";
+                }
                 filterProducts(scope.originalProducts, function() {
                     scope.pageChanged(1);
                 });
                 cookieProcessFn();
             });
 
+            
 
+            scope.changeProductSortOrder = function(){
+                productComponentCookieData.productSortOrder = scope.productSortOrder.order;
+                localStorageService.set(productComponentCookieKey, productComponentCookieData);
+                filterProducts(scope.originalProducts, function() {
+                    scope.pageChanged(1);
+                });
+            }
 
             scope.itemClicked = function(item) {
                 var returnValue = false;
@@ -346,6 +390,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                     getAccountSettings(scope.account);
                     cookieKey = 'cart_cookie_' + scope.account._id + '_' + scope.account.subdomain;
                     orderCookieKey = 'order_cookie_' + scope.account._id + '_' + scope.account.subdomain;
+                    productComponentCookieKey = 'product_cookie_' + scope.account._id + '_' + scope.component._id;
                     cookieData = localStorageService.get(cookieKey);
                     if (!cookieData) {
                         var cookieComponentKey = 'cart_cookie_' + scope.component._id;
@@ -358,8 +403,20 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                         else{
                             localStorageService.set(cookieKey, cookieData);
                         }
-                    }
+                    }                  
+
                     orderCookieData = localStorageService.get(orderCookieKey);
+
+                    productComponentCookieData = localStorageService.get(productComponentCookieKey);
+                    if (!productComponentCookieData) {
+                        productComponentCookieData = {
+                            productSortOrder: 'most_recent'
+                        }
+                        localStorageService.set(productComponentCookieKey, productComponentCookieData);
+                    }
+
+                
+                    scope.productSortOrder.order = productComponentCookieData.productSortOrder;
                 }
             });
 
@@ -1738,6 +1795,10 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                   scope.addresses.shipping = false;
                 }
 
+                if(productComponentCookieData.productSortOrder){
+                    scope.productSortOrder.order = productComponentCookieData.productSortOrder;
+                }
+
                 cookieData.checkShippingInfo = scope.addresses.shipping;
 
                 if ($routeParams.state && $routeParams.comp == 'products') {
@@ -2001,6 +2062,21 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                 scope.checkoutModalState = state;
                 angular.element("#cart-checkout-modal .modal-body").scrollTop(0);
             };
+
+            scope.productSortOrderOptions = [
+                {
+                    label: "Most Recent",
+                    data: "most_recent"
+                },
+                {
+                    label: "Price: Low to High",
+                    data: "price_low"
+                },
+                {
+                    label: "Price: High to Low",
+                    data: "price_high"
+                }
+            ]
 
         },
         controller: function($scope) {

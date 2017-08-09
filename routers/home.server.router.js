@@ -78,6 +78,7 @@ _.extend(router.prototype, BaseRouter.prototype, {
         app.get('/cached/:page', this.frontendSetup.bind(this), this.optimizedIndex.bind(this));
         app.get('/template', this.frontendSetup.bind(this), this.getOrCreateTemplate.bind(this));
         app.get('/template/:page', this.frontendSetup.bind(this), this.getOrCreateTemplate.bind(this));
+        app.get('/template/:page/:page_1', this.frontendSetup.bind(this), this.getOrCreateTemplate.bind(this));
 
         app.get('/scripts/*', this.frontendSetup.bind(this), this.serveNodeModules.bind(this));
         return this;
@@ -572,6 +573,9 @@ _.extend(router.prototype, BaseRouter.prototype, {
             accountId = appConfig.mainAccountID;
         }
         var pageName = req.params.page || 'index';
+        if(req.params.page_1) {
+            pageName += '/' + req.params.page_1;
+        }
         var update = req.query.cachebuster || false;
         self.log.debug('>> getOrCreateTemplate ' + accountId + ', ' + pageName + ', ' + update);
         //return pageCacheManager.getOrCreateLocalTemplate(accountId, pageName, resp);

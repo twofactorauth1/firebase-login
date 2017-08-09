@@ -973,7 +973,7 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
 
     function validateDuplicatePage(pageHandle) {
 
-        pageHandle = $filter('slugify')(pageHandle); // in case $watch hasn't cleaned-up the handle.
+        pageHandle = customSlugify(pageHandle); // in case $watch hasn't cleaned-up the handle.
         var _page = vm.state.pages.filter(function(page){return page.handle.toLowerCase() === pageHandle.toLowerCase()})[0]
 
         if (pageHandle === "") {
@@ -996,7 +996,7 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
 
     $scope.$watch('vm.state.page.handle', function(handle, oldHandle){
         if(handle && !angular.equals(oldHandle, handle)){
-            vm.state.page.handle = $filter('slugify')(handle);
+            vm.state.page.handle = customSlugify(handle);
         }
     });
 
@@ -1115,7 +1115,11 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
         }
         return _showSection;
     }
-
+    function customSlugify(s) {
+        if (!s) return "";
+        s = s.replace(/[^\w\s-\/]/g, "").trim().toLowerCase();
+        return s.replace(/[-\s]+/g, "-");
+    }
     function init(element) {
 
         vm.element = element;

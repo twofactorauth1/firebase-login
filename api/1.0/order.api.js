@@ -13,7 +13,7 @@ var dao = require('../../orders/dao/order.dao');
 var emailDao = require('../../cms/dao/email.dao');
 var emailMessageManager = require('../../emailmessages/emailMessageManager');
 var productManager = require('../../products/product_manager');
-
+var contactActivityManager = require('../../contactactivities/contactactivity_manager.js');
 
 var api = function () {
     this.init.apply(this, arguments);
@@ -69,7 +69,10 @@ _.extend(api.prototype, baseApi.prototype, {
                     self.log.debug(accountId, userId, '<< createOrder', err);
                     self.sendResultOrError(res, err, order, 'Error creating order', 500);
                     if(userId && order) {
-                        self.createUserActivity(req, 'CREATE_ORDER', null, {id: order.id()}, function(){});
+                        self.createUserActivity(req, 'CREATE_ORDER', null, {id: order.id()}, function(){});                        
+                    }
+                    if(order){
+                        self._createContactActivity(order, accountId, 'CREATE_ORDER');
                     }
                 }); 
             } else {
@@ -77,7 +80,10 @@ _.extend(api.prototype, baseApi.prototype, {
                     self.log.debug(accountId, userId, '<< createOrder', err);
                     self.sendResultOrError(res, err, order, 'Error creating order', 500);
                     if(userId && order) {
-                        self.createUserActivity(req, 'CREATE_ORDER', null, {id: order.id()}, function(){});
+                        self.createUserActivity(req, 'CREATE_ORDER', null, {id: order.id()}, function(){});                        
+                    }
+                    if(order){
+                        self._createContactActivity(order, accountId, 'CREATE_ORDER');
                     }
                 }); 
             }
@@ -132,6 +138,9 @@ _.extend(api.prototype, baseApi.prototype, {
             self.sendResultOrError(resp, err, order, 'Error creating order', 500);
             if(userId && order) {
                 self.createUserActivity(req, 'CREATE_PAYPAL_ORDER', null, {id: order.id()}, function(){});
+            }
+            if(order){
+                self._createContactActivity(order, accountId, 'CREATE_PAYPAL_ORDER');
             }
         });
 
@@ -478,6 +487,24 @@ _.extend(api.prototype, baseApi.prototype, {
                 self.createUserActivity(req, 'DELETE_ORDER', null, {id: orderId}, function(){});
             } else {
                 self.wrapError(res, 401, null, err, value);
+            }
+        });
+    },
+    _createContactActivity: function(order, accountId, type ){
+        var contactActivity = new $$.m.ContactActivity({
+            accountId: accountId,
+            contactId: order.get("customer_id"),
+            activityType: type,
+            extraFields: {
+                _id: order.id(),
+                orderId: order.get("order_id")
+            },
+            start:new Date()
+        });
+        contactActivityManager.createActivity(contactActivity, function(err, value){
+            if(err) {
+                self.log.error('Error creating subscribe activity: ' + err);
+                //if we can't create the activity... that's fine.  We have already created the contact.
             }
         });
     }

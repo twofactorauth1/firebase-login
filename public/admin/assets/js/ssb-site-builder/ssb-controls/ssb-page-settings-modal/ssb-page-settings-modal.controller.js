@@ -258,6 +258,7 @@ app.controller('SiteBuilderPageSettingsModalController', ['$scope', '$timeout', 
       if(page){
         vm.isBlogPage = vm.parentVm.uiState.checkIfBlogPage(vm.originalPage);
         vm.isBlogCopy = vm.parentVm.uiState.checkIfBlogCopy(vm.originalPage);
+        vm.isBlogListPage = vm.originalPage.handle === "blog-list";
         vm.inValidPageHandle = validateDuplicatePage(vm.page.handle);
       }
     });
