@@ -190,9 +190,8 @@ var mainApp = angular
             })
             .when('/:name', {
                 template: function(urlattr) {
-                    urlattr.name="index/new";
                     var s = '<div class="main-include" ssb-data-styles data-ng-include="';
-                    s += " '/template/"+ encodeURIComponent(urlattr.name.toLowerCase());
+                    s += " '/template/"+ urlattr.name.toLowerCase();
                     if(urlattr.cachebuster) {
                         s+='?cachebuster=' + urlattr.cachebuster;
                     }
