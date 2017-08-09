@@ -216,6 +216,20 @@ var mainApp = angular
                 controller: 'PreviewCtrl as previewCtrl',
                 templateUrl: '../views/main.html'
             })
+            .when('/:name/:name_1', {
+                template: function(urlattr) {
+                    var s = '<div class="main-include" ssb-data-styles data-ng-include="';
+                    s += " '/template/"+ urlattr.name.toLowerCase() + '/' + urlattr.name_1.toLowerCase();
+                    if(urlattr.cachebuster) {
+                        s+='?cachebuster=' + urlattr.cachebuster;
+                    }
+                    s+= "'";
+                    s += ' "></div>';
+                    return s;
+                },
+                controller: 'CacheCtrl as cacheCtrl',
+                reloadOnSearch: false
+            })
             .otherwise({
                template: function(urlattr) {
                    if(window.location.pathname.length>1)
