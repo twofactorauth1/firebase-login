@@ -2,12 +2,11 @@
 /**
  * Indigenous Main Controller
  */
-app.controller('AppCtrl', ['$rootScope', '$scope', '$state', '$translate', '$window', '$location', '$document', '$timeout', '$modal', 'cfpLoadingBar', 'UserService', 'AccountService', 'accountConstant', 'UserPermissionsConfig',
-    function ($rootScope, $scope, $state, $translate, $window, $location, $document, $timeout, $modal, cfpLoadingBar, UserService, AccountService, accountConstant, UserPermissionsConfig) {
+app.controller('AppCtrl', ['$rootScope', '$scope', '$state', '$translate', '$window', '$location', '$document', '$timeout', '$modal', 'cfpLoadingBar', 'UserService', 'AccountService', 'accountConstant', 'UserPermissionsConfig', 'Analytics',
+    function ($rootScope, $scope, $state, $translate, $window, $location, $document, $timeout, $modal, cfpLoadingBar, UserService, AccountService, accountConstant, UserPermissionsConfig, Analytics) {
 
         AccountService.getAccount(function (account) {
             $scope.account = account;
-
             $rootScope.account = account;
             AccountService.setMainAccount($scope.account);
             if (account.showhide.dohy && $state.current.name === 'app.dashboard') {
@@ -146,7 +145,8 @@ app.controller('AppCtrl', ['$rootScope', '$scope', '$state', '$translate', '$win
         // Top Bar User
         // -----------------------------------
         UserService.getUser(function (user) {
-            $scope.currentUser = user;            
+            $scope.currentUser = user;
+            Analytics.set('&uid', user.username);
         });
         $scope.userPermissions = {};
         $scope.$watchGroup(["account", "currentUser"], _.debounce(function (values) {
