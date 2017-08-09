@@ -340,6 +340,20 @@
                                         <span>{{activity.email}}</span>
                                     </p>
                                 </div>
+                                <div ng-switch-when="CREATE_PAYPAL_ORDER">
+                                    <p>
+                                        <span class="label label-info">ORDER CREATED</span> with Order Id
+                                        
+                                        <span>'{{activity.extraFields.orderId}}'</span>
+                                    </p>
+                                </div>
+                                <div ng-switch-when="CREATE_ORDER">
+                                    <p>
+                                        <span class="label label-info">ORDER CREATED</span> with Order Id
+                                        
+                                        <span>'{{activity.extraFields.orderId}}'</span>
+                                    </p>
+                                </div>
                                 <div ng-switch-default>
                                     <p>
                                         <span class="label label-default">{{activity.activityType}}</span> {{activity.detail}}
