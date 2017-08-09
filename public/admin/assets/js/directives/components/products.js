@@ -17,6 +17,9 @@ app.directive('productsComponent', ['ProductService', '$location', '$timeout', '
 
       scope.currentPath = angular.copy($location);
       
+      scope.productSortOrder = {
+          order: "most_recent"
+      }
       /*
        * @filterTags
        * - if component has tags filter them or return the _product
@@ -68,11 +71,25 @@ app.directive('productsComponent', ['ProductService', '$location', '$timeout', '
           if (filterTags(product)) {
             if (checkOnSale(product)) {
               product.onSaleToday = true;
+              product.actualSalesPrice = product.sale_price;
+            }
+            else{
+              product.actualSalesPrice = product.regular_price;
             }
             _filteredProducts.push(product);
           }
         });
         var activeProducts =_.filter(_filteredProducts, function(product){ return product.type !== 'DONATION'})
+        var sortOrder = "created.date";
+        var sortDir = true;
+        if(scope.productSortOrder.order == "price_low"){
+            sortOrder = "actualSalesPrice";
+            sortDir = false;
+        }
+        else if(scope.productSortOrder.order == "price_high"){
+            sortOrder = "actualSalesPrice";
+            sortDir = true;
+        }
         scope.products = activeProducts;
         if (fn) {
           fn();
@@ -118,6 +135,12 @@ app.directive('productsComponent', ['ProductService', '$location', '$timeout', '
           scope.pageChanged(1);
         });
       });
+
+      scope.changeProductSortOrder = function(){
+          filterProducts(scope.originalProducts, function() {
+              scope.pageChanged(1);
+          });
+      }
 
       AccountService.getAccount(function(account) {
         scope.account = account;
@@ -226,7 +249,20 @@ app.directive('productsComponent', ['ProductService', '$location', '$timeout', '
        * @convertInLowerCase
        * - convert array value in lowercase
        */
-
+      scope.productSortOrderOptions = [
+          {
+              label: "Most Recent",
+              data: "most_recent"
+          },
+          {
+              label: "Price: Low to High",
+              data: "price_low"
+          },
+          {
+              label: "Price: High to Low",
+              data: "price_high"
+          }
+      ]
       function convertInLowerCase(dataItem) {
           var _item = [];
           _.each(dataItem, function(tagItem) {
