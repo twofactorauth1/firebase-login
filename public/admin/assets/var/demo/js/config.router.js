@@ -3,8 +3,8 @@
 /**
  * Config for the router
  */
-app.config(['$stateProvider', '$urlRouterProvider', '$controllerProvider', '$compileProvider', '$filterProvider', '$provide', '$ocLazyLoadProvider', 'JS_REQUIRES',
-function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvider, $filterProvider, $provide, $ocLazyLoadProvider, jsRequires) {
+app.config(['$stateProvider', '$urlRouterProvider', '$controllerProvider', '$compileProvider', '$filterProvider', '$provide', '$ocLazyLoadProvider', 'JS_REQUIRES','AnalyticsProvider', '$windowProvider',
+function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvider, $filterProvider, $provide, $ocLazyLoadProvider, jsRequires, AnalyticsProvider, $windowProvider) {
 
     app.controller = $controllerProvider.register;
     app.directive = $compileProvider.directive;
@@ -13,6 +13,18 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
     app.service = $provide.service;
     app.constant = $provide.constant;
     app.value = $provide.value;
+
+    /*
+     * Hack for GA
+     */
+    var $window = $windowProvider.$get();
+    var gaId = $window.indigenous.gaId || '0';
+    AnalyticsProvider.setAccount(gaId);
+    if($window.indigenous.gaTestMode) {
+        AnalyticsProvider.enterTestMode();
+    }
+
+    AnalyticsProvider.setPageEvent('$stateChangeSuccess');
 
     // LAZY MODULES
 
@@ -149,7 +161,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
     }).state('app.marketing', {
         url: '/marketing',
         template: '<div ui-view class="fade-in-up"></div>',
-        title: 'Marketing',
+        title: 'Marketing'
     }).state('app.marketing.socialfeed', {
         url: '/social-feed',
         templateUrl: "/admin/assets/views/social-feed.html",
@@ -183,7 +195,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
     }).state('app.account', {
         url: '/account',
         template: '<div ui-view class="fade-in-up"></div>',
-        title: 'Account',
+        title: 'Account'
     }).state('app.account.profilebusiness', {
         url: '/profile-business',
         templateUrl: "/admin/assets/views/profile-business.html",
@@ -271,7 +283,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         url: '/quotes/notifications',
         templateUrl: "/admin/assets/var/demo/views/under-construction.html",
         title: 'Notifications',
-        icon: 'ti-layout-media-left-alt',
+        icon: 'ti-layout-media-left-alt'
     }).state('app.viewquotes', {
         url: '/quotes/view',
         templateUrl: "/admin/assets/var/demo/views/under-construction.html",

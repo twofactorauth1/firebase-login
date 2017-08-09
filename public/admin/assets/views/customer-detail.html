@@ -200,6 +200,13 @@
                                                         </button>
                                                     </td>
                                                 </tr>
+                                                <tr ng-if="customer.billing.plan != 'EVERGREEN'">
+                                                    <td colspan="3">
+                                                        <button type="button" class="btn btn-warning btn-wide btn-scroll btn-scroll-top ti ti-plus" ng-click="makeEvergreen()">
+                                                            <span>Convert to Evergreen</span>
+                                                        </button>
+                                                    </td>
+                                                </tr>
                                             </tbody>
                                         </table>
 

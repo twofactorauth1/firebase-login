@@ -19,5 +19,6 @@ angular.module("indigenous", [
     'angular-parallax',
     'ng-sortable',
     'http-auth-interceptor',
-    'angularAddToHomeScreen'
+    'angularAddToHomeScreen',
+    'angular-google-analytics'
 ]);

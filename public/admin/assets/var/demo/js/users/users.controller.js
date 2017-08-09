@@ -40,7 +40,7 @@
                 });
               }
             }
-        })
+        });
 
         function loadAccountUsers(){
             UserService.getAccountUsers(function(users){
@@ -56,7 +56,7 @@
             var _isAdmin = false;
             var _userAccount = _.find($scope.currentUser.accounts, function(account){
                 return account.accountId == vm.state.account._id
-            })
+            });
 
             if(_userAccount && _userAccount.permissions){
                 if(_.contains(_userAccount.permissions, "admin")){
