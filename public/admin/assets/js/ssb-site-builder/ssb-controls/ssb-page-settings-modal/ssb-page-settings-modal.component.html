@@ -145,7 +145,7 @@
     <div class="clearfix"></div>
     <div ng-class="{'disabled' : vm.loading || vm.saveLoading}" class="modal-footer ssb-footer-page-settings-modal">
         <ul class="list-unstyled page-settings">
-            <li ng-if="!vm.isBlogPage || vm.isBlogCopy"><a tooltip-placement="bottom" tooltip="Create a duplicate page" href="javascript:void(0)" ng-click="vm.duplicatePage()"><i class="fa fa-copy"></i> Duplicate</a></li>
+            <li ng-if="!vm.isBlogPage || vm.isBlogCopy || vm.isBlogListPage"><a tooltip-placement="bottom" tooltip="Create a duplicate page" href="javascript:void(0)" ng-click="vm.duplicatePage()"><i class="fa fa-copy"></i> Duplicate</a></li>
             <li ng-hide="vm.isBlogPage && vm.page.handle === 'blog-post'"><a tooltip-placement="bottom" tooltip="Hide this page from main menu" ng-click="vm.hideFromMenu()" href="javascript:void(0)"><i class="fa fa-eye"></i> Hide</a></li>
             <li ng-if="!vm.isBlogPage || vm.isBlogCopy"><a tooltip-placement="bottom" tooltip="Delete this page" href="javascript:void(0)" ng-click="vm.deletePage()" ><i class="fa fa-trash"></i> Delete</a></li>
         </ul>
