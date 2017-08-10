@@ -21,6 +21,11 @@ html(class="no-js", lang="en")
                 include standardhead
             title=title
 
+            if account.orgId == 1
+                    link(rel="shortcut icon", href='https://s3.amazonaws.com/indigenous-digital-assets/account_1301/rvlvr-icon_1489761269532.png')
+            else
+                link(rel="shortcut icon", href='https://s3.amazonaws.com/indigenous-account-websites/acct_6/favicon.ico')
+
             // Bootstrap
             link(rel='stylesheet', href='/js/libs/bootstrap/dist/css/bootstrap.min.css')
             // Font Awesome
