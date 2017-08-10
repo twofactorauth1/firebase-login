@@ -106,6 +106,8 @@ module.exports = {
                 file.type = asset.get('mimeType');
                 file.size = asset.get('size');
                 file.path = temporaryPath;
+                file.isCache =existingAsset.get('isCached')==false?false:true;
+                self.log.debug("old image cache status="+file.isCache);
                 var bucket = awsConfig.BUCKETS.ASSETS;
                 var subdir = 'account_' + asset.get('accountId');
                 if(appConfig.nonProduction === true) {

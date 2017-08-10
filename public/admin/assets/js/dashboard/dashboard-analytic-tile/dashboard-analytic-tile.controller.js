@@ -77,7 +77,7 @@ function dashboardAnalyticTileComponentController($scope, $attrs, $filter, Dashb
                     break;
                 case 'CampaignMetrics':
 
-                    ret.widgetTitle = 'Campaigns';
+                    ret.widgetTitle = 'Campaign Email';
                     ret.buttonTitle = 'View Campaigns';
                     ret.data = [
                         {

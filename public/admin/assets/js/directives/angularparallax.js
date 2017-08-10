@@ -102,9 +102,7 @@ angular.module('angular-parallax', [
 
       // set our initial position - fixes webkit background render bug
       $(document).ready(function() {
-        setTimeout(function() {
-            setPosition();
-        }, 0)
+
         var unbindWatcher = $scope.$watch(function() {
                 return angular.element(".sortable-page-content").length
             }, function(newValue, oldValue) {
@@ -123,10 +121,17 @@ angular.module('angular-parallax', [
                 unbindWatcher();
             }
         });
+          angular.element($window).bind("scroll", setPosition);
+          angular.element($window).bind("touchmove", setPosition);
+          $scope.$on('parallaxCall', function(event, args) {
+               setTimeout(function() {
+                    setPosition();
+                }, 100)
+          });
       })
 
-      angular.element($window).bind("scroll", setPosition);
-      angular.element($window).bind("touchmove", setPosition);
+    //  angular.element($window).bind("scroll", setPosition);
+     // angular.element($window).biparallaxCallnd("touchmove", setPosition);
 
     }  // link function
   };

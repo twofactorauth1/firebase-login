@@ -27,11 +27,12 @@ app.directive('productsComponent', ['ProductService', '$location', '$timeout', '
 
       function filterTags(_product) {
         var _tags = scope.component.productTags;
-        _tags = convertInLowerCase(_tags);
+        
         if (_tags && _tags.length > 0) {
+          _tags = _.map(_tags, function(tag){return tag.toLowerCase()});
           if (_product.tags) {
-            _product.tags = convertInLowerCase(_product.tags);
-            if (_.intersection(_tags, _product.tags).length > 0) {
+            var _productTags = _.map(_product.tags, function(tag){return tag.toLowerCase()});
+            if (_.intersection(_tags, _productTags).length > 0) {
               return true;
             }
           }
@@ -251,10 +252,6 @@ app.directive('productsComponent', ['ProductService', '$location', '$timeout', '
         return styleString;
       }
 
-      /*
-       * @convertInLowerCase
-       * - convert array value in lowercase
-       */
       scope.productSortOrderOptions = [
           {
               label: "Most Recent",
@@ -269,13 +266,6 @@ app.directive('productsComponent', ['ProductService', '$location', '$timeout', '
               data: "price_high"
           }
       ]
-      function convertInLowerCase(dataItem) {
-          var _item = [];
-          _.each(dataItem, function(tagItem) {
-              _item.push(tagItem.toLowerCase());
-          });
-          return _item;
-      }
     }
   };
 }]);
