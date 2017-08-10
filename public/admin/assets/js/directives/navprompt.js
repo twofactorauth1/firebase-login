@@ -25,7 +25,7 @@ app.directive('indigNavprompt', function ($rootScope, $location, $state, SweetAl
                 if (scope.myState && $state.$current.name === scope.myState && scope.checkIfDirty && scope.checkIfDirty()) {
                     event.preventDefault();
 
-                    
+                    $rootScope.app.layout.isMinimalAdminChrome=true;
                     SweetAlert.swal({
                         title: "Are you sure?",
                         text: "You have unsaved data. Do you want to save it before navigating to a new page?",
@@ -45,6 +45,7 @@ app.directive('indigNavprompt', function ($rootScope, $location, $state, SweetAl
                                 scope.$watch(function () {
                                     return scope.savePageCheck
                                 }, function (newValue) {
+                                    $rootScope.app.layout.isMinimalAdminChrome=false;
                                     if (newValue && scope.allowRedirect) {
                                         if (angular.isDefined(scope.customRedirectUrl) && scope.customRedirectUrl) {
                                             $location.url(scope.customRedirectUrl);
@@ -63,7 +64,9 @@ app.directive('indigNavprompt', function ($rootScope, $location, $state, SweetAl
                             $rootScope.$broadcast('$stateChangeSuccess', toState, toParams, fromState, fromParams);
                         } else if (!angular.isDefined(isConfirm)) {
                             $rootScope.$broadcast('$stateChangeSuccess', toState, toParams, fromState, fromParams);
+                            $rootScope.app.layout.isMinimalAdminChrome=true;
                         } else {
+                            $rootScope.app.layout.isMinimalAdminChrome=false;
                             scope.resetDirty && scope.resetDirty();
                             SweetAlert.swal("Not Saved!", "Unsaved data was discarded.", "success");
                             if (angular.isDefined(scope.customRedirectUrl) && scope.customRedirectUrl) {
