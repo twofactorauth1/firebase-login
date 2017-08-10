@@ -35,6 +35,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url(':id/statistics'), this.isAuthAndSubscribedApi.bind(this), this.getCampaignStatistics.bind(this));
         app.get(this.url(':id/statistics/reconcile'), this.isAuthAndSubscribedApi.bind(this), this.reconcileCampaignStatistics.bind(this));//TODO
         app.get(this.url(':id/statistics/opens'), this.isAuthAndSubscribedApi.bind(this), this.getCampaignOpens.bind(this));
+        app.get(this.url(':id/performance'), this.isAuthAndSubscribedApi.bind(this), this.getCampaignPerformance.bind(this));
         app.get(this.url(''), this.isAuthAndSubscribedApi.bind(this), this.findCampaigns.bind(this));
         app.delete(this.url(':id'), this.isAuthAndSubscribedApi.bind(this), this.deleteCampaign.bind(this));//TODO
         app.delete(this.url(':id/cancel'), this.isAuthAndSubscribedApi.bind(this), this.cancelCampaign.bind(this));//TODO
@@ -319,6 +320,36 @@ _.extend(api.prototype, baseApi.prototype, {
 
             }
         });
+    },
+
+    getCampaignPerformance: function(req, resp) {
+        var self = this;
+        var accountId = parseInt(self.accountId(req));
+        var userId = self.userId(req);
+        self.log.debug(accountId, userId, '>> getCampaignPerformance');
+        var campaignId = req.params.id;
+        self.checkPermission(req, self.sc.privs.VIEW_CAMPAIGN, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(resp);
+            } else {
+
+                /*
+                emailMessageManager.getAsyncCampaignPerformanceReport(accountId, userId, campaignId, function(err, ticket){
+
+                });
+                */
+                emailMessageManager.getCampaignPerformanceReport(accountId, campaignId, userId, function(err, messages) {
+                    //emailMessageManager.findOpenedMessagesByCampaign(accountId, campaignId, userId, function(err, messages){
+                    self.log.debug(accountId, userId, '<< getCampaignOpens');
+                    resp.set('Content-Type', 'text/csv');
+                    var _fileName = "report_" + new Date().getTime() + '.csv';
+                    resp.setHeader('Content-disposition', 'attachment; filename='+_fileName);
+                    self.sendResultOrError(resp, err, messages, "Error finding campaign messages");
+
+                });
+            }
+        });
+
     },
 
     getCampaignOpens: function(req, resp) {
