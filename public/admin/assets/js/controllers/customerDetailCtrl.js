@@ -325,6 +325,51 @@
             });
         };
 
+        $scope.excludeUserFromCustomerView = function(userId, exclude, user){
+
+            if(exclude){
+                SweetAlert.swal({
+                    title: "Are you sure?",
+                    text: "Exclude user from customer view",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "Yes",
+                    cancelButtonText: "No",
+                    closeOnConfirm: true,
+                    closeOnCancel: true
+                },
+                function (isConfirm) {
+                    if (isConfirm) {
+                        $scope.saveUser = true;
+                        customerService.excludeUserFromCustomerView(userId, exclude, function(err, data){
+                            if(err) {
+                                toaster.pop('warning', err.message);
+                            } else {
+                                toaster.pop('success', 'User excluded from customer view.');
+                            }
+                            $scope.saveUser = false;
+                        });
+                    }
+                    else{
+                        user.excludeFromCustomerView = false;
+                    }
+                });
+            }
+            else{
+                $scope.saveUser = true;
+                customerService.excludeUserFromCustomerView(userId, exclude, function(err, data){
+                    if(err) {
+                        toaster.pop('warning', err.message);
+                    } else {
+                        toaster.pop('success', 'User included to customer view.');
+                    }
+                    $scope.saveUser = false;
+                });
+            }
+            
+        }
+
         $scope.openEditUserModal = function(userId) {
             $scope.currentUserId = userId;
             $scope.openSimpleModal('edit-password-modal');

@@ -962,5 +962,31 @@ module.exports = {
             
         });
 
+    },
+
+    excludeUserFromCustomerView: function(userId, excludeUser, callingUser, fn){
+        var self = this;
+        self.log = log;
+        self.log.debug('>> excludeUserFromCustomerView');
+
+       
+        dao.getById(userId, $$.m.User, function(err, user){
+            if(err) {
+                self.log.error('Error fetching user by Id', err);
+                return fn(err, null);
+            } else if(user === null) {
+                self.log.warn('Could not find user with id [' + userId + ']');
+                return fn(null, null);
+            } else {
+                var modified = {
+                    date: new Date(),
+                    by: callingUser
+                };
+                user.set('modified', modified);
+                user.set("excludeFromCustomerView", excludeUser)
+                dao.saveOrUpdate(user, fn);
+            }
+        });
+
     }
 };

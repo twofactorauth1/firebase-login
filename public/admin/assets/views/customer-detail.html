@@ -239,6 +239,7 @@
                                                     <td>{{user.first}} {{user.last}}</td>
                                                     <td>{{user.username}}</td>
                                                     <td class="table-action">
+                                                        <input ng-disabled="saveUser" type="checkbox" id="exclude_{{$index}}" ng-model="user.excludeFromCustomerView" ng-change="excludeUserFromCustomerView(user._id, user.excludeFromCustomerView, user)" class="margin-right-5 pull-left" style="margin-top: 2px;">
                                                         <a ng-click="openEditUserModal(user._id)"><i class="fa fa-pencil"></i></a>
                                                         <a ng-click="removeUserFromAccount(user._id)" class="delete-row"><i class="fa fa-trash-o"></i></a>
                                                     </td>
