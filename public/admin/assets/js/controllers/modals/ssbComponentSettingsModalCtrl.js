@@ -1207,15 +1207,16 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
 
       ProductService.getProducts(function (data) {
         $scope.products = data;
+        var _tags = [];
         _.each(data, function (product) {
           if (product.status === 'active' && product.tags && product.tags.length > 0) {
+            
             _.each(product.tags, function (tag) {
-              if ($scope.availableProductTags.indexOf(tag.toLowerCase()) === -1) {
-                $scope.availableProductTags.push(tag);
-              }
+                _tags.push(tag);
             });
           }
         });
+        $scope.availableProductTags = _.uniq(_tags);
         $scope.availableProductTagsString = $scope.availableProductTags.join(",");
       });
 
