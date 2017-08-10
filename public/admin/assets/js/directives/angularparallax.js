@@ -69,6 +69,8 @@ angular.module('angular-parallax', [
           }
           var calcValY = 0;
           if(angular.element(".sortable-page-content").length > 0){
+              if(calcValY>200 && calcValY<220)
+                  debugger
                 calcValY = (elem.offset().top - $scope.offsetTop - $window.pageYOffset) * ($scope.parallaxRatio ? $scope.parallaxRatio : 1.1) - ($scope.parallaxVerticalOffset || 0);
                 elem.css('background-position', "50% " + calcValY + "px");
                 elem.css('background-attachment', "fixed");
@@ -102,9 +104,7 @@ angular.module('angular-parallax', [
 
       // set our initial position - fixes webkit background render bug
       $(document).ready(function() {
-        setTimeout(function() {
-            setPosition();
-        }, 0)
+
         var unbindWatcher = $scope.$watch(function() {
                 return angular.element(".sortable-page-content").length
             }, function(newValue, oldValue) {
@@ -123,10 +123,15 @@ angular.module('angular-parallax', [
                 unbindWatcher();
             }
         });
+          angular.element($window).bind("scroll", setPosition);
+          angular.element($window).bind("touchmove", setPosition);
+          setTimeout(function() {
+            setPosition();
+          }, 100)
       })
 
-      angular.element($window).bind("scroll", setPosition);
-      angular.element($window).bind("touchmove", setPosition);
+    //  angular.element($window).bind("scroll", setPosition);
+     // angular.element($window).bind("touchmove", setPosition);
 
     }  // link function
   };
