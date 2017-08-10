@@ -32,6 +32,7 @@ _.extend(api.prototype, baseApi.prototype, {
         
         app.post(this.url('account/:id/user/:userId'), this.isAuthApi.bind(this), this.addUserToAccount.bind(this));
         app.delete(this.url('account/:id/user/:userId'), this.isAuthApi.bind(this), this.removeUserFromAccount.bind(this));
+        app.post(this.url(':id/exclude'), this.isAuthApi.bind(this), this.excludeUserFromCustomerView.bind(this));
     },
 
     getUser: function(req, resp) {
@@ -207,6 +208,30 @@ _.extend(api.prototype, baseApi.prototype, {
                 });
             }
         });
+    },
+
+    excludeUserFromCustomerView: function(req, resp) {
+        var self = this;
+        self.log.debug('>> excludeUserFromCustomerView');
+
+        self._isAdmin(req, function(err, value){
+            if(value !== true) {
+                return self.send403(resp);
+            } else {
+                var excludeUser = req.body.excludeUser;
+                var userId = parseInt(req.params.id);
+                userManager.excludeUserFromCustomerView(userId, excludeUser, self.userId(req), function(err, user){
+                    if(err) {
+                        self.log.error('Error excluding user from customer view:', err);
+                        self.wrapError(resp, 500, 'Error excluding user from customer view', err, null);
+                    } else {
+                        self.log.debug('<< excludeUserFromCustomerView');
+                        self.sendResult(resp, user);
+                    }
+                });
+            }
+        });
+
     },
 
     /**

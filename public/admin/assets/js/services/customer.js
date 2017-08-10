@@ -134,6 +134,16 @@
             });
         };
 
+        this.excludeUserFromCustomerView = function(userId, exclude, fn) {
+            var apiUrl = [adminUrl, 'user', userId, 'exclude'].join('/');
+            var body = {excludeUser:exclude};
+            $http.post(apiUrl, body).success(function(data){
+                fn(null, data);
+            }).error(function(err){
+                fn(err);
+            });
+        };
+
         this.setUserPassword = function(userId, password, fn) {
             var apiUrl = [adminUrl, 'user', userId, 'password'].join('/');
             var body = {password:password};
