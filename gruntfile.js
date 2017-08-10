@@ -20,6 +20,7 @@ var srcfiles = [];
 var bowerLockdown = require('./utils/bowerlockdown');
 
 var _ = require('underscore');
+moment = require('moment');
 
 module.exports = function(grunt) {
 
@@ -475,6 +476,35 @@ module.exports = function(grunt) {
                         }
                     ]
                 }
+            },
+            logs: {
+                options:{
+                    questions:[
+                        {
+                            config:'doLogsearch.startDate',
+                            type:'input',
+                            message: 'Enter the start date in UTC with format MM-DD-YYYYTHH:mm:ss:',
+                            default: moment().subtract(1, 'days').hours(0).minutes(0).format('MM-DD-YYYY[T]HH:mm')
+                        },
+                        {
+                            config:'doLogsearch.endDate',
+                            type:'input',
+                            message: 'Enter the end date in UTC with format MM-DD-YYYYTHH:mm:ss:',
+                            default: moment().subtract(1, 'days').hours(23).minutes(59).format('MM-DD-YYYY[T]HH:mm')
+                        },
+                        {
+                            config:'doLogsearch.filter',
+                            type: 'list', // list, checkbox, confirm, input, password
+                            message: 'Filter type of log', // Question to ask the user, function needs to return a string,
+                            default: 'node', // default value if nothing is entered
+                            choices: [
+                                { name: 'Node', value: 'node', checked:true },
+                                { name: 'Nginx', value: 'nginx'},
+                                { name: 'Any', value:null}
+                            ]
+                        }
+                    ]
+                }
             }
         },
         doUpdateBlogPages: {
@@ -727,6 +757,16 @@ module.exports = function(grunt) {
         var dbCopyUtil = require('./utils/dbcopyutil');
         dbCopyUtil.updateUnsubedContacts(done);
     });
+
+    grunt.registerTask('doLogsearch', 'doLogsearch', function(){
+        var done = this.async();
+        var loggrabber = require('./utils/loggrabber');
+        var startDate = moment.utc(grunt.config('doLogsearch.startDate'), 'MM-DD-YYYY[T]HH:mm').toDate();
+        var endDate = moment.utc(grunt.config('doLogsearch.endDate'), 'MM-DD-YYYY[T]HH:mm').toDate();
+        var filter = grunt.config('doLogsearch.filter');
+        loggrabber.grab(startDate, endDate, filter, done);
+    });
+    grunt.registerTask('logs',  ['prompt:logs', 'doLogsearch']);
 
     // grunt.registerTask('serve', 'Start a custom web server.', function() {
     //     grunt.log.writeln('Starting web server on port 80.');

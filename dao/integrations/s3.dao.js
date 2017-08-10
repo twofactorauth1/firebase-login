@@ -89,7 +89,7 @@ var dao = {
         var size = file.size;
         var path = file.path;
         var hash = file.hash;
-
+        var isCache=true
         if (makeUnique === true) {
             //Rename file to ensure uniqueness
             var regExp = /(.+?)(\.[^.]*$|$)/;
@@ -97,6 +97,8 @@ var dao = {
             var nameNoExt = filenameParts[1];
             var ext = filenameParts[2];
             name = nameNoExt + "_" + new Date().getTime() + ext;
+        }else{
+            isCache=file.isCache;
         }
 
         var key = name;
@@ -113,7 +115,8 @@ var dao = {
         fs.readFile(path, function (err, data) {
             var s3 = new AWS.S3({params: {Bucket: bucket}});
 
-            var params = {Key: key, Body: data, ContentType:type, CacheControl:"max-age=3600"};
+            var params = {Key: key, Body: data, ContentType:type,
+            CacheControl: (isCache?"max-age=3600":'no-cache')};
             //console.dir(params);
             s3.putObject(params, function (err, data) {
                 if (!err) {
