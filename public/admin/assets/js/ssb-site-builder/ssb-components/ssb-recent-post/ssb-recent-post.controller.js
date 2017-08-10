@@ -14,6 +14,7 @@ function ssbBlogRecentPostComponentController(SimpleSiteBuilderBlogService, $sco
     vm.initData = initData;
     vm.hasFeaturedPosts = false;
     vm.showNumberOfPosts=showNumberOfPosts;// default
+    vm.showFirstPost = showFirstPost;
     var path = $location.$$url.replace('/page/', '');
 
     if(path){
@@ -136,9 +137,13 @@ function ssbBlogRecentPostComponentController(SimpleSiteBuilderBlogService, $sco
        return showCount
     }
 
+    function showFirstPost(){
+        return vm.filterCategoryOrTagsView = (vm.component.postTags && vm.component.postTags.length) || (vm.component.postCategories && vm.component.postCategories.length);
+    }
+
     function init(element) {
     	vm.element = element;
-        checkHasFeaturedPosts();
+        checkHasFeaturedPosts();        
         if (!vm.blog.posts.length) {
             vm.initData();
         }
