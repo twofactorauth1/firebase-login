@@ -69,8 +69,6 @@ angular.module('angular-parallax', [
           }
           var calcValY = 0;
           if(angular.element(".sortable-page-content").length > 0){
-              if(calcValY>200 && calcValY<220)
-                  debugger
                 calcValY = (elem.offset().top - $scope.offsetTop - $window.pageYOffset) * ($scope.parallaxRatio ? $scope.parallaxRatio : 1.1) - ($scope.parallaxVerticalOffset || 0);
                 elem.css('background-position', "50% " + calcValY + "px");
                 elem.css('background-attachment', "fixed");
@@ -125,13 +123,15 @@ angular.module('angular-parallax', [
         });
           angular.element($window).bind("scroll", setPosition);
           angular.element($window).bind("touchmove", setPosition);
-          setTimeout(function() {
-            setPosition();
-          }, 100)
+          $scope.$on('parallaxCall', function(event, args) {
+               setTimeout(function() {
+                    setPosition();
+                }, 100)
+          });
       })
 
     //  angular.element($window).bind("scroll", setPosition);
-     // angular.element($window).bind("touchmove", setPosition);
+     // angular.element($window).biparallaxCallnd("touchmove", setPosition);
 
     }  // link function
   };
