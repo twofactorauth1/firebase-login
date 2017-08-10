@@ -51,7 +51,8 @@ function ssbBlogPostListComponentController(SimpleSiteBuilderBlogService, $scope
                         return post.featured
                     }))
                     $scope.$broadcast('$refreshSlickSlider');
-                }, 500)
+                    $(window).resize();
+                }, 0)
             }
             else{
                 vm.featuredPosts = _.filter(posts, function(post){
