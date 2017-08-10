@@ -1216,6 +1216,8 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
             });
           }
         });
+        _.uniq(_tags);
+        _tags = _.map(_tags, function(tag){return tag.toLowerCase()});
         $scope.availableProductTags = _.uniq(_tags);
         $scope.availableProductTagsString = $scope.availableProductTags.join(",");
       });

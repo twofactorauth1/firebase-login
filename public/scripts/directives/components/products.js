@@ -117,8 +117,10 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                 }
 
                 if (_tags && _tags.length > 0) {
+                    _tags = _.map(_tags, function(tag){return tag.toLowerCase()});
                     if (_product.tags) {
-                        if (_.intersection(_tags, _product.tags).length > 0) {
+                        var _productTags = _.map(_product.tags, function(tag){return tag.toLowerCase()});
+                        if (_.intersection(_tags, _productTags).length > 0) {
                             return true;
                         }
                     }
