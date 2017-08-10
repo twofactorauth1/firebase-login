@@ -20,26 +20,18 @@ env_check(){
 
 	if [ "$1" = "master" ]; then
 		export AWS_DEFAULT_REGION="us-west-1"
-		export ENV_NAME="indigeweb-env-blue"
+		export ENV_NAME="XXX"
+		export APP_NAME="XXX"
 		export S3_BUCKET="elasticbeanstalk-us-west-1-213805526570"
 		export GOOGLE_CLIENT_ID="277102651227-m80ppab4ler5fo08jle3a2g0vhnjce99.apps.googleusercontent.com"
 		export GOOGLE_CLIENT_SECRET="yPiJOniUgxjT94O7M_4tNj_M"
 		export STRIPE_PUBLISHABLE_KEY="pk_live_GFldJIgLoRweE8KmZgHc76df"
-		export RVLVR_STRIPE_PUBLISHABLE_KEY="pk_live_nmZLNQLPQhMVDWSOrWGsfDk1"
-		export GREEN_ENV_NAME="indigeweb-env-green"
 	elif [ "$1" = "develop" ]; then
 		export GOOGLE_CLIENT_ID="277102651227-koaeib7b05jjc355thcq3bqtkbuv1o5r.apps.googleusercontent.com"
 	  	export GOOGLE_CLIENT_SECRET="lg41TWgRgRfZQ22Y9Qd902pH"
 	  	export AWS_DEFAULT_REGION="us-west-1"
-        export ENV_NAME="indiwebTestB-env"
-        export APP_NAME="indiweb-test-b"
-        export S3_BUCKET="elasticbeanstalk-us-west-1-213805526570"
-    elif [ "$1" = "mlab" ]; then
-        export GOOGLE_CLIENT_ID="277102651227-koaeib7b05jjc355thcq3bqtkbuv1o5r.apps.googleusercontent.com"
-        export GOOGLE_CLIENT_SECRET="lg41TWgRgRfZQ22Y9Qd902pH"
-        export AWS_DEFAULT_REGION="us-west-1"
-        export ENV_NAME="indiwebMlab-env"
-        export APP_NAME="indiweb-mlab"
+        export ENV_NAME="securematicsTestEnv-env"
+        export APP_NAME="securematics-test-env"
         export S3_BUCKET="elasticbeanstalk-us-west-1-213805526570"
 	else
 		on_err "No environment specified"
@@ -71,10 +63,6 @@ main(){
 	else
 		echo "No environment specified.  No constants"
 	fi
-	# precompile assets, ...
-	########################
-	# remove original main file
-	#rm -f public/js/main.js	
 
 	# run grunt
 	echo Running grunt production
