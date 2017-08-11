@@ -62,11 +62,12 @@ function ssbBlogPostListComponentController(SimpleSiteBuilderBlogService, $scope
                 vm.featuredPosts = angular.copy(_.filter(posts, function(post){
                     return post.featured
                 }))
-                
-                $timeout(function() {
-                    $scope.$broadcast('$refreshSlickSlider');
-                    $(window).resize();
-                }, 0);
+                if($location.$$path.indexOf("/preview/") == 0){
+                    $timeout(function() {
+                        $scope.$broadcast('$refreshSlickSlider');
+                        $(window).resize();
+                    }, 1000);
+                }
             }            
         }
     }, true);
