@@ -426,9 +426,15 @@
                 EmailBuilderService.updateEmail(vm.state.email).then(function(res) {
                     vm.uiState.dataLoaded = true;
                     vm.state.pendingEmailChanges = false;
+                    vm.state.saveLoading = false;
                     toaster.pop('success', 'Email saved');
                     vm.uiState.updateEmailCache(res.data, true);
-                });
+                }).catch(function(error) {
+                    var message = error.data ? error.data.message : 'The email was not saved. Please try again.';
+                    toaster.pop('error', 'Error', message);
+                    vm.state.saveLoading = false;
+                    vm.uiState.dataLoaded = true;
+                })
             } else {
                 vm.uiState.allowRedirect = false;
                 toaster.pop('warning', 'Mandatory field should not be blank');
