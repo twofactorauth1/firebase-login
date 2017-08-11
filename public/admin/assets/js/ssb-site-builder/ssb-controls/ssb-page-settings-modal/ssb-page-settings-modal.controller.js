@@ -246,13 +246,20 @@ app.controller('SiteBuilderPageSettingsModalController', ['$scope', '$timeout', 
 
     $scope.$watch('vm.page.handle', function(handle, old_handle){
       if(handle){
-        vm.page.handle = $filter('slugify')(handle);
+        vm.page.handle = customSlugify(handle);
         vm.inValidPageHandle = validateDuplicatePage(handle, old_handle);
       }
       else{
         vm.inValidPageHandle = null;
       }
     });
+
+
+    function customSlugify(s) {
+        if (!s) return "";
+        s = s.replace(/[^\w\s-\/]/g, "").trim().toLowerCase();
+        return s.replace(/[-\s]+/g, "-");
+    }
 
     $scope.$watch('vm.originalPage', function(page){
       if(page){
