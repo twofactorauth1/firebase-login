@@ -68,8 +68,6 @@ angular.module('angular-parallax', [
             yoffset = 10;
           }
           var calcValY = 0;
-           if(elem.attr('id')=='px-ele-a74b7504-e859-42ee-93ca-bf5c35587196')
-              console.log("offsett="+elem.offset().top)
           if(angular.element(".sortable-page-content").length > 0){
                 calcValY = (elem.offset().top - $scope.offsetTop - $window.pageYOffset) * ($scope.parallaxRatio ? $scope.parallaxRatio : 1.1) - ($scope.parallaxVerticalOffset || 0);
                  if(navigator.userAgent.indexOf("Firefox") > 0) {
