@@ -216,7 +216,7 @@ $.FroalaEditor.build = _.memoize(function(type) {
         placeholderText: 'Type here',
         imageManagerScrollOffset: 0,
         dragImage: false,
-        pastePlain: true,
+        pastePlain: false,
         linkList: [
         {
           text: 'Google',
