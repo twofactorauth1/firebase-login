@@ -434,6 +434,8 @@
                     toaster.pop('error', 'Error', message);
                     vm.state.saveLoading = false;
                     vm.uiState.dataLoaded = true;
+                    vm.uiState.updateEmailCache(vm.state.originalEmail, true);
+                    vm.state.pendingEmailChanges = false;
                 })
             } else {
                 vm.uiState.allowRedirect = false;
