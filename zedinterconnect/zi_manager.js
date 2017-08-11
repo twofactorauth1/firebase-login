@@ -680,32 +680,31 @@ var ziManager = {
                     self.log.debug(0,0, 'Loading ledger');
                     var dateString = moment().format("M/DD/YY");
                     self.loadLedgerCollection(dateString, function(){
-                        self.log.debug(0,0, 'Scheduling next run');
-                        //schedule next run
-
-                        var code = '$$.u.ziManager.runInventoryJob();';
-                        var send_at = moment().minute(0);
-
-                        send_at = moment(send_at).add(1, 'hours');
-                        self.log.debug('Scheduling ahead an hour');
-
-                        var scheduledJob = new $$.m.ScheduledJob({
-                            accountId: 0,
-                            scheduledAt: moment(send_at).toDate(),
-                            runAt: null,
-                            job: code
-                        });
-                        scheduledJobsManager.scheduleJob(scheduledJob, function (err, value) {
-                            if (err || !value) {
-                                self.log.error(0, 0, 'Error scheduling job with manager:', err);
-                            } else {
-                                self.log.debug(0, 0, 'scheduled next job:', value.get('scheduledAt'));
-                            }
-                            self.log.debug(0, 0, '<< runInventoryJob');
-                        });
+                        self.log.debug(0,0,'<< runInventoryJob');
                     });
                 });
+            });
+            self.log.debug(0,0, 'Scheduling next run');
+            //schedule next run
 
+            var code = '$$.u.ziManager.runInventoryJob();';
+            var send_at = moment().minute(0);
+
+            send_at = moment(send_at).add(1, 'hours');
+            self.log.debug('Scheduling ahead an hour');
+
+            var scheduledJob = new $$.m.ScheduledJob({
+                accountId: 0,
+                scheduledAt: moment(send_at).toDate(),
+                runAt: null,
+                job: code
+            });
+            scheduledJobsManager.scheduleJob(scheduledJob, function (err, value) {
+                if (err || !value) {
+                    self.log.error(0, 0, 'Error scheduling job with manager:', err);
+                } else {
+                    self.log.debug(0, 0, 'scheduled next job:', value.get('scheduledAt'));
+                }
             });
         } catch(exception) {
             self.log.error('Error scheduling inventoryjob:', exception);

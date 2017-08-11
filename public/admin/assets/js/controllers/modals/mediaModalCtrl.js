@@ -32,7 +32,7 @@ app.controller('MediaModalCtrl', ['$scope', 'mediaManagerConstant', '$injector',
     $scope.account = account;
     loadAssets();
   });
-  
+
 
   function loadAssets(file){
     AssetsService.getPagedAssetsByAccount($scope.pagingParams, function (data) {
@@ -62,7 +62,7 @@ app.controller('MediaModalCtrl', ['$scope', 'mediaManagerConstant', '$injector',
             $scope.m.singleSelect(asset);
           }
         }
-        
+
         $scope.pageLoading = false;
         $timeout(function() {
           $scope.loadingAssets = false;
@@ -79,7 +79,7 @@ app.controller('MediaModalCtrl', ['$scope', 'mediaManagerConstant', '$injector',
     $scope.mediaModal = {
       replace:replace,
       asset: asset
-    };    
+    };
   };
 
   /*
@@ -186,30 +186,30 @@ app.controller('MediaModalCtrl', ['$scope', 'mediaManagerConstant', '$injector',
     response.files[0].mimeType = fileItem.file.type;
 
     if($scope.mediaModal.replace){
-        if($scope.mediaModal.asset){    
-          $scope.cachebuster = new Date().getTime();         
+        if($scope.mediaModal.asset){
+          $scope.cachebuster = new Date().getTime();
           response.files[0].filename = $scope.mediaModal.asset.filename;
           var originalAsset =_.findWhere($scope.originalAssets, { _id: $scope.mediaModal.asset._id });
           var asset =_.findWhere($scope.assets, { _id: $scope.mediaModal.asset._id });
           _.extend(originalAsset, response.files[0]);
-          _.extend(asset, response.files[0]);       
+          _.extend(asset, response.files[0]);
           originalAsset.checked = true;
           asset.checked = true;
-          $scope.m.singleSelect(asset);  
-          ToasterService.showWithTitle('success', 'Replacement image has been uploaded', 'Note: images are cached by the browser for an hour. Flush your browser cache to see the latest media (or wait)');
+          $scope.m.singleSelect(asset);
+          ToasterService.showWithTitle('success', 'Replacement image has been uploaded', 'By default, images are cached by the browser for an hour. Flush your browser cache to see the latest media (or wait)');
         }
     }
     else{
       //$scope.originalAssets.push(response.files[0]);
-      //$scope.assets.push(response.files[0]); 
+      //$scope.assets.push(response.files[0]);
       if(uploader.queue.length <= 1){
         loadDefaultsForPaging();
         loadAssets(response.files[0]);
       }
-      
+
     }
 
-    
+
   };
 
   uploader.onErrorItem = function (item, response, status, headers) {
@@ -346,7 +346,7 @@ app.controller('MediaModalCtrl', ['$scope', 'mediaManagerConstant', '$injector',
 
   $scope.m.singleSelect = function (asset) {
     $scope.singleSelected = asset.checked;
-    
+
     $timeout(function () {
       if (!$scope.isSingleSelect || !$scope.singleSelected || $scope.selectModel.select_all) {
         //$scope.batch.push(asset);
@@ -436,14 +436,14 @@ app.controller('MediaModalCtrl', ['$scope', 'mediaManagerConstant', '$injector',
                 //Check if the all the items of page are deleted
                 if(refreshList){
                   loadDefaultsForPaging();
-                }              
+                }
                 // Else land to the same
                 {
                   $scope.pageLoading = true;
                   loadAssets();
                 }
-              }  
-              
+              }
+
               SweetAlert.swal("Saved!", "deleted.", "success");
               angular.element('.modal.in').show();
             }
@@ -571,7 +571,7 @@ app.controller('MediaModalCtrl', ['$scope', 'mediaManagerConstant', '$injector',
     }
 
     function selectPage(page){
-        if(page != $scope.pagingParams.curPage){            
+        if(page != $scope.pagingParams.curPage){
             $scope.pagingParams.curPage = page;
             $scope.pagingParams.skip = (page - 1) * $scope.pagingParams.limit;
             $scope.pageLoading = true;

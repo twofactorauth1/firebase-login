@@ -212,7 +212,7 @@ app.controller('SiteBuilderPageSettingsModalController', ['$scope', '$timeout', 
         return (
             SimpleSiteBuilderService.saveWebsite(vm.parentVm.state.website).then(function(response){
                 console.log('website saved');
-                if (vm.parentVm.state.account && vm.parentVm.state.account.showhide && vm.parentVm.state.account.showhide.userScripts && vm.parentVm.state.website.resources.toggles.userScripts) {
+                if (vm.parentVm.state.account && vm.parentVm.state.account.showhide && vm.parentVm.state.account.showhide.userScripts && vm.parentVm.state.website.resources.toggles && vm.parentVm.state.website.resources.toggles.userScripts) {
                     SimpleSiteBuilderService.updateScriptResource(vm.parentVm.state.website).then(function(response) {
                         vm.parentVm.state.website = response.data;
                     });
@@ -246,13 +246,20 @@ app.controller('SiteBuilderPageSettingsModalController', ['$scope', '$timeout', 
 
     $scope.$watch('vm.page.handle', function(handle, old_handle){
       if(handle){
-        vm.page.handle = $filter('slugify')(handle);
+        vm.page.handle = customSlugify(handle);
         vm.inValidPageHandle = validateDuplicatePage(handle, old_handle);
       }
       else{
         vm.inValidPageHandle = null;
       }
     });
+
+
+    function customSlugify(s) {
+        if (!s) return "";
+        s = s.replace(/[^\w\s-\/]/g, "").trim().toLowerCase();
+        return s.replace(/[-\s]+/g, "-");
+    }
 
     $scope.$watch('vm.originalPage', function(page){
       if(page){

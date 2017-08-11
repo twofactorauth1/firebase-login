@@ -702,10 +702,21 @@ var manager = {
                 fn(err);
             } else if (!report) {
                 // create a new report
-                var report = new $$.m.PromotionReport(patchObject);
-                report.set('accountId', accountId);
-                report.set('modified', {date:new Date(), by:userId});
-                report.set('created', {date:new Date(), by:userId});
+
+                var report = new $$.m.PromotionReport({
+                    accountId:accountId,
+                    promotionId:promotionId,
+                    cardCodeRestrictions:patchObject.cardCodeRestrictions,
+                    recipients:patchObject.recipientAry,
+                    startOn:patchObject.startOnDate,
+                    repeat:patchObject.repeatInterval,
+                    created:{
+                        date:new Date(),
+                        by:userId
+                    }
+                });
+
+                
                 promotionDao.saveOrUpdate(report, function(err, value){
                     if(err) {
                         self.log.error(accountId, userId, 'Error saving report:', err);
@@ -716,9 +727,10 @@ var manager = {
                     }
                 });
             } else {
-                _.each(patchObject, function(value, key){
-                    report.set(key, value);
-                });
+                report.set("cardCodeRestrictions", patchObject.cardCodeRestrictions);
+                report.set("recipients", patchObject.recipientAry);
+                report.set("startOn", patchObject.startOnDate);
+                report.set("repeat", patchObject.repeatInterval);
                 report.set('modified', {date:new Date(), by:userId});
                 promotionDao.saveOrUpdate(report, function(err, value){
                     if(err) {
