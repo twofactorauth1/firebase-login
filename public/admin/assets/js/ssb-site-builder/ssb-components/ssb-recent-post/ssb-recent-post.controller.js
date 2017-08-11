@@ -129,7 +129,13 @@ function ssbBlogRecentPostComponentController(SimpleSiteBuilderBlogService, $sco
     function showNumberOfPosts(){
         var showCount=6
         if(vm.component.post_count){
-            showCount= parseInt(vm.component.post_count)+1;
+            if(vm.showFirstPost()){
+                showCount= parseInt(vm.component.post_count);
+            }
+            else{
+                showCount= parseInt(vm.component.post_count)+1;
+            }
+            
         }
        if(showCount>vm.blog.posts.length){
            showCount=vm.blog.posts.length

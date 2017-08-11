@@ -58,12 +58,19 @@ function ssbBlogPostListComponentController(SimpleSiteBuilderBlogService, $scope
                 }, 2000);
             }
             else{
-                vm.featuredPosts = _.filter(posts, function(post){
+                
+                vm.featuredPosts = angular.copy(_.filter(posts, function(post){
                     return post.featured
-                })
+                }))
+                if($location.$$path.indexOf("/preview/") == 0){
+                    $timeout(function() {
+                        $scope.$broadcast('$refreshSlickSlider');
+                        $(window).resize();
+                    }, 1000);
+                }
             }            
         }
-    });
+    }, true);
 
     function initData() {
         var posts = SimpleSiteBuilderBlogService.loadDataFromPage('#indigenous-precache-sitedata-posts') || window.indigenous.precache.siteData.posts;

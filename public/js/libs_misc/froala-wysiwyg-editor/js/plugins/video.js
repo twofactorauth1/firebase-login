@@ -531,6 +531,8 @@
       $message_header.focus();
     }
 
+    
+
     /**
      * Insert video by URL.
      */
@@ -542,12 +544,25 @@
 
       var video = null;
       if (editor.helpers.isURL(link)) {
+        var isValidUrl = false;
         for (var i = 0; i < $.FE.VIDEO_PROVIDERS.length; i++) {
+
           var vp = $.FE.VIDEO_PROVIDERS[i];
           if (vp.test_regex.test(link)) {
             video = link.replace(vp.url_regex, vp.url_text);
             video = vp.html.replace(/\{url\}/, video);
+            isValidUrl = true
             break;
+          }
+        }
+        if(!isValidUrl){
+          if(link){
+            if(editor.video.checkForExtensions(link)){
+              video = link;
+              var html = '<video width="640" height="360" controls><source src="{url}"></video>'
+              //var html = '<iframe width="640" height="360" src="{url}?wmode=opaquerel=0" autoplay="0" frameborder="0" allowfullscreen></iframe>';
+              video = html.replace(/\{url\}/, video);
+            }
           }
         }
       }
@@ -558,6 +573,11 @@
       else {
         editor.events.trigger('video.linkError', [link]);
       }
+    }
+
+    function checkForExtensions(url){
+      return url.indexOf(".mp4") || url.indexOf(".webm") || url.indexOf(".ogv");
+
     }
 
 
@@ -1954,7 +1974,8 @@
       replace: replace,
       back: back,
       setSize: setSize,
-      get: get
+      get: get,
+      checkForExtensions: checkForExtensions
     }
   }
 
