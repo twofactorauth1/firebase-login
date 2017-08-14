@@ -300,6 +300,14 @@
                         validMapData = true;
                     } else {
                         $scope.loadingMap = false;
+                        $scope.location.lat = "";
+                        $scope.location.lon = "";
+                        $scope.contact_data.details[0].addresses[0].lat = "";
+                        $scope.contact_data.details[0].addresses[0].lon = "";
+                        if ($scope.markers && $scope.markers.mainMarker) {
+                            $scope.markers.mainMarker.lat = "";
+                            $scope.markers.mainMarker.lon = "";
+                        }
                     }
 
                     if (fn) {

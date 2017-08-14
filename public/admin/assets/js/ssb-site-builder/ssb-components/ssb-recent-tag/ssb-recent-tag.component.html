@@ -3,13 +3,13 @@
         <h3 ng-attr-style="{{vm.titleStyle()}}">
             <div elem ng-model="vm.component.title"></div>
         </h3>
-        <div class="ssb-ssb-blog-post-detail ssb-blog-recent-tags margin-top-5">
-        	<ul class="ssb-post_tags" >
-	            <li ng-attr-style="{{vm.descriptionStyle()}}" ng-repeat="tag in vm.blog_tags track by $index">
+        <div class="ssb-ssb-blog-post-detail ssb-blog-recent-tags">
+        	<ul class="ssb-post_tags margin-top-5" >
+	            <li ng-attr-style="{{vm.descriptionStyle()}}" ng-repeat="tag in vm.blog_tags | orderBy: tag">
 	                <a href="/tag/{{tag.text ? vm.encodeUrlText(tag.text): vm.encodeUrlText(tag)}}" class="btn ssb-theme-btn" target="_self" itemprop="url" rel="tag" ng-attr-style="{{vm.descriptionStyle()}}" >{{tag.text ? tag.text: tag}}</a>
 	            </li>
-        	</ul> 
+        	</ul>
         </div>
-        
+
     </div>
 </div>

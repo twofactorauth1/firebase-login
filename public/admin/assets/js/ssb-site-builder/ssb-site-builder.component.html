@@ -15,7 +15,12 @@
     color: {{vm.state.website.themeOverrides.styles.primaryTextColor}};
     font-family: {{vm.state.website.themeOverrides.defaultFontStack}};
     background-color: {{vm.state.website.themeOverrides.styles.bodyBackgroundColor}};
+    font-size: {{vm.state.website.themeOverrides.styles.fontSize}}px;
+    font-family: {{vm.state.website.themeOverrides.styles.fontFamily}};
+    letter-spacing: {{vm.state.website.themeOverrides.styles.letterSpacing}}px;
+    font-weight: {{vm.state.website.themeOverrides.styles.fontWeight}};
 }
+
 
 .ssb-theme-{{vm.state.website.theme.handle}} .ssb-section-layout {
     background-color: {{vm.state.website.themeOverrides.styles.bodyBackgroundColor}};
@@ -29,6 +34,8 @@
     background-color: {{vm.state.website.themeOverrides.styles.headerBackgroundColor}};
     color: {{vm.state.website.themeOverrides.styles.headerTextColor}};
 }
+
+
 
 .ssb-theme-{{vm.state.website.theme.handle}} .ssb-page-section-layout-header [ssb-text-component] {
     /*color: {{vm.state.website.themeOverrides.styles.headerTextColor}};*/
@@ -171,6 +178,7 @@
                     ng-repeat="section in vm.state.page.sections"
                     section="section"
                     index="$index"
+                    clickedIndex="{{$index}}"
                     ng-class="{ 'ssb-active-section': $index === vm.uiState.activeSectionIndex }"
                     class="ssb-page-section"
                     state="vm.state"
