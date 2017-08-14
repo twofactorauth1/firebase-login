@@ -446,7 +446,7 @@
                                <span tooltip-placement="top" tooltip-append-to-body="true" tooltip="Font size of button"><i class="fa fa-info-circle" /></span>
                             </label>
                             <div class="col-xs-7 pull-right">
-                                <input type="text" ng-model="vm.state.website.themeOverrides.styles.globalFonts.fontSize" min="8" max="96" touchspin>
+                                <input type="text" ng-model="vm.state.website.themeOverrides.styles.fontSize" min="8" max="96" touchspin>
                             </div>
                         </div>
                         <div class="form-group">
@@ -454,9 +454,9 @@
                                 Font Family
                                 <span tooltip-placement="top" tooltip-append-to-body="true" tooltip="Font family for button"><i class="fa fa-info-circle" /></span>
                             </label>
-                            <select ng-model="vm.state.website.themeOverrides.styles.globalFonts.fontFamily" class="form-control margin-bottom-0">
+                            <select ng-model="vm.state.website.themeOverrides.styles.fontFamily" class="form-control margin-bottom-0">
                                 <option value="">--Select--</option>
-                                <option ng-repeat="(value, key) in vm.fontFamilyOptions" value="{{value}}" ng-selected="{{vm.checkIfSelected(value, vm.state.website.themeOverrides.styles.globalFonts.fontFamily)}}">{{key}}</option>
+                                <option ng-repeat="(value, key) in vm.fontFamilyOptions" value="{{value}}" ng-selected="{{vm.checkIfSelected(value, vm.state.website.themeOverrides.styles.fontFamily)}}">{{key}}</option>
                             </select>
                         </div>
                         <div class="form-group">
@@ -464,16 +464,16 @@
                                 Letter spacing
                                 <span tooltip-placement="top" tooltip-append-to-body="true" tooltip="Spacing between letters"><i class="fa fa-info-circle" /></span>
                             </label>
-                            <input type="text" ng-model="vm.state.website.themeOverrides.styles.globalFonts.letterSpacing" min="-2" max="20" touchspin>
+                            <input type="text" ng-model="vm.state.website.themeOverrides.styles.letterSpacing" min="-2" max="20" touchspin>
                         </div>
                         <div class="form-group">
                             <label>
                                 Font Weight
                                 <span tooltip-placement="top" tooltip-append-to-body="true" tooltip="Font family for button"><i class="fa fa-info-circle" /></span>
                             </label>
-                            <select ng-model="vm.state.website.themeOverrides.styles.globalFonts.fontWeight" class="form-control margin-bottom-0">
+                            <select ng-model="vm.state.website.themeOverrides.styles.fontWeight" class="form-control margin-bottom-0">
                                 <option value="">--Select--</option>
-                                <option ng-repeat="(value, key) in vm.bodyFontWeightOptions" value="{{value}}" ng-selected="{{value == vm.state.website.themeOverrides.styles.globalFonts.fontWeight}}">{{key}}</option>
+                                <option ng-repeat="(value, key) in vm.bodyFontWeightOptions" value="{{value}}" ng-selected="{{value == vm.state.website.themeOverrides.styles.fontWeight}}">{{key}}</option>
                             </select>
                         </div>
 
