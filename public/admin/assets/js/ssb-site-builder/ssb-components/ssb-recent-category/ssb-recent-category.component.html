@@ -5,7 +5,7 @@
         </h3>
         <div class="ssb-ssb-blog-post-detail ssb-blog-recent-tags">
         	<ul class="ssb-post_tags margin-top-5">
-	            <li ng-attr-style="{{vm.descriptionStyle()}}" ng-repeat="category in vm.blog_categories | orderBy: category">
+	            <li ng-attr-style="{{vm.descriptionStyle()}}" ng-repeat="category in vm.blog_categories | orderBy: 'text'">
 	                <a href="/category/{{category.text ? vm.encodeUrlText(category.text): vm.encodeUrlText(category)}}" class="btn ssb-theme-btn" target="_self" itemprop="url" rel="tag" ng-attr-style="{{vm.descriptionStyle()}}" >{{category.text ? category.text: category}}</a>
 	            </li>
         	</ul>
