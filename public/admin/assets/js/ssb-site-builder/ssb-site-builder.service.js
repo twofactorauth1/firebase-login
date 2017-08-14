@@ -54,6 +54,7 @@
         ssbService.getTemplateById = getTemplateById;
         ssbService.getLegacyTemplates = getLegacyTemplates;
         ssbService.addSectionToPage = addSectionToPage;
+        ssbService.addSectionToPageToIndex = addSectionToPageToIndex;
         ssbService.removeSectionFromPage = removeSectionFromPage;
         ssbService.removeSectionFromLayoutArea = removeSectionFromLayoutArea;
         ssbService.getSpectrumColorOptions = getSpectrumColorOptions;
@@ -1075,6 +1076,51 @@
                 promise = deferred.promise;
 
             }
+
+            return promise;
+
+        }
+
+        function addSectionToPageToIndex(section, insertAtIndex) {
+            var insertAt;
+            var numSections;
+            var hasHeader = false;
+            var hasFooter = false;
+            var deferred = $q.defer();
+            var promise;
+
+            if (!ssbService.page.sections) {
+                ssbService.page.sections = [];
+            } else {
+                
+                hasFooter = pageHasFooter(ssbService.page.sections);
+                console.debug(hasFooter);
+            }
+
+            numSections = ssbService.page.sections.length;
+
+            insertAt = hasFooter ? numSections - 1 : numSections;
+
+            if(angular.isDefined(insertAtIndex)){
+
+                insertAt = insertAtIndex;
+            }
+
+            promise = ssbService.getSection(section, 1).then(function(response) {
+
+                if (response) {
+
+                    var _section = checkAndSetGlobalHeader(response);
+                    var insertSection = ssbService.setTempUUIDForSection(_section);
+                    ssbService.page.sections.splice(insertAt, 0, insertSection);
+                    ssbService.setActiveSection(insertAt);
+                    ssbService.setActiveComponent(null);
+
+                } else {
+                    console.error("Error loading section/component:", section);
+                }
+
+            });
 
             return promise;
 

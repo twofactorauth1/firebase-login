@@ -31,6 +31,7 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
     vm.getPlatformSections = getPlatformSections;
     vm.getPlatformComponents = getPlatformComponents;
     vm.addSectionToPage = addSectionToPage;
+    vm.addSectionToPageToIndex = addSectionToPageToIndex;
     vm.scrollToActiveSection = scrollToActiveSection;
     vm.removeSectionFromPage = removeSectionFromPage;
     vm.removeComponentFromSection = removeComponentFromSection;
@@ -266,6 +267,26 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
         vm.uiState.showSectionPanel = false;
         return (
             SimpleSiteBuilderService.addSectionToPage(section, version, replaceAtIndex, vm.state.page.sections[vm.uiState.activeSectionIndex], copyAtIndex).then(function() {
+                vm.scrollToActiveSection();
+            }, function(error) {
+                console.error('section panel -> SimpleSiteBuilderService.addSectionToPage', JSON.stringify(error));
+            })
+        )
+    }
+
+    function addSectionToPageToIndex(section) {
+        var el = angular.element(".ssb-page-section.ssb-active-edit-control");
+        
+        var insertAtIndex = undefined;
+        if(el.length){
+            index = el.attr("clickedIndex");
+            index = parseInt(index);
+            insertAtIndex = (index > 0) ? (index + 1) : index;
+        }
+        
+        vm.uiState.showSectionPanel = false;
+        return (
+            SimpleSiteBuilderService.addSectionToPageToIndex(section, insertAtIndex).then(function() {
                 vm.scrollToActiveSection();
             }, function(error) {
                 console.error('section panel -> SimpleSiteBuilderService.addSectionToPage', JSON.stringify(error));
