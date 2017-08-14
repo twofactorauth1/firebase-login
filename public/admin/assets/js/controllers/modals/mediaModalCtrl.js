@@ -12,11 +12,14 @@ app.controller('MediaModalCtrl', ['$scope', 'mediaManagerConstant', '$injector',
     replace:false,
     asset: null
   };
-
+  $scope.paging ={
+    recordPerPage: mediaManagerConstant.numberOfRowsPerPage 
+  } 
   $scope.numberOfPages = numberOfPages;
   $scope.selectPage = selectPage;
+  $scope.refreshPaging = refreshPaging;
   $scope.pagingParams = {
-    limit: mediaManagerConstant.numberOfRowsPerPage,
+    limit: $scope.paging.recordPerPage,
     skip: 0,
     curPage: 1,
     showPages: mediaManagerConstant.displayedPages,
@@ -585,5 +588,11 @@ app.controller('MediaModalCtrl', ['$scope', 'mediaManagerConstant', '$injector',
         loadAssets();
       }
     })
+
+    function refreshPaging(limit){
+        $scope.pagingParams.limit = limit; 
+        loadDefaultsForPaging();
+        loadAssets();
+    }
 
 }]);
