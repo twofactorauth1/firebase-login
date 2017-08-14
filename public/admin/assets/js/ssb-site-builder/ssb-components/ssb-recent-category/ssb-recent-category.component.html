@@ -3,8 +3,8 @@
         <h3 ng-attr-style="{{vm.titleStyle()}}">
             <div elem ng-model="vm.component.title"></div>
         </h3>
-        <div class="ssb-ssb-blog-post-detail ssb-blog-recent-tags margin-top-5">
-        	<ul class="ssb-post_tags" >
+        <div class="ssb-ssb-blog-post-detail ssb-blog-recent-tags">
+        	<ul class="ssb-post_tags margin-top-5">
 	            <li ng-attr-style="{{vm.descriptionStyle()}}" ng-repeat="category in vm.blog_categories | orderBy: category">
 	                <a href="/category/{{category.text ? vm.encodeUrlText(category.text): vm.encodeUrlText(category)}}" class="btn ssb-theme-btn" target="_self" itemprop="url" rel="tag" ng-attr-style="{{vm.descriptionStyle()}}" >{{category.text ? category.text: category}}</a>
 	            </li>
