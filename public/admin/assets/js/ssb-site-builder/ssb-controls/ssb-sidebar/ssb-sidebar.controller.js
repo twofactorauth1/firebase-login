@@ -69,7 +69,15 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
 
     editableOptions.theme = 'bs3';
 
+    vm.fontFamilyOptions = SimpleSiteBuilderService.getFontFamilyOptions();
+    vm.fontWeightOptions = SimpleSiteBuilderService.getFontWeightOptions();
+    vm.bodyFontWeightOptions = SimpleSiteBuilderService.bodyFontWeightOptions();
+    vm.checkIfSelected = checkIfSelected;
 
+    function checkIfSelected(value, newValue){
+        if(value && newValue)
+            return value.replace(/'/g, "").replace(/, /g, ",") == newValue.replace(/"/g, "").replace(/, /g, ",");
+    }
     vm.sortableOptions = {
         handle: '.ssb-sidebar-move-handle',
         onSort: function (evt) {

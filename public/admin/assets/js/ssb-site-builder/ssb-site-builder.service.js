@@ -59,6 +59,7 @@
         ssbService.getSpectrumColorOptions = getSpectrumColorOptions;
         ssbService.getFontFamilyOptions = getFontFamilyOptions;
         ssbService.getFontWeightOptions = getFontWeightOptions;
+        ssbService.bodyFontWeightOptions = bodyFontWeightOptions;
         ssbService.getLocationFinderRanges = getLocationFinderRanges;
         ssbService.deletePage = deletePage;
         ssbService.openMediaModal = openMediaModal;
@@ -1483,7 +1484,13 @@
             }
         }
 
-
+        function bodyFontWeightOptions(){
+            return {
+                "200": "Light",
+                "400": "Normal",
+                "700": 'Bold'
+            }
+        }
 
 
         /*
