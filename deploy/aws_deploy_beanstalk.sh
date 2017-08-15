@@ -103,7 +103,6 @@ main(){
 	interval=5; timeout=90; while [[ ! `aws elasticbeanstalk describe-environments --environment-name "${ENV_NAME}" | grep -i status | grep -i ready` && $timeout > 0 ]]; do sleep $interval; timeout=$((timeout - interval)); done
 
 	[ $timeout > 0 ] && aws elasticbeanstalk update-environment --environment-name "${ENV_NAME}" --version-label "${APP_VERSION}" || exit 0
-
 	
 
 	# Testing?
