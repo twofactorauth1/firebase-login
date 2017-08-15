@@ -193,8 +193,9 @@ _.extend(api.prototype, baseApi.prototype, {
 
     removeUserFromAccount: function(req, resp) {
         var self = this;
-        self.log.debug('>> removeUserFromAccount');
-
+        var thisAccountId = parseInt(self.accountId(req));
+        var thisUserId = self.userId(req);
+        self.log.debug(thisAccountId, thisUserId, '>> removeUserFromAccount');
         var accountId = parseInt(req.params.id);
         var userId = parseInt(req.params.userId);
 
@@ -203,7 +204,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 return self.send403(resp);
             } else {
                 userManager.deleteOrRemoveUserForAccount(accountId, userId, function(err, value){
-                    self.log.debug('<< removeUserFromAccount');
+                    self.log.debug(thisAccountId, thisUserId, '<< removeUserFromAccount');
                     return self.sendResultOrError(resp, err, value, 'Error removing user from account', null);
                 });
             }

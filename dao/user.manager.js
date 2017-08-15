@@ -694,7 +694,7 @@ module.exports = {
     deleteOrRemoveUserForAccount: function(accountId, userId, fn){
         var self = this;
         self.log = log;
-        self.log.debug('>> deleteOrRemoveUserForAccount');
+        self.log.debug(accountId, userId, '>> deleteOrRemoveUserForAccount');
 
         dao.getById(userId, $$.m.User, function(err, user){
             if(err || user=== null) {
