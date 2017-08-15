@@ -20,8 +20,8 @@ env_check(){
 
 	if [ "$1" = "master" ]; then
 		export AWS_DEFAULT_REGION="us-west-1"
-		export ENV_NAME="XXX"
-		export APP_NAME="XXX"
+		export ENV_NAME="securematics-prod-env"
+		export APP_NAME="securematics"
 		export S3_BUCKET="elasticbeanstalk-us-west-1-213805526570"
 		export GOOGLE_CLIENT_ID="277102651227-m80ppab4ler5fo08jle3a2g0vhnjce99.apps.googleusercontent.com"
 		export GOOGLE_CLIENT_SECRET="yPiJOniUgxjT94O7M_4tNj_M"
@@ -30,8 +30,8 @@ env_check(){
 		export GOOGLE_CLIENT_ID="277102651227-koaeib7b05jjc355thcq3bqtkbuv1o5r.apps.googleusercontent.com"
 	  	export GOOGLE_CLIENT_SECRET="lg41TWgRgRfZQ22Y9Qd902pH"
 	  	export AWS_DEFAULT_REGION="us-west-1"
-        export ENV_NAME="securematicsTestEnv-env"
-        export APP_NAME="securematics-test-env"
+        export ENV_NAME="securematics-test-env"
+        export APP_NAME="securematics"
         export S3_BUCKET="elasticbeanstalk-us-west-1-213805526570"
 	else
 		on_err "No environment specified"
@@ -52,12 +52,12 @@ main(){
 	    echo "Generating constants for production."
 	    grunt ngconstant:production || on_err "$_"
 	    cp public/admin/assets/js/config.js public/js/scripts/config.js
-	    export APP_DESCRIPTION="Production Build"
+	    export APP_DESCRIPTION="Securematics Production Build"
 	elif [ "$1" = "develop" ]; then
 	    echo "Generating constants for development."
 	    grunt ngconstant:development || on_err "$_"
 	    cp public/admin/assets/js/config.js public/js/scripts/config.js
-	    export APP_DESCRIPTION="Test Build"
+	    export APP_DESCRIPTION="Securematics Test Build"
 	    echo $APP_DESCRIPTION
 	    cp public/robots-test.txt public/robots.txt
 	else
