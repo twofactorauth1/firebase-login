@@ -326,7 +326,9 @@ module.exports = {
         self.log.debug(accountId, userId, '>> cancelAccountSubscription');
         async.waterfall([
             function(cb) {
-                if(account.get('orgId') && account.get('orgId') > 0) {
+                if(account.get('billing').stripeParent && account.get('billing').stripeParent === 6) {
+                    cb(null, null);
+                } else if(account.get('orgId') && account.get('orgId') > 0) {
                     self._getOrgAccessToken(account.get('orgId'), function(err, token){
                         if(err) {
                             self.log.error(accountId, userId, 'Error getting accessToken:', err);
