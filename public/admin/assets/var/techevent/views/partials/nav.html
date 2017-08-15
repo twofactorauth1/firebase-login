@@ -183,30 +183,6 @@
 			</li>
 		</ul>
 	</li>
-	<li ng-class="{'active open':$state.includes('app.support')}">
-		<a href="javascript:void(0)">
-			<div class="item-content">
-				<div class="item-media">
-					<i class="ti-info-alt"></i>
-				</div>
-				<div class="item-inner">
-					<span class="title" translate="sidebar.nav.support.MAIN"> Support </span><i class="icon-desktop"></i>
-				</div>
-			</div>
-		</a>
-		<ul class="sub-menu hidden">
-			<li ui-sref-active="active">
-				<a ui-sref="app.support.helptopics">
-					<span class="title" translate="sidebar.nav.support.HELPTOPICS"> Help Topics </span>
-				</a>
-			</li>
-			<li ui-sref-active="active" ng-if="account._id == 6">
-				<a ui-sref="app.support.managetopics">
-					<span class="title" translate="sidebar.nav.support.MANAGETOPICS"> Manage Topics</span>
-				</a>
-			</li>
-		</ul>
-	</li>
 </ul>
 <div class="wrapper ng-scope" ng-if="account.billing.plan==='NO_PLAN_ARGUMENT'">
     <!--accountConstant.plan_types.TRIAL-->

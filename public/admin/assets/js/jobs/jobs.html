@@ -20,10 +20,10 @@
                         <thead ng-class="{'bg-white': tableView == 'grid'}">
                         <tr>
                             <th ng-class="{'column-width': tableView == 'grid'}" ng-click='selectAllClickFn($event)' ng-show='vm.state.jobs.length'><i class="fa fa-2x" ng-class='{"fa-check-circle": selectAllChecked, "fa-circle-o": !selectAllChecked}'></i></th>
-                            <th st-sort="_id" st-sort-default="reverse"  ng-class="{'column-width': tableView == 'grid'}">Job</th>
+                            <th st-sort="_id"  ng-class="{'column-width': tableView == 'grid'}">Job</th>
                             <th st-sort="count" style="margin-top: 1px;" ng-class="{'column-width': tableView == 'grid'}">Count</th>
                             <th class="hidden-xs" st-sort="lastRun"  ng-class="{'column-width': tableView == 'grid'}">Last Run</th>
-                            <th class="hidden-xs" st-sort="nextRun"  ng-class="{'column-width': tableView == 'grid'}" style="white-space: nowrap;">Next Run</th>
+                            <th class="hidden-xs" st-sort="nextRun" st-sort-default="reverse" ng-class="{'column-width': tableView == 'grid'}" style="white-space: nowrap;">Next Run</th>
                             <th ng-class="{'column-width': tableView == 'grid'}" style="white-space: nowrap;"> </th>
                         </tr>
 

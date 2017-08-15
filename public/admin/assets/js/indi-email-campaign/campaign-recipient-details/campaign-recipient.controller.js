@@ -169,15 +169,24 @@ function campaignRecipientDetailsController($scope, $state, $attrs, $filter, $mo
     }
 
     function viewSingleContact(recipient){
-        var _email = recipient.receiver
-        var _event = _.findWhere(recipient.events, function(item){
-            return item.email === _email
-        })
-        if(_event){
+        var contactId = recipient.contactId;
+        if(!contactId){
+            var _email = recipient.receiver
+            var _event = _.findWhere(recipient.events, function(item){
+                return item.email === _email
+            })
+            if(_event){
+                $state.go('app.singleContact', {
+                    contactId: _event.contactId
+                });
+            }
+        }
+        else{
             $state.go('app.singleContact', {
-                contactId: _event.contactId
+                contactId: contactId
             });
         }
+        
     }
 
     function checkIfFieldSearch(){

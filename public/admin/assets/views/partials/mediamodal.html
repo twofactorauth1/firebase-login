@@ -49,13 +49,19 @@
                 <div class="clearfix"></div>
 
                 <div class="media margin-top-0" id="assets" ng-style="{'max-height':bodyHeight}">
-                    <div class="col-xs-12 col-sm-6 form-group search-media" ng-if="!loadingAssets">
+                    <div class="col-xs-12 col-sm-4 form-group search-media" ng-if="!loadingAssets">
                         <span class="input-icon">
                             <input type="text" placeholder="Search by file name" class="form-control" ng-model="pagingParams.search" ng-model-options="{ debounce: 1000 }"/>
                             <i class="ti-search"></i>
                         </span>
                     </div>
-                    <div class="col-xs-12 col-sm-6 form-group paging-media" ng-if="assetsCount">
+                    <div class="col-xs-12 col-sm-4 form-group paging-limit-container" ng-if="!loadingAssets">
+                        <span class="margin-right-5">Display: </span>
+                        <label class="radio-inline"><input type="radio" ng-model="paging.recordPerPage" value="6" name="optpaging" ng-change="refreshPaging(paging.recordPerPage)"><span>6</span></label>
+                        <label class="radio-inline"><input type="radio" ng-model="paging.recordPerPage" name="optpaging" value="18" ng-change="refreshPaging(paging.recordPerPage)"><span>18</span></label>
+                        <label class="radio-inline"><input type="radio" ng-model="paging.recordPerPage" name="optpaging" value="60" ng-change="refreshPaging(paging.recordPerPage)"><span>60</span></label>
+                    </div>
+                    <div class="col-xs-12 col-sm-4 form-group paging-media" ng-if="assetsCount">
                         <nav ng-if="numberOfPages() && pages.length >= 2">
                             <ul class="pagination">
                                 <li ng-repeat="page in pages" ng-class="{active: page == pagingParams.curPage}">

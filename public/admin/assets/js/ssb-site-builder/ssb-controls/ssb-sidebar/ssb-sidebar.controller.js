@@ -31,6 +31,7 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
     vm.getPlatformSections = getPlatformSections;
     vm.getPlatformComponents = getPlatformComponents;
     vm.addSectionToPage = addSectionToPage;
+    vm.addSectionToPageToIndex = addSectionToPageToIndex;
     vm.scrollToActiveSection = scrollToActiveSection;
     vm.removeSectionFromPage = removeSectionFromPage;
     vm.removeComponentFromSection = removeComponentFromSection;
@@ -69,7 +70,15 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
 
     editableOptions.theme = 'bs3';
 
+    vm.fontFamilyOptions = SimpleSiteBuilderService.getFontFamilyOptions();
+    vm.fontWeightOptions = SimpleSiteBuilderService.getFontWeightOptions();
+    vm.bodyFontWeightOptions = SimpleSiteBuilderService.bodyFontWeightOptions();
+    vm.checkIfSelected = checkIfSelected;
 
+    function checkIfSelected(value, newValue){
+        if(value && newValue)
+            return value.replace(/'/g, "").replace(/, /g, ",") == newValue.replace(/"/g, "").replace(/, /g, ",");
+    }
     vm.sortableOptions = {
         handle: '.ssb-sidebar-move-handle',
         onSort: function (evt) {
@@ -258,6 +267,26 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
         vm.uiState.showSectionPanel = false;
         return (
             SimpleSiteBuilderService.addSectionToPage(section, version, replaceAtIndex, vm.state.page.sections[vm.uiState.activeSectionIndex], copyAtIndex).then(function() {
+                vm.scrollToActiveSection();
+            }, function(error) {
+                console.error('section panel -> SimpleSiteBuilderService.addSectionToPage', JSON.stringify(error));
+            })
+        )
+    }
+
+    function addSectionToPageToIndex(section) {
+        var el = angular.element(".ssb-page-section.ssb-active-edit-control");
+        
+        var insertAtIndex = undefined;
+        if(el.length){
+            index = el.attr("clickedIndex");
+            index = parseInt(index);
+            insertAtIndex = (index > 0) ? (index + 1) : index;
+        }
+        
+        vm.uiState.showSectionPanel = false;
+        return (
+            SimpleSiteBuilderService.addSectionToPageToIndex(section, insertAtIndex).then(function() {
                 vm.scrollToActiveSection();
             }, function(error) {
                 console.error('section panel -> SimpleSiteBuilderService.addSectionToPage', JSON.stringify(error));

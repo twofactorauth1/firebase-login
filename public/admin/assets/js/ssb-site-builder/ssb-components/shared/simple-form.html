@@ -88,8 +88,9 @@
                 </label>
                 <div ng-if="emails">
                     <ui-select ng-model="component.emailId" theme="bootstrap">
-                        <ui-select-match placeholder="Select a email">
+                        <ui-select-match placeholder="Select a email" style="outline:0 !important">
                             <small ng-bind-html="$select.selected.title"></small>
+                            <span style="position:absolute; right:-15px" class="fa fa-times text-danger" ng-click="component.emailId = null;" ng-show='$select.selected.title'></span>
                         </ui-select-match>
                         <ui-select-choices repeat="email._id as email in emails | filter: $select.search track by $index">
                             <small ng-bind-html="email.title | highlight: $select.search"></small>
@@ -107,8 +108,9 @@
                 </label>
                 <div ng-if="emails">
                     <ui-select ng-model="component.campaignId" theme="bootstrap">
-                        <ui-select-match placeholder="Select a campaign">
+                        <ui-select-match placeholder="Select a campaign"  style="outline:0 !important">
                             <small ng-bind-html="$select.selected.name"></small>
+                            <span style="position:absolute; right:-15px" class="fa fa-times text-danger" ng-click="component.campaignId = null;" ng-show='$select.selected.name'></span>
                         </ui-select-match>
                         <ui-select-choices repeat="campaign._id as campaign in campaigns | filter: $select.search | filter:{ type: 'autoresponder' } track by $index">
                             <small ng-bind-html="campaign.name | highlight: $select.search"></small>

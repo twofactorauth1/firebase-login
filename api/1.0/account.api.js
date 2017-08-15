@@ -128,17 +128,18 @@ _.extend(api.prototype, baseApi.prototype, {
 
     removeUserFromAccount: function(req, resp) {
         var self = this;
-        self.log.debug('>> removeUserFromAccount');
-
         var accountId = parseInt(self.accountId(req));
         var userId = parseInt(req.params.userId);
+        self.log.debug(accountId, userId, '>> removeUserFromAccount');
+
+
 
         self.checkPermission(req, self.sc.privs.MODIFY_ACCOUNT, function(err, isAllowed){
             if(isAllowed !== true) {
                 return self.send403(resp);
             } else {
                 userManager.deleteOrRemoveUserForAccount(accountId, userId, function(err, value){
-                    self.log.debug('<< removeUserFromAccount');
+                    self.log.debug(accountId, userId, '<< removeUserFromAccount');
                     return self.sendResultOrError(resp, err, value, 'Error removing user from account', null);
                 });
             }

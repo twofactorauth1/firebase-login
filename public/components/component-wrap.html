@@ -80,7 +80,7 @@
                         <div ng-if="component.bg.color"
                              class="bg"
                              ng-style="{'background': component.bg.color}"></div>
-                        <div ng-if="component.bg.img.show && component.type == 'masthead'"
+                        <div id="px-ele-{{vm.component._id}}" ng-if="component.bg.img.show && component.type == 'masthead'"
                              class="bg cover"
                              ng-class="{parallax:component.bg.img.parallax,
                                 'blur-image':component.bg.img.blur,
@@ -93,7 +93,7 @@
                                 background-repeat: no-repeat;
                                 background-position: {{component.bg.img.position}};'>
                         </div>
-                        <div ng-if="component.bg.img.show && component.type != 'masthead'"
+                        <div id="px-ele-{{vm.component._id}}" ng-if="component.bg.img.show && component.type != 'masthead'"
                              class="bg"
                              ng-class="{parallax:component.bg.img.parallax,
                                 'blur-image':component.bg.img.blur}"

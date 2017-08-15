@@ -32,14 +32,35 @@ _.extend(view.prototype, BaseView.prototype, {
             if (!err && value != null) {
                 data.account = value.toJSON();
             }
-            data.isGroupAdmin = isGroupAdmin;
-            data.includeJs = false;
-            data = self.baseData(data);
-            data.accounts = self.req.session.accounts;
-            //console.dir(data.accounts);
-            self.resp.render('home_new', data);
-            self.cleanUp();
-            data = self = null;
+            if(data.account && data.account.orgId){
+                self.getOrganizationByAccountId(data.account._id, function(err, org){
+                    if (!err && org != null) {
+                        var _orgDomain = org.get("orgTitle");
+                        if(_orgDomain){
+                            data.title = _orgDomain;
+                        }
+                    }
+                    data.isGroupAdmin = isGroupAdmin;
+                    data.includeJs = false;
+                    data = self.baseData(data);
+                    data.accounts = self.req.session.accounts;
+                    //console.dir(data.accounts);
+                    self.resp.render('home_new', data);
+                    self.cleanUp();
+                    data = self = null;
+                })
+            }
+            else{
+                data.isGroupAdmin = isGroupAdmin;
+                data.includeJs = false;
+                data = self.baseData(data);
+                data.accounts = self.req.session.accounts;
+                //console.dir(data.accounts);
+                self.resp.render('home_new', data);
+                self.cleanUp();
+                data = self = null;
+            }
+            
         });
     }
 });

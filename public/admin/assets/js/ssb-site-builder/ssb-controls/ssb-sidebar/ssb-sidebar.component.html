@@ -76,7 +76,7 @@
 
                             <!-- <div ng-repeat="section in vm.sections | orderBy:'title' | filter:{ featured: true, enabled: true }" ng-if="sectionFilter.lowercase === 'featured'" class="ssb-sidebar-add-section margin-bottom-15"> -->
                             <div ng-sortable="vm.uiState.sortableListAddContentConfig" >
-                                <div sectionId = "{{section._id}}" ng-repeat="section in vm.uiState.filteredSections = (vm.sections | orderBy:['title', 'version'] |  filterSsbSections:sectionFilter)" ng-if="sectionFilter.lowercase != 'all' && sectionFilter.lowercase != 'featured'" class="ssb-sidebar-add-section margin-bottom-15 ssb-sidebar-layout-version" ng-click="vm.addSectionToPage(section);vm.uiState.openSidebarPanel = '';" >
+                                <div sectionId = "{{section._id}}" ng-repeat="section in vm.uiState.filteredSections = (vm.sections | orderBy:['title', 'version'] |  filterSsbSections:sectionFilter)" ng-if="sectionFilter.lowercase != 'all' && sectionFilter.lowercase != 'featured'" class="ssb-sidebar-add-section margin-bottom-15 ssb-sidebar-layout-version" ng-click="vm.addSectionToPageToIndex(section);vm.uiState.openSidebarPanel = '';" >
                                     <div class="ssb-sidebar-add-section-img">
                                         <div class="img-wrap">
                                             <a>
@@ -101,7 +101,7 @@
                                 </div>
 
 
-                                <div sectionId = "{{section._id}}" ng-repeat="section in  vm.uiState.filteredSections = (vm.sections | orderBy:['title', 'version'] | filter:{ enabled: true })" ng-if="sectionFilter.lowercase == 'all'" class="ssb-sidebar-add-section margin-bottom-15" ng-click="vm.addSectionToPage(section);vm.uiState.openSidebarPanel = '';">
+                                <div sectionId = "{{section._id}}" ng-repeat="section in  vm.uiState.filteredSections = (vm.sections | orderBy:['title', 'version'] | filter:{ enabled: true })" ng-if="sectionFilter.lowercase == 'all'" class="ssb-sidebar-add-section margin-bottom-15" ng-click="vm.addSectionToPageToIndex(section);vm.uiState.openSidebarPanel = '';">
                                     <div class="ssb-sidebar-add-section-img">
                                         <div class="img-wrap">
                                             <a>
@@ -430,34 +430,54 @@
                                 </rzslider>
                             </div>                    
                         </div>
-                    </div>
-
-                    <!-- <div class="row padding-10">
-                        Heading Size: <input type="text" string-to-number touchspin="" ng-model="vm.state.website.themeOverrides.styles.headingSize" min="12" max="500" data-verticalbuttons="true" data-verticalupclass="ti-angle-up" data-verticaldownclass="ti-angle-down"> (px)
-                    </div>
-                    <div class="row padding-10">
-                        Paragraph Size: <input type="text" string-to-number touchspin="" ng-model="vm.state.website.themeOverrides.styles.paragraphSize" min="8" max="100" data-verticalbuttons="true" data-verticalupclass="ti-angle-up" data-verticaldownclass="ti-angle-down"> (px)
-                    </div>
-                    <div class="row padding-10">
-                        Font Stack (Default):
-                        <div ng-attr-style="background-color: {{vm.state.website.themeOverrides.styles.bodyBackgroundColor}}; font-family: {{vm.state.website.themeOverrides.defaultFontStack}};">
-                            {{vm.state.website.themeOverrides.defaultFontStack}}
-                        </div>
-                    </div>
-                    <div class="row padding-10">
-                        Font Stack (Heading):
-                        <div ng-attr-style="background-color: {{vm.state.website.themeOverrides.styles.bodyBackgroundColor}}; font-family: {{vm.state.website.themeOverrides.defaultFontStack}};">
-                            {{vm.state.website.themeOverrides.headingFontStack}}
-                        </div>
-                    </div>
-                    <div class="row padding-10">
-                        Font Stack (Paragraph):
-                        <div ng-attr-style="background-color: {{vm.state.website.themeOverrides.styles.bodyBackgroundColor}}; font-family: {{vm.state.website.themeOverrides.defaultFontStack}};">
-                            {{vm.state.website.themeOverrides.paragraphFontStack}}
-                        </div>
-                    </div> -->
 
 
+                        <div class="form-group">
+                            <div>
+                                <h4>
+                                    Default font styles
+                                </h4>
+                            </div>            
+                        </div>
+
+                        <div class="form-group">
+                            <label for="txt_size">
+                                Font Size
+                               <span tooltip-placement="top" tooltip-append-to-body="true" tooltip="Font size of button"><i class="fa fa-info-circle" /></span>
+                            </label>
+                            <div class="col-xs-7 pull-right">
+                                <input type="text" ng-model="vm.state.website.themeOverrides.styles.fontSize" min="8" max="96" touchspin>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>
+                                Font Family
+                                <span tooltip-placement="top" tooltip-append-to-body="true" tooltip="Font family for button"><i class="fa fa-info-circle" /></span>
+                            </label>
+                            <select ng-model="vm.state.website.themeOverrides.styles.fontFamily" class="form-control margin-bottom-0">
+                                <option value="">--Select--</option>
+                                <option ng-repeat="(value, key) in vm.fontFamilyOptions" value="{{value}}" ng-selected="{{vm.checkIfSelected(value, vm.state.website.themeOverrides.styles.fontFamily)}}">{{key}}</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>
+                                Letter spacing
+                                <span tooltip-placement="top" tooltip-append-to-body="true" tooltip="Spacing between letters"><i class="fa fa-info-circle" /></span>
+                            </label>
+                            <input type="text" ng-model="vm.state.website.themeOverrides.styles.letterSpacing" min="-2" max="20" touchspin>
+                        </div>
+                        <div class="form-group">
+                            <label>
+                                Font Weight
+                                <span tooltip-placement="top" tooltip-append-to-body="true" tooltip="Font family for button"><i class="fa fa-info-circle" /></span>
+                            </label>
+                            <select ng-model="vm.state.website.themeOverrides.styles.fontWeight" class="form-control margin-bottom-0">
+                                <option value="">--Select--</option>
+                                <option ng-repeat="(value, key) in vm.bodyFontWeightOptions" value="{{value}}" ng-selected="{{value == vm.state.website.themeOverrides.styles.fontWeight}}">{{key}}</option>
+                            </select>
+                        </div>
+
+                    </div>
                 </div>
             </section>
 

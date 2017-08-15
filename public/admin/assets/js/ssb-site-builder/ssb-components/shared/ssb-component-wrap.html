@@ -45,7 +45,7 @@
 	                             class="bg"
 	                             ng-style="{'background': vm.component.bg.color}"></div>
 	                        
-	                        <div ng-if="vm.component.bg.img.show"
+	                        <div id="px-ele-{{vm.component._id}}" ng-if="vm.component.bg.img.show"
 	                             class="bg"
 	                             ng-class="{parallax:vm.component.bg.img.parallax,
 	                                'blur-image':vm.component.bg.img.blur}"

@@ -65,9 +65,16 @@ function SiteBuilderBolgRecentTagComponentController(SimpleSiteBuilderBlogServic
                     angular.forEach(post.post_tags, function(tag, key1) {
 
                         if(blog_tags.length<20){
-                          if (blog_tags.indexOf(tag) == -1) {
-                            blog_tags.push(tag)
-                           }
+                          if(angular.isObject(tag) && tag.text){
+                            if (blog_tags.indexOf(tag.text) == -1) {
+                                blog_tags.push(tag)
+                            }
+                          }
+                          else{
+                            if (blog_tags.indexOf(tag) == -1) {
+                                blog_tags.push(tag)
+                            }
+                          }
                         }
                     })
                 }
