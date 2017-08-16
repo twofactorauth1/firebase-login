@@ -672,10 +672,10 @@
               editor.selection.restore();
             }
             else {
-              _split();
-
+              
               // Add link.
               editor.format.apply('a', { href: href });
+              editor.selection.restore();
             }
           }
         }
