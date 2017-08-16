@@ -675,15 +675,9 @@
               
               // Add link.
               
-              editor.format.apply('a', { href: href});
-              var lnk = get();
-              if (lnk) {
-                var $lnk = $(lnk);
-              $lnk
-              .prepend($.FE.START_MARKER)
-              .append($.FE.END_MARKER);
-              editor.selection.restore();
-              }
+              editor.html.insert('<a href="' + href + '">' + $.FE.START_MARKER + editor.selection.element().outerHTML + $.FE.END_MARKER + '</a>');
+              
+              
               //editor.selection.restore();
             }
           }
