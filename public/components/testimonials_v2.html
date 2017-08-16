@@ -32,12 +32,12 @@
     }
     @media screen and (min-width: 768px){
         [testimonials-component]#component_{{component._id}} .testimonials-v2 .carousel-caption {
-            width: {{component.customWidth}}px !important;
-            max-width: {{component.customWidth}}px !important;
+            width: {{component.customWidth && component.customWidth=='100%'?component.customWidth:(component.customWidth+'px')}}  !important;
+            max-width: {{component.customWidth && component.customWidth=='100%'?component.customWidth:(component.customWidth+'px')}}  !important;
         }
         [testimonials-component]#component_{{component._id}} .testimonials-v2 .slick-dots {
-             width: {{component.customWidth}}px !important;
-             max-width: {{component.customWidth}}px !important;
+             width: {{component.customWidth && component.customWidth=='100%'?component.customWidth:(component.customWidth+'px')}}  !important;
+             max-width: {{component.customWidth && component.customWidth=='100%'?component.customWidth:(component.customWidth+'px')}}  !important;
         }
     }
 </style>
