@@ -90,19 +90,6 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
                     var _col = section.layoutModifiers.columns.columnsNum || 1;
                     classString += ' ssb-text-column-layout ssb-text-column-' + _col;
                 }
-                if (section.spacing && section.spacing.mw) {
-                    if(section.spacing.mw != '100%' && section.components[0].customWidth != '100%'){
-                        if(section.components[0].type === 'testimonials' &&
-                           section.components[0].version == 2){
-                            if(section.spacing.mw < section.components[0].customWidth){
-                            section.components[0].customWidth = section.spacing.mw;
-
-                          } $scope.$broadcast('updatetestimonialHeight.component', {})
-                        }
-                      }
-               } else if( section.components && section.components[0] && section.components[0].type === 'testimonials' && section.components[0].version == 2 && section.components[0].customWidth){
-                   $scope.$broadcast('updatetestimonialHeight.component', {})
-               }
 
             }
 
