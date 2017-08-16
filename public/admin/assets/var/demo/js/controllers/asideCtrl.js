@@ -32,7 +32,7 @@ app.controller('AsideCtrl', ["$scope", "$modal", "$aside", "QuoteCartDetailsServ
       
       var _modal = {
           templateUrl: modal,
-          keyboard: false,
+          keyboard: true,
           backdrop: 'static',
           size: 'lg',
           scope: $scope,

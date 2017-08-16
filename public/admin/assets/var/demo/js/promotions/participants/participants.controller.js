@@ -86,7 +86,7 @@ function participantsComponentController($scope, $attrs, $window, $filter, $stat
         
         var _modal = {
             templateUrl: modal,
-            keyboard: false,
+            keyboard: true,
             backdrop: 'static',
             size: 'lg',
             resolve: {

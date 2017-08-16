@@ -105,7 +105,7 @@
             console.log('openModal >>> ', modal, controller);
             var _modal = {
                 templateUrl: modal,
-                keyboard: false,
+                keyboard: true,
                 backdrop: 'static',
                 size: 'md',
                 resolve: {
