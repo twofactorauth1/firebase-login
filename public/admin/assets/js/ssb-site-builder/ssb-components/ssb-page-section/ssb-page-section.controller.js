@@ -90,19 +90,6 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
                     var _col = section.layoutModifiers.columns.columnsNum || 1;
                     classString += ' ssb-text-column-layout ssb-text-column-' + _col;
                 }
-                if (section.spacing && section.spacing.mw) {
-                    if(section.spacing.mw != '100%' && section.components[0].customWidth != '100%'){
-                        if(section.components[0].type === 'testimonials' &&
-                           section.components[0].version == 2){
-                            if(section.spacing.mw < section.components[0].customWidth){
-                            section.components[0].customWidth = section.spacing.mw;
-
-                          } $scope.$broadcast('updatetestimonialHeight.component', {})
-                        }
-                      }
-               } else if( section.components && section.components[0] && section.components[0].type === 'testimonials' && section.components[0].version == 2 && section.components[0].customWidth){
-                   $scope.$broadcast('updatetestimonialHeight.component', {})
-               }
 
             }
 
@@ -648,27 +635,6 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
             } else {
                 $timeout(function() {
                     $(vm.element[0]).sticky({zIndex:999});
-                    var fixedElementHeight = $(vm.element[0]).height();
-                    var adjustAnchor = function(eventType) {
-                        var $anchor = $(':target');
-                        fixedElementHeight = $(vm.element[0]).height();
-                        if ($anchor.length > 0) {
-                            $('html, body').stop();
-                              $timeout(function() {
-                                  window.scrollTo(0, $anchor.offset().top - fixedElementHeight);
-                             }, 200);
-                        }
-                    };
-                    $(window).on('hashchange',function(){
-                         adjustAnchor();
-                    });
-                    if(window.location.hash){
-                        var hashelement=window.location.hash;
-                        window.location.hash="";
-                        $timeout(function() {
-                            $("a[href*='"+hashelement+"']").trigger("click");
-                        },1000);
-                    }
                     if(ssbPageSectionService){
                         $scope.$watch(
                             function () {

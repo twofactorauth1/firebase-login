@@ -48,7 +48,7 @@ function shipmentsComponentController($scope, $attrs, $window, $filter, $statePa
     function openModal(modal, controller, size){
         var _modal = {
             templateUrl: modal,
-            keyboard: false,
+            keyboard: true,
             backdrop: 'static',
             size: 'lg',
             resolve: {

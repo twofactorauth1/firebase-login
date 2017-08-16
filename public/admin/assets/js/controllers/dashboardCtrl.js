@@ -294,7 +294,7 @@ app.controller('DashboardCtrl', ["$scope", "OrderService", "ContactService", "Ch
         $scope.openModal = function (modal) {
             $scope.modalInstance = $modal.open({
                 templateUrl: modal,
-                keyboard: false,
+                keyboard: true,
                 backdrop: 'static',
                 scope: $scope
             });

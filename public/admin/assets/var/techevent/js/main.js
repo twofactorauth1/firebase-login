@@ -69,7 +69,7 @@ function ($rootScope, $state, $stateParams, $injector, $window, ENV) {
 
             modalInstance = $modal.open({
                 templateUrl: 'indigeneous-admin-login-modal',
-                keyboard: false,
+                keyboard: true,
                 backdrop: 'static',
                 size: 'sm'
             });

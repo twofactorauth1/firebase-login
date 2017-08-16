@@ -197,7 +197,7 @@ app.controller('AppCtrl', ['$rootScope', '$scope', '$state', '$translate', '$win
         templateUrl: 'media-modal',
         controller: 'MediaModalCtrl',
         size: 'lg',
-        keyboard: false,
+        keyboard: true,
         backdrop: 'static',
         resolve: {
           showInsert: function () {

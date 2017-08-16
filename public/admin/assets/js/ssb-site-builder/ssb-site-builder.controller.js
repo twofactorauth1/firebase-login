@@ -43,6 +43,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
     vm.savePost = savePost;
     vm.updateColumnLayout = updateColumnLayout;
     vm.setDefaultSpacing = setDefaultSpacing;
+    vm.updatetestimonialWidth = updatetestimonialWidth;
     vm.isNavHero = isNavHero;
     vm.isSortableDisabled = angular.element($window).width() < 768 ? true : false
     vm.toggleSidebarPanel = toggleSidebarPanel;
@@ -167,6 +168,8 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
         updateColumnLayout: vm.updateColumnLayout,
 
         setDefaultSpacing: vm.setDefaultSpacing,
+
+        updatetestimonialWidth:vm.updatetestimonialWidth,
 
         isNavHero: vm.isNavHero,
 
@@ -667,7 +670,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
       console.log('openModal >>> ', modal, controller, index);
       var _modal = {
         templateUrl: modal,
-        keyboard: false,
+        keyboard: true,
         backdrop: 'static',
         size: 'md',
         scope: $scope,
@@ -698,7 +701,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
         console.log('openModal >>> ', modal, controller, index);
         var _modal = {
             templateUrl: modal,
-            keyboard: false,
+            keyboard: true,
             backdrop: 'static',
             size: 'md',
             resolve: {
@@ -753,7 +756,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
         console.log('openModal >>> ', modal, controller, index);
         var _modal = {
             templateUrl: modal,
-            keyboard: false,
+            keyboard: true,
             backdrop: 'static',
             size: 'md',
             resolve: {
@@ -1273,7 +1276,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
       console.log('openModal >>> ', modal, controller, index);
       var _modal = {
         templateUrl: modal,
-        keyboard: false,
+        keyboard: true,
         backdrop: 'static',
         size: 'md',
         scope: $scope,
@@ -1398,7 +1401,25 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
         }
         section.spacing.default = value ? false : true;
     }
-
+    function updatetestimonialWidth(section){
+        if(section.components.length>0 &&
+           section.components[0].type === 'testimonials' &&
+           section.components[0].version == 2){
+            $timeout(function() {
+                if (section.spacing &&
+                section.spacing.mw &&
+                section.components[0].customWidth &&
+                section.spacing.mw != '100%' &&
+                section.components[0].customWidth != '100%' &&
+                section.spacing.mw < section.components[0].customWidth){
+                  $scope.$apply(function() {
+                      section.components[0].customWidth = section.spacing.mw;
+                  })
+                }
+                $scope.$broadcast('updatetestimonialHeight.component', {})
+            }, 1000);
+        }
+    }
     $scope.$on('$refreshAccountSettings', function(event, account) {
         if(account && account._id){
             vm.state.account = account;

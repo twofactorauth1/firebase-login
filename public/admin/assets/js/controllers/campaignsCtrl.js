@@ -7,6 +7,8 @@
 
     $scope.Math = $window.Math;
     $scope.newCampaign = {};
+    $scope.itemPerPage = 100;
+    $scope.showPages = 15;
     // $route.reload();
 
     /*
@@ -19,7 +21,7 @@
         $timeout(function() {
           $scope.$apply(function() {
             $scope.campaigns = campaigns;
-            $timeout(fetchCampaigns, 10000);
+            $timeout(fetchCampaigns, 15000);
           });
         });
       });
@@ -63,7 +65,7 @@
         $scope.modalInstance = $modal.open({
             templateUrl: 'new-campaign-modal',
             size: size,
-            keyboard: false,
+            keyboard: true,
             backdrop: 'static',
             scope: $scope
         });

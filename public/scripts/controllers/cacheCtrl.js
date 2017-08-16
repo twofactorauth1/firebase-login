@@ -117,7 +117,12 @@ mainApp.controller('CacheCtrl', ['$scope', '$rootScope', 'embeddedSiteDataServic
                     if (locId) {
                         var element = document.getElementById(locId);
                         if (element) {
-                            $document.scrollToElementAnimated(element, 0, 1000);
+                            var stiky=$('#sticky-wrapper');
+                            var offset=0;
+                            if(stiky && stiky[0]){
+                                offset=stiky[0].height();
+                            }
+                            $document.scrollToElementAnimated(element, offset, 1000);
                         }
                     }
                 }, 3000);

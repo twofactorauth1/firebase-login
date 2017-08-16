@@ -469,7 +469,7 @@
     $scope.openSimpleModal = function (modal, _size) {
       var _modal = {
         templateUrl: modal,
-        keyboard: false,
+        keyboard: true,
        // backdrop: 'static',
         scope: $scope,
         size: _size || 'md',
@@ -489,7 +489,7 @@
       console.log('openModal >>> ', modal, controller, index);
       var _modal = {
         templateUrl: modal,
-        keyboard: false,
+        keyboard: true,
         backdrop: 'static',
         size: 'md',
         resolve: {

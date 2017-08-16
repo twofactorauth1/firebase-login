@@ -62,7 +62,7 @@
             $scope.modalInstance = $modal.open({
                 templateUrl: 'new-product-modal',
                 size: size,
-                keyboard: false,
+                keyboard: true,
                 backdrop: 'static',
                 scope: $scope
             });
@@ -72,7 +72,7 @@
             $scope.modalInstance = $modal.open({
                 templateUrl: 'import-product-modal',
                 size: size,
-                keyboard: false,
+                keyboard: true,
                 backdrop: 'static',
                 scope: $scope
             });

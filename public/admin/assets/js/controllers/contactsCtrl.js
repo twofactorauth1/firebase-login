@@ -143,7 +143,7 @@
             console.log('openModal >>> ', template, controller, _size);
             var _modal = {
                 templateUrl: template,
-                keyboard: false,
+                keyboard: true,
                 backdrop: 'static',
                 size: 'md',
                 resolve: {
@@ -171,7 +171,7 @@
             var _modal = {
                 templateUrl: modal,
                 scope: $scope,
-                keyboard: false,
+                keyboard: true,
                 backdrop: 'static'
             };
             $scope.modalInstance = $modal.open(_modal);
