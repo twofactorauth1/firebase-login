@@ -493,7 +493,9 @@
 
       var href = text_inputs.filter('[name="href"]').val();
       var text = text_inputs.filter('[name="text"]').val();
-
+      if(text){
+        text = text.trim();
+      }
       var attrs = {};
       var $input;
       var i;

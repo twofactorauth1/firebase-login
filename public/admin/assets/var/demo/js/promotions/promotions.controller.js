@@ -57,7 +57,7 @@ function promotionsComponentController($scope, $attrs, $filter, $modal, $timeout
         vm.modalInstance = $modal.open({
             templateUrl: templateUrl,
             size: size,
-            keyboard: false,
+            keyboard: true,
             backdrop: 'static',
             scope: $scope
         });
@@ -76,7 +76,7 @@ function promotionsComponentController($scope, $attrs, $filter, $modal, $timeout
         console.log('openModal >>> ', modal, controller);
         var _modal = {
             templateUrl: modal,
-            keyboard: false,
+            keyboard: true,
             backdrop: 'static',
             size: 'md',
             resolve: {

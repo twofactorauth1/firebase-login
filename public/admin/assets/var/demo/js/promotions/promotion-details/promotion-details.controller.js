@@ -89,7 +89,7 @@ function promotionDetailsController($scope, $window, $state, $attrs, $filter, $m
         console.log('openModal >>> ', modal, controller);
         var _modal = {
             templateUrl: modal,
-            keyboard: false,
+            keyboard: true,
             backdrop: 'static',
             size: 'lg',
             resolve: {
@@ -131,7 +131,7 @@ function promotionDetailsController($scope, $window, $state, $attrs, $filter, $m
         
         var _modal = {
             templateUrl: modal,
-            keyboard: false,
+            keyboard: true,
             backdrop: 'static',
             size: 'lg',
             resolve: {
