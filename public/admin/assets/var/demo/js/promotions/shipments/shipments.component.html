@@ -80,15 +80,15 @@
 	        </thead>
 	        <tbody>
 	            <tr ng-repeat-start="shipment in vm.displayedShipments" class="list-row" ng-click="vm.currentShipment = shipment; vm.openModal('new-promotion-shipment-modal', 'PromotionShipmentModalController', 'lg')" >
-	                <td class="col-partner"><strong>VAR: </strong>{{shipment.companyName}}</td>
+	                <td class="col-partner"><strong>VAR: </strong><span class="grid-col-inner-content">{{shipment.companyName}}</span></td>
 
-	                <td class="hidden-xs col-products"><strong>Products: </strong><div class="name-block-container"><span class="list-name"></span><span class="text-adjust-table" tooltip="{{vm.getProductsName(shipment.products)}}">{{vm.getProductsName(shipment.products)}}</span></div></td>
-	                <td class="hidden-xs col-ship-date"><strong>Ship Date: </strong>{{vm.parseValueToDate(shipment.shipDate) | date:'M/d/yyyy'}}</td>
-	                <td class="hidden-xs col-config-date"><strong>Config Date: </strong>{{vm.parseValueToDate(shipment.configDate) | date:'M/d/yyyy'}}</td>
-	                <td class="hidden-xs col-deploy-date"><strong>Deploy Date: </strong>{{vm.parseValueToDate(shipment.deployDate) | date:'M/d/yyyy'}}</td>
-	                <td class="col-end-date"><strong>End Date: </strong>{{vm.parseValueToDate(shipment.endDate) | date:'M/d/yyyy'}}</td>
-	                <td class="col-report"><strong>Report: </strong><i ng-if="shipment.attachment.name" class="fa fa-file-pdf-o" ng-click="vm.viewPdf($event, shipment.attachment)"></i></td>
-	                <td class="col-status"><strong>Status: </strong>{{vm.getShipmentStatus(shipment.status)}}</td>
+	                <td class="hidden-xs col-products"><strong>Products: </strong><div class="name-block-container"><span class="list-name"></span><span class="text-adjust-table" tooltip="{{vm.getProductsName(shipment.products)}}"><span class="grid-col-inner-content">{{vm.getProductsName(shipment.products)}}</span></div></span></td>
+	                <td class="hidden-xs col-ship-date"><strong>Ship Date: </strong><span class="grid-col-inner-content">{{vm.parseValueToDate(shipment.shipDate) | date:'M/d/yyyy'}}</span></td>
+	                <td class="hidden-xs col-config-date"><strong>Config Date: </strong><span class="grid-col-inner-content">{{vm.parseValueToDate(shipment.configDate) | date:'M/d/yyyy'}}</span></td>
+	                <td class="hidden-xs col-deploy-date"><strong>Deploy Date: </strong><span class="grid-col-inner-content">{{vm.parseValueToDate(shipment.deployDate) | date:'M/d/yyyy'}}</span></td>
+	                <td class="col-end-date"><strong>End Date: </strong><span class="grid-col-inner-content">{{vm.parseValueToDate(shipment.endDate) | date:'M/d/yyyy'}}</span></td>
+	                <td class="col-report"><strong>Report: </strong><span class="grid-col-inner-content"><i ng-if="shipment.attachment.name" class="fa fa-file-pdf-o" ng-click="vm.viewPdf($event, shipment.attachment)"></i></span></td>
+	                <td class="col-status"><strong>Status: </strong><span class="grid-col-inner-content">{{vm.getShipmentStatus(shipment.status)}}</span></td>
 	                <td ng-show="tableView == 'list'">
 	                    <button class="expand-btn" ng-click="vm.preventClick($event);expanded = !expanded">
 	                       <span ng-if="expanded" class="fa fa-chevron-up"></span>

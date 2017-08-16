@@ -213,7 +213,7 @@ function QuoteDetailsController($scope, $timeout, toaster, SweetAlert, formValid
 
         var _modal = {
             templateUrl: modal,
-            keyboard: false,
+            keyboard: true,
             backdrop: 'static',
             size: 'lg',
             scope: $scope,

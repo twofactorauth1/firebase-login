@@ -419,7 +419,7 @@ function inventoryComponentController($scope, $attrs, $filter, $modal, $timeout,
         
         var _modal = {
             templateUrl: modal,
-            keyboard: false,
+            keyboard: true,
             backdrop: 'static',
             size: 'lg',
             resolve: {

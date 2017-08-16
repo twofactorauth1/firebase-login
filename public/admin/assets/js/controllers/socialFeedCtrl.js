@@ -29,7 +29,7 @@
     $scope.openModal = function (modal) {
       $scope.modalInstance = $modal.open({
         templateUrl: modal,
-        keyboard: false,
+        keyboard: true,
         backdrop: 'static',
         scope: $scope
       });

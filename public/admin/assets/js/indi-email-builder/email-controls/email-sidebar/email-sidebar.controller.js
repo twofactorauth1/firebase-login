@@ -592,7 +592,7 @@ function ssbEmailBuilderSidebarController($scope, $attrs, $filter, $document, $t
       console.log('openModal >>> ', modal, controller, index);
       var _modal = {
         templateUrl: modal,
-        keyboard: false,
+        keyboard: true,
         backdrop: 'static',
         size: 'md',
         scope: $scope,
@@ -623,7 +623,7 @@ function ssbEmailBuilderSidebarController($scope, $attrs, $filter, $document, $t
       console.log('openModal >>> ', modal, controller, index);
       var _modal = {
         templateUrl: modal,
-        keyboard: false,
+        keyboard: true,
         backdrop: 'static',
         size: 'md',
         resolve: {

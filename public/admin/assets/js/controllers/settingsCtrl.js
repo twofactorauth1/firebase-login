@@ -368,7 +368,7 @@
         templateUrl: 'media-modal',
         controller: 'MediaModalCtrl',
         size: 'lg',
-        keyboard: false,
+        keyboard: true,
         backdrop: 'static',
         resolve: {
           showInsert: function () {

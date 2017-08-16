@@ -580,7 +580,7 @@
         function openModalFn(template) {
             vm.modalInstance = $modal.open({
                 templateUrl: template,
-                keyboard: false,
+                keyboard: true,
                 backdrop: 'static',
                 scope: $scope
             });

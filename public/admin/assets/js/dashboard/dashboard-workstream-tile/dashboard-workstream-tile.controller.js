@@ -111,7 +111,7 @@ function dashboardWorkstreamTileComponentController($scope, $attrs, $filter, $lo
     function openModal(modalTemplate) {
       vm.modalInstance = $modal.open({
         templateUrl: modalTemplate,
-        keyboard: false,
+        keyboard: true,
         backdrop: 'static',
         size: 'lg',
         scope: $scope
@@ -183,7 +183,7 @@ function dashboardWorkstreamTileComponentController($scope, $attrs, $filter, $lo
         $scope.showDone = true;
         var _modal = {
             templateUrl: modal,
-            keyboard: false,
+            keyboard: true,
             backdrop: 'static',
             size: 'md',
             scope: $scope,

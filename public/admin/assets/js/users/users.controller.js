@@ -62,7 +62,7 @@
             var _modal = {
                 templateUrl: modal,
                 scope: $scope,
-                keyboard: false,
+                keyboard: true,
                 backdrop: 'static'
             };
             $scope.modalInstance = $modal.open(_modal);

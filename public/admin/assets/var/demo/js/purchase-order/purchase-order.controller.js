@@ -101,7 +101,7 @@ function purchaseOrderComponentController($scope, $attrs, $filter, $modal, $time
         $scope.modalInstance = $modal.open({
             templateUrl: templateUrl,
             size: size,
-            keyboard: false,
+            keyboard: true,
             backdrop: 'static',
             scope: $scope
         });
@@ -120,7 +120,7 @@ function purchaseOrderComponentController($scope, $attrs, $filter, $modal, $time
         $scope.modalInstance = $modal.open({
             templateUrl: 'archived-purchase-order-modal',
             size: size,
-            keyboard: false,
+            keyboard: true,
             backdrop: 'static',
             scope: $scope
         });
