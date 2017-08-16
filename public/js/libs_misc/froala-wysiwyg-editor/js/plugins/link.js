@@ -493,9 +493,9 @@
 
       var href = text_inputs.filter('[name="href"]').val();
       var text = text_inputs.filter('[name="text"]').val();
-      if(text){
+      //if(text){
         text = text.trim();
-      }
+      //}
       var attrs = {};
       var $input;
       var i;
@@ -674,8 +674,17 @@
             else {
               
               // Add link.
-              editor.format.apply('a', { href: href });
+              
+              editor.format.apply('a', { href: href});
+              var lnk = get();
+              if (lnk) {
+                var $lnk = $(lnk);
+              $lnk
+              .prepend($.FE.START_MARKER)
+              .append($.FE.END_MARKER);
               editor.selection.restore();
+              }
+              //editor.selection.restore();
             }
           }
         }
