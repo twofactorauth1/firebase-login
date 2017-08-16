@@ -674,11 +674,18 @@
             else {
               
               // Add link.
-              
-              editor.html.insert('<a href="' + href + '">' + $.FE.START_MARKER + editor.selection.element().outerHTML + $.FE.END_MARKER + '</a>');
-              
-              
+              _split();
+              editor.format.apply('a', { href: href});
+              var lnk = get();
+              if (lnk) {
+                var $lnk = $(lnk);
+              $lnk
+              .prepend($.FE.START_MARKER)
+              .append($.FE.END_MARKER);
               //editor.selection.restore();
+              }
+              editor.selection.restore();
+              //editor.toolbar.hide();
             }
           }
         }
