@@ -63,7 +63,7 @@
         $scope.modalInstance = $modal.open({
             templateUrl: 'new-campaign-modal',
             size: size,
-            keyboard: false,
+            keyboard: true,
             backdrop: 'static',
             scope: $scope
         });
