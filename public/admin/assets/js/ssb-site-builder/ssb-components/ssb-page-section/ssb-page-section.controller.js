@@ -635,27 +635,6 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
             } else {
                 $timeout(function() {
                     $(vm.element[0]).sticky({zIndex:999});
-                    var fixedElementHeight = $(vm.element[0]).height();
-                    var adjustAnchor = function(eventType) {
-                        var $anchor = $(':target');
-                        fixedElementHeight = $(vm.element[0]).height();
-                        if ($anchor.length > 0) {
-                            $('html, body').stop();
-                              $timeout(function() {
-                                  window.scrollTo(0, $anchor.offset().top - fixedElementHeight);
-                             }, 200);
-                        }
-                    };
-                    $(window).on('hashchange',function(){
-                         adjustAnchor();
-                    });
-                    if(window.location.hash){
-                        var hashelement=window.location.hash;
-                        window.location.hash="";
-                        $timeout(function() {
-                            $("a[href*='"+hashelement+"']").trigger("click");
-                        },1000);
-                    }
                     if(ssbPageSectionService){
                         $scope.$watch(
                             function () {
