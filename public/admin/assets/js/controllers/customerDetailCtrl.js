@@ -574,7 +574,7 @@
             $scope.modalInstance = $modal.open({
                 templateUrl: 'media-modal',
                 controller: 'MediaModalCtrl',
-                keyboard: false,
+                keyboard: true,
                 backdrop: 'static',
                 size: 'lg',
                 resolve: {
