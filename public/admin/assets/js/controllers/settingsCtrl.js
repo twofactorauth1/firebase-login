@@ -444,6 +444,52 @@
         }
       }
     }
+    $scope.blogListResolutionOptions = [
+      {
+        label: "768",
+        value: "768px"
+      },
+      {
+        label: "960",
+        value: "960px"
+      },
+      {
+        label: "1024",
+        value: "1024px"
+      },
+      {
+        label: "1280",
+        value: "1280px"
+      },
+      {
+        label: "1360",
+        value: "1360px"
+      },
+      {
+        label: "1366",
+        value: "1366px"
+      },
+      {
+        label: "1440",
+        value: "1440px"
+      },
+      {
+        label: "1600",
+        value: "1600px"
+      },
+      {
+        label: "1680",
+        value: "1680px"
+      },
+      {
+        label: "1920",
+        value: "1920px"
+      },
+      {
+        label: "100%",
+        value: "100%"
+      }
+    ]
 
   }]);
 }(angular));
