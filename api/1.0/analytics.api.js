@@ -1615,8 +1615,22 @@ _.extend(api.prototype, baseApi.prototype, {
                 }
             });
         } else {
-            self.log.warn(accountId, userId, 'Non-main account attempted to call admin reports!');
-            return self.send403(resp);
+            organizationDao.getByOrgDomain("securematics", function(err, organization){
+                if(err || !organization) {
+                    self.log.warn(accountId, userId, 'Non-main account attempted to call admin reports!');
+                    return self.send403(resp);
+                } else {
+                    if(organization.get('adminAccount') === accountId) {
+                        analyticsManager.getDailyActiveUsers(accountId, userId, start, end, organization.id(), function(err, results){
+                            self.log.debug(accountId, userId, '<< getDailyActiveUsers');
+                            self.sendResultOrError(resp, err, results, 'Error getting report');
+                        });
+                    } else {
+                        self.log.warn(accountId, userId, 'Non-orgAdmin account attempted to call admin reports!');
+                        return self.send403(resp);
+                    }
+                }
+            });
         }
 
     },
