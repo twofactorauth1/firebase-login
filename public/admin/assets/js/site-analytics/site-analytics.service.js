@@ -128,7 +128,12 @@
             }
             var startDateString = moment.utc(startDate).format('YYYY-MM-DD[T]HH:mm:ss');
             var endDateString = moment.utc(endDate).format('YYYY-MM-DD[T]HH:mm:ss');
-            var path = '/' + reportName + '?start=' + startDateString + '&end=' + endDateString;
+            if(startDate && endDate){
+                var path = '/' + reportName + '?start=' + startDateString + '&end=' + endDateString;
+            }
+            else{
+                var path = '/' + reportName;
+            }
             if(isAdmin) {
                 path = adminAnalyticsAPIUrl + path;
             } else if(isCustomer){

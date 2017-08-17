@@ -17,96 +17,118 @@
                 </button>
             </div>
         </div>
-    </div>   
-    <div class="securematics-list-container securematics-list-users" ng-init="tableView='list'">
-        <div st-table="vm.displayedUsers" st-safe-src="vm.state.filterUsers" st-filtered-collection>
-            <div class="container-fluid container-fullw bg-white padding-top-0 padding-bottom-0 margin-bottom-15">
-                <div class="row">
-                    <div class="col-sm-12">
-                        <div class="panel panel-transparent row margin-bottom-0">
-                            <div class="panel-body">
-                                <form role="form" class="ng-pristine ng-valid row">
-                                    <div class="hidden-xs">
-                                        <div class="col-xs-12 col-sm-6 padding-left-0 padding-right-0">
-                                            <div class="form-group">
-                                                <div class="col-xs-8 col-sm-6">
-                                                    <span class="input-icon">
-                                                        <input type="text" st-search ng-model="vm.uiState.globalSearch" placeholder="Search by Id, name, username..." id="form-field-14" class="form-control">
-                                                        <i class="ti-search"></i>
-                                                    </span>
+    </div>
+    
+    <tabset class="tabbable">
+        <tab heading="Users">
+            <div class="securematics-list-container securematics-list-users" ng-init="tableView='list'">
+            <div st-table="vm.displayedUsers" st-safe-src="vm.state.filterUsers" st-filtered-collection>
+                <div class="container-fluid container-fullw bg-white padding-top-0 padding-bottom-0 margin-bottom-15 margin-left-0 margin-right-0" style="padding-left:15px !important;">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="panel panel-transparent row margin-bottom-0">
+                                <div class="panel-body">
+                                    <form role="form" class="ng-pristine ng-valid row">
+                                        <div class="hidden-xs">
+                                            <div class="col-xs-12 col-sm-6 padding-left-0 padding-right-0">
+                                                <div class="form-group">
+                                                    <div class="col-xs-8 col-sm-6">
+                                                        <span class="input-icon">
+                                                            <input type="text" st-search ng-model="vm.uiState.globalSearch" placeholder="Search by Id, name, username..." id="form-field-14" class="form-control">
+                                                            <i class="ti-search"></i>
+                                                        </span>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        </div>                                    
-                                    </div>                               
-                                </form>
+                                            </div>                                    
+                                        </div>                               
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <table class="table table-hover table-striped bg-white table-list-view" ng-if="!vm.uiState.loading" fixed-header-table>
+                    <thead ng-class="{'bg-white': tableView == 'grid'}"  sticky offset="65" sticky-class="sticky-header-class">
+                        <tr>                    
+                            <th class="hidden-xs col-id" st-sort="_id" style="white-space: nowrap">ID</th>
+                            <th st-sort="vm.getters.name" class="col-name" style="white-space: nowrap">Name</th>
+                            <th class="col-email" st-sort="username" style="white-space: nowrap">Username</th>                    
+                            <th class="hidden-xs col-login-date" st-sort="vm.getters.loginDate" style="white-space: nowrap">Last Login</th>
+                            <th class="hidden-xs col-login-ip" st-sort="vm.getters.ip">Last IP</th>
+                            <th class="col-actions hidden-xs">Actions</th>
+                            <th class="hidden-xs col-activity"  ng-if="vm.state.orgCardAndPermissions.isAdminUser || vm.state.orgCardAndPermissions.isSecurematicsUser">Activity</th>
+                        </tr>
+                        <tr>
+                            <th class="hidden-xs col-id" >
+                                <input st-search="_id" placeholder="Id" class="form-control" type="search" ng-model="vm.uiState.fieldSearch._id"/>
+                            </th>
+                            <th class="col-name">
+                                <input st-search="first" placeholder="Name" class="form-control" type="search" ng-model="vm.uiState.fieldSearch.first"/>
+                            </th>                   
+                            <th class="col-email">
+                                <input st-search="username" placeholder="Username" class="form-control" type="search" ng-model="vm.uiState.fieldSearch.username"/>
+                            </th>
+                            <th class="hidden-xs col-login-date"></th>
+                            <th class="hidden-xs col-login-ip"></th>
+                            <th class="hidden-xs col-actions"></th>
+                            <th class="hidden-xs col-activity"  ng-if="vm.state.orgCardAndPermissions.isAdminUser || vm.state.orgCardAndPermissions.isSecurematicsUser"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="user in vm.displayedUsers" class="product-item">                
+                            <td class="hidden-xs col-id">
+                                {{user._id}}
+                            </td>
+                            <td class="col-name">{{user.first}} {{user.last}}</td>
+                            <td class="col-email">{{user.username}}</td>
+                            <td class="hidden-xs col-login-date">{{user.lastLoginDate | date:'M/dd/yyyy hh:mm a'}}</td>
+                            <td class="hidden-xs col-login-ip">{{user.lastLoginIP}}</td>
+                            <td class="table-action col-actions hidden-xs" >
+                                <a ng-if="vm.uiState.isAdminUser || currentUser._id === user._id" ng-click="openEditUserModal(user._id)"><span tooltip-placement="top" tooltip="Change Password"><i class="fa fa-pencil"></i></span></a>
+                                <a  ng-if="currentUser._id !== user._id && vm.uiState.isAdminUser" ng-click="openEditUserCardModal(user._id)"><span tooltip-placement="top" tooltip="Edit User's Detail"><i class="fa fa-address-book-o"></i></span></a>
+                                <a ng-if="currentUser._id !== user._id && vm.uiState.isAdminUser" ng-click="vm.removeUserFromAccount(user._id)" class="delete-row"><span tooltip-placement="top" tooltip="Delete User"><i class="fa fa-trash-o"></i></span></a>
+                            </td>
+                            <td class="table-action col-activity hidden-xs" ng-if="vm.state.orgCardAndPermissions.isAdminUser || vm.state.orgCardAndPermissions.isSecurematicsUser">
+                                <a ng-click="vm.downloadActivityReport(user._id)" class="delete-row"><span tooltip-placement="top" tooltip="Download user activities"><i class="fa fa-download"></i></span></a>
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td class="text-center" ng-if="vm.state.filterUsers.length" st-custom-pagination="" st-displayed-pages="vm.pagingConstant.displayedPages" st-items-by-page="vm.pagingConstant.numberOfRowsPerPage || 50" colspan="6">
+                            </td>
+                            <td ng-if="(!vm.state.filterUsers || vm.state.filterUsers.length <= 0 ) && !vm.uiState.loading" colspan="8" class="center height-100">
+                                <h4>There are currently no users</h4>
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
+                <div class="load1 csspinner height-400" ng-show="vm.uiState.loading"></div>
+            </div>
+        </div>
+        </tab>
+        <tab heading="Active users detail" ng-click="vm.reflowCharts()">
+
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="panel panel-white" id="overview" ng-class="{'load1 csspinner': !vm.activeUserConfig.options}">
+                        <div class="panel-heading border-light">
+                            <h4 class="panel-title text-primary"><span class="text-bold">Active users</span> Overview</h4>
+                            <ct-paneltool class="panel-tools" tool-collapse="tool-collapse"></ct-paneltool>
+                        </div>
+                        <div collapse="overview" class="panel-wrapper" ng-init="setAnalyticsWidgetStates()">
+                            <div class="panel-body">
+                                <div >
+                                    <highchart config="vm.activeUserConfig" id="active-users-chart"></highchart>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <table class="table table-hover table-striped bg-white table-list-view" ng-if="!vm.uiState.loading" fixed-header-table>
-                <thead ng-class="{'bg-white': tableView == 'grid'}"  sticky offset="65" sticky-class="sticky-header-class">
-                    <tr>                    
-                        <th class="hidden-xs col-id" st-sort="_id" style="white-space: nowrap">ID</th>
-                        <th st-sort="vm.getters.name" class="col-name" style="white-space: nowrap">Name</th>
-                        <th class="col-email" st-sort="username" style="white-space: nowrap">Username</th>                    
-                        <th class="hidden-xs col-login-date" st-sort="vm.getters.loginDate" style="white-space: nowrap">Last Login</th>
-                        <th class="hidden-xs col-login-ip" st-sort="vm.getters.ip">Last IP</th>
-                        <th class="col-actions hidden-xs">Actions</th>
-                        <th class="hidden-xs col-activity"  ng-if="vm.state.orgCardAndPermissions.isAdminUser || vm.state.orgCardAndPermissions.isSecurematicsUser">Activity</th>
-                    </tr>
-                    <tr>
-                        <th class="hidden-xs col-id" >
-                            <input st-search="_id" placeholder="Id" class="form-control" type="search" ng-model="vm.uiState.fieldSearch._id"/>
-                        </th>
-                        <th class="col-name">
-                            <input st-search="first" placeholder="Name" class="form-control" type="search" ng-model="vm.uiState.fieldSearch.first"/>
-                        </th>                   
-                        <th class="col-email">
-                            <input st-search="username" placeholder="Username" class="form-control" type="search" ng-model="vm.uiState.fieldSearch.username"/>
-                        </th>
-                        <th class="hidden-xs col-login-date"></th>
-                        <th class="hidden-xs col-login-ip"></th>
-                        <th class="hidden-xs col-actions"></th>
-                        <th class="hidden-xs col-activity"  ng-if="vm.state.orgCardAndPermissions.isAdminUser || vm.state.orgCardAndPermissions.isSecurematicsUser"></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr ng-repeat="user in vm.displayedUsers" class="product-item">                
-                        <td class="hidden-xs col-id">
-                            {{user._id}}
-                        </td>
-                        <td class="col-name">{{user.first}} {{user.last}}</td>
-                        <td class="col-email">{{user.username}}</td>
-                        <td class="hidden-xs col-login-date">{{user.lastLoginDate | date:'M/dd/yyyy hh:mm a'}}</td>
-                        <td class="hidden-xs col-login-ip">{{user.lastLoginIP}}</td>
-                        <td class="table-action col-actions hidden-xs" >
-                            <a ng-if="vm.uiState.isAdminUser || currentUser._id === user._id" ng-click="openEditUserModal(user._id)"><span tooltip-placement="top" tooltip="Change Password"><i class="fa fa-pencil"></i></span></a>
-                            <a  ng-if="currentUser._id !== user._id && vm.uiState.isAdminUser" ng-click="openEditUserCardModal(user._id)"><span tooltip-placement="top" tooltip="Edit User's Detail"><i class="fa fa-address-book-o"></i></span></a>
-                            <a ng-if="currentUser._id !== user._id && vm.uiState.isAdminUser" ng-click="vm.removeUserFromAccount(user._id)" class="delete-row"><span tooltip-placement="top" tooltip="Delete User"><i class="fa fa-trash-o"></i></span></a>
-                        </td>
-                        <td class="table-action col-activity hidden-xs" ng-if="vm.state.orgCardAndPermissions.isAdminUser || vm.state.orgCardAndPermissions.isSecurematicsUser">
-                            <a ng-click="vm.downloadActivityReport(user._id)" class="delete-row"><span tooltip-placement="top" tooltip="Download user activities"><i class="fa fa-download"></i></span></a>
-                        </td>
-                    </tr>
-                </tbody>
-                <tfoot>
-                    <tr>
-                        <td class="text-center" ng-if="vm.state.filterUsers.length" st-custom-pagination="" st-displayed-pages="vm.pagingConstant.displayedPages" st-items-by-page="vm.pagingConstant.numberOfRowsPerPage || 50" colspan="6">
-                        </td>
-                        <td ng-if="(!vm.state.filterUsers || vm.state.filterUsers.length <= 0 ) && !vm.uiState.loading" colspan="8" class="center height-100">
-                            <h4>There are currently no users</h4>
-                        </td>
-                    </tr>
-                </tfoot>
-            </table>
-            <div class="load1 csspinner height-400" ng-show="vm.uiState.loading"></div>
-        </div>
-    </div>
+        </tab>
+    </tabset>
 </div>
 <div data-ng-include=" 'assets/var/demo/views/partials/new-user-modal.html' "></div>
 <div data-ng-include=" 'assets/views/partials/edit-password-modal.html' "></div>
 <div data-ng-include=" 'assets/var/demo/views/partials/edit-user-card-modal.html' "></div>
-
-
-

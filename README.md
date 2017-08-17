@@ -1,4 +1,6 @@
-These directions will assist you in getting your environment set up on your local machine in order to begin code development. 
+# Securematics
+
+These directions will assist you in getting your environment set up on your local machine in order to begin code development.
 
 ### Dependencies
 

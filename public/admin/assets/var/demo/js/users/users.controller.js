@@ -2,7 +2,7 @@
 /*global app, moment, angular, window*/
 /*jslint unparam:true*/
 (function (angular) {
-    app.controller('usersCtrl', ['$scope', '$state', '$http', "toaster", "$filter", "$modal", "$timeout", "AccountService","UserService", "userConstant", "formValidations", "SweetAlert", "pagingConstant", "UtilService", "UserPermissionsConfig", function ($scope, $state, $http, toaster, $filter, $modal, $timeout, AccountService,UserService, userConstant, formValidations, SweetAlert, pagingConstant, UtilService, UserPermissionsConfig) {
+    app.controller('usersCtrl', ['$scope', '$state', '$http', "toaster", "$filter", "$modal", "$timeout", "AccountService","UserService", "userConstant", "formValidations", "SweetAlert", "pagingConstant", "UtilService", "UserPermissionsConfig", "ChartAnalyticsService", function ($scope, $state, $http, toaster, $filter, $modal, $timeout, AccountService,UserService, userConstant, formValidations, SweetAlert, pagingConstant, UtilService, UserPermissionsConfig, ChartAnalyticsService) {
 
         var vm = this;
 
@@ -13,6 +13,16 @@
             isAdmin: false,
             orgCardAndPermissions: UserPermissionsConfig.orgConfigAndPermissions
         };
+
+        var localTimezoneOffset=0;
+        //highchar datetime behaving diffent on differnetbrowser so nee to set this check, may be a bugb in highcart
+        if((!!window.chrome && !!window.chrome.webstore) ||
+           (/constructor/i.test(window.HTMLElement) || (function (p) { return p.toString() === "[object SafariRemoteNotification]"; })(!window['safari'] || safari.pushNotification)
+          )){
+            localTimezoneOffset=0;
+        }else{
+            localTimezoneOffset = new Date().getTimezoneOffset()*-60000;
+        }
 
         vm.uiState = {
             loading: true
@@ -28,6 +38,7 @@
         vm.validateUserDetails = validateUserDetails;
         vm.setDefaults = setDefaults;
         vm.downloadActivityReport = downloadActivityReport;
+        vm.reflowCharts = reflowCharts;
         $scope.$watch("$parent.orgCardAndPermissions", function(orgCardAndPermissions){
             if(orgCardAndPermissions){
               if(_.contains(orgCardAndPermissions.userPermissions.vendorRestrictedStates, $state.current.name)){
@@ -37,6 +48,23 @@
                 AccountService.getUpdatedAccount(function (account) {
                     vm.state.account = account;
                     loadAccountUsers();
+                    ChartAnalyticsService.getDailyActiveUsers(vm.state.account._id, function(dau){
+                        //DAU
+                        var dauData = [];
+                        _.each(dau, function(dau){
+                            var subArr = [];
+                            var value = dau.total || 0;
+                            subArr.push(new Date(dau.timeframe.start.replace(" ", "T")).getTime()+localTimezoneOffset);
+                            subArr.push(value);
+                            dauData.push(subArr);
+                        });
+                        vm.dauData = dauData;
+                        ChartAnalyticsService.getActiveUserConfig(vm.dauData, function (data) {
+                            vm.activeUserConfig = data;
+                            vm.activeUserConfig.loading = false;
+                            reflowCharts();
+                        });
+                    })
                 });
               }
             }
@@ -475,6 +503,20 @@
         function downloadActivityReport(userId){
             UserService.downloadUserActivities(userId);
         }
+        function reflowCharts(){
+            window.Highcharts.charts.forEach(function(chart){
+                $timeout(function() {
+                    if(angular.isDefined(chart) && Object.keys(chart).length)
+                        chart.reflow();
+                }, 0);
+            })
+        };
+
+        $scope.$watchGroup(['app.layout.isAnalyticsDashboardMode', 'app.layout.isSidebarClosed'],  function (val1, val2) {
+            if(angular.isDefined(val1) || angular.isDefined(val2)){
+                reflowCharts();
+            }
+        });
 
         (function init() {
             UserService.getVendors(function(data){
