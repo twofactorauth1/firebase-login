@@ -343,6 +343,7 @@ _.extend(view.prototype, BaseView.prototype, {
                 if(foundPage) {
                    cb(null, webpageData, pages);
                 } else {
+                    self.log.warn('Page [' + pageHandle + '] Not Found');
                     cb('Page [' + pageHandle + '] Not Found');
                 }
             },

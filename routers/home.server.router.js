@@ -49,7 +49,7 @@ _.extend(router.prototype, BaseRouter.prototype, {
         app.get("/category/*", this.setupForPages.bind(this), this.renderBlogByAuthorOrPost.bind(this));
         app.get("/author/*", this.setupForPages.bind(this), this.renderBlogByAuthorOrPost.bind(this));
         app.get("/page/*", [sitemigration_middleware.checkForRedirect, this.setupForPages.bind(this)], this.optimizedIndex.bind(this));
-        app.get("/signup", this.setupForSocialSignup.bind(this), this.optimizedIndex.bind(this));
+        app.get("/signup", this.setupForSocialSignup.bind(this), this.optimizedSignup.bind(this));
         app.get("/post", this.setupForPages.bind(this), this.optimizedIndex.bind(this));
 
         app.get("/index_temp_page", this.setup.bind(this), this.indexTempPage.bind(this));
@@ -472,6 +472,20 @@ _.extend(router.prototype, BaseRouter.prototype, {
         //pagecacheManager.getCachedPage(accountId, pageName, resp);
     },
     */
+
+    optimizedSignup: function(req, resp) {
+        var self = this;
+        var accountId = self.unAuthAccountId(req) || appConfig.mainAccountID;
+        if(accountId === 'new') {//we are on the signup page
+            accountId = appConfig.mainAccountID;
+        }
+        var pageName = 'signup';
+        self.log.debug('>> optimizedSignup ' + accountId + ', ' + pageName);
+
+        new WebsiteView(req, resp).renderCachedPage(accountId, pageName);
+
+        self.log.debug('<< optimizedSignup');
+    },
 
     optimizedIndex: function(req,resp) {
         var self = this;
