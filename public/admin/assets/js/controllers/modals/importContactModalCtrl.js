@@ -361,22 +361,18 @@ app.controller('importContactModalCtrl', ['$scope', '$location', '$timeout', '$m
   };
 
   $scope.addmorefields = function(){
-   
-    var newcolumns=
-                {
-                name: 'Custom'+$scope.counter,
-                value: ' ',
-                label: 'Custom'+$scope.counter,
-
-                match: '',
-                flag: 'custom',
-                known: ['custom', 'extra', 'additional'],
-                errorRows: []
-                };
-  $scope.contactColumns.push(newcolumns);
-  $scope.counter++;
-
+      var newcolumns= {
+        name: 'Custom'+$scope.counter,
+        value: 'qa'+($scope.counter+1),
+        label: 'Custom'+$scope.counter,
+        match: '',
+        flag: 'custom',
+        known: ['custom', 'extra', 'additional'],
+        errorRows: []
     };
+      $scope.contactColumns.push(newcolumns);
+      $scope.counter++;
+  };
   $scope.guessHeaders = function (fn) {
     _.each($scope.contactColumns, function (_column) {
       var bestMatch = {
@@ -517,67 +513,50 @@ app.controller('importContactModalCtrl', ['$scope', '$location', '$timeout', '$m
    * @updatePreview
    * - update the preview when details are changed
    */
-
-  $scope.updatePreview = function (selected) {
-    if(selected!=undefined)
-    {
-    if(selected.name!=undefined)
-    {
-    var currentobj = $filter('filter')($scope.contactColumns, {'flag': 'Custom','name':selected.name})[0];
-      currentobj.value=selected.match;
-    
-
-    }
-    }
-  var customfields = $filter('filter')($scope.contactColumns, {'flag': 'Custom'});
-  blankFormattedContact.extra = [];
-  for(var k=0;k<customfields.length;k++)
-  {
-  blankFormattedContact.extra.push(customfields[k]);
+  $scope.updatePreviewSelection=function(selected){
+       $timeout(function () { $scope.updatePreview(selected); }, 1000);
   }
-    var column = angular.copy(selected);
-    if (selected && !selected.match) {
-      selected.index = null;
-    }
-
-    var _colVal,_formatIndex = null;
-    var _formattedColumns = $scope.formatColumns();
-    if(column && !column.match){
-      _colVal = column.value;
-      _formatIndex = _formattedColumns[_colVal].index;
-      
-        $scope.previewContact[_colVal] = "";
-    }
-    else{
-      _.each($scope.contactColumns, function (_column) {
-      _colVal = _column.value;
+  $scope.updatePreview = function (selected) {
+      /* if(selected!=undefined){
+          if(selected.name!=undefined){
+              var currentobj = $filter('filter')($scope.contactColumns,{'flag': 'Custom','name':selected.name})[0];
+             // currentobj.value=selected.match;
+          }
+      }*/
+      var customfields = $filter('filter')($scope.contactColumns, {'flag': 'Custom'});
+      blankFormattedContact.extra = [];
+      for(var k=0;k<customfields.length;k++){
+          blankFormattedContact.extra.push(customfields[k]);
+      }
+      var column = angular.copy(selected);
+      if (selected && !selected.match) {
+          selected.index = null;
+      }
+      var _colVal,_formatIndex = null;
+      var _formattedColumns = $scope.formatColumns();
+      if(column && !column.match){
+          _colVal = column.value;
+          _formatIndex = _formattedColumns[_colVal].index;
+         $scope.previewContact[_colVal] = "";
+      }
+      else{
+          _.each($scope.contactColumns, function (_column) {
+              _colVal = _column.value;
        //blankFormattedContact.custom
-      _formatIndex = _formattedColumns[_colVal].index;
-      if(angular.isDefined(_formatIndex) && _formatIndex !== null)
-        $scope.previewContact[_colVal] = angular.copy($scope.csvResults[$scope.currentRow][_formatIndex]);
-      if(blankFormattedContact.extra!=undefined)
-      {
-      for(var j=0;j< blankFormattedContact.extra.length;j++)
-      { 
-        if(blankFormattedContact.extra[j]!=undefined)
-        {
-        if(blankFormattedContact.extra[j].match==_colVal)
-        {
-          blankFormattedContact.extra[j].value =  $scope.previewContact[_colVal];
-        }
+              _formatIndex = _formattedColumns[_colVal].index;
+              if(angular.isDefined(_formatIndex) && _formatIndex !== null)
+                  $scope.previewContact[_colVal] = angular.copy($scope.csvResults[$scope.currentRow][_formatIndex]);
+              if(blankFormattedContact.extra!=undefined){
+                  for(var j=0;j< blankFormattedContact.extra.length;j++){
+                      if(blankFormattedContact.extra[j]!=undefined){
+                          if(blankFormattedContact.extra[j].match==_colVal){
+                              blankFormattedContact.extra[j].value =  $scope.previewContact[_colVal];
+                          }
+                      }
+                  }
+              }
+          });
       }
-      }
-      } 
-    });
-      
-     
-    }
-      
-      
- 
-
-
-    
   };
 
 
@@ -639,12 +618,11 @@ app.controller('importContactModalCtrl', ['$scope', '$location', '$timeout', '$m
     var _formattedContact = angular.copy(blankFormattedContact);
     _.each($scope.csvResults, function (_result, i) {
       if (i !== 0) {
-
         _.each($scope.contactColumns, function (_column) {
           var _colVal = _column.value;
           var _formatIndex = _formattedColumns[_colVal].index;
           var _csvResult = _result[_formatIndex];
-          if (_csvResult) {
+          if (_csvResult !=undefined) {
             var _formatVal = _formattedColumns[_colVal].value;
             var _details = _formattedContact.details[0];
 
@@ -667,8 +645,10 @@ app.controller('importContactModalCtrl', ['$scope', '$location', '$timeout', '$m
               };
               _details.phones.push(_phone);
             }
-            if (_formatVal === 'custom') {
-              _details.custom = _csvResult;
+            if (_column.flag  === 'custom') {
+              //_details.custom = _csvResult;
+                var match = _.findWhere(_formattedContact.extra, {index:_column.index });
+                match.value = _csvResult
             };
 
             if (_formatVal === 'website') {
