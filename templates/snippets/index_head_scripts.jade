@@ -161,11 +161,10 @@ if (typeof account.website.theme !== 'undefined' && typeof account.website.theme
             .ssb-theme-#{account.website.theme.handle} .ssb-theme-paragraph-text {
                 font-size: #{account.website.themeOverrides.styles.paragraphSize};
             }
-
-            .ssb-page-layout-row-2-col{
-                max-width: #{account.website.settings.defaultBlogTemplateWidth}!important;
-            }
-
+            if (typeof account.website.settings !== 'undefined' && typeof account.website.defaultBlogTemplateWidth !== 'undefined')
+                .ssb-page-layout-row-2-col{
+                    max-width: #{account.website.settings.defaultBlogTemplateWidth}!important;
+                }
         }
 
 
