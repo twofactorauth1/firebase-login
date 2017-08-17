@@ -156,12 +156,10 @@ _.extend(api.prototype, baseApi.prototype, {
     _parseString: function(text){
         if(text==undefined)
             return ',';
-        // "" added for number value
         text= "" + text;
-        if(text.indexOf(',')>-1)
-            return "\"" + text + "\",";
-        else
-            return text+",";
+        text = text.replace(/"/g, "'");
+        text = "\"" + text + "\"";
+        return text + ",";
     }
 });
 
