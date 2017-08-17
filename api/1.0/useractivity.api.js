@@ -158,7 +158,8 @@ _.extend(api.prototype, baseApi.prototype, {
             return ',';
         text= "" + text;
         text = text.replace(/"/g, "'");
-        text = "\"" + text + "\"";
+        if(text.indexOf(',')>-1)
+            text = "\"" + text + "\"";
         return text + ",";
     }
 });
