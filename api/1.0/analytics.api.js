@@ -1589,22 +1589,35 @@ _.extend(api.prototype, baseApi.prototype, {
             start = moment(start, 'YYYY-MM-DD[T]HH:mm:ss').toDate();
             self.log.debug('start:', start);
         }
-        organizationDao.getByOrgDomain("securematics", function(err, organization){
-            if(err || !organization) {
-                self.log.warn(accountId, userId, 'Non-main account attempted to call admin reports!');
-                return self.send403(resp);
-            } else {
-                if(organization.get('adminAccount') === accountId) {
-                    analyticsManager.getDailyActiveUsers(accountId, userId, start, end, organization.id(), function(err, results){
-                        self.log.debug(accountId, userId, '<< getDailyActiveUsers');
-                        self.sendResultOrError(resp, err, results, 'Error getting report');
-                    });
-                } else {
-                    self.log.warn(accountId, userId, 'Non-orgAdmin account attempted to call admin reports!');
+        if(accountId === appConfig.mainAccountID) {
+            analyticsManager.getDailyActiveUsers(accountId, userId, start, end, null, function(err, results){
+                self.log.debug(accountId, userId, '<< getDailyActiveUsers');
+                self.sendResultOrError(resp, err, results, 'Error getting report');
+            });
+        } else if(urlUtils.getSubdomainFromRequest(req).isOrgRoot === true){
+            /*
+             * Check if we are a org admin
+             */
+            organizationDao.getByOrgDomain(urlUtils.getSubdomainFromRequest(req).orgDomain, function(err, organization){
+                if(err || !organization) {
+                    self.log.warn(accountId, userId, 'Non-main account attempted to call admin reports!');
                     return self.send403(resp);
+                } else {
+                    if(organization.get('adminAccount') === accountId) {
+                        analyticsManager.getDailyActiveUsers(accountId, userId, start, end, organization.id(), function(err, results){
+                            self.log.debug(accountId, userId, '<< getDailyActiveUsers');
+                            self.sendResultOrError(resp, err, results, 'Error getting report');
+                        });
+                    } else {
+                        self.log.warn(accountId, userId, 'Non-orgAdmin account attempted to call admin reports!');
+                        return self.send403(resp);
+                    }
                 }
-            }
-        });
+            });
+        } else {
+            self.log.warn(accountId, userId, 'Non-main account attempted to call admin reports!');
+            return self.send403(resp);
+        }
 
     },
 
