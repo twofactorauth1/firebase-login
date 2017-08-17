@@ -639,12 +639,11 @@ app.controller('importContactModalCtrl', ['$scope', '$location', '$timeout', '$m
     var _formattedContact = angular.copy(blankFormattedContact);
     _.each($scope.csvResults, function (_result, i) {
       if (i !== 0) {
-
         _.each($scope.contactColumns, function (_column) {
           var _colVal = _column.value;
           var _formatIndex = _formattedColumns[_colVal].index;
           var _csvResult = _result[_formatIndex];
-          if (_csvResult) {
+          if (_csvResult !=undefined) {
             var _formatVal = _formattedColumns[_colVal].value;
             var _details = _formattedContact.details[0];
 
@@ -667,8 +666,10 @@ app.controller('importContactModalCtrl', ['$scope', '$location', '$timeout', '$m
               };
               _details.phones.push(_phone);
             }
-            if (_formatVal === 'custom') {
-              _details.custom = _csvResult;
+            if (_column.flag  === 'custom') {
+              //_details.custom = _csvResult;
+                var match = _.findWhere(_formattedContact.extra, {index:_column.index });
+                match.value = _csvResult
             };
 
             if (_formatVal === 'website') {
