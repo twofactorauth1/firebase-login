@@ -3,7 +3,7 @@
         <div class="row">
             <div class="col-sm-8">
                 <h1 class="mainTitle">Account Users</h1>
-                
+
                 <span ng-if="vm.state.filterUsers" class="mainDescription">There {{vm.state.filterUsers.length > 1 ? 'are' : 'is'}} currently {{vm.state.filterUsers.length}} user<span ng-if="vm.state.filterUsers.length > 1">s</span>. <span ng-if="vm.showFilteredRecords()"> ({{filteredCollection.length || 0}} in filtered view)</span></span>
 
             </div>
@@ -18,7 +18,7 @@
             </div>
         </div>
     </div>
-    
+
     <tabset class="tabbable">
         <tab heading="Users">
             <div class="securematics-list-container securematics-list-users" ng-init="tableView='list'">
@@ -39,8 +39,8 @@
                                                         </span>
                                                     </div>
                                                 </div>
-                                            </div>                                    
-                                        </div>                               
+                                            </div>
+                                        </div>
                                     </form>
                                 </div>
                             </div>
@@ -49,10 +49,10 @@
                 </div>
                 <table class="table table-hover table-striped bg-white table-list-view" ng-if="!vm.uiState.loading" fixed-header-table>
                     <thead ng-class="{'bg-white': tableView == 'grid'}"  sticky offset="65" sticky-class="sticky-header-class">
-                        <tr>                    
+                        <tr>
                             <th class="hidden-xs col-id" st-sort="_id" style="white-space: nowrap">ID</th>
                             <th st-sort="vm.getters.name" class="col-name" style="white-space: nowrap">Name</th>
-                            <th class="col-email" st-sort="username" style="white-space: nowrap">Username</th>                    
+                            <th class="col-email" st-sort="username" style="white-space: nowrap">Username</th>
                             <th class="hidden-xs col-login-date" st-sort="vm.getters.loginDate" style="white-space: nowrap">Last Login</th>
                             <th class="hidden-xs col-login-ip" st-sort="vm.getters.ip">Last IP</th>
                             <th class="col-actions hidden-xs">Actions</th>
@@ -64,7 +64,7 @@
                             </th>
                             <th class="col-name">
                                 <input st-search="first" placeholder="Name" class="form-control" type="search" ng-model="vm.uiState.fieldSearch.first"/>
-                            </th>                   
+                            </th>
                             <th class="col-email">
                                 <input st-search="username" placeholder="Username" class="form-control" type="search" ng-model="vm.uiState.fieldSearch.username"/>
                             </th>
@@ -75,7 +75,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr ng-repeat="user in vm.displayedUsers" class="product-item">                
+                        <tr ng-repeat="user in vm.displayedUsers" class="product-item">
                             <td class="hidden-xs col-id">
                                 {{user._id}}
                             </td>
@@ -107,7 +107,7 @@
             </div>
         </div>
         </tab>
-        <tab heading="Active users detail" ng-click="vm.reflowCharts()">
+        <tab heading="Daily Active Users" ng-click="vm.reflowCharts()">
 
             <div class="row">
                 <div class="col-sm-12">
