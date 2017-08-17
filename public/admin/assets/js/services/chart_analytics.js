@@ -530,6 +530,13 @@
             return queryData;
         };
 
+        this.getDailyActiveUsers = function(account, fn){
+            SiteAnalyticsService.getDailyActiveUsers(null, null, account, true, false, function(data){
+                console.log('got dau:', data);
+                fn(data);
+            })
+        }
+
         this.getVisitorOverviewChartData = function(date, account, isAdmin, isCustomer, fn) {
             var promises = [];
             var pageviews, users, sessions, dau,fourOfour;
@@ -812,6 +819,72 @@
                 analyticsOverviewConfig.options.tooltip.headerFormat = '<b>{point.x:%b %d %H:%M}</b><br>';
             }
             fn(analyticsOverviewConfig);
+        };
+
+        this.getActiveUserConfig = function (dailyActiveUsersData, fn) {
+            
+            var activeUserConfig = {
+                options: {
+                    chart: {
+                        spacing: [25, 25, 25, 25],
+                        zoomType: 'x',
+                        pinchType: 'x'
+                    },
+                    colors: ['#41b0c7'],
+                    title: {
+                        text: null
+                    },
+                    subtitle: {
+                        text: ''
+                    },
+                    tooltip: {
+                        headerFormat: '<b>{point.x:%b %d}</b><br>',
+                        pointFormat: '<b class="text-center">{point.y}</b>'
+                    },
+                    legend: {
+                        enabled: true
+                    },
+                    exporting: {
+                        enabled: false
+                    },
+                    plotOptions: {
+                        series: {
+                            marker: {
+                                enabled: true,
+                                radius: 3
+                            },
+                            events: {
+                                legendItemClick: function(event) {
+                                    //setLegendVisibility(_widgetName, this.name, !this.visible)
+                                }
+                            }
+                        }
+                    }
+                },
+                xAxis: {
+                    type: 'datetime',
+                    labels: {
+                        format: "{value:%b %d}"
+                    }
+                },
+                yAxis: {
+                    min: 0,
+                    // max: Math.max.apply(Math, lineData) + 100,
+                    title: {
+                        text: ''
+                    }
+                },
+                series: [
+                    {
+                        name: 'Daily Active Users',
+                        data: dailyActiveUsersData
+                    }
+                ],
+                credits: {
+                    enabled: false
+                }
+            };
+            fn(activeUserConfig);
         };
 
         this.emailsOverview = function (emailsData, campaignsData, opensData, clicksData, fn) {

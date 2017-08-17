@@ -347,7 +347,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         templateUrl: "/admin/assets/var/demo/js/users/users.html",
         title: 'Users',
         icon: 'ti-layout-media-left-alt',
-        resolve: loadSequence('UsersCtrl', 'customerService')
+        resolve: loadSequence('UsersCtrl', 'customerService', 'highcharts', 'highmaps', 'highmaps-lib', 'chartAnalyticsService')
     }).state('app.broadcastmessage', {
         url: '/customer/messages',
         templateUrl: "/admin/assets/js/messages/messages.html",

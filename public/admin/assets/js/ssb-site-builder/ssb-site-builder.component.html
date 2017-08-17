@@ -110,6 +110,8 @@
 
 
 
+
+
 @media screen and (min-width: 768px) {
 
     .ssb-theme-{{vm.state.website.theme.handle}} .ssb-page-section-layout-header [ssb-text-component] {
@@ -128,6 +130,9 @@
         font-size: {{vm.state.website.themeOverrides.styles.paragraphSize}};
     }
 
+    .ssb-page-layout-row-2-col{
+        max-width: {{vm.state.website.settings.defaultBlogTemplateWidth}}!important;
+    }
 }
 
 </style>

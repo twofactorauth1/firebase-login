@@ -100,34 +100,34 @@ module.exports = function(grunt) {
                     // '../indigeweb/public/css/style.default.css_o': [ 'public/less/style.default_o.less' ],
                     // '../indigeweb/public/pipeshift/css/site.css': [ 'public/pipeshift/less/theme.less', 'public/pipeshift/less/main.less' ],
                     // '../indigeweb/public/css/angular-admin.css': [ 'public/less/angular-admin.less' ]
-                    '../indigeweb/public/admin/assets/css/frontend-admin.css': [ 'public/less/frontend-admin.less' ],
-                    '../indigeweb/public/css/styles.css': [ 'public/less/frontend.less' ],
-                    '../indigeweb/public/admin/assets/css/styles.css': [ 'public/less/styles.less' ],
-                    '../indigeweb/public/admin/assets/css/theme.css': [ 'public/less/theme.less' ],
-                    '../indigeweb/public/admin/assets/css/email.css': [ 'public/less/email.less' ],
+                    './public/admin/assets/css/frontend-admin.css': [ 'public/less/frontend-admin.less' ],
+                    './public/css/styles.css': [ 'public/less/frontend.less' ],
+                    './public/admin/assets/css/styles.css': [ 'public/less/styles.less' ],
+                    './public/admin/assets/css/theme.css': [ 'public/less/theme.less' ],
+                    './public/admin/assets/css/email.css': [ 'public/less/email.less' ],
                     // '../indigeweb/public/admin/assets/css/ssb-site-builder/styles.css': [ 'public/less/ssb-site-builder/frontend/styles.less' ],
-                    '../indigeweb/public/css/ssb-site-builder/ssb-themes/ssb-theme-young-soul.css': [ 'public/less/ssb-site-builder/ssb-frontend/ssb-themes/ssb-theme-young-soul.less' ]
+                    './public/css/ssb-site-builder/ssb-themes/ssb-theme-young-soul.css': [ 'public/less/ssb-site-builder/ssb-frontend/ssb-themes/ssb-theme-young-soul.less' ]
                 }
             }
         },
 
         csssplit: {
             split_style: {
-              src: ['../indigeweb/public/css/styles.css'],
-              dest: '../indigeweb/public/css'
+              src: ['./public/css/styles.css'],
+              dest: './public/css'
             }
         },
 
         watch: {
             less: {
-                files: "../indigeweb/public/less/**/*.less",
+                files: "./public/less/**/*.less",
                 tasks: ["less", "postcss"]
             },
             html: {
-                files: "../indigeweb/public/templates/**/*.html"
+                files: "./public/templates/**/*.html"
             },
             scripts: {
-              files: '../indigeweb/public/js/**/*.js'
+              files: './public/js/**/*.js'
             },
             options: {
               livereload: true

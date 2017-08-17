@@ -117,15 +117,23 @@ mainApp.controller('CacheCtrl', ['$scope', '$rootScope', 'embeddedSiteDataServic
                     if (locId) {
                         var element = document.getElementById(locId);
                         if (element) {
-                            var stiky=$('#sticky-wrapper');
-                            var offset=0;
-                            if(stiky && stiky[0]){
-                                offset=stiky[0].height();
-                            }
-                            $document.scrollToElementAnimated(element, offset, 1000);
+                            $document.scrollToElementAnimated(element, ssbPageSectionService.offset, 1000);
                         }
                     }
-                }, 3000);
+                    var adjustAnchor = function(eventType) {
+                        var $anchor = $(':target');
+                        if ($anchor.length > 0) {
+                            var element = document.getElementById($anchor.attr('id'));
+                            $document.scrollTop(0);
+                            $timeout(function() {
+                                $document.scrollToElementAnimated(element, ssbPageSectionService.offset, 1000);
+                            }, 200);
+                        }
+                    };
+                    $(window).on('hashchange',function(){
+                        adjustAnchor();
+                    });
+                },5000);
             });
 
             /**

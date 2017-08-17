@@ -26,21 +26,16 @@ env_check(){
 		export GOOGLE_CLIENT_SECRET="yPiJOniUgxjT94O7M_4tNj_M"
 		export STRIPE_PUBLISHABLE_KEY="pk_live_GFldJIgLoRweE8KmZgHc76df"
 		export RVLVR_STRIPE_PUBLISHABLE_KEY="pk_live_nmZLNQLPQhMVDWSOrWGsfDk1"
-		export GREEN_ENV_NAME="indigeweb-env-green"
+        export GREEN_ENV_NAME="indigeweb-env-green"
 	elif [ "$1" = "develop" ]; then
 		export GOOGLE_CLIENT_ID="277102651227-koaeib7b05jjc355thcq3bqtkbuv1o5r.apps.googleusercontent.com"
 	  	export GOOGLE_CLIENT_SECRET="lg41TWgRgRfZQ22Y9Qd902pH"
 	  	export AWS_DEFAULT_REGION="us-west-1"
+        export ENV_NAME="securematics-test-env"
+        export APP_NAME="securematics"
+        export S3_BUCKET="elasticbeanstalk-us-west-1-213805526570"
         export ENV_NAME="indiwebTestB-env"
         export APP_NAME="indiweb-test-b"
-        export S3_BUCKET="elasticbeanstalk-us-west-1-213805526570"
-    elif [ "$1" = "mlab" ]; then
-        export GOOGLE_CLIENT_ID="277102651227-koaeib7b05jjc355thcq3bqtkbuv1o5r.apps.googleusercontent.com"
-        export GOOGLE_CLIENT_SECRET="lg41TWgRgRfZQ22Y9Qd902pH"
-        export AWS_DEFAULT_REGION="us-west-1"
-        export ENV_NAME="indiwebMlab-env"
-        export APP_NAME="indiweb-mlab"
-        export S3_BUCKET="elasticbeanstalk-us-west-1-213805526570"
 	else
 		on_err "No environment specified"
 	fi	
@@ -71,10 +66,6 @@ main(){
 	else
 		echo "No environment specified.  No constants"
 	fi
-	# precompile assets, ...
-	########################
-	# remove original main file
-	#rm -f public/js/main.js	
 
 	# run grunt
 	echo Running grunt production
@@ -115,7 +106,6 @@ main(){
 	interval=5; timeout=90; while [[ ! `aws elasticbeanstalk describe-environments --environment-name "${ENV_NAME}" | grep -i status | grep -i ready` && $timeout > 0 ]]; do sleep $interval; timeout=$((timeout - interval)); done
 
 	[ $timeout > 0 ] && aws elasticbeanstalk update-environment --environment-name "${ENV_NAME}" --version-label "${APP_VERSION}" || exit 0
-
 	
 
 	# Testing?
