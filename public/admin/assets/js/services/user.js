@@ -3,7 +3,7 @@
  * service for user
  */
 (function(angular) {
-  app.service('UserService', function($http) {
+  app.service('UserService', function($http,$q) {
     var account, that = this;
     var baseUrl = '/api/1.0/';
     var baseAPIUrlv2 = '/api/1.0/integrations/zi';
@@ -324,6 +324,22 @@
       var apiUrl = baseUrl + ['useractivity', 'user', userId, "csv"].join('/')+qString;
       window.location = apiUrl;
     };
+    this.getUsersForAutocomplete = function (term) {
 
+        var deferred = $q.defer();
+
+
+        var apiUrl = baseUrl + ["admin","user","search"].join('/')+'?term='+term;
+        $http({
+            url: apiUrl,
+            method: "get",
+        }).success(function (data) {
+            deferred.resolve(data);
+        }).error(function (err) {
+            console.log('END:userService with ERROR');
+            fn(err);
+        });
+        return deferred.promise;
+    };
   });
 })(angular);
