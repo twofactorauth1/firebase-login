@@ -6,6 +6,20 @@
         $scope.isDomainChanged = false;
         $scope.cancelaccount = {cancelNow:false};
         $scope.dataloaded= false;
+        $scope.searchUsers=[]
+
+
+        $scope.updateUsers = function (typed){
+            $scope.searchUsers=[]
+            var getUsers= UserService.getUsersForAutocomplete(typed);
+            getUsers.then(function(data){
+                 $scope.searchUsers=[]
+                 data.forEach(function (value, index) {
+                     $scope.searchUsers.push(value.username+","+(value.first + " "+value.last));
+                 })
+             }) ;
+
+        }
         /*
          * @getCustomer
          * -
