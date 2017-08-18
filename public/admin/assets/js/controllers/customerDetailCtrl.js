@@ -6,9 +6,8 @@
         $scope.isDomainChanged = false;
         $scope.cancelaccount = {cancelNow:false};
         $scope.dataloaded= false;
-        $scope.searchUsers=[]
-
-
+        $scope.searchUsers=[];
+        $scope.isAdmin=true
         $scope.updateUsers = function (typed){
             $scope.searchUsers=[]
             var getUsers= UserService.getUsersForAutocomplete(typed);
@@ -18,6 +17,13 @@
                      $scope.searchUsers.push(value.username+","+(value.first + " "+value.last));
                  })
              }) ;
+            var username=typed.split(',');
+             $scope.newuser.username=username[0];
+        }
+
+        $scope.selectUser = function (selected){
+             var username = selected.split(',');
+             $scope.newuser.username=username[0];
 
         }
         /*
@@ -315,14 +321,33 @@
 
         $scope.addNewUser = function() {
             console.log('Adding the following:', $scope.newuser);
-            customerService.addNewUser($scope.customer._id, $scope.newuser.username, $scope.newuser.password, function(err, newuser){
-                if(err) {
-                    toaster.pop('warning', err.message);
-                } else {
-                    $scope.customer.users.push(newuser);
-                    $scope.closeModal();
-                }
-            });
+            UserService.findUserByUsername($scope.newuser.username,
+              function(err,exitinguser){
+                  if(err){
+                     toaster.pop('warning', err.message);
+                  }else if(exitinguser){
+                      //copy exiting
+                      customerService.addUserToAccountTo($scope.customer._id,exitinguser._id,function(err, newuser){
+                          if(err) {
+                                toaster.pop('warning', err.message);
+                          } else {
+                                $scope.customer.users.push(newuser);
+                                $scope.closeModal();
+                          }
+                      });
+                  }else{
+                      //add new
+                      customerService.addNewUser($scope.customer._id, $scope.newuser.username,
+                                                 $scope.newuser.password, function(err, newuser){
+                          if(err) {
+                              toaster.pop('warning', err.message);
+                          } else {
+                              $scope.customer.users.push(newuser);
+                              $scope.closeModal();
+                          }
+                      });
+                  }
+            })
         };
 
         $scope.removeUserFromAccount = function(userId) {
