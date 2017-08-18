@@ -452,6 +452,8 @@ var manager = {
                         component.uniqueCustomers = 0;
                         var vars = [];
                         var customers = [];
+                        var customerData = [];
+                        var customerStates = [];
                         _.each(list, function (shipment) {
                             if(shipment.get("attachment") && shipment.get("attachment").name){
                                 component.reports += 1;
@@ -481,6 +483,9 @@ var manager = {
                             if(shipment.getCustomerName()){
                                 customers.push(shipment.getCustomerName());
                             }
+                            if(shipment.getCustomerState()){
+                                customerStates.push(shipment.getCustomerState());
+                            }
 
                             shipment.configDate = shipment.getFormattedDate("configDate");
                             shipment.deployDate = shipment.getFormattedDate("deployDate");
@@ -501,6 +506,23 @@ var manager = {
                         component.uniqueVars = _.uniq(vars).length;
                         component.uniqueCustomers = _.uniq(customers).length;
                         component.shipments = list;
+
+                        _.each(customerStates, function (state) {
+                            
+                            var _state = state.toUpperCase();
+                            var _exists =  _.find(customerData, function(data){ return data.code == _state; });
+                            if(_exists){
+                                _exists.value += 1;
+                            }
+                            else{
+                                customerData.push({
+                                    value: 1,
+                                    code: _state
+                                })
+                            }
+                        });
+                        
+                        component.customerData = customerData;
 
                         app.render('promotions/shipment-html-view', component, function(err, html){
                             if(err) {
