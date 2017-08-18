@@ -198,6 +198,8 @@ html
 				div#visitor_locations
 
 				script(type='text/javascript').
+					var mydata = !{JSON.stringify(customerData)}
+					
 					var chart1 = Highcharts.Map({
 						chart: {
 							renderTo: 'visitor_locations',
@@ -239,12 +241,14 @@ html
 						},
 
 						series: [{
-							data: [],
+							data: mydata,
 							mapData: Highcharts.maps['countries/us/us-all'],
 							joinBy: ['postal-code', 'code'],
 							dataLabels: {
-								enabled: false
-							}
+								enabled: true,
+								format: '{point.code}'
+							},
+							name: ''
 						}]	
 					})	
 

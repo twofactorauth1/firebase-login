@@ -164,6 +164,16 @@ var shipment = $$.m.ModelBase.extend({
         }
     },
 
+    getCustomerState: function(){
+        var details = this.get("customerDetails");
+        if(details){
+            return details.state ? details.state.trim().toLowerCase() : "";
+        }
+        else{
+            return "";
+        }
+    },
+
     getShipmentVar: function(){
         return this.get("cardCode") ? this.get("cardCode").toLowerCase() : ""; 
     },
