@@ -72,6 +72,16 @@ function ssbBlogPostListComponentController(SimpleSiteBuilderBlogService, $scope
         }
     }, true);
 
+
+    $scope.$watch('vm.website.settings.defaultBlogTemplateWidth', function(settings) {
+        if(angular.isDefined(settings)){
+            $timeout(function () {
+                $scope.$broadcast('$refreshSlickSlider');
+            }, 0)
+        }
+        
+    })
+
     function initData() {
         var posts = SimpleSiteBuilderBlogService.loadDataFromPage('#indigenous-precache-sitedata-posts') || window.indigenous.precache.siteData.posts;
         
