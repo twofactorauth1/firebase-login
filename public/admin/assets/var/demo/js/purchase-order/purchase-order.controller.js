@@ -27,8 +27,7 @@ function purchaseOrderComponentController($scope, $attrs, $filter, $modal, $time
     vm.selectAllClickFn = selectAllClickFn;
     vm.orderSelectClickFn = orderSelectClickFn;
     vm.bulkActionSelectFn = bulkActionSelectFn;
-    vm.selectedOrdersFn = selectedOrdersFn;
-    vm.setBulkActionChoiceFn=setBulkActionChoiceFn
+    vm.setBulkActionChoiceFn = setBulkActionChoiceFn
     vm.pagingConstant = pagingConstant;
     vm.showFilteredRecords = showFilteredRecords;    
     vm.selectCardCode = selectCardCode;
@@ -37,10 +36,15 @@ function purchaseOrderComponentController($scope, $attrs, $filter, $modal, $time
     vm.formValidations = formValidations; 
     vm.bulkActionChoice = {};
 
+    vm.selectedOrders = [];
+    vm.checkIfOrderSelected = checkIfOrderSelected;
     vm.bulkActionChoices = [{data: 'archive', label: 'Archive'}];
 
     vm.init = init;
 
+    function checkIfOrderSelected(order){
+        return _.contains(vm.selectedOrders, order._id);
+    }
 
     $scope.$watch(function() { return PurchaseOrderService.purchaseOrders }, function(data) {
         if(angular.isDefined(data)){
@@ -172,25 +176,29 @@ function purchaseOrderComponentController($scope, $attrs, $filter, $modal, $time
         $event.stopPropagation();
         vm.selectAllChecked = !vm.selectAllChecked;
         vm.displayedOrders.forEach(function(order, index) {
-            order.isSelected = vm.selectAllChecked
+            if(vm.selectAllChecked){
+                vm.selectedOrders.push(order._id);
+            }
+            else{
+                vm.selectedOrders = _.without(vm.selectedOrders, order._id);
+            }
         });
+        vm.selectedOrders = _.uniq(vm.selectedOrders);
     };
 
 
     function orderSelectClickFn($event, order) {
         $event.stopPropagation();
-        if (order.isSelected) {
-            order.isSelected = false;
-        } else {
-            order.isSelected = true;
+        if(_.contains(vm.selectedOrders, order._id)){
+            vm.selectedOrders = _.without(vm.selectedOrders, order._id);
+        }
+        else{
+            vm.selectedOrders.push(order._id);
         }
     };
 
 
-    function selectedOrdersFn() {
-        var exportOrders = _.filter(vm.displayedOrders, function(order) { return order.isSelected; });
-        return exportOrders;
-    };
+    
     function setBulkActionChoiceFn(lable){
         vm.bulkActionChoice.action={data:lable.toLowerCase()}
         vm.bulkActionSelectFn();
@@ -202,7 +210,7 @@ function purchaseOrderComponentController($scope, $attrs, $filter, $modal, $time
     }
 
     function bulkActionSelectFn() {
-        var selectedOrders = vm.selectedOrdersFn();
+        var selectedOrders = vm.selectedOrders;
         var deleteMessage = "Do you want to archive the "+ selectedOrders.length + " purchase order?";
         if(selectedOrders.length > 1)
           deleteMessage = "Do you want to archive the "+ selectedOrders.length + " purchase orders?";
@@ -220,13 +228,11 @@ function purchaseOrderComponentController($scope, $attrs, $filter, $modal, $time
               },
               function (isConfirm) {
                 if (isConfirm) {
-                    var _selectedOrdersId = [];
-                    _.each(selectedOrders, function(order){
-                        _selectedOrdersId.push(order._id);
-                    })
-                    PurchaseOrderService.archiveBulkPurchaseOrders(_selectedOrdersId).then(function(response){
+                    
+                    PurchaseOrderService.archiveBulkPurchaseOrders(selectedOrders).then(function(response){
                         vm.bulkActionChoice = null;
                         vm.bulkActionChoice = {};
+                        vm.selectedOrders = [];
                         toaster.pop('success', 'Purchase orders successfully archived');
                     });
                 } else {
