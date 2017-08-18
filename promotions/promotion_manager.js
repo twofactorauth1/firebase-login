@@ -453,7 +453,6 @@ var manager = {
                         var vars = [];
                         var customers = [];
                         var customerData = [];
-                        var customerStates = [];
                         _.each(list, function (shipment) {
                             if(shipment.get("attachment") && shipment.get("attachment").name){
                                 component.reports += 1;
@@ -484,7 +483,17 @@ var manager = {
                                 customers.push(shipment.getCustomerName());
                             }
                             if(shipment.getCustomerState()){
-                                customerStates.push(shipment.getCustomerState());
+                                var state = shipment.getCustomerState();
+                                var _exists =  _.find(customerData, function(data){ return data.code == state; });
+                                if(_exists){
+                                    _exists.value += 1;
+                                }
+                                else{
+                                    customerData.push({
+                                        value: 1,
+                                        code: state
+                                    })
+                                }
                             }
 
                             shipment.configDate = shipment.getFormattedDate("configDate");
@@ -507,20 +516,6 @@ var manager = {
                         component.uniqueCustomers = _.uniq(customers).length;
                         component.shipments = list;
 
-                        _.each(customerStates, function (state) {
-                            
-                            var _state = state.toUpperCase();
-                            var _exists =  _.find(customerData, function(data){ return data.code == _state; });
-                            if(_exists){
-                                _exists.value += 1;
-                            }
-                            else{
-                                customerData.push({
-                                    value: 1,
-                                    code: _state
-                                })
-                            }
-                        });
                         
                         component.customerData = customerData;
 
