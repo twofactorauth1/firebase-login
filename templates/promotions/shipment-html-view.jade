@@ -1,5 +1,8 @@
 html
 	head
+	script(src="https://code.highcharts.com/maps/highmaps.js")
+	script(src="https://code.highcharts.com/maps/modules/data.js")
+	script(src="https://code.highcharts.com/mapdata/countries/us/us-all.js")
 	meta(http-equiv='Content-Type', content='text/html; charset=UTF-8')
 	link(rel='stylesheet', href='//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css')
 	link(rel='stylesheet', href='//fonts.googleapis.com/css?family=Raleway')
@@ -30,6 +33,10 @@ html
 		}
 		.statsContainer, .shipmentPrice, .shipmentDetails{
 			margin-top: 20px;
+		}
+
+		.statsContainer{
+			margin-bottom: 20px;
 		}
 
 		.colShipment{
@@ -143,45 +150,103 @@ html
 			padding-top: 9px;
 			padding-bottom: 5px;
 		}
+		.map-chart{
+			position: absolute;
+			top:0;
+			right:0%;
+		}
 	body
-
+		
 		div.mainDiv.col-xs-12
 			div.reportName.col-xs-6.pull-left
 				h4 !{reportName}
 			div.reportDate.col-xs-6.pull-right
 				span.pull-right !{reportDate}
 			div.clearfix
-			div.statsContainer
-				div.statistics.col-xs-4
+			div.statsContainer.col-sm-8.pull-left
+				div.statistics.col-xs-12
 					span.value-stat !{totalShipments}
 					span.label-stat SHIPMENTS
-				div.statistics.col-xs-4
+				div.statistics.col-xs-12
 					span.value-stat !{reports}
 					span.label-stat REPORTS
-				div.statistics.col-xs-4
+				div.statistics.col-xs-12
 					span.value-stat !{tryState}
 					span.label-stat TRY
 
-				div.statistics.col-xs-4
+				div.statistics.col-xs-12
 					span.value-stat !{configured}
 					span.label-stat CONFIGURED
-				div.statistics.col-xs-4
+				div.statistics.col-xs-12
 					span.value-stat !{uniqueCustomers}
 					span.label-stat UNIQUE CUSTOMERS				
-				div.statistics.col-xs-4
+				div.statistics.col-xs-12
 					span.value-stat !{buyState}
 					span.label-stat BUY
 
-				div.statistics.col-xs-4
+				div.statistics.col-xs-12
 					span.value-stat !{deployed}
 					span.label-stat DEPLOYED				
-				div.statistics.col-xs-4
+				div.statistics.col-xs-12
 					span.value-stat !{uniqueVars}
 					span.label-stat UNIQUE VARS	
-				div.statistics.col-xs-4
+				div.statistics.col-xs-12
 					span.value-stat !{rmaState}
 					span.label-stat RMA
-				
+			
+			div.col-sm-4.pull-right.map-chart
+				div#visitor_locations
+
+				script(type='text/javascript').
+					var chart1 = Highcharts.Map({
+						chart: {
+							renderTo: 'visitor_locations',
+							height: 240,
+							zoomType : false,
+							backgroundColor:'rgba(255, 255, 255, 0.1)'
+						},
+
+						title: {
+							text: ''
+						},
+
+						exporting: {
+							enabled: false
+						},
+
+						legend: {
+							enabled: false
+						},
+
+						mapNavigation: {
+							enableButtons: false,
+							enableDoubleClickZoom: false,
+							enableTouchZoom: false
+						},
+
+						colorAxis: {
+							min: 1,
+							type: 'logarithmic',
+							minColor: '#7cb5ec',
+							maxColor: '#224f5b'
+						},
+
+						xAxis:{
+
+						},
+						credits: {
+							enabled: false
+						},
+
+						series: [{
+							data: [],
+							mapData: Highcharts.maps['countries/us/us-all'],
+							joinBy: ['postal-code', 'code'],
+							dataLabels: {
+								enabled: false
+							}
+						}]	
+					})	
 
 			div.clearfix
 			div.shipmentPrice
@@ -244,3 +309,4 @@ html
 													div.heading JUNIPER REP ENGAGED
 													span.block !{shipment.customerJuniperRep}
 													div.col-separator
+		
