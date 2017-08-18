@@ -44,7 +44,7 @@ _.extend(router.prototype, BaseRouter.prototype, {
         app.get('/preview/:pageId', this.isAuth.bind(this), this.previewIndex.bind(this));
         app.get('/preview/:pageId/:postId', this.isAuth.bind(this), this.previewIndex.bind(this));
         app.get('/:page/:page1', [sitemigration_middleware.checkForRedirect, this.setupForPages.bind(this)], this.optimizedSubpathIndex.bind(this));
-        app.get('/:page/:page1/:page2', [sitemigration_middleware.checkForRedirect, this.setupForPages.bind(this)], this.optimizedSubpathIndex.bind(this));
+        app.get('/:page/:page1/:page2*', [sitemigration_middleware.checkForRedirect, this.setupForPages.bind(this)], this.optimizedSubpathIndex.bind(this));
         return this;
     },
 
@@ -94,6 +94,10 @@ _.extend(router.prototype, BaseRouter.prototype, {
         if(req.params.page2) {
             pageName += '/' + req.params.page2;
         }
+        if(req.params[0]!=undefined){
+             pageName += req.params[0];
+        }
+        self.log.debug(req.params)
         self.log.debug('>> optimizedIndex ' + accountId + ', ' + pageName);
         new WebsiteView(req, resp).renderCachedPage(accountId, pageName);
 

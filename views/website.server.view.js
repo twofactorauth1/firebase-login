@@ -343,6 +343,7 @@ _.extend(view.prototype, BaseView.prototype, {
                 if(foundPage) {
                    cb(null, webpageData, pages);
                 } else {
+                    self.log.warn('Page [' + pageHandle + '] Not Found');
                     cb('Page [' + pageHandle + '] Not Found');
                 }
             },
@@ -503,7 +504,7 @@ _.extend(view.prototype, BaseView.prototype, {
                 }
 
                 var blogUrlParts = [];
-                if (self.req.params.length) {
+                if (self.req.params.length && self.req.params[0]!=undefined) {
                     blogUrlParts = self.req.params[0].split('/');
                 }
                 if (blogUrlParts.length == 2 && blogUrlParts[0] == 'blog') {
