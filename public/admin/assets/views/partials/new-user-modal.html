@@ -11,7 +11,12 @@
         <form action="#" name="form" role="form" id="form" autocomplete="off">
             <div class="form-group">
                 <label class="">Username</label>
-                <input name="futureuser" id="input-username" class="form-control" ng-model="$parent.newuser.username" placeholder="Email Address" type="text" autocomplete="false" >
+                <div ng-hide="$parent.isAdmin">
+                    <input name="futureuser" id="input-username" class="form-control" ng-model="$parent.newuser.username" placeholder="Email Address" type="text" autocomplete="false" >
+                </div>
+                <div ng-show="$parent.isAdmin">
+                    <autocomplete ng-model="$parent.newuser.usernameSearch" data="$parent.searchUsers" on-type="$parent.updateUsers" attr-placeholder="Username" on-select="$parent.selectUser" ></autocomplete>
+                </div>
             </div>
             <div class="form-group">
                 <label class="">Password</label>

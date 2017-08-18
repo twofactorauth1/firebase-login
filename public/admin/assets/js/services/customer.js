@@ -274,6 +274,14 @@
                 fn(err);
             });
         };
+        this.addUserToAccountTo = function(id, userId, fn) {
+            var apiUrl = [adminUrl, 'user', 'account', id,'user',userId].join('/');
+            $http.post(apiUrl).success(function(data){
+                fn(null, data);
+            }).error(function(err){
+                fn(err);
+            });
+        };
 
     }]);
 }(angular));
