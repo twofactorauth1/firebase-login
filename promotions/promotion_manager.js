@@ -452,6 +452,7 @@ var manager = {
                         component.uniqueCustomers = 0;
                         var vars = [];
                         var customers = [];
+                        var customerData = [];
                         _.each(list, function (shipment) {
                             if(shipment.get("attachment") && shipment.get("attachment").name){
                                 component.reports += 1;
@@ -481,6 +482,19 @@ var manager = {
                             if(shipment.getCustomerName()){
                                 customers.push(shipment.getCustomerName());
                             }
+                            if(shipment.getCustomerState()){
+                                var state = shipment.getCustomerState();
+                                var _exists =  _.find(customerData, function(data){ return data.code == state; });
+                                if(_exists){
+                                    _exists.value += 1;
+                                }
+                                else{
+                                    customerData.push({
+                                        value: 1,
+                                        code: state
+                                    })
+                                }
+                            }
 
                             shipment.configDate = shipment.getFormattedDate("configDate");
                             shipment.deployDate = shipment.getFormattedDate("deployDate");
@@ -501,6 +515,9 @@ var manager = {
                         component.uniqueVars = _.uniq(vars).length;
                         component.uniqueCustomers = _.uniq(customers).length;
                         component.shipments = list;
+
+                        
+                        component.customerData = customerData;
 
                         app.render('promotions/shipment-html-view', component, function(err, html){
                             if(err) {
