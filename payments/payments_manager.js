@@ -368,18 +368,43 @@ module.exports = {
             if(organization) {
                 accountDao.getAccountByID(organization.get('adminAccount'), function(err, account){
                     if(account) {
-                        var credentials = account.get('credentials');
-                        var creds = null;
-                        _.each(credentials, function (cred) {
-                            if (cred.type === 'stripe') {
-                                creds = cred;
-                            }
-                        });
-                        if(creds && creds.accessToken) {
-                            return fn(null, creds.accessToken);
+                        var billing = account.get('billing');
+                        if(billing && billing.stripeParent) {
+                            self.log.debug('using stripeParent:', billing.stripeParent);
+                            //need to get the token from stripeParent account.
+                            accountDao.getAccountByID(billing.stripeParent, function(err, account){
+                                if(account) {
+                                    var credentials = account.get('credentials');
+                                    var creds = null;
+                                    _.each(credentials, function (cred) {
+                                        if (cred.type === 'stripe') {
+                                            creds = cred;
+                                        }
+                                    });
+                                    if(creds && creds.accessToken) {
+                                        return fn(null, creds.accessToken);
+                                    } else {
+                                        return fn(null, null);
+                                    }
+                                } else {
+                                    fn(err || 'No account found');
+                                }
+                            });
                         } else {
-                            return fn(null, null);
+                            var credentials = account.get('credentials');
+                            var creds = null;
+                            _.each(credentials, function (cred) {
+                                if (cred.type === 'stripe') {
+                                    creds = cred;
+                                }
+                            });
+                            if(creds && creds.accessToken) {
+                                return fn(null, creds.accessToken);
+                            } else {
+                                return fn(null, null);
+                            }
                         }
+
                     } else {
                         fn(err);
                     }
