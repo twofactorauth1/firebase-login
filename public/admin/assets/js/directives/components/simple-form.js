@@ -147,7 +147,12 @@ app.directive('simpleFormComponent',["formValidations", "$timeout", function (fo
         }
         return styleString;
       };
-
+        function resetBoderStyle(currentComponent){
+          currentComponent.style.setProperty('border-color', "none", 'important');
+          currentComponent.style.setProperty('border-width', '0px', 'important');
+          currentComponent.style.setProperty('border-radius', 'none%', 'important');
+          currentComponent.style.setProperty('border-style', "none", 'important');
+      }
       angular.element(document).ready(function() {
           var unbindWatcher = scope.$watch(function() {              
               return angular.element(scope.elementClass).length;
@@ -201,16 +206,14 @@ app.directive('simpleFormComponent',["formValidations", "$timeout", function (fo
                                         this.style.setProperty('border-style', btnHoverStyle.border.style, 'important');
                                     }
                                  }else {
-                                    this.style.setProperty('border-color', "none", 'important');
-                                    this.style.setProperty('border-width', '0px', 'important');
-                                    this.style.setProperty('border-radius', 'none%', 'important');
-                                    this.style.setProperty('border-style', "none", 'important');
+                                    resetBoderStyle(this);
                                 }
                             }
                             if(btnHoverStyle && btnHoverStyle.txtcolor)
                               this.style.setProperty( 'color', btnHoverStyle.txtcolor, 'important' );
 
                         }, function(){
+                            resetBoderStyle(this);
                             if(scope.originalData.bg.color)
                               this.style.setProperty( 'background-color', scope.originalData.bg.color, 'important' );
                             else
@@ -246,8 +249,7 @@ app.directive('simpleFormComponent',["formValidations", "$timeout", function (fo
                         });
 
                         element.on("mousedown touchstart", function(){
-                            if(scope.component.formSettings && scope.component.formSettings.btnStyle && scope.component.formSettings.btnStyle.pressed)
-                            {
+                            if(scope.component.formSettings && scope.component.formSettings.btnStyle && scope.component.formSettings.btnStyle.pressed){
                               btnActiveStyle = scope.component.formSettings.btnStyle.pressed;
                             }
                             if(btnActiveStyle){
@@ -272,10 +274,7 @@ app.directive('simpleFormComponent',["formValidations", "$timeout", function (fo
                                         this.style.setProperty('border-style', btnActiveStyle.border.style, 'important');
                                     }
                                  }else {
-                                    this.style.setProperty('border-color', "none", 'important');
-                                    this.style.setProperty('border-width', '0px', 'important');
-                                    this.style.setProperty('border-radius', 'none%', 'important');
-                                    this.style.setProperty('border-style', "none", 'important');
+                                     resetBoderStyle(this);
                                 }
                             }
                             if(btnActiveStyle && btnActiveStyle.txtcolor)
