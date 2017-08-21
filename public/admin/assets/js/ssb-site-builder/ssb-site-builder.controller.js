@@ -1402,7 +1402,8 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
         section.spacing.default = value ? false : true;
     }
     function updatetestimonialWidth(section){
-        if(section.components.length>0 &&
+
+        if(section.components && section.components.length>0 &&
            section.components[0].type === 'testimonials' &&
            section.components[0].version == 2){
             $timeout(function() {
@@ -1418,6 +1419,12 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
                 }
                 $scope.$broadcast('updatetestimonialHeight.component', {})
             }, 1000);
+        }
+        else if(section && section.type === 'testimonials' &&
+           section.version == 2){
+            $timeout(function() {
+                $scope.$broadcast('updatetestimonialHeight.component', {})
+            }, 500);
         }
     }
     $scope.$on('$refreshAccountSettings', function(event, account) {

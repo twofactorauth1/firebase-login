@@ -152,6 +152,13 @@ app.directive('simpleFormComponent', ["ipCookie", '$window', '$timeout', 'userSe
         return stringval.replace(/[^\w-\s]/gi, '');
       }
 
+      function resetBoderStyle(currentComponent){
+          currentComponent.style.setProperty('border-color', "none", 'important');
+          currentComponent.style.setProperty('border-width', '0px', 'important');
+          currentComponent.style.setProperty('border-radius', 'none%', 'important');
+          currentComponent.style.setProperty('border-style', "none", 'important');
+      }
+
 
       angular.element(document).ready(function() {
           var unbindWatcher = scope.$watch(function() {
@@ -179,8 +186,7 @@ app.directive('simpleFormComponent', ["ipCookie", '$window', '$timeout', 'userSe
 
                         element.hover(function(){
                             var btnHoverStyle = null;
-                            if(scope.component.formSettings && scope.component.formSettings.btnStyle && scope.component.formSettings.btnStyle.hover)
-                            {
+                            if(scope.component.formSettings && scope.component.formSettings.btnStyle && scope.component.formSettings.btnStyle.hover){
                               btnHoverStyle = scope.component.formSettings.btnStyle.hover;
                             }
 
@@ -206,22 +212,17 @@ app.directive('simpleFormComponent', ["ipCookie", '$window', '$timeout', 'userSe
                                         this.style.setProperty('border-style', btnHoverStyle.border.style, 'important');
                                     }
                                  }else {
-                                    this.style.setProperty('border-color', "none", 'important');
-                                    this.style.setProperty('border-width', '0px', 'important');
-                                    this.style.setProperty('border-radius', 'none%', 'important');
-                                    this.style.setProperty('border-style', "none", 'important');
+                                    resetBoderStyle(this);
                                 }
                             }else{
-                                    this.style.setProperty('border-color', "none", 'important');
-                                    this.style.setProperty('border-width', '0px', 'important');
-                                    this.style.setProperty('border-radius', 'none%', 'important');
-                                    this.style.setProperty('border-style', "none", 'important');
+                                    resetBoderStyle(this);
 
                             }
                             if(btnHoverStyle && btnHoverStyle.txtcolor)
                               this.style.setProperty( 'color', btnHoverStyle.txtcolor, 'important' );
 
                         }, function(){
+                            resetBoderStyle(this);
                             if(scope.originalData.bg.color)
                               this.style.setProperty( 'background-color', scope.originalData.bg.color, 'important' );
                             else
@@ -283,16 +284,10 @@ app.directive('simpleFormComponent', ["ipCookie", '$window', '$timeout', 'userSe
                                           this.style.setProperty('border-style', "none", 'important');
                                     }
                                  }else {
-                                    this.style.setProperty('border-color', "none", 'important');
-                                    this.style.setProperty('border-width', '0px', 'important');
-                                    this.style.setProperty('border-radius', 'none%', 'important');
-                                    this.style.setProperty('border-style', "none", 'important');
+                                   resetBoderStyle(this);
                                 }
                             }else{
-                                    this.style.setProperty('border-color', "none", 'important');
-                                    this.style.setProperty('border-width', '0px', 'important');
-                                    this.style.setProperty('border-radius', 'none%', 'important');
-                                    this.style.setProperty('border-style', "none", 'important');
+                                 resetBoderStyle(this);
 
                             }
                             if(btnActiveStyle && btnActiveStyle.txtcolor)
@@ -302,6 +297,7 @@ app.directive('simpleFormComponent', ["ipCookie", '$window', '$timeout', 'userSe
                         element.on("mouseup touchend", function(){
                             var elem = this;
                             $timeout(function() {
+                                resetBoderStyle(elem);
                                 if(scope.originalData.bg.color)
                                   elem.style.setProperty( 'background-color', scope.originalData.bg.color, 'important' );
                                 else
