@@ -13,6 +13,10 @@
 
 .ssb-theme-{{vm.state.website.theme.handle}} {
     color: {{vm.state.website.themeOverrides.styles.primaryTextColor}};
+    
+}
+
+.ssb-theme-{{vm.state.website.theme.handle}} .ssb-section-layout .ssb-component{
     font-family: {{vm.state.website.themeOverrides.defaultFontStack}};
     background-color: {{vm.state.website.themeOverrides.styles.bodyBackgroundColor}};
     font-size: {{vm.state.website.themeOverrides.styles.fontSize}}px;
@@ -20,7 +24,6 @@
     letter-spacing: {{vm.state.website.themeOverrides.styles.letterSpacing}}px;
     font-weight: {{vm.state.website.themeOverrides.styles.fontWeight}};
 }
-
 
 .ssb-theme-{{vm.state.website.theme.handle}} .ssb-section-layout {
     background-color: {{vm.state.website.themeOverrides.styles.bodyBackgroundColor}};
