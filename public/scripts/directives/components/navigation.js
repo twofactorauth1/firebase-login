@@ -40,7 +40,7 @@ app.directive('navigationComponent', ['websiteService', 'accountService', '$time
                         li.addClass("nav-active");
                     }else{
                         li.removeClass("nav-active");
-                        li.parents("section").remove("overflow_visible");
+                        li.parents("section").removeClass("overflow_visible");
                     }
                 }
             }
