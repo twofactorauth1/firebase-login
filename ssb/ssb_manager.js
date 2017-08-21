@@ -2121,11 +2121,13 @@ module.exports = {
                  */
                 self.log.debug('\n\nupdateBlogPages - globalHeader:', globalHeader);
                 if(globalHeader) {
+
                     var query = {
+                        $or : [{handle: {$in:['blog-list', 'blog-post']}}, {isBlogCopy:true}],
                         accountId:accountId,
-                        handle: {$in:['blog-list', 'blog-post']},
                         latest:true
                     };
+
                     pageDao.findMany(query, $$.m.ssb.Page, function(err, pages){
                         if(err || !pages) {
                             self.log.error('Error finding blog pages:', err);
@@ -3803,10 +3805,7 @@ module.exports = {
                         latest:true,
                         handle: {$in: ['blog-post', 'blog-list']}
                     };
-                    var orQuery = [                    
-                        {isBlogCopy:true}
-                    ];
-                    query["$or"] = orQuery;
+                    
                     pageDao.findMany(query, $$.m.ssb.Page, function(err, pages){
                         if(err) {
                             self.log.error(accountId, userId, 'Error finding website:', err);
