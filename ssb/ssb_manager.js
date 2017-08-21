@@ -997,6 +997,37 @@ module.exports = {
         });
     },
 
+    getLatestPageByHandle: function(accountId, handle, websiteId, fn) {
+        var self = this;
+        self.log.debug(accountId, null,'>> getPageByHandle (' + accountId + ',' + handle + ',' + websiteId + ')');
+
+        pageDao.getLatestPage(websiteId, handle, accountId, function(err, page){
+            if(err || !page) {
+                self.log.error(accountId, null,'Error getting page:', err);
+                return fn(err, null);
+            } else {
+                var sections = page.get('sections') || [];
+                sectionDao.dereferenceSections(page.get('sections'), function(err, sectionAry){
+
+                    //handle legacy pages without sections
+                    if(sectionAry && sectionAry.length === 0) {
+                        //self.log.debug('Converting legacy page');
+                        var section = {};
+                        section.components = page.get('components');
+                        section.ssb = false;
+                        sections.push(section);
+                        page.set('sections', sections);
+                    } else {
+                        page.set('sections', sectionAry);
+                    }
+                    self.log.debug(accountId, null,'<< getPage');
+                    return fn(null, page);
+                });
+
+            }
+        });
+    },
+
     /**
      * Gets latest draft page
      */
@@ -1237,7 +1268,7 @@ module.exports = {
                             post_status: $$.m.BlogPost.status.PUBLISHED,
                             websiteId: publishedPage.get("websiteId")
                         }
-                        self.getPageByHandle(accountId, 'blog-list', publishedPage.get('websiteId'), function(err, page) {
+                        self.getLatestPageByHandle(accountId, 'blog-list', publishedPage.get('websiteId'), function(err, page) {
                             if(err) {
                                 self.log.error('error getting account by id: ' + err);
                                 cb(err);
