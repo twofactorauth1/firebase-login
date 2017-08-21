@@ -310,7 +310,13 @@ _.extend(api.prototype, baseApi.prototype, {
                 } else {
                     var asset = new $$.m.Asset(req.body);
                     asset.set('_id', assetId);
-                   assetManager.updateAssetChangeUrl(asset, userId, function(err, value) {
+                    var created = asset.get('created');
+
+                    if (created && _.isString(asset.get('created').date)) {
+                        created.date = moment(asset.date).toDate();
+                    }
+
+                    assetManager.updateAssetChangeUrl(asset, userId, function(err, value) {
                         self.log.debug('<< updateAsset');
                         self.sendResultOrError(res, err, value, "Error updating Asset");
                         self.createUserActivity(req, 'UPDATE_ASSET', null, null, function(){});
@@ -336,6 +342,11 @@ _.extend(api.prototype, baseApi.prototype, {
                 } else {
                     var asset = new $$.m.Asset(req.body);
                     asset.set('_id', assetId);
+                    var created = asset.get('created');
+
+                    if (created && _.isString(asset.get('created').date)) {
+                        created.date = moment(asset.date).toDate();
+                    }
                     self.log.debug('<< updateAsset metadata');
                     assetManager.metadataS3Asset( asset.get('accountId'), userId, asset,function(err, value) {
                         self.log.debug('<< updateAsset metadata');
