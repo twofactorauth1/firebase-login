@@ -124,12 +124,12 @@ html
 		}
 		.customerDetails tbody tr td .col-separator{
 			position: absolute;
-			    position: absolute;
-			    border-right: 1px solid #eee;
-			    height: 80%;
-			    float: left;
-			    top: 10%;
-			    left: 0;
+				position: absolute;
+				border-right: 1px solid #eee;
+				height: 80%;
+				float: left;
+				top: 10%;
+				left: 0;
 		}
 		.customerDetails tbody tr td.customer{
 			width: 25%
@@ -156,7 +156,7 @@ html
 			right:0%;
 		}
 	body
-		
+
 		div.mainDiv.col-xs-12
 			div.reportName.col-xs-6.pull-left
 				h4 !{reportName}
@@ -179,27 +179,27 @@ html
 					span.label-stat CONFIGURED
 				div.statistics.col-xs-12
 					span.value-stat !{uniqueCustomers}
-					span.label-stat UNIQUE CUSTOMERS				
+					span.label-stat UNIQUE CUSTOMERS
 				div.statistics.col-xs-12
 					span.value-stat !{buyState}
 					span.label-stat BUY
 
 				div.statistics.col-xs-12
 					span.value-stat !{deployed}
-					span.label-stat DEPLOYED				
+					span.label-stat DEPLOYED
 				div.statistics.col-xs-12
 					span.value-stat !{uniqueVars}
-					span.label-stat UNIQUE VARS	
+					span.label-stat UNIQUE VARS
 				div.statistics.col-xs-12
 					span.value-stat !{rmaState}
 					span.label-stat RMA
-			
+
 			div.col-sm-4.pull-right.map-chart
 				div#visitor_locations
 
 				script(type='text/javascript').
 					var mydata = !{JSON.stringify(customerData)}
-					
+
 					var chart1 = Highcharts.Map({
 						chart: {
 							renderTo: 'visitor_locations',
@@ -231,7 +231,7 @@ html
 							min: 1,
 							type: 'logarithmic',
 							minColor: '#7cb5ec',
-							maxColor: '#224f5b'
+							maxColor: '#7cb5ec'
 						},
 
 						xAxis:{
@@ -247,11 +247,17 @@ html
 							joinBy: ['postal-code', 'code'],
 							dataLabels: {
 								enabled: true,
-								format: '{point.code}'
+								format: '{point.code}',
+								style: {
+									fontFamily: '\'Lato\', sans-serif',
+									fontSize: '7px',
+									fontColor: '#000000',
+									textOutline: 'none'
+								}
 							},
 							name: ''
-						}]	
-					})	
+						}]
+					})
 
 			div.clearfix
 			div.shipmentPrice
@@ -314,4 +320,3 @@ html
 													div.heading JUNIPER REP ENGAGED
 													span.block !{shipment.customerJuniperRep}
 													div.col-separator
-		
