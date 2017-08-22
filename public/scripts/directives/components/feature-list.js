@@ -11,6 +11,7 @@ app.directive('featureListComponent',['$window', '$timeout', function ($window, 
             featureIndex: 0
         }
         scope.loading = true;
+        scope.listStyles = listStyles;
 		scope.featureClass = function(){
             var parent_id = scope.component.anchor || scope.component._id;
             var element = angular.element("#"+parent_id + " div.features-wrap")
@@ -68,6 +69,16 @@ app.directive('featureListComponent',['$window', '$timeout', function ($window, 
                 if (field.align === 'center') {
                     styleString += 'margin: 0 auto !important; float:none !important;';
                 }
+            }
+            return styleString;
+        }
+
+        function listStyles(component, isActive){
+            
+            var styleString = ' ';
+            if (isActive) {
+                var color = $(".list-features-"+ component._id +" li.active .fr-view:last span").css("color");
+                styleString += 'border-bottom: 1px solid ' + color + ';';
             }
             return styleString;
         }
