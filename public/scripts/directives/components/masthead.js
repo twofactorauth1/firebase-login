@@ -65,6 +65,7 @@ app.directive('mastheadComponent', ['$window', '$timeout', function ($window, $t
                             else
                                 angular.element(".nav-undernav .bg").removeClass("bg-nav-undernav");
                             angular.element(".undernav").closest('li.fragment').addClass("li-nav-undernav");
+                            angular.element(".undernav").closest("section").addClass('unset');
 
                             if (mastheadUnderNavElement)
                                 mastheadUnderNavElement.css("height", margin);

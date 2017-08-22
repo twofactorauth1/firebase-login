@@ -42,7 +42,7 @@ var promotion = $$.m.ModelBase.extend({
 
     },
 
-    getReportDate: function(){
+    getReportRange: function(){
         var _dateInterval = "";
         if(this.get("report") && this.get("report").schedule && this.get("report").startDate){
             if(this.get("report").schedule === 'WEEKLY'){
@@ -53,6 +53,9 @@ var promotion = $$.m.ModelBase.extend({
             }
         }
         return _dateInterval;
+    },
+    getReportDate: function(){        
+        return moment().format("MMMM D, YYYY");
     }
 
 }, {

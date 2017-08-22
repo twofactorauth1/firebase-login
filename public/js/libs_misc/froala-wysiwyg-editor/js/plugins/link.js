@@ -684,7 +684,9 @@
               .append($.FE.END_MARKER);
               //editor.selection.restore();
               }
-              editor.selection.restore();
+              setTimeout (function () {
+                editor.selection.clear();
+              }, 500)
               //editor.toolbar.hide();
             }
           }

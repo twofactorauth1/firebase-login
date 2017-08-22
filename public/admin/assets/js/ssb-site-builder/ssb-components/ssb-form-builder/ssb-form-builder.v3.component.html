@@ -14,6 +14,32 @@
                         <div elem ng-model="vm.component.subtitle"></div>
                     </div>
                     <div class="clearfix mb15"></div>
+                    <div class="col-sm-4">
+                        <div  elem
+                             ng-model="vm.component.ownerContactInfo.name.label">
+                        </div>
+                        <div elem
+                             ng-model="vm.component.ownerContactInfo.name.value">
+                        </div>
+                        <div style="padding-top: 10px;" elem
+                             ng-model="vm.component.ownerContactInfo.address.label">
+                        </div>
+                        <div elem
+                             ng-model="vm.component.ownerContactInfo.address.value">
+                        </div>
+                        <div style="padding-top: 10px;" elem
+                             ng-model="vm.component.ownerContactInfo.otherInfo.label">
+                        </div>
+                        <div elem
+                             ng-model="vm.component.ownerContactInfo.otherInfo.value">
+                        </div>
+                        <div style="padding-top: 10px;" elem
+                             ng-model="vm.component.ownerContactInfo.otherInfo1.label">
+                        </div>
+                        <div elem
+                             ng-model="vm.component.ownerContactInfo.otherInfo1.value">
+                        </div>
+                    </div>
                     <div class="col-sm-8">
                         <form name="formBuilder" ng-submit="vm.createUser(formBuilder)">
 
@@ -184,32 +210,6 @@
                                 </div>
                             </div>
                         </form>
-                    </div>
-                    <div class="col-sm-4">
-                        <div  elem
-                             ng-model="vm.component.ownerContactInfo.name.label">
-                        </div>
-                        <div elem
-                             ng-model="vm.component.ownerContactInfo.name.value">
-                        </div>
-                        <div style="padding-top: 10px;" elem
-                             ng-model="vm.component.ownerContactInfo.address.label">
-                        </div>
-                        <div elem
-                             ng-model="vm.component.ownerContactInfo.address.value">
-                        </div>
-                        <div style="padding-top: 10px;" elem
-                             ng-model="vm.component.ownerContactInfo.otherInfo.label">
-                        </div>
-                        <div elem
-                             ng-model="vm.component.ownerContactInfo.otherInfo.value">
-                        </div>
-                        <div style="padding-top: 10px;" elem
-                             ng-model="vm.component.ownerContactInfo.otherInfo1.label">
-                        </div>
-                        <div elem
-                             ng-model="vm.component.ownerContactInfo.otherInfo1.value">
-                        </div>
                     </div>
                 </div>
             </div>

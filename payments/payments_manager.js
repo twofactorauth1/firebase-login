@@ -220,36 +220,70 @@ module.exports = {
             self.log.error(accountId, userId, 'No stripe customerId found for account: ' + accountId);
             return fn('No stripe customerId found');
         }
-        if(account.get('orgId') && account.get('orgId') >= 1 && account.get('billing').stripeParent !== 6) {
-            self._getOrgAccessToken(account.get('orgId'), function(err, accessToken){
-                self.log.debug('using the accessToken:', accessToken);
-                stripeDao.listInvoices(customerId, dateFilter, ending_before, limit, starting_after, accessToken, function(err, invoices){
-                    //need to filter based on subscriptionId
-                    //TODO: if we ever keep track of subscription history, we will need to handle that as well
-                    if(err) {
-                        self.log.error(accountId, userId, 'Error listing invoices:', err);
-                        return fn(err);
-                    } else {
-                        //self.log.debug('Filtering invoices by [' + subscriptionId + ']', invoices );
+        var billing = account.get('billing');
+        if(account.get('orgId') && account.get('orgId') >= 1 && billing.stripeParent !== 6) {
+            if(billing.stripeParent) {
+                self._getStripeParentAccessToken(account, function(err, accessToken){
+                    self.log.debug('using the accessToken:', accessToken);
+                    stripeDao.listInvoices(customerId, dateFilter, ending_before, limit, starting_after, accessToken, function(err, invoices){
+                        //need to filter based on subscriptionId
+                        //TODO: if we ever keep track of subscription history, we will need to handle that as well
+                        if(err) {
+                            self.log.error(accountId, userId, 'Error listing invoices:', err);
+                            return fn(err);
+                        } else {
+                            //self.log.debug('Filtering invoices by [' + subscriptionId + ']', invoices );
 
-                        var filteredInvoices = [];
-                        invoices = invoices || {};
-                        _.each(invoices.data, function(invoice){
-                            //self.log.debug('line:', invoice.lines.data[0]);
-                            if(invoice.lines.data[0].id === subscriptionId || invoice.subscription === subscriptionId) {
-                                filteredInvoices.push(invoice);
-                            } else {
-                                //self.log.debug(accountId, userId, 'filtering: ', invoice);
-                            }
-                        });
-                        invoices.data = filteredInvoices;
-                        invoices.count = filteredInvoices.length;
-                        self.log.debug(accountId, userId, '<< listInvoicesForAccount');
-                        return fn(null, invoices);
-                    }
+                            var filteredInvoices = [];
+                            invoices = invoices || {};
+                            _.each(invoices.data, function(invoice){
+                                //self.log.debug('line:', invoice.lines.data[0]);
+                                if(invoice.lines.data[0].id === subscriptionId || invoice.subscription === subscriptionId) {
+                                    filteredInvoices.push(invoice);
+                                } else {
+                                    //self.log.debug(accountId, userId, 'filtering: ', invoice);
+                                }
+                            });
+                            invoices.data = filteredInvoices;
+                            invoices.count = filteredInvoices.length;
+                            self.log.debug(accountId, userId, '<< listInvoicesForAccount');
+                            return fn(null, invoices);
+                        }
 
+                    });
                 });
-            });
+            } else {
+                self._getOrgAccessToken(account.get('orgId'), function(err, accessToken){
+                    self.log.debug('using the accessToken:', accessToken);
+                    stripeDao.listInvoices(customerId, dateFilter, ending_before, limit, starting_after, accessToken, function(err, invoices){
+                        //need to filter based on subscriptionId
+                        //TODO: if we ever keep track of subscription history, we will need to handle that as well
+                        if(err) {
+                            self.log.error(accountId, userId, 'Error listing invoices:', err);
+                            return fn(err);
+                        } else {
+                            //self.log.debug('Filtering invoices by [' + subscriptionId + ']', invoices );
+
+                            var filteredInvoices = [];
+                            invoices = invoices || {};
+                            _.each(invoices.data, function(invoice){
+                                //self.log.debug('line:', invoice.lines.data[0]);
+                                if(invoice.lines.data[0].id === subscriptionId || invoice.subscription === subscriptionId) {
+                                    filteredInvoices.push(invoice);
+                                } else {
+                                    //self.log.debug(accountId, userId, 'filtering: ', invoice);
+                                }
+                            });
+                            invoices.data = filteredInvoices;
+                            invoices.count = filteredInvoices.length;
+                            self.log.debug(accountId, userId, '<< listInvoicesForAccount');
+                            return fn(null, invoices);
+                        }
+
+                    });
+                });
+            }
+
         } else {
             self.log.debug('No accessToken');
             stripeDao.listInvoices(customerId, dateFilter, ending_before, limit, starting_after, null, function(err, invoices){
@@ -328,6 +362,15 @@ module.exports = {
             function(cb) {
                 if(account.get('billing').stripeParent && account.get('billing').stripeParent === 6) {
                     cb(null, null);
+                } else if(account.get('billing').stripeParent) {
+                    self._getStripeParentAccessToken(account, function(err, token){
+                        if(err) {
+                            self.log.error(accountId, userId, 'Error getting accessToken:', err);
+                            cb(err);
+                        } else {
+                            cb(null, token);
+                        }
+                    });
                 } else if(account.get('orgId') && account.get('orgId') > 0) {
                     self._getOrgAccessToken(account.get('orgId'), function(err, token){
                         if(err) {
@@ -361,6 +404,34 @@ module.exports = {
 
     },
 
+    _getStripeParentAccessToken: function(account, fn) {
+        var self = this;
+        var billing = account.get('billing');
+        if(billing && billing.stripeParent) {
+            self.log.debug('using stripeParent:', billing.stripeParent);
+            //need to get the token from stripeParent account.
+            accountDao.getAccountByID(billing.stripeParent, function(err, account){
+                if(account) {
+                    var credentials = account.get('credentials');
+                    var creds = null;
+                    _.each(credentials, function (cred) {
+                        if (cred.type === 'stripe') {
+                            creds = cred;
+                        }
+                    });
+                    if(creds && creds.accessToken) {
+                        return fn(null, creds.accessToken);
+                    } else {
+                        return fn(null, null);
+                    }
+                } else {
+                    fn(err || 'No account found');
+                }
+            });
+        } else {
+            fn(null, null);
+        }
+    },
 
     _getOrgAccessToken: function(orgId, fn) {
         var self = this;

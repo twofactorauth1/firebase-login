@@ -2,9 +2,9 @@
 
 app.controller('SiteBuilderTextSettingsController', ssbTextSettingsController);
 
-ssbTextSettingsController.$inject = ['$rootScope', '$scope', '$attrs', '$filter', '$timeout', '$compile'];
+ssbTextSettingsController.$inject = ['$rootScope', '$scope', '$attrs', '$filter', '$timeout', '$compile', '$window'];
 /* @ngInject */
-function ssbTextSettingsController($rootScope, $scope, $attrs, $filter, $timeout, $compile) {
+function ssbTextSettingsController($rootScope, $scope, $attrs, $filter, $timeout, $compile, $window) {
 
     var vm = this;
     var pvm = null;
@@ -146,8 +146,13 @@ function ssbTextSettingsController($rootScope, $scope, $attrs, $filter, $timeout
                 else if(vm.parentNgRepeat.hasClass('thumbnail-image-slider-collection')){
                     var parentIndex = vm.parentNgRepeat.scope().$parent.$index;
                     var index = vm.parentNgRepeat.scope().$index;
-
-                    vm.elementModelIndex = parentIndex > 0 ? (parentIndex * 4 + index) : index;
+                    var w = angular.element($window);
+                    var winWidth = w.width();
+                    var number_of_arr = 4;
+                    if (winWidth < 768) {
+                        number_of_arr = 1;
+                    }
+                    vm.elementModelIndex = parentIndex > 0 ? (parentIndex * number_of_arr + index) : index;
                      
                 }else{
                     vm.elementModelIndex = vm.parentNgRepeat.scope().$index;
@@ -211,8 +216,13 @@ function ssbTextSettingsController($rootScope, $scope, $attrs, $filter, $timeout
                     else if(vm.parentNgRepeat.hasClass('thumbnail-image-slider-collection')){
                         var parentIndex = vm.parentNgRepeat.scope().$parent.$index;
                         var index = vm.parentNgRepeat.scope().$index;
-
-                        vm.elementModelIndex = parentIndex > 0 ? (parentIndex * 4 + index) : index;
+                        var w = angular.element($window);
+                        var winWidth = w.width();
+                        var number_of_arr = 4;
+                        if (winWidth < 768) {
+                            number_of_arr = 1;
+                        }
+                        vm.elementModelIndex = parentIndex > 0 ? (parentIndex * number_of_arr + index) : index;
                      
                     }else{
                         vm.elementModelIndex = vm.parentNgRepeat.scope().$index;
@@ -255,8 +265,13 @@ function ssbTextSettingsController($rootScope, $scope, $attrs, $filter, $timeout
                 else if(vm.parentNgRepeat.hasClass('thumbnail-image-slider-collection')){
                     var parentIndex = vm.parentNgRepeat.scope().$parent.$index;
                     var index = vm.parentNgRepeat.scope().$index;
-
-                    vm.elementModelIndex = parentIndex > 0 ? (parentIndex * 4 + index) : index;
+                    var w = angular.element($window);
+                    var winWidth = w.width();
+                    var number_of_arr = 4;
+                    if (winWidth < 768) {
+                        number_of_arr = 1;
+                    }
+                    vm.elementModelIndex = parentIndex > 0 ? (parentIndex * number_of_arr + index) : index;
                      
                 }else{
                     vm.elementModelIndex = vm.parentNgRepeat.scope().$index;
