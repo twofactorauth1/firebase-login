@@ -140,6 +140,9 @@
   margin: 5px 5px 5px 0;
   max-width: calc(100% - 5px);
 }
+.testimonials .fr-view img.fr-dii.fr-fil{
+    margin: 0px
+}
 .fr-view img.fr-dii.fr-fir {
   float: right;
   margin: 5px 0 5px 5px;
