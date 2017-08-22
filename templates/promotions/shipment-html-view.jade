@@ -36,7 +36,7 @@ html
 		}
 
 		.statsContainer{
-			margin-bottom: 60px;
+			margin-bottom: 20px;
 		}
 
 		.colShipment{
@@ -152,7 +152,7 @@ html
 		}
 		.map-chart{
 			position: absolute;
-			margin-top:20px;
+			top:0;
 			right:0%;
 		}
 	body
@@ -203,7 +203,8 @@ html
 					var chart1 = Highcharts.Map({
 						chart: {
 							renderTo: 'visitor_locations',
-							height: 240,
+							height: 270,
+							width: 270,
 							zoomType : false,
 							backgroundColor:'rgba(255, 255, 255, 0.1)'
 						},
