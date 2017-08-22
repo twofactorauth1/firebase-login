@@ -46,6 +46,7 @@
             vm.removeBorderStyle(currentElement);
             if (btnStyle.border &&
                 btnStyle.border.show) {
+                removeBorderStyleForNewForms(currentElement)
                 if (btnStyle.border.color) {
                     currentElement.style.setProperty('border-color', btnStyle.border.color, 'important');
                 }
@@ -62,11 +63,17 @@
                 }
             }
         }
-        function removeBorderStyle(currentElement){
+        function removeBorderStyle(currentElement){// for old as in adding 4px so created method below
             currentElement.style.setProperty('border-color', "transparent", 'important');
             currentElement.style.setProperty('border-width', '1px', 'important');
             currentElement.style.setProperty('border-radius', '4px', 'important');// old default is 4px
             currentElement.style.setProperty('border-style', "solid", 'important');
+        }
+        function removeBorderStyleForNewForms(currentElement){// for new
+            currentElement.style.setProperty('border-color', "none", 'important');
+            currentElement.style.setProperty('border-width', '0px', 'important');
+            currentElement.style.setProperty('border-radius', 'none%', 'important');
+            currentElement.style.setProperty('border-style', "none", 'important');
         }
         function fieldClass(field) {
             var classString = 'col-sm-12';
