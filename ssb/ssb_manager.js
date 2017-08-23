@@ -1359,7 +1359,6 @@ module.exports = {
             }
         });
     },
-
     updatePage:function(accountId, pageId, page, modified, homePage, userId, fn) {
         var self = this;
         self.log.debug(accountId, userId,'>> updatePage (' + pageId + ')');
@@ -1818,8 +1817,9 @@ module.exports = {
                 checkTime = moment();
                 timingLog.warn('setAsHomePage: ' + checkTime.diff(startTime));
                 startTime = checkTime;
+
                 if (updatedPage && updatedPage.get("handle") !=='index' && homePage) {
-                    pageDao.getLatestPage('index', 'accountId', function(err, page) {
+                    pageDao.getLatestPage('index', accountId, function(err, page) {
                         if (err) {
                             self.log.error(accountId, userId,'Error getting index page: ' + err);
                             cb(err);
