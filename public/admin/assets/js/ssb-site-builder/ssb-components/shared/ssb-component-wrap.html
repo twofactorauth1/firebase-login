@@ -33,7 +33,7 @@
 	                            'max-width': vm.component.spacing.mw == '100%' ? vm.component.spacing.mw : vm.component.spacing.mw  + 'px'}">
 	                        <div ng-if="vm.component.version==0 || vm.component.version==1" data-ng-include
 	         					data-src="'/admin/assets/js/ssb-site-builder/ssb-components/'+vm.component.type+'/'+vm.component.type+'.component.html'"></div>
-                            <div ng-if="vm.component.version==2" data-ng-include
+                            <div ng-if="!(vm.component.version==0 || vm.component.version==1)" data-ng-include
 	         					data-src="'/admin/assets/js/ssb-site-builder/ssb-components/'+vm.component.type+'/'+vm.component.type+'.v'+vm.component.version+'.component.html'"></div>
 	                    </div>
 	                </div>
@@ -74,7 +74,7 @@
 	                             >
 	                            <div ng-if="vm.component.version==0 || vm.component.version==1" data-ng-include
 	         					data-src="'/admin/assets/js/ssb-site-builder/ssb-components/'+vm.component.type+'/'+vm.component.type+'.component.html'"></div>
-                            <div ng-if="vm.component.version==2" data-ng-include
+                            <div ng-if="!(vm.component.version==0 || vm.component.version==1)" data-ng-include
 	         					data-src="'/admin/assets/js/ssb-site-builder/ssb-components/'+vm.component.type+'/'+vm.component.type+'.v'+vm.component.version+'.component.html'"></div>
 	                        </div>
 	                    </div>

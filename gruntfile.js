@@ -572,6 +572,13 @@ module.exports = function(grunt) {
 
         dbcopyutil.updateEmailCollection(done);
     });
+    
+    grunt.registerTask('updateFooterYearText', 'A task to update footer year text', function(){
+        var done = this.async();
+
+        dbcopyutil.updateFooterTextYear('2016', '2017', done);
+    });
+
 
     grunt.registerTask('copyAccount',  ['prompt:copyAccount', 'doCopyAccount']);
 
