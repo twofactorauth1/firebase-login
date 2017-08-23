@@ -1265,7 +1265,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
             })
         } else {
             vm.uiState.navigation.loadPage(page._id);
-            SimpleSiteBuilderService.getPages();
+            //SimpleSiteBuilderService.getPages();
             $timeout(function() {
                 vm.state.saveAndLoading = false;
             }, 0);
