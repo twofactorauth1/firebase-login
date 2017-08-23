@@ -22,14 +22,20 @@ html
 			font-size: 12px;
 			right: 0 !important;
 		}
+		.statistics{
+			border-left: #48b1cc 2px solid;
+		}
+		.statistics:not(:last-child){			
+			padding-bottom: 8px;
+		}
 		.statistics .value-stat{
 			color: #48b1cc !important;
-			font-size: 12px;
+			font-size: 15px;
 			margin-right: 5px;
 		}
 		.statistics .label-stat{
 			color: #8e8e93 !important;
-			font-size: 12px;
+			font-size: 15px;
 		}
 		.statsContainer, .shipmentPrice, .shipmentDetails{
 			margin-top: 20px;
@@ -152,8 +158,8 @@ html
 		}
 		.map-chart{
 			position: absolute;
-			top:0;
-			right:0%;
+			top:2px;
+			right:10px;
 		}
 	body
 
@@ -190,7 +196,7 @@ html
 				div.statistics.col-xs-12
 					span.value-stat !{uniqueVars}
 					span.label-stat UNIQUE VARS
-				div.statistics.col-xs-12
+				div.statistics.last-col.col-xs-12
 					span.value-stat !{rmaState}
 					span.label-stat RMA
 
@@ -203,8 +209,8 @@ html
 					var chart1 = Highcharts.Map({
 						chart: {
 							renderTo: 'visitor_locations',
-							height: 270,
-							width: 270,
+							height: 350,
+							width: 420,
 							zoomType : false,
 							backgroundColor:'rgba(255, 255, 255, 0.1)'
 						},
