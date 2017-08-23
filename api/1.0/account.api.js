@@ -117,9 +117,15 @@ _.extend(api.prototype, baseApi.prototype, {
                 return self.send403(resp);
             } else {
                 userManager.createUser(accountId, username, password, email, roleAry, callingUser, params, function(err, user){
-                    self.log.debug('<< createUserForAccount');
-                    var _user = user.toJSON('manage', {accountId:accountId});
-                    return self.sendResultOrError(resp, err, _user, 'Error creating user', null);
+                    if(err) {
+                        self.log.error('Error creading user for account:', err);
+                        return self.wrapError(resp, 500, null, err, null);
+                    } else {
+                        self.log.debug('<< createUserForAccount');
+                        var _user = user.toJSON('manage', {accountId:accountId});
+                        return self.sendResultOrError(resp, err, _user, 'Error creating user', null);
+                    }
+                    
                 });
             }
         });
