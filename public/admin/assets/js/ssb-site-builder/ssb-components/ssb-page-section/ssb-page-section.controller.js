@@ -381,6 +381,9 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
         }
         if(vm.section.layoutModifiers && vm.section.layoutModifiers.columns){
             if (angular.isDefined(vm.section.layoutModifiers.columns.columnsNum)) {
+                var rowsCount = vm.section.layoutModifiers.columns.rowsNum ? parseInt(vm.section.layoutModifiers.columns.rowsNum) : 1
+                var firstColIndexes = getColumnIndexes(rowsCount, vm.section.layoutModifiers.columns.columnsNum, true);
+                var lastColIndexes = getColumnIndexes(rowsCount, vm.section.layoutModifiers.columns.columnsNum, false);
                 var _lastCoulmnFullWidth = false;
                 var actualColumnsToIgnore = [];
                 if(vm.section.layoutModifiers.columns.ignoreColumns && vm.section.layoutModifiers.columns.ignoreColumns.length){
@@ -428,9 +431,7 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
                 if (vm.section.layoutModifiers.columns.columnsSpacing && !fixedColumn) {
                     if(parseInt(vm.section.layoutModifiers.columns.columnsNum) > 1){
                         
-                        var rowsCount = vm.section.layoutModifiers.columns.rowsNum ? parseInt(vm.section.layoutModifiers.columns.rowsNum) : 1
-                        var firstColIndexes = getColumnIndexes(rowsCount, vm.section.layoutModifiers.columns.columnsNum, true);
-                        var lastColIndexes = getColumnIndexes(rowsCount, vm.section.layoutModifiers.columns.columnsNum, false);
+                        
                         if(actualColumnsIndexes.indexOf(index) == 0){
                             classString += ' ssb-component-layout-columns-spacing-first-column-' + vm.section.layoutModifiers.columns.columnsSpacing + ' ';
                         }
@@ -450,6 +451,13 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
                     }
 
                 }
+                if (!fixedColumn) {
+                    if(parseInt(vm.section.layoutModifiers.columns.columnsNum) > 1){
+                        if(_.contains(firstColIndexes, actualColumnsIndexes.indexOf(index))){
+                            classString += " ssb-clear-left ";
+                        }
+                    }
+                }    
 
                 if(index === vm.section.components.length - 1 && _lastCoulmnFullWidth){
                     classString += " ssb-text-last-column-full-width";
