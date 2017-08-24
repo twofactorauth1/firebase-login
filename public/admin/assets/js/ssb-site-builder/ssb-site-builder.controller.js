@@ -1355,7 +1355,8 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
     function updateColumnLayout(section){
         if(section && section.layoutModifiers && section.layoutModifiers.columns){
             var columns = parseInt(section.layoutModifiers.columns.columnsNum);
-
+            var rows = section.layoutModifiers.columns.rowsNum ? parseInt(section.layoutModifiers.columns.rowsNum) : 1;
+            columns = columns * rows;
             if(section.layoutModifiers.columns.ignoreColumns && section.layoutModifiers.columns.ignoreColumns.length){
                 columns = columns + section.layoutModifiers.columns.ignoreColumns.length;
             }
