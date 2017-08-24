@@ -26,20 +26,21 @@
         <div data-repeat-index-id="{{features.featureIndex}}">
             <div class="feature-tab-content" ng-if="!loading && isEditing" >
                 <div class="col-sm-4 col-xs-12">
-                    <div ng-if="component.features.length>0" elem ng-model="component.features[features.featureIndex].media"></div>
-                     <div ng-if="component.features.length<=0" elem ng-model="component.features[0].media"></div>
-                </div>
-                <div class="col-sm-4 col-xs-12">
                     <div ng-if="component.features.length>0" elem ng-model="component.features[features.featureIndex].content"></div>
                      <div ng-if="component.features.length<=0" elem ng-model="component.features[features.featureIndex].content"></div>
                 </div>
+                <div class="col-sm-4 col-xs-12">
+                    <div ng-if="component.features.length>0" elem ng-model="component.features[features.featureIndex].media"></div>
+                     <div ng-if="component.features.length<=0" elem ng-model="component.features[0].media"></div>
+                </div>
             </div>
             <div class="feature-tab-content" ng-show="!isEditing">
+                
+                <div class="col-sm-4 col-xs-12">
+                    <div elem ng-model="component.features[features.featureIndex].content"></div> 
+                </div>
                 <div class="col-sm-4 col-xs-12">
                     <div elem ng-model="component.features[features.featureIndex].media"></div>
-                </div>
-                <div class="col-sm-4 col-xs-12" ng-if="!loading">
-                    <div elem ng-model="component.features[features.featureIndex].content"></div> 
                 </div>
             </div>
         </div>
