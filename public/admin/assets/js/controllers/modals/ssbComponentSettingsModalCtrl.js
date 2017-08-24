@@ -652,6 +652,9 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
     });
 
   };
+  $scope.radioName=function(p,c){
+      return 'radio'+'-'+p+"-"+c
+  }
   $scope.deleteLinkFromSubNav= function (parentIndex,index ) {
     SweetAlert.swal({
       title: "Are you sure?",
