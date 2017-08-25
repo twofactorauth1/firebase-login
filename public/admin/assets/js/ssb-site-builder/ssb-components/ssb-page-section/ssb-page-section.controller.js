@@ -817,7 +817,7 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
         if(vm.uiState && vm.section && vm.section.bg && vm.section.bg.img && vm.section.bg.img.parallax){
 
             $timeout(function() {
-
+                $(window).scroll();
             }, 500);
         }
 
