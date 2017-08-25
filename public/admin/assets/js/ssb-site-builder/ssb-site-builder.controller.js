@@ -652,6 +652,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
             if(value){
                 $timeout(function() {
                     $rootScope.app.layout.editorLoaded = true; 
+                    $scope.$broadcast('parallaxCall', {});
                 }, 1000);
             }
             else{

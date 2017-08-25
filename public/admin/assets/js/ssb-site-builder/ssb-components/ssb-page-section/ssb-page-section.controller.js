@@ -826,11 +826,13 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
                         var image = new Image();
                         image.onload = function() {
                             console.log("image loaded")
-                            $(window).scroll();
+                            $timeout(function() {
+                                $scope.$broadcast('parallaxCall', {});    
+                            }, 0);
                         };
                         image.src = src; 
                     }
-                    
+
                     unbindWatcher();
                 }
             });
