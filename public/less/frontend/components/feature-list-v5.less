@@ -1,8 +1,11 @@
 .feature-list-v5 {
 	.feature-list-container{
+		margin:0;
 		ul.list-features{
-			margin: 0;
-    		padding: 0;
+			@media screen and (min-width: 768px) {
+				margin: 0;
+    			padding: 0;
+			}
     		padding-top:30px;
     		padding-bottom:30px;
     		list-style: none;
