@@ -818,7 +818,7 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
 
             $timeout(function() {
                 $(window).scroll();
-            }, 500);
+            }, 1000);
         }
 
     }
