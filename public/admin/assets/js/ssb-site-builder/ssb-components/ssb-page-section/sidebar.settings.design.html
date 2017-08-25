@@ -13,6 +13,16 @@
 
         <div class="form-group">
             <label>
+                Number of rows
+                <span tooltip-placement="top" tooltip-append-to-body="true" tooltip="Number of rows to show. "><i class="fa fa-info-circle" /></span>
+            </label>
+            <div class="col-xs-6 pull-right">
+                <input type="text" ng-model="component.layoutModifiers.columns.rowsNum" min="1" max="30" ng-change="vm.uiState.updateColumnLayout(component)" touchspin>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>
                 Column Spacing
                 <span tooltip-placement="top" tooltip-append-to-body="true" tooltip="Space between columns"><i class="fa fa-info-circle" /></span>
             </label>

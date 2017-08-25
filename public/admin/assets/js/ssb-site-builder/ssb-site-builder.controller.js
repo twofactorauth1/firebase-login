@@ -1354,7 +1354,8 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
     function updateColumnLayout(section){
         if(section && section.layoutModifiers && section.layoutModifiers.columns){
             var columns = parseInt(section.layoutModifiers.columns.columnsNum);
-
+            var rows = section.layoutModifiers.columns.rowsNum ? parseInt(section.layoutModifiers.columns.rowsNum) : 1;
+            columns = columns * rows;
             if(section.layoutModifiers.columns.ignoreColumns && section.layoutModifiers.columns.ignoreColumns.length){
                 columns = columns + section.layoutModifiers.columns.ignoreColumns.length;
             }
@@ -1380,16 +1381,21 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
                         }
                     })
                 }
-                // To Do
+                
                 // Remove empty components
-                // else if(section.components.length > columns){
-                //     for(var i = columns; i < columnLength; i++){
-                //         // remove empty components from section
-                //         if(section.components[i] && !section.components[i].text){
-                //             section.components.splice(i, 1);
-                //         }
-                //     }
-                // }
+                else if(section.components.length > columns){
+                    var _diff =  section.components.length - columns;
+                    
+                    while(_diff !== 0){
+                        if(section.layoutModifiers.columns.ignoreColumns && section.layoutModifiers.columns.ignoreColumns.indexOf("last") > -1){
+                            section.components.splice(section.components.length - 2, 1);
+                        }
+                        else{
+                            section.components.splice(section.components.length - 1, 1);
+                        }
+                        _diff--;
+                    }
+                }
             }
         }
     }
