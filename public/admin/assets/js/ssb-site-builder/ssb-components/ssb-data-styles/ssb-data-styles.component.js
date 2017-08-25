@@ -115,11 +115,13 @@ function ssbDataStyles($timeout, $location, $compile,$window) {
                                     if(element.hasClass("ssb-theme-btn")){
                                             var _bg = element.css("background-color");
                                             var _txtcolor = element.css("color");
+                                            _border = element.css("border");
                                             $compile( element )(scope);
                                             // Need to rest the text and background color
                                             $timeout(function() {
                                                 element.css("background-color", _bg);
                                                 element.css("color", _txtcolor);
+                                                element.css("border", _border);
                                             }, 0);
                                         }else{
                                             $compile( element )(scope);
