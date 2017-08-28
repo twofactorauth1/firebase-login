@@ -451,6 +451,18 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
                     }
 
                 }
+
+                if (vm.section.layoutModifiers.columns.rowsSpacing && !fixedColumn) {
+                    if(parseInt(vm.section.layoutModifiers.columns.columnsNum) > 1){
+                        if(actualColumnsIndexes.indexOf(index) > vm.section.layoutModifiers.columns.columnsNum - 1){
+                            classString += ' ssb-component-layout-rows-spacing-' + vm.section.layoutModifiers.columns.rowsSpacing + ' ';
+                        }
+                        if(actualColumnsIndexes.indexOf(index) > 0){
+                            classString += ' ssb-component-layout-rows-mobile-spacing-' + vm.section.layoutModifiers.columns.rowsSpacing + ' ';
+                        }
+                    }
+                }
+
                 if (!fixedColumn) {
                     if(parseInt(vm.section.layoutModifiers.columns.columnsNum) > 1){
                         if(_.contains(firstColIndexes, actualColumnsIndexes.indexOf(index))){
@@ -848,25 +860,20 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
             }, 0);
         }
 
-        if(vm.uiState && vm.section && vm.section.bg && vm.section.bg.img && vm.section.bg.img.parallax && vm.section.bg.img.url){
-            var isLoaded = false;
+        if(vm.uiState && vm.section){
             var unbindWatcher = $scope.$watch(function() {
-                return angular.element("#px-ele-"+ vm.section._id).length
+                return angular.element('div[id^="px-ele-"]').length
             }, function(newValue, oldValue) {
-                if (newValue && newValue > 0 && !isLoaded) {
-                    isLoaded = true;
-                    var src = vm.section.bg.img.url;
-                    if(src){
-                        var image = new Image();
-                        image.onload = function() {
-                            console.log("image loaded")
-                            $timeout(function() {
-                                $scope.$broadcast('parallaxCall', {});    
-                            }, 0);
-                        };
-                        image.src = src; 
-                    }
-
+                if (newValue && newValue > 0 && !vm.uiState.backgroundImagesLoaded) {
+                    var elem = angular.element('div[id^="px-ele-"]').first();
+                    vm.uiState.backgroundImagesLoaded = true;
+                    elem.waitForImages().done(function() {
+                        $(window).scroll();
+                        console.log("Image loaded");
+                        $timeout(function() {
+                            $(window).scroll();
+                        }, 1500);
+                    });
                     unbindWatcher();
                 }
             });

@@ -47,17 +47,16 @@ app.directive('featureListComponent',['$window', '$timeout', function ($window, 
         scope.setSelectedFeatureIndex = function(index){
             scope.loading = true;
             scope.features.featureIndex = index;
-            $timeout(function() {                
-                scope.loading = false;
+            scope.loading = false;
+            //$timeout(function() {
                 var featureImges = angular.element("#" + scope.component._id + " .feature-tab-content .col-md-5 img");
                 angular.forEach(featureImges, function(el) {
                     var srcFeatureImage = angular.element(el).attr("src");
                     if (srcFeatureImage) {
                         angular.element(el).wrap('<a href="' + srcFeatureImage + '" title="Project A" data-gallery=""></a>');
                     }
-
                 });
-            }, 0);
+           // }, 0);
         }
 
         scope.setStyles = function(field){

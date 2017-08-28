@@ -279,7 +279,7 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
         
         var insertAtIndex = undefined;
         if(el.length){
-            index = el.attr("clickedIndex");
+            var index = el.attr("clicked-index");
             index = parseInt(index);
             insertAtIndex = (index > 0) ? (index + 1) : index;
         }
@@ -1147,6 +1147,7 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
     function customSlugify(s) {
         if (!s) return "";
         s = s.replace(/[^\w\s-\/]/g, "").trim().toLowerCase();
+        s =s.replace("//","/")
         return s.replace(/[-\s]+/g, "-");
     }
     function init(element) {

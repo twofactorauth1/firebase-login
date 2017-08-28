@@ -34,12 +34,14 @@
                      <div ng-if="component.features.length<=0" elem ng-model="component.features[features.featureIndex].content"></div>
                 </div>
             </div>
-            <div class="feature-tab-content" ng-show="!isEditing">
-                <div class="col-md-5">
-                    <div elem ng-model="component.features[features.featureIndex].media"></div>
-                </div>
-                <div class="col-md-7">
-                    <div elem ng-model="component.features[features.featureIndex].content"></div> 
+            <div class="feature-tab-content" ng-if="!isEditing">
+                <div ng-repeat="feature in component.features" ng-if="$index == features.featureIndex">
+                    <div class="col-md-5">
+                        <div elem ng-model="component.features[features.featureIndex].media"></div>
+                    </div>
+                    <div class="col-md-7">
+                        <div elem ng-model="component.features[features.featureIndex].content"></div> 
+                    </div>
                 </div>
             </div>
         </div>
