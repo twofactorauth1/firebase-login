@@ -34,7 +34,7 @@
                      <div ng-if="component.features.length<=0" elem ng-model="component.features[0].media"></div>
                 </div>
             </div>
-            <div class="feature-tab-content" ng-show="!isEditing">
+            <div class="feature-tab-content" ng-if="!loading && !isEditing">
                 
                 <div class="col-sm-4 col-xs-12">
                     <div elem ng-model="component.features[features.featureIndex].content"></div> 
