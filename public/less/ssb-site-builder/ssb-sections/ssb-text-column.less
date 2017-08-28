@@ -85,6 +85,18 @@
 	  }
 	  .generate-column-spacing-classes(@n, (@i + 10));
 	}
+
+	.generate-row-spacing-classes(500);
+
+	.generate-row-spacing-classes(@n, @i: 10) when (@i =< @n) {
+	  
+		.ssb-component-layout-rows-spacing-@{i} {
+			.component-wrap{
+				margin-top: (1px * @i);
+			}
+		}
+	  .generate-row-spacing-classes(@n, (@i + 10));
+	}
 }
 .ssb-text-column-layout.ssb-page-section-layout-1-col-grid{
     .col-xs-15,

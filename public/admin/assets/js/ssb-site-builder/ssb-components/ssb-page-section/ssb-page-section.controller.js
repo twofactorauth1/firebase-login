@@ -451,6 +451,15 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
                     }
 
                 }
+
+                if (vm.section.layoutModifiers.columns.rowsSpacing && !fixedColumn) {
+                    if(parseInt(vm.section.layoutModifiers.columns.columnsNum) > 1){
+                        if(actualColumnsIndexes.indexOf(index) > vm.section.layoutModifiers.columns.columnsNum - 1){
+                            classString += ' ssb-component-layout-rows-spacing-' + vm.section.layoutModifiers.columns.rowsSpacing + ' ';
+                        }
+                    }
+                }
+
                 if (!fixedColumn) {
                     if(parseInt(vm.section.layoutModifiers.columns.columnsNum) > 1){
                         if(_.contains(firstColIndexes, actualColumnsIndexes.indexOf(index))){
