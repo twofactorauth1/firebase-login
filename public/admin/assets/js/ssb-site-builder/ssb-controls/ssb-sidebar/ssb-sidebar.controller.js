@@ -1147,6 +1147,7 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
     function customSlugify(s) {
         if (!s) return "";
         s = s.replace(/[^\w\s-\/]/g, "").trim().toLowerCase();
+        s =s.replace("//","/")
         return s.replace(/[-\s]+/g, "-");
     }
     function init(element) {
