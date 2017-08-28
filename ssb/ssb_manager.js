@@ -4244,6 +4244,41 @@ module.exports = {
         }
 
         return description;
+    },
+
+    generateSiteMap: function(accountId, userId, protocol, host, fn) {
+        var self = this;
+        self.log.debug(accountId, userId, '>> generateSiteMap');
+        var query = {accountId:accountId, latest:true};
+        pageDao.findPublishedPages(query, function(err, pages){
+            if(err) {
+                self.log.error('Error finding pages:', err);
+                fn(err);
+            } else {
+                var prefix = protocol + '://' + host + '/';
+                var entryAry = [];
+                _.each(pages, function(page){
+                    if(!page.get('hideFromVisitors') && !page.get('hideFromSearchEngines')) {//TODO: check these props
+                        var entry = '<url><loc>' + prefix;
+                        if(page.get('handle') === 'index') {
+                            entry+= '</loc>';
+                        } else {
+                            entry+= page.get('handle') + '</loc>';
+                        }
+
+                        entry += '<lastMod>' + moment(page.get('modified').date).format('YYYY-MM-DD') + '</lastMod></url>';
+                        entryAry.push(entry);
+                    }
+                });
+                var xmlString = '<?xml version="1.0" encoding="utf-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">';
+                _.each(entryAry, function(entry){
+                    xmlString += entry;
+                });
+                xmlString += '</urlset>';
+                self.log.debug(accountId, userId, '<< generateSiteMap');
+                return fn(null, xmlString);
+            }
+        });
     }
 
 };
