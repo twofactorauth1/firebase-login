@@ -869,11 +869,12 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
                     var elem = angular.element(".parallax").first();
                     vm.uiState.backgroundImagesLoaded = true;
                     elem.waitForImages().done(function() {
+                        $(window).scroll();
+                        console.log("Image loaded");
                         $timeout(function() {
                             $(window).scroll();
-                        }, 1000);
+                        }, 1500);
                     });
-
                     unbindWatcher();
                 }
             });
