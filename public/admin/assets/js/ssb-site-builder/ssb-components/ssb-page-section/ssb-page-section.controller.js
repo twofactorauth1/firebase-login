@@ -860,24 +860,19 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
             }, 0);
         }
 
-        if(vm.uiState && vm.section && vm.section.bg && vm.section.bg.img && vm.section.bg.img.parallax && vm.section.bg.img.url){
-            var isLoaded = false;
+        if(vm.uiState && vm.section){
+            
             var unbindWatcher = $scope.$watch(function() {
-                return angular.element("#px-ele-"+ vm.section._id).length
+                return angular.element(".parallax").length
             }, function(newValue, oldValue) {
-                if (newValue && newValue > 0 && !isLoaded) {
-                    isLoaded = true;
-                    var src = vm.section.bg.img.url;
-                    if(src){
-                        var image = new Image();
-                        image.onload = function() {
-                            console.log("image loaded")
-                            $timeout(function() {
-                                $scope.$broadcast('parallaxCall', {});    
-                            }, 0);
-                        };
-                        image.src = src; 
-                    }
+                if (newValue && newValue > 0 && !vm.uiState.backgroundImagesLoaded) {
+                    var elem = angular.element(".parallax").first();
+                    vm.uiState.backgroundImagesLoaded = true;
+                    elem.waitForImages().done(function() {
+                        $timeout(function() {
+                            $(window).scroll();
+                        }, 1000);
+                    });
 
                     unbindWatcher();
                 }
