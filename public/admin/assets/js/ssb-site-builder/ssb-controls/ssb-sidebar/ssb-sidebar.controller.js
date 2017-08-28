@@ -279,7 +279,7 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
         
         var insertAtIndex = undefined;
         if(el.length){
-            index = el.attr("clickedIndex");
+            index = el.attr("clicked-index");
             index = parseInt(index);
             insertAtIndex = (index > 0) ? (index + 1) : index;
         }
