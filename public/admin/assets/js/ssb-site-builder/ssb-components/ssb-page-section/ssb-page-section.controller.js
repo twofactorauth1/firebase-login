@@ -868,21 +868,11 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
                 if (newValue && newValue > 0 && !vm.uiState.backgroundImagesLoaded) {
                     var elem = angular.element(".parallax").first();
                     vm.uiState.backgroundImagesLoaded = true;
-                    var bg = elem.css('background-image');
-                    if (bg) {
-                        var src = bg.replace(/(^url\()|(\)$|[\"\'])/g, '');
-                        if(src){
-                            var image = new Image();
-                            image.onload = function() {
-                                console.log("image loaded")
-                                $scope.$broadcast('parallaxCall', {});
-                                $timeout(function() {
-                                    $scope.$broadcast('parallaxCall', {});    
-                                }, 1000);
-                            };
-                            image.src = src; 
-                        }
-                    }
+                    elem.waitForImages().done(function() {
+                        $timeout(function() {
+                            $(window).scroll();
+                        }, 1000);
+                    });
 
                     unbindWatcher();
                 }
