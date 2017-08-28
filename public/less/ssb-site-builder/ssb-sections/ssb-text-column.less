@@ -91,8 +91,17 @@
 	.generate-row-spacing-classes(@n, @i: 10) when (@i =< @n) {
 	  
 		.ssb-component-layout-rows-spacing-@{i} {
-			.component-wrap{
-				margin-top: (1px * @i);
+			@media (min-width: 768px) {
+				.component-wrap{
+					margin-top: (1px * @i);
+				}
+			}
+		}
+		.ssb-component-layout-rows-mobile-spacing-@{i} {
+			@media (max-width: 767px) {
+				.component-wrap{
+					margin-top: (1px * @i);
+				}
 			}
 		}
 	  .generate-row-spacing-classes(@n, (@i + 10));

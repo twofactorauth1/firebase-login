@@ -457,6 +457,9 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
                         if(actualColumnsIndexes.indexOf(index) > vm.section.layoutModifiers.columns.columnsNum - 1){
                             classString += ' ssb-component-layout-rows-spacing-' + vm.section.layoutModifiers.columns.rowsSpacing + ' ';
                         }
+                        if(actualColumnsIndexes.indexOf(index) > 0){
+                            classString += ' ssb-component-layout-rows-mobile-spacing-' + vm.section.layoutModifiers.columns.rowsSpacing + ' ';
+                        }
                     }
                 }
 
