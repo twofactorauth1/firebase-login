@@ -861,12 +861,11 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
         }
 
         if(vm.uiState && vm.section){
-            
             var unbindWatcher = $scope.$watch(function() {
-                return angular.element(".parallax").length
+                return angular.element('div[id^="px-ele-"]').length
             }, function(newValue, oldValue) {
                 if (newValue && newValue > 0 && !vm.uiState.backgroundImagesLoaded) {
-                    var elem = angular.element(".parallax").first();
+                    var elem = angular.element('div[id^="px-ele-"]').first();
                     vm.uiState.backgroundImagesLoaded = true;
                     elem.waitForImages().done(function() {
                         $(window).scroll();
