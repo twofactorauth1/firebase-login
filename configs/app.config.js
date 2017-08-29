@@ -152,7 +152,7 @@ module.exports = {
     www_url: wwwUrl,
     subdomain_suffix: subdomainSuffix,
     support_email: "support@indigenous.io",
-    cluster: false,
+    cluster: true,
     freeCpus: 2,
     xdhost_whitelist: XDHosts,
     mainAccountID: MAIN_ACCOUNT_ID,
