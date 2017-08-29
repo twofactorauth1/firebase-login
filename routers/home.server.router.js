@@ -26,6 +26,7 @@ var RSSView = require('../views/rss.server.view');
 var UAParser = require('ua-parser-js');
 var parser = new UAParser();
 var urlUtils = require('../utils/urlutils');
+var ssbManager = require('../ssb/ssb_manager');
 
 var router = function() {
     this.init.apply(this, arguments);
@@ -81,6 +82,8 @@ _.extend(router.prototype, BaseRouter.prototype, {
         app.get('/template/:page/:page_1', this.frontendSetup.bind(this), this.getOrCreateTemplate.bind(this));
 
         app.get('/scripts/*', this.frontendSetup.bind(this), this.serveNodeModules.bind(this));
+
+        app.get('/sitemap.xml', this.frontendSetup.bind(this), this.generateSiteMap.bind(this));
         return this;
     },
 
@@ -652,6 +655,31 @@ _.extend(router.prototype, BaseRouter.prototype, {
             return null;
         }
 
+    },
+
+    //consider caching this
+    generateSiteMap: function(req, resp) {
+        var self = this;
+
+        var accountId = self.unAuthAccountId(req);
+        self.log.debug(accountId, null, '>> generateSiteMap');
+        var protocol = req.protocol;
+        var host = req.host;
+        var subdomains = req.subdomains.join('.');
+        var combinedHost = host;
+        if(req.port) {
+            combinedHost += ':' + req.port;
+        }
+
+        ssbManager.generateSiteMap(accountId, null, protocol, combinedHost, function(err, sitemap){
+            self.log.debug(accountId, null, '<< generateSiteMap');
+            if(err) {
+                resp.send(500, err);
+            } else {
+                resp.set('Content-Type', 'application/xml');
+                resp.send(sitemap);
+            }
+        });
     }
 
 });

@@ -1,7 +1,7 @@
 'use strict';
 /*global app, moment, angular, window*/
 /*jslint unparam:true*/
-app.directive('testimonialsComponent', ['$timeout', function ($timeout) {
+app.directive('testimonialsComponent', ['$timeout','WebsiteService', function ($timeout,WebsiteService) {
   return {
     scope: {
       component: '=',
@@ -10,8 +10,11 @@ app.directive('testimonialsComponent', ['$timeout', function ($timeout) {
     },
     templateUrl: '/components/component-wrap.html',
     link: function (scope, element, attrs) {
-            // set default values for slider
-        var themeOverridesStyle= angular.copy(scope.$parent.$parent.vm.website.themeOverrides.styles);
+        var themeOverridesStyle    // set default values for slider
+        WebsiteService.getWebsite(function (website) {
+          themeOverridesStyle = website.themeOverrides.styles;
+        });
+        //var themeOverridesStyle= angular.copy(scope.$parent.$parent.vm.website.themeOverrides.styles);
         scope.touchMove = false;
         scope.draggable = false;
         scope.autoplay = false;
