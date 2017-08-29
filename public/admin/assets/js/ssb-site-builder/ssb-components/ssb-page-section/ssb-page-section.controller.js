@@ -869,9 +869,11 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
                     vm.uiState.backgroundImagesLoaded = true;
                     $timeout(function() {
                         elem.waitForImages(true).done(function() {
+                            $scope.$broadcast('parallaxCall', {});
                             $(window).scroll();
                             console.log("Image loaded");
                             $timeout(function() {
+                                $scope.$broadcast('parallaxCall', {});
                                 $(window).scroll();
                             }, 1000);
                         });
