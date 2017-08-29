@@ -337,7 +337,7 @@ var setUpListener = function (app) {
 //-----------------------------------------------------
 //  CLUSTERING
 //-----------------------------------------------------
-if (appConfig.cluster == true) {
+if (appConfig.cluster == true && process.env.NODE_ENV != "testing") {
     var cluster = require('cluster');
     if (cluster.isMaster) {
         var cpuCount = require('os').cpus().length;
