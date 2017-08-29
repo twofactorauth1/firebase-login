@@ -142,6 +142,13 @@ if(process.env.RUN_SCHEDULED_JOBS === 'true') {
 var groupAdminUserIDs = process.env.GROUP_ADMIN_USERIDS || '1,4';
 groupAdminUserIDs = groupAdminUserIDs.split(',');
 //---------------------------------------------------------
+// CLUSTERING
+//---------------------------------------------------------
+var cluster = true;
+if(process.env.CLUSTER) {
+    cluster = process.env.CLUSTER;
+}
+//---------------------------------------------------------
 // EXPORTS
 //---------------------------------------------------------
 module.exports = {
@@ -152,7 +159,7 @@ module.exports = {
     www_url: wwwUrl,
     subdomain_suffix: subdomainSuffix,
     support_email: "support@indigenous.io",
-    cluster: true,
+    cluster: cluster,
     freeCpus: 2,
     xdhost_whitelist: XDHosts,
     mainAccountID: MAIN_ACCOUNT_ID,
