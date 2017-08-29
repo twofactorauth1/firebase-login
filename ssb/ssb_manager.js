@@ -2139,8 +2139,24 @@ module.exports = {
                         } else {
                             async.eachSeries(pages, function(page, callback){
                                 var sections = page.get('sections');
-                                sections[0]._id = globalHeader.id();
-                                pageDao.saveOrUpdate(page, callback);
+                                sectionDao.dereferenceSections(page.get('sections'), function(err, pageSections){
+                                    var index = -1;
+                                    _.each(pageSections, function(section, headerIndex){
+                                        if(section.get('globalHeader') === true){
+                                            index = headerIndex;
+                                            return false;
+                                        }
+                                    });
+                                    if(index > -1){
+                                        sections[index]._id = globalHeader.id();
+                                        pageDao.saveOrUpdate(page, callback);    
+                                    }
+                                    else{
+                                        callback();
+                                    }
+                                    
+                                })
+                                
                             }, function(err){
                                 cb(err, updatedPage, updatedSections);
                             });
