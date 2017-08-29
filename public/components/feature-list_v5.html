@@ -3,7 +3,7 @@
         <div elem ng-model="component.title"></div>
     </div>
     <div class="row features-wrap feature-list-container" ng-init="setSelectedFeatureIndex(0)">
-        <ul class="list-features list-features-{{component._id}}">
+        <ul class="list-features list-features-{{component._id}} col-xs-12">
             <li class="feature" ng-attr-style="{{listStyles(component, $index == features.featureIndex)}}" ng-repeat="feature in component.features" ng-click="setSelectedFeatureIndex($index)" ng-class="{'feature-col-5-layout':component.features.length >= 5, 'feature-col-4-layout':component.features.length == 4, 'feature-col-3-layout':component.features.length == 3, 'feature-col-2-layout':component.features.length == 2, 'feature-col-1-layout':component.features.length == 1, 'active': $index == features.featureIndex}">
                 <a class="feature-heading" ng-attr-style="{{setStyles(component.formSettings)}}">
                     <div class="fetaure-tabs-icon"> 
@@ -34,12 +34,14 @@
                      <div ng-if="component.features.length<=0" elem ng-model="component.features[features.featureIndex].content"></div>
                 </div>
             </div>
-            <div class="feature-tab-content" ng-show="!isEditing">
-                <div class="col-md-5">
-                    <div elem ng-model="component.features[features.featureIndex].media"></div>
-                </div>
-                <div class="col-md-7" ng-if="!loading">
-                    <div elem ng-model="component.features[features.featureIndex].content"></div> 
+            <div class="feature-tab-content" ng-if="!isEditing">
+                <div ng-repeat="feature in component.features" ng-if="$index == features.featureIndex">
+                    <div class="col-md-5">
+                        <div elem ng-model="component.features[features.featureIndex].media"></div>
+                    </div>
+                    <div class="col-md-7">
+                        <div elem ng-model="component.features[features.featureIndex].content"></div> 
+                    </div>
                 </div>
             </div>
         </div>

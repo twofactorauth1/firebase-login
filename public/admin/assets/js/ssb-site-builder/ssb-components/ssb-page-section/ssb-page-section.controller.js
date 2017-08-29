@@ -381,6 +381,9 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
         }
         if(vm.section.layoutModifiers && vm.section.layoutModifiers.columns){
             if (angular.isDefined(vm.section.layoutModifiers.columns.columnsNum)) {
+                var rowsCount = vm.section.layoutModifiers.columns.rowsNum ? parseInt(vm.section.layoutModifiers.columns.rowsNum) : 1
+                var firstColIndexes = getColumnIndexes(rowsCount, vm.section.layoutModifiers.columns.columnsNum, true);
+                var lastColIndexes = getColumnIndexes(rowsCount, vm.section.layoutModifiers.columns.columnsNum, false);
                 var _lastCoulmnFullWidth = false;
                 var actualColumnsToIgnore = [];
                 if(vm.section.layoutModifiers.columns.ignoreColumns && vm.section.layoutModifiers.columns.ignoreColumns.length){
@@ -398,6 +401,8 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
                 var fixedColumn = actualColumnsToIgnore.indexOf(index) > -1 ? true : false;
 
                 var colCount = parseInt(vm.section.layoutModifiers.columns.columnsNum) || 1;
+                var rowsCount = vm.section.layoutModifiers.columns.rowsNum ? parseInt(vm.section.layoutModifiers.columns.rowsNum) : 1
+                var newColCount = colCount * rowsCount;
                 var colClass = " col-xs-12 col-sm-" + Math.floor(12/colCount);
 
                 if(!fixedColumn) {
@@ -407,7 +412,7 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
                     }
                 }
 
-                var totalCoulmns = colCount;
+                var totalCoulmns = newColCount;
                 var actualColumnsIndexes = [];
                 for(var i = 0; i<= vm.section.components.length -1; i++){
                     actualColumnsIndexes.push(i);
@@ -425,11 +430,20 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
 
                 if (vm.section.layoutModifiers.columns.columnsSpacing && !fixedColumn) {
                     if(parseInt(vm.section.layoutModifiers.columns.columnsNum) > 1){
-                        if(actualColumnsIndexes.indexOf(index) === 0){
+                        
+                        
+                        if(actualColumnsIndexes.indexOf(index) == 0){
                             classString += ' ssb-component-layout-columns-spacing-first-column-' + vm.section.layoutModifiers.columns.columnsSpacing + ' ';
                         }
-                        else if(actualColumnsIndexes.indexOf(index) === vm.section.layoutModifiers.columns.columnsNum - 1){
+                        else if(actualColumnsIndexes.indexOf(index) == vm.section.layoutModifiers.columns.columnsNum - 1){
                             classString += ' ssb-component-layout-columns-spacing-last-column-' + vm.section.layoutModifiers.columns.columnsSpacing + ' ';
+                        }
+
+                        else if(_.contains(lastColIndexes, actualColumnsIndexes.indexOf(index) )){
+                            classString += ' ssb-component-layout-columns-spacing-last-column-' + vm.section.layoutModifiers.columns.columnsSpacing + ' ';
+                        }
+                        else if(_.contains(firstColIndexes, actualColumnsIndexes.indexOf(index))){
+                            classString += ' ssb-component-layout-columns-spacing-first-column-' + vm.section.layoutModifiers.columns.columnsSpacing + ' ';
                         }
                         else{
                             classString += ' ssb-component-layout-columns-spacing-' + vm.section.layoutModifiers.columns.columnsSpacing + ' ';
@@ -437,6 +451,25 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
                     }
 
                 }
+
+                if (vm.section.layoutModifiers.columns.rowsSpacing && !fixedColumn) {
+                    if(parseInt(vm.section.layoutModifiers.columns.columnsNum) > 1){
+                        if(actualColumnsIndexes.indexOf(index) > vm.section.layoutModifiers.columns.columnsNum - 1){
+                            classString += ' ssb-component-layout-rows-spacing-' + vm.section.layoutModifiers.columns.rowsSpacing + ' ';
+                        }
+                        if(actualColumnsIndexes.indexOf(index) > 0){
+                            classString += ' ssb-component-layout-rows-mobile-spacing-' + vm.section.layoutModifiers.columns.rowsSpacing + ' ';
+                        }
+                    }
+                }
+
+                if (!fixedColumn) {
+                    if(parseInt(vm.section.layoutModifiers.columns.columnsNum) > 1){
+                        if(_.contains(firstColIndexes, actualColumnsIndexes.indexOf(index))){
+                            classString += " ssb-clear-left ";
+                        }
+                    }
+                }    
 
                 if(index === vm.section.components.length - 1 && _lastCoulmnFullWidth){
                     classString += " ssb-text-last-column-full-width";
@@ -465,6 +498,7 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
                 }
             }
 
+            // need to add clearFix
         }
 
 
@@ -583,6 +617,18 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
 
 
         return styleString;
+    }
+
+    function getColumnIndexes(rowsNum, colNum, first){
+        var indexes = [];
+        for(var index=0; index <= rowsNum; index++){
+            if(first)
+                indexes.push(index * parseInt(colNum));
+            else{
+                indexes.push((index * parseInt(colNum)) + parseInt(colNum) - 1);                
+            }
+        }
+        return indexes;
     }
 
     /**
@@ -814,7 +860,29 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
             }, 0);
         }
 
-
+        if(vm.uiState && vm.section){
+            var unbindWatcher = $scope.$watch(function() {
+                return angular.element('div[id^="px-ele-"]').length
+            }, function(newValue, oldValue) {
+                if (newValue && newValue > 0 && !vm.uiState.backgroundImagesLoaded) {
+                    var elem = angular.element('div[id^="px-ele-"]').first();
+                    vm.uiState.backgroundImagesLoaded = true;
+                    $timeout(function() {
+                        elem.waitForImages(true).done(function() {
+                            $scope.$broadcast('parallaxCall', {});
+                            $(window).scroll();
+                            console.log("Image loaded");
+                            $timeout(function() {
+                                $scope.$broadcast('parallaxCall', {});
+                                $(window).scroll();
+                            }, 1000);
+                        });
+                    }, 500);
+                    unbindWatcher();
+                }
+            });
+            
+        }
 
     }
 

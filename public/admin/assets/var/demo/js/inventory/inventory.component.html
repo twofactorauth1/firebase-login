@@ -63,9 +63,9 @@
 	                <th class="name-col sort" style="white-space: nowrap;" ng-class="{'st-sort-ascent': vm.uiState.sortData.details['name'].direction === 1, 'st-sort-descent': vm.uiState.sortData.details['name'].direction === -1}" ng-click="vm.sortInventory('_itemName', 'name')">Product</th>
 	                <th class="vendor-col sort" style="white-space: nowrap;" ng-class="{'st-sort-ascent': vm.uiState.sortData.details['vendor'].direction === 1, 'st-sort-descent': vm.uiState.sortData.details['vendor'].direction === -1}" ng-click="vm.sortInventory('_shortVendorName', 'vendor')">Vendor</th>
 	                <th class="hidden-xs desc-col">Description</th>
-	                <th class="hidden-xs hidden-sm dim-col">Box Dim (LxWxH)</th>
-	                <th class="hidden-xs hidden-sm weight-col">Weight</th>
-                    <th class="hidden-xs hidden-sm price-col" style="white-space: nowrap;">List Price</th>
+	                <th class="visible-lg dim-col">Box Dim (LxWxH)</th>
+	                <th class="visible-lg weight-col">Weight</th>
+                    <th class="visible-md visible-lg price-col" style="white-space: nowrap;">List Price</th>
 	                <th class="qty-col hidden-xs sort" style="white-space: nowrap;" ng-class="{'st-sort-ascent': vm.uiState.sortData.details['available'].direction === 1, 'st-sort-descent': vm.uiState.sortData.details['available'].direction === -1}" ng-click="vm.sortInventory('Available', 'available')"><span class="hidden-xs">Qty </span>Avail</th>
 	                <th class="col-add-btn hidden-xs" ng-if="vm.state.orgCardAndPermissions.permissions.quote.create"></th>
 	            </tr>
@@ -78,9 +78,9 @@
 	                    <input ng-model="vm.uiState.fieldSearch._shortVendorName" ng-model-options="{ debounce: 800 }" placeholder="Vendor" class="form-control" type="search"/>
 	                </th>
 	                <th class="desc-col hidden-xs"></th>
-	                <th class="dim-col hidden-xs hidden-sm"></th>
-	                <th class="weight-col hidden-xs hidden-sm"></th>
-                    <th class="price-col hidden-xs hidden-sm"></th>
+	                <th class="dim-col visible-lg"></th>
+	                <th class="weight-col visible-lg"></th>
+                    <th class="price-col visible-md visible-lg"></th>
 	                <th class="qty-col hidden-xs">
 	                    <select ng-model="vm.uiState.fieldSearch.Available" class="form-control" ng-options="options.value as options.label for options in vm.quantitySearchOptions" ng-change="updateSettings()" required>
                             <option value="" selected class="placeholder">Qty Avail</option>
@@ -102,9 +102,9 @@
 	                <td class="name-col"><strong>Product: </strong><div tooltip="{{product.OITM_ItemName}}" class="text-adjust-outerTable">{{product.OITM_ItemName}}</div></td>
 	                <td class="vendor-col" style="white-space: nowrap;"><strong>Vendor: </strong><div class="text-capitalize text-adjust-outerTable">{{product._shortVendorName}}</div></td>
 	                <td class="hidden-xs desc-col"><strong>Description: </strong><div tooltip="{{product.OITM_U_dscription}}" class="text-adjust-outerTable">{{product.OITM_U_dscription}}</div></td>
-	                <td class="hidden-xs hidden-sm dim-col"><strong>Box Dim: </strong>{{vm.getDimentions(product)}}</td>
-	                <td class="weight-col hidden-xs hidden-sm" style="white-space: nowrap;"><strong>Weight: </strong>{{vm.getWeight(product)}}</td>
-                    <td class="price-col hidden-xs hidden-sm" style="white-space: nowrap;"><strong>List Price: </strong>{{vm.getPrice(product) | currency : '$'}}</td>
+	                <td class="visible-lg dim-col"><strong>Box Dim: </strong>{{vm.getDimentions(product)}}</td>
+	                <td class="weight-col visible-lg" style="white-space: nowrap;"><strong>Weight: </strong>{{vm.getWeight(product)}}</td>
+                    <td class="price-col visible-md visible-lg" style="white-space: nowrap;"><strong>List Price: </strong>{{vm.getPrice(product) | currency : '$'}}</td>
                     <td class="qtyColumn qty-col hidden-xs" style="white-space: nowrap;"><strong>Qty: </strong>
 		                <span ng-if="product.Available <= 0">
 	                        <a href='#' ng-click='vm.cancel($event);' onclick='Intercom("showNewMessage","")'>Click to Inquire</a>
@@ -115,7 +115,7 @@
 	                </td>
 	                <td class="col-add-btn hidden-xs" ng-if="vm.state.orgCardAndPermissions.permissions.quote.create">
         				<button type="button" class="btn btn-primary btn-warning pull-right" ng-click="vm.preventClick($event); vm.addItemToQuote(product, 'new-quote-modal', 'NewQuoteModalController', 'lg')">
-                            <span>Add</span>
+                            <span style="white-space: nowrap;">Add to Quote</span>
                         </button>
 	                </td>
 	            </tr>

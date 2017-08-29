@@ -44,6 +44,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
     vm.updateColumnLayout = updateColumnLayout;
     vm.setDefaultSpacing = setDefaultSpacing;
     vm.updatetestimonialWidth = updatetestimonialWidth;
+    vm.onBorderChange = onBorderChange;
     vm.isNavHero = isNavHero;
     vm.isSortableDisabled = angular.element($window).width() < 768 ? true : false
     vm.toggleSidebarPanel = toggleSidebarPanel;
@@ -170,6 +171,8 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
         setDefaultSpacing: vm.setDefaultSpacing,
 
         updatetestimonialWidth:vm.updatetestimonialWidth,
+
+        onBorderChange:vm.onBorderChange,
 
         isNavHero: vm.isNavHero,
 
@@ -652,8 +655,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
             if(value){
                 $timeout(function() {
                     $rootScope.app.layout.editorLoaded = true; 
-                    console.log("call parallax ")
-                    $scope.$broadcast('parallaxCall', {})
+                    $scope.$broadcast('parallaxCall', {});
                 }, 1000);
             }
             else{
@@ -1355,7 +1357,8 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
     function updateColumnLayout(section){
         if(section && section.layoutModifiers && section.layoutModifiers.columns){
             var columns = parseInt(section.layoutModifiers.columns.columnsNum);
-
+            var rows = section.layoutModifiers.columns.rowsNum ? parseInt(section.layoutModifiers.columns.rowsNum) : 1;
+            columns = columns * rows;
             if(section.layoutModifiers.columns.ignoreColumns && section.layoutModifiers.columns.ignoreColumns.length){
                 columns = columns + section.layoutModifiers.columns.ignoreColumns.length;
             }
@@ -1381,16 +1384,21 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
                         }
                     })
                 }
-                // To Do
+                
                 // Remove empty components
-                // else if(section.components.length > columns){
-                //     for(var i = columns; i < columnLength; i++){
-                //         // remove empty components from section
-                //         if(section.components[i] && !section.components[i].text){
-                //             section.components.splice(i, 1);
-                //         }
-                //     }
-                // }
+                else if(section.components.length > columns){
+                    var _diff =  section.components.length - columns;
+                    
+                    while(_diff !== 0){
+                        if(section.layoutModifiers.columns.ignoreColumns && section.layoutModifiers.columns.ignoreColumns.indexOf("last") > -1){
+                            section.components.splice(section.components.length - 2, 1);
+                        }
+                        else{
+                            section.components.splice(section.components.length - 1, 1);
+                        }
+                        _diff--;
+                    }
+                }
             }
         }
     }
@@ -1426,6 +1434,15 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
                 $scope.$broadcast('updatetestimonialHeight.component', {})
             }, 500);
         }
+    }
+    function onBorderChange(section){
+        return {
+                floor: 0,
+                ceil: 100,
+                onEnd: function() {
+                    updatetestimonialWidth(section);
+                }
+            };
     }
     $scope.$on('$refreshAccountSettings', function(event, account) {
         if(account && account._id){
