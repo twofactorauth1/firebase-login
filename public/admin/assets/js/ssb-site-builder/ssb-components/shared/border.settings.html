@@ -40,7 +40,7 @@
                         class="slider-opacity"
                         name="border-width"
                         rz-slider-model="component.border.width"
-                        rz-slider-options="{floor: 0, ceil: 100}">
+                       rz-slider-options="vm.uiState.resizer(component);">
                     </rzslider>
                 </div>
             </div>
@@ -76,7 +76,7 @@
                         class="slider-opacity"
                         name="border-radius"
                         rz-slider-model="component.border.radius"
-                        rz-slider-options="{floor: 0, ceil: 50}">
+                        rz-slider-options="vm.uiState.resizer(component);">
                     </rzslider>
                 </div>
             </div>
