@@ -44,7 +44,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
     vm.updateColumnLayout = updateColumnLayout;
     vm.setDefaultSpacing = setDefaultSpacing;
     vm.updatetestimonialWidth = updatetestimonialWidth;
-    vm.resizer = resizer;
+    vm.onBorderChange = onBorderChange;
     vm.isNavHero = isNavHero;
     vm.isSortableDisabled = angular.element($window).width() < 768 ? true : false
     vm.toggleSidebarPanel = toggleSidebarPanel;
@@ -172,7 +172,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
 
         updatetestimonialWidth:vm.updatetestimonialWidth,
 
-        resizer:vm.resizer,
+        onBorderChange:vm.onBorderChange,
 
         isNavHero: vm.isNavHero,
 
@@ -1435,7 +1435,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
             }, 500);
         }
     }
-    function resizer(section){
+    function onBorderChange(section){
         return {
                 floor: 0,
                 ceil: 100,
