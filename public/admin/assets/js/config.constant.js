@@ -978,7 +978,7 @@ app.constant('JS_REQUIRES', {
   },{
     name: 'wait-for-images',
     files: [
-        '../js/libs/waitForImages/dist/jquery.waitforimages.min.js'
+        '../js/libs_misc/waitForImages/dist/jquery.waitforimages.min.js'
     ]
   }]
 });
