@@ -1,8 +1,8 @@
 <div>
-	<div ng-if="vm.component.version != 2" class="ssb-image-component-container">
+	<div ng-show="vm.component.version != 2" class="ssb-image-component-container">
 		<img class="img-responsive" ng-src="{{vm.component.src}}" alt="{{(vm.component.src) ? vm.component.alttext : ''}}"/>
 	</div>
-	<div id="px-ele-{{vm.component._id}}" class="nav-header-div" ng-if="vm.component.version == 2" ng-class="{parallax:vm.component.parallax}"
+	<div id="px-ele-{{vm.component._id}}" class="nav-header-div" ng-show="vm.component.version == 2" ng-class="{parallax:vm.component.parallax}"
 	     {{vm.component.parallax ? parallax-background  : ""}}
 	     ng-attr-parallax-ratio="{{vm.component.parallax ? '0.4' : '1'}}"
 	     style='
