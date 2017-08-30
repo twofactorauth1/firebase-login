@@ -26,15 +26,18 @@ app.directive('testimonialsComponent', ['$timeout','WebsiteService', function ($
             };
         }
         // set default values for slider
-        if(scope.component.slider.sliderDotColorOpacity==undefined){
-           scope.component.slider.sliderDotColorOpacity= themeOverridesStyle.primarySliderDotColorOpacity;
+        if(themeOverridesStyle){
+            if(scope.component.slider.sliderDotColorOpacity==undefined){
+                scope.component.slider.sliderDotColorOpacity= themeOverridesStyle.primarySliderDotColorOpacity;
+            }
+            if(scope.component.slider.sliderActiveDotColor==undefined){
+               scope.component.slider.sliderActiveDotColor= themeOverridesStyle.primarySliderActiveDotColor;
+            }
+            if(scope.component.slider.sliderDotColor==undefined){
+               scope.component.slider.sliderDotColor= themeOverridesStyle.primarySliderDotColor;
+            }
         }
-        if(scope.component.slider.sliderActiveDotColor==undefined){
-           scope.component.slider.sliderActiveDotColor= themeOverridesStyle.primarySliderActiveDotColor;
-        }
-        if(scope.component.slider.sliderDotColor==undefined){
-           scope.component.slider.sliderDotColor= themeOverridesStyle.primarySliderDotColor;
-        }
+        
 
 
 
