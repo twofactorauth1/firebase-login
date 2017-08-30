@@ -127,6 +127,9 @@ mainApp.controller('CacheCtrl', ['$scope', '$rootScope', 'embeddedSiteDataServic
                         var $anchor = $(':target');
                         if ($anchor.length > 0) {
                             var element = document.getElementById($anchor.attr('id'));
+                            if(!element){
+                                document.getElementById("section_"+$anchor.attr('id'));
+                            }
                             $document.scrollTop(0);
                             $timeout(function() {
                                 $document.scrollToElementAnimated(element, ssbPageSectionService.offset, 1000);
