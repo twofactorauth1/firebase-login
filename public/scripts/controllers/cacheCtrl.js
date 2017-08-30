@@ -123,7 +123,7 @@ mainApp.controller('CacheCtrl', ['$scope', '$rootScope', 'embeddedSiteDataServic
                            element= document.getElementById("component_"+locId);
                         }
                         if (element) {
-                            $document.scrollToElementAnimated(element, ssbPageSectionService.offset, 1000);
+                            $document.scrollToElementAnimated(element, SsbPageSectionService.offset, 1000);
                         }
                     }
                     var adjustAnchor = function(eventType) {
@@ -138,7 +138,7 @@ mainApp.controller('CacheCtrl', ['$scope', '$rootScope', 'embeddedSiteDataServic
                             }
                             $document.scrollTop(0);
                             $timeout(function() {
-                                $document.scrollToElementAnimated(element, ssbPageSectionService.offset, 1000);
+                                $document.scrollToElementAnimated(element, SsbPageSectionService.offset, 1000);
                             }, 200);
                         }
                     };
