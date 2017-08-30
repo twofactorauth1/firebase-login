@@ -337,7 +337,7 @@ var setUpListener = function (app) {
 //-----------------------------------------------------
 //  CLUSTERING
 //-----------------------------------------------------
-if (appConfig.cluster == true) {
+if (appConfig.cluster == true && process.env.NODE_ENV != "testing") {
     var cluster = require('cluster');
     if (cluster.isMaster) {
         var cpuCount = require('os').cpus().length;
@@ -393,31 +393,34 @@ require('./routers/page.server.router');
 //  SETUP Persistent Scheduling
 //-----------------------------------------------------
 if (process.env.NODE_ENV != "testing" && appConfig.runJobs === true) {
-    var drone = require('schedule-drone');
-    var scheduledjobs_manager = require('./scheduledjobs/scheduledjobs_manager');
-    drone.setConfig(
-        {
-            persistence:{
-                type:'mongodb',
-                connectionString:mongoConfig.MONGODB_SINGLE_HOST,
-                eventsCollection: 'scheduled_events',
-                options:{}
+    if(!cluster || cluster.isMaster) {
+        var drone = require('schedule-drone');
+        var scheduledjobs_manager = require('./scheduledjobs/scheduledjobs_manager');
+        drone.setConfig(
+            {
+                persistence:{
+                    type:'mongodb',
+                    connectionString:mongoConfig.MONGODB_SINGLE_HOST,
+                    eventsCollection: 'scheduled_events',
+                    options:{}
+                }
             }
-        }
-    );
-    var scheduler = drone.daemon();
-    $$.u = $$.u || {};
-    $$.u.scheduler = scheduler;
-    log.debug('Started scheduler');
-    scheduledjobs_manager.setScheduler(scheduler);
-    //scheduler.scheduleAndStore( '*/5 * * * * *', 'scheduledJob', {id:'jobId'}, function(){log.debug('callback')});
-    /*
-    scheduler.on('scheduledJob', function(params){
-        log.debug('got these params:', params);
-        scheduledjobs_manager.handleJob(params.id, function(){});
-    });
-    */
-    scheduledjobs_manager.startup(function(){log.debug('scheduledjobs_manager initialized')});
+        );
+        var scheduler = drone.daemon();
+        $$.u = $$.u || {};
+        $$.u.scheduler = scheduler;
+        log.debug('Started scheduler');
+        scheduledjobs_manager.setScheduler(scheduler);
+        //scheduler.scheduleAndStore( '*/5 * * * * *', 'scheduledJob', {id:'jobId'}, function(){log.debug('callback')});
+        /*
+         scheduler.on('scheduledJob', function(params){
+         log.debug('got these params:', params);
+         scheduledjobs_manager.handleJob(params.id, function(){});
+         });
+         */
+        scheduledjobs_manager.startup(function(){log.debug('scheduledjobs_manager initialized')});
+    }
+
 } else {
     log.debug('Skipping scheduler');
 }
@@ -433,9 +436,14 @@ requirejs('libs_misc/handlebars/indigenoushelpers');
 //  SETUP ANALYTICS PROCESSING JOB
 //-----------------------------------------------------
 if (process.env.NODE_ENV != "testing") {//disables the collator for unit tests
-    var analyticsTimerConfig = require('./configs/analyticstimer.config');
-    log.info('Starting analytics job to run every ' + analyticsTimerConfig.ANALYTICS_JOB_MS + 'ms');
-    analyticsTimerConfig.startJob();
+    if(!cluster || cluster.isMaster) {
+        var analyticsTimerConfig = require('./configs/analyticstimer.config');
+        log.info('Starting analytics job to run every ' + analyticsTimerConfig.ANALYTICS_JOB_MS + 'ms');
+        analyticsTimerConfig.startJob();
+    } else {
+        log.debug('Worker skipping analytics jobs');
+    }
+
 }
 //-----------------------------------------------------
 //  CATCH UNCAUGHT EXCEPTIONS - Log them and email the error

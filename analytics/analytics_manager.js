@@ -20,6 +20,10 @@ var orderDao = require('../orders/dao/order.dao');
 var emailMessageManager = require('../emailmessages/emailMessageManager');
 var accountManager = require('../accounts/account.manager');
 var geoiputil = require('../utils/geoiputil');
+require('./model/session_event');
+require('./model/page_event');
+require('./model/ping_event');
+
 const not404s=[ "/404",
              "/apple-touch-icon.png",
              "/apple-touch-icon-120x120.png",

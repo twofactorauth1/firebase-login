@@ -4274,7 +4274,7 @@ module.exports = {
                 var prefix = protocol + '://' + host + '/';
                 var entryAry = [];
                 _.each(pages, function(page){
-                    if(!page.get('hideFromVisitors') && !page.get('hideFromSearchEngines')) {//TODO: check these props
+                    if(!page.get('hideFromVisitors') && page.get('showinseo') !== false) {//TODO: check these props
                         var entry = '<url><loc>' + prefix;
                         if(page.get('handle') === 'index') {
                             entry+= '</loc>';
