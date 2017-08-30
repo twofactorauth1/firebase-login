@@ -116,6 +116,9 @@ mainApp.controller('CacheCtrl', ['$scope', '$rootScope', 'embeddedSiteDataServic
                     var locId = $location.$$hash;
                     if (locId) {
                         var element = document.getElementById(locId);
+                        if(!element){
+                            document.getElementById("section_"+locId);
+                        }
                         if (element) {
                             $document.scrollToElementAnimated(element, ssbPageSectionService.offset, 1000);
                         }
