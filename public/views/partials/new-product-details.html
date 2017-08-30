@@ -66,7 +66,7 @@
                     </div>
                     
 
-                    <p ng-if="selectedProduct.description" class="description product-description margin-top-20 visible-xs text-adjust" ng-attr-style="{{descriptionStyle(component.formSettings)}}" ng-tt-more-label="(More details)" ng-tt-less-label="Hide">{{selectedProduct.description}}</p>
+                    <p ng-if="selectedProduct.description" class="description product-description margin-top-20 visible-xs text-adjust" ng-attr-style="{{descriptionStyle(component.formSettings)}}">{{selectedProduct.description}}</p>
 
                     <div class="clearfix"></div>
                     <div class="actions margin-top-20 visible-xs" ng-style="{'font-family': component.formSettings.buttonFontFamily}">
@@ -97,9 +97,13 @@
                                 </div>
                             </a>
                     </div>
-                    <p ng-if="selectedProduct.description" class="description product-description margin-top-20 hidden-xs" ng-attr-style="{{descriptionStyle(component.formSettings)}}"  ng-text-truncate="selectedProduct.description" ng-tt-chars-threshold="500" ng-tt-more-label="(More details)" ng-tt-less-label="Hide"></p>
-                   
-
+                    
+                    <p ng-if="selectedProduct.description && !detailedDescription" class="description product-description margin-top-20 hidden-xs" ng-attr-style="{{descriptionStyle(component.formSettings)}}">{{selectedProduct.description | characters : 500 : true}}
+                        <span class="btn-link ngTruncateToggleText ssb-theme-btn" ng-if="selectedProduct.description.length > 500" ng-click="showFullContent()"> (More details)
+                        </span>
+                    </p>
+                    <p ng-if="selectedProduct.description && detailedDescription" class="description product-description margin-top-20 hidden-xs" ng-attr-style="{{descriptionStyle(component.formSettings)}}">{{selectedProduct.description}}
+                    </p>
                 </div>
             </div>    
           <div class="clearfix"></div>
