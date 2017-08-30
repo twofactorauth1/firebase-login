@@ -116,17 +116,29 @@ mainApp.controller('CacheCtrl', ['$scope', '$rootScope', 'embeddedSiteDataServic
                     var locId = $location.$$hash;
                     if (locId) {
                         var element = document.getElementById(locId);
+                        if(!element){
+                           element= document.getElementById("section_"+locId);
+                        }
+                         if(!element){
+                           element= document.getElementById("component_"+locId);
+                        }
                         if (element) {
-                            $document.scrollToElementAnimated(element, ssbPageSectionService.offset, 1000);
+                            $document.scrollToElementAnimated(element, SsbPageSectionService.offset, 1000);
                         }
                     }
                     var adjustAnchor = function(eventType) {
                         var $anchor = $(':target');
                         if ($anchor.length > 0) {
                             var element = document.getElementById($anchor.attr('id'));
+                            if(!element){
+                                element=document.getElementById("section_"+$anchor.attr('id'));
+                            }
+                            if(!element){
+                                element=document.getElementById("component_"+$anchor.attr('id'));
+                            }
                             $document.scrollTop(0);
                             $timeout(function() {
-                                $document.scrollToElementAnimated(element, ssbPageSectionService.offset, 1000);
+                                $document.scrollToElementAnimated(element, SsbPageSectionService.offset, 1000);
                             }, 200);
                         }
                     };

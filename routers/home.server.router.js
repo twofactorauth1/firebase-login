@@ -663,9 +663,16 @@ _.extend(router.prototype, BaseRouter.prototype, {
 
         var accountId = self.unAuthAccountId(req);
         self.log.debug(accountId, null, '>> generateSiteMap');
-        var protocol = req.protocol;
+        var protocol = 'http';
+        if(req.headers['x-forwarded-proto'] && req.headers['x-forwarded-proto']==='https') {
+            protocol = 'https';
+        } else {
+            self.log.debug(accountId, null, 'headers:', req.headers);
+        }
         var host = req.host;
-        var subdomains = req.subdomains.join('.');
+        if(req.headers['x-host']) {
+            host = req.headers['x-host'];
+        }
         var combinedHost = host;
         if(req.port) {
             combinedHost += ':' + req.port;
