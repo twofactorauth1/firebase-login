@@ -225,6 +225,7 @@ _.extend(router.prototype, BaseRouter.prototype, {
 
     showAngularAdmin: function(req,resp) {
         var accountId = this.accountId(req);
+        //console.log('showAngularAdmin', accountId);
         if (accountId > 0) {
             new AngularAdminView(req,resp).show();
         } else {
