@@ -117,7 +117,10 @@ mainApp.controller('CacheCtrl', ['$scope', '$rootScope', 'embeddedSiteDataServic
                     if (locId) {
                         var element = document.getElementById(locId);
                         if(!element){
-                            document.getElementById("section_"+locId);
+                           element= document.getElementById("section_"+locId);
+                        }
+                         if(!element){
+                           element= document.getElementById("component_"+locId);
                         }
                         if (element) {
                             $document.scrollToElementAnimated(element, ssbPageSectionService.offset, 1000);
@@ -128,7 +131,10 @@ mainApp.controller('CacheCtrl', ['$scope', '$rootScope', 'embeddedSiteDataServic
                         if ($anchor.length > 0) {
                             var element = document.getElementById($anchor.attr('id'));
                             if(!element){
-                                document.getElementById("section_"+$anchor.attr('id'));
+                                element=document.getElementById("section_"+$anchor.attr('id'));
+                            }
+                            if(!element){
+                                element=document.getElementById("component_"+$anchor.attr('id'));
                             }
                             $document.scrollTop(0);
                             $timeout(function() {
