@@ -579,6 +579,12 @@ module.exports = function(grunt) {
         dbcopyutil.updateFooterTextYear('2016', '2017', done);
     });
 
+    grunt.registerTask('updateThumbnailImages', 'A task to update existing thumbnail slider images', function(){
+        var done = this.async();
+
+        dbcopyutil.updateThumbnailSliderImages(done);
+    });
+
 
     grunt.registerTask('copyAccount',  ['prompt:copyAccount', 'doCopyAccount']);
 
