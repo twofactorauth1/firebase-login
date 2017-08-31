@@ -13,8 +13,8 @@ app.controller('MediaModalCtrl', ['$scope', 'mediaManagerConstant', '$injector',
     asset: null
   };
   $scope.paging ={
-    recordPerPage: mediaManagerConstant.numberOfRowsPerPage 
-  } 
+    recordPerPage: mediaManagerConstant.numberOfRowsPerPage
+  }
   $scope.numberOfPages = numberOfPages;
   $scope.selectPage = selectPage;
   $scope.refreshPaging = refreshPaging;
@@ -199,7 +199,7 @@ app.controller('MediaModalCtrl', ['$scope', 'mediaManagerConstant', '$injector',
           originalAsset.checked = true;
           asset.checked = true;
           $scope.m.singleSelect(asset);
-          ToasterService.showWithTitle('success', 'Replacement image has been uploaded', 'By default, images are cached by the browser for an hour. Flush your browser cache to see the latest media (or wait)');
+          ToasterService.showWithTitle('success', 'Replacement image has been uploaded', 'By default, images are cached by the browser for 24 hours. Flush your browser cache to see the latest media (or wait)');
         }
     }
     else{
@@ -590,7 +590,7 @@ app.controller('MediaModalCtrl', ['$scope', 'mediaManagerConstant', '$injector',
     })
 
     function refreshPaging(limit){
-        $scope.pagingParams.limit = limit; 
+        $scope.pagingParams.limit = limit;
         loadDefaultsForPaging();
         loadAssets();
     }
