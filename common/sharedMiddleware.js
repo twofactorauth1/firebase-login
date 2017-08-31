@@ -43,7 +43,10 @@ module.exports = {
     _setup: function(req, resp, next, checkForTrial) {
         var self = this;
         var key = 'host_' + req.get('host');
-        self._nocache(resp);
+        if(!checkForTrial) {
+            self._nocache(resp);
+        }
+
         $$.g.cache.get(key, null, null, null, function(err, value){
             if(value) {
                 logger.trace('From cache-- ' + key + ' -> accountId:' + value.id());
