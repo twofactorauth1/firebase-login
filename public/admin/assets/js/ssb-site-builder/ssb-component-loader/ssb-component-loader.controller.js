@@ -11,11 +11,6 @@ function ssbComponentLoaderController($rootScope, $scope, $attrs, $filter) {
     var vm = this;
 
     vm.init = init;
-    vm.hover = hover;
-
-    function hover(e) {
-
-    }
 
     function init(element) {
     	vm.element = element;
