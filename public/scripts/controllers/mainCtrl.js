@@ -1,7 +1,7 @@
 'use strict';
 
-mainApp.controller('MainCtrl', ['$scope', 'websiteService', 'accountService', 'themeService', 'pagesService', 'ENV', '$location', '$document', '$anchorScroll', '$window', 'userService',
-    function ($scope, websiteService, accountService, themeService, pagesService, ENV, $location, $document, $anchorScroll, $window, userService) {
+mainApp.controller('MainCtrl', ['$scope', 'ENV', '$document', '$window',
+    function ($scope, ENV, $document, $window) {
 
         var account, pages, website, that = this;
         that.segmentIOWriteKey = ENV.segmentKey;
@@ -13,10 +13,6 @@ mainApp.controller('MainCtrl', ['$scope', 'websiteService', 'accountService', 't
             $scope.websiteId = value;
         };
 
-        var height = Math.max(body.scrollHeight, body.offsetHeight,
-            html.clientHeight, html.scrollHeight, html.offsetHeight);
-        $scope.minHeight = height;
-
         $scope.isSection = function (value) {
             if (value == 'section') {
                 return true;
@@ -24,14 +20,6 @@ mainApp.controller('MainCtrl', ['$scope', 'websiteService', 'accountService', 't
                 return false;
             }
         };
-
-        $scope.showAdminBar = false;
-
-        userService.isAuthenticatedSession(function (data) {
-            if (data === true) {
-                $scope.showAdminBar = true;
-            }
-        });
 
         /*
          * Setup some org specific settings
