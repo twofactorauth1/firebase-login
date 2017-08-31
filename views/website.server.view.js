@@ -366,25 +366,45 @@ _.extend(view.prototype, BaseView.prototype, {
                         });
                         //self.log.debug('components:', components);
                         var map = {};
-                        async.eachSeries(components, function(component, cb){
+                        var fontMap= {};
+                        async.eachSeries(components, function(component, _cb){
                             if(component) {
                                 var obj = {};
                                 obj.id = '/components/' + component.type + '_v' + component.version + '.html';
+                                if(component.text) {
+                                    //var fontRegexp = /.*font-family: \'([a-zA-Z\s]+)\'.*/g;
+                                    var fontRegexp = /font-family: ([a-zA-Z\s,\'\-]+)[^;]*/g;
+                                    var font = fontRegexp.exec(component.text);
+                                    if(font && font.length > 1) {
+                                        for(var i=1; i<font.length; i+=3) {
+                                            console.log('matched:', font[i]);
+                                            var fontAry = font[i].split(',');
+                                            _.each(fontAry, function(splitFont){
+                                                splitFont = splitFont.trim().replace('\'', '').replace('\'', '');
+                                                fontMap[splitFont] = splitFont;
+                                            });
+                                        }
+
+                                    }
+
+                                }
                                 if(map[obj.id]) {
-                                    cb(null);
+                                    _cb(null);
                                 } else {
                                     fs.readFile('public' + obj.id, 'utf8', function(err, html){
                                         obj.data = html;
                                         data.templateIncludes.push(obj);
                                         map[obj.id] = obj;
-                                        cb();
+                                        _cb();
                                     });
                                 }
                             } else {
-                                cb();
+                                _cb();
                             }
 
                         }, function done(err){
+                            self.log.debug('The following fonts are used:', fontMap);
+                            data.fontMap = fontMap;
                             cb(null, webpageData, pages);
                         });
 
