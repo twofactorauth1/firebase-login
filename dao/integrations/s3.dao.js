@@ -116,7 +116,7 @@ var dao = {
             var s3 = new AWS.S3({params: {Bucket: bucket}});
 
             var params = {Key: key, Body: data, ContentType:type,
-            CacheControl: (isCache?"max-age=3600":'no-cache')};
+            CacheControl: (isCache?"max-age=86400":'no-cache')};
             //console.dir(params);
             s3.putObject(params, function (err, data) {
                 if (!err) {
@@ -144,7 +144,7 @@ var dao = {
             Bucket: bucket ,
             CopySource: bucket + "/" + key,
             Key: key,
-            CacheControl: (isCache?"max-age=3600":'no-cache'),
+            CacheControl: (isCache?"max-age=86400":'no-cache'),
             ContentType: file.type,
             MetadataDirective:'REPLACE'
         };
@@ -171,7 +171,7 @@ var dao = {
             Bucket: destBucket,
             CopySource: sourceBucket + "/" + sourceKey,
             Key: destKey,
-            CacheControl:"max-age=3600",
+            CacheControl:"max-age=86400",
             ContentType: contentType
         };
         s3.copyObject(params, function(err, value){
