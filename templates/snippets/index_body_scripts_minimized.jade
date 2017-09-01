@@ -16,9 +16,6 @@ script.
 
 | !{website.resources.userScripts.global.sanitized}
 
-if environment === 'local' || environment === 'test'
-
-else
 // - Google Analytics
 script.
     window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
@@ -27,17 +24,14 @@ script.
 script(async src='https://www.google-analytics.com/analytics.js')
 // - End Google Anlytics
 
-if environment === 'local' || environment === 'test'
+// - TrackJS
+script(type="text/javascript").
+    window._trackJs = {  // Just ensure the global variable is initialized before the tracker script loads.
+        token: '8ff8967db42447d4a9967c5fc68938ef'
+    };
 
-else
-    // - TrackJS
-    script(type="text/javascript").
-        window._trackJs = {  // Just ensure the global variable is initialized before the tracker script loads.
-            token: '8ff8967db42447d4a9967c5fc68938ef'
-        };
-
-    script(src="https://cdn.trackjs.com/releases/current/tracker.js")
-    // - End TrackJS
+script(src="https://cdn.trackjs.com/releases/current/tracker.js")
+// - End TrackJS
 
 external-scripts(class="external-scripts")
 user-scripts(class="user-scripts" handle="#{currentPageHandle}")
