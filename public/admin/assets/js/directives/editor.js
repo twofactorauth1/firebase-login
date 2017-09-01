@@ -27,7 +27,7 @@ app.directive("elem", function($rootScope, $timeout, $compile, SimpleSiteBuilder
                                 '</div>'+
                                 '<div ng-show="vm.showHide()" class="editable element-wrap" ng-bind-html="ngModel | unsafe"></div>'+
                                 '<div ng-if="!vm.showHide()" class="text-center">HIDDEN</div>'+
-                        '</div>'
+                        '</div>'+
                     '</div>';
 
         var blogTemplate =
@@ -57,7 +57,7 @@ app.directive("elem", function($rootScope, $timeout, $compile, SimpleSiteBuilder
         }
         
         if (attrs.ssbBlogEditor || attrs.broadcastMessageEditor) {
-            return blogTemplate
+            return blogTemplate;
         }
 
         if (attrs.helpTopics) {
@@ -102,7 +102,7 @@ app.directive("elem", function($rootScope, $timeout, $compile, SimpleSiteBuilder
                 ngModel.$setViewValue(html);
                 scope.compileEditorElements(editor);
             });
-        }, 500)
+        }, 500);
 
         scope.compileEditorElements = function(editor, initial) {
 
@@ -168,9 +168,9 @@ app.directive("elem", function($rootScope, $timeout, $compile, SimpleSiteBuilder
                         else if (attrs.ssbBlogEditor) {
                             return 'ssbBlogEditor';
                         } else if (attrs.ssbEmailEditor) {
-                            return 'ssbEmailEditor'
+                            return 'ssbEmailEditor';
                         } else {
-                            return
+                            return ;
                         }
                     })()
                 );
@@ -326,7 +326,7 @@ app.directive("elem", function($rootScope, $timeout, $compile, SimpleSiteBuilder
                                 mirror.on('change', function() {
                                     $timeout(function() {
                                         scope.updateFroalaContent(editor, editor.codeView.get());
-                                    }, 0)
+                                    }, 0);
                                 });
                             }
                         }
@@ -359,7 +359,7 @@ app.directive("elem", function($rootScope, $timeout, $compile, SimpleSiteBuilder
                                         if (!element.parents('span.fr-video.fr-dvb').length) {
                                             element.wrap( "<span class='fr-video fr-dvb' />");
                                         }
-                                    })
+                                    });
                                 }
                             
                         }
@@ -425,7 +425,7 @@ app.directive("elem", function($rootScope, $timeout, $compile, SimpleSiteBuilder
                                 editor.opts.button.scope().vm.elementData.txtcolor = val;
                             }
                         }
-                    })
+                    });
                     // .on('froalaEditor.video.inserted', function (e, editor, $video) {
                     //       var videoSource = $video.contents().get(0).src;
                     //       $video.html('<div class="embed-responsive embed-responsive-16by9"><iframe class="embed-responsive-item" src="' + videoSource +'" frameborder="0" allowfullscreen></iframe></div>');
@@ -439,7 +439,7 @@ app.directive("elem", function($rootScope, $timeout, $compile, SimpleSiteBuilder
                             // prevent it if cursor is in the middle of the button
                             if ($window.getSelection().focusOffset !== 0 && $window.getSelection().focusOffset !== $window.getSelection().focusNode.length) {
                                 e.preventDefault();
-                                return false
+                                return false;
                             }
                         }
                         else{
@@ -452,5 +452,5 @@ app.directive("elem", function($rootScope, $timeout, $compile, SimpleSiteBuilder
             });
       }
     }
-  }
+  };
 });

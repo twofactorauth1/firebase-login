@@ -48,8 +48,8 @@ app.directive('navigationComponent', ['websiteService', 'accountService', '$time
                         li.parents("section").removeClass("overflow_visible");
                     }
                 }
-            }
-            $scope.$watch(function() { return SsbPageSectionService.offset }, function(offset) {
+            };
+            $scope.$watch(function() { return SsbPageSectionService.offset; }, function(offset) {
                 $scope.scrollOffsetTop = offset;
             }, true);
 
@@ -71,8 +71,8 @@ app.directive('navigationComponent', ['websiteService', 'accountService', '$time
                         }
                     }
                 }
-            }
+            };
 
         }
-    }
+    };
 }]);

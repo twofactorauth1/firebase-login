@@ -24,14 +24,12 @@ angular.module('mainApp').directive("elem", function ($timeout) {
 
         scope.component= scope.$parent.component;
         $timeout(function() {
-            if(!element.hasClass("ssb-text-o-desktop")
-               && element.children().hasClass("ssb-text-o-desktop")){
-                element.addClass("ssb-text-o-desktop")
+            if(!element.hasClass("ssb-text-o-desktop") && element.children().hasClass("ssb-text-o-desktop")){
+                element.addClass("ssb-text-o-desktop");
                 element.parents(".ssb-text-only").addClass("ssb-text-o-desktop");
             }
-            if(!element.hasClass("ssb-text-o-moblie")
-               && element.children().hasClass("ssb-text-o-moblie")){
-                element.addClass("ssb-text-o-moblie")
+            if(!element.hasClass("ssb-text-o-moblie") && element.children().hasClass("ssb-text-o-moblie")){
+                element.addClass("ssb-text-o-moblie");
                 element.parents(".ssb-text-only").addClass("ssb-text-o-moblie");
             }
         }, 0);
@@ -66,7 +64,7 @@ angular.module('mainApp').directive("elem", function ($timeout) {
                     return String(string).replace(/(&amp;|&lt;|&gt;|&quot;|&#39;|&#x2f;|&apos;)/g, function(s) {
                         return unescapeMap[s] || s;
                     });
-                }
+                };
 
                 var modelString = scope.ngModel.replace(/\[script /g, '<script ')
                     .replace(/\]\[\/script\]/g, '></script>')
@@ -75,7 +73,7 @@ angular.module('mainApp').directive("elem", function ($timeout) {
 
                 scope.ngModel = unescapeHTML(modelString);
             } else if (scope.ngModel.indexOf('&lt;!-- more --&gt;') !== -1) {
-                scope.ngModel = scope.ngModel.replace(/&lt;!-- more --&gt;/, '')
+                scope.ngModel = scope.ngModel.replace(/&lt;!-- more --&gt;/, '');
             }
         }
 
