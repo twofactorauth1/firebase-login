@@ -354,3 +354,8 @@ mainApp.constant('formValidations', {
     'zip': /(^\d{5}$)|(^\d{5}-\d{4}$)/,
     'extension': /^[0-9]*$/
 });
+
+mainApp.config(['$compileProvider', function ($compileProvider) {
+    $compileProvider.debugInfoEnabled(false);
+}]);
+
