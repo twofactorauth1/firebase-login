@@ -8,7 +8,7 @@ function ssbCustomComponentLoader($compile) {
   return {
     restrict: 'E',
     templateUrl: function(element, attrs, scope) {
-      return '/admin/assets/js/ssb-site-builder/ssb-components/ssb-'+ attrs.layout + '/ssb-' + attrs.layout + '.layout.v' + attrs.version+ '.html';
+      return '/admin/assets/js/ssb-site-builder/ssb-components/ssb-nav-hero/ssb-nav-hero.layout.v' + attrs.version+ '.html';
     }
   }
 }
