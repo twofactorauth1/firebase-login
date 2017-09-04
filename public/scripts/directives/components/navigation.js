@@ -46,9 +46,9 @@ app.directive('navigationComponent', ['websiteService', 'accountService', '$time
                     }
                 }
             }
-            $scope.$watch(function() { return SsbPageSectionService.offset }, function(offset) {
+            $scope.$watchCollection(function() { return SsbPageSectionService.offset }, function(offset) {
                 $scope.scrollOffsetTop = offset;
-            }, true);
+            });
 
             var pageList = {};
             if(window.indigenous && window.indigenous.precache && window.indigenous.precache.siteData && window.indigenous.precache.siteData.pages){
