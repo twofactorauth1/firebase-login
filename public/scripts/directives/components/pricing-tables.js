@@ -1,8 +1,11 @@
+/*global app */
+/*jslint unparam:true*/
 app.directive('pricingTablesComponent', function () {
-  return {
-    scope: {
-      component: '='
-    },
-    templateUrl: '/components/component-wrap.html'
-  }
+	'use strict';
+	return {
+		scope: {
+			component: '='
+		},
+		templateUrl: '/components/component-wrap.html'
+	};
 });
