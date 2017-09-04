@@ -8,10 +8,7 @@ app.directive('navigationComponent', ['websiteService', 'accountService', '$time
             $scope.navbarId = _.random(0, 1000);
             $scope.website = {};
             if(window.indigenous && window.indigenous.precache && window.indigenous.precache.siteData && window.indigenous.precache.siteData.linkList){
-                $scope.website.linkLists = window.indigenous.precache.siteData.linkList;
-                $timeout(function () {
-                    $(window).trigger('resize');
-                }, 0);
+                $scope.website.linkLists = window.indigenous.precache.siteData.linkList;               
             }
             
             if (!angular.isDefined($scope.component.shownavbox)) {
