@@ -1,24 +1,23 @@
-mainApp.filter('selectedTags', function() {
-    return function(products, tags) {
-        if(products)
-        {
-            return products.filter(function(product) {
-                if(!tags || tags.length === 0)
-                {
-                    if(product.status === 'active')
-                        return true;
-                    else
-                        return false;
-                }
-                else{
-                    for (var i in product.tags) {
-                    if (product.status === 'active' && tags.indexOf(product.tags[i]) != -1) {
-                        return true;
-                    }
-                }
-                return false;
-            }                
-            });
-        }
-    };
+/*global mainApp */
+mainApp.filter('selectedTags', function () {
+	'use strict';
+	return function (products, tags) {
+		if (products) {
+			return products.filter(function (product) {
+				if (!tags || tags.length === 0) {
+					return (product.status === 'active');
+				} else {
+					var i = 0;
+					if (product.status === 'active') {
+						for (i = 0; i < product.tags.length; i++) {
+							if (tags.indexOf(product.tags[i]) !== -1) {
+								return true;
+							}
+						}
+					}
+					return false;
+				}
+			});
+		}
+	};
 });
