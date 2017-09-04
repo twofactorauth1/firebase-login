@@ -1,7 +1,7 @@
-'use strict';
-/*global mainApp*/
+/*global mainApp,console,angular,document */
 mainApp.controller('PreviewCtrl', ['$scope', '$rootScope', 'previewPagesService', 'SsbPageSectionService', '$window', '$location', '$document', '$timeout',
     function ($scope, $rootScope, previewPagesService, SsbPageSectionService, $window, $location, $document, $timeout) {
+		'use strict';
         $scope.isEditing = false;
 
         console.log('preview ctrl');
@@ -21,7 +21,7 @@ mainApp.controller('PreviewCtrl', ['$scope', '$rootScope', 'previewPagesService'
             if ($scope.components && $scope.components.length > 0) {
                 $scope.components.forEach(function (value, index) {
                     if (value && value.type === 'masthead' && value._id == masthead_id) {
-                        if (index != 0 && $scope.components[index - 1].type == "navigation") {
+                        if (index !== 0 && $scope.components[index - 1].type == "navigation") {
                             data.allowUndernav = true;
                             data.navComponent =  $scope.components[index - 1];
                         } else {
@@ -31,13 +31,10 @@ mainApp.controller('PreviewCtrl', ['$scope', '$rootScope', 'previewPagesService'
                 });
             } else if ($scope.sections && $scope.sections.length > 0) {
                 $scope.sections.forEach(function (sectionValue, sectionIndex) {
-                    sectionValue.components.forEach(function (value, index) {
+                    sectionValue.components.forEach(function (value) {
                         if (value && value.type === 'masthead' && value._id == masthead_id && $scope.sections[sectionIndex - 1]) {
                             var navComponent = _.findWhere($scope.sections[sectionIndex - 1].components, { type: 'navigation' });
-                            if (
-                                sectionIndex != 0 &&
-                                navComponent !== undefined
-                            ) {
+                            if (sectionIndex !== 0 && navComponent !== undefined) {
                                 data.allowUndernav = true;
                                 data.navComponent = navComponent;
                             } else {
@@ -75,7 +72,7 @@ mainApp.controller('PreviewCtrl', ['$scope', '$rootScope', 'previewPagesService'
                 }
 
             } else {
-                $timeout(function() {
+                $timeout(function () {
                     SsbPageSectionService.setSectionOffset(0);
                     $scope.page = data;
                     $rootScope.title = $scope.page.title;
@@ -85,15 +82,14 @@ mainApp.controller('PreviewCtrl', ['$scope', '$rootScope', 'previewPagesService'
                     angular.element(document).ready(function () {
                         $document.scrollTop(0);
                         $timeout(function () {
-                            var locId = $location.$$hash;
-                            if (locId) {
-                                var element = document.getElementById(locId);
+                            if ($location.$$hash) {
+                                var element = document.getElementById($location.$$hash);
                                 if (element) {
                                     $document.scrollToElementAnimated(element, 0, 1000);
                                 }
                             }
                         }, 3000);
-                    })
+                    });
                 }, 500);
                 
             }
