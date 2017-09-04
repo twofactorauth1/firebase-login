@@ -7,7 +7,7 @@ app.directive('footerComponent', ['$window', 'websiteService', '$location', func
 			component: '='
 		},
 		templateUrl: '/components/component-wrap.html',
-		link: function (scope, element, attrs) {
+		link: function (scope, element) {
 
 			scope.orgId = $window.indigenous.orgId;
 			scope.component.spacing = scope.$parent.defaultSpacings;
