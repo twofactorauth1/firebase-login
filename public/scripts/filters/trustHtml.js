@@ -1,1 +1,5 @@
-mainApp.filter('unsafe', function($sce) { return $sce.trustAsHtml; });
+/*global mainApp */
+mainApp.filter('unsafe', function ($sce) {
+	'use strict';
+	return $sce.trustAsHtml;
+});
