@@ -115,16 +115,28 @@ mainApp.controller('CacheCtrl', ['$scope', '$rootScope', 'embeddedSiteDataServic
 				$document.scrollTop(0);
 				$timeout(function () {
 					if ($location.$$hash) {
-						var element = document.getElementById($location.$$hash);
-						if (!element) {
-							element = document.getElementById("section_" + $location.$$hash);
-						}
-						if (!element) {
-							element = document.getElementById("component_" + $location.$$hash);
-						}
-						if (element) {
-							$document.scrollToElementAnimated(element, SsbPageSectionService.offset, 1000);
-						}
+						
+						var unbindWatcher = $scope.$watch(function() {
+                			return document.getElementById($location.$$hash) 
+                			|| document.getElementById("section_" + $location.$$hash) 
+                			|| document.getElementById("component_" + $location.$$hash)
+		            	}, function(newValue, oldValue) {
+			                if (newValue && !angular.equals(newValue, oldValue)) {
+			                    var element = document.getElementById($location.$$hash);
+								if (!element) {
+									element = document.getElementById("section_" + $location.$$hash);
+								}
+								if (!element) {
+									element = document.getElementById("component_" + $location.$$hash);
+								}
+								if (element) {
+									$timeout(function() {
+			                        	$document.scrollToElementAnimated(element, SsbPageSectionService.offset, 1000);
+			                    	}, 1000);
+								}
+			                    unbindWatcher();
+			                }
+		            	});
 					}
 					$(window).on('hashchange', function () {
 						var $anchor = $(':target');
@@ -142,7 +154,7 @@ mainApp.controller('CacheCtrl', ['$scope', '$rootScope', 'embeddedSiteDataServic
 							}, 200);
 						}
 					});
-				}, 5000);
+				}, 0);
 			});
 
 			/**
