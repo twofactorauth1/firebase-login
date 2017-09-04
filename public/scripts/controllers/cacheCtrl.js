@@ -122,19 +122,20 @@ mainApp.controller('CacheCtrl', ['$scope', '$rootScope', 'embeddedSiteDataServic
                 			|| document.getElementById("component_" + $location.$$hash)
 		            	}, function(newValue, oldValue) {
 			                if (newValue && !angular.equals(newValue, oldValue)) {
-			                    var element = document.getElementById($location.$$hash);
-								if (!element) {
-									element = document.getElementById("section_" + $location.$$hash);
-								}
-								if (!element) {
-									element = document.getElementById("component_" + $location.$$hash);
-								}
-								if (element) {
-									$timeout(function() {
-			                        	$document.scrollToElementAnimated(element, SsbPageSectionService.offset, 1000);
-			                    	}, 1000);
-								}
-			                    unbindWatcher();
+			                	unbindWatcher();
+			                	$timeout(function() {
+			                		var element = document.getElementById($location.$$hash);
+									if (!element) {
+										element = document.getElementById("section_" + $location.$$hash);
+									}
+									if (!element) {
+										element = document.getElementById("component_" + $location.$$hash);
+									}
+									if (element) {									
+				                       $document.scrollToElementAnimated(element, SsbPageSectionService.offset, 1000);
+									}
+
+			                	}, 1000);
 			                }
 		            	});
 					}
