@@ -1,22 +1,15 @@
-(function(){
+/*global app, console */
+/*jslint unparam:true*/
+(function () {
+	'use strict';
+	app.controller('SiteBuilderImageComponentController',
+		function () {
+			console.info('ssb-image directive init...');
+			var vm = this;
 
-app.controller('SiteBuilderImageComponentController', ssbImageComponentController);
-
-ssbImageComponentController.$inject = ['$scope', '$attrs', '$filter', '$transclude'];
-/* @ngInject */
-function ssbImageComponentController($scope, $attrs, $filter, $transclude) {
-
-  console.info('ssb-image directive init...')
-
-  var vm = this;
-
-  vm.init = init;
-
-  function init(element) {
-  	vm.element = element;
-  }
-
-}
-
-
-})();
+			function init(element) {
+				vm.element = element;
+			}
+			vm.init = init;
+		});
+}());
