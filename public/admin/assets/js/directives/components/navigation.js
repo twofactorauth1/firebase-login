@@ -57,10 +57,10 @@ app.directive('navigationComponent', ['WebsiteService', 'AccountService', '$time
           }
       }
       $scope.currentpage = $scope.$parent.page;
-      $scope.$parent.$watch('vm.state.page', function(page) {
+      $scope.$parent.$watchCollection('vm.state.page', function(page) {
         if(page)
           $scope.currentpage = page;
-      }, true);
+      });
     }
   };
 }]);

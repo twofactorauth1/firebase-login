@@ -242,10 +242,10 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
             }
         }else{
             if(section) {
-                angular.forEach(section.components, function (cmp, index) {
-                    section.components[index].isOverlayActive = false;
-                    section.components[index].isGrid = false;
-                });
+                _.each(section.components, function(component){
+                    component.isOverlayActive = false;
+                    component.isGrid = false;
+                })
             }
         }
         setUpFroalaVideoSize(section);
@@ -258,16 +258,16 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
 
     function resizeSliderImagesToFullHeight(section){
         if(section){
-            var sectionElement = angular.element("#section_"+ section._id)
+            var sectionElement = angular.element("#section_"+ section._id);
             if(sectionElement.hasClass("ssb-page-section-layout-nav-hero-v2")|| sectionElement.hasClass("ssb-page-section-layout-nav-hero-v3") || sectionElement.hasClass("ssb-page-section-layout-nav-hero-v4")){
-                var sectionElementTextHeight=120 // 120 is offset
+                var sectionElementTextHeight = 120;
                 var innerSectionHeaderElement = sectionElement.find(".navigation-header");
                 if(innerSectionHeaderElement.length ){
-                    sectionElementTextHeight+=innerSectionHeaderElement.height()
+                    sectionElementTextHeight+= innerSectionHeaderElement.height();
                 }
                 var innerSectionTextElement = sectionElement.find(".ssb-nav-hero-text");
                 if(innerSectionHeaderElement.length ){
-                    sectionElementTextHeight+=innerSectionTextElement.height()
+                    sectionElementTextHeight+= innerSectionTextElement.height()
                 }
                 if(sectionElement.hasClass("ssb-page-section-layout-nav-hero-v3")){
                      var innerSectionText2Element = sectionElement.find(".ssb-nav-hero-text-full-wdith");
@@ -277,24 +277,6 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
                 }
                 sectionElement.find(".single-testimonial .component-slider-image img").css("min-height",  sectionElementTextHeight);
             }
-            // else if(sectionElement.hasClass("ssb-page-section-layout-hero-v7")){
-            //     var sectionElementTextHeight=120;
-            //     var maxTextHeight=0;
-            //     var allText=sectionElement.find(".single-testimonial .testimonial-row");
-            //     if(allText){
-            //         for(var i=0;i<allText.length; i++) {
-            //             if($(allText[i]) && maxTextHeight<$(allText[i]).height()){
-            //                 maxTextHeight=$(allText[i]).height();
-            //             }
-            //         }
-            //         sectionElementTextHeight+=maxTextHeight;
-            //         var images=sectionElement.find(".single-testimonial .component-slider-image img").hide();
-            //         for(var i=0;i<images.length; i++) {
-            //             var imageParent=$(images[i]).parent();
-            //             imageParent.css('background-image', 'url(' + $(images[i])[0].src + ')').css("min-height",  sectionElementTextHeight+120).css("background-size", "cover");
-            //         }
-            //     }
-            // }
         }
     }
 
@@ -344,10 +326,6 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
     function componentClass(component, index) {
         var classString = 'container-fluid ';
 
-        if (vm.section.layout === '1-col') {
-          // classString += 'col-sm-12 ';
-        }
-
         if (vm.section.layout === '2-col') {
           classString += ' col-md-6 ';
         }
@@ -374,7 +352,7 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
            classString += ' square-dot ';
         }
         if(component.hideOnlyMobile){
-            classString += " ssb-component-o-desktop" ;
+            classString += " ssb-component-o-desktop";
         }
         if(component.showOnlyMobile){
             classString += " ssb-component-o-moblie";
@@ -424,13 +402,11 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
 
                 if (index !== undefined && index >= totalCoulmns && !fixedColumn) {
                     classString += " ssb-col-hide";
-                    //actualColumnsIndexes = _.reject(actualColumnsIndexes, function(num){ return num === index; });
                 }
 
 
                 if (vm.section.layoutModifiers.columns.columnsSpacing && !fixedColumn) {
                     if(parseInt(vm.section.layoutModifiers.columns.columnsNum) > 1){
-                        
                         
                         if(actualColumnsIndexes.indexOf(index) == 0){
                             classString += ' ssb-component-layout-columns-spacing-first-column-' + vm.section.layoutModifiers.columns.columnsSpacing + ' ';
@@ -497,8 +473,6 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
                     }
                 }
             }
-
-            // need to add clearFix
         }
 
 
@@ -788,8 +762,7 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
 
     vm.showSection = function(section){
         var _showSection = false;
-        if(section)
-        {
+        if(section){
             _showSection = section.visibility !== false;
             if(section.global && section.hiddenOnPages){
                 var _pageHandle;
@@ -811,14 +784,14 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
 
         $timeout(function() {
             vm.sectionInitDelayDone = true;
-        });
+        }, 0);
         var _isVerticalNav = false;
         var elementIsFirstPosition = vm.index === 0;
-        var isBlogPage = angular.element(".ssb-layout__header_2-col_footer").length;
+        
 
         if (!vm.uiState && vm.section && vm.section.fixedLeftNavigation && elementIsFirstPosition && vm.showSection(vm.section)) {
             _isVerticalNav = true;
-
+            var isBlogPage = angular.element(".ssb-layout__header_2-col_footer").length;
             if(!isBlogPage){
                 if(!angular.element(".ssb-wrap-left-fixed-left-nav").length){
                     angular.element(".ssb-page-section:first").addClass("ssb-wrap-left-fixed-left-nav");
