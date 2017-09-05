@@ -967,5 +967,10 @@ app.constant('JS_REQUIRES', {
     files: [
         '../js/libs/deep-diff/index.js',
     ]
+  },{
+    name: 'wait-for-images',
+    files: [
+        '../js/libs_misc/waitForImages/dist/jquery.waitforimages.min.js'
+    ]
   }]
 });

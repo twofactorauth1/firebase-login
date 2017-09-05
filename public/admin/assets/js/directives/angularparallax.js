@@ -131,7 +131,14 @@ angular.module('angular-parallax', [
                     setPosition();
                 }, 100)
           });
+          // set our initial position - fixes webkit background render bug
+
       })
+
+      angular.element($window).bind('load', function(e) {
+        setPosition();
+        $scope.$apply();
+      });
 
     //  angular.element($window).bind("scroll", setPosition);
      // angular.element($window).biparallaxCallnd("touchmove", setPosition);

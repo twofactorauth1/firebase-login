@@ -11,6 +11,7 @@ app.directive('featureListComponent',["$window", "$timeout", function ($window, 
     link: function (scope, element, attrs, ctrl) {
 
         scope.isEditing = true;
+        scope.listStyles = listStyles;
         scope.features= {
             featureIndex: 0
         }
@@ -91,6 +92,19 @@ app.directive('featureListComponent',["$window", "$timeout", function ($window, 
                 if (field.align === 'center') {
                     styleString += 'margin: 0 auto !important; float:none !important;';
                 }
+            }
+            return styleString;
+        }
+
+        function listStyles(component, isActive){
+            
+            var styleString = ' ';
+            if (isActive) {
+                var color = $(".list-features-"+ component._id +" li.active .fr-view span:not('.fr-marker'):not('.fr-placeholder'):not(:empty):last").css("color");
+                if(!color){
+                    color = $(".list-features-"+ component._id +" li.active").css("color");
+                }
+                styleString += 'border-bottom: 1px solid ' + color + ';';
             }
             return styleString;
         }

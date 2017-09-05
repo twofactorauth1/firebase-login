@@ -23,30 +23,27 @@ script(type="text/javascript").
         window.analytics.page('Index', {accountId:#{account._id}});
     }
 
-
-
-script(src="//ajax.googleapis.com/ajax/libs/webfont/1.5.18/webfont.js")
-
-if account.website.settings.font_family && account.website.settings.font_family_2
-    script(type="text/javascript").
-        WebFont.load({
-          google: {
-                 families: [#{"'"+account.website.settings.font_family+"'"}, #{"'"+account.website.settings.font_family_2+"'"}]
-           }
-        });
-
-
 script(type="text/javascript").
-    WebFont.load({
-        google: {
+  WebFontConfig = {
+     google: {
             families: ['Roboto:200,400,700', 'Roboto Condensed:200,400,700', 'Roboto Slab:200,400,700', 'Oswald:200,400,700', 'Montserrat:200,400,700', 'Droid Serif:200,400,700', 'Open Sans:200,400,700', 'Open Sans Condensed:200,400,700', 'Lato:200,400,700', 'Raleway:200,400,700', 'Quicksand:200,400,700', 'Ubuntu:200,400,700', 'Merriweather:200,400,700', 'Quattrocento:200,400,700', 'Lora:200,400,700', 'Playfair Display:200,400,700', 'Pacifico:200,400,700', 'Satisfy:200,400,700', 'Parisienne:200,400,700', 'Petit Formal Script:200,400,700', 'Indie Flower:200,400,700', 'Shadows Into Light Two:200,400,700', 'Amatic SC:200,400,700', 'Neucha:200,400,700', 'Schoolbell:200,400,700', 'Itim:200,400,700', 'Patrick Hand SC:200,400,700', 'Delius Swash Caps:200,400,700', 'PT Sans:200,400,700', 'Nunito:200,400,700' ]
         }
-    });
-    window.WebFontConfig = {
-        active: function() {
-            sessionStorage.fonts = true;
-        }
-    }
+  }; 
+  if(#{"'"+account.website.settings.font_family+"'"}!='undefined' &&
+     #{"'"+account.website.settings.font_family_2+"'"} !='undefined'){
+    WebFontConfig.google.families.push(#{"'"+account.website.settings.font_family+"'"})
+    WebFontConfig.google.families.push(#{"'"+account.website.settings.font_family_2+"'"})
+  }
+
+  (function() {
+    var wf = document.createElement('script');
+    wf.src = ('https:' == document.location.protocol ? 'https' : 'http') +
+      '://ajax.googleapis.com/ajax/libs/webfont/1.5.18/webfont.js';
+    wf.type = 'text/javascript';
+    wf.async = 'true';
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(wf, s);
+  })();
 
 script(type="text/javascript").
     window.indigenous = window.indigenous || {};
@@ -57,16 +54,19 @@ if (typeof account.website.theme !== 'undefined' && typeof account.website.theme
     style.
         .ssb-theme-#{account.website.theme.handle} {
             color: #{account.website.themeOverrides.styles.primaryTextColor};
-            font-family: !{account.website.themeOverrides.defaultFontStack};
             background-color: #{account.website.themeOverrides.styles.bodyBackgroundColor};
-            font-size: #{account.website.themeOverrides.styles.fontSize}px;
-            font-family: #{account.website.themeOverrides.styles.fontFamily};
-            letter-spacing: #{account.website.themeOverrides.styles.letterSpacing}px;
-            font-weight: #{account.website.themeOverrides.styles.fontWeight};
         }
 
         .ssb-theme-#{account.website.theme.handle} .ssb-section-layout {
             background-color: #{account.website.themeOverrides.styles.bodyBackgroundColor};
+            font-family: !{account.website.themeOverrides.defaultFontStack};
+        }
+
+        .ssb-theme-#{account.website.theme.handle} .ssb-section-layout .ssb-component .element-wrap{
+            font-size: #{account.website.themeOverrides.styles.fontSize}px;
+            font-family: #{account.website.themeOverrides.styles.fontFamily};
+            letter-spacing: #{account.website.themeOverrides.styles.letterSpacing}px;
+            font-weight: #{account.website.themeOverrides.styles.fontWeight};
         }
 
         .ssb-theme-#{account.website.theme.handle} .ssb-navigation a {
@@ -161,9 +161,13 @@ if (typeof account.website.theme !== 'undefined' && typeof account.website.theme
             .ssb-theme-#{account.website.theme.handle} .ssb-theme-paragraph-text {
                 font-size: #{account.website.themeOverrides.styles.paragraphSize};
             }
-           
+
             .ssb-page-layout-row-2-col{
                 max-width: #{account.website.settings.defaultBlogTemplateWidth}!important;
+            }
+
+            .ssb-page-layout-row-2-col .ssb-section-layout{
+                background-color: #{account.website.settings.defaultBlogTemplateBgColor};
             }
         }
 

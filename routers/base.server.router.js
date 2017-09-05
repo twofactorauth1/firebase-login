@@ -357,6 +357,11 @@ _.extend(baseRouter.prototype, {
         var self = this;
         logger.trace('>> isAuth (' + req.originalUrl + ')');
         logger.trace('session accountId: ' + req.session.accountId + ' session sub: ' + req.session.subdomain);
+        logger.trace('session unauthAccountId: ' + req.session.unAuthAccountId);
+        if(!req.session.unAuthAccountId) {
+            req.session.unAuthAccountId = req.session.accountId;
+        }
+
         var path = req.url;
         logger.trace('path:', path);
         var redirectParam = req.query.redirectTo;

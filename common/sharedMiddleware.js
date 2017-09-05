@@ -43,6 +43,10 @@ module.exports = {
     _setup: function(req, resp, next, checkForTrial) {
         var self = this;
         var key = 'host_' + req.get('host');
+        if(!checkForTrial) {
+            self._nocache(resp);
+        }
+
         $$.g.cache.get(key, null, null, null, function(err, value){
             if(value) {
                 logger.trace('From cache-- ' + key + ' -> accountId:' + value.id());
@@ -82,5 +86,11 @@ module.exports = {
         var planID = billing.plan;
         var expired = moment(billing.signupDate).add(billing.trialLength, 'days').isBefore();
         return (planID === DEFAULT_PLAN && expired === true);
-    }
+    },
+
+    _nocache: function(resp) {
+        resp.header('Cache-Control', 'no-cache,no-store');
+        resp.header('Expires', '-1');
+        resp.header('Pragma', 'no-cache');
+    },
 };

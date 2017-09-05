@@ -35,6 +35,12 @@ var dao = {
         self.findOne(query, $$.m.ssb.Page, fn);
     },
 
+    getLatestPage: function(pageName, accountId, fn) {
+        var self = this;
+        var query = {handle: pageName, accountId: accountId, latest: {$ne:false}};
+        self.findOne(query, $$.m.ssb.Page, fn);
+    },
+
     getPublishedPageForWebsite: function(websiteId, pageName, accountId, fn) {
         var self = this;
         var query = {websiteId: websiteId, handle: pageName, accountId: accountId};

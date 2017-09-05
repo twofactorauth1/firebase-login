@@ -21,8 +21,6 @@ var mainApp = angular
         'dm.style',
         'duScroll',
         'mrPageEnterAnimate',
-        'angularMoment',
-        'mgo-angular-wizard',
         'timer',
         'ui',
         'ui.bootstrap',
@@ -38,8 +36,7 @@ var mainApp = angular
         'wu.masonry',
         'slugifier',
         'LocalStorageModule',
-        'ngMap',
-        'ngTextTruncate'
+        'ngMap'
     ])
     .config(['$routeProvider', '$locationProvider', '$httpProvider', 'localStorageServiceProvider', function ($routeProvider, $locationProvider, $httpProvider, localStorageServiceProvider) {
         //$locationProvider.html5Mode(true);

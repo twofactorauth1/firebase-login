@@ -11,11 +11,12 @@
                 <div class="carousel-inner" ng-class="{'hide-scroll': !isEditing}">
                     <div class="item {{$first?'active':''}}" data-ng-repeat="collection in slider">
                         <div class="row">
-                            <div class="col-xs-3 hideText col-xs-width"  data-ng-repeat="image in collection track by $index">
+                            <div class="col-xs-3 hideText col-xs-width thumbnail-image-slider-collection" data-ng-repeat="image in collection track by $index">
                                 <div class="image-wrap {{isEditing ? 'editing' : ''}}">
                                     <div class="imgHeight single-image">
                                         <div class="{{isFirst?'':'thumbnail '}}" style="text-align: center;border: 0;margin-top: 20px;background: none;">
-                                            <img ng-src="{{image.url}}" alt="Image" class="img-responsive hover image-thumbnail" ng-click="addImageFromMedia(component._id, $index, true, $parent.$index)" style="max-height: 100px; margin:{{image.margin}}; " />
+                                            <img ng-if="image.img === undefined" ng-src="{{image.url}}" alt="Image" class="img-responsive hover image-thumbnail" ng-click="addImageFromMedia(component._id, $index, true, $parent.$index)" style="max-height: 100px; margin:{{image.margin}}; " />
+                                            <div ng-if="image.img !== undefined" elem ng-model="image.img"></div>
                                         </div>
                                     </div>
                                     <div ng-if="isEditing" class="delete-single-image center" ng-click="deleteImageFromThumbnail($index, $parent.$parent.$index)">

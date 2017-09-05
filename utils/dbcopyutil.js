@@ -800,6 +800,63 @@ var copyutil = {
             });
         });
     },
+    
+    updateFooterTextYear :function(oldYear, newYear, fn) {
+        var srcURL = mongoConfig.TEST_MONGODB_CONNECT;
+        //var srcURL = mongoConfig.PROD_MONGODB_CONNECT
+        var srcMongo = mongoskin.db(srcURL, {safe: true});
+
+        var sections = srcMongo.collection('sections');
+        var _oldyeartext = 'Copyright &copy; '+ oldYear +'. All Rights reserved.';
+        var _newyeartext = 'Copyright &copy; '+ newYear +'. All Rights reserved.';
+        sections.find({'components.type':'footer', accountId: 0, 'components.text': _oldyeartext}).toArray(function(err, sectionArry){
+            async.each(sectionArry, function(section, cb){
+                if(section.components && section.components.length && section.components[0].type == 'footer' && section.components[0].text == _oldyeartext){
+                    section.components[0].text = _newyeartext;
+                    sections.save(section, function(){
+                        cb();
+                    });
+                }
+                else{
+                    cb();
+                }
+            }, function done(){
+                console.log('done');
+                fn();
+            });
+        });
+    },
+
+    updateThumbnailSliderImages :function(fn) {
+        var srcURL = mongoConfig.TEST_MONGODB_CONNECT;
+        //var srcURL = mongoConfig.PROD_MONGODB_CONNECT
+        var srcMongo = mongoskin.db(srcURL, {safe: true});
+
+        var sections = srcMongo.collection('sections');
+
+        sections.find({'components.type':'thumbnail-slider', accountId: {$ne:0},  latest: {$ne:false}}).toArray(function(err, sectionArry){
+            async.each(sectionArry, function(section, cb){
+                if(section.components && section.components.length && section.components[0].type == 'thumbnail-slider' && section.components[0].thumbnailCollection){                    
+                    _.each(section.components[0].thumbnailCollection, function(image){
+                        if(!image.img){
+                            image.img = "<img src=\"" + image.url + "\">";
+                        }
+                    })
+                    sections.save(section, function(){
+                        cb();
+                    });
+                }
+                else{
+                    cb();
+                }
+            }, function done(){
+                console.log('done');
+                fn();
+            });
+        });
+    },
+
+    
     _updateBlogPages :function(fn) {
 
         var srcURL = mongoConfig.PROD_MONGODB_CONNECT,

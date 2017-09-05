@@ -1,0 +1,50 @@
+<div data-edit ng-class="component.type+'-v'+component.version">
+    <div class="title mb30">
+        <div elem ng-model="component.title"></div>
+    </div>
+    <div class="row features-wrap feature-list-container" ng-init="setSelectedFeatureIndex(0)">
+        <ul class="list-features list-features-{{component._id}} col-sm-4">
+            <li class="feature" ng-attr-style="{{listStyles(component, $index == features.featureIndex)}}" ng-repeat="feature in component.features" ng-click="setSelectedFeatureIndex($index)" ng-class="{'active': $index == features.featureIndex}">
+                <a class="feature-heading" ng-attr-style="{{setStyles(component.formSettings)}}">
+                    <div class="fetaure-tabs-icon"> 
+                        <div elem ng-model="feature.top"></div>    
+                    </div>
+                    <div class="features-tabs-heading">
+                        <div elem ng-model="feature.heading"></div>
+                    </div>
+                    <div ng-if="isEditing">
+                        <div class="delete-feature center" ng-click="deleteFeatureList($index)" tooltip-placement="top" tooltip-append-to-body="true" tooltip-append-to-body="true" tooltip="Delete this feature.">
+                            <i class='fa fa-trash'></i>
+                        </div>
+                        <div class="add-addtional center" ng-click="addFeatureService($index)" tooltip-placement="top" tooltip-append-to-body="true"  tooltip-append-to-body="true" tooltip="Add another feature.">
+                            <i class='fa fa-plus'></i>
+                        </div>
+                    </div>
+                </a>                
+            </li>
+        </ul>
+        <div data-repeat-index-id="{{features.featureIndex}}">
+            <div class="feature-tab-content" ng-if="!loading && isEditing" >
+                <div class="col-sm-4 col-xs-12">
+                    <div ng-if="component.features.length>0" elem ng-model="component.features[features.featureIndex].content"></div>
+                     <div ng-if="component.features.length<=0" elem ng-model="component.features[features.featureIndex].content"></div>
+                </div>
+                <div class="col-sm-4 col-xs-12">
+                    <div ng-if="component.features.length>0" elem ng-model="component.features[features.featureIndex].media"></div>
+                     <div ng-if="component.features.length<=0" elem ng-model="component.features[0].media"></div>
+                </div>
+            </div>
+            <div class="feature-tab-content" ng-if="!isEditing">
+                <div ng-repeat="feature in component.features" ng-if="$index == features.featureIndex">
+                    <div class="col-sm-4 col-xs-12">
+                        <div elem ng-model="component.features[features.featureIndex].content"></div> 
+                    </div>
+                    <div class="col-sm-4 col-xs-12">
+                        <div elem ng-model="component.features[features.featureIndex].media"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+</div>

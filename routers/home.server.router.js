@@ -26,6 +26,7 @@ var RSSView = require('../views/rss.server.view');
 var UAParser = require('ua-parser-js');
 var parser = new UAParser();
 var urlUtils = require('../utils/urlutils');
+var ssbManager = require('../ssb/ssb_manager');
 
 var router = function() {
     this.init.apply(this, arguments);
@@ -81,6 +82,8 @@ _.extend(router.prototype, BaseRouter.prototype, {
         app.get('/template/:page/:page_1', this.frontendSetup.bind(this), this.getOrCreateTemplate.bind(this));
 
         app.get('/scripts/*', this.frontendSetup.bind(this), this.serveNodeModules.bind(this));
+
+        app.get('/sitemap.xml', this.frontendSetup.bind(this), this.generateSiteMap.bind(this));
         return this;
     },
 
@@ -222,6 +225,7 @@ _.extend(router.prototype, BaseRouter.prototype, {
 
     showAngularAdmin: function(req,resp) {
         var accountId = this.accountId(req);
+        //console.log('showAngularAdmin', accountId);
         if (accountId > 0) {
             new AngularAdminView(req,resp).show();
         } else {
@@ -652,6 +656,38 @@ _.extend(router.prototype, BaseRouter.prototype, {
             return null;
         }
 
+    },
+
+    //consider caching this
+    generateSiteMap: function(req, resp) {
+        var self = this;
+
+        var accountId = self.unAuthAccountId(req);
+        self.log.debug(accountId, null, '>> generateSiteMap');
+        var protocol = 'http';
+        if(req.headers['x-forwarded-proto'] && req.headers['x-forwarded-proto']==='https') {
+            protocol = 'https';
+        } else {
+            self.log.debug(accountId, null, 'headers:', req.headers);
+        }
+        var host = req.host;
+        if(req.headers['x-host']) {
+            host = req.headers['x-host'];
+        }
+        var combinedHost = host;
+        if(req.port) {
+            combinedHost += ':' + req.port;
+        }
+
+        ssbManager.generateSiteMap(accountId, null, protocol, combinedHost, function(err, sitemap){
+            self.log.debug(accountId, null, '<< generateSiteMap');
+            if(err) {
+                resp.send(500, err);
+            } else {
+                resp.set('Content-Type', 'application/xml');
+                resp.send(sitemap);
+            }
+        });
     }
 
 });
