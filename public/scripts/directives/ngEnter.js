@@ -5,104 +5,103 @@
  * @author Markus Riegel <riegel.markus@googlemail.com>
  */
 
+/*global  window , document  */
 
+(function (window, angular, undefined) {
 
- (function (window, angular, undefined) {
-
+	'use strict';
 
 	var app = angular.module('mrPageEnterAnimate', []);
 
 
 
-	angular.module('mrPageEnterAnimate').provider('Settings', function() {
+	angular.module('mrPageEnterAnimate').provider('Settings', function () {
 
 		this.settings = {
-			completelyVisible : false
+			completelyVisible: false
 		};
 
-		this.$get = function() {
+		this.$get = function () {
 			var settings = this.settings;
 			return {
-				key: function(settingsType) {
+				key: function (settingsType) {
 					return settings[settingsType] || settingsType;
 				}
 			};
 		};
 
-		this.setSettings = function(settings) {
+		this.setSettings = function (settings) {
 			this.settings = settings;
 		};
 	});
 
 
-	
 
-	app.directive('mrPageEnter', [ 'Settings', '$timeout', function(Settings, $timeout){
+
+	app.directive('mrPageEnter', ['Settings', '$timeout', function (Settings, $timeout) {
 		return {
 			restrict: 'A',
-			link: function(scope, elm, attr){
+			link: function (scope, elm, attr) {
 
 
-				var enterClass = attr.mrPageEnter;
+				var enterClass = attr.mrPageEnter,
 
 
-				/*
-				 * Matches the position of the element vs the scroll position
-				 * @return boolean
-				 */
+					/*
+					 * Matches the position of the element vs the scroll position
+					 * @return boolean
+					 */
+					isVisible = function (elm) {
 
-				var isVisible = function(elm){
-
-					var rect = elm[0].getBoundingClientRect();
-
-					
-
-					if(Settings.key('completelyVisible') === true) {
-
-						return (
-							rect.top >= 0 &&
-							rect.left >= 0 &&
-							rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
-							rect.right <= (window.innerWidth || document.documentElement.clientWidth)
-						);
-
-					}
-					else {
-
-						return (
-							rect.bottom >= 0 &&
-							rect.right >= 0 &&
-							rect.top <= (window.innerHeight || document.documentElement.clientHeight) &&
-							rect.left <= (window.innerWidth || document.documentElement.clientWidth)
-						);
-
-					}
-
-				}
+						var rect = elm[0].getBoundingClientRect();
 
 
-				/*
-				 * Scroll / Resize event handler
-				 */
 
-				var onChangeHandler = function(){
+						if (Settings.key('completelyVisible') === true) {
 
-					if( isVisible(elm) === true ){
+							return (
+								rect.top >= 0 &&
+								rect.left >= 0 &&
+								rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+								rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+							);
 
-						angular.element(window).unbind('scroll', onChangeHandler);
-						angular.element(window).unbind('resize', onChangeHandler);
-						angular.element(window).unbind('load', onChangeHandler);
+						} else {
 
-						// Delay just in case add it instantely would kill the animation
+							return (
+								rect.bottom >= 0 &&
+								rect.right >= 0 &&
+								rect.top <= (window.innerHeight || document.documentElement.clientHeight) &&
+								rect.left <= (window.innerWidth || document.documentElement.clientWidth)
+							);
 
-						$timeout(function(){
-							elm.addClass(enterClass+'-active');
-						},0);
-						
+						}
 
-					}
+					},
 
-				}
+
+					/*
+					 * Scroll / Resize event handler
+					 */
+
+					onChangeHandler = function () {
+
+						if (isVisible(elm) === true) {
+
+							angular.element(window).unbind('scroll', onChangeHandler);
+							angular.element(window).unbind('resize', onChangeHandler);
+							angular.element(window).unbind('load', onChangeHandler);
+
+							// Delay just in case add it instantely would kill the animation
+
+							$timeout(function () {
+								elm.addClass(enterClass + '-active');
+							}, 0);
+
+
+						}
+
+					};
 
 				elm.addClass(enterClass);
 
@@ -114,8 +113,8 @@
 
 
 			}
-		}
+		};
 	}]);
 
 
- })(window, window.angular);
+}(window, window.angular));

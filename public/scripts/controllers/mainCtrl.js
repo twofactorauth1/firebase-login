@@ -1,43 +1,23 @@
-'use strict';
+/*global mainApp */
+mainApp.controller('MainCtrl', ['$scope', 'ENV', '$document', '$window',
+    function ($scope, ENV, $document, $window) {
+		'use strict';
+		var  that = this;
+		that.segmentIOWriteKey = ENV.segmentKey;
 
-mainApp.controller('MainCtrl', ['$scope', 'websiteService', 'accountService', 'themeService', 'pagesService', 'ENV', '$location', '$document', '$anchorScroll', '$window', 'userService',
-    function ($scope, websiteService, accountService, themeService, pagesService, ENV, $location, $document, $anchorScroll, $window, userService) {
+		$scope.init = function (value) {
+			$scope.websiteId = value;
+		};
 
-        var account, pages, website, that = this;
-        that.segmentIOWriteKey = ENV.segmentKey;
+		$scope.isSection = function (value) {
+			return (value === 'section');
+		};
 
-        var body = document.body,
-            html = document.documentElement;
-
-        $scope.init = function (value) {
-            $scope.websiteId = value;
-        };
-
-        var height = Math.max(body.scrollHeight, body.offsetHeight,
-            html.clientHeight, html.scrollHeight, html.offsetHeight);
-        $scope.minHeight = height;
-
-        $scope.isSection = function (value) {
-            if (value == 'section') {
-                return true;
-            } else {
-                return false;
-            }
-        };
-
-        $scope.showAdminBar = false;
-
-        userService.isAuthenticatedSession(function (data) {
-            if (data === true) {
-                $scope.showAdminBar = true;
-            }
-        });
-
-        /*
-         * Setup some org specific settings
-         */
-        $scope.orgId = $window.indigenous.orgId;
-        ENV.stripeKey = ENV.stripeKey[$scope.orgId];
+		/*
+		 * Setup some org specific settings
+		 */
+		$scope.orgId = $window.indigenous.orgId;
+		ENV.stripeKey = ENV.stripeKey[$scope.orgId];
 
     }
 ]);
