@@ -290,8 +290,8 @@ module.exports = {
         if(!lookBackInMinutes || lookBackInMinutes === 0) {
             lookBackInMinutes = 30;
         }
-        var targetDate = moment.utc().subtract('minutes', lookBackInMinutes);
-        var rightnow = moment.utc().subtract('minutes', 1);
+        var targetDate = moment.utc().subtract(lookBackInMinutes, 'minutes');
+        var rightnow = moment.utc().subtract(1, 'minutes');
         //self.log.debug('targetDate:', targetDate.toDate());
         var stageAry = [];
         var match = {
@@ -414,8 +414,8 @@ module.exports = {
         self.log.trace(accountId, userId, '>> getLiveVisitorDetails');
 
 
-        var targetDate = moment.utc().subtract('minutes', lookBackInMinutes);
-        var rightnow = moment.utc().subtract('minutes', 1);
+        var targetDate = moment.utc().subtract(lookBackInMinutes, 'minutes');
+        var rightnow = moment.utc().subtract(1, 'minutes');
         //self.log.debug('targetDate:', targetDate.toDate());
         var stageAry = [];
         var match = {
@@ -801,84 +801,97 @@ module.exports = {
 
         var group2 = {$group:{_id:"$_id.yearMonthDay", visits:{$sum:1} }};
         stageAry.push(group2);
-
-        async.waterfall([
-            function(cb){
-                dao.aggregateWithCustomStages(stageAry, $$.m.SessionEvent, function(err, value) {
-                    //{"result": [{"value": 6, "timeframe": {"start": "2016-06-20T05:00:00.000Z", "end": "2016-06-21T05:00:00.000Z"}}
-                    if(err) {
-                        self.log.error('Error getting analytics:', err);
-                        cb(err);
-                    } else {
-                        var resultAry = [];
-                        _.each(value, function (entry) {
-                            var result = {
-                                value: entry.visits,
-                                timeframe: {
-                                    start: entry._id
-                                }
-                            };
-                            if(granularity === 'hours') {
-                                result.timeframe.end = moment(entry._id).add(1, 'hours').format('YYYY-MM-DD HH:mm');
+        self._addAccountFilterByID(accountId, userId, isAggregate, match, function(err, match){
+            if(err) {
+                self.log.error(accountId, userId, 'Error adding filter:', err);
+                fn(err);
+            } else {
+                self.log.debug('stageAry[0]', stageAry[0]);
+                stageAry[0] = match;//is this necessary?
+                self.log.debug('match:', match);
+                async.waterfall([
+                    function(cb){
+                        dao.aggregateWithCustomStages(stageAry, $$.m.SessionEvent, function(err, value) {
+                            //{"result": [{"value": 6, "timeframe": {"start": "2016-06-20T05:00:00.000Z", "end": "2016-06-21T05:00:00.000Z"}}
+                            if(err) {
+                                self.log.error('Error getting analytics:', err);
+                                cb(err);
                             } else {
-                                result.timeframe.end = moment(entry._id).add(1, 'days').format('YYYY-MM-DD');
-                            }
-                            resultAry.push(result);
-                        });
-                        resultAry = _.sortBy(resultAry, function(result){return result.timeframe.start;});
-                        if(granularity === 'hours') {
-                            resultAry = self._zeroMissingHours(resultAry, {value:0}, moment(startDate).format('YYYY-MM-DD HH:mm'), moment(endDate).format('YYYY-MM-DD HH:mm'));
-                        } else {
-                            resultAry = self._zeroMissingDays(resultAry, {value:0}, moment(startDate).format('YYYY-MM-DD'), moment(endDate).format('YYYY-MM-DD'));
-                        }
-                        cb(null, resultAry);
-                    }
-                });
-            },
-            function(newVisitorResults, cb) {
-                stageAry[0].$match.new_visitor = false;
-                dao.aggregateWithCustomStages(stageAry, $$.m.SessionEvent, function(err, value) {
-                    //{"result": [{"value": 6, "timeframe": {"start": "2016-06-20T05:00:00.000Z", "end": "2016-06-21T05:00:00.000Z"}}
-                    if(err) {
-                        self.log.error('Error getting analytics:', err);
-                        cb(err);
-                    } else {
-                        var resultAry = [];
-                        _.each(value, function (entry) {
-                            var result = {
-                                value: entry.visits,
-                                timeframe: {
-                                    start: entry._id
+                                var resultAry = [];
+                                _.each(value, function (entry) {
+                                    var result = {
+                                        value: entry.visits,
+                                        timeframe: {
+                                            start: entry._id
+                                        }
+                                    };
+                                    if(granularity === 'hours') {
+                                        result.timeframe.end = moment(entry._id).add(1, 'hours').format('YYYY-MM-DD HH:mm');
+                                    } else {
+                                        result.timeframe.end = moment(entry._id).add(1, 'days').format('YYYY-MM-DD');
+                                    }
+                                    resultAry.push(result);
+                                });
+                                resultAry = _.sortBy(resultAry, function(result){return result.timeframe.start;});
+                                if(granularity === 'hours') {
+                                    resultAry = self._zeroMissingHours(resultAry, {value:0}, moment(startDate).format('YYYY-MM-DD HH:mm'), moment(endDate).format('YYYY-MM-DD HH:mm'));
+                                } else {
+                                    resultAry = self._zeroMissingDays(resultAry, {value:0}, moment(startDate).format('YYYY-MM-DD'), moment(endDate).format('YYYY-MM-DD'));
                                 }
-                            };
-                            if(granularity === 'hours') {
-                                result.timeframe.end = moment(entry._id).add(1, 'hours').format('YYYY-MM-DD HH:mm');
-                            } else {
-                                result.timeframe.end = moment(entry._id).add(1, 'days').format('YYYY-MM-DD');
+                                cb(null, resultAry);
                             }
-                            resultAry.push(result);
                         });
-                        resultAry = _.sortBy(resultAry, function(result){return result.timeframe.start;});
-                        if(granularity === 'hours') {
-                            resultAry = self._zeroMissingHours(resultAry, {value:0}, moment(startDate).format('YYYY-MM-DD HH:mm'), moment(endDate).format('YYYY-MM-DD HH:mm'));
-                        } else {
-                            resultAry = self._zeroMissingDays(resultAry, {value:0}, moment(startDate).format('YYYY-MM-DD'), moment(endDate).format('YYYY-MM-DD'));
-                        }
-                        cb(null, newVisitorResults, resultAry);
+                    },
+                    function(newVisitorResults, cb) {
+                        stageAry[0].$match.new_visitor = false;
+                        dao.aggregateWithCustomStages(stageAry, $$.m.SessionEvent, function(err, value) {
+                            //{"result": [{"value": 6, "timeframe": {"start": "2016-06-20T05:00:00.000Z", "end": "2016-06-21T05:00:00.000Z"}}
+                            if(err) {
+                                self.log.error('Error getting analytics:', err);
+                                cb(err);
+                            } else {
+                                var resultAry = [];
+                                _.each(value, function (entry) {
+                                    var result = {
+                                        value: entry.visits,
+                                        timeframe: {
+                                            start: entry._id
+                                        }
+                                    };
+                                    if(granularity === 'hours') {
+                                        result.timeframe.end = moment(entry._id).add(1, 'hours').format('YYYY-MM-DD HH:mm');
+                                    } else {
+                                        result.timeframe.end = moment(entry._id).add(1, 'days').format('YYYY-MM-DD');
+                                    }
+                                    resultAry.push(result);
+                                });
+                                resultAry = _.sortBy(resultAry, function(result){return result.timeframe.start;});
+                                if(granularity === 'hours') {
+                                    resultAry = self._zeroMissingHours(resultAry, {value:0}, moment(startDate).format('YYYY-MM-DD HH:mm'), moment(endDate).format('YYYY-MM-DD HH:mm'));
+                                } else {
+                                    resultAry = self._zeroMissingDays(resultAry, {value:0}, moment(startDate).format('YYYY-MM-DD'), moment(endDate).format('YYYY-MM-DD'));
+                                }
+                                cb(null, newVisitorResults, resultAry);
+                            }
+                        });
+                    },
+                    function combine(newVisitorResults, returningVisitorResults, cb) {
+                        var result = {
+                            newVisitors:newVisitorResults,
+                            returning:returningVisitorResults
+                        };
+                        cb(null, result);
                     }
+                ], function(err, result){
+                    self.log.debug(accountId, userId, '<< getVisitorReports');
+                    fn(err, result);
                 });
-            },
-            function combine(newVisitorResults, returningVisitorResults, cb) {
-                var result = {
-                    newVisitors:newVisitorResults,
-                    returning:returningVisitorResults
-                };
-                cb(null, result);
             }
-        ], function(err, result){
-            self.log.debug(accountId, userId, '<< getVisitorReports');
-            fn(err, result);
+
+
         });
+
+
 
     },
 
@@ -2688,6 +2701,41 @@ module.exports = {
             return 'hours';
         } else {
             return 'days';
+        }
+    },
+
+    _addAccountFilterByID: function(accountId, userId, isAggregate, query, fn) {
+        var self = this;
+        if(isAggregate === true) {
+            fn(null, query);
+        } else {
+            accountDao.getAccountByID(accountId, function(err, account){
+                if(err) {
+                    self.log.error(accountId, userId, 'Error fetching account:', err);
+                    fn(err);
+                } else {
+                    self._addAccountFilter(account, userId, isAggregate, query, fn);
+                }
+            });
+        }
+    },
+
+    _addAccountFilter: function(account, userId, isAggregate, query, fn) {
+        var self = this;
+        if(isAggregate === true) {
+            fn(null, query);
+        } else if(!account){
+            self.log.warn('No account to filter');
+            fn(null, query);
+        } else {
+            var prefs = account.get('analyticsPreferences');
+            if(!prefs) {
+                fn(null, query);
+            } else {
+                var filterIPs = prefs.filterIPs;
+                query.$match.ip_address = {$nin:filterIPs};
+                fn(null, query);
+            }
         }
     }
 };
