@@ -281,6 +281,7 @@ module.exports = {
         });
     },
 
+    //TODO: filter based on IP?
     getLiveVisitors: function(accountId, userId, lookBackInMinutes, isAggregate, orgId, fn) {
         var self = this;
         self.log = _log;
@@ -481,7 +482,7 @@ module.exports = {
                                 "maxmind": sessionEvent.maxmind,
                                 "user_agent": sessionEvent.user_agent,
                                 "timestamp": sessionEvent.server_time_dt,
-                                "server_time": sessionEvent.server_time,
+                                "server_time": sessionEvent.server_time
                             });
                             cb();
                         }
@@ -806,9 +807,7 @@ module.exports = {
                 self.log.error(accountId, userId, 'Error adding filter:', err);
                 fn(err);
             } else {
-                self.log.debug('stageAry[0]', stageAry[0]);
-                stageAry[0] = match;//is this necessary?
-                self.log.debug('match:', match);
+                //match is applied via pass-by-reference
                 async.waterfall([
                     function(cb){
                         dao.aggregateWithCustomStages(stageAry, $$.m.SessionEvent, function(err, value) {
@@ -927,14 +926,22 @@ module.exports = {
             }
         };
         stageAry.push(group1);
-
-        dao.aggregateWithCustomStages(stageAry, $$.m.SessionEvent, function(err, value) {
-            _.each(value, function(result){
-                result['ip_geo_info.province'] = result._id;
-            });
-            self.log.debug(accountId, userId, '<< getVisitorLocationsReport');
-            fn(err, value);
+        self._addAccountFilterByID(accountId, userId, isAggregate, match, function(err, match) {
+            if (err) {
+                self.log.error(accountId, userId, 'Error adding filter:', err);
+                fn(err);
+            } else {
+                //match is applied via pass-by-reference
+                dao.aggregateWithCustomStages(stageAry, $$.m.SessionEvent, function(err, value) {
+                    _.each(value, function(result){
+                        result['ip_geo_info.province'] = result._id;
+                    });
+                    self.log.debug(accountId, userId, '<< getVisitorLocationsReport');
+                    fn(err, value);
+                });
+            }
         });
+
     },
 
     getVisitorLocationsByCountryReport: function(accountId, userId, startDate, endDate, isAggregate, orgId, fn) {
@@ -968,19 +975,26 @@ module.exports = {
             }
         };
         stageAry.push(group1);
+        self._addAccountFilterByID(accountId, userId, isAggregate, match, function(err, match) {
+            if (err) {
+                self.log.error(accountId, userId, 'Error adding filter:', err);
+                fn(err);
+            } else {
+                dao.aggregateWithCustomStages(stageAry, $$.m.SessionEvent, function(err, value) {
+                    _.each(value, function(result){
+                        if(result._id !== null) {
+                            result['ip_geo_info.country'] = result._id;
+                        } else {
+                            result['ip_geo_info.country'] = 'Unknown';
+                        }
 
-        dao.aggregateWithCustomStages(stageAry, $$.m.SessionEvent, function(err, value) {
-            _.each(value, function(result){
-                if(result._id !== null) {
-                    result['ip_geo_info.country'] = result._id;
-                } else {
-                    result['ip_geo_info.country'] = 'Unknown';
-                }
-
-            });
-            self.log.debug(accountId, userId, '<< getVisitorLocationsByCountryReport');
-            fn(err, value);
+                    });
+                    self.log.debug(accountId, userId, '<< getVisitorLocationsByCountryReport');
+                    fn(err, value);
+                });
+            }
         });
+
     },
 
     getVisitorDeviceReport: function(accountId, userId, startDate, endDate, isAggregate, orgId, fn) {
@@ -1016,21 +1030,28 @@ module.exports = {
             }
         };
         stageAry.push(group1);
-
-        dao.aggregateWithCustomStages(stageAry, $$.m.SessionEvent, function(err, value) {
-            //{"result": [{"user_agent.device": "desktop", "result": 123}, {"user_agent.device": "mobile", "result": 14}]}
-            var resultAry = [];
-            _.each(value, function(entry){
-                var res = {
-                    'user_agent.device': entry._id,
-                    'result': entry.count
-                };
-                resultAry.push(res);
-            });
-            var result = {result: resultAry};
-            self.log.debug(accountId, userId, '<< getVisitorDeviceReport');
-            fn(err, result);
+        self._addAccountFilterByID(accountId, userId, isAggregate, match, function(err, match) {
+            if (err) {
+                self.log.error(accountId, userId, 'Error adding filter:', err);
+                fn(err);
+            } else {
+                dao.aggregateWithCustomStages(stageAry, $$.m.SessionEvent, function(err, value) {
+                    //{"result": [{"user_agent.device": "desktop", "result": 123}, {"user_agent.device": "mobile", "result": 14}]}
+                    var resultAry = [];
+                    _.each(value, function(entry){
+                        var res = {
+                            'user_agent.device': entry._id,
+                            'result': entry.count
+                        };
+                        resultAry.push(res);
+                    });
+                    var result = {result: resultAry};
+                    self.log.debug(accountId, userId, '<< getVisitorDeviceReport');
+                    fn(err, result);
+                });
+            }
         });
+
     },
 
     getUserReport:function(accountId, userId, start, end, previousStart, previousEnd, isAggregate, orgId, fn) {
@@ -1080,80 +1101,88 @@ module.exports = {
             }
         };
         stageAry.push(group2);
-
-        async.waterfall([
-            function(cb) {
-                var startTime1 = new Date().getTime();
-                dao.aggregateWithCustomStages(stageAry, $$.m.SessionEvent, function(err, value) {
-                    var duration1 = new Date().getTime() - startTime1;
-                    self.log.warn('duration1:', duration1);
-                    if(err) {
-                        self.log.error('Error finding current month:', err);
-                        cb(err);
-                    } else {
-                        var resultAry = [];
-                        _.each(value, function (entry) {
-                            var result = {
-                                value: entry.total,
-                                timeframe: {
-                                    start: entry._id
-                                }
-                            };
-                            if(granularity === 'hours') {
-                                result.timeframe.end = moment(entry._id).add(1, 'hours').format('YYYY-MM-DD HH:mm');
+        self._addAccountFilterByID(accountId, userId, isAggregate, match, function(err, match) {
+            if (err) {
+                self.log.error(accountId, userId, 'Error adding filter:', err);
+                fn(err);
+            } else {
+                async.waterfall([
+                    function(cb) {
+                        var startTime1 = new Date().getTime();
+                        dao.aggregateWithCustomStages(stageAry, $$.m.SessionEvent, function(err, value) {
+                            var duration1 = new Date().getTime() - startTime1;
+                            self.log.warn('duration1:', duration1);
+                            if(err) {
+                                self.log.error('Error finding current month:', err);
+                                cb(err);
                             } else {
-                                result.timeframe.end = moment(entry._id).add(1, 'days').format('YYYY-MM-DD');
+                                var resultAry = [];
+                                _.each(value, function (entry) {
+                                    var result = {
+                                        value: entry.total,
+                                        timeframe: {
+                                            start: entry._id
+                                        }
+                                    };
+                                    if(granularity === 'hours') {
+                                        result.timeframe.end = moment(entry._id).add(1, 'hours').format('YYYY-MM-DD HH:mm');
+                                    } else {
+                                        result.timeframe.end = moment(entry._id).add(1, 'days').format('YYYY-MM-DD');
+                                    }
+                                    resultAry.push(result);
+                                });
+                                resultAry = _.sortBy(resultAry, function(result){return result.timeframe.start;});
+
+                                if(granularity === 'hours') {
+                                    resultAry = self._zeroMissingHours(resultAry, {value:0}, moment(previousStart).format('YYYY-MM-DD HH:mm'), moment(end).format('YYYY-MM-DD HH:mm'));
+                                } else {
+                                    resultAry = self._zeroMissingDays(resultAry, {value:0}, moment(previousStart).format('YYYY-MM-DD'), moment(end).format('YYYY-MM-DD'));
+                                }
+                                cb(null, resultAry);
                             }
-                            resultAry.push(result);
                         });
-                        resultAry = _.sortBy(resultAry, function(result){return result.timeframe.start;});
+                    },
+                    function (totalResults, cb) {
+                        var currentMonth = [];
+                        var previousMonth = [];
+                        _.each(totalResults, function(result){
+                            var resultEnd = moment(result.timeframe.start, "YYYY-MM-DD HH:mm");
+                            if(granularity === 'hours') {
+                                if(resultEnd.isAfter(start) || resultEnd.isSame(start, 'hour')) {
+                                    currentMonth.push(result);
+                                } else {
+                                    previousMonth.push(result);
+                                }
+                            } else {
+                                if(resultEnd.isAfter(start) || resultEnd.isSame(start, 'day')) {
+                                    currentMonth.push(result);
+                                } else {
+                                    previousMonth.push(result);
+                                }
+                            }
+                        });
+                        cb(null, currentMonth, previousMonth);
+                    },
+                    function(currentMonth, previousMonth, cb) {
 
-                        if(granularity === 'hours') {
-                            resultAry = self._zeroMissingHours(resultAry, {value:0}, moment(previousStart).format('YYYY-MM-DD HH:mm'), moment(end).format('YYYY-MM-DD HH:mm'));
-                        } else {
-                            resultAry = self._zeroMissingDays(resultAry, {value:0}, moment(previousStart).format('YYYY-MM-DD'), moment(end).format('YYYY-MM-DD'));
-                        }
-                        cb(null, resultAry);
+                        var result = {
+                            currentMonth:currentMonth,
+                            previousMonth: previousMonth
+                        };
+                        cb(null, result);
                     }
+                ], function(err, results){
+                    var duration = new Date().getTime() - startTime;
+                    self.log.debug(accountId, userId, '<< getUserReport [' + duration + ']');
+                    fn(err, results);
                 });
-            },
-            function (totalResults, cb) {
-                var currentMonth = [];
-                var previousMonth = [];
-                _.each(totalResults, function(result){
-                    var resultEnd = moment(result.timeframe.start, "YYYY-MM-DD HH:mm");
-                    if(granularity === 'hours') {
-                        if(resultEnd.isAfter(start) || resultEnd.isSame(start, 'hour')) {
-                            currentMonth.push(result);
-                        } else {
-                            previousMonth.push(result);
-                        }
-                    } else {
-                        if(resultEnd.isAfter(start) || resultEnd.isSame(start, 'day')) {
-                            currentMonth.push(result);
-                        } else {
-                            previousMonth.push(result);
-                        }
-                    }
-                });
-                cb(null, currentMonth, previousMonth);
-            },
-            function(currentMonth, previousMonth, cb) {
-
-                var result = {
-                    currentMonth:currentMonth,
-                    previousMonth: previousMonth
-                };
-                cb(null, result);
             }
-        ], function(err, results){
-            var duration = new Date().getTime() - startTime;
-            self.log.debug(accountId, userId, '<< getUserReport [' + duration + ']');
-            fn(err, results);
         });
+
 
     },
 
+    //TODO: not filtering based on IP... do we need it?
     getPageViewsReport: function(accountId, userId, start, end, previousStart, previousEnd, isAggregate, orgId, fn) {
         var self = this;
         self.log = _log;
@@ -1258,6 +1287,7 @@ module.exports = {
 
     },
 
+    //TODO: not filtering based on IP... do we need it?
     getPageViewPerformanceReport: function(accountId, userId, start, end, orgId, accountIds, fn) {
         var self = this;
         self.log = _log;
@@ -1386,74 +1416,81 @@ module.exports = {
             }
         };
         stageAry.push(group2);
-
-        async.waterfall([
-            function(cb) {
-                dao.aggregateWithCustomStages(stageAry, $$.m.SessionEvent, function(err, value) {
-                    if(err) {
-                        self.log.error('Error finding current month:', err);
-                        cb(err);
-                    } else {
-                        var resultAry = [];
-                        _.each(value, function (entry) {
-                            var result = {
-                                total: entry.total,
-                                timeframe: {
-                                    start: entry._id
-                                }
-                            };
-                            if(granularity === 'hours') {
-                                result.timeframe.end = moment(entry._id).add(1, 'hours').format('YYYY-MM-DD HH:mm');
+        self._addAccountFilterByID(accountId, userId, isAggregate, match, function(err, match) {
+            if (err) {
+                self.log.error(accountId, userId, 'Error adding filter:', err);
+                fn(err);
+            } else {
+                async.waterfall([
+                    function(cb) {
+                        dao.aggregateWithCustomStages(stageAry, $$.m.SessionEvent, function(err, value) {
+                            if(err) {
+                                self.log.error('Error finding current month:', err);
+                                cb(err);
                             } else {
-                                result.timeframe.end = moment(entry._id).add(1, 'days').format('YYYY-MM-DD');
+                                var resultAry = [];
+                                _.each(value, function (entry) {
+                                    var result = {
+                                        total: entry.total,
+                                        timeframe: {
+                                            start: entry._id
+                                        }
+                                    };
+                                    if(granularity === 'hours') {
+                                        result.timeframe.end = moment(entry._id).add(1, 'hours').format('YYYY-MM-DD HH:mm');
+                                    } else {
+                                        result.timeframe.end = moment(entry._id).add(1, 'days').format('YYYY-MM-DD');
+                                    }
+
+                                    resultAry.push(result);
+                                });
+                                resultAry = _.sortBy(resultAry, function(result){return result.timeframe.start;});
+                                if(granularity === 'hours') {
+                                    resultAry = self._zeroMissingHours(resultAry, {total:0}, moment(previousStart).format('YYYY-MM-DD HH:mm'), moment(end).format('YYYY-MM-DD HH:mm'));
+                                } else {
+                                    resultAry = self._zeroMissingDays(resultAry, {total:0}, moment(previousStart).format('YYYY-MM-DD'), moment(end).format('YYYY-MM-DD'));
+                                }
+
+                                cb(null, resultAry);
                             }
-
-                            resultAry.push(result);
                         });
-                        resultAry = _.sortBy(resultAry, function(result){return result.timeframe.start;});
-                        if(granularity === 'hours') {
-                            resultAry = self._zeroMissingHours(resultAry, {total:0}, moment(previousStart).format('YYYY-MM-DD HH:mm'), moment(end).format('YYYY-MM-DD HH:mm'));
-                        } else {
-                            resultAry = self._zeroMissingDays(resultAry, {total:0}, moment(previousStart).format('YYYY-MM-DD'), moment(end).format('YYYY-MM-DD'));
-                        }
+                    },
+                    function (totalResults, cb) {
+                        var currentMonth = [];
+                        var previousMonth = [];
+                        _.each(totalResults, function(result) {
+                            var resultEnd = moment(result.timeframe.start, "YYYY-MM-DD HH:mm");
+                            if(granularity === 'hours') {
+                                if(resultEnd.isAfter(start) || resultEnd.isSame(start, 'hour')) {
+                                    currentMonth.push(result);
+                                } else {
+                                    previousMonth.push(result);
+                                }
+                            } else {
+                                if(resultEnd.isAfter(start) || resultEnd.isSame(start, 'day')) {
+                                    currentMonth.push(result);
+                                } else {
+                                    previousMonth.push(result);
+                                }
+                            }
+                        });
+                        cb(null, currentMonth, previousMonth);
+                    },
 
-                        cb(null, resultAry);
+                    function(currentMonth, previousMonth, cb) {
+                        var result = {
+                            currentMonth:currentMonth,
+                            previousMonth: previousMonth
+                        };
+                        cb(null, result);
                     }
+                ], function(err, results){
+                    self.log.debug(accountId, userId, '<< getSessionsReport');
+                    fn(err, results);
                 });
-            },
-            function (totalResults, cb) {
-                var currentMonth = [];
-                var previousMonth = [];
-                _.each(totalResults, function(result) {
-                    var resultEnd = moment(result.timeframe.start, "YYYY-MM-DD HH:mm");
-                    if(granularity === 'hours') {
-                        if(resultEnd.isAfter(start) || resultEnd.isSame(start, 'hour')) {
-                            currentMonth.push(result);
-                        } else {
-                            previousMonth.push(result);
-                        }
-                    } else {
-                        if(resultEnd.isAfter(start) || resultEnd.isSame(start, 'day')) {
-                            currentMonth.push(result);
-                        } else {
-                            previousMonth.push(result);
-                        }
-                    }
-                });
-                cb(null, currentMonth, previousMonth);
-            },
-
-            function(currentMonth, previousMonth, cb) {
-                var result = {
-                    currentMonth:currentMonth,
-                    previousMonth: previousMonth
-                };
-                cb(null, result);
             }
-        ], function(err, results){
-            self.log.debug(accountId, userId, '<< getSessionsReport');
-            fn(err, results);
         });
+
 
     },
 
@@ -1493,191 +1530,198 @@ module.exports = {
             group1.$group._id.$dateToString.format = '%Y-%m-%d %H:00';
         }
         stageAry.push(group1);
+        self._addAccountFilterByID(accountId, userId, isAggregate, match, function(err, match) {
+            if (err) {
+                self.log.error(accountId, userId, 'Error adding filter:', err);
+                fn(err);
+            } else {
+                async.waterfall([
+                    function nonBounceAverageSessionLength(cb) {
+                        dao.aggregateWithCustomStages(stageAry, $$.m.SessionEvent, function(err, value) {
+                            if(err) {
+                                self.log.error('Error finding current month:', err);
+                                cb(err);
+                            } else {
+                                var resultAry = [];
+                                _.each(value, function (entry) {
+                                    var result = {
+                                        value: entry.averageTime,
+                                        count: entry.count,
+                                        timeframe: {
+                                            start: entry._id
+                                        }
+                                    };
+                                    if(granularity === 'hours') {
+                                        result.timeframe.end = moment(entry._id).add(1, 'hours').format('YYYY-MM-DD HH:mm');
+                                    } else {
+                                        result.timeframe.end = moment(entry._id).add(1, 'days').format('YYYY-MM-DD');
+                                    }
+                                    resultAry.push(result);
+                                });
+                                resultAry = _.sortBy(resultAry, function(result){return result.timeframe.start;});
+                                if(granularity === 'hours') {
+                                    resultAry = self._zeroMissingHours(resultAry, {value:0, count:0}, moment(start).format('YYYY-MM-DD HH:mm'), moment(end).format('YYYY-MM-DD HH:mm'));
+                                } else {
+                                    resultAry = self._zeroMissingDays(resultAry, {value:0, count:0}, moment(start).format('YYYY-MM-DD'), moment(end).format('YYYY-MM-DD'));
+                                }
+                                cb(null, resultAry);
+                            }
+                        });
+                    },
+                    function bounceAverageSessionLength(nonBounceAvg, cb) {
+                        stageAry[0].$match.session_length = {$lte:5000};
+                        //TODO: re-enable this
+                        //stageAry[0].$match.page_depth = {$lte:1};
+                        //self.log.debug('match:', stageAry[0]);
+                        dao.aggregateWithCustomStages(stageAry, $$.m.SessionEvent, function(err, value) {
+                            if(err) {
+                                self.log.error('Error finding current month:', err);
+                                cb(err);
+                            } else {
+                                var resultAry = [];
+                                _.each(value, function (entry) {
+                                    var result = {
+                                        value: entry.averageTime,
+                                        count: entry.count,
+                                        timeframe: {
+                                            start: entry._id
+                                        }
+                                    };
+                                    if(granularity === 'hours') {
+                                        result.timeframe.end = moment(entry._id).add(1, 'hours').format('YYYY-MM-DD HH:mm');
+                                    } else {
+                                        result.timeframe.end = moment(entry._id).add(1, 'days').format('YYYY-MM-DD');
+                                    }
+                                    resultAry.push(result);
+                                });
+                                resultAry = _.sortBy(resultAry, function(result){return result.timeframe.start;});
+                                if(granularity === 'hours') {
+                                    resultAry = self._zeroMissingHours(resultAry, {value:0, count:0}, moment(start).format('YYYY-MM-DD HH:mm'), moment(end).format('YYYY-MM-DD HH:mm'));
+                                } else {
+                                    resultAry = self._zeroMissingDays(resultAry, {value:0, count:0}, moment(start).format('YYYY-MM-DD'), moment(end).format('YYYY-MM-DD'));
+                                }
+                                //self.log.debug('results:', value);
+                                cb(null, nonBounceAvg, resultAry);
+                            }
+                        });
+                    },
+                    function previousNonBounceAverageSessionLength(nonBounceAvg, bounceAvg, cb) {
+                        stageAry[0].$match.session_length = {$gte:5000};
+                        //TODO: re-enable this
+                        //stageAry[0].$match.page_depth = {$gte:1};
+                        stageAry[0].$match.server_time_dt.$gte = previousStart;
+                        stageAry[0].$match.server_time_dt.$lte = previousEnd;
+                        dao.aggregateWithCustomStages(stageAry, $$.m.SessionEvent, function(err, value) {
+                            if(err) {
+                                self.log.error('Error finding current month:', err);
+                                cb(err);
+                            } else {
+                                var resultAry = [];
+                                _.each(value, function (entry) {
+                                    var result = {
+                                        value: entry.averageTime,
+                                        count: entry.count,
+                                        timeframe: {
+                                            start: entry._id
+                                        }
+                                    };
+                                    if(granularity === 'hours') {
+                                        result.timeframe.end = moment(entry._id).add(1, 'hours').format('YYYY-MM-DD HH:mm');
+                                    } else {
+                                        result.timeframe.end = moment(entry._id).add(1, 'days').format('YYYY-MM-DD');
+                                    }
+                                    resultAry.push(result);
+                                });
+                                resultAry = _.sortBy(resultAry, function(result){return result.timeframe.start;});
+                                if(granularity === 'hours') {
+                                    resultAry = self._zeroMissingHours(resultAry, {value:0, count:0}, moment(previousStart).format('YYYY-MM-DD HH:mm'), moment(previousEnd).format('YYYY-MM-DD HH:mm'));
+                                } else {
+                                    resultAry = self._zeroMissingDays(resultAry, {value:0, count:0}, moment(previousStart).format('YYYY-MM-DD'), moment(previousEnd).format('YYYY-MM-DD'));
+                                }
+                                cb(null, nonBounceAvg, bounceAvg, resultAry);
+                            }
+                        });
+                    },
+                    function previousBounceAverageSessionLength(nonBounceAvg, bounceAvg, prevNonBounceAvg, cb) {
+                        stageAry[0].$match.session_length = {$lte:5000};
+                        //TODO: re-enable this
+                        //stageAry[0].$match.page_depth = {$lte:1};
+                        dao.aggregateWithCustomStages(stageAry, $$.m.SessionEvent, function(err, value) {
+                            if(err) {
+                                self.log.error('Error finding current month:', err);
+                                cb(err);
+                            } else {
+                                var resultAry = [];
+                                _.each(value, function (entry) {
+                                    var result = {
+                                        value: entry.averageTime,
+                                        count: entry.count,
+                                        timeframe: {
+                                            start: entry._id
+                                        }
+                                    };
+                                    if(granularity === 'hours') {
+                                        result.timeframe.end = moment(entry._id).add(1, 'hours').format('YYYY-MM-DD HH:mm');
+                                    } else {
+                                        result.timeframe.end = moment(entry._id).add(1, 'days').format('YYYY-MM-DD');
+                                    }
+                                    resultAry.push(result);
+                                });
+                                resultAry = _.sortBy(resultAry, function(result){return result.timeframe.start;});
+                                if(granularity === 'hours') {
+                                    resultAry = self._zeroMissingHours(resultAry, {value:0, count:0}, moment(previousStart).format('YYYY-MM-DD HH:mm'), moment(previousEnd).format('YYYY-MM-DD HH:mm'));
+                                } else {
+                                    resultAry = self._zeroMissingDays(resultAry, {value:0, count:0}, moment(previousStart).format('YYYY-MM-DD'), moment(previousEnd).format('YYYY-MM-DD'));
+                                }
+                                cb(null, nonBounceAvg, bounceAvg, prevNonBounceAvg, resultAry);
+                            }
+                        });
+                    },
+                    function compileResults(nonBounceAvg, bounceAvg, prevNonBounceAvg, prevBounceAvg, cb) {
+                        var result = {
+                            nonBounceAvg:nonBounceAvg,
+                            bounceAvg:bounceAvg,
+                            prevNonBounceAvg:prevNonBounceAvg,
+                            prevBounceAvg:prevBounceAvg
+                        };
+                        var currentMonthAvg = 0;
+                        var currentMonthCount = 0;
+                        var prevMonthAvg = 0;
+                        var prevMonthCount = 0;
+                        _.each(nonBounceAvg.concat(bounceAvg), function(nb){
+                            if(nb.value >0) {
+                                nb.valueSeconds = nb.value / 1000;
+                                currentMonthAvg+= (nb.value * nb.count);
+                                currentMonthCount += nb.count;
+                            } else {
+                                nb.valueSeconds = 0;
+                            }
+                        });
+                        result.currentMonthAverage = (currentMonthAvg / currentMonthCount);
+                        _.each(prevNonBounceAvg.concat(prevBounceAvg), function(nb){
+                            if(nb.value >0) {
+                                nb.valueSeconds = nb.value / 1000;
+                                prevMonthAvg+= (nb.value * nb.count);
+                                prevMonthCount += nb.count;
+                            } else {
+                                nb.valueSeconds = 0;
+                            }
+                        });
+                        result.previousMonthAverage = (prevMonthAvg / prevMonthCount);
+                        result.previousMonthBounceCount = 0;
+                        _.each(prevBounceAvg, function(ba){
+                            result.previousMonthBounceCount += ba.count;
+                        });
 
-        async.waterfall([
-            function nonBounceAverageSessionLength(cb) {
-                dao.aggregateWithCustomStages(stageAry, $$.m.SessionEvent, function(err, value) {
-                    if(err) {
-                        self.log.error('Error finding current month:', err);
-                        cb(err);
-                    } else {
-                        var resultAry = [];
-                        _.each(value, function (entry) {
-                            var result = {
-                                value: entry.averageTime,
-                                count: entry.count,
-                                timeframe: {
-                                    start: entry._id
-                                }
-                            };
-                            if(granularity === 'hours') {
-                                result.timeframe.end = moment(entry._id).add(1, 'hours').format('YYYY-MM-DD HH:mm');
-                            } else {
-                                result.timeframe.end = moment(entry._id).add(1, 'days').format('YYYY-MM-DD');
-                            }
-                            resultAry.push(result);
-                        });
-                        resultAry = _.sortBy(resultAry, function(result){return result.timeframe.start;});
-                        if(granularity === 'hours') {
-                            resultAry = self._zeroMissingHours(resultAry, {value:0, count:0}, moment(start).format('YYYY-MM-DD HH:mm'), moment(end).format('YYYY-MM-DD HH:mm'));
-                        } else {
-                            resultAry = self._zeroMissingDays(resultAry, {value:0, count:0}, moment(start).format('YYYY-MM-DD'), moment(end).format('YYYY-MM-DD'));
-                        }
-                        cb(null, resultAry);
+                        cb(null, result);
                     }
+                ], function(err, result){
+                    self.log.debug(accountId, userId, '<< sessionLengthReport');
+                    fn(err, result);
                 });
-            },
-            function bounceAverageSessionLength(nonBounceAvg, cb) {
-                stageAry[0].$match.session_length = {$lte:5000};
-                //TODO: re-enable this
-                //stageAry[0].$match.page_depth = {$lte:1};
-                //self.log.debug('match:', stageAry[0]);
-                dao.aggregateWithCustomStages(stageAry, $$.m.SessionEvent, function(err, value) {
-                    if(err) {
-                        self.log.error('Error finding current month:', err);
-                        cb(err);
-                    } else {
-                        var resultAry = [];
-                        _.each(value, function (entry) {
-                            var result = {
-                                value: entry.averageTime,
-                                count: entry.count,
-                                timeframe: {
-                                    start: entry._id
-                                }
-                            };
-                            if(granularity === 'hours') {
-                                result.timeframe.end = moment(entry._id).add(1, 'hours').format('YYYY-MM-DD HH:mm');
-                            } else {
-                                result.timeframe.end = moment(entry._id).add(1, 'days').format('YYYY-MM-DD');
-                            }
-                            resultAry.push(result);
-                        });
-                        resultAry = _.sortBy(resultAry, function(result){return result.timeframe.start;});
-                        if(granularity === 'hours') {
-                            resultAry = self._zeroMissingHours(resultAry, {value:0, count:0}, moment(start).format('YYYY-MM-DD HH:mm'), moment(end).format('YYYY-MM-DD HH:mm'));
-                        } else {
-                            resultAry = self._zeroMissingDays(resultAry, {value:0, count:0}, moment(start).format('YYYY-MM-DD'), moment(end).format('YYYY-MM-DD'));
-                        }
-                        //self.log.debug('results:', value);
-                        cb(null, nonBounceAvg, resultAry);
-                    }
-                });
-            },
-            function previousNonBounceAverageSessionLength(nonBounceAvg, bounceAvg, cb) {
-                stageAry[0].$match.session_length = {$gte:5000};
-                //TODO: re-enable this
-                //stageAry[0].$match.page_depth = {$gte:1};
-                stageAry[0].$match.server_time_dt.$gte = previousStart;
-                stageAry[0].$match.server_time_dt.$lte = previousEnd;
-                dao.aggregateWithCustomStages(stageAry, $$.m.SessionEvent, function(err, value) {
-                    if(err) {
-                        self.log.error('Error finding current month:', err);
-                        cb(err);
-                    } else {
-                        var resultAry = [];
-                        _.each(value, function (entry) {
-                            var result = {
-                                value: entry.averageTime,
-                                count: entry.count,
-                                timeframe: {
-                                    start: entry._id
-                                }
-                            };
-                            if(granularity === 'hours') {
-                                result.timeframe.end = moment(entry._id).add(1, 'hours').format('YYYY-MM-DD HH:mm');
-                            } else {
-                                result.timeframe.end = moment(entry._id).add(1, 'days').format('YYYY-MM-DD');
-                            }
-                            resultAry.push(result);
-                        });
-                        resultAry = _.sortBy(resultAry, function(result){return result.timeframe.start;});
-                        if(granularity === 'hours') {
-                            resultAry = self._zeroMissingHours(resultAry, {value:0, count:0}, moment(previousStart).format('YYYY-MM-DD HH:mm'), moment(previousEnd).format('YYYY-MM-DD HH:mm'));
-                        } else {
-                            resultAry = self._zeroMissingDays(resultAry, {value:0, count:0}, moment(previousStart).format('YYYY-MM-DD'), moment(previousEnd).format('YYYY-MM-DD'));
-                        }
-                        cb(null, nonBounceAvg, bounceAvg, resultAry);
-                    }
-                });
-            },
-            function previousBounceAverageSessionLength(nonBounceAvg, bounceAvg, prevNonBounceAvg, cb) {
-                stageAry[0].$match.session_length = {$lte:5000};
-                //TODO: re-enable this
-                //stageAry[0].$match.page_depth = {$lte:1};
-                dao.aggregateWithCustomStages(stageAry, $$.m.SessionEvent, function(err, value) {
-                    if(err) {
-                        self.log.error('Error finding current month:', err);
-                        cb(err);
-                    } else {
-                        var resultAry = [];
-                        _.each(value, function (entry) {
-                            var result = {
-                                value: entry.averageTime,
-                                count: entry.count,
-                                timeframe: {
-                                    start: entry._id
-                                }
-                            };
-                            if(granularity === 'hours') {
-                                result.timeframe.end = moment(entry._id).add(1, 'hours').format('YYYY-MM-DD HH:mm');
-                            } else {
-                                result.timeframe.end = moment(entry._id).add(1, 'days').format('YYYY-MM-DD');
-                            }
-                            resultAry.push(result);
-                        });
-                        resultAry = _.sortBy(resultAry, function(result){return result.timeframe.start;});
-                        if(granularity === 'hours') {
-                            resultAry = self._zeroMissingHours(resultAry, {value:0, count:0}, moment(previousStart).format('YYYY-MM-DD HH:mm'), moment(previousEnd).format('YYYY-MM-DD HH:mm'));
-                        } else {
-                            resultAry = self._zeroMissingDays(resultAry, {value:0, count:0}, moment(previousStart).format('YYYY-MM-DD'), moment(previousEnd).format('YYYY-MM-DD'));
-                        }
-                        cb(null, nonBounceAvg, bounceAvg, prevNonBounceAvg, resultAry);
-                    }
-                });
-            },
-            function compileResults(nonBounceAvg, bounceAvg, prevNonBounceAvg, prevBounceAvg, cb) {
-                var result = {
-                    nonBounceAvg:nonBounceAvg,
-                    bounceAvg:bounceAvg,
-                    prevNonBounceAvg:prevNonBounceAvg,
-                    prevBounceAvg:prevBounceAvg
-                };
-                var currentMonthAvg = 0;
-                var currentMonthCount = 0;
-                var prevMonthAvg = 0;
-                var prevMonthCount = 0;
-                _.each(nonBounceAvg.concat(bounceAvg), function(nb){
-                    if(nb.value >0) {
-                        nb.valueSeconds = nb.value / 1000;
-                        currentMonthAvg+= (nb.value * nb.count);
-                        currentMonthCount += nb.count;
-                    } else {
-                        nb.valueSeconds = 0;
-                    }
-                });
-                result.currentMonthAverage = (currentMonthAvg / currentMonthCount);
-                _.each(prevNonBounceAvg.concat(prevBounceAvg), function(nb){
-                    if(nb.value >0) {
-                        nb.valueSeconds = nb.value / 1000;
-                        prevMonthAvg+= (nb.value * nb.count);
-                        prevMonthCount += nb.count;
-                    } else {
-                        nb.valueSeconds = 0;
-                    }
-                });
-                result.previousMonthAverage = (prevMonthAvg / prevMonthCount);
-                result.previousMonthBounceCount = 0;
-                _.each(prevBounceAvg, function(ba){
-                    result.previousMonthBounceCount += ba.count;
-                });
-
-                cb(null, result);
             }
-        ], function(err, result){
-            self.log.debug(accountId, userId, '<< sessionLengthReport');
-            fn(err, result);
         });
+
 
     },
 
@@ -1713,18 +1757,26 @@ module.exports = {
         };
         stageAry.push(group);
 
-        dao.aggregateWithCustomStages(stageAry, $$.m.SessionEvent, function(err, value) {
-            if(err) {
-                self.log.error('Error finding current month:', err);
+        self._addAccountFilterByID(accountId, userId, isAggregate, match, function(err, match) {
+            if (err) {
+                self.log.error(accountId, userId, 'Error adding filter:', err);
                 fn(err);
             } else {
-                _.each(value, function(result){
-                    result['referrer.domain'] = result._id;
+                dao.aggregateWithCustomStages(stageAry, $$.m.SessionEvent, function(err, value) {
+                    if(err) {
+                        self.log.error('Error finding current month:', err);
+                        fn(err);
+                    } else {
+                        _.each(value, function(result){
+                            result['referrer.domain'] = result._id;
+                        });
+                        self.log.debug(accountId, userId, '<< trafficSourcesReport');
+                        fn(null, value);
+                    }
                 });
-                self.log.debug(accountId, userId, '<< trafficSourcesReport');
-                fn(null, value);
             }
         });
+
     },
 
     newVsReturningReport: function(accountId, userId, start, end, isAggregate, orgId, fn) {
@@ -1771,24 +1823,34 @@ module.exports = {
             }
         };
         stageAry.push(group2);
-        dao.aggregateWithCustomStages(stageAry, $$.m.SessionEvent, function(err, value) {
-            if(err) {
-                self.log.error('Error finding current month:', err);
+
+        self._addAccountFilterByID(accountId, userId, isAggregate, match, function(err, match) {
+            if (err) {
+                self.log.error(accountId, userId, 'Error adding filter:', err);
                 fn(err);
             } else {
-                _.each(value, function(result){
-                    if(result._id === false) {
-                        result._id = 'returning';
+                dao.aggregateWithCustomStages(stageAry, $$.m.SessionEvent, function(err, value) {
+                    if(err) {
+                        self.log.error('Error finding current month:', err);
+                        fn(err);
                     } else {
-                        result._id = 'new';
+                        _.each(value, function(result){
+                            if(result._id === false) {
+                                result._id = 'returning';
+                            } else {
+                                result._id = 'new';
+                            }
+                        });
+                        self.log.debug(accountId, userId, '<< newVsReturningReport');
+                        fn(null, value);
                     }
                 });
-                self.log.debug(accountId, userId, '<< newVsReturningReport');
-                fn(null, value);
             }
         });
+
     },
 
+    //TODO: no IP filtering here... do we need it?
     pageAnalyticsReport: function(accountId, userId, start, end, isAggregate, orgId, fn) {
         var self = this;
         self.log = _log;
@@ -2041,13 +2103,22 @@ module.exports = {
         };
         stageAry.push(group1);
 
-        dao.aggregateWithCustomStages(stageAry, $$.m.SessionEvent, function(err, value) {
-            var sortedResults = _.sortBy(value, function(result){return result.count;});
-            self.log.debug(accountId, userId, '<< getUserAgentReport');
-            fn(err, sortedResults);
+        self._addAccountFilterByID(accountId, userId, isAggregate, match, function(err, match) {
+            if (err) {
+                self.log.error(accountId, userId, 'Error adding filter:', err);
+                fn(err);
+            } else {
+                dao.aggregateWithCustomStages(stageAry, $$.m.SessionEvent, function(err, value) {
+                    var sortedResults = _.sortBy(value, function(result){return result.count;});
+                    self.log.debug(accountId, userId, '<< getUserAgentReport');
+                    fn(err, sortedResults);
+                });
+            }
         });
+
     },
 
+    //TODO: No IP Filtering here... do we need it?
     getDailyActiveUsers: function(accountId, userId, start, end, orgId, fn) {
         var self = this;
         self.log = _log;
@@ -2123,6 +2194,7 @@ module.exports = {
         });
     },
 
+    //TODO: No IP Filtering Here... do we need it?
     getRevenueByMonth: function(accountId, userId, start, end, previousStart, previousEnd, isAggregate, orgId, fn) {
         var self = this;
         self.log = _log;
@@ -2289,14 +2361,22 @@ module.exports = {
             }
         };
         stageAry.push(group1);
-
-        dao.aggregateWithCustomStages(stageAry, $$.m.SessionEvent, function(err, value) {
-            var sortedResults = _.sortBy(value, function(result){return result.count;});
-            self.log.debug(accountId, userId, '<< getOSReport');
-            fn(err, sortedResults);
+        self._addAccountFilterByID(accountId, userId, isAggregate, match, function(err, match) {
+            if (err) {
+                self.log.error(accountId, userId, 'Error adding filter:', err);
+                fn(err);
+            } else {
+                dao.aggregateWithCustomStages(stageAry, $$.m.SessionEvent, function(err, value) {
+                    var sortedResults = _.sortBy(value, function(result){return result.count;});
+                    self.log.debug(accountId, userId, '<< getOSReport');
+                    fn(err, sortedResults);
+                });
+            }
         });
+
     },
 
+    //TODO: No IP Filtering here... do we need it?
     getCampaignEmailsReport: function(accountId, userId, start, end, previousStart, previousEnd, isAggregate, orgId, fn) {
         var self = this;
         self.log = _log;
@@ -2558,6 +2638,7 @@ module.exports = {
         });
     },
 
+    //TODO: No IP Filtering here... do we need it?
     get404sReport: function(accountId, userId, start, end, isAggregate, orgId, fn) {
         var self = this;
         self.log = _log;
@@ -2615,6 +2696,7 @@ module.exports = {
         });
     },
 
+    //TODO: No IP Filtering here... do we need it?
     get404sByDateAndPathReport: function(accountId, userId, start, end, isAggregate, orgId, fn) {
         var self = this;
         self.log = _log;
