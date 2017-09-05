@@ -21,8 +21,6 @@ var mainApp = angular
         'dm.style',
         'duScroll',
         'mrPageEnterAnimate',
-        'angularMoment',
-        'mgo-angular-wizard',
         'timer',
         'ui',
         'ui.bootstrap',

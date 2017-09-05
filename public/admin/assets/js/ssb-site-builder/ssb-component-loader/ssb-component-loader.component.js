@@ -3,7 +3,7 @@
 (function () {
 	'use strict';
 	/* @ngInject */
-	function ssbComponentLoader($compile, $timeout) {
+	function ssbComponentLoader($compile) {
 		return {
 			restrict: 'E',
 			controller: 'SiteBuilderComponentLoaderController',
@@ -48,14 +48,13 @@
 				}
 				compiled = $compile(template)(scope);
 				element.replaceWith(compiled);
-				$timeout(function () {
-					newEl = angular.element('#component_' + ctrl.component._id);
-					ctrl.init(newEl);
-				});
+				
+				newEl = angular.element('#component_' + ctrl.component._id);
+				ctrl.init(newEl);
 			}
 		};
 	}
 	app.directive('ssbComponentLoader', ssbComponentLoader);
-	ssbComponentLoader.$inject = ['$compile', '$timeout'];
+	ssbComponentLoader.$inject = ['$compile'];
 
 }());

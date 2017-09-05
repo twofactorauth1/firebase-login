@@ -13,7 +13,7 @@
 }
 
 [testimonials-component]#component_{{component._id}} .slider-dot-color-opacity .slick-dots li button:before{
-    opacity: {{component.slider.sliderDotColorOpacity?component.slider.sliderDotColorOpacity:0.01}} !important;
+    opacity: {{component.slider.sliderDotColorOpacity}} !important;
 }
 
 .carousel-indicators li.active {
@@ -21,15 +21,8 @@
         {
             primaryColor
         }
-    }
-    ;
+    };
 }
-    div.applyingNewWidth{
-        display: none;
-    }
-    div.applyingNewWidth.slick-current{
-        display: block;
-    }
     @media screen and (min-width: 768px){
         [testimonials-component]#component_{{component._id}} .testimonials-v2 .carousel-caption {
             width: {{component.customWidth && component.customWidth=='100%'?component.customWidth:(component.customWidth+'px')}}  !important;
@@ -40,6 +33,13 @@
              max-width: {{component.customWidth && component.customWidth=='100%'?component.customWidth:(component.customWidth+'px')}}  !important;
         }
     }
+    div.applyingNewWidth{
+        display: none;
+    }
+    div.applyingNewWidth.slick-current{
+        display: block;
+    }
+    
 </style>
 <div data-edit ng-class="component.type+'-v'+component.version">
     <div class="title col-xs-12">
