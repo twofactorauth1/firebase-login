@@ -1,29 +1,22 @@
+/*global mainApp   */
+/*jslint unparam:true*/
+/* eslint-disable no-console */
 (function () {
-    mainApp.factory('SsbPageSectionService', SsbPageSectionService);
-    
-    function SsbPageSectionService(){
-        var ssbSectionService = {};
+	'use strict';
 
+	mainApp.factory('SsbPageSectionService', function () {
+		var ssbSectionService = {};
+		ssbSectionService.offset = 0;
 
-        ssbSectionService.getSectionOffset = getSectionOffset;
-        ssbSectionService.setSectionOffset = setSectionOffset;
+		function getSectionOffset() {
+			return ssbSectionService.offset;
+		}
 
-        ssbSectionService.offset = 0;
-        
-
-        function getSectionOffset() {
-            return ssbSectionService.offset;
-        } 
-
-
-        function setSectionOffset(offset) {
-            ssbSectionService.offset = offset;
-        }       
-
-        
-        (function init() {
-            
-        })();
-    return ssbSectionService;       
-    }
-})();
+		function setSectionOffset(offset) {
+			ssbSectionService.offset = offset;
+		}
+		ssbSectionService.getSectionOffset = getSectionOffset;
+		ssbSectionService.setSectionOffset = setSectionOffset;
+		return ssbSectionService;
+	});
+}());
