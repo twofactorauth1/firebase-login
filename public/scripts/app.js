@@ -21,6 +21,7 @@ var mainApp = angular
         'dm.style',
         'duScroll',
         'mrPageEnterAnimate',
+        'angularMoment',
         'timer',
         'ui',
         'ui.bootstrap',
