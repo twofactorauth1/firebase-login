@@ -41,18 +41,7 @@
 
     <div ng-if="((vm.section.components[0] && vm.section.components[0].src) || (vm.section.bg.img.show && vm.section.bg.img.url) || vm.section.bg.video.show && vm.section.bg.video.url) && vm.section.bg.img.overlay" class="bg bg-overlay"></div>
 
-
-    <div ng-if="vm.section.components.length && vm.section.layoutModifiers.custom && vm.section.layout === 'nav-hero'">
-
-    	<div ng-switch="vm.section.version">
-            <ssb-custom-component-loader version="1" ng-switch-when="1"></ssb-custom-component-loader>
-            <ssb-custom-component-loader version="2" ng-switch-when="2"></ssb-custom-component-loader>
-            <ssb-custom-component-loader version="3" ng-switch-when="3"></ssb-custom-component-loader>
-            <ssb-custom-component-loader version="4" ng-switch-when="4"></ssb-custom-component-loader>
-    	</div>
-    </div>
-
-    <div ng-if="vm.section.components.length && vm.section.layoutModifiers.custom && vm.section.layout !== 'nav-hero'" >
+    <div ng-if="vm.section.components.length && vm.section.layoutModifiers.custom" >
     	<div data-ng-include data-src=" '/admin/assets/js/ssb-site-builder/ssb-components/ssb-' + vm.section.layout + '/ssb-' + vm.section.layout + '.layout.v' + vm.section.version + '.html' " ></div>
     </div>
 

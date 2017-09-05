@@ -6,9 +6,9 @@ ssbCustomComponentLoader.$inject = ['$compile'];
 /* @ngInject */
 function ssbCustomComponentLoader($compile) {
   return {
-    restrict: 'E',
-    templateUrl: function(element, attrs, scope) {
-      return '/admin/assets/js/ssb-site-builder/ssb-components/ssb-nav-hero/ssb-nav-hero.layout.v' + attrs.version+ '.html';
+    restrict: 'EA',
+	link: function(scope, element, attrs) {
+        contentUrl = attrs.template;
     }
   }
 }
