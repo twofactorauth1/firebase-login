@@ -6,7 +6,6 @@
  */
 
 (function () {
-	"use strict";
 	if (typeof indigenous == 'undefined') {
 		indigenous = {};
 	}
@@ -32,4 +31,4 @@
 	// namespace for social dashboard
 	$$.modules = {};
 	$$.Charts = {};
-}());
+})();
