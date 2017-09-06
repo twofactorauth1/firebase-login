@@ -2,9 +2,9 @@
 	<div ng-if="!(vm.component.version == 2 && vm.component.parallax )" class="ssb-image-component-container">
 		<img class="img-responsive" ng-src="{{vm.component.src}}" alt="{{(vm.component.src) ? vm.component.alttext : ''}}"/>
 	</div>
-	<div id="px-ele-{{vm.component._id}}" class="nav-header-div parallax" parallax-background
-         ng-if="(vm.component.version == 2 && vm.component.parallax )"
-	     ng-attr-parallax-ratio="'0.4'"
+	<div id="px-ele-{{vm.component._id}}" class="nav-header-div" ng-if="(vm.component.version == 2 && vm.component.parallax )" ng-class="{parallax:vm.component.parallax}"
+	     {{vm.component.parallax ? parallax-background  : ""}}
+	     ng-attr-parallax-ratio="{{vm.component.parallax ? '0.4' : '1'}}"
 	     style='
 	        background: url("{{vm.component.src}}");
 	        background-size: cover;
@@ -12,4 +12,6 @@
 		<img ng-src="{{vm.component.src}}" style="visibility: hidden; opacity: 0;"/>		
 	</div>
 </div>
+
+
 

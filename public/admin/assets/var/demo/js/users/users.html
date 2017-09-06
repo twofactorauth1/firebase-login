@@ -53,7 +53,7 @@
                             <th class="hidden-xs col-id" st-sort="_id" style="white-space: nowrap">ID</th>
                             <th st-sort="vm.getters.name" class="col-name" style="white-space: nowrap">Name</th>
                             <th class="col-email" st-sort="username" style="white-space: nowrap">Username</th>
-                            <th class="hidden-xs col-login-date" st-sort="vm.getters.loginDate" style="white-space: nowrap">Last Login</th>
+                            <th class="hidden-xs col-login-date" st-sort-default="reverse" st-sort="vm.getters.loginDate" style="white-space: nowrap">Last Login</th>
                             <th class="hidden-xs col-login-ip" st-sort="vm.getters.ip">Last IP</th>
                             <th class="col-actions hidden-xs">Actions</th>
                             <th class="hidden-xs col-activity"  ng-if="vm.state.orgCardAndPermissions.isAdminUser || vm.state.orgCardAndPermissions.isSecurematicsUser">Activity</th>
