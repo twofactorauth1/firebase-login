@@ -235,7 +235,7 @@ function dashboardAnalyticTileComponentController($scope, $attrs, $filter, Dashb
     }
 
     function parseValueToCurrency(value, symbol){
-        if(value){
+        if(angular.isDefined(value)){
             return $filter('currency')(value, symbol)
         }
     }
