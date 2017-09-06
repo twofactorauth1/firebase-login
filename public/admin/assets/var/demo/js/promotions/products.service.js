@@ -48,10 +48,12 @@
             if(pagingParams.sortBy){
                 _qString += "&sortBy=" + pagingParams.sortBy + "&sortDir=" + pagingParams.sortDir;
             }
+            else{
+                 _qString += "&sortBy=_firmName&sortDir=1";
+            }
             
-            else if(pagingParams.globalSearch){
+            if(pagingParams.globalSearch){
                 _qString += "&term=" + encodeURIComponent(pagingParams.globalSearch);
-                
             }
             if(pagingParams.filter)
                 _qString += '&vendor=' + encodeURIComponent(pagingParams.filter);
