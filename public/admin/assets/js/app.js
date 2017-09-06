@@ -1,4 +1,4 @@
-'use strict';
+/*global angular */
 angular.module("indigenous", [
     'ngAnimate',
     'ngCookies',

@@ -146,7 +146,7 @@ function dashboardAnalyticTileComponentController($scope, $attrs, $filter, Dashb
 
                             ret.data.push({
 
-                                field1: parseValueToCurrency(invoice.totalInvoice, invoice.items[0].currency),
+                                field1: parseValueToCurrency(getTotalUnpaidInvoice(invoice), invoice.items[0].currency),
                                 field2: invoice._id,
                                 field3: $filter('date')(parseValueToDate(invoice.items[0].dueDate), 'M/d/yyyy'),
                                 link: "#/invoices/" + invoice.items[0].cardCode + "/" + invoice._id
@@ -235,9 +235,20 @@ function dashboardAnalyticTileComponentController($scope, $attrs, $filter, Dashb
     }
 
     function parseValueToCurrency(value, symbol){
-        if(value){
+        if(angular.isDefined(value)){
             return $filter('currency')(value, symbol)
         }
+    }
+
+    function getTotalUnpaidInvoice(invoice){
+        var item = invoice.items ? invoice.items[0] : {};
+        var tax = item.tax || 0;
+        var freight = item.freight || 0;
+        var discount = item.discount || 0;
+        var paid = item.paid || 0;
+        var subTotal = invoice.totalInvoice || 0;
+        var total = parseFloat(subTotal) + parseFloat(tax) + parseFloat(freight) - parseFloat(discount) - parseFloat(paid);
+        return total || 0;
     }
 
     function init(element) {

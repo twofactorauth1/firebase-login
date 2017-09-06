@@ -1,20 +1,19 @@
-'use strict';
-/*global app*/
-app.controller('SiteBuilderFormBuilderModalController', ['$scope', '$timeout', 'parentVm', 'toaster', 'SimpleSiteBuilderService', function ($scope, $timeout, parentVm, toaster, SimpleSiteBuilderService) {
+/*global app,console*/
+/* eslint-disable no-console*/
+app.controller('SiteBuilderFormBuilderModalController', ['$scope', function ($scope) {
+	'use strict';
+	var vm = this,
+		pVm = $scope.$parent.vm;
 
-    var vm = this;
+	vm.addCustomField = pVm.addCustomField;
+	vm.checkDuplicateField = pVm.checkDuplicateField;
+	vm.closeModal = pVm.closeModal;
+	vm.component = pVm.state.page.sections[pVm.uiState.activeSectionIndex].components[pVm.uiState.activeComponentIndex];
 
-    var pVm = $scope.$parent.vm;
+	(function init() {
 
-    vm.addCustomField = pVm.addCustomField;
-    vm.checkDuplicateField = pVm.checkDuplicateField;
-    vm.closeModal = pVm.closeModal;
-    vm.component = pVm.state.page.sections[pVm.uiState.activeSectionIndex].components[pVm.uiState.activeComponentIndex];
+		console.debug('init form-builder contact modal');
 
-    (function init() {
-
-        console.debug('init form-builder contact modal');
-
-    })();
+	}());
 
 }]);

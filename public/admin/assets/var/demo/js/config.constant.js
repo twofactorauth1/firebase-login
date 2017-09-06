@@ -744,6 +744,7 @@ app.constant('JS_REQUIRES', {
     "QuoteProductModalController": 'assets/var/demo/js/quotes/modals/new-quote-product-modal.controller.js',
     
     'asideCtrl': 'assets/var/demo/js/controllers/asideCtrl.js',
+    'UsersComponent': 'assets/var/demo/js/users/user-details.component.js',
     'UsersCtrl': 'assets/var/demo/js/users/users.controller.js',
 
 

@@ -430,15 +430,16 @@ var ziManager = {
                     $push: {
                         cardCode: "$_CustStatmentHdr_CardCode",
                         dueDate: "$_CustStatmentDtl_DueDate",
-                        currency: "$_CustStatmentHdr_Currency"
-                        
+                        currency: "$_CustStatmentHdr_Currency",
+                        tax: "$OINV_VatSum",
+                        freight: "$OINV_TotalExpns",
+                        discount: "$OINV_DiscSum",
+                        paid: "$OINV_PaidToDate"
                     }
                 }
             }
         };
         stageAry.push(group);
-
-        
         ziDao.aggregateWithCustomStagesAndCollection(stageAry, 'ledger', function(err, resultAry){
             if(err) {
                 self.log.error(accountId, userId, 'Error searching cached ledger:', err);
