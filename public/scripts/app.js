@@ -1,4 +1,4 @@
-'use strict';
+
 
 /**
  * @ngdoc overview
@@ -8,6 +8,7 @@
  *
  * Main module of the application.
  */
+/*global angular,window,navigator, clearInterval, setInterval  */
 var mainApp = angular
     .module('mainApp', [
         'ipCookie',
@@ -40,6 +41,7 @@ var mainApp = angular
         'ngMap'
     ])
     .config(['$routeProvider', '$locationProvider', '$httpProvider', 'localStorageServiceProvider', function ($routeProvider, $locationProvider, $httpProvider, localStorageServiceProvider) {
+		'use strict';
         //$locationProvider.html5Mode(true);
         if (window.history && window.history.pushState) {
             $locationProvider.html5Mode(true).hashPrefix('!');
@@ -59,17 +61,17 @@ var mainApp = angular
                 templateUrl: '/template/index',
                 controller: 'CacheCtrl as cacheCtrl'
                 */
-                template: function(urlattr) {
+                template: function (urlattr) {
                     var s = '<div class="main-include" ssb-data-styles data-ng-include="';
-                    if(window.indigenous.defaultBlog === 1) {
+                    if (window.indigenous.defaultBlog === 1) {
                         s += " '/template/blog-list";
                     } else {
                         s += " '/template/index";
                     }
-                    if(urlattr.cachebuster) {
-                        s+='?cachebuster=' + urlattr.cachebuster;
+                    if (urlattr.cachebuster) {
+                        s += '?cachebuster=' + urlattr.cachebuster;
                     }
-                    s+= "'";
+                    s += "'";
                     s += ' "></div>';
                     return s;
                 },
@@ -81,33 +83,33 @@ var mainApp = angular
                 controller: 'NotFoundCtrl as notfound'
             })
             .when('/blog', {
-                template: function(urlattr) {
-                    var _pageName = 'blog';
-                    if(window.indigenous.ssbBlog === true) {
-                        _pageName = 'blog-list';
+                template: function (urlattr) {
+                    var blogPageName = 'blog', s;
+                    if (window.indigenous.ssbBlog === true) {
+                        blogPageName = 'blog-list';
                     }
-                    var s = '<div class="main-include" ssb-data-styles data-ng-include="';
-                    s += " '/template/" + _pageName;
-                    if(urlattr.cachebuster) {
-                        s+='?cachebuster=' + urlattr.cachebuster;
+                    s = '<div class="main-include" ssb-data-styles data-ng-include="';
+                    s += " '/template/" + blogPageName;
+                    if (urlattr.cachebuster) {
+                        s += '?cachebuster=' + urlattr.cachebuster;
                     }
-                    s+= "'";
+                    s += "'";
                     s += ' "></div>';
                     return s;
                 },
                 controller: 'CacheCtrl as cacheCtrl'
             })
             .when('/page/blog/:postName', {
-                template: function(urlattr) {
-                    if(window.indigenous.ssbBlog === true) {
+                template: function (urlattr) {
+                    if (window.indigenous.ssbBlog === true) {
                         return '<div data-ng-include="\'blogpost.html\'"></div>';
                     } else {
                         var s = '<div data-ng-include="';
                         s += " '/template/single-post";
-                        if(urlattr.cachebuster) {
-                            s+='?cachebuster=' + urlattr.cachebuster;
+                        if (urlattr.cachebuster) {
+                            s += '?cachebuster=' + urlattr.cachebuster;
                         }
-                        s+= "'";
+                        s += "'";
                         s += ' "></div>';
                         return s;
                     }
@@ -115,70 +117,69 @@ var mainApp = angular
                 controller: 'CacheCtrl as cacheCtrl'
             })
             .when('/author/:author', {
-                template: function(urlattr) {
-                    var _pageName = 'blog';
-                    if(window.indigenous.ssbBlog === true) {
-                        _pageName = 'blog-list';
+                template: function (urlattr) {
+                    var authorPageName = 'blog', s;
+                    if (window.indigenous.ssbBlog === true) {
+                        authorPageName = 'blog-list';
                     }
 
-                    var s = '<div class="main-include" ssb-data-styles data-ng-include="';
-                    s += " '/template/" + _pageName;
-                    if(urlattr.cachebuster) {
-                        s+='?cachebuster=' + urlattr.cachebuster;
+					s = '<div class="main-include" ssb-data-styles data-ng-include="';
+                    s += " '/template/" + authorPageName;
+                    if (urlattr.cachebuster) {
+                        s += '?cachebuster=' + urlattr.cachebuster;
                     }
-                    s+= "'";
+                    s += "'";
                     s += ' "></div>';
                     return s;
                 },
                 controller: 'CacheCtrl as cacheCtrl'
             })
             .when('/tag/:tag', {
-                template: function(urlattr) {
-                    var _pageName = 'blog';
-                    if(window.indigenous.ssbBlog === true) {
-                        _pageName = 'blog-list';
+                template: function (urlattr) {
+                    var tagPageName = 'blog', s;
+                    if (window.indigenous.ssbBlog === true) {
+                        tagPageName = 'blog-list';
                     }
 
-                    var s = '<div class="main-include" ssb-data-styles data-ng-include="';
-                    s += " '/template/" + _pageName;
-                        if(urlattr.cachebuster) {
-                            s+='?cachebuster=' + urlattr.cachebuster;
-                        }
-                        s+= "'";
-                        s += ' "></div>';
-                        return s;
+                    s = '<div class="main-include" ssb-data-styles data-ng-include="';
+                    s += " '/template/" + tagPageName;
+					if (urlattr.cachebuster) {
+						s += '?cachebuster=' + urlattr.cachebuster;
+					}
+					s += "'";
+					s += ' "></div>';
+					return s;
                 },
                 controller: 'CacheCtrl as cacheCtrl'
             })
             .when('/category/:category', {
-                template: function(urlattr) {
-                    var _pageName = 'blog';
-                    if(window.indigenous.ssbBlog === true) {
-                        _pageName = 'blog-list';
+                template: function (urlattr) {
+                    var categoryPageName = 'blog', s;
+                    if (window.indigenous.ssbBlog === true) {
+                        categoryPageName = 'blog-list';
                     }
-
-                    var s = '<div class="main-include" ssb-data-styles data-ng-include="';
-                    s += " '/template/" + _pageName;
-                        if(urlattr.cachebuster) {
-                            s+='?cachebuster=' + urlattr.cachebuster;
-                        }
-                        s+= "'";
-                        s += ' "></div>';
-                        return s;
+					s = '<div class="main-include" ssb-data-styles data-ng-include="';
+                    s += " '/template/" + categoryPageName;
+					if (urlattr.cachebuster) {
+						s += '?cachebuster=' + urlattr.cachebuster;
+					}
+					s += "'";
+					s += ' "></div>';
+					return s;
                 },
                 controller: 'CacheCtrl as cacheCtrl'
             })
             .when('/blog/:postName', {
-                template: function(urlattr) {
-                    if(window.indigenous.ssbBlog === true) {
+                template: function (urlattr) {
+                    if (window.indigenous.ssbBlog === true) {
                         return '<div data-ng-include="\'blogpost.html\'"></div>';
                     } else {
                         var s = '<div data-ng-include="';
                         s += " '/template/single-post";
-                        if(urlattr.cachebuster) {
-                            s+='?cachebuster=' + urlattr.cachebuster;
+                        if (urlattr.cachebuster) {
+                            s += '?cachebuster=' + urlattr.cachebuster;
                         }
-                        s+= "'";
+                        s += "'";
                         s += ' "></div>';
                         return s;
                     }
@@ -187,13 +188,13 @@ var mainApp = angular
                 controller: 'CacheCtrl as cacheCtrl'
             })
             .when('/:name', {
-                template: function(urlattr) {
+                template: function (urlattr) {
                     var s = '<div class="main-include" ssb-data-styles data-ng-include="';
-                    s += " '/template/"+ urlattr.name.toLowerCase();
-                    if(urlattr.cachebuster) {
-                        s+='?cachebuster=' + urlattr.cachebuster;
+                    s += " '/template/" + urlattr.name.toLowerCase();
+                    if (urlattr.cachebuster) {
+                        s += '?cachebuster=' + urlattr.cachebuster;
                     }
-                    s+= "'";
+                    s += "'";
                     s += ' "></div>';
                     return s;
                 },
@@ -215,38 +216,37 @@ var mainApp = angular
                 templateUrl: '../views/main.html'
             })
             .when('/:name/:name_1', {
-                template: function(urlattr) {
+                template: function (urlattr) {
                     var s = '<div class="main-include" ssb-data-styles data-ng-include="';
-                    s += " '/template/"+ urlattr.name.toLowerCase() + '/' + urlattr.name_1.toLowerCase();
-                    if(urlattr.cachebuster) {
-                        s+='?cachebuster=' + urlattr.cachebuster;
+                    s += " '/template/" + urlattr.name.toLowerCase() + '/' + urlattr.name_1.toLowerCase();
+                    if (urlattr.cachebuster) {
+                        s += '?cachebuster=' + urlattr.cachebuster;
                     }
-                    s+= "'";
+                    s += "'";
                     s += ' "></div>';
                     return s;
                 },
                 controller: 'CacheCtrl as cacheCtrl',
                 reloadOnSearch: false
             })
-            .otherwise({
-               template: function(urlattr) {
-                   if(window.location.pathname.length>1)
-                    urlattr.name=window.location.pathname.substr(1);
+			.otherwise({
+                template: function (urlattr) {
+					if (window.location.pathname.length > 1) {
+						urlattr.name = window.location.pathname.substr(1);
+					}
                     var s = '<div class="main-include" ssb-data-styles data-ng-include="';
-                    s += " '/template/"+ encodeURIComponent(urlattr.name.toLowerCase());
-                    if(urlattr.cachebuster) {
-                        s+='?cachebuster=' + urlattr.cachebuster;
+                    s += " '/template/" + encodeURIComponent(urlattr.name.toLowerCase());
+                    if (urlattr.cachebuster) {
+                        s += '?cachebuster=' + urlattr.cachebuster;
                     }
-                    s+= "'";
+                    s += "'";
                     s += ' "></div>';
                     return s;
                 },
                 controller: 'CacheCtrl as cacheCtrl',
                 reloadOnSearch: false
             });
-
-            localStorageServiceProvider.setPrefix('indi');
-
+		localStorageServiceProvider.setPrefix('indi');
     }])
     // .factory('noCacheInterceptor', function () {
     //     return {
@@ -260,12 +260,13 @@ var mainApp = angular
     //    };
     // })
     .run(function ($rootScope, $location, $anchorScroll, $routeParams, $document, $timeout, ipCookie, analyticsService) {
+		'use strict';
 
-        var runningInterval;
-        var isPreview = $location.$$path.indexOf("/preview/") === 0;
-        var editorIndex = window.location.search.indexOf("editor=true");
+        var runningInterval,
+			isPreview = $location.$$path.indexOf("/preview/") === 0,
+			editorIndex = window.location.search.indexOf("editor=true");
         if (editorIndex == -1 && !isPreview) {
-            analyticsService.sessionStart(function (data) {
+            analyticsService.sessionStart(function () {
             });
         }
 
@@ -276,30 +277,27 @@ var mainApp = angular
                 if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
                     check = true;
                 }
-                ;
                 return check;
-            })()
+            }())
         };
 
 
         $rootScope.pageTitle = function () {
-            if($rootScope.isSocialEnabled)
-            {
-                if(window.indigenous && window.indigenous.precache && window.indigenous.precache.siteData && window.indigenous.precache.siteData.post){
-                    return window.indigenous.precache.siteData.post.post_title;
-                }
-            }
-            else{
+			if ($rootScope.isSocialEnabled) {
+				if (window.indigenous && window.indigenous.precache && window.indigenous.precache.siteData && window.indigenous.precache.siteData.post) {
+					return window.indigenous.precache.siteData.post.post_title;
+				}
+			} else {
                 return $rootScope.title;
             }
-        };
+		};
 
 
-        $rootScope.$on("$routeChangeStart", function (scope, next, current) {
-            var self = this;
-        });
+        /*$rootScope.$on("$routeChangeStart", function () {
+            //var self = this;
+        });*/
 
-        $rootScope.$on("$routeChangeSuccess", function (scope, next, current) {
+        $rootScope.$on("$routeChangeSuccess", function () {
 
             $rootScope.isSocialEnabled = $location.absUrl().search(/\/blog\/.+/) !== -1;
             if (editorIndex == -1 && !isPreview) {
@@ -325,6 +323,7 @@ var mainApp = angular
 
     })
     .run(function ($rootScope, $location) {
+		'use strict';
         $rootScope.$on('duScrollspy:becameActive', function ($event, $element) {
             //Automaticly update location
             var hash = $element.prop('hash');
@@ -335,11 +334,12 @@ var mainApp = angular
         });
     })
     .config(["$provide", function ($provide) {
-        $provide.decorator("$exceptionHandler", ["$delegate", "$window", function($delegate, $window) {
+        'use strict';
+		$provide.decorator("$exceptionHandler", ["$delegate", "$window", function ($delegate, $window) {
                 return function (exception, cause) {
                     if ($window.trackJs) {
-                        $window.trackJs.track(exception);
-                    }
+						$window.trackJs.track(exception);
+					}
                     // (Optional) Pass the error through to the delegate
                     $delegate(exception, cause);
                 };
