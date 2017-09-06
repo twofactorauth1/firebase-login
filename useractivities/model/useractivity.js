@@ -34,7 +34,7 @@ var userActivity = $$.m.ModelBase.extend({
         var dateString = "";
         if(offset){
             offset = parseInt(offset);
-            dateString = moment.utc(this.get("start")).utcOffset(offset).format("MM/DD/YYYY HH:mm a");
+            dateString = moment.utc(this.get("start")).utcOffset(offset).format("MM/DD/YYYY HH:mm");
         }
         else{
             dateString = this.get(dateField) ? moment(this.get(dateField)).format("MM/DD/YYYY HH:mm A") : '';
