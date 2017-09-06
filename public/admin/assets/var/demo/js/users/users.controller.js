@@ -5,7 +5,7 @@
     app.controller('usersCtrl', ['$scope', '$state', '$http', "toaster", "$filter", "$modal", "$timeout", "AccountService","UserService", "userConstant", "formValidations", "SweetAlert", "pagingConstant", "UtilService", "UserPermissionsConfig", "ChartAnalyticsService", function ($scope, $state, $http, toaster, $filter, $modal, $timeout, AccountService,UserService, userConstant, formValidations, SweetAlert, pagingConstant, UtilService, UserPermissionsConfig, ChartAnalyticsService) {
 
         var vm = this;
-
+        vm.init = init;
         vm.state = {
             adminUserName: userConstant.admin_user.userName,
             adminUserEmailFilter: userConstant.admin_user.emailDomain,
@@ -76,13 +76,13 @@
                 users = _.reject(users, function(user){ return user.username == vm.state.adminUserName });
                 vm.state.users = users;
                 vm.uiState.loading = false;
-                vm.uiState.isAdminUser =  vm.state.account.ownerUser == $scope.currentUser._id || $scope.currentUser.username == vm.state.adminUserName || checkIfAdminUser();
+                vm.uiState.isAdminUser =  vm.state.account.ownerUser == $scope.$parent.currentUser._id || $scope.$parent.currentUser.username == vm.state.adminUserName || checkIfAdminUser();
             });
         }
 
         function checkIfAdminUser(){
             var _isAdmin = false;
-            var _userAccount = _.find($scope.currentUser.accounts, function(account){
+            var _userAccount = _.find($scope.$parent.currentUser.accounts, function(account){
                 return account.accountId == vm.state.account._id
             });
 
@@ -268,16 +268,16 @@
         };
 
         $scope.openEditUserModal = function(userId) {
-            $scope.currentUserId = userId;
+            $scope.$parent.currentUserId = userId;
             vm.openSimpleModal('edit-password-modal');
         };
         $scope.closeEditUserModal = function() {
-            $scope.currentUserId = null;
+            $scope.$parent.currentUserId = null;
             $scope.closeModal();
         };
 
         $scope.openEditUserCardModal = function(userId) {
-            $scope.currentUserId = userId;
+            $scope.$parent.currentUserId = userId;
 
             $scope.editUser = null;
             $scope.editUser = _.find(vm.state.users, function(user){
@@ -308,7 +308,7 @@
             vm.openSimpleModal('edit-user-card-modal');
         };
         $scope.closeUserCardModal = function() {
-            $scope.currentUserId = null;
+            $scope.$parent.currentUserId = null;
             $scope.closeModal();
         };
 
@@ -328,9 +328,9 @@
         function updateUserDetails(){
             setOrgConfig(vm.state.account.orgId);
             var _permissions = getUserPermissions();
-            UserService.editUser($scope.editUser, $scope.currentUserId, function(){
-                UserService.updateUserPermisions($scope.currentUserId, _permissions, function(user){
-                    updateUserPermissions(user, $scope.currentUserId);
+            UserService.editUser($scope.editUser, $scope.$parent.currentUserId, function(){
+                UserService.updateUserPermisions($scope.$parent.currentUserId, _permissions, function(user){
+                    updateUserPermissions(user, $scope.$parent.currentUserId);
                     toaster.pop('info', 'Successfully updated');
                     $scope.closeUserCardModal();
                 })
@@ -518,11 +518,11 @@
             }
         });
 
-        (function init() {
+        function init() {
             UserService.getVendors(function(data){
                 vm.state.vendors = data;
             })
-        })();
+        }
 
     }]);
 }(angular));

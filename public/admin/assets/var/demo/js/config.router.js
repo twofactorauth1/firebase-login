@@ -344,10 +344,10 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         resolve: loadSequence('InvoiceDetailsComponent', 'InvoiceDetailsController', 'InvoiceService', 'InventoryService')
     }).state('app.account.users', {
         url: '/users',
-        templateUrl: "/admin/assets/var/demo/js/users/users.html",
+        templateUrl: "/admin/assets/var/demo/js/users/user-details.component.html",
         title: 'Users',
         icon: 'ti-layout-media-left-alt',
-        resolve: loadSequence('UsersCtrl', 'customerService', 'highcharts', 'highmaps', 'highmaps-lib', 'chartAnalyticsService')
+        resolve: loadSequence('UsersComponent', 'UsersCtrl', 'customerService', 'highcharts', 'highmaps', 'highmaps-lib', 'chartAnalyticsService')
     }).state('app.broadcastmessage', {
         url: '/customer/messages',
         templateUrl: "/admin/assets/js/messages/messages.html",
