@@ -1,82 +1,84 @@
-(function(){
+/*global app,  console ,angular */
+/*jslint unparam:true*/
+/* eslint-disable no-console */
+(function () {
 
-app.controller('SiteBuilderRssFeedComponentController', ssbRssFeedComponentController);
+	app.controller('SiteBuilderRssFeedComponentController', ssbRssFeedComponentController);
 
-ssbRssFeedComponentController.$inject = ['$scope', '$attrs', '$filter', '$transclude', 'RssFeedService'];
-/* @ngInject */
-function ssbRssFeedComponentController($scope, $attrs, $filter, $transclude, RssFeedService) {
+	ssbRssFeedComponentController.$inject = ['$scope', '$attrs', '$filter', '$transclude', 'RssFeedService'];
+	/* @ngInject */
+	function ssbRssFeedComponentController($scope, $attrs, $filter, $transclude, RssFeedService) {
 
-	console.info('ssb-rss-feed directive init...')
+		console.info('ssb-rss-feed directive init...');
 
-	var vm = this;
+		var vm = this;
 
-	vm.loadFeed = loadFeed;
+		vm.loadFeed = loadFeed;
 
-	vm.init = init;
-	vm.titleStyle = titleStyle;
-	vm.descriptionStyle = descriptionStyle;
+		vm.init = init;
+		vm.titleStyle = titleStyle;
+		vm.descriptionStyle = descriptionStyle;
 
-	vm.isEditing = $scope.$parent && $scope.$parent.vm && $scope.$parent.vm.uiState;
+		vm.isEditing = $scope.$parent && $scope.$parent.vm && $scope.$parent.vm.uiState;
 
-	function titleStyle(){
-		var styleString = ' ';
-		if(vm.component && vm.component.settings && vm.component.settings.title && vm.component.settings.title.fontSize){
-			styleString += 'font-size: ' + vm.component.settings.title.fontSize + 'px !important;';
+		function titleStyle() {
+			var styleString = ' ';
+			if (vm.component && vm.component.settings && vm.component.settings.title && vm.component.settings.title.fontSize) {
+				styleString += 'font-size: ' + vm.component.settings.title.fontSize + 'px !important;';
+			}
+			if (vm.component && vm.component.settings && vm.component.settings.title && vm.component.settings.title.fontFamily) {
+				styleString += 'font-family: ' + vm.component.settings.title.fontFamily + 'px !important;';
+			}
+			if (vm.component && vm.component.settings && vm.component.settings.title && vm.component.settings.title.color) {
+				styleString += 'color: ' + vm.component.settings.title.color + "!important;";
+			}
+			return styleString;
 		}
-		if(vm.component && vm.component.settings && vm.component.settings.title && vm.component.settings.title.fontFamily){
-			styleString += 'font-family: ' + vm.component.settings.title.fontFamily + 'px !important;';
+
+		function descriptionStyle() {
+			var styleString = ' ';
+			if (vm.component && vm.component.settings && vm.component.settings.description && vm.component.settings.description.fontSize) {
+				styleString += 'font-size: ' + vm.component.settings.description.fontSize + 'px !important;';
+			}
+			if (vm.component && vm.component.settings && vm.component.settings.description && vm.component.settings.description.fontFamily) {
+				styleString += 'font-family: ' + vm.component.settings.description.fontFamily + 'px !important;';
+			}
+			if (vm.component && vm.component.settings && vm.component.settings.description && vm.component.settings.description.color) {
+				styleString += 'color: ' + vm.component.settings.description.color + "!important;";
+			}
+			return styleString;
 		}
-		if(vm.component && vm.component.settings && vm.component.settings.title && vm.component.settings.title.color){
-			styleString += 'color: ' + vm.component.settings.title.color + "!important;";
+
+		$scope.$watch('vm.component.settings.source', function (val) {
+			if (angular.isDefined(val)) {
+				loadFeed();
+			}
+		});
+
+
+		function loadFeed() {
+			vm.loading = true;
+			RssFeedService.parseFeed(vm.component.settings.source).then(function (feeds) {
+				if (feeds && feeds.data) {
+					vm.feeds = feeds.data;
+					vm.loading = false;
+				} else {
+					vm.feeds = [];
+					vm.loading = false;
+				}
+
+			}).catch(function () {
+				vm.feeds = [];
+				vm.loading = false;
+			});
 		}
-		return styleString;
+
+		function init(element) {
+			vm.element = element;
+			//loadFeed();
+		}
+
 	}
 
-	function descriptionStyle(){
-		var styleString = ' ';
-		if(vm.component && vm.component.settings && vm.component.settings.description && vm.component.settings.description.fontSize){
-			styleString += 'font-size: ' + vm.component.settings.description.fontSize + 'px !important;';
-		}
-		if(vm.component && vm.component.settings && vm.component.settings.description && vm.component.settings.description.fontFamily){
-			styleString += 'font-family: ' + vm.component.settings.description.fontFamily + 'px !important;';
-		}
-		if(vm.component && vm.component.settings && vm.component.settings.description && vm.component.settings.description.color){
-			styleString += 'color: ' + vm.component.settings.description.color + "!important;";
-		}
-		return styleString;
-	}
 
-	$scope.$watch('vm.component.settings.source', function (val) {
-        if (angular.isDefined(val)) {
-        	loadFeed();
-        }
-    })
-
-
-	function loadFeed(){
-		vm.loading = true;
-		RssFeedService.parseFeed(vm.component.settings.source).then(function(feeds){
-	        if(feeds && feeds.data){
-		        vm.feeds = feeds.data;
-		        vm.loading = false;
-	        }
-	        else{
-	        	vm.feeds = [];
-	        	vm.loading = false;
-	        }
-		        
-		}).catch(function(err) {
-        	vm.feeds = [];
-        	vm.loading = false;
-        })
-	}
-
-	function init(element) {
-		vm.element = element;
-		//loadFeed();
-	}
-
-}
-
-
-})();
+}());
