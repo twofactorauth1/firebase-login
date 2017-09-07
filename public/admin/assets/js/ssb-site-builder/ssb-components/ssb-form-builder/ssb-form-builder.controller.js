@@ -100,9 +100,9 @@
 				if (field.spacing && field.spacing.mb) {
 					styleString += 'margin-bottom: ' + field.spacing.mb + 'px;';
 				}
-			}
-			if (field.fieldsPerRow) {
-				styleString += "min-width:" + Math.floor(100 / field.fieldsPerRow) + '%';
+				if (field.fieldsPerRow) {
+					styleString += "min-width:" + Math.floor(100 / field.fieldsPerRow) + '%';
+				}
 			}
 			return styleString;
 		}
