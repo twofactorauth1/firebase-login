@@ -1,5 +1,6 @@
 /*global app, console */
 /*jslint unparam:true*/
+/* eslint-disable no-console */
 (function () {
 	'use strict';
 	app.controller('SiteBuilderImageComponentController',

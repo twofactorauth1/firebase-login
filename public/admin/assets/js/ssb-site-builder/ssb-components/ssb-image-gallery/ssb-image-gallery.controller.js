@@ -1,23 +1,26 @@
-(function(){
+/*global app,console*/
+/*jslint unparam:true*/
+/* eslint-disable no-console */
+(function () {
 
-app.controller('SiteBuilderImageGalleryComponentController', ssbImageGalleryComponentController);
+	app.controller('SiteBuilderImageGalleryComponentController', ssbImageGalleryComponentController);
 
-ssbImageGalleryComponentController.$inject = ['$scope', '$attrs', '$filter', '$transclude'];
-/* @ngInject */
-function ssbImageGalleryComponentController($scope, $attrs, $filter, $transclude) {
+	ssbImageGalleryComponentController.$inject = ['$scope', '$attrs', '$filter', '$transclude'];
+	/* @ngInject */
+	function ssbImageGalleryComponentController($scope, $attrs, $filter, $transclude) {
 
-  console.info('ssb-image-gallery directive init...')
+		console.info('ssb-image-gallery directive init...');
 
-  var vm = this;
+		var vm = this;
 
-  vm.init = init;
-
-
-  function init(element) {
-  	vm.element = element;
-  }
-
-}
+		vm.init = init;
 
 
-})();
+		function init(element) {
+			vm.element = element;
+		}
+
+	}
+
+
+}());
