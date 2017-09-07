@@ -138,3 +138,25 @@
       ]" ng-click="component.nav.align = option" ng-model="component.nav.align" class="btn text-capitalize" ng-class="{'active': option == component.nav.align }">{{option}}</button>
     </div>
 </div>
+
+<h4 class="ssb-sidebar-sub-heading-separator">Sub Nav alignment & settings</h4>
+<div class="row padding-left-10 padding-right-10">
+    <div class="btn-group ssb-sidebar-btn-group ssb-sidebar-btn-group-small-top margin-bottom-15">
+        <button type="button" ng-repeat="option in [
+        'left', 'center', 'right'
+      ]" ng-click="component.subnavigation.align = option" ng-model="component.subnavigation.align" class="btn text-capitalize" ng-class="{'active': option == component.subnavigation.align }">{{option}}</button>
+    </div>
+
+    <div class="form-group ssb-spectrum-color-picker-small">
+        <div class="ssb-spectrum-color-picker-background-container">
+            <spectrum-colorpicker class="ssb-spectrum-color-picker-background" format="'rgb'" options="vm.spectrum.options" ng-model="component.subnavigation.menubgcolor"></spectrum-colorpicker>
+            <i class="fa fa-eyedropper" />
+        </div>
+        <label>
+            Fill color
+            <span tooltip-placement="top" tooltip-append-to-body="true"  tooltip-append-to-body="true" tooltip="Background color of sun nav menu.">
+                <i class="fa fa-info-circle" />
+            </span>
+        </label>
+    </div>
+</div>
