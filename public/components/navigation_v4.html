@@ -37,6 +37,10 @@
         border-color: {{component.nav.txtcolor}} !important;
     }
 
+    .navigation-v4.nav-header-{{component._id}} .navbar-default .nav-sub-menu{
+        background-color: {{component.subnavigation.menubgcolor}}!important;
+        border-color: {{component.subnavigation.menubgcolor}}!important;
+    }
     .navigation-v4.nav-header-{{component._id}} .navbar-default .navbar-nav > li,.navigation-v4.nav-header-{{component._id}} .navbar-default .navbar-nav > li a{
         color: {{component.nav.txtcolor}} !important;
         background-color: {{component.nav.menubgcolor}};
@@ -45,7 +49,7 @@
         font-weight:{{component.nav.font.weight}};
         text-transform:{{component.nav.allowMixedCase ? 'none' : 'uppercase' }}
     }
-
+    
 </style>
 <div ng-class="component.type+'-v'+component.version" class="nav-header-{{component._id}}">
     <nav class="navbar navbar-default" role="navigation">
