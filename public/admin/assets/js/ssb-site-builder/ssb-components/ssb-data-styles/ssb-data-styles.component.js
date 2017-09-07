@@ -115,13 +115,17 @@
 												if (element.hasClass("ssb-theme-btn")) {
 													var elementBg = element.css("background-color"),
 														elementTxtcolor = element.css("color"),
-														elementBorder = element.css("border");
+														elementBorder = element.css("border"),
+														elementPadding = element.css("padding"),
+														elementMargin = element.css("margin")
 													$compile(element)(scope);
 													// Need to rest the text and background color
 													$timeout(function () {
 														element.css("background-color", elementBg);
 														element.css("color", elementTxtcolor);
 														element.css("border", elementBorder);
+														element.css("padding", elementPadding);
+														element.css("margin", elementMargin);
 													}, 0);
 												} else {
 													$compile(element)(scope);

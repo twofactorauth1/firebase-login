@@ -1,26 +1,27 @@
-(function(){
+/*global app */
+/* eslint-disable no-console*/
+(function () {
+	'use strict';
+	app.directive('ssbFormDonateComponent',
 
-app.directive('ssbFormDonateComponent', ssbFormDonateComponent);
+		function () {
+			return {
+				// transclude: true,
+				restrict: 'A',
+				controller: 'SiteBuilderFormDonateComponentController',
+				controllerAs: 'vm',
+				bindToController: true,
+				scope: {
+					ssbEditor: '=',
+					componentClass: '&',
+					component: '='
+				},
+				templateUrl: '/admin/assets/js/ssb-site-builder/ssb-components/shared/ssb-component-wrap.html',
+				replace: true,
+				link: function (scope, element, attrs, ctrl) {
+					ctrl.init(element);
+				}
+			};
+		});
 
-function ssbFormDonateComponent() {
-  return {
-  	// transclude: true,
-  	restrict: 'A',
-  	controller: 'SiteBuilderFormDonateComponentController',
-  	controllerAs: 'vm',
-  	bindToController: true,
-    scope: {
-      ssbEditor: '=',
-      componentClass: '&',
-      component: '='
-    },
-    templateUrl: '/admin/assets/js/ssb-site-builder/ssb-components/shared/ssb-component-wrap.html',
-    replace: true,
-  	link: function (scope, element, attrs, ctrl) {
-  		ctrl.init(element);
-  	}
-  }
-
-}
-
-})();
+}());

@@ -82,7 +82,7 @@
         vm.formInvalidFn = formInvalidFn;
         vm.openModalFn = openModalFn;
         vm.closeModalFn = closeModalFn;
-        
+
 
         vm.nthRow = 'nth-row';
 
@@ -412,7 +412,7 @@
                 });
             });
 
-            
+
             if(vm.product.tags){
                 vm.product.tags = _.map(vm.product.tags, function(tag){return tag.toLowerCase()});
             }
@@ -420,7 +420,7 @@
             if(vm.component.tags){
                 vm.component.tags = _.map(vm.component.tags, function(tag){return tag.toLowerCase()});
             }
-            
+
             var formatted = {
                 fingerprint: fingerprint,
                 sessionId: sessionId,
@@ -672,7 +672,7 @@
                     vm.isCardExpired = true;
                     return;
                 }
-                
+
                 if (exp_month < vm.currentMonth && parseInt(exp_year) <= vm.currentYear) {
                     $(".donation-v1 #card_expiry .error").html("Card Month has Expired");
                     $(".donation-v1 #card_expiry").addClass('has-error');
@@ -850,7 +850,7 @@
 
         function close() {
             vm.formBuilder = {};
-            
+
             vm.getDonations(vm.product._id);
             if (vm.component.redirect && vm.checkoutModalState == 5) {
                 vm.checkoutModalState = 1;
@@ -919,13 +919,13 @@
         function setInitialCheckoutState() {
             if ($routeParams && $routeParams.state && $routeParams.comp == 'donation') {
                 vm.checkoutModalState = parseInt($routeParams.state);
-                
+
                 $timeout(function () {
                     vm.openModalFn();
                     if(!vm.formBuilder){
                         vm.formBuilder = {};
                     }
-                    if($routeParams.amount){                        
+                    if($routeParams.amount){
                         vm.formBuilder.amount = parseFloat($routeParams.amount);
                         vm.donationAmout = angular.copy(vm.formBuilder.amount);
                     }
@@ -968,7 +968,7 @@
 
             if (vm.component.productSettings.timePeriod.startDate && vm.component.productSettings.timePeriod.endDate) {
                 return (moment().isAfter(vm.component.productSettings.timePeriod.startDate) && moment().isBefore(vm.component.productSettings.timePeriod.endDate) || (
-                    moment().isSame(vm.component.productSettings.timePeriod.endDate, "day") && moment().isSame(vm.component.productSettings.timePeriod.endDate, "month") && moment().isSame(vm.component.productSettings.timePeriod.endDate, "year")));                
+                    moment().isSame(vm.component.productSettings.timePeriod.endDate, "day") && moment().isSame(vm.component.productSettings.timePeriod.endDate, "month") && moment().isSame(vm.component.productSettings.timePeriod.endDate, "year")));
             } else if (vm.component.productSettings.timePeriod.startDate) {
                 return moment().isAfter(vm.component.productSettings.timePeriod.startDate);
             } else if (vm.component.productSettings.timePeriod.endDate) {
@@ -1007,7 +1007,7 @@
         };
 
         function closeModalFn() {
-            vm.close();            
+            vm.close();
             $timeout(function() {
                 vm.modalInstance.close();
             }, 0);
@@ -1020,16 +1020,16 @@
                 campaignService.getCampaign(vm.component.campaignId, function(data) {
                   vm._campaignObj = data;
                 });
-              }      
+              }
             }
         }
 
         function setDonationAmount(amount){
             if(amount)
-                vm.formBuilder.amount = parseFloat(amount);            
+                vm.formBuilder.amount = parseFloat(amount);
         }
 
-        
+
 
         function init(element) {
             vm.element = element;
@@ -1059,7 +1059,7 @@
                 vm.setInitialCheckoutState();
 
             }
-            
+
             getCampaings();
         }
 

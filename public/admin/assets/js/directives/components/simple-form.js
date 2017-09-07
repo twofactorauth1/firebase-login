@@ -162,8 +162,6 @@ app.directive('simpleFormComponent',["formValidations", "$timeout", function (fo
                   $timeout(function() {
                     
                     var element = angular.element(scope.elementClass);
-
-
                     var originalData = {
                         bg: {
                             color: element.css('background-color')
@@ -227,7 +225,7 @@ app.directive('simpleFormComponent',["formValidations", "$timeout", function (fo
                             else
                               this.style.setProperty( 'border-color', originalData.borderColor, 'important' );
 
-                            var btn=scope.originalData.btn;
+                            var btn=scope.originalData.btn || scope.component.btn;
                                 if(btn && btn.border && btn.border.show){
                                     if(btn.border.color){
                                         this.style.setProperty( 'border-color', btn.border.color, 'important' );
@@ -280,6 +278,24 @@ app.directive('simpleFormComponent',["formValidations", "$timeout", function (fo
                             if(btnActiveStyle && btnActiveStyle.txtcolor)
                               this.style.setProperty( 'color', btnActiveStyle.txtcolor, 'important' );
                         })
+
+
+                        element.on("mouseup touchend", function () {
+                          var elem = this;
+                          $timeout(function () {
+                            elem.style.setProperty('background-color', (scope.originalData.bg.color || originalData.bg.color), 'important');
+                            elem.style.setProperty('color', (scope.originalData.txtcolor || originalData.txtcolor), 'important');
+                            elem.style.setProperty('border-color', (scope.originalData.borderColor || originalData.borderColor), 'important');
+                            var btn = scope.originalData.btn || scope.component.btn;
+                            if (btn) {
+                              vm.setBorderStyle(elem, btn);
+                            } else {
+                              vm.removeBorderStyle(elem);
+                            }
+                          }, 1000);
+                        });
+
+                        
                     }
                   }, 500);
               }

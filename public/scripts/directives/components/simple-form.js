@@ -226,7 +226,7 @@ app.directive('simpleFormComponent', ["ipCookie", '$window', '$timeout', 'userSe
 									this.style.setProperty('color', (scope.originalData.txtcolor || originalData.txtcolor), 'important');
 									this.style.setProperty('border-color',
 										(scope.originalData.borderColor || originalData.borderColor), 'important');
-									var btn = scope.originalData.btn;
+									var btn = scope.originalData.btn  || scope.component.btn;
 									if (btn && btn.border && btn.border.show) {
 										if (btn.border.color) {
 											this.style.setProperty('border-color', btn.border.color, 'important');
@@ -290,7 +290,7 @@ app.directive('simpleFormComponent', ["ipCookie", '$window', '$timeout', 'userSe
 										elem.style.setProperty('background-color', (scope.originalData.bg.color || originalData.bg.color), 'important');
 										elem.style.setProperty('color', (scope.originalData.txtcolor || originalData.txtcolor), 'important');
 										elem.style.setProperty('border-color', (scope.originalData.borderColor || originalData.borderColor), 'important');
-										var btn = scope.originalData.btn;
+										var btn = scope.originalData.btn || scope.component.btn;
 										if (btn && btn.border && btn.border.show) {
 											if (btn.border.color) {
 												elem.style.setProperty('border-color', btn.border.color, 'important');

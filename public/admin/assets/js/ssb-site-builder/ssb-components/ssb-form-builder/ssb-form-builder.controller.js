@@ -100,9 +100,9 @@
 				if (field.spacing && field.spacing.mb) {
 					styleString += 'margin-bottom: ' + field.spacing.mb + 'px;';
 				}
-			}
-			if (field.fieldsPerRow) {
-				styleString += "min-width:" + Math.floor(100 / field.fieldsPerRow) + '%';
+				if (field.fieldsPerRow) {
+					styleString += "min-width:" + Math.floor(100 / field.fieldsPerRow) + '%';
+				}
 			}
 			return styleString;
 		}
@@ -471,7 +471,7 @@
 									this.style.setProperty('background-color', (vm.originalData.bg.color || originalData.bg.color), 'important');
 									this.style.setProperty('color', (vm.originalData.txtcolor || originalData.txtcolor), 'important');
 									this.style.setProperty('border-color', (vm.originalData.borderColor || originalData.borderColor), 'important');
-									var btn = vm.originalData.btn;
+									var btn = vm.originalData.btn || vm.component.btn;
 									if (btn) {
 										vm.setBorderStyle(this, btn);
 									} else {
@@ -504,7 +504,7 @@
 									elem.style.setProperty('background-color', (vm.originalData.bg.color || originalData.bg.color), 'important');
 									elem.style.setProperty('color', (vm.originalData.txtcolor || originalData.txtcolor), 'important');
 									elem.style.setProperty('border-color', (vm.originalData.borderColor || originalData.borderColor), 'important');
-									var btn = vm.originalData.btn;
+									var btn = vm.originalData.btn || vm.component.btn;
 									if (btn) {
 										vm.setBorderStyle(elem, btn);
 									} else {

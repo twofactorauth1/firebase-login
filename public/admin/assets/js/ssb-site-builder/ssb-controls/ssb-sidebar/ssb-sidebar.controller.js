@@ -281,7 +281,7 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
         if(el.length){
             var index = el.attr("clicked-index");
             index = parseInt(index);
-            insertAtIndex = (index > 0) ? (index + 1) : index;
+            insertAtIndex = index + 1;
         }
         
         vm.uiState.showSectionPanel = false;

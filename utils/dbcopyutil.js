@@ -3,8 +3,8 @@ var _ = require('underscore');
 var mongoskin = require('mongoskin');
 var async = require('async');
 var STRIPE_CUSTOMER_ID = 'cus_5Rf0LtLeyl1bh0';
-var SUBSCRIPTION_ID = 'sub_6HfA5moT1ErVcM';
-var STRIPE_PLAN_ID = 'jtospfftdw';
+var SUBSCRIPTION_ID = 'sub_5Rf0V4RGG9qSxT';
+var STRIPE_PLAN_ID = 'pb70x50g7q';
 var STRIPE_ACCESS_TOKEN = 'sk_test_osAnWDulUbCkgw0D2kkwo1Ju';
 var STRIPE_REFRESH_TOKEN = 'rt_5NU1M6ubOAkICDJs0TpIa8iCRHDUwbSaC7VJgPXQ75MCfFGZ';
 

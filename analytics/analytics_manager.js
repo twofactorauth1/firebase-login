@@ -281,7 +281,6 @@ module.exports = {
         });
     },
 
-    //TODO: filter based on IP?
     getLiveVisitors: function(accountId, userId, lookBackInMinutes, isAggregate, orgId, fn) {
         var self = this;
         self.log = _log;
@@ -310,98 +309,113 @@ module.exports = {
             match.$match.orgId = orgId;
         }
         stageAry.push(match);
-
-        //see: http://stackoverflow.com/questions/26814427/group-result-by-15-minutes-time-interval-in-mongodb
-        var group1 = {
-            $group:{
-                _id:{
-                    session_id:'$session_id',
-                    secondsAgo:{$add:[{
-                        "$subtract": [
-                            { "$subtract": [ "$server_time_dt", new Date("1970-01-01") ] },
-                            { "$mod": [
-                                { "$subtract": [ "$server_time_dt", new Date("1970-01-01") ] },
-                                1000 * 60]
-                            }
-                        ]},
-                        new Date(0)
-                    ]}
-                },
-                count:{$sum:1}
-            }
-        };
-        stageAry.push(group1);
-        var group2 = {
-            $group:{
-                _id: {secondsAgo:'$_id.secondsAgo', session_id:'$_id.sessionId'},
-                //_id: '$_id.secondsAgo',
-                //count:{$sum:'$count'}
-                count:{$sum:1}
-            }
-        };
-        stageAry.push(group2);
-        var project = {
-            $project:{
-                _id: '$_id.secondsAgo',
-                count:'$count'
-            }
-        };
-        stageAry.push(project);
-        var sort = {
-            $sort:{'_id':-1}
-        };
-        stageAry.push(sort);
-        //self.log.debug('stageAry:', stageAry);
-        dao.aggregateWithCustomStages(stageAry, $$.m.PingEvent, function(err, value) {
+        var filterStages = [];
+        self._buildLookupAndFilterStages(accountId, userId, isAggregate, function(err, extraStages){
             if(err) {
-                self.log.error('Error getting analytics:', err);
-                fn(err);
+                self.log.error(accountId, userId, 'Error building lookup and filter:', err);
+                return fn(err);
             } else {
-                var results = [];
-                if(value) {
-                    results = self._zeroMissingMinutes(value.reverse(), {count:0}, targetDate.toDate(), rightnow.toDate());
+                if(extraStages && extraStages.length > 0) {
+                    stageAry = stageAry.concat(extraStages);
+                    filterStages = extraStages;
                 }
-                self.log.trace(accountId, userId, '<< getLiveVistiors');
-
-
-                // Adding location data
-                var stageAry = [];
-                var match = {
-                    $match:{
-                        accountId:accountId,
-                        server_time_dt:{
-                            $gte:targetDate.toDate()
-                        },
-                        fingerprint:{$ne:null},
-                        "maxmind.country":"United States"
-                    }
-                };
-                if(isAggregate === true) {
-                    delete match.$match.accountId;
-                }
-                if(orgId !== null) {
-                    match.$match.orgId = orgId;
-                }
-                stageAry.push(match);
-
+                //see: http://stackoverflow.com/questions/26814427/group-result-by-15-minutes-time-interval-in-mongodb
                 var group1 = {
-                    $group: {
-                        _id: '$maxmind.province',
-                        result: {$sum:1}
+                    $group:{
+                        _id:{
+                            session_id:'$session_id',
+                            secondsAgo:{$add:[{
+                                "$subtract": [
+                                    { "$subtract": [ "$server_time_dt", new Date("1970-01-01") ] },
+                                    { "$mod": [
+                                        { "$subtract": [ "$server_time_dt", new Date("1970-01-01") ] },
+                                            1000 * 60]
+                                    }
+                                ]},
+                                new Date(0)
+                            ]}
+                        },
+                        count:{$sum:1}
                     }
                 };
                 stageAry.push(group1);
-
-                dao.aggregateWithCustomStages(stageAry, $$.m.SessionEvent, function(err, value) {
-                    _.each(value, function(result){
-                        result['ip_geo_info.province'] = result._id;
-                    });
-                    self.log.trace(accountId, userId, '<< getLiveVisitors');
-                    //fn(err, value);
-                    if(results.length > 0){
-                        results[0].locations = value;
+                var group2 = {
+                    $group:{
+                        _id: {secondsAgo:'$_id.secondsAgo', session_id:'$_id.sessionId'},
+                        //_id: '$_id.secondsAgo',
+                        //count:{$sum:'$count'}
+                        count:{$sum:1}
                     }
-                    fn(null, results);
+                };
+                stageAry.push(group2);
+                var project = {
+                    $project:{
+                        _id: '$_id.secondsAgo',
+                        count:'$count'
+                    }
+                };
+                stageAry.push(project);
+                var sort = {
+                    $sort:{'_id':-1}
+                };
+                stageAry.push(sort);
+                //self.log.debug('stageAry:', stageAry);
+                dao.aggregateWithCustomStages(stageAry, $$.m.PingEvent, function(err, value) {
+                    if(err) {
+                        self.log.error('Error getting analytics:', err);
+                        fn(err);
+                    } else {
+                        var results = [];
+                        if(value) {
+                            results = self._zeroMissingMinutes(value.reverse(), {count:0}, targetDate.toDate(), rightnow.toDate());
+                        }
+                        self.log.trace(accountId, userId, '<< getLiveVistiors');
+
+
+                        // Adding location data
+                        var stageAry = [];
+                        var match = {
+                            $match:{
+                                accountId:accountId,
+                                server_time_dt:{
+                                    $gte:targetDate.toDate()
+                                },
+                                fingerprint:{$ne:null},
+                                "maxmind.country":"United States"
+                            }
+                        };
+                        if(isAggregate === true) {
+                            delete match.$match.accountId;
+                        }
+                        if(orgId !== null) {
+                            match.$match.orgId = orgId;
+                        }
+                        stageAry.push(match);
+
+                        var group1 = {
+                            $group: {
+                                _id: '$maxmind.province',
+                                result: {$sum:1}
+                            }
+                        };
+                        stageAry.push(group1);
+
+                        self._addAccountFilterByID(accountId, userId, isAggregate, match, function(err, newMatch){
+                            dao.aggregateWithCustomStages(stageAry, $$.m.SessionEvent, function(err, value) {
+                                _.each(value, function(result){
+                                    result['ip_geo_info.province'] = result._id;
+                                });
+                                self.log.trace(accountId, userId, '<< getLiveVisitors');
+                                //fn(err, value);
+                                if(results.length > 0){
+                                    results[0].locations = value;
+                                }
+                                fn(null, results);
+                            });
+                        });
+
+
+                    }
                 });
             }
         });
@@ -436,64 +450,67 @@ module.exports = {
 
 
         stageAry.push(match);
+        self._addAccountFilterByID(accountId, userId, isAggregate, match, function(err, newMatch){
+            dao.aggregateWithCustomStages(stageAry, $$.m.SessionEvent, function(err, results) {
+                if(err) {
+                    self.log.error('Error getting analytics:', err);
+                    fn(err);
+                } else {
+                    var _resultDetails = [];
 
-        dao.aggregateWithCustomStages(stageAry, $$.m.SessionEvent, function(err, results) {
-            if(err) {
-                self.log.error('Error getting analytics:', err);
-                fn(err);
-            } else {
-                var _resultDetails = [];
-
-                async.eachLimit(results, 10, function(sessionEvent, cb){
-                    var query = {session_id:sessionEvent.session_id};
-                    var skip = 0;
-                    var limit = 1;
-                    var sort = {server_time:-1};
-                    var fields = null;
-                    var type = $$.m.PageEvent;
-                    dao.findAllWithFieldsSortAndLimit(query, skip, null, sort, fields, type, function(err, pageEvents){
-                        if(err) {
-                            self.log.error('Error getting page event:', err);
-                            cb();
-                        } else if(pageEvents) {
-                            var _pageEvents = [];
-                            _.each(pageEvents, function(pEvent){
-                                _pageEvents.push({
-                                    pageTime : pEvent.get('server_time_dt'),
-                                    pageRequested : pEvent.get('url').source
-                                })
-                            });
-                            _resultDetails.push({
-                                "_id": sessionEvent._id,
-                                "session_id": sessionEvent.session_id,
-                                "ip_address": sessionEvent.ip_address,
-                                "maxmind": sessionEvent.maxmind,
-                                "user_agent": sessionEvent.user_agent,
-                                "timestamp": sessionEvent.server_time_dt,
-                                "server_time": sessionEvent.server_time,
-                                pageEvents : _pageEvents
-                            });
-                            cb();
-                        } else {
-                            _resultDetails.push({
-                                "_id": sessionEvent._id,
-                                "session_id": sessionEvent.session_id,
-                                "ip_address": sessionEvent.ip_address,
-                                "maxmind": sessionEvent.maxmind,
-                                "user_agent": sessionEvent.user_agent,
-                                "timestamp": sessionEvent.server_time_dt,
-                                "server_time": sessionEvent.server_time
-                            });
-                            cb();
-                        }
+                    async.eachLimit(results, 10, function(sessionEvent, cb){
+                        var query = {session_id:sessionEvent.session_id};
+                        var skip = 0;
+                        var limit = 1;
+                        var sort = {server_time:-1};
+                        var fields = null;
+                        var type = $$.m.PageEvent;
+                        dao.findAllWithFieldsSortAndLimit(query, skip, null, sort, fields, type, function(err, pageEvents){
+                            if(err) {
+                                self.log.error('Error getting page event:', err);
+                                cb();
+                            } else if(pageEvents) {
+                                var _pageEvents = [];
+                                _.each(pageEvents, function(pEvent){
+                                    _pageEvents.push({
+                                        pageTime : pEvent.get('server_time_dt'),
+                                        pageRequested : pEvent.get('url').source
+                                    })
+                                });
+                                _resultDetails.push({
+                                    "_id": sessionEvent._id,
+                                    "session_id": sessionEvent.session_id,
+                                    "ip_address": sessionEvent.ip_address,
+                                    "maxmind": sessionEvent.maxmind,
+                                    "user_agent": sessionEvent.user_agent,
+                                    "timestamp": sessionEvent.server_time_dt,
+                                    "server_time": sessionEvent.server_time,
+                                    pageEvents : _pageEvents
+                                });
+                                cb();
+                            } else {
+                                _resultDetails.push({
+                                    "_id": sessionEvent._id,
+                                    "session_id": sessionEvent.session_id,
+                                    "ip_address": sessionEvent.ip_address,
+                                    "maxmind": sessionEvent.maxmind,
+                                    "user_agent": sessionEvent.user_agent,
+                                    "timestamp": sessionEvent.server_time_dt,
+                                    "server_time": sessionEvent.server_time
+                                });
+                                cb();
+                            }
+                        });
+                    }, function(err){
+                        self.log.trace(accountId, userId, '<< getLiveVisitorDetails');
+                        _resultDetails = _.sortBy(_resultDetails, function(result){return -result.server_time;});
+                        fn(err, _resultDetails);
                     });
-                }, function(err){
-                    self.log.trace(accountId, userId, '<< getLiveVisitorDetails');
-                    _resultDetails = _.sortBy(_resultDetails, function(result){return -result.server_time;});
-                    fn(err, _resultDetails);
-                });
-            }
+                }
+            });
         });
+
+
     },
 
     getVisitorCount: function(accountId, userId, startDate, endDate, previousStart, previousEnd, isAggregate, fn) {
@@ -1182,7 +1199,6 @@ module.exports = {
 
     },
 
-    //TODO: not filtering based on IP... do we need it?
     getPageViewsReport: function(accountId, userId, start, end, previousStart, previousEnd, isAggregate, orgId, fn) {
         var self = this;
         self.log = _log;
@@ -1207,87 +1223,94 @@ module.exports = {
             match.$match.orgId = orgId;
         }
         stageAry.push(match);
-        var group = {
-            $group: {
-                _id: { $dateToString: { format: "%Y-%m-%d", date: "$server_time_dt" }},
-                count:{$sum:1}
-            }
-        };
-        if(granularity === 'hours') {
-            group.$group._id.$dateToString.format = '%Y-%m-%d %H:00';
-        }
-        stageAry.push(group);
 
-        async.waterfall([
-            function(cb) {
-                dao.aggregateWithCustomStages(stageAry, $$.m.PageEvent, function(err, value) {
-                    if(err) {
-                        self.log.error('Error finding current month:', err);
-                        cb(err);
-                    } else {
-                        var resultAry = [];
-                        _.each(value, function (entry) {
-                            var result = {
-                                value: entry.count,
-                                timeframe: {
-                                    start: entry._id
+        self._buildLookupAndFilterStages(accountId, userId, isAggregate, function(err, extraStages){
+            if(extraStages && extraStages.length > 0) {
+                stageAry = stageAry.concat(extraStages);
+            }
+            var group = {
+                $group: {
+                    _id: { $dateToString: { format: "%Y-%m-%d", date: "$server_time_dt" }},
+                    count:{$sum:1}
+                }
+            };
+            if(granularity === 'hours') {
+                group.$group._id.$dateToString.format = '%Y-%m-%d %H:00';
+            }
+            stageAry.push(group);
+
+            async.waterfall([
+                function(cb) {
+                    dao.aggregateWithCustomStages(stageAry, $$.m.PageEvent, function(err, value) {
+                        if(err) {
+                            self.log.error('Error finding current month:', err);
+                            cb(err);
+                        } else {
+                            var resultAry = [];
+                            _.each(value, function (entry) {
+                                var result = {
+                                    value: entry.count,
+                                    timeframe: {
+                                        start: entry._id
+                                    }
+                                };
+                                if(granularity === 'hours') {
+                                    result.timeframe.end = moment(entry._id).add(1, 'hours').format('YYYY-MM-DD HH:mm');
+                                } else {
+                                    result.timeframe.end = moment(entry._id).add(1, 'days').format('YYYY-MM-DD');
                                 }
-                            };
+                                resultAry.push(result);
+                            });
+                            resultAry = _.sortBy(resultAry, function(result){return result.timeframe.start;});
                             if(granularity === 'hours') {
-                                result.timeframe.end = moment(entry._id).add(1, 'hours').format('YYYY-MM-DD HH:mm');
+                                resultAry = self._zeroMissingHours(resultAry, {value:0}, moment(previousStart).format('YYYY-MM-DD HH:mm'), moment(end).format('YYYY-MM-DD HH:mm'));
                             } else {
-                                result.timeframe.end = moment(entry._id).add(1, 'days').format('YYYY-MM-DD');
+                                resultAry = self._zeroMissingDays(resultAry, {value:0}, moment(previousStart).format('YYYY-MM-DD'), moment(end).format('YYYY-MM-DD'));
                             }
-                            resultAry.push(result);
-                        });
-                        resultAry = _.sortBy(resultAry, function(result){return result.timeframe.start;});
+
+                            cb(null, resultAry);
+                        }
+                    });
+                },
+                function (totalResults, cb) {
+                    var currentMonth = [];
+                    var previousMonth = [];
+                    _.each(totalResults, function(result){
+                        var resultEnd = moment(result.timeframe.start, "YYYY-MM-DD HH:mm");
                         if(granularity === 'hours') {
-                            resultAry = self._zeroMissingHours(resultAry, {value:0}, moment(previousStart).format('YYYY-MM-DD HH:mm'), moment(end).format('YYYY-MM-DD HH:mm'));
+                            if(resultEnd.isAfter(start) || resultEnd.isSame(start, 'hour')) {
+                                currentMonth.push(result);
+                            } else {
+                                previousMonth.push(result);
+                            }
                         } else {
-                            resultAry = self._zeroMissingDays(resultAry, {value:0}, moment(previousStart).format('YYYY-MM-DD'), moment(end).format('YYYY-MM-DD'));
+                            if(resultEnd.isAfter(start) || resultEnd.isSame(start, 'day')) {
+                                currentMonth.push(result);
+                            } else {
+                                previousMonth.push(result);
+                            }
                         }
+                    });
+                    cb(null, currentMonth, previousMonth);
+                },
 
-                        cb(null, resultAry);
-                    }
-                });
-            },
-            function (totalResults, cb) {
-                var currentMonth = [];
-                var previousMonth = [];
-                _.each(totalResults, function(result){
-                    var resultEnd = moment(result.timeframe.start, "YYYY-MM-DD HH:mm");
-                    if(granularity === 'hours') {
-                        if(resultEnd.isAfter(start) || resultEnd.isSame(start, 'hour')) {
-                            currentMonth.push(result);
-                        } else {
-                            previousMonth.push(result);
-                        }
-                    } else {
-                        if(resultEnd.isAfter(start) || resultEnd.isSame(start, 'day')) {
-                            currentMonth.push(result);
-                        } else {
-                            previousMonth.push(result);
-                        }
-                    }
-                });
-                cb(null, currentMonth, previousMonth);
-            },
-
-            function(currentMonth, previousMonth, cb) {
-                var result = {
-                    currentMonth:currentMonth,
-                    previousMonth: previousMonth
-                };
-                cb(null, result);
-            }
-        ], function(err, results){
-            self.log.debug(accountId, userId, '<< getPageViewsReport');
-            fn(err, results);
+                function(currentMonth, previousMonth, cb) {
+                    var result = {
+                        currentMonth:currentMonth,
+                        previousMonth: previousMonth
+                    };
+                    cb(null, result);
+                }
+            ], function(err, results){
+                self.log.debug(accountId, userId, '<< getPageViewsReport');
+                fn(err, results);
+            });
         });
+
+
 
     },
 
-    //TODO: not filtering based on IP... do we need it?
     getPageViewPerformanceReport: function(accountId, userId, start, end, orgId, accountIds, fn) {
         var self = this;
         self.log = _log;
@@ -1309,63 +1332,68 @@ module.exports = {
             match.$match.orgId = orgId;
         }
         stageAry.push(match);
-        var group = {
-            $group: {
-                _id: {
-                    _date: {$dateToString: { format: "%Y-%m-%d", date: "$server_time_dt" }},
-                    accountId:'$accountId'},
+
+        self._buildLookupAndFilterStages(accountId, userId, true, function(err, extraStages) {
+            if (extraStages && extraStages.length > 0) {
+                stageAry = stageAry.concat(extraStages);
+            }
+            var group = {
+                $group: {
+                    _id: {
+                        _date: {$dateToString: { format: "%Y-%m-%d", date: "$server_time_dt" }},
+                        accountId:'$accountId'},
                     count:{$sum:1}
+                }
+            };
+            if(granularity === 'hours') {
+                group.$group._id._date.$dateToString.format = '%Y-%m-%d %H:00';
             }
-        };
-        if(granularity === 'hours') {
-            group.$group._id._date.$dateToString.format = '%Y-%m-%d %H:00';
-        }
-        stageAry.push(group);
+            stageAry.push(group);
 
-        dao.aggregateWithCustomStages(stageAry, $$.m.PageEvent, function(err, value) {
-            if(err) {
-                self.log.error('Error finding current month:', err);
-                fn(err);
-            } else {
-                var resultsByAccount = {};
-                var resultAry = null;
-                _.each(value, function (entry) {
-                    if(resultsByAccount[entry._id.accountId]) {
-                        resultAry = resultsByAccount[entry._id.accountId];
-                    } else {
-                        resultsByAccount[entry._id.accountId] = [];
-                        resultAry = resultsByAccount[entry._id.accountId];
-                    }
-                    var result = {
-                        accountId: entry._id.accountId,
-                        value: entry.count,
-                        timeframe: {
-                            start: entry._id._date
+            dao.aggregateWithCustomStages(stageAry, $$.m.PageEvent, function(err, value) {
+                if(err) {
+                    self.log.error('Error finding current month:', err);
+                    fn(err);
+                } else {
+                    var resultsByAccount = {};
+                    var resultAry = null;
+                    _.each(value, function (entry) {
+                        if(resultsByAccount[entry._id.accountId]) {
+                            resultAry = resultsByAccount[entry._id.accountId];
+                        } else {
+                            resultsByAccount[entry._id.accountId] = [];
+                            resultAry = resultsByAccount[entry._id.accountId];
                         }
-                    };
-                    if(granularity === 'hours') {
-                        result.timeframe.end = moment(entry._id._date).add(1, 'hours').format('YYYY-MM-DD HH:mm');
-                    } else {
-                        result.timeframe.end = moment(entry._id._date).add(1, 'days').format('YYYY-MM-DD');
-                    }
-                    resultAry.push(result);
-                });
-                var results = _.mapObject(resultsByAccount, function(val, key){
-                    val = _.sortBy(val, function(result){return result.timeframe.start});
-                    if(granularity === 'hours') {
-                        val = self._zeroMissingHours(val, {accountId:key, value:0}, moment(start).format('YYYY-MM-DD HH:mm'), moment(end).format('YYYY-MM-DD HH:mm'));
-                    } else {
-                        val = self._zeroMissingDays(val, {value:0, accountId:key}, moment(start).format('YYYY-MM-DD'), moment(end).format('YYYY-MM-DD'));
-                    }
-                    return val;
-                });
+                        var result = {
+                            accountId: entry._id.accountId,
+                            value: entry.count,
+                            timeframe: {
+                                start: entry._id._date
+                            }
+                        };
+                        if(granularity === 'hours') {
+                            result.timeframe.end = moment(entry._id._date).add(1, 'hours').format('YYYY-MM-DD HH:mm');
+                        } else {
+                            result.timeframe.end = moment(entry._id._date).add(1, 'days').format('YYYY-MM-DD');
+                        }
+                        resultAry.push(result);
+                    });
+                    var results = _.mapObject(resultsByAccount, function(val, key){
+                        val = _.sortBy(val, function(result){return result.timeframe.start});
+                        if(granularity === 'hours') {
+                            val = self._zeroMissingHours(val, {accountId:key, value:0}, moment(start).format('YYYY-MM-DD HH:mm'), moment(end).format('YYYY-MM-DD HH:mm'));
+                        } else {
+                            val = self._zeroMissingDays(val, {value:0, accountId:key}, moment(start).format('YYYY-MM-DD'), moment(end).format('YYYY-MM-DD'));
+                        }
+                        return val;
+                    });
 
-
-
-                self.log.debug(accountId, userId, '<< getPageViewPerformanceReport');
-                fn(null, results);
-            }
+                    self.log.debug(accountId, userId, '<< getPageViewPerformanceReport');
+                    fn(null, results);
+                }
+            });
         });
+
 
 
     },
@@ -1850,7 +1878,6 @@ module.exports = {
 
     },
 
-    //TODO: no IP filtering here... do we need it?
     pageAnalyticsReport: function(accountId, userId, start, end, isAggregate, orgId, fn) {
         var self = this;
         self.log = _log;
@@ -1858,8 +1885,9 @@ module.exports = {
         var startTime = new Date().getTime();
 
         var stageAry = [];
+        var match, group1, group2;
         if(isAggregate === true) {
-            var match = {
+            match = {
                 $match:{
                     server_time_dt:{
                         $gte:start,
@@ -1871,9 +1899,8 @@ module.exports = {
             if(orgId !== null) {
                 match.$match.orgId = orgId;
             }
-            stageAry.push(match);
 
-            var group1 = {
+            group1 = {
                 $group:{
                     _id: {
                         path: '$accountId',
@@ -1884,9 +1911,8 @@ module.exports = {
                     avgTimeOnPage:{$avg:'$timeOnPage'}
                 }
             };
-            stageAry.push(group1);
 
-            var group2 = {
+            group2 = {
                 $group: {
                     _id: '$_id.path',
                     uniquePageviews: {$sum:1},
@@ -1895,9 +1921,8 @@ module.exports = {
                     avgTimeOnPage:{$avg:'$avgTimeOnPage'}
                 }
             };
-            stageAry.push(group2);
         } else {
-            var match = {
+            match = {
                 $match:{
                     accountId:accountId,
                     server_time_dt:{
@@ -1908,9 +1933,7 @@ module.exports = {
                 }
             };
 
-            stageAry.push(match);
-
-            var group1 = {
+            group1 = {
                 $group:{
                     _id: {
                         path: '$url.path',
@@ -1921,9 +1944,8 @@ module.exports = {
                     avgTimeOnPage:{$avg:'$timeOnPage'}
                 }
             };
-            stageAry.push(group1);
 
-            var group2 = {
+            group2 = {
                 $group: {
                     _id: '$_id.path',
                     uniquePageviews: {$sum:1},
@@ -1932,46 +1954,55 @@ module.exports = {
                     avgTimeOnPage:{$avg:'$avgTimeOnPage'}
                 }
             };
-            stageAry.push(group2);
+
         }
+        stageAry.push(match);
 
-        //self.log.debug(accountId, userId, 'stageAry:', JSON.stringify(stageAry));
-        dao.aggregateWithCustomStages(stageAry, $$.m.PageEvent, function(err, value) {
-            if(err) {
-                self.log.error('Error finding current month:', err);
-                fn(err);
-            } else {
-                _.each(value, function(result){
-                    result['url.path'] = result._id;
-                });
-                if(isAggregate === true) {
-                    accountDao.findMany({_id:{$exists:true}}, $$.m.Account, function(err, accounts){
-                        if(err) {
-                            self.log.error('Error finding accounts:', err);
-                            return fn(null, value);
-                        } else {
-                            var map = {};
-                            _.each(accounts, function(account){
-                                map[account.id()] = account.get('subdomain');
-                            });
-                            _.each(value, function(result){
-                                result['id'] = result['url.path'];
-                                result['url.path'] = map[result['url.path']];
-                            });
-                            var duration = new Date().getTime() - startTime;
-                            self.log.debug(accountId, userId, '<< pageAnalyticsReport [' + duration + ']');
-                            fn(null, value);
-                        }
-
-                    });
-                } else {
-                    var duration = new Date().getTime() - startTime;
-                    self.log.debug(accountId, userId, '<< pageAnalyticsReport [' + duration + ']');
-                    fn(null, value);
-                }
-
+        self._buildLookupAndFilterStages(accountId, userId, isAggregate, function(err, extraStages){
+            if(extraStages && extraStages.length > 0) {
+                stageAry = stageAry.concat(extraStages);
             }
+            stageAry.push(group1);
+            stageAry.push(group2);
+            //self.log.debug(accountId, userId, 'stageAry:', JSON.stringify(stageAry));
+            dao.aggregateWithCustomStages(stageAry, $$.m.PageEvent, function(err, value) {
+                if(err) {
+                    self.log.error('Error finding current month:', err);
+                    fn(err);
+                } else {
+                    _.each(value, function(result){
+                        result['url.path'] = result._id;
+                    });
+                    if(isAggregate === true) {
+                        accountDao.findMany({_id:{$exists:true}}, $$.m.Account, function(err, accounts){
+                            if(err) {
+                                self.log.error('Error finding accounts:', err);
+                                return fn(null, value);
+                            } else {
+                                var map = {};
+                                _.each(accounts, function(account){
+                                    map[account.id()] = account.get('subdomain');
+                                });
+                                _.each(value, function(result){
+                                    result['id'] = result['url.path'];
+                                    result['url.path'] = map[result['url.path']];
+                                });
+                                var duration = new Date().getTime() - startTime;
+                                self.log.debug(accountId, userId, '<< pageAnalyticsReport [' + duration + ']');
+                                fn(null, value);
+                            }
+
+                        });
+                    } else {
+                        var duration = new Date().getTime() - startTime;
+                        self.log.debug(accountId, userId, '<< pageAnalyticsReport [' + duration + ']');
+                        fn(null, value);
+                    }
+
+                }
+            });
         });
+
     },
 
     _zeroMissingDays: function(resultAry, blankResult, firstDate, lastDate) {
@@ -2696,7 +2727,6 @@ module.exports = {
         });
     },
 
-    //TODO: No IP Filtering here... do we need it?
     get404sByDateAndPathReport: function(accountId, userId, start, end, isAggregate, orgId, fn) {
         var self = this;
         self.log = _log;
@@ -2722,57 +2752,60 @@ module.exports = {
             match.$match.orgId = orgId;
         }
         stageAry.push(match);
-
-        var group1 = {
-            $group: {
-                _id:{
-                    yearMonthDay: { $dateToString: { format: "%Y-%m-%d", date: "$server_time_dt" }}
-                },
-                count:{$sum:1}
+        self._buildLookupAndFilterStages(accountId, userId, isAggregate, function(err, extraStages) {
+            if (extraStages && extraStages.length > 0) {
+                stageAry = stageAry.concat(extraStages);
             }
-        };
-        if(granularity === 'hours') {
-            group1.$group._id.yearMonthDay.$dateToString.format = '%Y-%m-%d %H:00';
-        }
-        stageAry.push(group1);
-
-        var group2 = {
-            $group: {
-                _id: {date:'$_id.yearMonthDay'},
-                total:{$sum:'$count'}
-            }
-        };
-        stageAry.push(group2);
-
-
-
-        dao.aggregateWithCustomStages(stageAry, $$.m.PageEvent, function(err, value) {
-            var resultAry = [];
-            _.each(value, function (entry) {
-                var result = {
-                    total: entry.total,
-                    timeframe: {
-                        start: entry._id.date
-                    }
-                };
-                if(granularity === 'hours') {
-                    result.timeframe.end = moment(entry._id.date).add(1, 'hours').format('YYYY-MM-DD HH:mm');
-                } else {
-                    result.timeframe.end = moment(entry._id.date).add(1, 'days').format('YYYY-MM-DD');
+            var group1 = {
+                $group: {
+                    _id:{
+                        yearMonthDay: { $dateToString: { format: "%Y-%m-%d", date: "$server_time_dt" }}
+                    },
+                    count:{$sum:1}
                 }
-                resultAry.push(result);
-            });
-            //self.log.info('resultAry:', resultAry);
-            var sortedResults = _.sortBy(resultAry, function(result){return result.timeframe.start;});
-            //self.log.info('sortedResults:', sortedResults);
+            };
             if(granularity === 'hours') {
-                sortedResults = self._zeroMissingHours(sortedResults, {total:0}, moment(start).format('YYYY-MM-DD HH:mm'), moment(end).format('YYYY-MM-DD HH:mm'));
-            } else {
-                sortedResults = self._zeroMissingDays(sortedResults, {total:0}, moment(start).format('YYYY-MM-DD'), moment(end).format('YYYY-MM-DD'));
+                group1.$group._id.yearMonthDay.$dateToString.format = '%Y-%m-%d %H:00';
             }
-            self.log.debug(accountId, userId, '<< get404sByDateAndPathReport');
-            fn(err, sortedResults);
+            stageAry.push(group1);
+
+            var group2 = {
+                $group: {
+                    _id: {date:'$_id.yearMonthDay'},
+                    total:{$sum:'$count'}
+                }
+            };
+            stageAry.push(group2);
+
+            dao.aggregateWithCustomStages(stageAry, $$.m.PageEvent, function(err, value) {
+                var resultAry = [];
+                _.each(value, function (entry) {
+                    var result = {
+                        total: entry.total,
+                        timeframe: {
+                            start: entry._id.date
+                        }
+                    };
+                    if(granularity === 'hours') {
+                        result.timeframe.end = moment(entry._id.date).add(1, 'hours').format('YYYY-MM-DD HH:mm');
+                    } else {
+                        result.timeframe.end = moment(entry._id.date).add(1, 'days').format('YYYY-MM-DD');
+                    }
+                    resultAry.push(result);
+                });
+                //self.log.info('resultAry:', resultAry);
+                var sortedResults = _.sortBy(resultAry, function(result){return result.timeframe.start;});
+                //self.log.info('sortedResults:', sortedResults);
+                if(granularity === 'hours') {
+                    sortedResults = self._zeroMissingHours(sortedResults, {total:0}, moment(start).format('YYYY-MM-DD HH:mm'), moment(end).format('YYYY-MM-DD HH:mm'));
+                } else {
+                    sortedResults = self._zeroMissingDays(sortedResults, {total:0}, moment(start).format('YYYY-MM-DD'), moment(end).format('YYYY-MM-DD'));
+                }
+                self.log.debug(accountId, userId, '<< get404sByDateAndPathReport');
+                fn(err, sortedResults);
+            });
         });
+
     },
 
     /*
@@ -2818,6 +2851,47 @@ module.exports = {
                 query.$match.ip_address = {$nin:filterIPs};
                 fn(null, query);
             }
+        }
+    },
+
+    _buildLookupAndFilterStages: function(accountId, userId, isAggregate, fn){
+        var self = this;
+        if(isAggregate === true) {
+            fn(null, []);
+        } else {
+            accountDao.getAccountByID(accountId, function(err, account){
+                if(err) {
+                    self.log.error(accountId, userId, 'Error fetching account:', err);
+                    fn(err);
+                } else if(!account || !account.get('analyticsPreferences')){
+                    fn(null, []);
+                } else {
+                    var prefs = account.get('analyticsPreferences');
+                    if(!prefs) {
+                        fn(null, []);
+                    } else {
+                        var filterIPs = prefs.filterIPs;
+                        var lookupStage = {
+                            $lookup:{
+                                from:'session_events',
+                                localField:'session_id',
+                                foreignField:'session_id',
+                                as:'sessionEvent'
+                            }
+                        };
+                        var extraStages = [];
+                        extraStages.push(lookupStage);
+                        var filter = {
+                            $match:{
+                                'sessionEvent.ip_address':{$nin:filterIPs}
+                            }
+                        };
+                        extraStages.push(filter);
+
+                        fn(null, extraStages);
+                    }
+                }
+            });
         }
     }
 };
