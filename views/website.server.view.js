@@ -377,7 +377,7 @@ _.extend(view.prototype, BaseView.prototype, {
                                     var font = fontRegexp.exec(component.text);
                                     if(font && font.length > 1) {
                                         for(var i=1; i<font.length; i+=3) {
-                                            console.log('matched:', font[i]);
+                                            //console.log('matched:', font[i]);
                                             var fontAry = font[i].split(',');
                                             _.each(fontAry, function(splitFont){
                                                 splitFont = splitFont.trim().replace('\'', '').replace('\'', '');
