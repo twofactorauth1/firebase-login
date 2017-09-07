@@ -72,10 +72,14 @@
     .product {
         margin-bottom: 35px;
         .img-wrap {
+            display: table;
+            height: 100%;
+            width: 100%;
             text-align: center;
             font-size: 120px !important;
             .product-img {
-                display: block;
+                display: table-cell;
+                vertical-align: middle;
             }
             i.fa{
                 color: #5b5b60;
@@ -93,6 +97,7 @@
     }
     .product-img {
         height: 180px;
+        
         img {
             margin-right: 15px;
             max-height: 180px;
