@@ -2026,7 +2026,8 @@ _.extend(api.prototype, baseApi.prototype, {
                 self.log.error('Error getting account: ' + err);
                 return self.wrapError(resp, 500, 'Could not find account.');
             }
-            var customerId = account.get('billing').stripeCustomerId;
+            var billing = account.get('billing');
+            var customerId = billing.stripeCustomerId;
             if (!customerId || customerId === '') {
                 self.log.error('No stripe customerId found for account: ' + account.id());
                 return self.wrapError(resp, 400, 'No Stripe CustomerId found for account.');
@@ -2037,7 +2038,15 @@ _.extend(api.prototype, baseApi.prototype, {
             var limit = req.query.limit || 100;
             var starting_after = req.query.starting_after;
 
-            if(account.get('orgId') && account.get('orgId') === 1 && account.get('billing').stripeParent !== 6) {
+
+            if(billing.stripeParent && billing.stripeParent !== 6) {
+                self._getAccessTokenFromAccountId(billing.stripeParent, function(err, accessToken){
+                    stripeDao.listStripeCharges(created, customerId, ending_before, limit, starting_after, accessToken, function(err, charges){
+                        self.log.debug('<< getChargesForAccount');
+                        return self.sendResultOrError(resp, err, charges, "Error listing charges.");
+                    });
+                });
+            } else if(account.get('orgId') && account.get('orgId') === 1 && billing.stripeParent !== 6) {
                 self._getOrgAccessToken(account.get('orgId'), function(err, accessToken){
                     stripeDao.listStripeCharges(created, customerId, ending_before, limit, starting_after, accessToken, function(err, charges){
                         self.log.debug('<< getChargesForAccount');
@@ -2396,13 +2405,40 @@ _.extend(api.prototype, baseApi.prototype, {
             } else {
                 var billing = account.get('billing');
                 var orgId = account.get('orgId');
-                if(orgId && orgId === 1 && billing.stripeParent !== 6) {
+                if(billing.stripeParent && billing.stripeParent !== 6) {
+                    self._getAccessTokenFromAccountId(billing.stripeParent, fn);
+                } else if(orgId && billing.stripeParent !== 6) {
                     self._getOrgAccessToken(orgId, fn);
                 } else {
                     fn();
                 }
             }
         });
+    },
+
+    _getAccessTokenFromAccountId: function(accountId, fn) {
+        var self = this;
+        accountDao.getAccountByID(accountId, function(err, account){
+            if(account) {
+                var credentials = account.get('credentials');
+                var creds = null;
+                _.each(credentials, function (cred) {
+                    if (cred.type === 'stripe') {
+                        creds = cred;
+                    }
+                });
+                if(creds && creds.accessToken) {
+                    self.log.debug('Returning:', creds.accessToken);
+                    return fn(null, creds.accessToken);
+                } else {
+                    self.log.debug('Returning null');
+                    return fn(null, null);
+                }
+            } else {
+                fn(err);
+            }
+        });
+
     }
 });
 
