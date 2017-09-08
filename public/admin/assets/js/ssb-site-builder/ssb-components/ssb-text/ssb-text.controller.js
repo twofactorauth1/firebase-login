@@ -1,23 +1,26 @@
-(function(){
+/*global app, console   */
+/*jslint unparam:true*/
+/* eslint-disable no-console */
+(function () {
 
-app.controller('SiteBuilderTextComponentController', ssbTextComponentController);
+	app.controller('SiteBuilderTextComponentController', ssbTextComponentController);
 
-ssbTextComponentController.$inject = ['$scope', '$attrs', '$filter', '$transclude'];
-/* @ngInject */
-function ssbTextComponentController($scope, $attrs, $filter, $transclude) {
+	ssbTextComponentController.$inject = ['$scope', '$attrs', '$filter', '$transclude'];
+	/* @ngInject */
+	function ssbTextComponentController($scope, $attrs, $filter, $transclude) {
 
-  console.info('ssb-text directive init...')
+		console.info('ssb-text directive init...');
 
-  var vm = this;
+		var vm = this;
 
-  vm.init = init;
-
-
-  function init(element) {
-  	vm.element = element;
-  }
-
-}
+		vm.init = init;
 
 
-})();
+		function init(element) {
+			vm.element = element;
+		}
+
+	}
+
+
+}());
