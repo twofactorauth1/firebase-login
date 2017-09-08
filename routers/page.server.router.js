@@ -36,7 +36,7 @@ _.extend(router.prototype, BaseRouter.prototype, {
 
     initialize: function() {
         app.get('/simple-interim-page', [this.setupForPages.bind(this), this._handleBasicAuth.bind(this)], this.optimizedIndex.bind(this));
-        app.get('/investors', [this.setupForPages.bind(this), this._handleBasicAuth.bind(this)], this.optimizedIndex.bind(this));
+        app.get('/investors', [this.setupForPages.bind(this), this._handleBasicAuth.bind(this), sitemigration_middleware.checkForRedirect], this.optimizedIndex.bind(this));
 
         app.get("/:page", [sitemigration_middleware.checkForRedirect, this.setupForPages.bind(this)], this.optimizedIndex.bind(this));
         //app.get(/^\/(?!api.*|static)(.*)$/, [sitemigration_middleware.checkForRedirect, this.setupForPages.bind(this)], this.optimizedRegexpIndex.bind(this));

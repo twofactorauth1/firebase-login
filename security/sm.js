@@ -222,7 +222,32 @@ var securityManager = {
             }
             //if no verification OR verification older than 24 hours
             var accessToken = null;
-            if(account.get('orgId') && account.get('orgId') > 0 && billing.stripeParent !== 6) {
+            if(billing.stripeParent && billing.stripeParent !== 6) {
+                accountDao.getAccountByID(billing.stripeParent, function(err, adminAccount){
+                    if(err) {
+                        log.error('Error getting org stripe credentials:', err);
+                        return cb(null, false);
+                    } else {
+                        var credentials = adminAccount.get('credentials');
+                        var creds = null;
+                        _.each(credentials, function (cred) {
+                            if (cred.type === 'stripe') {
+                                creds = cred;
+                            }
+                        });
+                        if(creds && creds.accessToken) {
+                            //log.info('using accessToken:', creds.accessToken);
+                            //log.info('from adminAccount:', adminAccount);
+                            accessToken = creds.accessToken;
+                        }
+                        if(!billing.lastVerified || moment().diff(billing.lastVerified, 'hours') >24) {
+                            self._verifyAndSetSessionPrivs(billing, accessToken, account, req, cb);
+                        } else {
+                            self._setSessionPrivs(billing, accessToken, req, cb);
+                        }
+                    }
+                });
+            } else if(account.get('orgId') && account.get('orgId') > 0 && billing.stripeParent !== 6) {
                 orgManager.getAdminAccountByOrgId(account.id(), null, account.get('orgId'), function(err, adminAccount){
                     if(err) {
                         log.error('Error getting org stripe credentials:', err);
