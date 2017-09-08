@@ -87,7 +87,7 @@ app.config(['$stateProvider', '$urlRouterProvider', '$controllerProvider', '$com
 				templateUrl: "/admin/assets/views/site-analytics.html",
 				title: 'Site Analytics',
 				icon: 'ti-layout-media-left-alt',
-				resolve: loadSequence('siteAnalyticsCtrl', 'highcharts', 'highmaps', 'highmaps-lib', 'secTotime', 'dateRangePicker', 'chartAnalyticsService', 'ipCookie', 'analyticsWidgetStateService')
+				resolve: loadSequence('siteAnalyticsCtrl', 'highcharts', 'highmaps', 'highmaps-lib', 'secTotime', 'dateRangePicker', 'chartAnalyticsService', 'ipCookie', 'analyticsWidgetStateService','spectrum')
 			}).state('app.website.pages', {
 				url: '/pages',
 				templateUrl: "/admin/assets/views/pages.html",
@@ -105,31 +105,31 @@ app.config(['$stateProvider', '$urlRouterProvider', '$controllerProvider', '$com
 				templateUrl: "/admin/assets/views/contacts.html",
 				title: 'Contacts',
 				icon: 'ti-layout-media-left-alt',
-				resolve: loadSequence('contactsCtrl', 'ImportContactService', "socialConfigService", 'contactService', 'papaParse', 'string_score', 'importContactModalCtrl', 'contactPagingService')
+				resolve: loadSequence('contactsCtrl', 'ImportContactService', "socialConfigService", 'contactService', 'papaParse', 'string_score', 'importContactModalCtrl', 'contactPagingService','spectrum')
 			}).state('app.customers', {
 				url: '/customers',
 				templateUrl: "/admin/assets/views/customers.html",
 				title: 'Customers',
 				icon: 'ti-layout-media-left-alt',
-				resolve: loadSequence('customersCtrl', 'customerService')
+				resolve: loadSequence('customersCtrl', 'customerService','spectrum')
 			}).state('app.customeranalytics', {
 				url: '/customers/analytics',
 				templateUrl: "/admin/assets/views/customer-analytics.html",
 				title: 'Customer Analytics',
 				icon: 'ti-layout-media-left-alt',
-				resolve: loadSequence('customerAnalyticsCtrl', 'customerService', 'userService', 'chartAnalyticsService', 'highcharts', 'highmaps', 'highmaps-lib', 'secTotime', 'dateRangePicker', 'ipCookie', 'analyticsWidgetStateService')
+				resolve: loadSequence('customerAnalyticsCtrl', 'customerService', 'userService', 'chartAnalyticsService', 'highcharts', 'highmaps', 'highmaps-lib', 'secTotime', 'dateRangePicker', 'ipCookie', 'analyticsWidgetStateService','spectrum')
 			}).state('app.singleContact', {
 				url: '/contacts/:contactId',
 				templateUrl: "/admin/assets/views/contact-detail.html",
 				title: 'Single Contact',
 				icon: 'ti-layout-media-left-alt',
-				resolve: loadSequence('contactDetailCtrl', 'contactService', 'ngMap', 'offset', 'assetsService', 'toasterService', 'orderService')
+				resolve: loadSequence('contactDetailCtrl', 'contactService', 'ngMap', 'offset', 'assetsService', 'toasterService', 'orderService','spectrum')
 			}).state('app.singleCustomer', {
 				url: '/customers/:customerId',
 				templateUrl: "/admin/assets/views/customer-detail.html",
 				title: 'Single Customer',
 				icon: 'ti-layout-media-left-alt',
-				resolve: loadSequence('customerDetailCtrl', 'singleCustomerAnalyticsCtrl', 'ngMap', 'customerService', 'toasterService', 'userService', 'chartAnalyticsService', 'highcharts', 'highmaps', 'highmaps-lib', 'secTotime', 'dateRangePicker', 'ipCookie', 'analyticsWidgetStateService')
+				resolve: loadSequence('customerDetailCtrl', 'singleCustomerAnalyticsCtrl', 'ngMap', 'customerService', 'toasterService', 'userService', 'chartAnalyticsService', 'highcharts', 'highmaps', 'highmaps-lib', 'secTotime', 'dateRangePicker', 'ipCookie', 'analyticsWidgetStateService','spectrum')
 			}).state('app.commerce', {
 				url: '/commerce',
 				template: '<div ui-view class="fade-in-up"></div>',
@@ -139,7 +139,7 @@ app.config(['$stateProvider', '$urlRouterProvider', '$controllerProvider', '$com
 				templateUrl: "/admin/assets/views/products.html",
 				title: 'Products',
 				icon: 'ti-layout-media-left-alt',
-				resolve: loadSequence('productsCtrl', 'productService', 'accountService', 'ipCookie')
+				resolve: loadSequence('productsCtrl', 'productService', 'accountService', 'ipCookie','spectrum')
 			}).state('app.commerce.productsingle', {
 				url: '/products/:productId',
 				templateUrl: "/admin/assets/views/product-detail.html",
@@ -151,19 +151,19 @@ app.config(['$stateProvider', '$urlRouterProvider', '$controllerProvider', '$com
 				templateUrl: "/admin/assets/views/orders.html",
 				title: 'Orders',
 				icon: 'ti-layout-media-left-alt',
-				resolve: loadSequence('ordersCtrl', 'orderService', 'contactService', 'dateRangePicker')
+				resolve: loadSequence('ordersCtrl', 'orderService', 'contactService', 'dateRangePicker','spectrum')
 			}).state('app.commerce.orderdetail', {
 				url: '/orders/:orderId',
 				templateUrl: "/admin/assets/views/order-detail.html",
 				title: 'Order Detail',
 				icon: 'ti-layout-media-left-alt',
-				resolve: loadSequence('orderDetailCtrl', 'orderService', 'contactService', 'userService')
+				resolve: loadSequence('orderDetailCtrl', 'orderService', 'contactService', 'userService','spectrum')
 			}).state('app.commerce.orderdetailedit', {
 				url: '/orders/:orderId/edit',
 				templateUrl: "/admin/assets/views/order-detail-edit.html",
 				title: 'Order Detail Edit',
 				icon: 'ti-layout-media-left-alt',
-				resolve: loadSequence('orderDetailEditCtrl', 'orderService', 'contactService', 'userService')
+				resolve: loadSequence('orderDetailEditCtrl', 'orderService', 'contactService', 'userService','spectrum')
 			}).state('app.marketing', {
 				url: '/marketing',
 				template: '<div ui-view class="fade-in-up"></div>',
@@ -179,25 +179,25 @@ app.config(['$stateProvider', '$urlRouterProvider', '$controllerProvider', '$com
 				templateUrl: "/admin/assets/views/emails.html",
 				title: 'Emails',
 				icon: 'ti-layout-media-left-alt',
-				resolve: loadSequence('emailsCtrl', 'chartEmailService')
+				resolve: loadSequence('emailsCtrl', 'chartEmailService','spectrum')
 			}).state('app.emailEditor', {
 				url: '/emails/editor/:id',
 				template: '<indi-email-builder class="ssb-site-builder"></indi-email-builder>',
 				title: 'Email Editor',
 				icon: 'ti-layout-media-left-alt',
-				resolve: loadSequence('froala-wysiwyg-editor', 'froala-wysiwyg-editor-plugins', 'custom-froala-wysiwyg-editor', 'spectrum', 'angular-slider', 'deep-diff', 'sortListPages')
+				resolve: loadSequence('froala-wysiwyg-editor', 'froala-wysiwyg-editor-plugins', 'custom-froala-wysiwyg-editor', 'spectrum', 'angular-slider', 'deep-diff', 'sortListPages','spectrum')
 			}).state('app.emailCampaign', {
 				url: '/emails/campaigns/:id',
 				template: "<indi-email-campaign></indi-email-campaign>",
 				title: 'Email Campaign',
 				icon: 'ti-layout-media-left-alt',
-				resolve: loadSequence('froala-wysiwyg-editor', 'froala-wysiwyg-editor-plugins', 'custom-froala-wysiwyg-editor', 'propsFilter', 'CampaignRecipientDetailsController', 'campaignService')
+				resolve: loadSequence('froala-wysiwyg-editor', 'froala-wysiwyg-editor-plugins', 'custom-froala-wysiwyg-editor', 'propsFilter', 'CampaignRecipientDetailsController', 'campaignService','spectrum')
 			}).state('app.marketing.campaigns', {
 				url: '/campaigns',
 				templateUrl: "/admin/assets/views/campaigns.html",
 				title: 'Campaigns',
 				icon: 'ti-layout-media-left-alt',
-				resolve: loadSequence('campaignsCtrl', 'campaignService', 'propsFilter')
+				resolve: loadSequence('campaignsCtrl', 'campaignService', 'propsFilter','spectrum')
 			}).state('app.account', {
 				url: '/account',
 				template: '<div ui-view class="fade-in-up"></div>',
@@ -207,13 +207,13 @@ app.config(['$stateProvider', '$urlRouterProvider', '$controllerProvider', '$com
 				templateUrl: "/admin/assets/views/profile-business.html",
 				title: 'Profile Business',
 				icon: 'ti-layout-media-left-alt',
-				resolve: loadSequence('profileBusinessCtrl', 'toasterService', 'assetsService')
+				resolve: loadSequence('profileBusinessCtrl', 'toasterService', 'assetsService','spectrum')
 			}).state('app.account.profilepersonal', {
 				url: '/profile-personal',
 				templateUrl: "/admin/assets/views/profile-personal.html",
 				title: 'Profile Personal',
 				icon: 'ti-layout-media-left-alt',
-				resolve: loadSequence('profilePersonalCtrl', 'toasterService', 'assetsService', 'offset')
+				resolve: loadSequence('profilePersonalCtrl', 'toasterService', 'assetsService', 'offset','spectrum')
 			}).state('app.account.billing', {
 				url: '/billing',
 				templateUrl: "/admin/assets/views/billing.html",
@@ -235,19 +235,19 @@ app.config(['$stateProvider', '$urlRouterProvider', '$controllerProvider', '$com
 				templateUrl: "/admin/assets/views/help-topics.html",
 				title: 'Help Topics',
 				icon: 'ti-layout-media-left-alt',
-				resolve: loadSequence('helpTopicsCtrl', 'toTrusted', 'jsVideoUrlParser')
+				resolve: loadSequence('helpTopicsCtrl', 'toTrusted', 'jsVideoUrlParser','spectrum')
 			}).state('app.support.oldhelptopics', {
 				url: '/old-help-topics',
 				templateUrl: "/admin/assets/views/old-help-topics.html",
 				title: 'Old Help Topics',
 				icon: 'ti-layout-media-left-alt',
-				resolve: loadSequence('oldHelpTopicsCtrl')
+				resolve: loadSequence('oldHelpTopicsCtrl','spectrum')
 			}).state('app.support.managetopics', {
 				url: '/manage-topics',
 				templateUrl: "/admin/assets/views/manage-topics.html",
 				title: 'Manage Topics',
 				icon: 'ti-layout-media-left-alt',
-				resolve: loadSequence('manageTopicsCtrl', 'userService')
+				resolve: loadSequence('manageTopicsCtrl', 'userService','spectrum')
 			}).state('app.support.singletopic', {
 				url: '/manage-topics/:id',
 				templateUrl: "/admin/assets/views/editTopics.html",
@@ -265,7 +265,7 @@ app.config(['$stateProvider', '$urlRouterProvider', '$controllerProvider', '$com
 				templateUrl: "/admin/assets/js/dashboard/dohy.html",
 				title: 'Dashboard',
 				icon: 'ti-layout-media-left-alt',
-				resolve: loadSequence('DOHYCtrl', 'dashboardService', 'DashboardWorkstreamTileComponentController', 'DashboardAnalyticTileComponentController', 'DashboardInboxComponentController', 'jsVideoUrlParser', 'highcharts', 'highmaps', 'highmaps-lib')
+				resolve: loadSequence('DOHYCtrl', 'dashboardService', 'DashboardWorkstreamTileComponentController', 'DashboardAnalyticTileComponentController', 'DashboardInboxComponentController', 'jsVideoUrlParser', 'highcharts', 'highmaps', 'highmaps-lib','spectrum')
 			}).state('app.account.users', {
 				url: '/users',
 				templateUrl: "/admin/assets/js/users/users.html",
