@@ -1,4 +1,4 @@
-<div
+<div ssb-data-styles
     ng-repeat="section in page.sections"
     class="fragment"
     ng-if="!page.layout || page.layout === 'ssb-layout__1-col'"
@@ -23,7 +23,7 @@
 </div>
 
 
-<div
+<div ssb-data-styles
     ng-if="page.layout === 'ssb-layout__header_2-col_footer'"
     ng-class="{ 'ssb-page-blog-list': page.handle === 'blog-list' }">
 
