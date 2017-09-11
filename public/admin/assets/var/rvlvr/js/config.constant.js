@@ -943,6 +943,8 @@ app.constant('JS_REQUIRES', {
       "../js/libs_misc/froala-wysiwyg-editor/js/plugins/video_media_manager.min.js",
       "../js/libs_misc/froala-wysiwyg-editor/js/plugins/button.js",
       "../js/libs_misc/froala-wysiwyg-editor/js/plugins/font-awesome-icons.js",
+      "../js/libs_misc/froala-wysiwyg-editor/js/plugins/tableCellPadding.min.js",
+      "../js/libs_misc/froala-wysiwyg-editor/js/plugins/tableBorderWidth.min.js",
       "../js/libs_misc/froala-wysiwyg-editor/css/plugins/font-awesome.css",
       '../js/libs_misc/froala-wysiwyg-editor/config/config.js']
   },
