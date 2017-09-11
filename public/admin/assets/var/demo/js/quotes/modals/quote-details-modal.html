@@ -10,9 +10,16 @@
     </div>
     <form name="form" role="form" id="form">
         <div class="modal-body bg-white quote-details-modal quote-cart-details" style="min-height:200px" stop-event="touchend">
+            <div ng-if="!vm.uiState.isViewMode && !vm.state.cartDetail.items.length" class="search-quote-inventory">
+                <button type="button" class="btn btn-primary btn-warning" ng-click="vm.searchInventory()">
+                        <span style="white-space: nowrap;">Search Inventory</span>
+                </button>
+            </div>
+            
             <div ng-if="!vm.uiState.loading && !vm.uiState.loadingDetailsModal">
                 <div class="col-xs-12 col-sm-7 padding-top-15 border-right">
                     <div ng-if="vm.uiState.isViewMode" data-ng-include=" '/admin/assets/var/demo/js/quotes/partials/quote-details-view.html' "></div>
+                        
                     <div ng-if="!vm.uiState.isViewMode" data-ng-include=" '/admin/assets/var/demo/js/quotes/partials/quote-details-edit.html' "></div>
                 </div>
                 <div class="col-sm-5 col-xs-12 padding-top-15">
