@@ -10,7 +10,7 @@
     }
     a.FroalaEditor.DefineIcon('tableBorderWidth', {NAME: 'minus'});
     a.FroalaEditor.RegisterCommand('tableBorderWidth', {
-      title: 'Cell Padding',
+      title: 'Border Width',
       type: 'dropdown',
       focus: false,
       undo: true,

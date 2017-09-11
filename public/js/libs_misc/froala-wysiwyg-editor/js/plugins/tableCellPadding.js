@@ -8,7 +8,7 @@
     for(var op=0; op<=30; op++){
         spacingOptions[op] = op;
     }
-    a.FroalaEditor.DefineIcon('tableCellPadding', {NAME: 'expand'});
+    a.FroalaEditor.DefineIcon('tableCellPadding', {NAME: 'arrows'});
     a.FroalaEditor.RegisterCommand('tableCellPadding', {
       title: 'Cell Padding',
       type: 'dropdown',
