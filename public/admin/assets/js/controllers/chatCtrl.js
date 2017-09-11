@@ -1,9 +1,8 @@
-'use strict';
-/**
- * controller for Messages
- */
+/*global app  */
+/*jslint unparam:true*/
+/* eslint-disable no-console */
 app.controller('ChatCtrl', ["$scope", function ($scope) {
-
+	"use strict";
     $scope.selfIdUser = 50223456;
     $scope.otherIdUser = 50223457;
     $scope.setOtherId = function (value) {

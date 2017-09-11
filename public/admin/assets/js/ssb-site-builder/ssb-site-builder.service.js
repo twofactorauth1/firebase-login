@@ -1,6 +1,8 @@
 'use strict';
-/*global app, window, $$*/
+/*global app, window,console,_, $, angular ,Image */
 /*jslint unparam:true*/
+
+/* eslint-disable no-console */
 (function () {
 
     app.factory('SimpleSiteBuilderService', SimpleSiteBuilderService);
@@ -8,20 +10,20 @@
     SimpleSiteBuilderService.$inject = ['$rootScope', '$compile', '$http', '$q', '$timeout', 'AccountService', 'WebsiteService', '$modal', 'pageConstant'];
     /* @ngInject */
     function SimpleSiteBuilderService($rootScope, $compile, $http, $q, $timeout, AccountService, WebsiteService, $modal, pageConstant) {
-        var ssbService = {};
-        var baseWebsiteAPIUrl = '/api/1.0/cms/website/';
-        var basePageAPIUrl = '/api/1.0/cms/page/';
-        var baseComponentAPIUrl = '/api/1.0/cms/component/';
-        var baseTemplateAPIUrl = '/api/1.0/cms/template/';
-        var baseWebsiteAPIUrlv2 = '/api/2.0/cms/websites/';
-        var basePageAPIUrlv2 = '/api/2.0/cms/pages/';
-        var baseTemplateAPIUrlv2 = '/api/2.0/cms/templates/';
-        var baseSiteTemplateAPIUrlv2 = '/api/2.0/cms/sitetemplates/';
-        var baseThemesAPIUrlv2 = '/api/2.0/cms/themes/';
-        var baseSectionAPIUrlv2 = '/api/2.0/cms/sections/';
-        var baseComponentAPIUrlv2 = '/api/2.0/cms/components/';
-        var basePagesWebsiteAPIUrl = '/api/2.0/cms/website/';
-        var baseAccountAPIUrl = '/api/1.0/account/';
+        var ssbService = {},
+			baseWebsiteAPIUrl = '/api/1.0/cms/website/',
+			//basePageAPIUrl = '/api/1.0/cms/page/',
+			baseComponentAPIUrl = '/api/1.0/cms/component/',
+			baseTemplateAPIUrl = '/api/1.0/cms/template/',
+			baseWebsiteAPIUrlv2 = '/api/2.0/cms/websites/',
+			basePageAPIUrlv2 = '/api/2.0/cms/pages/',
+			baseTemplateAPIUrlv2 = '/api/2.0/cms/templates/',
+			baseSiteTemplateAPIUrlv2 = '/api/2.0/cms/sitetemplates/',
+			baseThemesAPIUrlv2 = '/api/2.0/cms/themes/',
+			baseSectionAPIUrlv2 = '/api/2.0/cms/sections/',
+			baseComponentAPIUrlv2 = '/api/2.0/cms/components/',
+			basePagesWebsiteAPIUrl = '/api/2.0/cms/website/',
+			baseAccountAPIUrl = '/api/1.0/account/';
 
         ssbService.getSite = getSite;
         ssbService.getPage = getPage;
@@ -175,7 +177,7 @@
             'all':{
                 'icon': 'fa-sort-amount-asc'
             }
-        }
+        };
 
         ssbService.manageComponentIcons = {
             'navigation': {
@@ -196,14 +198,14 @@
             'ssb-text': {
                 icon: 'fa-text-height'
             }
-        }
+        };
 
         // function to get component sort order
         function getComponentSortOrder(newComponents, newSection){
             if(newSection && newSection.componentSortOrder)
                return newSection.componentSortOrder;
             else
-               return _.invert(_.object(_.pairs(_.pluck(newComponents, 'type'))))
+               return _.invert(_.object(_.pairs(_.pluck(newComponents, 'type'))));
         }
 
         /**
@@ -332,7 +334,7 @@
 
 
             function success(data) {
-                 console.log('SimpleSiteBuilderService getPages with sections');
+                 console.log('SimpleSiteBuilderService getPages with sections',data);
             }
 
             function error(error) {
@@ -390,12 +392,12 @@
          */
         function deletePage(page) {
             function success(data) {
-                console.log('SimpleSiteBuilderService requested page deleted');
+                console.log('SimpleSiteBuilderService requested page deleted',data);
                 delete ssbService.pages[page.handle];
             }
 
-            function error(error) {
-                console.error('SimpleSiteBuilderService page delete error: ', JSON.stringify(error));
+            function error(err) {
+                console.error('SimpleSiteBuilderService page delete error: ', JSON.stringify(err));
             }
 
             return (
@@ -404,7 +406,7 @@
                     method: 'DELETE',
                     data: angular.toJson(page)
                 }).success(success).error(error))
-            )
+            );
         }
 
         /**
@@ -422,11 +424,11 @@
             );
 
             function success(data) {
-                console.log('SimpleSiteBuilderService requested page created');
+                console.log('SimpleSiteBuilderService requested page created',data);
             }
 
-            function error(error) {
-                console.error('SimpleSiteBuilderService page creation error: ', JSON.stringify(error));
+            function error(er) {
+                console.error('SimpleSiteBuilderService page creation error: ', JSON.stringify(er));
             }
 
         }
@@ -438,9 +440,7 @@
                 console.log('SimpleSiteBuilderService requested pages saved' + data);
             }
 
-            function error(error) {
-                console.error('SimpleSiteBuilderService pages save error: ', JSON.stringify(error));
-            }
+
             if(ssbService.deletedNavLinks.length){
                 return (
                     ssbRequest($http({
@@ -459,7 +459,7 @@
          */
         function createDuplicatePage(page) {
             function success(data) {
-                console.log('SimpleSiteBuilderService requested page created');
+                console.log('SimpleSiteBuilderService requested page created',data);
             }
 
             function error(error) {
@@ -471,7 +471,7 @@
                   method: 'POST',
                   data: angular.toJson(page)
                 }).success(success).error(error))
-            )
+            );
 
         }
 
@@ -561,7 +561,7 @@
                     method: 'POST',
                     data: angular.toJson(website)
                 }).success(success).error(error))
-            )
+            );
 
         }
 
@@ -585,7 +585,7 @@
                     method: 'POST',
                     data: angular.toJson(website)
                 }).success(success).error(error))
-            )
+            );
 
         }
 
@@ -616,7 +616,7 @@
                         version: version
                     })
                 }).success(success).error(error))
-            )
+            );
 
         }
 
@@ -722,7 +722,7 @@
                         "pb": "0",
                         "pl": "0",
                         "pr": "0"
-                    }
+                    };
                 }
 
                 return sectionDefault;
@@ -824,7 +824,7 @@
                     url: baseThemesAPIUrlv2,
                     method: 'GET',
                 }).success(success).error(error))
-            )
+            );
 
         }
 
@@ -847,7 +847,7 @@
                     url: baseWebsiteAPIUrl + ssbService.website._id + '/page/' + pageHandle,
                     method: 'GET',
                 }).success(success).error(error))
-            )
+            );
 
         }
 
@@ -873,7 +873,7 @@
               url: baseTemplateAPIUrlv2,
               method: 'GET',
             }).success(success).error(error))
-          )
+          );
 
         }
 
@@ -897,7 +897,7 @@
               url: baseSiteTemplateAPIUrlv2,
               method: 'GET'
             }).success(success).error(error))
-          )
+          );
 
         }
 
@@ -922,7 +922,7 @@
               url: baseAccountAPIUrl + "templates",
               method: 'GET'
             }).success(success).error(error))
-          )
+          );
 
         }
 
@@ -953,7 +953,7 @@
                         siteThemeOverrides: siteTemplate.siteThemeOverrides
                     }
                 }).success(success).error(error))
-            )
+            );
         }
 
 
@@ -972,7 +972,7 @@
                     url: baseAccountAPIUrl + accountTemplateId + '/copy',
                     method: 'POST'
                 }).success(success).error(error))
-            )
+            );
         }
 
         /**
@@ -1008,7 +1008,7 @@
               url: baseTemplateAPIUrl,
               method: 'GET',
             }).success(success).error(error))
-          )
+          );
 
         }
 
@@ -1022,12 +1022,12 @@
          *
          */
         function addSectionToPage(section, version, replaceAtIndex, oldSection, copyAtIndex) {
-            var insertAt;
-            var numSections;
-            var hasHeader = false;
-            var hasFooter = false;
-            var deferred = $q.defer();
-            var promise;
+            var insertAt,
+				numSections,
+				hasHeader = false,
+				hasFooter = false,
+				deferred = $q.defer(),
+				promise;
 
             if (!ssbService.page.sections) {
                 ssbService.page.sections = [];
@@ -1174,16 +1174,16 @@
          */
         function removeSectionFromLayoutArea(pageSectionIndex) {
 
-            var decrementProceedingValues = false;
-            var sectionId = ssbService.page.sections[pageSectionIndex]._id;
-            var sectionLayoutName = _.filter(ssbService.page.layoutModifiers._layoutAreas, function(val, index) {
-                return ssbService.page.layoutModifiers[val].indexOf(pageSectionIndex) !== -1
+            var decrementProceedingValues = false,
+				//sectionId = ssbService.page.sections[pageSectionIndex]._id,
+				sectionLayoutName = _.filter(ssbService.page.layoutModifiers._layoutAreas, function(val) {
+                return ssbService.page.layoutModifiers[val].indexOf(pageSectionIndex) !== -1;
             })[0];
             var sectionLayoutIndex = ssbService.page.layoutModifiers[sectionLayoutName].indexOf(pageSectionIndex);
 
 
-            console.debug('sectionLayoutName before:', sectionLayoutName)
-            console.debug('ssbService.page.layoutModifiers[sectionLayoutName]:', ssbService.page.layoutModifiers[sectionLayoutName])
+            console.debug('sectionLayoutName before:', sectionLayoutName);
+            console.debug('ssbService.page.layoutModifiers[sectionLayoutName]:', ssbService.page.layoutModifiers[sectionLayoutName]);
 
             //remove this section's index value from the layout area array that its in
             ssbService.page.layoutModifiers[sectionLayoutName].splice(sectionLayoutIndex, 1);
@@ -1197,15 +1197,15 @@
 
                 if (decrementProceedingValues) {
 
-                    console.debug('layoutName before:', layoutName)
-                    console.debug('ssbService.page.layoutModifiers[layoutName]:', ssbService.page.layoutModifiers[layoutName])
+                    console.debug('layoutName before:', layoutName);
+                    console.debug('ssbService.page.layoutModifiers[layoutName]:', ssbService.page.layoutModifiers[layoutName]);
 
-                    ssbService.page.layoutModifiers[layoutName] = _.map(ssbService.page.layoutModifiers[layoutName], function(val, index) {
+                    ssbService.page.layoutModifiers[layoutName] = _.map(ssbService.page.layoutModifiers[layoutName], function(val) {
                         return (val - 1);
                     });
 
-                    console.debug('layoutName after:', layoutName)
-                    console.debug('ssbService.page.layoutModifiers[layoutName]:', ssbService.page.layoutModifiers[layoutName])
+                    console.debug('layoutName after:', layoutName);
+                    console.debug('ssbService.page.layoutModifiers[layoutName]:', ssbService.page.layoutModifiers[layoutName]);
                 }
 
             });
@@ -1234,7 +1234,7 @@
             var oldComponents = _(angular.copy(oldSection.components)).chain()
 
                                     .sortBy(function(x) { // sort by order of newComponents
-                                        return newComponentsOrder[x.type] && parseInt(newComponentsOrder[x.type], 10)
+                                        return newComponentsOrder[x.type] && parseInt(newComponentsOrder[x.type], 10);
                                     })
 
                                     .value(); // return the new array
@@ -1245,7 +1245,7 @@
                 //arrange components in requested order
                 newComponents = _(newComponents).chain()
                                     .sortBy(function(x) { // sort by order of newComponents
-                                        return newComponentsOrder[x.type] && parseInt(newComponentsOrder[x.type], 10)
+                                        return newComponentsOrder[x.type] && parseInt(newComponentsOrder[x.type], 10);
                                     }).value(); // return the new array
             }
 
@@ -1264,7 +1264,7 @@
 
                 // set current sort order
                 newSection.components = _(newSection.components).chain().sortBy(function(section){
-                    return componentOrder[section.type] && parseInt(componentOrder[section.type], 10)
+                    return componentOrder[section.type] && parseInt(componentOrder[section.type], 10);
                 }).value();
             }
             else if(checkIfDiffrentLenthSection(newSection)){
@@ -1287,8 +1287,8 @@
 
         function getGlobalHeaders(sections){
             return _.filter(sections, function(section){
-                return (section.globalHeader === true || section.title === "Header") && section.global === true
-            })
+                return (section.globalHeader === true || section.title === "Header") && section.global === true;
+            });
         }
 
         /*
@@ -1317,11 +1317,11 @@
                     hasComponentFooter = _.where(s.components, { type: 'footer' }).length !== 0;
                 }
 
-                return hasSectionFooter || hasComponentFooter
+                return hasSectionFooter || hasComponentFooter;
 
             });
 
-            return match.length !== 0
+            return match.length !== 0;
         }
 
 
@@ -1364,13 +1364,13 @@
          */
         function setupTheme() {
             return ssbService.getThemes().then(function(themes) {
-                var theme = themes.data.filter(function(t) { return t._id === ssbService.website.themeId })[0] || {};
+                var theme = themes.data.filter(function(t) { return t._id === ssbService.website.themeId; })[0] || {};
                 var defaultTheme;
 
                 if (theme._id) {
                     ssbService.applyThemeToSite(theme);
                 } else {
-                    defaultTheme = themes.data.filter(function(t) { return t.handle === 'default' })[0] || {};
+                    defaultTheme = themes.data.filter(function(t) { return t.handle === 'default'; })[0] || {};
                     ssbService.applyThemeToSite(defaultTheme, false);
                     ssbService.website.themeId = defaultTheme._id;
                     ssbService.saveWebsite(ssbService.website);
@@ -1423,7 +1423,7 @@
                 active: function() {
                     sessionStorage.fonts = true;
                 }
-            }
+            };
 
         }
 
@@ -1459,7 +1459,7 @@
                   ["#E29C45", "#F9690E", "#CA6924", "#F5AB35", "#BFBFBF", "#F2F1EF", "#BDC3C7", "#ECF0F1", "#D2D7D3", "#757D75"],
                   ["#EEEEEE", "#ABB7B7", "#6C7A89", "#95A5A6", "#9ACCCB", "#E8E7E7", "#000000", "#FFFFFF", "#50c7e8"]
                 ]
-            }
+            };
         }
 
         /*
@@ -1510,7 +1510,7 @@
                 "'Trebuchet MS'":"Trebuchet MS",
                 "'Ubuntu',sans-serif": 'Ubuntu',
                 "'Verdana',Geneva,sans-serif": "Verdana"
-            }
+            };
         }
 
 
@@ -1527,7 +1527,7 @@
                 "bolder": "bolder",
                 "normal": 'normal',
                 "lighter": 'Lighter'
-            }
+            };
         }
 
         function bodyFontWeightOptions(){
@@ -1535,7 +1535,7 @@
                 "200": "Light",
                 "400": "Normal",
                 "700": 'Bold'
-            }
+            };
         }
 
 
@@ -1568,7 +1568,7 @@
             },{
                 "description": "200 miles",
                 "value": 200
-            }]
+            }];
         }
 
         /*
@@ -1600,7 +1600,7 @@
                         return vm;
                     },
                     showInsert: function () {
-                        return true
+                        return true;
                     },
                     insertMedia: function () {
                         return function(asset) {
@@ -1610,7 +1610,7 @@
                                 ssbService.asset = asset;
                             }
 
-                        }
+                        };
                     },
                     component: function() {
                         return component;
@@ -1653,26 +1653,18 @@
          *
          */
         function setMediaForComponent(asset, component, index, update, fields) {
-
-            var obj = {};
-            var type = component.type;
+			var type = component.type;
 
             //if image/text component
             if (type === 'image-text') {
-
-                component.imgurl = asset.url;
-
-            } else if (type === 'image-gallery') {
-
-                isImage(asset.url).then(function(response){
-                  if(response === false)
-                    return;
-
-                    if (update) {
-
-                        component.images[index].url = asset.url;
-
-                    } else {
+				component.imgurl = asset.url;
+			} else if (type === 'image-gallery') {
+				isImage(asset.url).then(function(response){
+					if (response === false) {
+						return;
+					}else if (update) {
+						component.images[index].url = asset.url;
+					} else {
                         $rootScope.$broadcast('$refreshSlickSlider', index + 1);
                         component.images.splice(index + 1, 0, {
                             url: asset.url,
@@ -1684,15 +1676,14 @@
                             });
                         }
                     }
-                })
+                });
 
             } else if (type === 'thumbnail-slider') {
                 isImage(asset.url).then(function(response){
                     if(response === false){
-                        console.log("Not a valid image.")
+                        console.log("Not a valid image.");
                         return;
-                    }
-                    if (update) {
+                    }else if (update) {
                         component.thumbnailCollection[index].url = asset.url;
                         component.thumbnailCollection[index].img = "<img src='"+ asset.url +"'/>";
                     } else {
@@ -1701,15 +1692,13 @@
                             img: "<img src='"+ asset.url +"'/>"
                         });
                     }
-                })
-
-            } else if (type === 'meet-team') {
+                });
+			} else if (type === 'meet-team') {
                 component.teamMembers[index].profilepic = asset.url;
             } else {
                 console.log('unknown component or image location');
             }
-
-        }
+		}
 
         function isImage(src) {
               var deferred = $q.defer();
@@ -1729,7 +1718,7 @@
             return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
                 var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
                 return v.toString(16);
-            })
+            });
         }
 
         function setTempUUIDForSection(section) {
@@ -1742,14 +1731,14 @@
                     component._id = ssbService.getTempUUID();
                     component.anchor = component._id;
                     if(angular.isObject(component.elementStyles) && Object.keys(component.elementStyles).length){
-                        _.each(component.elementStyles, function(value, key){
+                        _.each(component.elementStyles, function(value){
                             if(value){
                                 delete value._id;
                                 delete value.id;
                                 delete value.anchor;
                             }
                         });
-                    };
+                    }
                 });
             }
 
@@ -1777,7 +1766,7 @@
                                 });
                             });
                         }
-                    })
+                    });
                 }
             });
 
@@ -1895,15 +1884,15 @@
             var data = {
                 allowUndernav : false,
                 navComponent: null
-            }
+            };
 
             if (ssbService.page && ssbService.page.sections) {
                 ssbService.page.sections.forEach(function (sectionValue, sectionIndex) {
-                    sectionValue.components.forEach(function (value, index) {
+                    sectionValue.components.forEach(function (value) {
                         if (value && value.type === 'masthead' && value._id == masthead_id && ssbService.page.sections[sectionIndex - 1]) {
                             var navComponent = _.findWhere(ssbService.page.sections[sectionIndex - 1].components, { type: 'navigation' });
                             if (
-                                sectionIndex != 0 &&
+                                sectionIndex !== 0 &&
                                 navComponent !== undefined
                             ) {
                                 data.allowUndernav = true;
@@ -1939,7 +1928,7 @@
               url: basePageAPIUrlv2 + [pageId, 'versions'].join('/'),
               method: 'GET',
             }).success(success).error(error))
-          )
+          );
         }
 
         /**
@@ -1963,7 +1952,7 @@
               url: basePageAPIUrlv2 + [pageId, 'version', versionId].join('/'),
               method: 'POST',
             }).success(success).error(error))
-          )
+          );
         }
 
         /**
@@ -1985,7 +1974,7 @@
               url: basePageAPIUrlv2 + [pageId, 'publish'].join('/'),
               method: 'POST',
             }).success(success).error(error))
-          )
+          );
         }
 
         function updateBlogPages() {
@@ -2003,7 +1992,7 @@
               url: baseWebsiteAPIUrlv2 + [ssbService.websiteId, 'updateBlogPages'].join('/'),
               method: 'POST',
             }).success(success).error(error))
-          )
+          );
         }
         /**
          * detect IE
@@ -2039,7 +2028,7 @@
             var trident = ua.indexOf('Trident/');
             if (trident > 0) {
                 // IE 11 => return version number
-                var rv = ua.indexOf('rv:');
+                //var rv = ua.indexOf('rv:');
                 // return parseInt(ua.substring(rv + 3, ua.indexOf('.', rv)), 10);
                 return true;
             }
@@ -2102,7 +2091,7 @@
                 $timeout(function() {
                     ssbService.account = data;
                 },0);
-            })
+            });
         }
 
 
