@@ -10,7 +10,7 @@
     </div>
     <form name="form" role="form" id="form">
         <div class="modal-body bg-white quote-details-modal quote-cart-details" style="min-height:200px" stop-event="touchend">
-            <div ng-if="!vm.uiState.isViewMode && !vm.state.cartDetail.items.length" class="search-quote-inventory">
+            <div ng-if="!vm.uiState.isViewMode && !vm.state.cartDetail.items.length && !vm.uiState.loading && !vm.uiState.loadingDetailsModal" class="search-quote-inventory">
                 <button type="button" class="btn btn-primary btn-warning" ng-click="vm.searchInventory()">
                         <span style="white-space: nowrap;">Search Inventory</span>
                 </button>
