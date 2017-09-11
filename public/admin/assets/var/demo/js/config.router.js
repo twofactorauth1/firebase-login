@@ -272,7 +272,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         templateUrl: "/admin/assets/var/demo/js/inventory/inventory-details/inventory-details.html",
         title: 'Single Inventory',
         icon: 'ti-layout-media-left-alt',
-        resolve: loadSequence('InventoryDetailsController', 'InventoryService', 'highcharts', 'chartAnalyticsService')
+        resolve: loadSequence('InventoryDetailsController', 'InventoryService', 'highcharts', 'chartAnalyticsService', 'NewQuoteModalController')
     }).state('app.managequotes', {
         url: '/quotes',
         templateUrl: "/admin/assets/var/demo/js/quotes/quote.html",

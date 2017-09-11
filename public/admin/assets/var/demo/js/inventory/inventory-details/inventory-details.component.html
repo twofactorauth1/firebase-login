@@ -20,6 +20,9 @@
                 Unwatch
             </span>
         </button>
+        <button type="button" ng-if="!vm.uiState.loadingWatchInventory && vm.state.orgCardAndPermissions.permissions.quote.create" class="btn btn-primary btn-warning pull-right margin-top-5 margin-bottom-5 margin-left-5" ng-click="vm.addItemToQuote(vm.inventory, 'new-quote-modal', 'NewQuoteModalController', 'lg')">
+            <span style="white-space: nowrap;">Add to Quote</span>
+        </button>
     </div>
 </div>
 <div class="clearfix"></div>
@@ -157,3 +160,4 @@
 <div class="loading-inventory-details center" ng-if="vm.uiState.loading">
     <h2>Loading inventory details. Please wait...</h2>
 </div>
+<div data-ng-include=" 'assets/var/demo/js/quotes/modals/new-quote-modal.html' "></div>
