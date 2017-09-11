@@ -190,7 +190,7 @@ $.FroalaEditor.build = _.memoize(function(type) {
             tabMode: 'indent',
             tabSize: 2
         },
-        tableEditButtons: ['tableHeader', 'tableRemove', 'tableRows', 'tableColumns', 'tableStyle', 'tableCells', 'tableCellColors', 'tableCellVerticalAlign', 'tableCellHorizontalAlign', 'tableCellStyle'],
+        tableEditButtons: ['tableHeader', 'tableRemove', 'tableRows', 'tableColumns', 'tableStyle', 'tableCells', 'tableCellColors', 'tableCellVerticalAlign', 'tableCellHorizontalAlign', 'tableCellStyle', 'tableCellPadding', 'tableBorderWidth'],
         tableCellStyles: {
             'ssb-table-transparent-border': 'Clear Border',
             'ssb-table-black-border': 'Black Border',

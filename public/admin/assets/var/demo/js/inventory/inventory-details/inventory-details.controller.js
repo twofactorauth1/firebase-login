@@ -2,9 +2,9 @@
 
 app.controller('InventoryDetailsController', inventoryDetailsController);
 
-inventoryDetailsController.$inject = ['$scope', '$state', '$attrs', '$filter', '$modal', '$timeout', '$stateParams', '$location', 'SweetAlert', 'toaster', 'InventoryService', 'ChartAnalyticsService'];
+inventoryDetailsController.$inject = ['$scope', '$state', '$attrs', '$filter', '$modal', '$timeout', '$stateParams', '$location', 'SweetAlert', 'toaster', 'InventoryService', 'ChartAnalyticsService', 'UserPermissionsConfig'];
 /* @ngInject */
-function inventoryDetailsController($scope, $state, $attrs, $filter, $modal, $timeout, $stateParams, $location, SweetAlert, toaster, InventoryService, ChartAnalyticsService) {
+function inventoryDetailsController($scope, $state, $attrs, $filter, $modal, $timeout, $stateParams, $location, SweetAlert, toaster, InventoryService, ChartAnalyticsService, UserPermissionsConfig) {
 
     var vm = this;
 
@@ -12,7 +12,9 @@ function inventoryDetailsController($scope, $state, $attrs, $filter, $modal, $ti
 
     console.log($stateParams.inventoryId);
     
-    vm.state = {};
+    vm.state = {
+        orgCardAndPermissions: UserPermissionsConfig.orgConfigAndPermissions
+    };
 
     vm.uiState = {
         loading: true,
@@ -30,6 +32,9 @@ function inventoryDetailsController($scope, $state, $attrs, $filter, $modal, $ti
     vm.watchInventoryItem = watchInventoryItem;
    
     vm.getWeightUnits = getWeightUnits;
+    vm.openModal = openModal;     
+    vm.closeModal = closeModal;
+    vm.addItemToQuote = addItemToQuote;
 
     function backToInventory(){
         $state.go("app.inventory");
@@ -104,6 +109,43 @@ function inventoryDetailsController($scope, $state, $attrs, $filter, $modal, $ti
             }
         }
         return weightUnits;
+    }
+
+    function addItemToQuote(item, modal, controller, size){
+        vm.state.selectedProductItem = item;
+        openModal(modal, controller, size);
+    }
+
+    function openModal(modal, controller, size){
+        
+        var _modal = {
+            templateUrl: modal,
+            keyboard: true,
+            backdrop: 'static',
+            size: 'lg',
+            resolve: {
+                parentVm: function() {
+                    return vm;
+                }
+            }
+        };
+
+        if (controller) {
+            _modal.controller = controller + ' as vm';
+        }
+
+
+        vm.modalInstance = $modal.open(_modal);
+
+        vm.modalInstance.result.then(null, function () {
+            angular.element('.sp-container').addClass('sp-hidden');
+        });
+    }
+
+
+    function closeModal() {
+        if(vm.modalInstance)
+            vm.modalInstance.close();
     }
 
     function init(element) {

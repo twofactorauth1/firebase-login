@@ -1,200 +1,196 @@
-'use strict';
-/*global app, moment, angular, window*/
+/*global app, console   */
 /*jslint unparam:true*/
+/* eslint-disable no-console */
 (function (angular) {
-    app.controller('usersCtrl', ['$scope', "toaster", "$filter", "$modal", "$timeout", "AccountService","UserService", "userConstant", "formValidations", "SweetAlert", "pagingConstant", function ($scope, toaster, $filter, $modal, $timeout, AccountService,UserService, userConstant, formValidations, SweetAlert, pagingConstant) {
+	app.controller('usersCtrl', ['$scope', "toaster", "$filter", "$modal", "$timeout", "AccountService", "UserService", "userConstant", "formValidations", "SweetAlert", "pagingConstant", function ($scope, toaster, $filter, $modal, $timeout, AccountService, UserService, userConstant, formValidations, SweetAlert, pagingConstant) {
+		'use strict';
+		var vm = this;
 
-        var vm = this;
+		vm.state = {
+			adminUserName: userConstant.admin_user.userName,
+			adminUserEmailFilter: userConstant.admin_user.emailDomain
+		};
 
-        vm.state = {
-            adminUserName: userConstant.admin_user.userName,
-            adminUserEmailFilter: userConstant.admin_user.emailDomain
-        };
+		vm.uiState = {
+			loading: true
+		};
 
-        vm.uiState = {
-            loading: true
-        };
+		vm.openSimpleModal = openSimpleModal;
+		//vm.addNewUser = addNewUser;
+		vm.removeUserFromAccount = removeUserFromAccount;
 
-        vm.openSimpleModal = openSimpleModal;
-        //vm.addNewUser = addNewUser;
-        vm.removeUserFromAccount = removeUserFromAccount;
+		AccountService.getUpdatedAccount(function (account) {
+			vm.state.account = account;
+			loadAccountUsers();
+		});
 
-        AccountService.getUpdatedAccount(function (account) {
-            vm.state.account = account;
-            loadAccountUsers();
-        });
+		vm.pagingConstant = pagingConstant;
 
-        vm.pagingConstant = pagingConstant;
+		function loadAccountUsers() {
+			AccountService.getUsersByAccount(vm.state.account._id, function (users) {
+				// We should not list global admin user
+				users = _.reject(users, function (user) {
+					return user.username == vm.state.adminUserName;
+				});
+				vm.state.users = users;
+				vm.uiState.loading = false;
+				vm.uiState.isAdminUser = vm.state.account.ownerUser == $scope.currentUser._id || $scope.currentUser.username == vm.state.adminUserName || checkIfAdminUser();
+			});
+		}
 
-        function loadAccountUsers(){
-            AccountService.getUsersByAccount(vm.state.account._id, function(users){
-                // We should not list global admin user
-                users = _.reject(users, function(user){ return user.username == vm.state.adminUserName });
-                vm.state.users = users;
-                vm.uiState.loading = false;
-                vm.uiState.isAdminUser =  vm.state.account.ownerUser == $scope.currentUser._id || $scope.currentUser.username == vm.state.adminUserName || checkIfAdminUser();
-            });
-        }
+		function checkIfAdminUser() {
+			var userAccount = _.find($scope.currentUser.accounts, function (account) {
+				return account.accountId == vm.state.account._id;
+			});
+			return (userAccount && userAccount.permissions && _.contains(userAccount.permissions, "admin"));
+		}
 
-        function checkIfAdminUser(){
-            var _isAdmin = false;
-            var _userAccount = _.find($scope.currentUser.accounts, function(account){
-                return account.accountId == vm.state.account._id
-            })
+		$scope.$watch('vm.state.users', function (users) {
+			if (users) {
+				vm.state.filterUsers = _.filter(users, function (user) {
+					return user.username.indexOf(vm.state.adminUserEmailFilter) === -1;
+				});
+			}
+		}, true);
 
-            if(_userAccount && _userAccount.permissions){
-                if(_.contains(_userAccount.permissions, "admin")){
-                    _isAdmin = true;
-                }
-            }
-            return _isAdmin;
-        }
+		function openSimpleModal(modal) {
+			var _modal = {
+				templateUrl: modal,
+				scope: $scope,
+				keyboard: true,
+				backdrop: 'static'
+			};
+			$scope.modalInstance = $modal.open(_modal);
+			$scope.modalInstance.result.then(null, function () {
+				angular.element('.sp-container').addClass('sp-hidden');
+			});
+		}
 
-        $scope.$watch('vm.state.users', function (users) {
-            if(users){
-                vm.state.filterUsers = _.filter(users, function(user){
-                    return user.username.indexOf(vm.state.adminUserEmailFilter) === -1
-                });
-            }
-        }, true)
+		$scope.addNewUser = function () {
+			console.log('Adding the following:', $scope.newuser);
+			//find by username
+			UserService.findUserByUsername($scope.newuser.username,
+				function (err, exitinguser) {
+					if (err) {
+						toaster.pop('warning', err.message);
+					} else if (exitinguser) {
+						//copy exiting
+						AccountService.copyExitingUser(exitinguser._id, function (err, user) {
+							if (err) {
+								toaster.pop('warning', err.message);
+							} else {
+								$timeout(function () {
+									vm.state.users.push(user);
+								}, 0);
+								$scope.closeModal();
+							}
+						});
+					} else {
+						//add new
+						AccountService.addNewUser(vm.state.account._id, $scope.newuser.username, $scope.newuser.password, function (err, newuser) {
+							if (err) {
+								toaster.pop('warning', err.message);
+							} else {
+								$timeout(function () {
+									vm.state.users.push(newuser);
+								}, 0);
+								$scope.closeModal();
+							}
+						});
+					}
+					$scope.newuser = null;
+				});
+		};
 
-        function openSimpleModal(modal){
-            var _modal = {
-                templateUrl: modal,
-                scope: $scope,
-                keyboard: true,
-                backdrop: 'static'
-            };
-            $scope.modalInstance = $modal.open(_modal);
-            $scope.modalInstance.result.then(null, function () {
-                angular.element('.sp-container').addClass('sp-hidden');
-            });
-        }
+		$scope.closeModal = function () {
+			$scope.modalInstance.close();
+		};
 
-        $scope.addNewUser = function() {
-            console.log('Adding the following:', $scope.newuser);
-            //find by username
-            UserService.findUserByUsername($scope.newuser.username,
-            function(err,exitinguser){
-                if(err){
-                   toaster.pop('warning', err.message);
-                }else if(exitinguser){
-                    //copy exiting
-                    AccountService.copyExitingUser(exitinguser._id, function(err, user){
-                        if(err) {
-                            toaster.pop('warning', err.message);
-                        } else {
-                            $timeout(function() {
-                                vm.state.users.push(user);
-                            }, 0);
-                            $scope.closeModal();
-                        }
-                    });
-                }else{
-                    //add new
-                    AccountService.addNewUser(vm.state.account._id, $scope.newuser.username, $scope.newuser.password, function(err, newuser){
-                        if(err) {
-                            toaster.pop('warning', err.message);
-                        } else {
-                            $timeout(function() {
-                                vm.state.users.push(newuser);
-                            }, 0);
-                            $scope.closeModal();
-                        }
-                    });
-                }
-                $scope.newuser = null;
-            });
-        };
+		$scope.openEditUserModal = function (userId) {
+			$scope.currentUserId = userId;
+			vm.openSimpleModal('edit-password-modal');
+		};
+		$scope.closeEditUserModal = function () {
+			$scope.currentUserId = null;
+			$scope.closeModal();
+		};
 
-        $scope.closeModal = function () {
-            $scope.modalInstance.close();
-        };
+		$scope.checkPasswordLength = function () {
+			$scope.passwordInValid = false;
+			if ($scope.edituser && $scope.edituser.password1 && $scope.edituser.password1.length < 6) {
+				$scope.passwordInValid = true;
+			} else if ($scope.newuser && $scope.newuser.password.length < 6) {
+				$scope.passwordInValid = true;
+			} else {
+				$scope.passwordInValid = false;
+			}
+		};
 
-        $scope.openEditUserModal = function(userId) {
-            $scope.currentUserId = userId;
-            vm.openSimpleModal('edit-password-modal');
-        };
-        $scope.closeEditUserModal = function() {
-            $scope.currentUserId = null;
-            $scope.closeModal();
-        };
+		$scope.setUserPassword = function (userId) {
+			$scope.checkPasswordLength();
+			if ($scope.passwordInValid) {
+				return;
+			}
+			AccountService.setUserPassword(userId, $scope.edituser.password1, function (err, data) {
+				if (err) {
+					toaster.pop('warning', err.message);
+				} else {
+					toaster.pop('info', 'Successfully changed password');
+					$scope.closeEditUserModal();
+				}
+			});
+		};
 
-        $scope.checkPasswordLength = function() {
-            $scope.passwordInValid = false;
-            if ($scope.edituser && $scope.edituser.password1 && $scope.edituser.password1.length < 6) {
-                $scope.passwordInValid = true;
-            } else if ($scope.newuser && $scope.newuser.password.length<6){
-                $scope.passwordInValid = true;
-            } else {
-                $scope.passwordInValid = false;
-            }
-        };
+		function removeUserFromAccount(userId) {
+			SweetAlert.swal({
+					title: "Are you sure?",
+					text: "You want to delete this user.",
+					type: "warning",
+					showCancelButton: true,
+					confirmButtonColor: "#DD6B55",
+					confirmButtonText: "Yes",
+					cancelButtonText: "No",
+					closeOnConfirm: true,
+					closeOnCancel: true
+				},
+				function (isConfirm) {
+					if (isConfirm) {
+						AccountService.removeUserFromAccount(userId, function (err, data) {
+							if (err) {
+								toaster.pop('warning', err.message);
+							} else {
+								console.log("data", data);
+								vm.state.users = _.filter(vm.state.users, function (user) {
+									if (user._id !== userId) {
+										return true;
+									}
+								});
+							}
+						});
+					}
+				});
+		}
 
-        $scope.setUserPassword = function(userId) {
-            $scope.checkPasswordLength();
-            if($scope.passwordInValid){
-                return;
-            }
-            AccountService.setUserPassword(userId, $scope.edituser.password1, function(err, data){
-                if(err) {
-                    toaster.pop('warning', err.message);
-                } else {
-                    toaster.pop('info', 'Successfully changed password');
-                    $scope.closeEditUserModal();
-                }
-            });
-        };
+		$scope.checkIfValidUserName = function (userName) {
+			var regex = formValidations.email;
+			return regex.test(userName);
+		};
 
-        function removeUserFromAccount(userId) {
-            SweetAlert.swal({
-              title: "Are you sure?",
-              text: "You want to delete this user.",
-              type: "warning",
-              showCancelButton: true,
-              confirmButtonColor: "#DD6B55",
-              confirmButtonText: "Yes",
-              cancelButtonText: "No",
-              closeOnConfirm: true,
-              closeOnCancel: true
-            },
-            function (isConfirm) {
-                if (isConfirm) {
-                    AccountService.removeUserFromAccount(userId, function(err, data){
-                        if(err) {
-                            toaster.pop('warning', err.message);
-                        } else {
-                            vm.state.users = _.filter(vm.state.users, function(user){
-                                if(user._id !== userId) {
-                                    return true;
-                                }
-                            });
-                        }
-                    });
-                }
-            });
-        };
+		vm.getters = {
+			name: function (value) {
+				return value.first || '' + value.last || '';
+			},
+			ip: function (value) {
+				return value.lastLoginIP || "";
+			},
+			loginDate: function (value) {
+				return value.lastLoginDate || "";
+			}
+		};
 
-        $scope.checkIfValidUserName = function(userName){
-            var regex = formValidations.email;
-            return regex.test(userName);
-        };
+		(function init() {
 
-        vm.getters = {        
-            name: function (value) {
-                return value.first || '' + value.last || '';
-            },
-            ip: function (value) {
-                return value.lastLoginIP || "";
-            },
-            loginDate: function (value) {
-                return value.lastLoginDate || "";
-            }
-        };
-
-        (function init() {
-
-        })();
+		}());
 
     }]);
-}(angular));
+}());
