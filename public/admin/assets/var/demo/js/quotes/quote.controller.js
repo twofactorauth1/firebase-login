@@ -111,6 +111,40 @@ function quoteComponentController($scope, $attrs, $filter, $modal, $timeout, $lo
             vm.uiState.loading = false;
         }        
     }, true);
+
+
+    $scope.openModal = openModal;
+    $scope.closeModal = closeModal;
+
+    function openModal(modal, controller, size){
+      
+      var _modal = {
+          templateUrl: modal,
+          keyboard: true,
+          backdrop: 'static',
+          size: 'lg',
+          scope: $scope,
+          resolve: {
+              
+          }
+      };
+
+      if (controller) {
+          _modal.controller = controller  + ' as vm';
+      }
+
+
+      $scope.modalInstance = $modal.open(_modal);
+
+      $scope.modalInstance.result.then(null, function () {
+          angular.element('.sp-container').addClass('sp-hidden');
+      });
+    }
+
+    function closeModal() {
+      if($scope.modalInstance)
+          $scope.modalInstance.close();
+    }
     
     function init(element) {
         vm.element = element;
