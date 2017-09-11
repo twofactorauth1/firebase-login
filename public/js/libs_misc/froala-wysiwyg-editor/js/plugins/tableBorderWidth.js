@@ -5,7 +5,7 @@
 }(function(a) {
     "use strict";
     var widthOptions = {};
-    for(var op=0; op<=10; op++){
+    for(var op=1; op<=10; op++){
         widthOptions[op] = op;
     }
     a.FroalaEditor.DefineIcon('tableBorderWidth', {NAME: 'minus'});
