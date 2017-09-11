@@ -1041,6 +1041,7 @@ app.constant('JS_REQUIRES', {
 				"../js/libs_misc/froala-wysiwyg-editor/js/plugins/font-awesome-icons.js",
 				"../js/libs_misc/froala-wysiwyg-editor/css/plugins/font-awesome.css",
 				"../js/libs_misc/froala-wysiwyg-editor/js/plugins/tableCellPadding.js",
+				"../js/libs_misc/froala-wysiwyg-editor/js/plugins/tableBorderWidth.js",
 				'../js/libs_misc/froala-wysiwyg-editor/config/config.js'
 			]
 		},

@@ -8,7 +8,7 @@
     for(var op=0; op<=30; op++){
         spacingOptions[op] = op;
     }
-    a.FroalaEditor.DefineIcon('tableCellPadding', {NAME: 'arrows'});
+    a.FroalaEditor.DefineIcon('tableCellPadding', {NAME: 'expand'});
     a.FroalaEditor.RegisterCommand('tableCellPadding', {
       title: 'Cell Padding',
       type: 'dropdown',
@@ -18,7 +18,9 @@
       options: spacingOptions,
       callback: function (cmd, val) {
         var tableCells = this.$el.find('.fr-selected-cell').closest('table').find("td");
+        var tableHeaders = this.$el.find('.fr-selected-cell').closest('table').find("th");
         tableCells.css("padding", val + "px");
+        tableHeaders.css("padding", val + "px");
       },
       // Callback on refresh.
       refresh: function ($btn) {
