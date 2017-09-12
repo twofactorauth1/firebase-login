@@ -1,6 +1,6 @@
 'use strict';
 /*global app*/
-app.controller('QuoteDetailsModalController', ['$scope', '$rootScope', '$timeout', 'toaster', 'SweetAlert', 'formValidations', 'QuoteCartDetailsService', 'UserPermissionsConfig', function ($scope, $rootScope, $timeout, toaster, SweetAlert, formValidations, QuoteCartDetailsService, UserPermissionsConfig) {
+app.controller('QuoteDetailsModalController', ['$scope', '$state', '$rootScope', '$timeout', 'toaster', 'SweetAlert', 'formValidations', 'QuoteCartDetailsService', 'UserPermissionsConfig', function ($scope, $state, $rootScope, $timeout, toaster, SweetAlert, formValidations, QuoteCartDetailsService, UserPermissionsConfig) {
 
     var vm = this;
 
@@ -19,7 +19,7 @@ app.controller('QuoteDetailsModalController', ['$scope', '$rootScope', '$timeout
     vm.attachment = {};
     vm.checkIfValidEmail = checkIfValidEmail;
     vm.selectCardCode = selectCardCode;
-
+    vm.searchInventory = searchInventory;
 
     function selectCardCode(customer){
         vm.state.cartDetail.companyName = customer.OCRD_CardName;
@@ -113,6 +113,11 @@ app.controller('QuoteDetailsModalController', ['$scope', '$rootScope', '$timeout
             }         
         }
     }, true);
+
+    function searchInventory(){
+        $scope.closeModal();
+        $state.go('app.inventory');
+    }
 
     (function init() {
         
