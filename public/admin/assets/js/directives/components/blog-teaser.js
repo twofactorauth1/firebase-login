@@ -1,242 +1,234 @@
-'use strict';
-/*global app, moment, angular, window*/
+/*global app, angular, */
 /*jslint unparam:true*/
 app.directive('blogTeaserComponent', ['WebsiteService', '$filter', function (WebsiteService, $filter) {
-  return {
-    scope: {
-      component: '=',
-      ssbEditor: '='
-    },
-    templateUrl: '/components/component-wrap.html',
-    link: function (scope, element, attrs) {
-      scope.isEditing = true;
-    },
-    controller: function ($scope, WebsiteService, $compile) {
-      $scope.loading = true;
-      $scope.currentPostPage = 1;
+	'use strict';
+	return {
+		scope: {
+			component: '=',
+			ssbEditor: '='
+		},
+		templateUrl: '/components/component-wrap.html',
+		link: function (scope) {
+			scope.isEditing = true;
+		},
+		controller: function ($scope, WebsiteService) {
+			$scope.loading = true;
+			$scope.currentPostPage = 1;
 
-      WebsiteService.getPosts(function (posts) {
-        _.each(posts, function(blogpost){
-          blogpost.date_published = new Date(blogpost.publish_date || blogpost.created.date).getTime();
-          blogpost.date_created = new Date(blogpost.created.date).getTime();
-          blogpost.date_modified = new Date(blogpost.modified.date).getTime();
-        })
-        $scope.teaserposts = angular.copy(posts);
-        filterPosts(posts, function () {
-          $scope.pageChanged(1);
-          $scope.loading = false;
-        });
-        
-      });
+			WebsiteService.getPosts(function (posts) {
+				_.each(posts, function (blogpost) {
+					blogpost.date_published = new Date(blogpost.publish_date || blogpost.created.date).getTime();
+					blogpost.date_created = new Date(blogpost.created.date).getTime();
+					blogpost.date_modified = new Date(blogpost.modified.date).getTime();
+				});
+				$scope.teaserposts = angular.copy(posts);
+				filterPosts(posts, function () {
+					$scope.pageChanged(1);
+					$scope.loading = false;
+				});
 
-      $scope.listArticleStyle = listArticleStyle;
+			});
 
-      function listArticleStyle(item){
-        var styleString = ' ';
+			$scope.listArticleStyle = listArticleStyle;
 
-        if(item && item.articleBorder && item.articleBorder.show && item.articleBorder.color){
-            styleString += 'border-color: ' + item.articleBorder.color + ';';
-            styleString += 'border-width: ' + item.articleBorder.width + 'px;';
-            styleString += 'border-style: ' + item.articleBorder.style + ';';
-            styleString += 'border-radius: ' + item.articleBorder.radius + '%;';
-        }
+			function listArticleStyle(item) {
+				var styleString = ' ';
 
-        return styleString;
-    }
+				if (item && item.articleBorder && item.articleBorder.show && item.articleBorder.color) {
+					styleString += 'border-color: ' + item.articleBorder.color + ';';
+					styleString += 'border-width: ' + item.articleBorder.width + 'px;';
+					styleString += 'border-style: ' + item.articleBorder.style + ';';
+					styleString += 'border-radius: ' + item.articleBorder.radius + '%;';
+				}
 
-      function sortBlogFn(component) {
-          if (component.postorder) {
-              if (component.postorder == 1 || component.postorder == 2) {
-                return "date_modified";
-              }
-              if (component.postorder == 3 || component.postorder == 4) {
-                return "date_created";
-              }
-              if (component.postorder == 5 || component.postorder == 6) {
-                return "date_published";
-              }
-          } else {
-              return "date_published";
-          }
-      };
-      $scope.titleStyle = function (component) {
-        var styleString = ' ';
-    		if(component && component.settings){
-                if(component.settings.title){
-                    if(component.settings.title.fontSize){
-                        styleString += 'font-size: ' + component.settings.title.fontSize + 'px !important;';
-                    }
-                    if(component.settings.title.fontFamily){
-                        styleString += 'font-family: ' + component.settings.title.fontFamily + 'px !important;';
-                    }
-                    if(component.settings.title.color){
-                        styleString += 'color: ' + component.settings.title.color + "!important;";
-                    }
-                }
-    		}
-		    return styleString;
-      };
-      $scope.descriptionStyle = function (component) {
-        var styleString = ' ';
-    		if(component && component.settings){
-                if(component.settings.description){
-                    if(component.settings.description.fontSize){
-                        styleString += 'font-size: ' + component.settings.description.fontSize + 'px !important;';
-                    }
-                    if(component.settings.description.fontFamily){
-                        styleString += 'font-family: ' + component.settings.description.fontFamily + 'px !important;';
-                    }
-                    if(component.settings.description.color){
-                        styleString += 'color: ' + component.settings.description.color + "!important;";
-                    }
-                }
-    		}
-    		return styleString;
-      };
+				return styleString;
+			}
 
-
-      function customSortOrder() {
-        if ($scope.component.postorder == 1 || $scope.component.postorder == 3 || $scope.component.postorder == 5) {
-          return false;
-        }
-        if ($scope.component.postorder == 2 || $scope.component.postorder == 4 || $scope.component.postorder == 6) {
-          return true;
-        }
-        return true;
-      };
-
-      function filterPosts(data, fn) {
-        var _filteredPosts = [];
-        _.each(data, function (post) {
-          if (filterTags(post)) {
-            if(filterCategory(post)){
-              _filteredPosts.push(post);
-            }     
-          }
-        });
-        _filteredPosts = sortTeaserPosts(_filteredPosts);
-        var _numberOfPostsToshow = 0;
-        if($scope.component.version == 2){
-          _numberOfPostsToshow = $scope.component.numberOfTotalPosts || $scope.teaserposts.length;
-        }
-        else{
-          _numberOfPostsToshow = $scope.component.numberOfTotalPosts || 3;          
-        }
-        _filteredPosts = $filter('limitTo')(_filteredPosts, _numberOfPostsToshow);
-        $scope.posts = _filteredPosts;
-        return fn();
-      }
-
-      function sortTeaserPosts(posts){
-        var sortOrder = customSortOrder();
-        var sortBy = sortBlogFn($scope.component);
-        return $filter('orderBy')(posts, [sortBy, "date_created"], sortOrder);
-      }
-
-      function filterTags(post) {
-        var _tags = $scope.component.postTags;
-        if (_tags && _tags.length > 0) {
-          if (post.post_tags) {
-            if (_.intersection(_tags, post.post_tags).length > 0) {
-              return true;
-            }
-          }
-        } else {
-          return true;
-        }
-      }
+			function sortBlogFn(component) {
+				if (component.postorder) {
+					if (component.postorder == 1 || component.postorder == 2) {
+						return "date_modified";
+					}
+					if (component.postorder == 3 || component.postorder == 4) {
+						return "date_created";
+					}
+					if (component.postorder == 5 || component.postorder == 6) {
+						return "date_published";
+					}
+				} else {
+					return "date_published";
+				}
+			}
+			$scope.titleStyle = function (component) {
+				var styleString = ' ';
+				if (component && component.settings) {
+					if (component.settings.title) {
+						if (component.settings.title.fontSize) {
+							styleString += 'font-size: ' + component.settings.title.fontSize + 'px !important;';
+						}
+						if (component.settings.title.fontFamily) {
+							styleString += 'font-family: ' + component.settings.title.fontFamily + 'px !important;';
+						}
+						if (component.settings.title.color) {
+							styleString += 'color: ' + component.settings.title.color + "!important;";
+						}
+					}
+				}
+				return styleString;
+			};
+			$scope.descriptionStyle = function (component) {
+				var styleString = ' ';
+				if (component && component.settings) {
+					if (component.settings.description) {
+						if (component.settings.description.fontSize) {
+							styleString += 'font-size: ' + component.settings.description.fontSize + 'px !important;';
+						}
+						if (component.settings.description.fontFamily) {
+							styleString += 'font-family: ' + component.settings.description.fontFamily + 'px !important;';
+						}
+						if (component.settings.description.color) {
+							styleString += 'color: ' + component.settings.description.color + "!important;";
+						}
+					}
+				}
+				return styleString;
+			};
 
 
-      function filterCategory(post) {
-        var _categories = $scope.component.postCategories;        
-        if (_categories && _categories.length > 0) {
-          if (post.post_categories) {
-            if (_.intersection(_categories, _.pluck(post.post_categories, "text")).length > 0) {
-              return true;
-            }
-          }
-        } else {
-          return true;
-        }
-      }
+			function customSortOrder() {
+				if ($scope.component.postorder == 1 || $scope.component.postorder == 3 || $scope.component.postorder == 5) {
+					return false;
+				}
+				if ($scope.component.postorder == 2 || $scope.component.postorder == 4 || $scope.component.postorder == 6) {
+					return true;
+				}
+				return true;
+			}
 
-      $scope.pageChanged = function (pageNo) {
-        $scope.currentPostPage = pageNo;
-        if ($scope.posts && $scope.component.numberOfPostsPerPage) {
-          var begin = (($scope.currentPostPage - 1) * $scope.component.numberOfPostsPerPage);
-          var numDisplay = $scope.component.numberOfPostsPerPage;
-          //check if set to 0 and change to all posts
-          if (numDisplay === 0) {
-            numDisplay = $scope.posts.length;
-          }
-          var end = begin + numDisplay;
-          $scope.filteredPosts = $scope.posts.slice(begin, end);
-        }
-        else{
-          $scope.filteredPosts = $scope.posts;
-        }
-      };
+			function filterPosts(data, fn) {
+				var filteredPosts = [],
+					numberOfPostsToshow = 0;
+				_.each(data, function (post) {
+					if (filterTags(post)) {
+						if (filterCategory(post)) {
+							filteredPosts.push(post);
+						}
+					}
+				});
+				filteredPosts = sortTeaserPosts(filteredPosts);
+				if ($scope.component.version == 2) {
+					numberOfPostsToshow = $scope.component.numberOfTotalPosts || $scope.teaserposts.length;
+				} else {
+					numberOfPostsToshow = $scope.component.numberOfTotalPosts || 3;
+				}
+				filteredPosts = $filter('limitTo')(filteredPosts, numberOfPostsToshow);
+				$scope.posts = filteredPosts;
+				return fn();
+			}
 
-      /*
-       * @watch:productTags
-       * - watch for product tags to change in component settings and filter products
-       */
+			function sortTeaserPosts(posts) {
+				var sortOrder = customSortOrder(),
+					sortBy = sortBlogFn($scope.component);
+				return $filter('orderBy')(posts, [sortBy, "date_created"], sortOrder);
+			}
 
-      $scope.$watch('component.postTags', function (newValue, oldValue) {
-        if (newValue !== oldValue) {
-          filterPosts($scope.teaserposts, function () {
-            $scope.pageChanged(1);
-          });
-        }
-      });
+			function filterTags(post) {
+				var postTags = $scope.component.postTags;
+				if (postTags && postTags.length > 0) {
+					return (post.post_tags && _.intersection(postTags, post.post_tags).length > 0);
+				} else {
+					return true;
+				}
+			}
 
 
-      $scope.$watch('component.postCategories', function (newValue, oldValue) {
-        if (newValue !== oldValue) {
-          filterPosts($scope.teaserposts, function () {
-            $scope.pageChanged(1);
-          });
-        }
-      });
+			function filterCategory(post) {
+				var postCategories = $scope.component.postCategories;
+				if (postCategories && postCategories.length > 0) {
+					return (post.post_categories && _.intersection(postCategories, _.pluck(post.post_categories, "text")).length > 0);
 
-      $scope.$watch('component.numberOfTotalPosts', function (newValue, oldValue) {
-        if (newValue !== oldValue) {
-          $scope.component.numberOfTotalPosts = parseInt(newValue) > 0 ? parseInt(newValue) : 0;
-          filterPosts($scope.teaserposts, function () {
-            $scope.pageChanged(1);
-          });
-        }
-      });
+				} else {
+					return true;
+				}
+			}
 
-      $scope.$watch('component.numberOfPostsPerPage', function (newValue, oldValue) {
-        if (newValue !== oldValue) {
-          $scope.component.numberOfPostsPerPage = parseInt(newValue) > 0 ? parseInt(newValue) : 0;
-          filterPosts($scope.teaserposts, function () {
-            $scope.pageChanged(1);
-          });
-        }
-      });
+			$scope.pageChanged = function (pageNo) {
+				$scope.currentPostPage = pageNo;
+				if ($scope.posts && $scope.component.numberOfPostsPerPage) {
+					var begin = (($scope.currentPostPage - 1) * $scope.component.numberOfPostsPerPage),
+						numDisplay = $scope.component.numberOfPostsPerPage,
+						end;
+					//check if set to 0 and change to all posts
+					if (numDisplay === 0) {
+						numDisplay = $scope.posts.length;
+					}
+					end = begin + numDisplay;
+					$scope.filteredPosts = $scope.posts.slice(begin, end);
+				} else {
+					$scope.filteredPosts = $scope.posts;
+				}
+			};
 
-      $scope.$watch('component.postorder', function (newValue, oldValue) {
-        if (newValue !== oldValue) {          
-          filterPosts($scope.teaserposts, function () {
-            $scope.pageChanged(1);
-          });
-        }
-      });
+			/*
+			 * @watch:productTags
+			 * - watch for product tags to change in component settings and filter products
+			 */
 
-      /*
-       * @convertInLowerCase
-       * - convert array value in lowercase
-       */
+			$scope.$watch('component.postTags', function (newValue, oldValue) {
+				if (newValue !== oldValue) {
+					filterPosts($scope.teaserposts, function () {
+						$scope.pageChanged(1);
+					});
+				}
+			});
 
-      function convertInLowerCase(dataItem) {
-          var _item = [];
-          _.each(dataItem, function(tagItem) {
-              _item.push(tagItem.toLowerCase());
-          });
-          return _item;
-      }
-    }
-  };
+
+			$scope.$watch('component.postCategories', function (newValue, oldValue) {
+				if (newValue !== oldValue) {
+					filterPosts($scope.teaserposts, function () {
+						$scope.pageChanged(1);
+					});
+				}
+			});
+
+			$scope.$watch('component.numberOfTotalPosts', function (newValue, oldValue) {
+				if (newValue !== oldValue) {
+					$scope.component.numberOfTotalPosts = parseInt(newValue) > 0 ? parseInt(newValue) : 0;
+					filterPosts($scope.teaserposts, function () {
+						$scope.pageChanged(1);
+					});
+				}
+			});
+
+			$scope.$watch('component.numberOfPostsPerPage', function (newValue, oldValue) {
+				if (newValue !== oldValue) {
+					$scope.component.numberOfPostsPerPage = parseInt(newValue) > 0 ? parseInt(newValue) : 0;
+					filterPosts($scope.teaserposts, function () {
+						$scope.pageChanged(1);
+					});
+				}
+			});
+
+			$scope.$watch('component.postorder', function (newValue, oldValue) {
+				if (newValue !== oldValue) {
+					filterPosts($scope.teaserposts, function () {
+						$scope.pageChanged(1);
+					});
+				}
+			});
+
+			/*
+			 * @convertInLowerCase
+			 * - convert array value in lowercase
+			 */
+
+			/*function convertInLowerCase(dataItem) {
+				var _item = [];
+				_.each(dataItem, function (tagItem) {
+					_item.push(tagItem.toLowerCase());
+				});
+				return _item;
+			}*/
+		}
+	};
 }]);
