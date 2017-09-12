@@ -4,6 +4,7 @@ mainApp.controller('CacheCtrl', ['$scope', '$rootScope', 'embeddedSiteDataServic
 	$scope.isEditing = false;
 	$scope.blog_post = null;
 	console.log('cache ctrl');
+	var firstheroNavId;
 	/*
 	function checkIntercom(data) {
 	    if (data.hideIntercom) {
@@ -88,6 +89,9 @@ mainApp.controller('CacheCtrl', ['$scope', '$rootScope', 'embeddedSiteDataServic
 
 			_.each(data.sections, function (section, index1) {
 				if (section) {
+					 if(section.layout== "nav-hero" && firstheroNavId==undefined){
+						 firstheroNavId="section_"+section._id
+					 }
 					if (section.ssb === false) {
 						$scope.components = $scope.components.concat(section.components);
 					} else {
@@ -115,7 +119,6 @@ mainApp.controller('CacheCtrl', ['$scope', '$rootScope', 'embeddedSiteDataServic
 				$document.scrollTop(0);
 				$timeout(function () {
 					if ($location.$$hash) {
-						
 						var unbindWatcher = $scope.$watch(function() {
                 			return document.getElementById($location.$$hash) 
                 			|| document.getElementById("section_" + $location.$$hash) 
@@ -123,6 +126,10 @@ mainApp.controller('CacheCtrl', ['$scope', '$rootScope', 'embeddedSiteDataServic
 		            	}, function(newValue, oldValue) {
 			                if (newValue && !angular.equals(newValue, oldValue)) {
 			                	unbindWatcher();
+								var waitTime = 1000;
+								if(firstheroNavId){
+									waitTime = 2000;
+								}
 			                	$timeout(function() {
 			                		var element = document.getElementById($location.$$hash);
 									if (!element) {
@@ -135,7 +142,7 @@ mainApp.controller('CacheCtrl', ['$scope', '$rootScope', 'embeddedSiteDataServic
 				                       $document.scrollToElementAnimated(element, SsbPageSectionService.offset, 1000);
 									}
 
-			                	}, 1000);
+			                	}, waitTime);
 			                }
 		            	});
 					}

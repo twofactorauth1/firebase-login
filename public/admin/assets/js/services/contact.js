@@ -225,6 +225,18 @@
             var self = this;
             var passedFn;
             if (contacts) {
+				contactArr =(function filter(obj) {
+					 _.each(obj, function(value,key){
+						 debugger
+						if (value === "" || value === null){
+							delete obj[key];
+						} else if (Object.prototype.toString.call(value) === '[object Object]') {
+							filter(value);
+						} else if (angular.isArray(value)) {
+							_.each(value, function (v,k) { filter(v); });
+						}
+					});
+				})(contacts);
                 contactArr = contacts;
             }
 
