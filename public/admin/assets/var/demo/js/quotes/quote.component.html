@@ -33,7 +33,7 @@
 	                                                <button class="btn btn-info" ng-class="{'active': tableView == 'list'}" href="" ng-click="tableView = 'list'" tooltip-placement="top" tooltip="List"> <span class="fa fa-th-list"></span> </button>
 	                                                <button class="btn btn-info" ng-class="{'active': tableView == 'grid'}" href="" ng-click="tableView = 'grid'" tooltip-placement="top" tooltip="Grid"> <span class="fa fa-th"></span> </button>
 	                                            </div>
-	                                            <button type="button" ng-if="vm.state.orgCardAndPermissions.permissions.quote.create" class="btn btn-primary btn-warning pull-right margin-right-5" ng-click="openModal('quote-details-modal', 'QuoteDetailsModalController', 'lg')">
+	                                            <button type="button" ng-if="vm.state.orgCardAndPermissions.permissions.quote.create" class="btn btn-primary btn-warning pull-right margin-right-5" ng-click="openQuoteModal('quote-details-modal', 'QuoteDetailsModalController', 'lg')">
             									<span style="white-space: nowrap;">New Quote</span>
         									</button>
 	                                        </div>

@@ -113,10 +113,7 @@ function quoteComponentController($scope, $attrs, $filter, $modal, $timeout, $lo
     }, true);
 
 
-    $scope.openModal = openModal;
-    $scope.closeModal = closeModal;
-
-    function openModal(modal, controller, size){
+    $scope.openQuoteModal = function(modal, controller, size){
       
       var _modal = {
           templateUrl: modal,
@@ -141,9 +138,9 @@ function quoteComponentController($scope, $attrs, $filter, $modal, $timeout, $lo
       });
     }
 
-    function closeModal() {
-      if($scope.modalInstance)
-          $scope.modalInstance.close();
+    $scope.closeModal = function(){
+        if($scope.modalInstance)
+            $scope.modalInstance.close();
     }
     
     function init(element) {

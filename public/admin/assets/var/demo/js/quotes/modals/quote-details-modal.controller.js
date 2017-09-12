@@ -115,8 +115,11 @@ app.controller('QuoteDetailsModalController', ['$scope', '$state', '$rootScope',
     }, true);
 
     function searchInventory(){
+        
         $scope.closeModal();
-        $state.go('app.inventory');
+        $timeout(function() {
+    		$state.go('app.inventory');
+    	}, 0);
     }
 
     (function init() {
