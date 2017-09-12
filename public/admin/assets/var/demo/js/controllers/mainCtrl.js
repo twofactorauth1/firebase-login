@@ -190,6 +190,21 @@ app.controller('AppCtrl', ['$rootScope', '$scope', '$state', '$translate', '$win
         };
 
         $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
+            var unbindWatcher = $rootScope.$watch(function() {
+                return $('iframe.intercom-launcher-frame').contents().find(".intercom-launcher-open-icon");
+            }, function(newValue, oldValue) {
+                if (newValue) {
+                    unbindWatcher();
+                    var btn = $('iframe.intercom-launcher-frame').contents().find(".intercom-launcher")[0];
+                    if(btn){
+                        btn.addEventListener('click', function() {
+                            if(!$(btn).hasClass("intercom-launcher-active")){
+                                Intercom("showNewMessage",$location.$$absUrl);
+                            }
+                        });
+                    }   
+                }
+            });
             //start loading bar on stateChangeStart
             $rootScope.app.layout.isMinimalAdminChrome = false;
             $rootScope.app.layout.isAnalyticsDashboardMode = false;
@@ -212,6 +227,7 @@ app.controller('AppCtrl', ['$rootScope', '$scope', '$state', '$translate', '$win
                 $scope.currentState = toState.name;
                 $scope.stateParams = toParams;
             }
+            
         });
         $rootScope.$on('$stateChangeSuccess', function (event, toState, toParams, fromState, fromParams) {
             //stop loading bar on stateChangeSuccess
@@ -247,3 +263,7 @@ app.controller('AppCtrl', ['$rootScope', '$scope', '$state', '$translate', '$win
 
     }
 ]);
+
+
+
+    
