@@ -2848,7 +2848,7 @@ module.exports = {
         var group = {
             $group:{
                 _id:'$note',
-                result:{$sum:1}
+                total:{$sum:1}
             }
         };
         stageAry.push(group);
@@ -2858,9 +2858,6 @@ module.exports = {
                 self.log.error('Error finding current month:', err);
                 fn(err);
             } else {
-                _.each(value, function(result){
-                    result['note'] = result._id;
-                });
                 self.log.debug(accountId, userId, '<< getTopSearches');
                 fn(null, value);
             }

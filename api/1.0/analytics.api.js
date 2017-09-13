@@ -73,7 +73,8 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url('reports/404s'), this.isAuthAndSubscribedApi.bind(this), this.get404s.bind(this));
         app.get(this.url('reports/daily404s'), this.isAuthAndSubscribedApi.bind(this), this.getDaily404s.bind(this));
         app.get(this.url('reports/all'), this.isAuthAndSubscribedApi.bind(this), this.allReports.bind(this));
-
+        app.get(this.url('reports/topSearches'), this.isAuthAndSubscribedApi.bind(this), this.topSearches.bind(this));
+        
         app.get(this.url('admin/reports/dau'), this.isAuthAndSubscribedApi.bind(this), this.getDailyActiveUsers.bind(this));
         app.get(this.url('admin/reports/visitors'), this.isAuthAndSubscribedApi.bind(this), this.runAdminVisitorsReport.bind(this));
         app.get(this.url('admin/reports/visitorLocations'), this.isAuthAndSubscribedApi.bind(this), this.adminVisitorLocationsReport.bind(this));
@@ -100,7 +101,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url('admin/pageViewPerformance'), this.isAuthAndSubscribedApi.bind(this), this.getPageViewPerformance.bind(this));
         app.get(this.url('admin/404s'), this.isAuthAndSubscribedApi.bind(this), this.getAdmin404s.bind(this));
         app.get(this.url('admin/reports/daily404s'), this.isAuthAndSubscribedApi.bind(this), this.getAdminDaily404s.bind(this));
-        app.get(this.url('reports/topSearches'), this.isAuthAndSubscribedApi.bind(this), this.topSearches.bind(this));
+        
     },    
 
 

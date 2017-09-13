@@ -134,7 +134,7 @@
                         </div>
                     </div>
                     <div class="col-sm-12">
-                        <div id="topSearches" class="panel panel-white no-radius" ng-class="{'load1 csspinner': !topSearches}">
+                        <div id="topSearches" class="panel panel-white no-radius" ng-class="{'load1 csspinner': !vm.topSearchesLoaded}">
                             <div class="panel-heading border-light">
                                 <h4 class="panel-title text-primary"><span class="text-bold">Top</span> Searches</h4>
                                 <ct-paneltool class="panel-tools" tool-collapse="tool-collapse"></ct-paneltool>
@@ -150,11 +150,11 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <tr ng-repeat="fourOfour in fourOfoursDetails|orderBy:'-total'|limitTo:25| filter:{'path':'!/404'}">
+                                                <tr ng-repeat="search in vm.topSearches|orderBy:'-total'">
                                                     <td>
-                                                        {{fourOfour.path}}
+                                                        {{search._id}}
                                                     </td>
-                                                    <td class="center">{{fourOfour.total | number}}</td>
+                                                    <td class="center">{{search.total | number}}</td>
                                                 </tr>
                                             </tbody>
                                         </table>

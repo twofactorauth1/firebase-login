@@ -26,6 +26,7 @@
             
             if (dateSwitch) {
                 loadActiveUsers();
+                loadTopSearches();
             }
             dateSwitch = true;
         });
@@ -85,6 +86,7 @@
                     vm.state.account = account;
                     loadAccountUsers();
                     loadActiveUsers();
+                    loadTopSearches();
                 });
               }
             }
@@ -112,6 +114,14 @@
                     vm.activeUserConfig.loading = false;
                     reflowCharts();
                 });
+            })
+        }
+
+        function loadTopSearches(){
+            ChartAnalyticsService.getUserTopSearches(vm.state.account._id, vm.date.startDate, vm.date.endDate, function(data){
+                
+                vm.topSearches = data;
+                vm.topSearchesLoaded = true;
             })
         }
 
