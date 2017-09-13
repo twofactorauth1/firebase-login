@@ -88,4 +88,17 @@ mainApp.service('orderService', function ($http) {
 		});
 	};
 
+	this.checkForInactiveProducts = function (order, fn) {
+		var apiUrl = baseUrl + ['orders', 'inactiveProducts'].join('/');
+		$http({
+			url: apiUrl,
+			method: "POST",
+			data: angular.toJson(order)
+		}).success(function (data) {
+			fn(data, null);
+		}).error(function (err) {
+			fn(null, err);
+		});
+	};
+
 });

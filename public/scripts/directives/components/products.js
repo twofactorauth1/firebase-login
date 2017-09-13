@@ -14,7 +14,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
             scope.shippingStates = shippingStates;
             scope.detailedDescription = false;
             //cookie data fetch
-
+            CartDetailsService.reloadItems = false;
             var cookieKey = ""; //'cart_cookie_' + scope.component._id;
             var orderCookieKey = ""; //'order_cookie_' + scope.component._id;
             var cookieData = ""; //localStorageService.get(cookieKey);
@@ -83,11 +83,17 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                 scope.shippingTax = CartDetailsService.shippingTax;
                 scope.cartTax = CartDetailsService.cartTax;
                 if(scope.cartDetails && scope.cartDetails.length)
-                    CartDetailsService.calculateTotalCharges(scope.cart_discount, scope.percent_off);
+                    CartDetailsService.calculateTotalCharges(scope.cart_discount, scope.percent_off);                
+            }, true)
 
-            }, true);
 
-
+            scope.$watch(function() {
+                return CartDetailsService.reloadItems;
+            }, function(val) {
+                console.log('watch');
+                if(val)
+                    getActiveProducts(true);                
+            });
 
             scope.setInnerHeight = function(){
                 var styleString = " ";
@@ -181,22 +187,25 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
              * - get all products, set originalProducts obj and filter
              */
 
-            ProductService.getActiveProducts(function(data) {
+            function getActiveProducts(reload){
+                ProductService.getActiveProducts(CartDetailsService.reloadItems, function(data) {
                 
-                scope.originalProducts = data;
-                if(productComponentCookieData && productComponentCookieData.productSortOrder){
-                    scope.productSortOrder.order = productComponentCookieData.productSortOrder;
-                }
-                else{
-                    scope.productSortOrder.order = "most_recent";
-                }
-                filterProducts(scope.originalProducts, function() {
-                    scope.pageChanged(1);
+                    scope.originalProducts = data;
+                    if(productComponentCookieData && productComponentCookieData.productSortOrder){
+                        scope.productSortOrder.order = productComponentCookieData.productSortOrder;
+                    }
+                    else{
+                        scope.productSortOrder.order = "most_recent";
+                    }
+                    filterProducts(scope.originalProducts, function() {
+                        scope.pageChanged(1);
+                    });
+                    if(!reload)
+                        cookieProcessFn();  
                 });
-                cookieProcessFn();
-            });
+            }
 
-            
+            getActiveProducts();
 
             scope.changeProductSortOrder = function(){
                 productComponentCookieData.productSortOrder = scope.productSortOrder.order;
@@ -361,7 +370,8 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                         'total': formatNum(totalAmount),
                         'name': item.name,
                         'total_tax': '0.00',
-                        'type': item.type
+                        'type': item.type,
+                        'status': item.status
                     };
                     order.line_items.push(_item);
                 });
@@ -1154,37 +1164,60 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                         'total': formatNum(totalAmount),
                         'name': item.name,
                         'total_tax': '0.00',
-                        'type': item.type
+                        'type': item.type,
+                        'status': item.status
                     };
                     order.line_items.push(_item);
                 });
-
-                OrderService.createPaypalOrder(order, function(data) {
-                    scope.order = data;
-                    scope.showPaypalLoading = false;
-                    if (data && !data._id) {
-                        var failedOrderMessage = 'Error in order processing';
-                        console.log(failedOrderMessage);
-                        if (data.message)
-                            failedOrderMessage = data.message;
+                OrderService.checkForInactiveProducts(order, function(data, err){
+                    if(err){
                         scope.checkoutModalState = 6;
-                        scope.failedOrderMessage = failedOrderMessage;
+                        scope.failedOrderMessage = err.message;
+                        CartDetailsService.reloadItems = true;
+                        $timeout(function() {
+                            CartDetailsService.reloadItems = false;
+                        }, 1000);
                         return;
                     }
-                    console.log('order, ', order);
-                    scope.checkoutModalState = 7;
-                    localStorageService.set(orderCookieKey, data);
-                    scope.paypalKey = data.payment_details.payKey;
-                    CartDetailsService.items = [];
-                    scope.cartDetails = [];
+                    else{
+                        OrderService.createPaypalOrder(order, function(data) {
+                            scope.order = data;
+                            scope.showPaypalLoading = false;
+                            if (data && !data._id) {
+                                var failedOrderMessage = 'Error in order processing';
+                                console.log(failedOrderMessage);
+                                if (data.message)
+                                    failedOrderMessage = data.message;
+                                scope.checkoutModalState = 6;
+                                scope.failedOrderMessage = failedOrderMessage;
+                                return;
+                            }
+                            console.log('order, ', order);
+                            scope.refreshList = false;
+                            if(CartDetailsService.items){
+                                var autoInactiveItems = _.filter(CartDetailsService.items, function(item){
+                                    return item.status === 'auto_inactive'
+                                })
+                                if(autoInactiveItems.length){
+                                    // refresh products
+                                    scope.refreshList = true;
+                                }
+                            }
+                            scope.checkoutModalState = 7;
+                            localStorageService.set(orderCookieKey, data);
+                            scope.paypalKey = data.payment_details.payKey;
+                            CartDetailsService.items = [];
+                            scope.cartDetails = [];
 
-                    CartDetailsService.subTotal = 0;
-                    CartDetailsService.totalTax = 0;
-                    CartDetailsService.total = 0;
-                    localStorageService.remove(cookieKey);
+                            CartDetailsService.subTotal = 0;
+                            CartDetailsService.totalTax = 0;
+                            CartDetailsService.total = 0;
+                            localStorageService.remove(cookieKey);
 
-                    // PaymentService.saveCartDetails(token, parseInt(scope.total * 100), function(data) {});
-                });
+                            // PaymentService.saveCartDetails(token, parseInt(scope.total * 100), function(data) {});
+                        });
+                    }
+                })
             };
 
             scope.makeCartPayment = function() {
@@ -1392,7 +1425,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                      var customer = scope.newContact;
                      console.log('customer, ', customer);
 
-                     var shipping_address= {
+                    var shipping_address= {
                         'first_name': customer.first,
                         'last_name': customer.last,
                         'phone': phone_number,
@@ -1463,7 +1496,8 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                              'sku': '',
                              'total': formatNum(totalAmount),
                              'name': item.name,
-                             'total_tax': '0.00'
+                             'total_tax': '0.00',
+                             'status': item.status
                          };
                          order.line_items.push(_item);
                      });
@@ -1471,37 +1505,66 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                         order.coupon = couponObj;
                     }
 
-                    OrderService.createOrder(order, function(data) {
-                        if (data && !data._id) {
-                            var failedOrderMessage = 'Error in order processing';
-                            console.log(failedOrderMessage);
-                            if (data.message)
-                                failedOrderMessage = data.message;
+                    OrderService.checkForInactiveProducts(order, function(data, err){
+                        if(err){
                             scope.checkoutModalState = 3;
-                            scope.failedOrderMessage = failedOrderMessage;
+                            scope.failedOrderMessage = err.message;
+                            CartDetailsService.reloadItems = true;
+                            $timeout(function() {
+                                CartDetailsService.reloadItems = false;
+                            }, 1000);
                             return;
                         }
-                        scope.order = data;
-                        console.log('order, ', order);
-                        scope.checkoutModalState = 5;
-                        CartDetailsService.items = [];
-                        scope.cartDetails = [];
+                        else{
+                            OrderService.createOrder(order, function(data) {
+                                if (data && !data._id) {
+                                    var failedOrderMessage = 'Error in order processing';
+                                    console.log(failedOrderMessage);
+                                    if (data.message)
+                                        failedOrderMessage = data.message;
+                                    scope.checkoutModalState = 3;
+                                    scope.failedOrderMessage = failedOrderMessage;
+                                    return;
+                                }
+                                scope.order = data;
+                                scope.refreshList = false;
+                                if(CartDetailsService.items){
+                                    var autoInactiveItems = _.filter(CartDetailsService.items, function(item){
+                                        return item.status === 'auto_inactive'
+                                    })
+                                    if(autoInactiveItems.length){
+                                        // refresh products
+                                        scope.refreshList = true;
+                                    }
+                                }
+                                console.log('order, ', order);
+                                scope.checkoutModalState = 5;
+                                CartDetailsService.items = [];
+                                scope.cartDetails = [];
 
 
-                        CartDetailsService.subTotal = 0;
-                        CartDetailsService.totalTax = 0;
-                        CartDetailsService.total = 0;
-                        localStorageService.remove(cookieKey);
-                        cookieData = {
-                          products: []
-                        };
-                        cookieProcessFn();
-                        clearCardDetails();
-                        CartDetailsService.showTax = false;
-                        scope.showTax = false;
-                        // PaymentService.saveCartDetails(token, parseInt(scope.total * 100), function(data) {});
-                    });
-
+                                CartDetailsService.subTotal = 0;
+                                CartDetailsService.totalTax = 0;
+                                CartDetailsService.total = 0;
+                                localStorageService.remove(cookieKey);
+                                cookieData = {
+                                  products: []
+                                };
+                                cookieProcessFn();
+                                clearCardDetails();
+                                CartDetailsService.showTax = false;
+                                scope.showTax = false;
+                                if(scope.refreshList){
+                                    CartDetailsService.reloadItems = true;
+                                    $timeout(function() {
+                                        CartDetailsService.reloadItems = false;
+                                    }, 1000);
+                                    scope.refreshList = false;
+                                }
+                            // PaymentService.saveCartDetails(token, parseInt(scope.total * 100), function(data) {});
+                            });
+                        }
+                    })
                 });
             }
 
@@ -1816,6 +1879,13 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                                 return;
                             }
                             localStorageService.remove(orderCookieKey);
+                            if(scope.refreshList){
+                                CartDetailsService.reloadItems = true;
+                                $timeout(function() {
+                                    CartDetailsService.reloadItems = false;
+                                }, 1000);
+                                scope.refreshList = false;
+                            }
                         });
                     }
                     if (scope.checkoutModalState == 6) {

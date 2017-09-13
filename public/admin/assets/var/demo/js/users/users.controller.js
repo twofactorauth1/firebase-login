@@ -6,12 +6,49 @@
 
         var vm = this;
         vm.init = init;
+        vm.displayDatePicker = displayDatePicker;
         vm.state = {
             adminUserName: userConstant.admin_user.userName,
             adminUserEmailFilter: userConstant.admin_user.emailDomain,
             cardCodes: null,
             isAdmin: false,
             orgCardAndPermissions: UserPermissionsConfig.orgConfigAndPermissions
+        };
+
+        function displayDatePicker(){
+            $('.deshboard-date-picker').click();
+        }
+
+        var dateSwitch = false;
+        $scope.$watch('vm.selectedDate', function () {
+            vm.date.startDate = moment(vm.selectedDate.startDate).format();
+            vm.date.endDate = moment(vm.selectedDate.endDate).format();
+            
+            if (dateSwitch) {
+                loadActiveUsers();
+                loadTopSearches();
+            }
+            dateSwitch = true;
+        });
+
+        vm.selectedDate = {
+            startDate: moment().subtract(29, 'days').startOf('day'),
+            endDate: moment()
+        };
+
+        vm.pickerOptions = {
+            startDate: moment().subtract(29, 'days').toDate(),
+            endDate: moment().toDate(),
+            format: 'YYYY-MM-DD',
+            opens: 'left',
+            ranges: {
+                'Today': [moment().startOf('day'), moment()],
+                'Yesterday': [moment().subtract(1, 'days').startOf('day'), moment().subtract(1, 'days').endOf('day')],
+                'Last 7 Days': [moment().subtract(6, 'days').startOf('day'), moment().endOf('day')],
+                'Last 30 Days': [moment().subtract(29, 'days').startOf('day'), moment().endOf('day')],
+                'This Month': [moment().startOf('month'), moment().endOf('month')],
+                'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+            }
         };
 
         var localTimezoneOffset=0;
@@ -48,27 +85,45 @@
                 AccountService.getUpdatedAccount(function (account) {
                     vm.state.account = account;
                     loadAccountUsers();
-                    ChartAnalyticsService.getDailyActiveUsers(vm.state.account._id, function(dau){
-                        //DAU
-                        var dauData = [];
-                        _.each(dau, function(dau){
-                            var subArr = [];
-                            var value = dau.total || 0;
-                            subArr.push(new Date(dau.timeframe.start.replace(" ", "T")).getTime()+localTimezoneOffset);
-                            subArr.push(value);
-                            dauData.push(subArr);
-                        });
-                        vm.dauData = dauData;
-                        ChartAnalyticsService.getActiveUserConfig(vm.dauData, function (data) {
-                            vm.activeUserConfig = data;
-                            vm.activeUserConfig.loading = false;
-                            reflowCharts();
-                        });
-                    })
+                    loadActiveUsers();
+                    loadTopSearches();
                 });
               }
             }
         });
+
+        function loadActiveUsers(){
+            ChartAnalyticsService.getDailyActiveUsers(vm.state.account._id, vm.date.startDate, vm.date.endDate, function(dau){
+                //DAU
+                var dauData = [];
+                _.each(dau, function(dau){
+                    var subArr = [];
+                    var value = dau.total || 0;
+                    subArr.push(new Date(dau.timeframe.start.replace(" ", "T")).getTime()+localTimezoneOffset);
+                    subArr.push(value);
+                    dauData.push(subArr);
+                });
+                vm.dauData = dauData;
+                if (moment(vm.date.endDate).diff(moment(vm.date.startDate), 'days') <= 7) {
+                    ChartAnalyticsService.setGraunularity('hours');
+                } else {
+                    ChartAnalyticsService.setGraunularity('days');
+                }
+                ChartAnalyticsService.getActiveUserConfig(vm.dauData, function (data) {
+                    vm.activeUserConfig = data;
+                    vm.activeUserConfig.loading = false;
+                    reflowCharts();
+                });
+            })
+        }
+
+        function loadTopSearches(){
+            ChartAnalyticsService.getUserTopSearches(vm.state.account._id, vm.date.startDate, vm.date.endDate, function(data){
+                
+                vm.topSearches = data;
+                vm.topSearchesLoaded = true;
+            })
+        }
 
         function loadAccountUsers(){
             UserService.getAccountUsers(function(users){
@@ -512,11 +567,18 @@
             })
         };
 
-        $scope.$watchGroup(['app.layout.isAnalyticsDashboardMode', 'app.layout.isSidebarClosed'],  function (val1, val2) {
-            if(angular.isDefined(val1) || angular.isDefined(val2)){
+        $scope.$parent.$watch('app.layout.isSidebarClosed',  function (val) {
+            if(angular.isDefined(val)){
                 reflowCharts();
             }
         });
+
+        vm.date = {
+            startDate: moment().subtract(29, 'days').format(),
+            endDate: moment().format()
+        };
+
+        
 
         function init() {
             UserService.getVendors(function(data){

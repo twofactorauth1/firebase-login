@@ -963,17 +963,33 @@ var dao = {
                     self.log.warn('Merging contact with id: ' + existingId);
                     contact.set('created', existingContact.get('created'));
                     self.log.warn('Here is what we have:', contact);
-                    var merged = existingContact;
+                    var merged = new $$.m.Contact(JSON.parse(JSON.stringify(existingContact)));
 					self.deepExtend(merged, contact);
+
                     merged.set('_id', existingId);
                     self.log.warn('Here is what we have now:', merged);
                     //union details, notes, siteActivity, tags
                     // Tags append to existing contact if exists
                     
                     merged.set('tags', _.union(_existingTags, contact.get('tags') || []));
+					var updatDetails=['addresses','phones','websites'];
+					_.each(['addresses','phones','websites'],function(detail){
+						if(contact.get('details')[0][detail] && contact.get('details')[0][detail].length>0) {
+							if(existingContact.get('details')[0][detail] &&  existingContact.get('details')[0][detail].length>0) {
+							self.deepExtend(existingContact.get('details')[0][detail][0],
+									contact.get('details')[0][detail][0]);
+							}else{
+								existingContact.get('details')[0][detail] = [contact.get('details')[0][detail][0]];
+							}
+						}
 
-                    merged.set('details', _.union(existingContact.get('details'), contact.get('details')));
-                    merged.set('notes', _.union(existingContact.get('notes'), contact.get('notes')));
+					});
+					var companyName=contact.get('details')[0]['company'];
+					if(companyName && companyName!==null && companyName!==""){
+						existingContact.get('details')[0]['company']=companyName;
+					}
+					merged.set('details', existingContact.get('details'));
+					merged.set('notes', _.union(existingContact.get('notes'), contact.get('notes')));
                     
                     merged.set('siteActivity', _.union(existingContact.get('siteActivity'), contact.get('siteActivity')));
                     
@@ -1212,18 +1228,17 @@ var dao = {
     },
 	deepExtend : function(destination, source) {
 		for (var property in source) {
-			if(source[property] !== null){
+			if(!( source[property] === null || source[property] === "")){
+				//self.log.debug(destination[property],'------',source[property]);
 				if (typeof source[property] === "object") {
 					destination[property] = destination[property] || {};
 					arguments.callee(destination[property], source[property]);
-				} else  {
+				} else{
 					destination[property] = source[property];
 				}
 			}
 		}
 	}
-
-
 };
 
 dao = _.extend(dao, baseDao.prototype, dao.options).init();
