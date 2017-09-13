@@ -557,8 +557,8 @@
             })
         };
 
-        $scope.$watchGroup(['app.layout.isAnalyticsDashboardMode', 'app.layout.isSidebarClosed'],  function (val1, val2) {
-            if(angular.isDefined(val1) || angular.isDefined(val2)){
+        $scope.$parent.$watch('app.layout.isSidebarClosed',  function (val) {
+            if(angular.isDefined(val)){
                 reflowCharts();
             }
         });
