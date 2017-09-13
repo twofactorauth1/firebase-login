@@ -626,7 +626,7 @@ module.exports = {
 
             },
             // Update auto inactive products to inactive
-            function updateAutoInactiveProducts(account, savedOrder, contact, callback) {
+            function (account, savedOrder, contact, callback) {
                 log.debug(accountId, userId, 'Updating auto inactive products to inactive');
 
                 var items = savedOrder.get('line_items');
@@ -1388,7 +1388,7 @@ module.exports = {
 
             },
             // Update auto inactive products to inactive
-            function updateAutoInactiveProducts(account, savedOrder, contact, callback) {
+            function (account, savedOrder, contact, callback) {
                 log.debug(accountId, userId, 'Updating auto inactive products to inactive');
 
                 var items = savedOrder.get('line_items');
@@ -1543,7 +1543,6 @@ module.exports = {
 
                     }
                 });
-
 
             },
             // check and get fulfillment email products
@@ -2663,7 +2662,7 @@ module.exports = {
                 });
             },
             // Update auto inactive products to inactive
-            function updateAutoInactiveProducts(order, productAry, accountId, userId, callback) {
+            function (order, productAry, accountId, userId, callback) {
                 log.debug(accountId, userId, 'Updating auto inactive products to inactive');
 
                 var items = order.get('line_items');
@@ -2701,7 +2700,7 @@ module.exports = {
                 else{
                     callback(err, order, productAry, accountId, userId);
                 }
-            }
+            },
             function (order,productAry,accountId,userId, callback) {
                 log.debug(accountId, userId, 'getting contact');
                 contactDao.getById(order.get('customer_id'), $$.m.Contact, function (err, contact) {
