@@ -27,11 +27,12 @@ mainApp.service('productService', function ($http) {
 		});
 	};
 
-	this.getActiveProducts = function (fn) {
+	this.getActiveProducts = function (relaod, fn) {
 		var apiUrl = [baseUrl, 'active'].join('/');
+		var cache = relaod ? false : true;
 		console.log(apiUrl);
 		$http.get(apiUrl, {
-			cache: true
+			cache: cache
 		}).success(function (data) {
 			fn(data);
 		});
