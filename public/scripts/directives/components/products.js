@@ -1486,51 +1486,59 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                         order.coupon = couponObj;
                     }
 
-                    OrderService.createOrder(order, function(data) {
-                        if (data && !data._id) {
-                            var failedOrderMessage = 'Error in order processing';
-                            console.log(failedOrderMessage);
-                            if (data.message)
-                                failedOrderMessage = data.message;
+                    OrderService.checkForInactiveProducts(order, function(data, err){
+                        if(err){
                             scope.checkoutModalState = 3;
-                            scope.failedOrderMessage = failedOrderMessage;
+                            scope.failedOrderMessage = err.message;
                             return;
                         }
-                        scope.order = data;
-                        scope.refreshList = false;
-                        if(CartDetailsService.items){
-                            var autoInactiveItems = _.filter(CartDetailsService.items, function(item){
-                                return item.status === 'auto_inactive'
-                            })
-                            if(autoInactiveItems.length){
-                                // refresh products
-                                scope.refreshList = true;
-                            }
+                        else{
+                            OrderService.createOrder(order, function(data) {
+                                if (data && !data._id) {
+                                    var failedOrderMessage = 'Error in order processing';
+                                    console.log(failedOrderMessage);
+                                    if (data.message)
+                                        failedOrderMessage = data.message;
+                                    scope.checkoutModalState = 3;
+                                    scope.failedOrderMessage = failedOrderMessage;
+                                    return;
+                                }
+                                scope.order = data;
+                                scope.refreshList = false;
+                                if(CartDetailsService.items){
+                                    var autoInactiveItems = _.filter(CartDetailsService.items, function(item){
+                                        return item.status === 'auto_inactive'
+                                    })
+                                    if(autoInactiveItems.length){
+                                        // refresh products
+                                        scope.refreshList = true;
+                                    }
+                                }
+                                console.log('order, ', order);
+                                scope.checkoutModalState = 5;
+                                CartDetailsService.items = [];
+                                scope.cartDetails = [];
+
+
+                                CartDetailsService.subTotal = 0;
+                                CartDetailsService.totalTax = 0;
+                                CartDetailsService.total = 0;
+                                localStorageService.remove(cookieKey);
+                                cookieData = {
+                                  products: []
+                                };
+                                cookieProcessFn();
+                                clearCardDetails();
+                                CartDetailsService.showTax = false;
+                                scope.showTax = false;
+                                if(scope.refreshList){
+                                    getActiveProducts();
+                                    scope.refreshList = false;
+                                }
+                            // PaymentService.saveCartDetails(token, parseInt(scope.total * 100), function(data) {});
+                            });
                         }
-                        console.log('order, ', order);
-                        scope.checkoutModalState = 5;
-                        CartDetailsService.items = [];
-                        scope.cartDetails = [];
-
-
-                        CartDetailsService.subTotal = 0;
-                        CartDetailsService.totalTax = 0;
-                        CartDetailsService.total = 0;
-                        localStorageService.remove(cookieKey);
-                        cookieData = {
-                          products: []
-                        };
-                        cookieProcessFn();
-                        clearCardDetails();
-                        CartDetailsService.showTax = false;
-                        scope.showTax = false;
-                        if(scope.refreshList){
-                            getActiveProducts();
-                            scope.refreshList = false;
-                        }
-                        // PaymentService.saveCartDetails(token, parseInt(scope.total * 100), function(data) {});
-                    });
-
+                    })
                 });
             }
 

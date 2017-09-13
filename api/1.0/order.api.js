@@ -45,6 +45,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         app.delete(this.url(':id'), this.isAuthAndSubscribedApi.bind(this), this.deleteOrder.bind(this));
         app.delete(this.url(':id/paypal'), this.setup.bind(this), this.deletePaypalOrder.bind(this));
+        app.post(this.url('inactiveProducts'), this.setup.bind(this), this.checkForInactiveProducts.bind(this));
     },
 
     createOrder: function(req, res) {
@@ -295,6 +296,19 @@ _.extend(api.prototype, baseApi.prototype, {
         orderManager.calculateEstimatedTax(accountId, userId, tempOrder, function(err, order){
             self.log.debug(accountId, userId, '<< calculateEstimatedTax');
             self.sendResultOrError(resp, err, order, 'Error calculating tax');
+        });
+    },
+
+    checkForInactiveProducts: function(req, resp) {
+        var self = this;
+        var accountId = parseInt(self.currentAccountId(req));
+        var userId = null;
+        self.log.debug(accountId, userId, '>> checkForInactiveProducts');
+
+        var tempOrder = new $$.m.Order(req.body);
+        orderManager.checkForInactiveProducts(accountId, userId, tempOrder, function(err, data){
+            self.log.debug(accountId, userId, '<< checkForInactiveProducts');
+            self.sendResultOrError(resp, err, data, 'Error getting inactive products');
         });
     },
 

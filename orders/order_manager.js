@@ -640,7 +640,7 @@ module.exports = {
                     self.log.debug('accountId:', accountId);
                     var query = {accountId:accountId, _id: {'$in': productIds}};
 
-                    productDao.findMany(query, $$.m.ssb.Product, function(err, products){
+                    productDao.findMany(query, $$.m.Product, function(err, products){
                         if(err) {
                             self.log.error(accountId, userId, 'Error finding products:', err);
                             callback(err);
@@ -649,7 +649,7 @@ module.exports = {
                             _.each(products, function(product){                    
                                 product.set('status', 'inactive');
                             });
-                            productDao.batchUpdate(products, $$.m.ssb.Product, function(err, updatedProducts){
+                            productDao.batchUpdate(products, $$.m.Product, function(err, updatedProducts){
                                 if(err) {
                                     self.log.error(accountId, userId, 'Error updating products:', err);
                                     callback(err);
@@ -1402,7 +1402,7 @@ module.exports = {
                     self.log.debug('accountId:', accountId);
                     var query = {accountId:accountId, _id: {'$in': productIds}};
 
-                    productDao.findMany(query, $$.m.ssb.Product, function(err, products){
+                    productDao.findMany(query, $$.m.Product, function(err, products){
                         if(err) {
                             self.log.error(accountId, userId, 'Error finding products:', err);
                             callback(err);
@@ -1411,7 +1411,7 @@ module.exports = {
                             _.each(products, function(product){                    
                                 product.set('status', 'inactive');
                             });
-                            productDao.batchUpdate(products, $$.m.ssb.Product, function(err, updatedProducts){
+                            productDao.batchUpdate(products, $$.m.Product, function(err, updatedProducts){
                                 if(err) {
                                     self.log.error(accountId, userId, 'Error updating products:', err);
                                     callback(err);
@@ -2676,7 +2676,7 @@ module.exports = {
                     self.log.debug('accountId:', accountId);
                     var query = {accountId:accountId, _id: {'$in': productIds}};
 
-                    productDao.findMany(query, $$.m.ssb.Product, function(err, products){
+                    productDao.findMany(query, $$.m.Product, function(err, products){
                         if(err) {
                             self.log.error(accountId, userId, 'Error finding products:', err);
                             callback(err);
@@ -2685,7 +2685,7 @@ module.exports = {
                             _.each(products, function(product){                    
                                 product.set('status', 'inactive');
                             });
-                            productDao.batchUpdate(products, $$.m.ssb.Product, function(err, updatedProducts){
+                            productDao.batchUpdate(products, $$.m.Product, function(err, updatedProducts){
                                 if(err) {
                                     self.log.error(accountId, userId, 'Error updating products:', err);
                                     callback(err);
@@ -3141,7 +3141,28 @@ module.exports = {
             }
         });
     },
-
+    checkForInactiveProducts: function (accountId, userId, order, fn) {
+        var userId = null;
+        var self = this;
+        self.log = log;
+        self.log.debug(accountId, userId, '>> checkForInactiveProducts');
+        var productIds = _.pluck(order.get("line_items"), "product_id");
+        var query = {accountId:accountId, _id: {'$in': productIds}, status: 'inactive'};
+        
+        productDao.exists(query, $$.m.Product, function(err, value){
+            if(err) {
+                self.log.error(accountId, userId, 'Error getting products:', err);
+                return fn(err, null);
+            } else {
+                if(value === true){
+                    return fn("Some products are already sold out", null);
+                }
+                else{
+                    return fn(null);
+                }
+            }
+        });
+    },
     _sendEmailNote :function (emailTo, fromEmail, fromName, accountId, note) {
         var self = this;
         self.log = log;
