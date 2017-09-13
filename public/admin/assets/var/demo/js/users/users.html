@@ -23,7 +23,7 @@
         <tabset class="tabbable">
             <tab heading="Users">
                 <div class="securematics-list-container securematics-list-users" ng-init="tableView='list'">
-                    
+
                     <div class="container-fluid container-fullw bg-white padding-top-0 padding-bottom-0 margin-bottom-15 margin-left-0 margin-right-0" style="padding-left:15px !important;">
                         <div class="row">
                             <div class="col-sm-12">
@@ -107,7 +107,7 @@
                     <div class="load1 csspinner height-400" ng-show="vm.uiState.loading"></div>
                 </div>
             </tab>
-            <tab heading="Daily Active Users" ng-click="vm.reflowCharts()">
+            <tab heading="Analytics" ng-click="vm.reflowCharts()">
 
                 <div class="row">
                     <div class="pull-right margin-bottom-20" ng-class="{'col-xs-12 col-sm-3': app.layout.isSidebarClosed, 'col-xs-12 col-sm-4': !app.layout.isSidebarClosed}">
@@ -166,7 +166,7 @@
                 </div>
             </tab>
         </tabset>
-    </div>    
+    </div>
 </div>
 <div data-ng-include=" 'assets/var/demo/views/partials/new-user-modal.html' "></div>
 <div data-ng-include=" 'assets/views/partials/edit-password-modal.html' "></div>
