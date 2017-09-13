@@ -530,9 +530,16 @@
             return queryData;
         };
 
-        this.getDailyActiveUsers = function(account, fn){
-            SiteAnalyticsService.getDailyActiveUsers(null, null, account, true, false, function(data){
+        this.getDailyActiveUsers = function(account, start, end, fn){
+            SiteAnalyticsService.getDailyActiveUsers(start, end, account, true, false, function(data){
                 console.log('got dau:', data);
+                fn(data);
+            })
+        }
+
+        this.getUserTopSearches = function(account, start, end, fn){
+            SiteAnalyticsService.getUserTopSearches(start, end, account, false, false, function(data){
+                console.log('got topSearches:', data);
                 fn(data);
             })
         }
@@ -884,6 +891,10 @@
                     enabled: false
                 }
             };
+            if(this.granularity === 'hours') {
+                activeUserConfig.xAxis.labels.format = '{value:%b %d %H:%M}';
+                activeUserConfig.options.tooltip.headerFormat = '<b>{point.x:%b %d %H:%M}</b><br>';
+            }
             fn(activeUserConfig);
         };
 

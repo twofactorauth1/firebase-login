@@ -309,11 +309,6 @@ module.exports = {
             match.$match.orgId = orgId;
         }
         stageAry.push(match);
-        var sort = {
-            $sort:{'server_time_dt':1}
-        };
-        //stageAry.push(sort);
-
         var filterStages = [];
         self._buildLookupAndFilterStages(accountId, userId, isAggregate, function(err, extraStages){
             if(err) {
@@ -344,11 +339,6 @@ module.exports = {
                     }
                 };
                 stageAry.push(group1);
-                //{"$group":{"_id":{"session_id":"$session_id","secondsAgo":{"$add":[{"$subtract":[{"$subtract":["$server_time_dt", new Date("1970-01-01")]},{"$mod":[{"$subtract":["$server_time_dt", new Date("1970-01-01")]},60000]}]}, new Date("1970-01-01")]}},"count":{"$sum":1}}},
-
-
-
-
 
                 var lookup = {"$lookup":{
                     from: "session_events",
@@ -467,13 +457,6 @@ module.exports = {
 
 
         stageAry.push(match);
-        var group = {
-            $group:{
-                _id: '$fingerprint',
-                session_events:{$push:'$$ROOT'}
-            }
-        };
-        stageAry.push(group);
         self._addAccountFilterByID(accountId, userId, isAggregate, match, function(err, newMatch){
             dao.aggregateWithCustomStages(stageAry, $$.m.SessionEvent, function(err, results) {
                 if(err) {
@@ -482,8 +465,7 @@ module.exports = {
                 } else {
                     var _resultDetails = [];
 
-                    async.eachLimit(results, 10, function(records, cb){
-                        var sessionEvent = records.session_events[0];
+                    async.eachLimit(results, 10, function(sessionEvent, cb){
                         var query = {session_id:sessionEvent.session_id};
                         var skip = 0;
                         var limit = 1;
@@ -2829,6 +2811,50 @@ module.exports = {
                 self.log.debug(accountId, userId, '<< get404sByDateAndPathReport');
                 fn(err, sortedResults);
             });
+        });
+
+    },
+
+    getTopSearches: function(accountId, userId, start, end, isAggregate, orgId, fn) {
+        var self = this;
+        self.log = _log;
+        self.log.debug(accountId, userId, '>> getTopSearches');
+
+        var stageAry = [];
+        var match = {
+            $match:{
+                accountId:accountId,
+                activityType: 'INV_SEARCH',
+                start:{
+                    $gte:start,
+                    $lte:end
+                }
+            }
+        };
+        if(isAggregate === true) {
+            delete match.$match.accountId;
+        }
+        if(orgId !== null) {
+            match.$match.orgId = orgId;
+        }
+        stageAry.push(match);
+
+        var group = {
+            $group:{
+                _id:'$note',
+                total:{$sum:1}
+            }
+        };
+        stageAry.push(group);
+
+        dao.aggregateWithCustomStages(stageAry, $$.m.UserActivity, function(err, value) {
+            if(err) {
+                self.log.error('Error finding current month:', err);
+                fn(err);
+            } else {
+                self.log.debug(accountId, userId, '<< getTopSearches');
+                fn(null, value);
+            }
         });
 
     },

@@ -18,11 +18,12 @@
             </div>
         </div>
     </div>
+
     <div st-table="vm.displayedUsers" st-safe-src="vm.state.filterUsers" st-filtered-collection>
         <tabset class="tabbable">
             <tab heading="Users">
                 <div class="securematics-list-container securematics-list-users" ng-init="tableView='list'">
-                    
+
                     <div class="container-fluid container-fullw bg-white padding-top-0 padding-bottom-0 margin-bottom-15 margin-left-0 margin-right-0" style="padding-left:15px !important;">
                         <div class="row">
                             <div class="col-sm-12">
@@ -106,9 +107,17 @@
                     <div class="load1 csspinner height-400" ng-show="vm.uiState.loading"></div>
                 </div>
             </tab>
-            <tab heading="Daily Active Users" ng-click="vm.reflowCharts()">
+            <tab heading="Analytics" ng-click="vm.reflowCharts()">
 
                 <div class="row">
+                    <div class="pull-right margin-bottom-20" ng-class="{'col-xs-12 col-sm-3': app.layout.isSidebarClosed, 'col-xs-12 col-sm-4': !app.layout.isSidebarClosed}">
+                        <div class="input-group">
+                            <label class="sr-only">Date Range</label>
+                            <div class="input-group-addon"><i class="fa fa-calendar"></i></div>
+                            <input date-range-picker class="form-control deshboard-date-picker date-picker" type="text" ng-model="vm.selectedDate" options="vm.pickerOptions" />
+                            <span class="input-group-addon" ng-click="vm.displayDatePicker()"><i class="fa fa-chevron-down fa-fw"></i></span>
+                        </div>
+                    </div>
                     <div class="col-sm-12">
                         <div class="panel panel-white" id="overview" ng-class="{'load1 csspinner': !vm.activeUserConfig.options}">
                             <div class="panel-heading border-light">
@@ -124,10 +133,40 @@
                             </div>
                         </div>
                     </div>
+                    <div class="col-sm-12">
+                        <div id="topSearches" class="panel panel-white no-radius" ng-class="{'load1 csspinner': !vm.topSearchesLoaded}">
+                            <div class="panel-heading border-light">
+                                <h4 class="panel-title text-primary"><span class="text-bold">Top</span> Searches</h4>
+                                <ct-paneltool class="panel-tools" tool-collapse="tool-collapse"></ct-paneltool>
+                            </div>
+                            <div class="panel-wrapper" collapse="topSearches">
+                                <div class="panel-body height-470 panel-scroll" perfect-scrollbar wheel-propagation="false" suppress-scroll-x="true">
+                                    <div class="table-responsive">
+                                        <table class="table table-hover margin-bottom-0">
+                                            <thead>
+                                                <tr>
+                                                    <th>Search</th>
+                                                    <th class="center">Count</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr ng-repeat="search in vm.topSearches|orderBy:'-total'">
+                                                    <td>
+                                                        {{search._id}}
+                                                    </td>
+                                                    <td class="center">{{search.total | number}}</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                      </div>
                 </div>
             </tab>
         </tabset>
-    </div>    
+    </div>
 </div>
 <div data-ng-include=" 'assets/var/demo/views/partials/new-user-modal.html' "></div>
 <div data-ng-include=" 'assets/views/partials/edit-password-modal.html' "></div>
