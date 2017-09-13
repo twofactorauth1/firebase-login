@@ -1382,7 +1382,7 @@ _.extend(api.prototype, baseApi.prototype, {
             start = moment(start, 'YYYY-MM-DD[T]HH:mm:ss').toDate();
             self.log.debug('start:', start);
         }
-
+        
         analyticsManager.getTopSearches(accountId, userId, start, end, false, null, function(err, results){
             self.log.debug(accountId, userId, '<< topSearches');
             self.sendResultOrError(resp, err, results, 'Error getting report');

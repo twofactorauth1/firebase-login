@@ -2821,20 +2821,20 @@ module.exports = {
 
     },
 
-    trafficSourcesReport: function(accountId, userId, start, end, isAggregate, orgId, fn) {
+    getTopSearches: function(accountId, userId, start, end, isAggregate, orgId, fn) {
         var self = this;
         self.log = _log;
-        self.log.debug(accountId, userId, '>> trafficSourcesReport');
+        self.log.debug(accountId, userId, '>> getTopSearches');
 
         var stageAry = [];
         var match = {
             $match:{
                 accountId:accountId,
-                server_time_dt:{
+                activityType: 'INV_SEARCH',
+                start:{
                     $gte:start,
                     $lte:end
-                },
-                fingerprint:{$ne:0}
+                }
             }
         };
         if(isAggregate === true) {
@@ -2847,29 +2847,22 @@ module.exports = {
 
         var group = {
             $group:{
-                _id:'$referrer.domain',
+                _id:'$note',
                 result:{$sum:1}
             }
         };
         stageAry.push(group);
 
-        self._addAccountFilterByID(accountId, userId, isAggregate, match, function(err, match) {
-            if (err) {
-                self.log.error(accountId, userId, 'Error adding filter:', err);
+        dao.aggregateWithCustomStages(stageAry, $$.m.UserActivity, function(err, value) {
+            if(err) {
+                self.log.error('Error finding current month:', err);
                 fn(err);
             } else {
-                dao.aggregateWithCustomStages(stageAry, $$.m.SessionEvent, function(err, value) {
-                    if(err) {
-                        self.log.error('Error finding current month:', err);
-                        fn(err);
-                    } else {
-                        _.each(value, function(result){
-                            result['referrer.domain'] = result._id;
-                        });
-                        self.log.debug(accountId, userId, '<< trafficSourcesReport');
-                        fn(null, value);
-                    }
+                _.each(value, function(result){
+                    result['note'] = result._id;
                 });
+                self.log.debug(accountId, userId, '<< getTopSearches');
+                fn(null, value);
             }
         });
 
