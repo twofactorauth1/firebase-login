@@ -83,13 +83,16 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                 scope.shippingTax = CartDetailsService.shippingTax;
                 scope.cartTax = CartDetailsService.cartTax;
                 if(scope.cartDetails && scope.cartDetails.length)
-                    CartDetailsService.calculateTotalCharges(scope.cart_discount, scope.percent_off);
-                if(CartDetailsService.reloadItems){
-                    getActiveProducts(true);
-                }
+                    CartDetailsService.calculateTotalCharges(scope.cart_discount, scope.percent_off);                
             }, true);
 
-
+            scope.$watch(function() {
+                return CartDetailsService.reloadItems;
+            }, function(val) {
+                console.log('watch');
+                if(val)
+                    getActiveProducts(true);                
+            });
 
             scope.setInnerHeight = function(){
                 var styleString = " ";
