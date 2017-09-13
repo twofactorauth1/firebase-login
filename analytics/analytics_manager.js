@@ -2821,6 +2821,60 @@ module.exports = {
 
     },
 
+    trafficSourcesReport: function(accountId, userId, start, end, isAggregate, orgId, fn) {
+        var self = this;
+        self.log = _log;
+        self.log.debug(accountId, userId, '>> trafficSourcesReport');
+
+        var stageAry = [];
+        var match = {
+            $match:{
+                accountId:accountId,
+                server_time_dt:{
+                    $gte:start,
+                    $lte:end
+                },
+                fingerprint:{$ne:0}
+            }
+        };
+        if(isAggregate === true) {
+            delete match.$match.accountId;
+        }
+        if(orgId !== null) {
+            match.$match.orgId = orgId;
+        }
+        stageAry.push(match);
+
+        var group = {
+            $group:{
+                _id:'$referrer.domain',
+                result:{$sum:1}
+            }
+        };
+        stageAry.push(group);
+
+        self._addAccountFilterByID(accountId, userId, isAggregate, match, function(err, match) {
+            if (err) {
+                self.log.error(accountId, userId, 'Error adding filter:', err);
+                fn(err);
+            } else {
+                dao.aggregateWithCustomStages(stageAry, $$.m.SessionEvent, function(err, value) {
+                    if(err) {
+                        self.log.error('Error finding current month:', err);
+                        fn(err);
+                    } else {
+                        _.each(value, function(result){
+                            result['referrer.domain'] = result._id;
+                        });
+                        self.log.debug(accountId, userId, '<< trafficSourcesReport');
+                        fn(null, value);
+                    }
+                });
+            }
+        });
+
+    },
+
     /*
      * If duration is 7 days or less, granularity will be 'hours'.  Else 'days'
      */
