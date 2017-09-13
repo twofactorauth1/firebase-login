@@ -2821,6 +2821,50 @@ module.exports = {
 
     },
 
+    getTopSearches: function(accountId, userId, start, end, isAggregate, orgId, fn) {
+        var self = this;
+        self.log = _log;
+        self.log.debug(accountId, userId, '>> getTopSearches');
+
+        var stageAry = [];
+        var match = {
+            $match:{
+                accountId:accountId,
+                activityType: 'INV_SEARCH',
+                start:{
+                    $gte:start,
+                    $lte:end
+                }
+            }
+        };
+        if(isAggregate === true) {
+            delete match.$match.accountId;
+        }
+        if(orgId !== null) {
+            match.$match.orgId = orgId;
+        }
+        stageAry.push(match);
+
+        var group = {
+            $group:{
+                _id:'$note',
+                total:{$sum:1}
+            }
+        };
+        stageAry.push(group);
+
+        dao.aggregateWithCustomStages(stageAry, $$.m.UserActivity, function(err, value) {
+            if(err) {
+                self.log.error('Error finding current month:', err);
+                fn(err);
+            } else {
+                self.log.debug(accountId, userId, '<< getTopSearches');
+                fn(null, value);
+            }
+        });
+
+    },
+
     /*
      * If duration is 7 days or less, granularity will be 'hours'.  Else 'days'
      */

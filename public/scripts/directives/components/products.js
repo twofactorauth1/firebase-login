@@ -84,7 +84,8 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                 scope.cartTax = CartDetailsService.cartTax;
                 if(scope.cartDetails && scope.cartDetails.length)
                     CartDetailsService.calculateTotalCharges(scope.cart_discount, scope.percent_off);                
-            }, true);
+            }, true)
+
 
             scope.$watch(function() {
                 return CartDetailsService.reloadItems;

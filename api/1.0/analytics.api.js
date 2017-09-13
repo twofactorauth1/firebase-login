@@ -73,7 +73,8 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url('reports/404s'), this.isAuthAndSubscribedApi.bind(this), this.get404s.bind(this));
         app.get(this.url('reports/daily404s'), this.isAuthAndSubscribedApi.bind(this), this.getDaily404s.bind(this));
         app.get(this.url('reports/all'), this.isAuthAndSubscribedApi.bind(this), this.allReports.bind(this));
-
+        app.get(this.url('reports/topSearches'), this.isAuthAndSubscribedApi.bind(this), this.topSearches.bind(this));
+        
         app.get(this.url('admin/reports/dau'), this.isAuthAndSubscribedApi.bind(this), this.getDailyActiveUsers.bind(this));
         app.get(this.url('admin/reports/visitors'), this.isAuthAndSubscribedApi.bind(this), this.runAdminVisitorsReport.bind(this));
         app.get(this.url('admin/reports/visitorLocations'), this.isAuthAndSubscribedApi.bind(this), this.adminVisitorLocationsReport.bind(this));
@@ -100,6 +101,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url('admin/pageViewPerformance'), this.isAuthAndSubscribedApi.bind(this), this.getPageViewPerformance.bind(this));
         app.get(this.url('admin/404s'), this.isAuthAndSubscribedApi.bind(this), this.getAdmin404s.bind(this));
         app.get(this.url('admin/reports/daily404s'), this.isAuthAndSubscribedApi.bind(this), this.getAdminDaily404s.bind(this));
+        
     },    
 
 
@@ -1356,6 +1358,34 @@ _.extend(api.prototype, baseApi.prototype, {
 
         analyticsManager.get404sReport(accountId, userId, start, end, false, null, function(err, results){
             self.log.debug(accountId, userId, '<< get404s');
+            self.sendResultOrError(resp, err, results, 'Error getting report');
+        });
+    },
+
+    topSearches: function(req, resp) {
+        var self = this;
+        var userId = self.userId(req);
+        var accountId = self.accountId(req);
+        self.log.debug(accountId, userId, '>> topSearches (' + req.query.start + ', ' + req.query.end + ')');
+        var start = req.query.start;
+        var end = req.query.end;
+
+        if(!end) {
+            end = moment().toDate();
+        } else {
+            //2016-07-03T00:00:00 05:30
+            end = moment(end, 'YYYY-MM-DD[T]HH:mm:ss').toDate();
+        }
+
+        if(!start) {
+            start = moment().add(-30, 'days').toDate();
+        } else {
+            start = moment(start, 'YYYY-MM-DD[T]HH:mm:ss').toDate();
+            self.log.debug('start:', start);
+        }
+        
+        analyticsManager.getTopSearches(accountId, userId, start, end, false, null, function(err, results){
+            self.log.debug(accountId, userId, '<< topSearches');
             self.sendResultOrError(resp, err, results, 'Error getting report');
         });
     },
@@ -2824,6 +2854,7 @@ _.extend(api.prototype, baseApi.prototype, {
             return self.send403(resp);
         }
     },
+
 
     getAdminDaily404s: function(req, resp) {
         var self = this;
