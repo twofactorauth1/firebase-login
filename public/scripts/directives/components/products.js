@@ -181,22 +181,24 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
              * - get all products, set originalProducts obj and filter
              */
 
-            ProductService.getActiveProducts(function(data) {
+            function getActiveProducts(){
+                ProductService.getActiveProducts(function(data) {
                 
-                scope.originalProducts = data;
-                if(productComponentCookieData && productComponentCookieData.productSortOrder){
-                    scope.productSortOrder.order = productComponentCookieData.productSortOrder;
-                }
-                else{
-                    scope.productSortOrder.order = "most_recent";
-                }
-                filterProducts(scope.originalProducts, function() {
-                    scope.pageChanged(1);
+                    scope.originalProducts = data;
+                    if(productComponentCookieData && productComponentCookieData.productSortOrder){
+                        scope.productSortOrder.order = productComponentCookieData.productSortOrder;
+                    }
+                    else{
+                        scope.productSortOrder.order = "most_recent";
+                    }
+                    filterProducts(scope.originalProducts, function() {
+                        scope.pageChanged(1);
+                    });
+                    cookieProcessFn();  
                 });
-                cookieProcessFn();
-            });
+            }
 
-            
+            getActiveProducts();
 
             scope.changeProductSortOrder = function(){
                 productComponentCookieData.productSortOrder = scope.productSortOrder.order;
@@ -361,7 +363,8 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                         'total': formatNum(totalAmount),
                         'name': item.name,
                         'total_tax': '0.00',
-                        'type': item.type
+                        'type': item.type,
+                        'status': item.status
                     };
                     order.line_items.push(_item);
                 });
@@ -1154,7 +1157,8 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                         'total': formatNum(totalAmount),
                         'name': item.name,
                         'total_tax': '0.00',
-                        'type': item.type
+                        'type': item.type,
+                        'status': item.status
                     };
                     order.line_items.push(_item);
                 });
@@ -1392,7 +1396,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                      var customer = scope.newContact;
                      console.log('customer, ', customer);
 
-                     var shipping_address= {
+                    var shipping_address= {
                         'first_name': customer.first,
                         'last_name': customer.last,
                         'phone': phone_number,
@@ -1463,7 +1467,8 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                              'sku': '',
                              'total': formatNum(totalAmount),
                              'name': item.name,
-                             'total_tax': '0.00'
+                             'total_tax': '0.00',
+                             'status': item.status
                          };
                          order.line_items.push(_item);
                      });
@@ -1482,6 +1487,16 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                             return;
                         }
                         scope.order = data;
+                        var refreshList = false;
+                        if(CartDetailsService.items){
+                            var autoInactiveItems = _.filter(CartDetailsService.items, function(item){
+                                return item.status === 'auto_inactive'
+                            })
+                            if(autoInactiveItems.length){
+                                // refresh products
+                                refreshList = true;
+                            }
+                        }
                         console.log('order, ', order);
                         scope.checkoutModalState = 5;
                         CartDetailsService.items = [];
@@ -1499,6 +1514,9 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                         clearCardDetails();
                         CartDetailsService.showTax = false;
                         scope.showTax = false;
+                        if(refreshList){
+                            getActiveProducts();
+                        }
                         // PaymentService.saveCartDetails(token, parseInt(scope.total * 100), function(data) {});
                     });
 
