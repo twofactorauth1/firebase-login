@@ -1173,6 +1173,9 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                         scope.checkoutModalState = 6;
                         scope.failedOrderMessage = err.message;
                         CartDetailsService.reloadItems = true;
+                        $timeout(function() {
+                            CartDetailsService.reloadItems = false;
+                        }, 1000);
                         return;
                     }
                     else{
@@ -1506,6 +1509,9 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                             scope.checkoutModalState = 3;
                             scope.failedOrderMessage = err.message;
                             CartDetailsService.reloadItems = true;
+                            $timeout(function() {
+                                CartDetailsService.reloadItems = false;
+                            }, 1000);
                             return;
                         }
                         else{
@@ -1549,6 +1555,9 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                                 scope.showTax = false;
                                 if(scope.refreshList){
                                     CartDetailsService.reloadItems = true;
+                                    $timeout(function() {
+                                        CartDetailsService.reloadItems = false;
+                                    }, 1000);
                                     scope.refreshList = false;
                                 }
                             // PaymentService.saveCartDetails(token, parseInt(scope.total * 100), function(data) {});
@@ -1871,6 +1880,9 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                             localStorageService.remove(orderCookieKey);
                             if(scope.refreshList){
                                 CartDetailsService.reloadItems = true;
+                                $timeout(function() {
+                                    CartDetailsService.reloadItems = false;
+                                }, 1000);
                                 scope.refreshList = false;
                             }
                         });
