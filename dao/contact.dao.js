@@ -972,9 +972,24 @@ var dao = {
                     // Tags append to existing contact if exists
                     
                     merged.set('tags', _.union(_existingTags, contact.get('tags') || []));
+					var updatDetails=['addresses','phones','websites'];
+					_.each(['addresses','phones','websites'],function(detail){
+						if(contact.get('details')[0][detail] && contact.get('details')[0][detail].length>0) {
+							if(existingContact.get('details')[0][detail] &&  existingContact.get('details')[0][detail].length>0) {
+							self.deepExtend(existingContact.get('details')[0][detail][0],
+									contact.get('details')[0][detail][0]);
+							}else{
+								existingContact.get('details')[0][detail] = [contact.get('details')[0][detail][0]];
+							}
+						}
 
-                    merged.set('details', _.union(existingContact.get('details'), contact.get('details')));
-                    merged.set('notes', _.union(existingContact.get('notes'), contact.get('notes')));
+					});
+					var companyName=contact.get('details')[0]['company'];
+					if(companyName && companyName!==null && companyName!==""){
+						existingContact.get('details')[0]['company']=companyName;
+					}
+					merged.set('details', existingContact.get('details'));
+					merged.set('notes', _.union(existingContact.get('notes'), contact.get('notes')));
                     
                     merged.set('siteActivity', _.union(existingContact.get('siteActivity'), contact.get('siteActivity')));
                     
@@ -1212,15 +1227,13 @@ var dao = {
         });
     },
 	deepExtend : function(destination, source) {
-		var self = this;
 		for (var property in source) {
-			if(! source[property] === null || source[property] === ""){
-				self.log.debug('>> property',property);
+			if(!( source[property] === null || source[property] === "")){
 				//self.log.debug(destination[property],'------',source[property]);
 				if (typeof source[property] === "object") {
 					destination[property] = destination[property] || {};
 					arguments.callee(destination[property], source[property]);
-				} else  {
+				} else{
 					destination[property] = source[property];
 				}
 			}
