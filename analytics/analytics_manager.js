@@ -312,8 +312,8 @@ module.exports = {
         var sort = {
             $sort:{'server_time_dt':1}
         };
-        stageAry.push(sort);
-        
+        //stageAry.push(sort);
+
         var filterStages = [];
         self._buildLookupAndFilterStages(accountId, userId, isAggregate, function(err, extraStages){
             if(err) {
@@ -344,27 +344,39 @@ module.exports = {
                     }
                 };
                 stageAry.push(group1);
+                //{"$group":{"_id":{"session_id":"$session_id","secondsAgo":{"$add":[{"$subtract":[{"$subtract":["$server_time_dt", new Date("1970-01-01")]},{"$mod":[{"$subtract":["$server_time_dt", new Date("1970-01-01")]},60000]}]}, new Date("1970-01-01")]}},"count":{"$sum":1}}},
+
+
+
+
+
+                var lookup = {"$lookup":{
+                    from: "session_events",
+                        localField: "_id.session_id",
+                        foreignField: "session_id",
+                        as: "session_event"
+                }};
+                stageAry.push(lookup);
+                var project2 = {$project:{_id:1, count:1, fingerprint: '$session_event.fingerprint'}};
+                stageAry.push(project2);
+
                 var group2 = {
                     $group:{
-                        _id: {secondsAgo:'$_id.secondsAgo', session_id:'$_id.session_id'},
-                        //_id: '$_id.secondsAgo',
-                        //count:{$sum:'$count'}
+                        _id: {secondsAgo:'$_id.secondsAgo', fingerprint:'$fingerprint'},
                         count:{$sum:1}
                     }
                 };
                 stageAry.push(group2);
-                var project = {
-                    $project:{
-                        _id: '$_id.secondsAgo',
-                        count:'$count'
-                    }
+                var group3 = {
+                    $group:{_id:'$_id.secondsAgo', count:{$sum:'$count'}}
                 };
-                stageAry.push(project);
+                
+                stageAry.push(group3);
                 var sort = {
                     $sort:{'_id':-1}
                 };
                 stageAry.push(sort);
-                //self.log.debug('stageAry:', stageAry);
+                self.log.debug('stageAry:', JSON.stringify(stageAry));
                 dao.aggregateWithCustomStages(stageAry, $$.m.PingEvent, function(err, value) {
                     if(err) {
                         self.log.error('Error getting analytics:', err);
