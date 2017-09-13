@@ -128,17 +128,17 @@
                     <form>
                         <div class="col-sm-6 col-xs-12">
                             <div class="form-group">
-                                <label>Title</label>
+                                <label>Default Title</label>
                                 <span tooltip-placement="right" tooltip="Title will appear in search engine results, browser tab and bookmarks."><i class="fa fa-info-circle" /></span>
                                 <input type="text" class="form-control" ng-model="website.title" />
                             </div>
                             <div class="form-group">
-                                <label>Description</label>
+                                <label>Default Description</label>
                                 <span tooltip-placement="right" tooltip="Description will appear in search engine results."><i class="fa fa-info-circle" /></span>
                                 <textarea type="text" class="form-control" ng-model="website.seo.description"></textarea>
                             </div>
                             <div class="form-group">
-                                <label>Keywords</label>
+                                <label>Default Keywords</label>
                                 <span tooltip-placement="right" tooltip="Use a comma to separate keywords for search engine indexing."><i class="fa fa-info-circle" /></span>
                                 <tags-input min-length="1" ng-model="website.seo.keywords"></tags-input>
                             </div>
@@ -270,7 +270,7 @@
                         <div class="form-group">
                             <label>Blog template max width</label>
                             <span tooltip-placement="bottom" tooltip="Set max width of blog template"><i class="fa fa-info-circle" /></span>
-                            
+
                             <select ng-model="website.settings.defaultBlogTemplateWidth" class="form-control" ng-options="option.value as option.label for option in blogListResolutionOptions">
                             <option value="">--Select--</option>
                             </select>
@@ -280,7 +280,7 @@
                     </form>
                     <div class="clearfix"></div>
                     <form class="col-sm-6 form-horizontal">
-                            
+
                             <div class="form-group ssb-spectrum-color-picker-small">
                                 <div class="ssb-spectrum-color-picker-background-container">
                                     <spectrum-colorpicker class="ssb-spectrum-color-picker-background" format="'rgb'" options="spectrum.options" ng-model="website.settings.defaultBlogTemplateBgColor"></spectrum-colorpicker>
@@ -388,17 +388,17 @@
 
                 <tab heading="Shipping Charges">
                     <form class="col-sm-6 form-horizontal">
-                        <div class="form-group">                            
+                        <div class="form-group">
                             <label>Enable Shipping Charges</label>
                             <span tooltip-placement="bottom" tooltip="Enable Shipping Charges"><i class="fa fa-info-circle" /></span>
-                            <switch ng-model="account.commerceSettings.shipping.enabled" class="pull-right" ng-change="setDefaultShipping(account.commerceSettings.shipping)"></switch>                        
+                            <switch ng-model="account.commerceSettings.shipping.enabled" class="pull-right" ng-change="setDefaultShipping(account.commerceSettings.shipping)"></switch>
                         </div>
-                        <div class="form-group" ng-if="account.commerceSettings.shipping.enabled"> 
+                        <div class="form-group" ng-if="account.commerceSettings.shipping.enabled">
                             <div class="block">
                                 <label>Calculate Shipping Charges based on:</label>
                                 <span tooltip-placement="right" tooltip="Calculate Shipping Charges"><i class="fa fa-info-circle" /></span>
                             </div>
-                            
+
                             <label class="radio-inline">
                                 <input type="radio" id="perItem" value="item" name="shippingCharges" ng-model="account.commerceSettings.shipping.chargeType"> Item
                             </label>
@@ -412,7 +412,7 @@
                             <div class="input-group">
                                 <span class="input-group-addon">$</span>
                                 <input type="text" name="shipping_charge" class="form-control" ng-model="account.commerceSettings.shipping.charge" ng-currency max="9999999999" min="0" currency-symbol=""/>
-                            </div>                       
+                            </div>
                         </div>
                         <div class="clearfix"></div>
                     </form>
