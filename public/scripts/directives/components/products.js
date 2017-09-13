@@ -181,8 +181,8 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
              * - get all products, set originalProducts obj and filter
              */
 
-            function getActiveProducts(){
-                ProductService.getActiveProducts(function(data) {
+            function getActiveProducts(reload){
+                ProductService.getActiveProducts(reload, function(data) {
                 
                     scope.originalProducts = data;
                     if(productComponentCookieData && productComponentCookieData.productSortOrder){
@@ -1490,6 +1490,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                         if(err){
                             scope.checkoutModalState = 3;
                             scope.failedOrderMessage = err.message;
+                            getActiveProducts(true);
                             return;
                         }
                         else{
@@ -1532,7 +1533,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                                 CartDetailsService.showTax = false;
                                 scope.showTax = false;
                                 if(scope.refreshList){
-                                    getActiveProducts();
+                                    getActiveProducts(true);
                                     scope.refreshList = false;
                                 }
                             // PaymentService.saveCartDetails(token, parseInt(scope.total * 100), function(data) {});
@@ -1854,7 +1855,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                             }
                             localStorageService.remove(orderCookieKey);
                             if(scope.refreshList){
-                                getActiveProducts();
+                                getActiveProducts(true);
                                 scope.refreshList = false;
                             }
                         });
