@@ -626,7 +626,7 @@ module.exports = {
 
             },
             // Update auto inactive products to inactive
-            function (account, savedOrder, contact, callback) {
+            function updateAutoInactiveProducts(account, savedOrder, contact, callback) {
                 log.debug(accountId, userId, 'Updating auto inactive products to inactive');
 
                 var items = savedOrder.get('line_items');
@@ -1387,6 +1387,48 @@ module.exports = {
                 });
 
             },
+            // Update auto inactive products to inactive
+            function updateAutoInactiveProducts(account, savedOrder, contact, callback) {
+                log.debug(accountId, userId, 'Updating auto inactive products to inactive');
+
+                var items = savedOrder.get('line_items');
+                var autoInactiveItems = _.filter(items, function(item){
+                    return item.status === 'auto_inactive'
+                })
+                if(autoInactiveItems.length){
+                    self.log.debug('autoInactiveItems:', autoInactiveItems);
+                    var productIds = _.pluck(autoInactiveItems, "product_id");
+                    self.log.debug('Found productIds:', productIds);
+                    self.log.debug('accountId:', accountId);
+                    var query = {accountId:accountId, _id: {'$in': productIds}};
+
+                    productDao.findMany(query, $$.m.ssb.Product, function(err, products){
+                        if(err) {
+                            self.log.error(accountId, userId, 'Error finding products:', err);
+                            callback(err);
+                        } else {
+                            self.log.debug('Found:', products);
+                            _.each(products, function(product){                    
+                                product.set('status', 'inactive');
+                            });
+                            productDao.batchUpdate(products, $$.m.ssb.Product, function(err, updatedProducts){
+                                if(err) {
+                                    self.log.error(accountId, userId, 'Error updating products:', err);
+                                    callback(err);
+                                }
+                                else{
+                                    callback(null, account, savedOrder, contact);
+                                }
+                            });
+                        }
+                    });
+
+                }
+                else{
+                    callback(null, account, savedOrder, contact);
+                }
+
+            },
             //send new order email
             function (account, updatedOrder, contact, callback) {
                 log.debug(accountId, userId, 'Sending new order email');
@@ -1910,7 +1952,7 @@ module.exports = {
                         callback(null, savedOrder);
                     }
                 });
-            }
+            }            
         ], function done(err, result) {
             if (err) {
                 log.error(accountId, userId, 'Error creating order: ' + err);
@@ -2620,6 +2662,46 @@ module.exports = {
                     callback(err, order, productAry,accountId,userId);
                 });
             },
+            // Update auto inactive products to inactive
+            function updateAutoInactiveProducts(order, productAry, accountId, userId, callback) {
+                log.debug(accountId, userId, 'Updating auto inactive products to inactive');
+
+                var items = order.get('line_items');
+                var autoInactiveItems = _.filter(items, function(item){
+                    return item.status === 'auto_inactive'
+                })
+                if(autoInactiveItems.length){
+                    self.log.debug('autoInactiveItems:', autoInactiveItems);
+                    var productIds = _.pluck(autoInactiveItems, "product_id");
+                    self.log.debug('Found productIds:', productIds);
+                    self.log.debug('accountId:', accountId);
+                    var query = {accountId:accountId, _id: {'$in': productIds}};
+
+                    productDao.findMany(query, $$.m.ssb.Product, function(err, products){
+                        if(err) {
+                            self.log.error(accountId, userId, 'Error finding products:', err);
+                            callback(err);
+                        } else {
+                            self.log.debug('Found:', products);
+                            _.each(products, function(product){                    
+                                product.set('status', 'inactive');
+                            });
+                            productDao.batchUpdate(products, $$.m.ssb.Product, function(err, updatedProducts){
+                                if(err) {
+                                    self.log.error(accountId, userId, 'Error updating products:', err);
+                                    callback(err);
+                                }
+                                else{
+                                    callback(null, order, productAry, accountId, userId);
+                                }
+                            });
+                        }
+                    });
+                }
+                else{
+                    callback(err, order, productAry, accountId, userId);
+                }
+            }
             function (order,productAry,accountId,userId, callback) {
                 log.debug(accountId, userId, 'getting contact');
                 contactDao.getById(order.get('customer_id'), $$.m.Contact, function (err, contact) {
