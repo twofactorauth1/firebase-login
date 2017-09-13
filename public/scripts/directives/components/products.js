@@ -85,7 +85,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                 if(scope.cartDetails && scope.cartDetails.length)
                     CartDetailsService.calculateTotalCharges(scope.cart_discount, scope.percent_off);
                 if(CartDetailsService.reloadItems){
-                    getActiveProducts();
+                    getActiveProducts(true);
                 }
             }, true);
 
@@ -183,7 +183,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
              * - get all products, set originalProducts obj and filter
              */
 
-            function getActiveProducts(){
+            function getActiveProducts(reload){
                 ProductService.getActiveProducts(CartDetailsService.reloadItems, function(data) {
                 
                     scope.originalProducts = data;
@@ -196,7 +196,8 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                     filterProducts(scope.originalProducts, function() {
                         scope.pageChanged(1);
                     });
-                    cookieProcessFn();  
+                    if(!reload)
+                        cookieProcessFn();  
                 });
             }
 
