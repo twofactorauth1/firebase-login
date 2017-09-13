@@ -963,8 +963,9 @@ var dao = {
                     self.log.warn('Merging contact with id: ' + existingId);
                     contact.set('created', existingContact.get('created'));
                     self.log.warn('Here is what we have:', contact);
-                    var merged = existingContact;
+                    var merged = new $$.m.Contact(JSON.parse(JSON.stringify(existingContact)));
 					self.deepExtend(merged, contact);
+
                     merged.set('_id', existingId);
                     self.log.warn('Here is what we have now:', merged);
                     //union details, notes, siteActivity, tags
@@ -1211,8 +1212,11 @@ var dao = {
         });
     },
 	deepExtend : function(destination, source) {
+		var self = this;
 		for (var property in source) {
-			if(source[property] !== null){
+			if(! source[property] === null || source[property] === ""){
+				self.log.debug('>> property',property);
+				//self.log.debug(destination[property],'------',source[property]);
 				if (typeof source[property] === "object") {
 					destination[property] = destination[property] || {};
 					arguments.callee(destination[property], source[property]);
@@ -1222,8 +1226,6 @@ var dao = {
 			}
 		}
 	}
-
-
 };
 
 dao = _.extend(dao, baseDao.prototype, dao.options).init();
