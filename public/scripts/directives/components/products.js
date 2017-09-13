@@ -1164,43 +1164,52 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                     };
                     order.line_items.push(_item);
                 });
-
-                OrderService.createPaypalOrder(order, function(data) {
-                    scope.order = data;
-                    scope.showPaypalLoading = false;
-                    if (data && !data._id) {
-                        var failedOrderMessage = 'Error in order processing';
-                        console.log(failedOrderMessage);
-                        if (data.message)
-                            failedOrderMessage = data.message;
+                OrderService.checkForInactiveProducts(order, function(data, err){
+                    if(err){
                         scope.checkoutModalState = 6;
-                        scope.failedOrderMessage = failedOrderMessage;
+                        scope.failedOrderMessage = err.message;
+                        CartDetailsService.reloadItems = true;
                         return;
                     }
-                    console.log('order, ', order);
-                    scope.refreshList = false;
-                    if(CartDetailsService.items){
-                        var autoInactiveItems = _.filter(CartDetailsService.items, function(item){
-                            return item.status === 'auto_inactive'
-                        })
-                        if(autoInactiveItems.length){
-                            // refresh products
-                            scope.refreshList = true;
-                        }
+                    else{
+                        OrderService.createPaypalOrder(order, function(data) {
+                            scope.order = data;
+                            scope.showPaypalLoading = false;
+                            if (data && !data._id) {
+                                var failedOrderMessage = 'Error in order processing';
+                                console.log(failedOrderMessage);
+                                if (data.message)
+                                    failedOrderMessage = data.message;
+                                scope.checkoutModalState = 6;
+                                scope.failedOrderMessage = failedOrderMessage;
+                                return;
+                            }
+                            console.log('order, ', order);
+                            scope.refreshList = false;
+                            if(CartDetailsService.items){
+                                var autoInactiveItems = _.filter(CartDetailsService.items, function(item){
+                                    return item.status === 'auto_inactive'
+                                })
+                                if(autoInactiveItems.length){
+                                    // refresh products
+                                    scope.refreshList = true;
+                                }
+                            }
+                            scope.checkoutModalState = 7;
+                            localStorageService.set(orderCookieKey, data);
+                            scope.paypalKey = data.payment_details.payKey;
+                            CartDetailsService.items = [];
+                            scope.cartDetails = [];
+
+                            CartDetailsService.subTotal = 0;
+                            CartDetailsService.totalTax = 0;
+                            CartDetailsService.total = 0;
+                            localStorageService.remove(cookieKey);
+
+                            // PaymentService.saveCartDetails(token, parseInt(scope.total * 100), function(data) {});
+                        });
                     }
-                    scope.checkoutModalState = 7;
-                    localStorageService.set(orderCookieKey, data);
-                    scope.paypalKey = data.payment_details.payKey;
-                    CartDetailsService.items = [];
-                    scope.cartDetails = [];
-
-                    CartDetailsService.subTotal = 0;
-                    CartDetailsService.totalTax = 0;
-                    CartDetailsService.total = 0;
-                    localStorageService.remove(cookieKey);
-
-                    // PaymentService.saveCartDetails(token, parseInt(scope.total * 100), function(data) {});
-                });
+                })
             };
 
             scope.makeCartPayment = function() {
