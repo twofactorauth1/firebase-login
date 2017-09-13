@@ -309,6 +309,11 @@ module.exports = {
             match.$match.orgId = orgId;
         }
         stageAry.push(match);
+        var sort = {
+            $sort:{'server_time_dt':1}
+        };
+        stageAry.push(sort);
+        
         var filterStages = [];
         self._buildLookupAndFilterStages(accountId, userId, isAggregate, function(err, extraStages){
             if(err) {
@@ -341,7 +346,7 @@ module.exports = {
                 stageAry.push(group1);
                 var group2 = {
                     $group:{
-                        _id: {secondsAgo:'$_id.secondsAgo', session_id:'$_id.sessionId'},
+                        _id: {secondsAgo:'$_id.secondsAgo', session_id:'$_id.session_id'},
                         //_id: '$_id.secondsAgo',
                         //count:{$sum:'$count'}
                         count:{$sum:1}
@@ -450,6 +455,13 @@ module.exports = {
 
 
         stageAry.push(match);
+        var group = {
+            $group:{
+                _id: '$fingerprint',
+                session_events:{$push:'$$ROOT'}
+            }
+        };
+        stageAry.push(group);
         self._addAccountFilterByID(accountId, userId, isAggregate, match, function(err, newMatch){
             dao.aggregateWithCustomStages(stageAry, $$.m.SessionEvent, function(err, results) {
                 if(err) {
@@ -458,7 +470,8 @@ module.exports = {
                 } else {
                     var _resultDetails = [];
 
-                    async.eachLimit(results, 10, function(sessionEvent, cb){
+                    async.eachLimit(results, 10, function(records, cb){
+                        var sessionEvent = records.session_events[0];
                         var query = {session_id:sessionEvent.session_id};
                         var skip = 0;
                         var limit = 1;
