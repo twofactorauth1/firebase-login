@@ -18,6 +18,7 @@
             </div>
         </div>
     </div>
+
     <div st-table="vm.displayedUsers" st-safe-src="vm.state.filterUsers" st-filtered-collection>
         <tabset class="tabbable">
             <tab heading="Users">
@@ -109,6 +110,14 @@
             <tab heading="Daily Active Users" ng-click="vm.reflowCharts()">
 
                 <div class="row">
+                    <div class="pull-right margin-bottom-20" ng-class="{'col-xs-12 col-sm-3': app.layout.isSidebarClosed, 'col-xs-12 col-sm-4': !app.layout.isSidebarClosed}">
+                        <div class="input-group">
+                            <label class="sr-only">Date Range</label>
+                            <div class="input-group-addon"><i class="fa fa-calendar"></i></div>
+                            <input date-range-picker class="form-control deshboard-date-picker date-picker" type="text" ng-model="vm.selectedDate" options="vm.pickerOptions" />
+                            <span class="input-group-addon" ng-click="vm.displayDatePicker()"><i class="fa fa-chevron-down fa-fw"></i></span>
+                        </div>
+                    </div>
                     <div class="col-sm-12">
                         <div class="panel panel-white" id="overview" ng-class="{'load1 csspinner': !vm.activeUserConfig.options}">
                             <div class="panel-heading border-light">
