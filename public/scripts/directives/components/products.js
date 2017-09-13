@@ -14,7 +14,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
             scope.shippingStates = shippingStates;
             scope.detailedDescription = false;
             //cookie data fetch
-
+            CartDetailsService.reloadItems = false;
             var cookieKey = ""; //'cart_cookie_' + scope.component._id;
             var orderCookieKey = ""; //'order_cookie_' + scope.component._id;
             var cookieData = ""; //localStorageService.get(cookieKey);
@@ -84,7 +84,9 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                 scope.cartTax = CartDetailsService.cartTax;
                 if(scope.cartDetails && scope.cartDetails.length)
                     CartDetailsService.calculateTotalCharges(scope.cart_discount, scope.percent_off);
-
+                if(CartDetailsService.reloadItems){
+                    getActiveProducts();
+                }
             }, true);
 
 
@@ -181,8 +183,8 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
              * - get all products, set originalProducts obj and filter
              */
 
-            function getActiveProducts(reload){
-                ProductService.getActiveProducts(reload, function(data) {
+            function getActiveProducts(){
+                ProductService.getActiveProducts(CartDetailsService.reloadItems, function(data) {
                 
                     scope.originalProducts = data;
                     if(productComponentCookieData && productComponentCookieData.productSortOrder){
@@ -1490,7 +1492,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                         if(err){
                             scope.checkoutModalState = 3;
                             scope.failedOrderMessage = err.message;
-                            getActiveProducts(true);
+                            CartDetailsService.reloadItems = true;
                             return;
                         }
                         else{
@@ -1533,7 +1535,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                                 CartDetailsService.showTax = false;
                                 scope.showTax = false;
                                 if(scope.refreshList){
-                                    getActiveProducts(true);
+                                    CartDetailsService.reloadItems = true;
                                     scope.refreshList = false;
                                 }
                             // PaymentService.saveCartDetails(token, parseInt(scope.total * 100), function(data) {});
@@ -1855,7 +1857,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                             }
                             localStorageService.remove(orderCookieKey);
                             if(scope.refreshList){
-                                getActiveProducts(true);
+                                CartDetailsService.reloadItems = true;
                                 scope.refreshList = false;
                             }
                         });
