@@ -84,12 +84,16 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                 scope.cartTax = CartDetailsService.cartTax;
                 if(scope.cartDetails && scope.cartDetails.length)
                     CartDetailsService.calculateTotalCharges(scope.cart_discount, scope.percent_off);
-                if(CartDetailsService.reloadItems){
-                    getActiveProducts(true);
-                }
+                
             }, true);
-
-
+            
+            scope.$watch(function() {
+                return CartDetailsService.reloadItems;
+            }, function(val) {
+                console.log('watch');
+                if(val)
+                    getActiveProducts(true);                
+            });
 
             scope.setInnerHeight = function(){
                 var styleString = " ";
