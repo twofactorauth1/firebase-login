@@ -103,6 +103,7 @@
 			$scope.analyticsAccount = account;
 			$scope.runAnalyticsReports();
 			$scope.platformTraffic();
+            $scope.platformTrafficDetails();
 		});
 
 		function loadLivePlatformLocationChart(data) {
@@ -160,6 +161,40 @@
 			});
 		};
 
+        $scope.platformTrafficDetails = function() {
+            ChartAnalyticsService.getPlatformTrafficDetails(function (liveVisitorDetails) {
+                $scope.liveVisitorDetails = liveVisitorDetails;
+                if(liveVisitorDetails && liveVisitorDetails.length){
+                    $scope.setActiveVisitorIndex(0, true);
+                }
+                $timeout($scope.updatePlatformTrafficDetails, 15000);
+            });
+        };
+        $scope.setActiveVisitorIndex = function(index, reload){
+            if(reload && $scope.activeVisitorDetail){
+                var selectedVisitorDetail = _.findWhere($scope.liveVisitorDetails, {
+                    _id: $scope.activeVisitorDetail._id
+                });
+                if(selectedVisitorDetail){
+                    var selectedVisitorIndex = _.findIndex($scope.liveVisitorDetails, selectedVisitorDetail);
+                    if(selectedVisitorIndex > -1){
+                        $scope.selectedVisitorIndex = selectedVisitorIndex;
+                        $scope.activeVisitorDetail = $scope.liveVisitorDetails[selectedVisitorIndex];
+                    } else{
+                        $scope.selectedVisitorIndex = index;
+                        $scope.activeVisitorDetail = $scope.liveVisitorDetails[index];
+                    }
+                } else{
+                    $scope.selectedVisitorIndex = index;
+                    $scope.activeVisitorDetail = $scope.liveVisitorDetails[index];
+                }
+            } else{
+                $scope.selectedVisitorIndex = index;
+                $scope.activeVisitorDetail = $scope.liveVisitorDetails[index];
+            }
+
+        }
+
 		$scope.updatePlatformTraffic = function () {
 			ChartAnalyticsService.getPlatformTraffic(function (platformData) {
 				var chart = $('#live-platform-traffic-chart').highcharts(),
@@ -176,6 +211,22 @@
 				$timeout($scope.updatePlatformTraffic, 15000);
 			});
 		};
+
+        $scope.updatePlatformTrafficDetails = function() {
+            ChartAnalyticsService.getPlatformTrafficDetails(function (liveVisitorDetails) {
+                $scope.liveVisitorDetails = liveVisitorDetails;
+                if(liveVisitorDetails && liveVisitorDetails.length){
+                    $scope.setActiveVisitorIndex(0, true);
+                }
+                $timeout($scope.updatePlatformTrafficDetails, 15000);
+            });
+        };
+
+        $scope.convertUtcToLocal = function(_date){
+            if(_date){
+                return moment.utc(_date).local().format('YYYY-MM-DD HH:mm:ss')
+            }
+        };
 
 		$scope.runAnalyticsReports = function () {
 			console.log('runAnalyticsReports');
@@ -996,6 +1047,7 @@
 				console.log("Refreshing");
 				$scope.runAnalyticsReports();
 				$scope.platformTraffic();
+                $scope.platformTrafficDetails();
 			}, $scope.analyticsRefreshAfterTime);
 		}
 

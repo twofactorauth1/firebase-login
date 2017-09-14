@@ -13,6 +13,7 @@
         var adminAnalyticsAPIUrl = '/api/1.0/analytics/admin/reports';
         var customerAnalyticsAPIUrl = '/api/1.0/analytics/customer/reports';
         var platformTrafficAPIUrl = '/api/1.0/analytics/admin/live';
+        var platformTrafficDetailsAPIUrl = '/api/1.0/analytics/admin/liveDetails';
         var baseLiveTrafficAPIUrl = '/api/1.0/analytics/live';
 
         var frontrunnerSitesPageviewsAPIUrl = '/api/1.0/analytics/admin/pageViewPerformance';
@@ -20,6 +21,7 @@
         saService.runAdminReports = runAdminReports;
         saService.runCustomerReports = runCustomerReports;
         saService.runPlatformTraffic = runPlatformTraffic;
+        saService.runPlatformTrafficDetails = runPlatformTrafficDetails;
         saService.runSiteAnlyticsTraffic = runSiteAnlyticsTraffic;
         saService.getFrontrunnerSitesPageviews = getFrontrunnerSitesPageviews;
         saService.runIndividualReports = runIndividualReports;
@@ -266,6 +268,17 @@
                 console.error('SiteAnalyticsService runPlatformTraffic error:', JSON.stringify(err));
             }
             return saRequest($http.get(platformTrafficAPIUrl).success(success).error(error));
+        }
+
+        function runPlatformTrafficDetails(fn) {
+            function success(data) {
+                fn(data);
+            }
+
+            function error(err) {
+                console.error('SiteAnalyticsService runPlatformTraffic error:', JSON.stringify(err));
+            }
+            return saRequest($http.get(platformTrafficDetailsAPIUrl).success(success).error(error));
         }
 
 

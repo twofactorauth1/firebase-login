@@ -367,7 +367,7 @@ module.exports = {
                     $sort:{'_id':-1}
                 };
                 stageAry.push(sort);
-                self.log.debug('stageAry:', JSON.stringify(stageAry));
+                //self.log.debug('stageAry:', JSON.stringify(stageAry));
                 dao.aggregateWithCustomStages(stageAry, $$.m.PingEvent, function(err, value) {
                     if(err) {
                         self.log.error('Error getting analytics:', err);
@@ -430,8 +430,118 @@ module.exports = {
 
     },
 
-
     getLiveVisitorDetails: function(accountId, userId, lookBackInMinutes, isAggregate, orgId, fn) {
+        var self = this;
+        self.log = _log;
+        self.log.trace(accountId, userId, '>> getLiveVisitorDetails');
+
+
+        var targetDate = moment.utc().subtract(lookBackInMinutes, 'minutes');
+        var rightnow = moment.utc().subtract(1, 'minutes');
+        //self.log.debug('targetDate:', targetDate.toDate());
+        var stageAry = [];
+        var match = {
+            $match:{
+                accountId:accountId,
+                server_time_dt:{
+                    $gte:targetDate.toDate()
+                }
+            }
+        };
+        if(isAggregate === true) {
+            delete match.$match.accountId;
+        }
+        if(orgId !== null) {
+            match.$match.orgId = orgId;
+        }
+
+
+        stageAry.push(match);
+        self._addAccountFilterByID(accountId, userId, isAggregate, match, function(err, newMatch){
+            var lookup = {
+                $lookup: {
+                    from: "page_events",
+                    localField: "session_id",
+                    foreignField: "session_id",
+                    as: "page_events"
+                }
+            };
+            stageAry.push(lookup);
+            var group = {
+                $group:{
+                    _id: '$fingerprint',
+                    sessions:{$push:'$$ROOT'}
+                }
+            };
+            stageAry.push(group);
+            dao.aggregateWithCustomStages(stageAry, $$.m.SessionEvent, function(err, results) {
+                if(err) {
+                    self.log.error('Error getting analytics:', err);
+                    fn(err);
+                } else {
+                    self.log.trace('results:', JSON.stringify(results));
+                    var _resultDetails = [];
+                    _.each(results, function(result) {
+                        var _result = {
+                            _id: result._id,
+                            session_id:'',
+                            ip_address:null,
+                            maxmind:'',
+                            user_agent:'',
+                            timestamp:null,
+                            server_time:null,
+                            pageEvents:[]
+                        };
+                        _.each(result.sessions, function(session){
+
+                            if(_result.session_id !== session.session_id + ' ') {
+                                _result.session_id += session.session_id + ' ';//TODO: fix this
+                            }
+                            if(!_result.ip_address) {
+                                _result.ip_address = session.ip_address;
+                            }
+                            if(_result.maxmind !== session.maxmind) {
+                                _result.maxmind = session.maxmind;
+                            }
+                            if(_result.user_agent !== session.user_agent) {
+                                _result.user_agent += session.user_agent;
+                            }
+                            if(!_result.timestamp) {
+                                _result.timestamp = session.timestamp;
+                            }
+                            if(!_result.server_time) {
+                                _result.server_time = session.server_time;
+                            }
+                            if(session.page_events) {
+                                _result.pageEvents = _result.pageEvents.concat(session.page_events);
+                            }
+
+                        });
+                        var _pageEvents = [];
+                        _.each(_result.pageEvents, function(pageEvent){
+                            var obj = {};
+                            if(pageEvent.server_time_dt) {
+                                obj.server_time_dt = pageEvent.server_time_dt;
+                            }
+                            if(pageEvent.url && pageEvent.url.source) {
+                                obj.pageRequested = pageEvent.url.source;
+                            }
+                            _pageEvents.push(obj);
+                        });
+                        _result.pageEvents = _pageEvents;
+                        _resultDetails.push(_result);
+                    });
+
+                    _resultDetails = _.sortBy(_resultDetails, function(result){return -result.server_time;});
+                    self.log.trace(accountId, userId, '<< getLiveVisitorDetails');
+                    fn(err, _resultDetails);
+                }
+            });
+        });
+
+    },
+
+    _getLiveVisitorDetails: function(accountId, userId, lookBackInMinutes, isAggregate, orgId, fn) {
         var self = this;
         self.log = _log;
         self.log.trace(accountId, userId, '>> getLiveVisitorDetails');

@@ -1,4 +1,4 @@
-<div ng-controller="customerAnalyticsCtrl" class="site-analytics">
+<div ng-controller="customerAnalyticsCtrl" class="site-analytics platform-analytics-container">
     <!-- start: PAGE TITLE -->
     <section id="page-title" class="padding-top-15 padding-bottom-15">
         <div class="row">
@@ -30,17 +30,105 @@
     <div class="row">
         <div class="col-sm-12">
             <div class="panel panel-white margin-top-15" id="liveTraffic" ng-class="{'load1 csspinner': !livePlatformTrafficConfig.options}">
-                <div class="panel-heading border-light">
-                    <h4 class="panel-title text-primary"><span class="text-bold">Live</span> Visitors (per minute, prior hour)</h4>
-                </div>
-                <div class="panel-body" style="position: relative" ng-if="livePlatformTrafficConfig">
-                    <div class="height-215 col-sm-8">
-                        <highchart config="livePlatformTrafficConfig" id="live-platform-traffic-chart"></highchart>
-                    </div>
-                    <div class="height-215 col-sm-4">
-                        <div id="live-platform-visitor-locations"></div>
-                    </div>
-                </div>
+                <tabset class="tabbable tabs-left margin-bottom-0">
+                    <tab>
+                        <tab-heading>
+                            <i class="ti-bar-chart"></i>
+                        </tab-heading>
+
+                        <div>
+                            <div class="" id="overview"  ng-class="{'load1 csspinner': !livePlatformTrafficConfig.options}">
+                                <div class="panel-heading border-light live-overview-container">
+                                    <h4 class="panel-title text-primary"><span class="text-bold">Live</span> Visitors (per minute, prior hour)</h4>
+                                </div>
+                                <div class="panel-body" style="position: relative" >
+                                    <div class="height-215 col-sm-8" ng-if="livePlatformTrafficConfig">
+                                        <highchart config="livePlatformTrafficConfig" id="live-platform-traffic-chart"></highchart>
+                                    </div>
+                                    <div class="height-215 col-sm-4">
+                                        <div id="live-platform-visitor-locations"></div>
+                                    </div>
+
+                                </div>
+
+                                <div class="panel-footer border-light">
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </tab>
+                    <tab>
+                        <tab-heading>
+                            <i class="ti-user"></i>
+                        </tab-heading>
+                        <div class="panel-heading border-light live-overview-container">
+                            <h4 class="panel-title text-primary"><strong>Live</strong> Visitors Details</h4>
+                        </div>
+                        <div class="panel-body" style="position: relative" >
+                            <div class="live-visitor-details" ng-if="liveVisitorDetails.length">
+                                <!-- Live visitor details- -->
+
+                                <div class="col-sm-5 visitor-left-pane">
+                                    <ul class="">
+                                        <li ng-class="{'active-visitor-detail': selectedVisitorIndex === $index}" ng-repeat="visitorDetail in liveVisitorDetails track by $index"  ng-click ="setActiveVisitorIndex($index)" class="cursor-pointer">
+                                            <div class="col-xs-4 visitor-address">{{visitorDetail.ip_address}}</div>
+                                            <div class="col-xs-8 visitor-timestamp">{{convertUtcToLocal(visitorDetail.timestamp)}}</div>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="col-sm-7 visitor-right-pane">
+                                    <ul>
+
+                                        <li>
+                                            <div class="col-xs-4"><strong>IP Address</strong></div>
+                                            <div class="col-xs-8">{{activeVisitorDetail.ip_address}}</div>
+                                        </li>
+                                        <li ng-if="activeVisitorDetail.maxmind.continent">
+                                            <div class="col-xs-4"><strong>Continent</strong></div>
+                                            <div class="col-xs-8">{{activeVisitorDetail.maxmind.continent}}</div>
+                                        </li>
+                                        <li ng-if="activeVisitorDetail.maxmind.country">
+                                            <div class="col-xs-4"><strong>Country</strong></div>
+                                            <div class="col-xs-8">{{activeVisitorDetail.maxmind.country}}</div>
+                                        </li>
+                                        <li ng-if="activeVisitorDetail.maxmind.province">
+                                            <div class="col-xs-4"><strong>State</strong></div>
+                                            <div class="col-xs-8">{{activeVisitorDetail.maxmind.province}}</div>
+                                        </li>
+                                        <li ng-if="activeVisitorDetail.maxmind.city">
+                                            <div class="col-xs-4"><strong>City</strong></div>
+                                            <div class="col-xs-8">{{activeVisitorDetail.maxmind.city}}</div>
+                                        </li>
+                                        <li ng-if="activeVisitorDetail.maxmind.postal_code">
+                                            <div class="col-xs-4"><strong>Postal Code</strong></div>
+                                            <div class="col-xs-8">{{activeVisitorDetail.maxmind.postal_code}}</div>
+                                        </li>
+                                        <li>
+                                            <div class="col-xs-4"><strong>Browser</strong></div>
+                                            <div class="col-xs-8">{{activeVisitorDetail.user_agent.browser.name}} {{activeVisitorDetail.user_agent.browser.version}}</div>
+                                        </li>
+                                        <li>
+                                            <div class="col-xs-4"><strong>OS Details</strong></div>
+                                            <div class="col-xs-8">{{activeVisitorDetail.user_agent.os.name}} {{activeVisitorDetail.user_agent.os.version}}</div>
+                                        </li>
+                                    </ul>
+                                    <hr>
+                                    <ul class="page-events">
+                                        <li ng-repeat="pageEvent in activeVisitorDetail.pageEvents | orderBy:'-pageTime'">
+                                            <div class="col-xs-4">{{convertUtcToLocal(pageEvent.pageTime)}}</div>
+                                            <div class="col-xs-8"><span class="text-adjust inline-block" tooltip-placement="top" tooltip="{{pageEvent.pageRequested}}">{{pageEvent.pageRequested}}</span></div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <h3 ng-if="!liveVisitorDetails.length" class="center margin-top-30">
+                                No details found
+                            </h3>
+                        </div>
+                    </tab>
+                </tabset>
+
             </div>
         </div>
     </div>
