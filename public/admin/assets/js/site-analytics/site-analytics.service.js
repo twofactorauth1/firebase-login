@@ -39,6 +39,8 @@
         saService.getRevenue = getRevenue;
         saService.getOS = getOS;
         saService.getEmails = getEmails;
+        saService.getUserTopSearches= getUserTopSearches;
+        saService.getMostActiveUsers = getMostActiveUsers;
         saService.loading = {value:0};
 
 
@@ -115,6 +117,14 @@
         }
         function getEmails(startDate, endDate, accountId, isAdmin, isCustomer, fn) {
             return runSingleReport(startDate, endDate, accountId, isAdmin, isCustomer, 'emails', fn);
+        }
+
+        function getUserTopSearches(startDate, endDate, accountId, isAdmin, isCustomer, fn) {
+            return runSingleReport(startDate, endDate, accountId, isAdmin, isCustomer, 'topSearches', fn);
+        }
+
+        function getMostActiveUsers(startDate, endDate, accountId, isAdmin, isCustomer, fn) {
+            return runSingleReport(startDate, endDate, accountId, isAdmin, isCustomer, 'mostActiveUsers', fn);
         }
 
         function runSingleReport(startDate, endDate, accountId, isAdmin, isCustomer, reportName, fn) {

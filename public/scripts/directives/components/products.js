@@ -83,13 +83,17 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                 scope.shippingTax = CartDetailsService.shippingTax;
                 scope.cartTax = CartDetailsService.cartTax;
                 if(scope.cartDetails && scope.cartDetails.length)
-                    CartDetailsService.calculateTotalCharges(scope.cart_discount, scope.percent_off);
-                if(CartDetailsService.reloadItems){
-                    getActiveProducts(true);
-                }
-            }, true);
+                    CartDetailsService.calculateTotalCharges(scope.cart_discount, scope.percent_off);                
+            }, true)
 
 
+            scope.$watch(function() {
+                return CartDetailsService.reloadItems;
+            }, function(val) {
+                console.log('watch');
+                if(val)
+                    getActiveProducts(true);                
+            });
 
             scope.setInnerHeight = function(){
                 var styleString = " ";
@@ -1170,6 +1174,9 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                         scope.checkoutModalState = 6;
                         scope.failedOrderMessage = err.message;
                         CartDetailsService.reloadItems = true;
+                        $timeout(function() {
+                            CartDetailsService.reloadItems = false;
+                        }, 1000);
                         return;
                     }
                     else{
@@ -1503,6 +1510,9 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                             scope.checkoutModalState = 3;
                             scope.failedOrderMessage = err.message;
                             CartDetailsService.reloadItems = true;
+                            $timeout(function() {
+                                CartDetailsService.reloadItems = false;
+                            }, 1000);
                             return;
                         }
                         else{
@@ -1546,6 +1556,9 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                                 scope.showTax = false;
                                 if(scope.refreshList){
                                     CartDetailsService.reloadItems = true;
+                                    $timeout(function() {
+                                        CartDetailsService.reloadItems = false;
+                                    }, 1000);
                                     scope.refreshList = false;
                                 }
                             // PaymentService.saveCartDetails(token, parseInt(scope.total * 100), function(data) {});
@@ -1868,6 +1881,9 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                             localStorageService.remove(orderCookieKey);
                             if(scope.refreshList){
                                 CartDetailsService.reloadItems = true;
+                                $timeout(function() {
+                                    CartDetailsService.reloadItems = false;
+                                }, 1000);
                                 scope.refreshList = false;
                             }
                         });

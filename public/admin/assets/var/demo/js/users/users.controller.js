@@ -26,6 +26,8 @@
             
             if (dateSwitch) {
                 loadActiveUsers();
+                loadTopSearches();
+                loadMostActiveUsers();
             }
             dateSwitch = true;
         });
@@ -85,6 +87,8 @@
                     vm.state.account = account;
                     loadAccountUsers();
                     loadActiveUsers();
+                    loadTopSearches();
+                    loadMostActiveUsers();
                 });
               }
             }
@@ -112,6 +116,20 @@
                     vm.activeUserConfig.loading = false;
                     reflowCharts();
                 });
+            })
+        }
+
+        function loadTopSearches(){
+            ChartAnalyticsService.getUserTopSearches(vm.state.account._id, vm.date.startDate, vm.date.endDate, function(data){                
+                vm.topSearches = data;
+                vm.topSearchesLoaded = true;
+            })
+        }
+
+        function loadMostActiveUsers(){
+            ChartAnalyticsService.getMostActiveUsers(vm.state.account._id, vm.date.startDate, vm.date.endDate, function(data){                
+                vm.mostActiveUsers = data;
+                vm.mostActiveUsersLoaded = true;
             })
         }
 

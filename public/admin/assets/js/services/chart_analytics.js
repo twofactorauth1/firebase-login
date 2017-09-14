@@ -537,6 +537,20 @@
             })
         }
 
+        this.getUserTopSearches = function(account, start, end, fn){
+            SiteAnalyticsService.getUserTopSearches(start, end, account, false, false, function(data){
+                console.log('got topSearches:', data);
+                fn(data);
+            })
+        }
+        
+        this.getMostActiveUsers = function(account, start, end, fn){
+            SiteAnalyticsService.getMostActiveUsers(start, end, account, false, false, function(data){
+                console.log('got mostActiveUsers:', data);
+                fn(data);
+            })
+        }
+        
         this.getVisitorOverviewChartData = function(date, account, isAdmin, isCustomer, fn) {
             var promises = [];
             var pageviews, users, sessions, dau,fourOfour;
