@@ -484,7 +484,7 @@ module.exports = {
                     _.each(results, function(result) {
                         var _result = {
                             _id: result._id,
-                            session_id:'',
+                            session_id:[],
                             ip_address:null,
                             maxmind:null,
                             user_agent:null,
@@ -494,8 +494,8 @@ module.exports = {
                         };
                         _.each(result.sessions, function(session){
 
-                            if(_result.session_id !== session.session_id + ' ') {
-                                _result.session_id += session.session_id + ' ';//TODO: fix this
+                            if(!_.contains(_result.session_id, session.session_id)){
+                                _result.session_id.push(session.session_id);
                             }
                             if(!_result.ip_address) {
                                 _result.ip_address = session.ip_address;
@@ -517,6 +517,7 @@ module.exports = {
                             }
 
                         });
+                        _result.session_id = _result.session_id.join(',');
                         var _pageEvents = [];
                         _.each(_result.pageEvents, function(pageEvent){
                             var obj = {};
