@@ -87,7 +87,7 @@
               this.orgConfigAndPermissions.promotions = m.promotions;
           } else {
               if(this.orgConfigAndPermissions.isVendor){
-                this.orgConfigAndPermissions.promotions = false;  
+                this.orgConfigAndPermissions.promotions = false;
               }
               else{
                 this.orgConfigAndPermissions.promotions = true;
@@ -149,6 +149,13 @@
         else{
           this.orgConfigAndPermissions.logoutUrl = "/logout";
         }
+      }
+
+      if(this.orgConfigAndPermissions.isVendor && orgConfig.finance){
+        this.orgConfigAndPermissions.ledger = true;
+      }
+      else{
+        this.orgConfigAndPermissions.ledger = false;
       }
 
       this.orgConfigAndPermissions.permissions = {
