@@ -133,20 +133,20 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-sm-12">
+                    <div class="col-md-12 col-lg-6">
                         <div id="topSearches" class="panel panel-white no-radius" ng-class="{'load1 csspinner': !vm.topSearchesLoaded}">
                             <div class="panel-heading border-light">
                                 <h4 class="panel-title text-primary"><span class="text-bold">Top</span> Searches</h4>
                                 <ct-paneltool class="panel-tools" tool-collapse="tool-collapse"></ct-paneltool>
                             </div>
                             <div class="panel-wrapper" collapse="topSearches">
-                                <div class="panel-body top-most-searches panel-scroll" perfect-scrollbar wheel-propagation="false" suppress-scroll-x="true">
+                                <div class="panel-body top-most-searches panel-scroll height-470" perfect-scrollbar wheel-propagation="false" suppress-scroll-x="true">
                                     <div class="table-responsive">
                                         <table class="table table-hover margin-bottom-0">
                                             <thead>
                                                 <tr>
                                                     <th>Search</th>
-                                                    <th class="center">Count</th>
+                                                    <th style="text-align:right;">Count</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -154,7 +154,7 @@
                                                     <td>
                                                         {{search._id}}
                                                     </td>
-                                                    <td class="center">{{search.total | number}}</td>
+                                                    <td style="text-align:right;">{{search.total | number}}</td>
                                                 </tr>
                                             </tbody>
                                         </table>
@@ -163,20 +163,20 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-sm-12">
+                    <div class="col-md-12 col-lg-6">
                         <div id="mostActiveUsers" class="panel panel-white no-radius" ng-class="{'load1 csspinner': !vm.mostActiveUsers}">
                             <div class="panel-heading border-light">
                                 <h4 class="panel-title text-primary"><span class="text-bold">Most Active</span> Users</h4>
                                 <ct-paneltool class="panel-tools" tool-collapse="tool-collapse"></ct-paneltool>
                             </div>
                             <div class="panel-wrapper" collapse="mostActiveUsers">
-                                <div class="panel-body panel-scroll top-most-users" perfect-scrollbar wheel-propagation="false" suppress-scroll-x="true">
+                                <div class="panel-body panel-scroll top-most-users height-470" perfect-scrollbar wheel-propagation="false" suppress-scroll-x="true">
                                     <div class="table-responsive">
                                         <table class="table table-hover margin-bottom-0">
                                             <thead>
                                                 <tr>
                                                     <th>User</th>
-                                                    <th class="center">Count</th>
+                                                    <th style="text-align:right;">Count</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -184,7 +184,7 @@
                                                     <td>
                                                         {{activeUser.user}}
                                                     </td>
-                                                    <td class="center">{{activeUser.total | number}}</td>
+                                                    <td style="text-align:right;">{{activeUser.total | number}}</td>
                                                 </tr>
                                             </tbody>
                                         </table>
