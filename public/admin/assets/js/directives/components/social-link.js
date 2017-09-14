@@ -1,33 +1,34 @@
-'use strict';
-/*global app, moment, angular, window*/
+/*global app ,console */
 /*jslint unparam:true*/
+/* eslint-disable no-console */
 app.directive('socialLinkComponent', ["$modal", "$timeout", function ($modal, $timeout) {
-  return {
-    scope: {
-      component: '=',
-      ssbEditor: '='
-    },
-    templateUrl: '/components/component-wrap.html',
-    link: function (scope, element, attrs, ctrl) {
+	'use strict';
+	return {
+		scope: {
+			component: '=',
+			ssbEditor: '='
+		},
+		templateUrl: '/components/component-wrap.html',
+		link: function (scope) {
 
-      scope.isEditing = true;
-      scope.sortableConfig = {
-        animation: 150,
-        onSort: function (evt) {
+			scope.isEditing = true;
+			scope.sortableConfig = {
+				animation: 150,
+				onSort: function (evt) {
+					console.log('onSort', evt);
+				},
+				onStart: function (evt) {
+					console.log('onStart', evt);
+				},
+				onEnd: function (evt) {
+					console.log('end', evt);
+				}
+			};
 
-        },
-        onStart: function (evt) {
-            console.log('onStart')
-        },
-        onEnd: function (evt) {
-            console.log('end')
-        }
-      };
 
-
-      $timeout(function() {
-        scope.loadSocialLinks = true;
-      },500);
-    }
-  };
+			$timeout(function () {
+				scope.loadSocialLinks = true;
+			}, 500);
+		}
+	};
 }]);
