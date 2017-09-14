@@ -15,6 +15,7 @@ var contactActivityManager = require('../../contactactivities/contactactivity_ma
 var userManager = require('../../dao/user.manager');
 var cookies = require('../../utils/cookieutil');
 var Contact = require('../../models/contact');
+var organizationDao = require('../../organizations/dao/organization.dao');
 var request = require('request');
 var fullContactConfig = require('../../configs/fullcontact.config');
 
@@ -24,6 +25,7 @@ var fs = require('fs');
 var geoIPUtil = require('../../utils/geoiputil');
 var async = require('async');
 var formidable = require('formidable');
+var appConfig = require('../../configs/app.config');
 
 var api = function () {
     this.init.apply(this, arguments);
@@ -867,6 +869,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 return self.wrapError(resp, 500, "There was a problem signing up.  Please try again later.", err, value);
             } else {
                 console.dir(req.body);
+                var account = value;
                 //TODO: check if contact exists
                 var query = {};
                 query.accountId = value.id();
@@ -929,29 +932,6 @@ _.extend(api.prototype, baseApi.prototype, {
                         emailMessageManager.sendNewCustomerEmail(toAddress, toName, fromName, fromAddress, accountId, vars, ccAry, function(err, value){
                             self.log.debug('email sent');
                         });
-
-                    } else if(emailPreferences.new_contacts === true && req.body.activity){
-                        var accountEmail = null;
-
-                        if(value && value.get("business") && value.get("business").emails && value.get("business").emails[0] && value.get("business").emails[0].email) {
-                            self.log.debug('user email: ', value.get("business").emails[0].email);
-                            accountEmail = value.get("business").emails[0].email;
-                            var ccAry = [];
-                            var emails = value.get('business').emails;
-                            if(emails.length > 1) {
-                                for(var i=1; i<emails.length; i++) {
-                                    ccAry.push(emails[i].email);
-                                }
-                            }
-                            var fromName = value.get('business').name;
-                            self._sendEmailOnCreateAccount(accountEmail, req.body.activity.contact, value.id(), ccAry, tagSet, accountSubdomain, true, fromName);
-                        } else{
-                            var fromName = value.get('business').name;
-                            userDao.getUserAccount(value.id(), function(err, user){
-                                accountEmail = user.get("email");
-                                self._sendEmailOnCreateAccount(accountEmail, req.body.activity.contact, value.id(), null, tagSet, accountSubdomain, false, fromName);
-                            })
-                        }
 
                     }
                     delete req.body.skipWelcomeEmail;
@@ -1164,7 +1144,30 @@ _.extend(api.prototype, baseApi.prototype, {
                                     return self.sendResult(resp, savedContact);
                                 });
 
+                                if(emailPreferences.new_contacts === true && activity){
+                                    var accountEmail = null;
 
+                                    if(account && account.get("business") && account.get("business").emails && account.get("business").emails[0] && account.get("business").emails[0].email) {
+                                        self.log.debug('user email: ', account.get("business").emails[0].email);
+                                        accountEmail = account.get("business").emails[0].email;
+                                        var ccAry = [];
+                                        var emails = account.get('business').emails;
+                                        if(emails.length > 1) {
+                                            for(var i=1; i<emails.length; i++) {
+                                                ccAry.push(emails[i].email);
+                                            }
+                                        }
+                                        var fromName = account.get('business').name;
+                                        self._sendEmailOnCreateAccount(accountEmail, activity.contact, account.id(), ccAry, tagSet, accountSubdomain, true, fromName, account, savedContact);
+                                    } else{
+                                        var fromName = value.get('business').name;
+                                        userDao.getUserAccount(value.id(), function(err, user){
+                                            accountEmail = user.get("email");
+                                            self._sendEmailOnCreateAccount(accountEmail, activity.contact, account.id(), null, tagSet, accountSubdomain, false, fromName, account, savedContact);
+                                        })
+                                    }
+
+                                }
                             }
                         });
                     });
@@ -1535,7 +1538,7 @@ _.extend(api.prototype, baseApi.prototype, {
         });
     },
 
-   _sendEmailOnCreateAccount: function(accountEmail, fields, accountId, ccAry, tagSet, accountSubdomain, suppressUnsubscribe, fromName) {
+   _sendEmailOnCreateAccount: function(accountEmail, fields, accountId, ccAry, tagSet, accountSubdomain, suppressUnsubscribe, fromName, account, savedContact) {
         var self = this;
         var component = {};
         //component.logourl = 'https://s3.amazonaws.com/indigenous-account-websites/acct_6/logo.png';
@@ -1561,28 +1564,51 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug('accountEmail ', accountEmail);
         component.title = "You have a new contact!";
         component.text = text;
-        app.render('emails/new_customer_created', component, function(err, html){
-            if(err) {
-                self.log.error('error rendering html: ' + err);
-                self.log.warn('email will not be sent to account owner.');
-            } else {
-                self.log.debug('sending email to: ', accountEmail);
-
-                var fromEmail = notificationConfig.FROM_EMAIL;
-                if(!fromName) {
-                    fromName =  notificationConfig.WELCOME_FROM_NAME;
-                }
-                var emailSubject = notificationConfig.NEW_CUSTOMER_EMAIL_SUBJECT;
-                var vars = [];
-                if(accountSubdomain){
-                    emailSubject = emailSubject + " ("+ accountSubdomain +")";
-                }
-
-                emailMessageManager.sendBasicEmail(fields.email, fromName, accountEmail, null, emailSubject, html, accountId, vars, '', ccAry, null, suppressUnsubscribe, function(err, result){
-                    self.log.debug('result: ', result);
-                });
+        var orgId = account.get("orgId") || 0;
+        var subdomain = account.get("subdomain"); 
+        organizationDao.getById(orgId, $$.m.Organization, function(err, organization){
+            var environment = appConfig.environment;
+            var port = appConfig.port;
+            var hostname = 'indigenous.io';
+            var protocol = "https://";
+            var hostname = organization.get("signupSettings") ? organization.get("signupSettings").suffix || "indigenous.io" : "indigenous.io";
+            
+            if(environment === appConfig.environments.DEVELOPMENT && appConfig.nonProduction){
+                hostname = 'indigenous.local' + ":" + port;
+                protocol = "http://";
             }
-        });
+            else if(environment !== appConfig.environments.DEVELOPMENT && appConfig.nonProduction){
+                hostname = 'test.' + hostname;
+                protocol = "http://";
+            }
+            
+            var url =  protocol + subdomain + "." + hostname + "/admin/#/contacts/" + savedContact.get("_id");
+            component.contactUrl = url;
+            app.render('emails/new_customer_created', component, function(err, html){
+                if(err) {
+                    self.log.error('error rendering html: ' + err);
+                    self.log.warn('email will not be sent to account owner.');
+                } else {
+                    self.log.debug('sending email to: ', accountEmail);
+
+                    var fromEmail = notificationConfig.FROM_EMAIL;
+                    if(!fromName) {
+                        fromName =  notificationConfig.WELCOME_FROM_NAME;
+                    }
+                    var emailSubject = notificationConfig.NEW_CUSTOMER_EMAIL_SUBJECT;
+                    var vars = [];
+                    if(accountSubdomain){
+                        emailSubject = emailSubject + " ("+ accountSubdomain +")";
+                    }
+
+                    emailMessageManager.sendBasicEmail(fields.email, fromName, accountEmail, null, emailSubject, html, accountId, vars, '', ccAry, null, suppressUnsubscribe, function(err, result){
+                        self.log.debug('result: ', result);
+                    });
+                }
+            });
+
+        })
+        
     }
 
     //endregion CONTACT ACTIVITY
