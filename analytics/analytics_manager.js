@@ -486,8 +486,8 @@ module.exports = {
                             _id: result._id,
                             session_id:'',
                             ip_address:null,
-                            maxmind:'',
-                            user_agent:'',
+                            maxmind:null,
+                            user_agent:null,
                             timestamp:null,
                             server_time:null,
                             pageEvents:[]
@@ -500,11 +500,11 @@ module.exports = {
                             if(!_result.ip_address) {
                                 _result.ip_address = session.ip_address;
                             }
-                            if(_result.maxmind !== session.maxmind) {
+                            if(!_result.maxmind) {
                                 _result.maxmind = session.maxmind;
                             }
-                            if(_result.user_agent !== session.user_agent) {
-                                _result.user_agent += session.user_agent;
+                            if(!_result.user_agent) {
+                                _result.user_agent = session.user_agent;
                             }
                             if(!_result.timestamp) {
                                 _result.timestamp = session.timestamp;
