@@ -258,19 +258,58 @@ var ziManager = {
                 $or: orQuery
             };
         }
-        self.log.debug('query:', query);
+        self.log.trace('query:', query);
 
         var fields = null;
         var collection = 'inventory';
         var _skip = skip || 0;
         var _limit = limit || 0;
 
+        var appliedSkip = _skip;
+        var appliedLimit = _limit;
+        if(!fieldSearch) {
+            //need to get all the results so we can rank
+            appliedSkip = 0;
+            appliedLimit = 0;
+        }
+
         self._addUserInventoryFilter(accountId, userId, query, function(err, query){
-            ziDao.findRawWithFieldsLimitAndOrder(query, _skip, _limit, sortBy, fields, collection, sortDir, function(err, value){
+            ziDao.findRawWithFieldsLimitAndOrder(query, appliedSkip, appliedLimit, sortBy, fields, collection, sortDir, function(err, value){
                 if(err) {
                     self.log.error(accountId, userId, 'Error searching cached inventory:', err);
                     fn(err);
                 } else {
+                    if(!fieldSearch) {
+                        self.log.info('ranking');
+                        var leftOrRightRegexp = new RegExp('\.*'+term +'|'+ term+'\.*', 'i');
+                        _.each(value.results, function(result){
+                            if(self._findMatchEquals(result, term)) {
+                                if(result._shortVendorName.indexOf('hardware') >0) {
+                                    result.rank = 1;
+                                } else {
+                                    result.rank = 2;
+                                }
+                            } else if(self._findMatchRegexp(result, leftOrRightRegexp)){
+                                if(result._shortVendorName.indexOf('hardware') >0) {
+                                    result.rank = 3;
+                                } else {
+                                    result.rank = 4;
+                                }
+                            } else {
+                                if(result._shortVendorName.indexOf('hardware') >0) {
+                                    result.rank = 5;
+                                } else {
+                                    result.rank = 6;
+                                }
+                            }
+                        });
+                        //self.log.debug('about to apply skip [' + _skip + '] and limit [' + _limit + '] to array with length:' + value.results.length);
+                        var sortedResults = _.sortBy(value.results, 'rank');
+                        //self.log.debug('sortedResults.length:', sortedResults.length);
+                        sortedResults = sortedResults.slice(_skip, _limit+_skip);
+                        //self.log.debug('sliced sortedResults.length:', sortedResults.length);
+                        value.results = sortedResults;
+                    }
                     self.log.debug(accountId, userId, '<< inventorySearch');
                     fn(null, value);
                 }
@@ -279,6 +318,40 @@ var ziManager = {
 
     },
 
+    _findMatchEquals: function(result, term) {
+        var matches = false;
+
+        var fieldAry = ['@id', 'OITM_ItemName', 'OITM_U_dscription', 'OITB_ItmsGrpNam', 'In_Stock', 'Committed',
+            'Available', '_shortVendorName', 'OLGT_UnitName', 'OITM_SLength1', 'OLGT_UnitName_10', 'OITM_SWidth1',
+            'OITM_BHeight1', 'OWGT_UnitName', 'OITM_SWeight1', 'OITM_SVolume'];
+
+        _.each(fieldAry, function(field){
+            if(result[field] === term) {
+                matches = true;
+            }
+        });
+        if(result.OITM_ItemCode === parseInt(term)) {
+            matches = true;
+        }
+
+        return matches;
+    },
+
+    _findMatchRegexp: function(result, regexp) {
+        var matches = false;
+
+        var fieldAry = ['@id', 'OITM_ItemName', 'OITM_U_dscription', 'OITB_ItmsGrpNam', 'In_Stock', 'Committed',
+            'Available', '_shortVendorName', 'OLGT_UnitName', 'OITM_SLength1', 'OLGT_UnitName_10', 'OITM_SWidth1',
+            'OITM_BHeight1', 'OWGT_UnitName', 'OITM_SWeight1', 'OITM_SVolume'];
+
+        _.each(fieldAry, function(field){
+            if(result[field] && result[field].match && result[field].match(regexp)) {
+                matches = true;
+            }
+        });
+
+        return matches;
+    },
 
     productSearch: function(accountId, userId, term, skip, limit, sortBy, sortDir, filter, fn) {
         var self = this;

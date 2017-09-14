@@ -521,8 +521,9 @@ module.exports = {
                         var _pageEvents = [];
                         _.each(_result.pageEvents, function(pageEvent){
                             var obj = {};
+                            console.log(pageEvent);
                             if(pageEvent.server_time_dt) {
-                                obj.server_time_dt = pageEvent.server_time_dt;
+                                obj.pageTime = pageEvent.server_time_dt;
                             }
                             if(pageEvent.url && pageEvent.url.source) {
                                 obj.pageRequested = pageEvent.url.source;
