@@ -27,6 +27,7 @@
             if (dateSwitch) {
                 loadActiveUsers();
                 loadTopSearches();
+                loadMostActiveUsers();
             }
             dateSwitch = true;
         });
@@ -87,6 +88,7 @@
                     loadAccountUsers();
                     loadActiveUsers();
                     loadTopSearches();
+                    loadMostActiveUsers();
                 });
               }
             }
@@ -118,10 +120,16 @@
         }
 
         function loadTopSearches(){
-            ChartAnalyticsService.getUserTopSearches(vm.state.account._id, vm.date.startDate, vm.date.endDate, function(data){
-                
+            ChartAnalyticsService.getUserTopSearches(vm.state.account._id, vm.date.startDate, vm.date.endDate, function(data){                
                 vm.topSearches = data;
                 vm.topSearchesLoaded = true;
+            })
+        }
+
+        function loadMostActiveUsers(){
+            ChartAnalyticsService.getMostActiveUsers(vm.state.account._id, vm.date.startDate, vm.date.endDate, function(data){                
+                vm.mostActiveUsers = data;
+                vm.mostActiveUsersLoaded = true;
             })
         }
 

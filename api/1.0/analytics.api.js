@@ -74,6 +74,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url('reports/daily404s'), this.isAuthAndSubscribedApi.bind(this), this.getDaily404s.bind(this));
         app.get(this.url('reports/all'), this.isAuthAndSubscribedApi.bind(this), this.allReports.bind(this));
         app.get(this.url('reports/topSearches'), this.isAuthAndSubscribedApi.bind(this), this.topSearches.bind(this));
+        app.get(this.url('reports/mostActiveUsers'), this.isAuthAndSubscribedApi.bind(this), this.mostActiveUsers.bind(this));
         
         app.get(this.url('admin/reports/dau'), this.isAuthAndSubscribedApi.bind(this), this.getDailyActiveUsers.bind(this));
         app.get(this.url('admin/reports/visitors'), this.isAuthAndSubscribedApi.bind(this), this.runAdminVisitorsReport.bind(this));
@@ -1386,6 +1387,34 @@ _.extend(api.prototype, baseApi.prototype, {
         
         analyticsManager.getTopSearches(accountId, userId, start, end, false, null, function(err, results){
             self.log.debug(accountId, userId, '<< topSearches');
+            self.sendResultOrError(resp, err, results, 'Error getting report');
+        });
+    },
+
+    mostActiveUsers: function(req, resp) {
+        var self = this;
+        var userId = self.userId(req);
+        var accountId = self.accountId(req);
+        self.log.debug(accountId, userId, '>> mostActiveUsers (' + req.query.start + ', ' + req.query.end + ')');
+        var start = req.query.start;
+        var end = req.query.end;
+
+        if(!end) {
+            end = moment().toDate();
+        } else {
+            //2016-07-03T00:00:00 05:30
+            end = moment(end, 'YYYY-MM-DD[T]HH:mm:ss').toDate();
+        }
+
+        if(!start) {
+            start = moment().add(-30, 'days').toDate();
+        } else {
+            start = moment(start, 'YYYY-MM-DD[T]HH:mm:ss').toDate();
+            self.log.debug('start:', start);
+        }
+        
+        analyticsManager.getMostActiveUsers(accountId, userId, start, end, false, null, function(err, results){
+            self.log.debug(accountId, userId, '<< mostActiveUsers');
             self.sendResultOrError(resp, err, results, 'Error getting report');
         });
     },
