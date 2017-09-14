@@ -1,28 +1,32 @@
-'use strict';
-/*global app, moment, angular, window*/
+/*global app , console */
 /*jslint unparam:true*/
+/* eslint-disable no-console */
 app.directive('topBarComponent', function () {
-  return {
-    scope: {
-      component: '=',
-      ssbEditor: '='
-    },
-    templateUrl: '/components/component-wrap.html',
-    link: function (scope, element, attrs, ctrl) {
-      scope.isEditing = true;
-      scope.sortableConfig = {
-        animation: 150,
-        onSort: function (evt) {
+	'use strict';
+	return {
+		scope: {
+			component: '=',
+			ssbEditor: '='
+		},
+		templateUrl: '/components/component-wrap.html',
+		link: function (scope) {
+			scope.isEditing = true;
+			scope.sortableConfig = {
+				animation: 150,
+				onSort: function (evt) {
+					console.log(evt);
 
-        },
-        onStart: function (evt) {
-          if(scope.$parent.vm)
-            scope.$parent.vm.uiState.sortableListPageContentConfig.disabled = true;
-        },
-        onEnd: function (evt) {
-
-        }
-      };
-    }
-  };
+				},
+				onStart: function (evt) {
+					console.log(evt);
+					if (scope.$parent.vm) {
+						scope.$parent.vm.uiState.sortableListPageContentConfig.disabled = true;
+					}
+				},
+				onEnd: function (evt) {
+					console.log(evt);
+				}
+			};
+		}
+	};
 });
