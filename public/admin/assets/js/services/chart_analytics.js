@@ -450,6 +450,10 @@
             SiteAnalyticsService.runPlatformTraffic(fn);
         };
 
+        this.getPlatformTrafficDetails = function(fn) {
+            SiteAnalyticsService.runPlatformTrafficDetails(fn);
+        };
+
         this.getSiteAnalyticsTraffic = function(fn) {
             SiteAnalyticsService.runSiteAnlyticsTraffic(fn);
         };

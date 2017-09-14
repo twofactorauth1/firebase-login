@@ -2792,7 +2792,7 @@ _.extend(api.prototype, baseApi.prototype, {
         var lookBackInMinutes = req.query.lookBackInMinutes;
 
         if(!lookBackInMinutes || lookBackInMinutes === 0) {
-            lookBackInMinutes = 30;
+            lookBackInMinutes = 60;
         }
         if(accountId === appConfig.mainAccountID) {
             analyticsManager.getLiveVisitorDetails(accountId, userId, lookBackInMinutes, true, null, function(err, value){
