@@ -59,6 +59,10 @@
                     </ui-select-choices>
                 </ui-select>
             </div>
+            <div class="form-group" ng-if="vm.state.userType === 'vendor'">
+                <input type="checkbox" class="checkbox-inline" id="vendor-user-finance" ng-model="vm.state.finance">
+                <label for="vendor-user-finance">Finance</label>
+            </div>
         </form>
         <div ng-if="!editUser">
             Loading..... 
