@@ -95,6 +95,7 @@
 
 
 		function fieldStyle(field) {
+			var loc = $location;
 			var styleString = ' ';
 			if (field) {
 				if (field.spacing && field.spacing.mb) {

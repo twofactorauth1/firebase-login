@@ -122,7 +122,7 @@ app.controller('importContactModalCtrl', ['$scope', '$location', '$timeout', '$m
 
   $scope.validateEmail = function (_email) {
     var regex = new RegExp('^[_a-z0-9]+(\.[_a-z0-9]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$');
-    return regex.test(_email);
+    return regex.test(_email.toLowerCase());
   };
 
   $scope.validatePhone = function (_phone) {

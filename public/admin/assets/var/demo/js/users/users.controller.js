@@ -27,6 +27,7 @@
             if (dateSwitch) {
                 loadActiveUsers();
                 loadTopSearches();
+                loadMostActiveUsers();
             }
             dateSwitch = true;
         });
@@ -87,6 +88,7 @@
                     loadAccountUsers();
                     loadActiveUsers();
                     loadTopSearches();
+                    loadMostActiveUsers();
                 });
               }
             }
@@ -118,10 +120,16 @@
         }
 
         function loadTopSearches(){
-            ChartAnalyticsService.getUserTopSearches(vm.state.account._id, vm.date.startDate, vm.date.endDate, function(data){
-                
+            ChartAnalyticsService.getUserTopSearches(vm.state.account._id, vm.date.startDate, vm.date.endDate, function(data){                
                 vm.topSearches = data;
                 vm.topSearchesLoaded = true;
+            })
+        }
+
+        function loadMostActiveUsers(){
+            ChartAnalyticsService.getMostActiveUsers(vm.state.account._id, vm.date.startDate, vm.date.endDate, function(data){                
+                vm.mostActiveUsers = data;
+                vm.mostActiveUsersLoaded = true;
             })
         }
 
@@ -300,6 +308,7 @@
             switch (vm.state.userType) {
                 case 'vendor':
                     orgConfig[0].cardCodes = vm.state.cardCodes;
+                    orgConfig[0].finance = vm.state.finance;
                     break;
                 case 'vendor-restricted':
                     orgConfig[0].vendorName = vm.state.vendorName;
@@ -316,6 +325,7 @@
                 default:
             }
             return orgConfig;
+
         }
 
         $scope.closeModal = function () {
@@ -457,6 +467,7 @@
             if(orgConfig){
                 vm.state.cardCodes = orgConfig.cardCodes;
                 vm.state.vendorName = orgConfig.vendorName;
+                vm.state.finance = orgConfig.finance;
             } else{
                 vm.state.cardCodes = null;
             }
@@ -484,6 +495,7 @@
             switch (vm.state.userType) {
                 case 'vendor':
                     orgConfigAry[0].cardCodes = vm.state.cardCodes;
+                    orgConfigAry[0].finance = vm.state.finance;
                     delete orgConfigAry[0].vendorName;
                     delete orgConfigAry[0].inventoryFilter;
                     break;

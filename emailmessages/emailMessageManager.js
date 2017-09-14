@@ -3343,6 +3343,9 @@ var emailMessageManager = {
         if(sendgridParam.batch_id) {
             emailmessage.set('sendgridBatchId', sendgridParam.batch_id);
         }
+        if(sendgridParam.reply_to) {
+            emailmessage.set('replyTo', sendgridParam.reply_to.email);
+        }
         dao.saveOrUpdate(emailmessage, function(err, value){
             if(err) {
                 log.error(accountId, userId, 'Error storing emailmessage:', err);
@@ -3394,6 +3397,9 @@ var emailMessageManager = {
             if(p.custom_args && p.custom_args.contactLastName) {
                 emailmessage.set('contactLastName', p.custom_args.contactLastName);
                 emailmessage.set('_contactLastName', p.custom_args.contactLastName.toLowerCase());
+            }
+            if(sendgridRequestBody.reply_to) {
+                emailmessage.set('replyTo', sendgridRequestBody.reply_to.email);
             }
             dao.saveOrUpdate(emailmessage, function(err, value){
                 if(err) {

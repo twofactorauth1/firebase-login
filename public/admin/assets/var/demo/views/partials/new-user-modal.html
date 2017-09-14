@@ -66,7 +66,11 @@
                         <small style="text-transform: capitalize;" ng-bind-html="vendor | highlight: $select.search"></small>
                     </ui-select-choices>
                 </ui-select>
-            </div> 
+            </div>
+            <div class="form-group" ng-if="vm.state.userType === 'vendor'">
+                <input type="checkbox" class="checkbox-inline" id="vendor-user-finance" ng-model="vm.state.finance">
+                <label for="vendor-user-finance">Finance</label>
+            </div>
         </form>
     </div>
     <div class="clearfix"></div>

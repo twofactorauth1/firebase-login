@@ -16,6 +16,7 @@ var contactDao = require('../dao/contact.dao');
 var contactActivityManager = require('../contactactivities/contactactivity_manager');
 var async = require('async');
 var accountDao = require('../dao/account.dao');
+var userDao = require('../dao/user.dao');
 var orderDao = require('../orders/dao/order.dao');
 var emailMessageManager = require('../emailmessages/emailMessageManager');
 var accountManager = require('../accounts/account.manager');
@@ -339,27 +340,34 @@ module.exports = {
                     }
                 };
                 stageAry.push(group1);
+
+                var lookup = {"$lookup":{
+                    from: "session_events",
+                        localField: "_id.session_id",
+                        foreignField: "session_id",
+                        as: "session_event"
+                }};
+                stageAry.push(lookup);
+                var project2 = {$project:{_id:1, count:1, fingerprint: '$session_event.fingerprint'}};
+                stageAry.push(project2);
+
                 var group2 = {
                     $group:{
-                        _id: {secondsAgo:'$_id.secondsAgo', session_id:'$_id.sessionId'},
-                        //_id: '$_id.secondsAgo',
-                        //count:{$sum:'$count'}
+                        _id: {secondsAgo:'$_id.secondsAgo', fingerprint:'$fingerprint'},
                         count:{$sum:1}
                     }
                 };
                 stageAry.push(group2);
-                var project = {
-                    $project:{
-                        _id: '$_id.secondsAgo',
-                        count:'$count'
-                    }
+                var group3 = {
+                    $group:{_id:'$_id.secondsAgo', count:{$sum:'$count'}}
                 };
-                stageAry.push(project);
+                
+                stageAry.push(group3);
                 var sort = {
                     $sort:{'_id':-1}
                 };
                 stageAry.push(sort);
-                //self.log.debug('stageAry:', stageAry);
+                self.log.debug('stageAry:', JSON.stringify(stageAry));
                 dao.aggregateWithCustomStages(stageAry, $$.m.PingEvent, function(err, value) {
                     if(err) {
                         self.log.error('Error getting analytics:', err);
@@ -2847,6 +2855,66 @@ module.exports = {
             } else {
                 self.log.debug(accountId, userId, '<< getTopSearches');
                 fn(null, value);
+            }
+        });
+
+    },
+
+    getMostActiveUsers: function(accountId, userId, start, end, isAggregate, orgId, fn) {
+        var self = this;
+        self.log = _log;
+        self.log.debug(accountId, userId, '>> getMostActiveUsers');
+
+        var stageAry = [];
+        var match = {
+            $match:{
+                accountId:accountId,
+                activityType: 'LOGIN',
+                start:{
+                    $gte:start,
+                    $lte:end
+                }
+            }
+        };
+        if(isAggregate === true) {
+            delete match.$match.accountId;
+        }
+        if(orgId !== null) {
+            match.$match.orgId = orgId;
+        }
+        stageAry.push(match);
+
+        var group = {
+            $group:{
+                _id:'$userId',
+                total:{$sum:1}
+            }
+        };
+        stageAry.push(group);
+
+        dao.aggregateWithCustomStages(stageAry, $$.m.UserActivity, function(err, value) {
+            if(err) {
+                self.log.error('Error finding current month:', err);
+                fn(err);
+            } else {
+                self.log.debug(accountId, userId, '<< getMostActiveUsers');
+                async.each(value, function(record, cb){
+                    userDao.getById(record._id, $$.m.User, function(err, user){
+                        if(err) {
+                            cb()
+                        }
+                        else if(user){
+                            record.user = user.get("username");
+                            cb();    
+                        }
+                        else{
+                            cb();
+                        }
+                        
+                    })
+                }, function(err){
+                    fn(null, value);
+                })
             }
         });
 

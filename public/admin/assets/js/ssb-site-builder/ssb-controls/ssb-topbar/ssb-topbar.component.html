@@ -12,11 +12,11 @@
             search-enabled="false">
 
             <ui-select-match>
-                <small ng-bind-html="$select.selected.title"></small>
+                <small ng-bind-html="$select.selected.menuTitle || $select.selected.title"></small>
             </ui-select-match>
 
-            <ui-select-choices class="margin-top-20 pages-top" repeat="page in vm.state.pages | sortListPages:vm.state.page._id:vm.state.account">
-                <small ng-bind-html="page.title" class="text-adjusts" style="max-width:200px"></small> <small>(/</small><small class="text-adjusts" ng-bind-html="page.handle" style="max-width:100px"></small><small>)</small>
+            <ui-select-choices id="pageHandle" class="margin-top-20 pages-top" repeat="page in vm.state.pages | sortListPages:vm.state.page._id:vm.state.account">
+                <small >{{(page.menuTitle ||page.title) | truncate : 32 : '...' : true}}</small> <small>(/<small ng-bind-html="page.handle" style="display: inline;"></small>)</small>
             </ui-select-choices>
 
         </ui-select>
