@@ -174,7 +174,7 @@
         var itemArray = orgConfig.modules && _.filter(Object.keys(orgConfig.modules), function(item){
            return orgConfig.modules[item] == true;
         });
-        if(itemArray && itemArray.length){
+        if(itemArray && itemArray.length && !this.orgConfigAndPermissions.dashboard){
           var _statename = "";
             switch (itemArray[0]) {
               case 'inventory':
@@ -210,7 +210,6 @@
             this.orgConfigAndPermissions.logoutUrl = "/logout";
         }
       }
-
       return this.orgConfigAndPermissions;
     };
 
