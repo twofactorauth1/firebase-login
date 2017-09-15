@@ -43,8 +43,6 @@ app.controller('QuoteDetailsModalController', ['$scope', '$modal', '$state', '$r
     }
 
     function saveQuote(isSubmit){
-
-        
         vm.uiState.saveLoading = true;
         var _quote = angular.copy(vm.state.cartDetail);
         delete _quote._id;
@@ -65,19 +63,40 @@ app.controller('QuoteDetailsModalController', ['$scope', '$modal', '$state', '$r
     function setDefaults(isSubmit){
         if(isSubmit){
             QuoteCartDetailsService.submitQuote(vm.state.quote).then(function(){
-                QuoteCartDetailsService.deleteCartDetails(vm.state.cartDetail).then(function(){
+                if(vm.state.cartDetail._id){
+                    QuoteCartDetailsService.deleteCartDetails(vm.state.cartDetail).then(function(){
+                        toaster.pop("success", "Quote submitted successfully");
+                        $rootScope.$broadcast('$quoteAddedFromCart');
+                        $scope.closeModal();
+                    })
+                }
+                else{
                     toaster.pop("success", "Quote submitted successfully");
                     $rootScope.$broadcast('$quoteAddedFromCart');
                     $scope.closeModal();
-                })
+                    QuoteCartDetailsService.cartDetail = {
+                        items: []
+                    }
+                }
             })
         }
         else{
-            QuoteCartDetailsService.deleteCartDetails(vm.state.cartDetail).then(function(){
+            if(vm.state.cartDetail._id){
+                QuoteCartDetailsService.deleteCartDetails(vm.state.cartDetail).then(function(){
+                    toaster.pop("success", "Quote saved successfully");
+                    $rootScope.$broadcast('$quoteAddedFromCart');
+                    $scope.closeModal();
+                })
+            }
+            else{
                 toaster.pop("success", "Quote saved successfully");
                 $rootScope.$broadcast('$quoteAddedFromCart');
                 $scope.closeModal();
-            })
+                QuoteCartDetailsService.cartDetail = {
+                    items: []
+                }
+            }
+            
         }
         
     }
@@ -168,24 +187,15 @@ app.controller('QuoteDetailsModalController', ['$scope', '$modal', '$state', '$r
 
     function addItemsToCart(items) {
         if(items.length){
-            if(!QuoteCartDetailsService.cartDetail._id){
-                vm.uiState.saveLoading = true;
-                QuoteCartDetailsService.getCartItemTitle("New Quote ("+ moment().format("MMM DD YY") + ")").then(function(response){
-                    QuoteCartDetailsService.cartDetail.title = response.data;                        
-                    _.each(items, function(item){
-                        var _item = _.findWhere(QuoteCartDetailsService.cartDetail.items, { OITM_ItemCode: item.OITM_ItemCode });
-                        addCartItems(item);
-                    })
-                })
-            }
-            else{
-                vm.uiState.saveLoading = true;
-                _.each(items, function(item){
-                    var _item = _.findWhere(vm.state.cartDetail.items, { OITM_ItemCode: item.OITM_ItemCode });
-                    addCartItems(item);
-                })
-            }
-        }    
+           _.each(items, function(item){
+                var _item = _.findWhere(vm.state.cartDetail.items, { OITM_ItemCode: item.OITM_ItemCode });
+                if(!_item){
+                    item.quantity = 1;
+                    vm.state.cartDetail.items.push(item);
+                }
+            })
+            setVendorSpecialPricing(); 
+        }   
     }
 
 
