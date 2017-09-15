@@ -171,11 +171,10 @@
       }
 
       if(this.orgConfigAndPermissions.userRestrictedStates.length){ 
-        var values = Object.keys(orgConfig.modules)
-        var itemArray =  _.filter(Object.keys(orgConfig.modules), function(item){
+        var itemArray = orgConfig.modules && _.filter(Object.keys(orgConfig.modules), function(item){
            return orgConfig.modules[item] == true;
         });
-        if(itemArray.length){
+        if(itemArray && itemArray.length){
           var _statename = "";
             switch (itemArray[0]) {
               case 'inventory':
