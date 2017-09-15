@@ -332,15 +332,29 @@ app.directive("elem", function ($rootScope, $timeout, $compile, SimpleSiteBuilde
 										}
 									}
 								}
-								if (cmd === 'tableHeader') {
-									var $popup = editor.popups.get('table.edit');
-									if ($popup) {
-										var $btn = $popup.find('.fr-command[data-cmd="tableHeader"]');
-										if ($btn && $btn.hasClass('fr-active')) {
-											$btn.removeClass("fr-active");
-										}
+								
+								if(cmd=== 'tableRows' || cmd === 'tableHeader'){
+									if(editor.$el.find('.fr-selected-cell').length){
+										var padding = editor.$el.find('.fr-selected-cell').css("padding");
+										var border = editor.$el.find('.fr-selected-cell').css("border-width")
+										var tableCells = editor.$el.find('.fr-selected-cell').closest('table').find("td");
+								        var tableHeaders = editor.$el.find('.fr-selected-cell').closest('table').find("th");
+								        tableCells.css("padding", padding);
+								        tableHeaders.css("padding", padding);
+								        tableCells.css("border-width", border);
+								        tableHeaders.css("border-width", border);
 									}
-
+									
+							        
+							        if(cmd === 'tableHeader'){
+							        	var $popup = editor.popups.get('table.edit');
+										if ($popup) {
+											var $btn = $popup.find('.fr-command[data-cmd="tableHeader"]');
+											if ($btn && $btn.hasClass('fr-active')) {
+												$btn.removeClass("fr-active");
+											}
+										}
+							        }
 								}
 								if (cmd === 'clearFormatting') {
 

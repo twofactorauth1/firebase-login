@@ -52,7 +52,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
     $stateProvider.state('app', {
         url: "",
         templateUrl: "/admin/assets/var/demo/views/app.html",
-        resolve: loadSequence('modernizr', 'underscore', 'moment', 'angularMoment', 'uiSwitch', 'perfect-scrollbar-plugin', 'toaster', 'ngAside', 'chartjs', 'tc.chartjs', 'oitozero.ngSweetAlert', 'chatCtrl', 'smart-table', 'touchspin-plugin', 'slugifier', 'commonService', 'timeAgoFilter','angularFileUpload', 'ngTextTruncate', 'infinite-scroll', 'ui.select', 'blueimp', 'ngTagsInput', 'titleCase', 'bootstrap-confirmation', 'ladda', 'angular-ladda', 'uuid', 'formatText', 'asideCtrl', 'settingsCtrl', 'assetsService', 'mediaModalCtrl', 'xeditable', 'angular-percentage-filter', 'angular-clipboard', 'google-fonts', 'dashboardService', 'videogular', 'indi-login-modal', 'productTableFilter', 'ngCurrency', 'DashboardAnalyticTileComponent', 'InventoryComponent', 'InventoryDetailsComponent', 'utilService', 'userPermissionsConfig', 'uiSelectChoices', 'ngSticky', 'fixedHeaderTable', 'securematicsCommonService', 'QuoteDetailsModalController', 'quoteCartDetailsService', 'QuoteDetailsController', 'propsFilter', 'dateRangePicker'),
+        resolve: loadSequence('modernizr', 'underscore', 'moment', 'angularMoment', 'uiSwitch', 'perfect-scrollbar-plugin', 'toaster', 'ngAside', 'chartjs', 'tc.chartjs', 'oitozero.ngSweetAlert', 'chatCtrl', 'smart-table', 'touchspin-plugin', 'slugifier', 'commonService', 'timeAgoFilter','angularFileUpload', 'ngTextTruncate', 'infinite-scroll', 'ui.select', 'blueimp', 'ngTagsInput', 'titleCase', 'bootstrap-confirmation', 'ladda', 'angular-ladda', 'uuid', 'formatText', 'asideCtrl', 'settingsCtrl', 'assetsService', 'mediaModalCtrl', 'xeditable', 'angular-percentage-filter', 'angular-clipboard', 'google-fonts', 'dashboardService', 'videogular', 'indi-login-modal', 'productTableFilter', 'ngCurrency', 'DashboardAnalyticTileComponent', 'InventoryComponent', 'InventoryDetailsComponent', 'utilService', 'userPermissionsConfig', 'uiSelectChoices', 'ngSticky', 'fixedHeaderTable', 'securematicsCommonService', 'QuoteDetailsModalController', 'quoteCartDetailsService', 'QuoteDetailsController', 'propsFilter', 'dateRangePicker', 'QuoteProductModalController', 'SecurematicsProductService'),
         abstract: true
     }).state('app.dashboard', {
         url: "/_dashboard",
@@ -278,7 +278,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         templateUrl: "/admin/assets/var/demo/js/quotes/quote.html",
         title: 'Quotes',
         icon: 'ti-layout-media-left-alt',
-        resolve: loadSequence('QuoteComponent', 'QuoteComponentController', 'QuoteService', 'QuoteProductModalController', 'SecurematicsProductService')
+        resolve: loadSequence('QuoteComponent', 'QuoteComponentController', 'QuoteService')
     }).state('app.quotesnotifications', {
         url: '/quotes/notifications',
         templateUrl: "/admin/assets/var/demo/views/under-construction.html",
@@ -300,7 +300,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         templateUrl: "/admin/assets/var/demo/js/promotions/promotion-details/promotion-details.html",
         title: 'Promotion Details',
         icon: 'ti-layout-media-left-alt',
-        resolve: loadSequence('PromotionDetailsComponent', 'PromotionDetailsController', 'PromotionsService', 'PromotionProductModalController', 'PromotionShipmentModalController', 'SecurematicsProductService', 'pdfobject', 'ShipmentsComponent', 'ShipmentsComponentController', 'ParticipantsComponent', 'ParticipantsComponentController', 'SecurematicsParticipantsService', 'PromotionParticipantModalController')
+        resolve: loadSequence('PromotionDetailsComponent', 'PromotionDetailsController', 'PromotionsService', 'PromotionProductModalController', 'PromotionShipmentModalController', 'pdfobject', 'ShipmentsComponent', 'ShipmentsComponentController', 'ParticipantsComponent', 'ParticipantsComponentController', 'SecurematicsParticipantsService', 'PromotionParticipantModalController')
     }).state('app.rmas', {
         url: '/rmas',
         templateUrl: "/admin/assets/var/demo/views/under-construction.html",
