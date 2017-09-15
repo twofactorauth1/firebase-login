@@ -151,11 +151,11 @@
         }
       }
 
-      if(this.orgConfigAndPermissions.isVendor && orgConfig.finance){
-        this.orgConfigAndPermissions.ledger = true;
-      }
-      else{
-        this.orgConfigAndPermissions.ledger = false;
+      if(this.orgConfigAndPermissions.isVendor){
+        if(orgConfig.finance)
+          this.orgConfigAndPermissions.ledger = true;
+        else
+          this.orgConfigAndPermissions.ledger = false;
       }
 
       this.orgConfigAndPermissions.permissions = {
