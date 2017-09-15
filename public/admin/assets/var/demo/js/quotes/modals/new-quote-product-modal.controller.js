@@ -100,7 +100,10 @@ app.controller('QuoteProductModalController', ['$timeout', 'parentVm', 'pagingCo
 
     function addProductsToPromotions(){
         vm.parentVm.addItemsToCart(vm.products);
-        vm.parentVm.closeModal();
+        $timeout(function() {
+            vm.parentVm.closeModal();
+        }, 1000);
+        
     }
 
     function loadDefaults() {
