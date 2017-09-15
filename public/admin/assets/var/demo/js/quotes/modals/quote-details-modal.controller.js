@@ -119,15 +119,11 @@ app.controller('QuoteDetailsModalController', ['$scope', '$modal', '$state', '$r
     }, true);
 
     function searchInventory(){
-        
-        $scope.closeModal();
-        $timeout(function() {
-    		$state.go('app.inventory');
-    	}, 0);
+        addProducts();
     }
 
     function addProducts(){
-        openModal("new-quote-product-modal", "QuoteProductModalController", 'lg')
+        openModal("new-quote-product-modal", "QuoteProductModalController", 'lg');
     }
 
     function openModal(modal, controller, size){
