@@ -158,36 +158,37 @@ app.controller('QuoteDetailsModalController', ['$scope', '$modal', '$state', '$r
             vm.modalInstance.close();
     }
 
+    function addCartItems(item){
+        var calcItem = QuoteCartDetailsService.getCartItem(item, {});
+        QuoteCartDetailsService.addItemToCart(calcItem).then(function (response){
+            vm.uiState.saveLoading = false;
+            vm.state.cartDetail = QuoteCartDetailsService.cartDetail;
+        });
+    }
 
     function addItemsToCart(items) {
         if(items.length){
             if(!QuoteCartDetailsService.cartDetail._id){
+                vm.uiState.saveLoading = true;
                 QuoteCartDetailsService.getCartItemTitle("New Quote ("+ moment().format("MMM DD YY") + ")").then(function(response){
                     QuoteCartDetailsService.cartDetail.title = response.data;                        
                     _.each(items, function(item){
-                        var _item = _.findWhere(vm.state.cartDetail.items, { OITM_ItemCode: item.OITM_ItemCode });
-                        if(!_item){
-                            item.quantity = 1;
-                            vm.state.cartDetail.items.push(item);
-                        }
+                        var _item = _.findWhere(QuoteCartDetailsService.cartDetail.items, { OITM_ItemCode: item.OITM_ItemCode });
+                        addCartItems(item);
                     })
-                    setVendorSpecialPricing(); 
                 })
             }
             else{
+                vm.uiState.saveLoading = true;
                 _.each(items, function(item){
                     var _item = _.findWhere(vm.state.cartDetail.items, { OITM_ItemCode: item.OITM_ItemCode });
-                    if(!_item){
-                        item.quantity = 1;
-                        vm.state.cartDetail.items.push(item);
-                    }
-                    setVendorSpecialPricing(); 
+                    addCartItems(item);
                 })
             }
         }    
     }
 
-    
+
     function setVendorSpecialPricing(){            
         var items =  _.groupBy(vm.state.cartDetail.items, function(item){ 
             return item._shortVendorName; 
