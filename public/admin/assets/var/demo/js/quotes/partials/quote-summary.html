@@ -34,6 +34,7 @@
         <hr>
     </div>
     <h4 class="text-center mb20">Vendor Special Pricing</h4>
+    <h5 class="text-center mb20">Add your NSP, SPA, SPR, Deal Reg number below</h5>
 
     <ul class="list-unstyled cart-items">
         <li ng-repeat="item in vm.state.cartDetail.vendorSpecialPricing track by $index">
@@ -43,7 +44,7 @@
                 </label>
             </div>
             <div class="col-xs-6">
-                <input ng-if="!vm.uiState.isViewMode" type="text" ng-model="item.pricing" class="form-control spinner-input quantity" placeholder="rssp pps">
+                <input ng-if="!vm.uiState.isViewMode" type="text" ng-model="item.pricing" class="form-control spinner-input quantity" placeholder="Enter Number">
                 <span ng-if="vm.uiState.isViewMode">{{item.pricing}}</span>
             </div>
             <div class="clearfix"></div>
