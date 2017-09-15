@@ -79,13 +79,8 @@
 			if (vm.parentComponent && vm.parentComponent.scope()) {
 				pvm.component = vm.parentComponent.scope().vm.component;
 				vm.elementData = getStylesForModel();
-                //console.warn('After getStyles:', vm.elementData);
-                if(vm.elementData && vm.elementData.bg && vm.elementData.bg.img && vm.elementData.bg.img.url === null) {
-                    console.warn('bg.img.url is null');
-                }
 			}
-            //SUPER-HACKY
-            //if(vm.elementData)
+
 		}
 
 		function setupActiveElementWatch() {
