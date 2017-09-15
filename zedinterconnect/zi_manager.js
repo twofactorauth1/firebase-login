@@ -326,7 +326,7 @@ var ziManager = {
             'OITM_BHeight1', 'OWGT_UnitName', 'OITM_SWeight1', 'OITM_SVolume'];
 
         _.each(fieldAry, function(field){
-            if(result[field] === term) {
+            if(result[field] && result[field].toLowerCase && result[field].toLowerCase() === term.toLowerCase()) {
                 matches = true;
             }
         });
