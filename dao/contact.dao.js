@@ -970,7 +970,7 @@ var dao = {
                     self.log.warn('Here is what we have now:', merged);
                     //union details, notes, siteActivity, tags
                     // Tags append to existing contact if exists
-                    
+
                     merged.set('tags', _.union(_existingTags, contact.get('tags') || []));
 					var updatDetails=['addresses','phones','websites'];
 					_.each(['addresses','phones','websites'],function(detail){
