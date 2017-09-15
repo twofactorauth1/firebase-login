@@ -567,16 +567,19 @@ app.controller('importContactModalCtrl', ['$scope', '$location', '$timeout', '$m
 
   $scope.updateColumn = function (data, col) {
     var _formattedColumns = $scope.formatColumns();
-    $scope.csvResults[$scope.currentRow][_formattedColumns[col.value].index] = data;
-    $scope.errorRows = _.reject($scope.errorRows, function (d) {
-      return d === $scope.currentRow;
-    });
-    var matchingColumn = _.find($scope.contactColumns, function (_col) {
-      return _col.value === col.value;
-    });
-    matchingColumn.errorRows = _.reject(matchingColumn.errorRows, function (d) {
-      return d === $scope.currentRow;
-    });
+	var colIndex=_formattedColumns[col.value].index
+	if(!isNaN(colIndex)){
+		$scope.csvResults[$scope.currentRow][colIndex] = data;
+		$scope.errorRows = _.reject($scope.errorRows, function (d) {
+			return d === $scope.currentRow;
+		});
+		var matchingColumn = _.find($scope.contactColumns, function (_col) {
+			return _col.value === col.value;
+		});
+		matchingColumn.errorRows = _.reject(matchingColumn.errorRows, function (d) {
+			return d === $scope.currentRow;
+		});
+	}
   };
 
   /*

@@ -236,27 +236,17 @@ var contact = $$.m.ModelBase.extend({
     },
 
     getPrimaryAddress: function() {
-      var details = this.get('details');
-      if (details == null || details.length == 0) {
-        return '';
-      }
+		var details = this.get('details');
+		if (details == null || details.length == 0) {
+			return '';
+		}
+		var addresses = _.flatten(_.pluck(details, 'addresses'));
+		if (!addresses.length) {
+			return '';
+		}
+		var address = _.findWhere(addresses, {defaultBilling: true});
+		return address? address : addresses[0];
 
-      var addresses = _.flatten(_.pluck(details, 'addresses'));
-      if (!addresses.length) {
-        return ''
-      }
-
-      var address = _.findWhere(addresses, {defaultBilling: true}) ? _.findWhere(addresses, {defaultBilling: true}) : addresses[0];
-      var fields = ['address', 'address2', 'city', 'state','zip', 'country', 'countryCode'];
-      var addressValues = [];
-
-      fields.forEach(function(field, index) {
-          if (address && address[field]) {
-            addressValues.push(address[field]);
-          }
-      });
-
-      return addressValues.join('|');
     },
 
     getNotes: function() {

@@ -112,13 +112,69 @@
           }
           this.orgConfigAndPermissions.dashboard = true;
       }
+      
+      if(this.orgConfigAndPermissions.isVendor){
+        if(orgConfig.finance)
+          this.orgConfigAndPermissions.ledger = true;
+        else
+          this.orgConfigAndPermissions.ledger = false;
+      }
+
+      this.orgConfigAndPermissions.permissions = {
+          promotion:{
+              "create": this.orgConfigAndPermissions.isAdminUser || this.orgConfigAndPermissions.isSecurematicsUser,
+              "delete": this.orgConfigAndPermissions.isAdminUser || this.orgConfigAndPermissions.isSecurematicsUser,
+              "edit": this.orgConfigAndPermissions.isAdminUser || this.orgConfigAndPermissions.isSecurematicsUser,
+              "participants": this.orgConfigAndPermissions.isAdminUser || this.orgConfigAndPermissions.isSecurematicsUser,
+              "shipments":{
+                "edit": !this.orgConfigAndPermissions.isVendorRestrictedUser
+              }
+          },
+          quote:{
+            "view": this.orgConfigAndPermissions.quotes && (this.orgConfigAndPermissions.isAdminUser || this.orgConfigAndPermissions.isVendorWithCardCodes || this.orgConfigAndPermissions.isSecurematicsUser),
+            "create": this.orgConfigAndPermissions.quotes && (this.orgConfigAndPermissions.isAdminUser || this.orgConfigAndPermissions.isVendorWithCardCodes || this.orgConfigAndPermissions.isSecurematicsUser),
+            "edit": this.orgConfigAndPermissions.quotes && (this.orgConfigAndPermissions.isAdminUser || this.orgConfigAndPermissions.isVendorWithCardCodes || this.orgConfigAndPermissions.isSecurematicsUser),
+            "delete": this.orgConfigAndPermissions.quotes && (this.orgConfigAndPermissions.isAdminUser || this.orgConfigAndPermissions.isVendorWithCardCodes || this.orgConfigAndPermissions.isSecurematicsUser),
+            "showPartner": this.orgConfigAndPermissions.quotes && this.orgConfigAndPermissions.isAdminUser
+          }
+      }
+
+      // Redirect permissions
+      // dashboard
       if(!this.orgConfigAndPermissions.dashboard){
         this.orgConfigAndPermissions.userRestrictedStates.push("app.dohy");
-        var values = Object.keys(orgConfig.modules)
-        var itemArray =  _.filter(Object.keys(orgConfig.modules), function(item){
+      }
+      //inventory
+      if(!this.orgConfigAndPermissions.inventory){
+        this.orgConfigAndPermissions.userRestrictedStates.push("app.inventory");
+        this.orgConfigAndPermissions.userRestrictedStates.push("app.singleInventory");
+      }
+      //promotions
+      if(!this.orgConfigAndPermissions.promotions){
+        this.orgConfigAndPermissions.userRestrictedStates.push("app.promotions");
+        this.orgConfigAndPermissions.userRestrictedStates.push("app.promotionDetails");        
+      }
+      //purchase orders
+      if(!this.orgConfigAndPermissions.purchaseorders){
+        this.orgConfigAndPermissions.userRestrictedStates.push("app.purchaseorders");
+        this.orgConfigAndPermissions.userRestrictedStates.push("app.purchaseOrderDetails");
+      }
+      //quotes
+      if(!this.orgConfigAndPermissions.quotes){
+        this.orgConfigAndPermissions.userRestrictedStates.push("app.managequotes");
+      }
+      //ledger
+      if(!this.orgConfigAndPermissions.ledger){
+        this.orgConfigAndPermissions.userRestrictedStates.push("app.customers");
+        this.orgConfigAndPermissions.userRestrictedStates.push("app.ledgerDetails");
+        this.orgConfigAndPermissions.userRestrictedStates.push("app.invoiceDetails");
+      }
+
+      if(this.orgConfigAndPermissions.userRestrictedStates.length){ 
+        var itemArray = orgConfig.modules && _.filter(Object.keys(orgConfig.modules), function(item){
            return orgConfig.modules[item] == true;
         });
-        if(itemArray.length){
+        if(itemArray && itemArray.length && !this.orgConfigAndPermissions.dashboard){
           var _statename = "";
             switch (itemArray[0]) {
               case 'inventory':
@@ -147,36 +203,13 @@
             this.orgConfigAndPermissions.defaultState = _statename;
         }
         else{
-          this.orgConfigAndPermissions.logoutUrl = "/logout";
+          if(this.orgConfigAndPermissions.dashboard){
+            this.orgConfigAndPermissions.defaultState = "app.dohy";
+          }
+          else
+            this.orgConfigAndPermissions.logoutUrl = "/logout";
         }
       }
-
-      if(this.orgConfigAndPermissions.isVendor && orgConfig.finance){
-        this.orgConfigAndPermissions.ledger = true;
-      }
-      else{
-        this.orgConfigAndPermissions.ledger = false;
-      }
-
-      this.orgConfigAndPermissions.permissions = {
-          promotion:{
-              "create": this.orgConfigAndPermissions.isAdminUser || this.orgConfigAndPermissions.isSecurematicsUser,
-              "delete": this.orgConfigAndPermissions.isAdminUser || this.orgConfigAndPermissions.isSecurematicsUser,
-              "edit": this.orgConfigAndPermissions.isAdminUser || this.orgConfigAndPermissions.isSecurematicsUser,
-              "participants": this.orgConfigAndPermissions.isAdminUser || this.orgConfigAndPermissions.isSecurematicsUser,
-              "shipments":{
-                "edit": !this.orgConfigAndPermissions.isVendorRestrictedUser
-              }
-          },
-          quote:{
-            "view": this.orgConfigAndPermissions.quotes && (this.orgConfigAndPermissions.isAdminUser || this.orgConfigAndPermissions.isVendorWithCardCodes || this.orgConfigAndPermissions.isSecurematicsUser),
-            "create": this.orgConfigAndPermissions.quotes && (this.orgConfigAndPermissions.isAdminUser || this.orgConfigAndPermissions.isVendorWithCardCodes || this.orgConfigAndPermissions.isSecurematicsUser),
-            "edit": this.orgConfigAndPermissions.quotes && (this.orgConfigAndPermissions.isAdminUser || this.orgConfigAndPermissions.isVendorWithCardCodes || this.orgConfigAndPermissions.isSecurematicsUser),
-            "delete": this.orgConfigAndPermissions.quotes && (this.orgConfigAndPermissions.isAdminUser || this.orgConfigAndPermissions.isVendorWithCardCodes || this.orgConfigAndPermissions.isSecurematicsUser),
-            "showPartner": this.orgConfigAndPermissions.quotes && this.orgConfigAndPermissions.isAdminUser
-          }
-      }
-
       return this.orgConfigAndPermissions;
     };
 

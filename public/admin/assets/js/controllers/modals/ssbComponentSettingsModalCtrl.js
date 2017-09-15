@@ -494,7 +494,8 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
               linkTo: {type: '',data:""},
               ssb: true
         });
-        $scope.editNav[index].links[alink.links.length-1]={isEdit:true};
+        if($scope.editNav[index])
+          $scope.editNav[index].links[alink.links.length-1]={isEdit:true};
         $timeout(function () {
              $scope.updateSubIndex();
         },1000);

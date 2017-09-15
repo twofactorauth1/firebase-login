@@ -394,7 +394,7 @@ _.extend(api.prototype, baseApi.prototype, {
     },
 
     _asyncMakeCSV: function(contacts, cb) {
-        var headers = ['first', 'middle', 'last', 'email', 'created', 'type', 'tags', 'phone', 'unsubscribed', 'website', 'company', 'address', 'notes'];
+        var headers = ['first', 'middle', 'last', 'email', 'created', 'type', 'tags', 'phone', 'unsubscribed', 'website', 'company', 'address', 'address2', 'city', 'state','zip', 'country', 'notes'];
         var extras = _.pluck(_.pluck(contacts, 'attributes'), 'extra');
         var extraHeaders = [];
 
@@ -436,7 +436,17 @@ _.extend(api.prototype, baseApi.prototype, {
             csv += parseString(contact.get('unsubscribed'));
             csv += parseString(contact.get('details').length && contact.get('details')[0].websites && contact.get('details')[0].websites[0] && contact.get('details')[0].websites[0].website ? contact.get('details')[0].websites[0].website  : '');
             csv += parseString(contact.get('details').length && contact.get('details')[0].company ? contact.get('details')[0].company : '');
-            csv += parseString( contact.getPrimaryAddress() );
+			//add address to export
+
+			const primaryAddress=contact.getPrimaryAddress();
+			const fields = ['address', 'address2', 'city', 'state','zip', 'country'];  fields.forEach(function(field, index) {
+				if (primaryAddress && primaryAddress[field]) {
+					csv += parseString( primaryAddress[field] );
+				}else{
+					csv += parseString( '' );
+				}
+			});
+
             csv += parseString(contact.getNotes() );
 
             _.each(extraHeaders, function (header) {

@@ -227,7 +227,6 @@
             if (contacts) {
 				contactArr =(function filter(obj) {
 					 _.each(obj, function(value,key){
-						 debugger
 						if (value === "" || value === null){
 							delete obj[key];
 						} else if (Object.prototype.toString.call(value) === '[object Object]') {
