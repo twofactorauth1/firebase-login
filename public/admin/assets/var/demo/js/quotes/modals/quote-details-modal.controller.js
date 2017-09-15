@@ -158,19 +158,36 @@ app.controller('QuoteDetailsModalController', ['$scope', '$modal', '$state', '$r
             vm.modalInstance.close();
     }
 
+
     function addItemsToCart(items) {
         if(items.length){
-           _.each(items, function(item){
-                var _item = _.findWhere(vm.state.cartDetail.items, { OITM_ItemCode: item.OITM_ItemCode });
-                if(!_item){
-                    item.quantity = 1;
-                    vm.state.cartDetail.items.push(item);
-                }
-            })
-            setVendorSpecialPricing(); 
-        }        
+            if(!QuoteCartDetailsService.cartDetail._id){
+                QuoteCartDetailsService.getCartItemTitle("New Quote ("+ moment().format("MMM DD YY") + ")").then(function(response){
+                    QuoteCartDetailsService.cartDetail.title = response.data;                        
+                    _.each(items, function(item){
+                        var _item = _.findWhere(vm.state.cartDetail.items, { OITM_ItemCode: item.OITM_ItemCode });
+                        if(!_item){
+                            item.quantity = 1;
+                            vm.state.cartDetail.items.push(item);
+                        }
+                    })
+                    setVendorSpecialPricing(); 
+                })
+            }
+            else{
+                _.each(items, function(item){
+                    var _item = _.findWhere(vm.state.cartDetail.items, { OITM_ItemCode: item.OITM_ItemCode });
+                    if(!_item){
+                        item.quantity = 1;
+                        vm.state.cartDetail.items.push(item);
+                    }
+                    setVendorSpecialPricing(); 
+                })
+            }
+        }    
     }
 
+    
     function setVendorSpecialPricing(){            
         var items =  _.groupBy(vm.state.cartDetail.items, function(item){ 
             return item._shortVendorName; 
