@@ -1,16 +1,18 @@
 'use strict';
 /*global app*/
-app.controller('QuoteDetailsModalController', ['$scope', '$state', '$rootScope', '$timeout', 'toaster', 'SweetAlert', 'formValidations', 'QuoteCartDetailsService', 'UserPermissionsConfig', function ($scope, $state, $rootScope, $timeout, toaster, SweetAlert, formValidations, QuoteCartDetailsService, UserPermissionsConfig) {
+app.controller('QuoteDetailsModalController', ['$scope', '$modal', '$state', '$rootScope', '$timeout', 'toaster', 'SweetAlert', 'formValidations', 'QuoteCartDetailsService', 'UserPermissionsConfig', function ($scope, $modal, $state, $rootScope, $timeout, toaster, SweetAlert, formValidations, QuoteCartDetailsService, UserPermissionsConfig) {
 
     var vm = this;
 
     vm.uiState = {
-       loadingDetailsModal: true
+       loadingDetailsModal: true,
+       showAddBtn: true
     };
 
     vm.state = {
         orgCardAndPermissions: UserPermissionsConfig.orgConfigAndPermissions
     };
+
     vm.initAttachment = initAttachment;
     vm.calculateTotalPrice = calculateTotalPrice;
     vm.state.cartDetail = QuoteCartDetailsService.cartDetail;
@@ -20,7 +22,9 @@ app.controller('QuoteDetailsModalController', ['$scope', '$state', '$rootScope',
     vm.checkIfValidEmail = checkIfValidEmail;
     vm.selectCardCode = selectCardCode;
     vm.searchInventory = searchInventory;
-
+    vm.addProducts = addProducts;
+    vm.addItemsToCart = addItemsToCart;
+    vm.closeModal = closeModal;
     function selectCardCode(customer){
         vm.state.cartDetail.companyName = customer.OCRD_CardName;
     }
@@ -115,11 +119,84 @@ app.controller('QuoteDetailsModalController', ['$scope', '$state', '$rootScope',
     }, true);
 
     function searchInventory(){
-        
-        $scope.closeModal();
-        $timeout(function() {
-    		$state.go('app.inventory');
-    	}, 0);
+        addProducts();
+    }
+
+    function addProducts(){
+        openModal("new-quote-product-modal", "QuoteProductModalController", 'lg');
+    }
+
+    function openModal(modal, controller, size){
+
+        var _modal = {
+            templateUrl: modal,
+            keyboard: true,
+            backdrop: 'static',
+            size: 'lg',
+            scope: $scope,
+            resolve: {
+                parentVm: function() {
+                    return vm;
+                }
+            }
+        };
+
+        if (controller) {
+            _modal.controller = controller  + ' as vm';
+        }
+
+
+        vm.modalInstance = $modal.open(_modal);
+
+        vm.modalInstance.result.then(null, function () {
+            angular.element('.sp-container').addClass('sp-hidden');
+        });
+    }
+
+    function closeModal() {
+        if(vm.modalInstance)
+            vm.modalInstance.close();
+    }
+
+    function addItemsToCart(items) {
+        if(items.length){
+           _.each(items, function(item){
+                var _item = _.findWhere(vm.state.cartDetail.items, { OITM_ItemCode: item.OITM_ItemCode });
+                if(!_item){
+                    item.quantity = 1;
+                    vm.state.cartDetail.items.push(item);
+                }
+            })
+            setVendorSpecialPricing(); 
+        }        
+    }
+
+    function setVendorSpecialPricing(){            
+        var items =  _.groupBy(vm.state.cartDetail.items, function(item){ 
+            return item._shortVendorName; 
+        });
+        var keyArr = _.map(items, function(g, key){return {vendor: key}});
+
+        _.each(keyArr, function(item){
+            if(vm.state.cartDetail.vendorSpecialPricing && vm.state.cartDetail.vendorSpecialPricing.length){
+                if(!_.contains(_.pluck(vm.state.cartDetail.vendorSpecialPricing, "vendor"), item.vendor)){
+                    vm.state.cartDetail.vendorSpecialPricing.push({
+                        "vendor": item.vendor
+                    })
+                }
+            }
+            else{
+                vm.state.cartDetail.vendorSpecialPricing = [];
+                vm.state.cartDetail.vendorSpecialPricing.push({
+                    "vendor": item.vendor
+                })
+            }
+        })
+
+        vm.state.cartDetail.vendorSpecialPricing = _.filter(vm.state.cartDetail.vendorSpecialPricing, function(item){
+            return _.contains(_.pluck(keyArr, 'vendor'), item.vendor) 
+        })
+
     }
 
     (function init() {

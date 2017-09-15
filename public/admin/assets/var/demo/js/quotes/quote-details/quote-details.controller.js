@@ -30,6 +30,8 @@ function QuoteDetailsController($scope, $timeout, toaster, SweetAlert, formValid
     vm.closeModal = closeModal;
     vm.addProducts = addProducts;
     vm.addItemsToCart = addItemsToCart;
+    vm.searchInventory = searchInventory;
+    
     function selectCardCode(customer){
         vm.state.cartDetail.companyName = customer.OCRD_CardName;
     }
@@ -240,6 +242,11 @@ function QuoteDetailsController($scope, $timeout, toaster, SweetAlert, formValid
         if(vm.modalInstance)
             vm.modalInstance.close();
     }
+
+    function searchInventory(){
+        addProducts();
+    }
+
     (function init() {
         
     })();
