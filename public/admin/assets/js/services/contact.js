@@ -3,7 +3,7 @@
 /*jslint unparam: true*/
 (function (angular) {
     app.service('ContactService', ['$http', '$rootScope', '$cacheFactory', 'ImportContactService', 'contactConstant', 'userConstant', 'formValidations', '$q', function ($http, $rootScope, $cacheFactory, ImportContactService, contactConstant, userConstant, formValidations, $q) {
-        var baseUrl = '/api/1.0/';
+        const baseUrl = '/api/1.0/';
 
         this.getCache = function () {
             var cache = $cacheFactory.get('ContactService');
@@ -227,7 +227,6 @@
             if (contacts) {
 				contactArr =(function filter(obj) {
 					 _.each(obj, function(value,key){
-						 debugger
 						if (value === "" || value === null){
 							delete obj[key];
 						} else if (Object.prototype.toString.call(value) === '[object Object]') {
