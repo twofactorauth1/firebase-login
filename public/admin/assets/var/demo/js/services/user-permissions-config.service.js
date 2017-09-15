@@ -157,7 +157,7 @@
       //purchase orders
       if(!this.orgConfigAndPermissions.purchaseorders){
         this.orgConfigAndPermissions.userRestrictedStates.push("app.purchaseorders");
-        this.orgConfigAndPermissions.userRestrictedStates.push("app.purchaseorders");
+        this.orgConfigAndPermissions.userRestrictedStates.push("app.purchaseOrderDetails");
       }
       //quotes
       if(!this.orgConfigAndPermissions.quotes){
