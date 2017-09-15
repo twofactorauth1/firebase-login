@@ -394,7 +394,7 @@ _.extend(api.prototype, baseApi.prototype, {
     },
 
     _asyncMakeCSV: function(contacts, cb) {
-        const headers = ['first', 'middle', 'last', 'email', 'created', 'type', 'tags', 'phone', 'unsubscribed', 'website', 'company', 'address', 'address2', 'city', 'state','zip', 'country', 'notes'];
+        var headers = ['first', 'middle', 'last', 'email', 'created', 'type', 'tags', 'phone', 'unsubscribed', 'website', 'company', 'address', 'address2', 'city', 'state','zip', 'country', 'notes'];
         var extras = _.pluck(_.pluck(contacts, 'attributes'), 'extra');
         var extraHeaders = [];
 

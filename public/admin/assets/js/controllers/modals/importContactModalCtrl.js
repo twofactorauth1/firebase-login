@@ -567,7 +567,7 @@ app.controller('importContactModalCtrl', ['$scope', '$location', '$timeout', '$m
 
   $scope.updateColumn = function (data, col) {
     var _formattedColumns = $scope.formatColumns();
-	const colIndex=_formattedColumns[col.value].index
+	var colIndex=_formattedColumns[col.value].index
 	if(!isNaN(colIndex)){
 		$scope.csvResults[$scope.currentRow][colIndex] = data;
 		$scope.errorRows = _.reject($scope.errorRows, function (d) {

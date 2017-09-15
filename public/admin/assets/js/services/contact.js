@@ -3,7 +3,7 @@
 /*jslint unparam: true*/
 (function (angular) {
     app.service('ContactService', ['$http', '$rootScope', '$cacheFactory', 'ImportContactService', 'contactConstant', 'userConstant', 'formValidations', '$q', function ($http, $rootScope, $cacheFactory, ImportContactService, contactConstant, userConstant, formValidations, $q) {
-        const baseUrl = '/api/1.0/';
+        var baseUrl = '/api/1.0/';
 
         this.getCache = function () {
             var cache = $cacheFactory.get('ContactService');
