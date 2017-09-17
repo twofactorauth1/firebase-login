@@ -9,7 +9,7 @@ html
       meta(http-equiv="X-UA-Compatible",content="IE=edge")
       //- link(rel='stylesheet', href='/public/admin/assets/css/styles.css')
       //- link(rel='stylesheet', href='/public/admin/assets/css/frontend-admin.css')
-      link(rel='stylesheet', href="//fonts.googleapis.com/css?family=Roboto|Roboto+Condensed|Roboto+Slab|Oswald|Montserrat:200,400,700|Droid+Serif|Open+Sans|Open+Sans+Condensed|Lato|Raleway|Quicksand|Ubuntu|Merriweather|Quattrocento|Lora|Playfair+Display|Pacifico|Satisfy|Parisienne|Petit+Formal+Script|Indie+Flower|Shadows+Into+Light+Two", type="text/css")
+      link(rel='stylesheet', href="//fonts.googleapis.com/css?family=Roboto|Roboto+Condensed|Roboto+Slab|Oswald|Montserrat:200,400,700|Droid+Serif|Open+Sans|Open+Sans+Condensed|Lato|Raleway|Quicksand|Ubuntu|Merriweather|Quattrocento|Lora|Playfair+Display|Pacifico|Satisfy|Parisienne|Petit+Formal+Script|Indie+Flower|Cinzel|Shadows+Into+Light+Two", type="text/css")
       link(rel='stylesheet', href='/public/js/libs/bootstrap/dist/css/bootstrap.min.css')
       link(rel='stylesheet', href='/public/admin/assets/css/email.css')
       style(type='text/css').
@@ -110,7 +110,7 @@ html
           text-align: center;
         }
         .crossLine {
-          text-decoration: line-through;    
+          text-decoration: line-through;
           margin-right: 10px;
         }
         .orderProductName{
@@ -443,8 +443,8 @@ html
                                           tr
                                             td(class="orderProductName")= val.name
                                             if val.on_sale
-                                                td(class="orderTd") 
-                                                    span.crossLine $!{val.regular_price} 
+                                                td(class="orderTd")
+                                                    span.crossLine $!{val.regular_price}
                                                     span $!{val.sale_price}
                                             else
                                                 td(class="orderTd")= '$' + val.regular_price
