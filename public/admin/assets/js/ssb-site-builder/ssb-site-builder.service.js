@@ -1474,7 +1474,7 @@
                 "'Amatic SC', cursive": "Amatic SC",
                 "'Berlin', sans-serif": "Berlin",
                 "'Calibri','Open Sans',sans-serif": "Calibri",
-                "'Cinzel','Cinzel',serif",
+                "'Cinzel',serif": "Cinzel",
                 "'Delius Swash Caps', cursive": 'Delius Swash Caps',
                 "'Droid Serif',serif": 'Droid Serif',
                 "'Georgia',serif": "Georgia",
