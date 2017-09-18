@@ -53,6 +53,9 @@ module.exports = {
                 req.session.unAuthAccountId = value.id();
                 req.session.unAuthSubdomain = value.get('subdomain');
                 req.session.unAuthDomain = value.get('domain');
+                if(value.get('isOrgAdmin') !== true) {
+                    self._addHeaders(resp);
+                }
                 return next();
             } else {
                 logger.trace('Not in cache');
@@ -67,6 +70,9 @@ module.exports = {
                             req.session.unAuthAccountId = value.id();
                             req.session.unAuthSubdomain = value.get('subdomain');
                             req.session.unAuthDomain = value.get('domain');
+                            if(value.get('isOrgAdmin') !== true) {
+                                self._addHeaders(resp);
+                            }
                             //req.session.locked = value.get('locked');
                             return next();
                         }
@@ -93,4 +99,8 @@ module.exports = {
         resp.header('Expires', '-1');
         resp.header('Pragma', 'no-cache');
     },
+
+    _addHeaders: function(resp) {
+        resp.header('X-Robots-Tag', 'noindex');
+    }
 };
