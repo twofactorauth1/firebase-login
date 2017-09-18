@@ -113,6 +113,16 @@
 
 
 
+.ssb-theme-btn.btnLaunchCart, .ssb-theme-btn.btnLaunchCart:hover {
+    background-color: {{vm.state.website.themeOverrides.styles.checkoutBtnBgColor}}!important;
+    color: {{vm.state.website.themeOverrides.styles.checkoutBtnTextColor}}!important;
+    border-color: {{vm.state.website.themeOverrides.styles.checkoutBtnBgColor}}!important;
+}
+
+.ssb-theme-btn.btnLaunchCart:hover, .ssb-theme-btn.btnLaunchCart:active, .ssb-theme-btn.btnLaunchCart:focus {
+    background-color: {{vm.state.website.themeOverrides.styles.checkoutBtnBgColor}}!important;
+}
+
 
 
 @media screen and (min-width: 768px) {
@@ -141,6 +151,8 @@
         background-color: {{vm.state.website.settings.defaultBlogTemplateBgColor}};
     }
 }
+
+
 
 </style>
 

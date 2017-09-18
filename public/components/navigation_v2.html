@@ -36,13 +36,6 @@
     .navigation-v2.nav-header-{{component._id}} .navbar-default .navbar-header .navbar-toggle {
         border-color: {{component.nav.txtcolor}} !important;
     }
-    .navigation-v2.nav-header-{{component._id}} .navbar-default .nav-sub-menu{
-        background-color: {{component.subnavigation.menubgcolor}}!important;
-        border-color: {{component.subnavigation.menubgcolor}}!important;
-    }
-    .navigation-v2.nav-header-{{component._id}} .navbar-default .nav-sub-menu li{
-        text-align:{{component.subnavigation.align}} !important;
-    }
     .navigation-v2.nav-header-{{component._id}} .navbar-default .navbar-nav > li,.navigation-v2.nav-header-{{component._id}} .navbar-default .navbar-nav > li a{
         color: {{component.nav.txtcolor}} !important;
         background-color: {{component.nav.menubgcolor}};
@@ -51,7 +44,23 @@
         font-weight:{{component.nav.font.weight}};
         text-transform:{{component.nav.allowMixedCase ? 'none' : 'uppercase' }}
     }
-
+    
+    .navigation-v2.nav-header-{{component._id}} .navbar-default .nav-sub-menu  li,
+    .navigation-v2.nav-header-{{component._id}} .navbar-default .nav-sub-menu li a{
+        background-color: {{component.subnavigation.menubgcolor}}!important; 
+        text-align:{{component.subnavigation.align}} !important;
+        border-color: {{component.subnavigation.menubgcolor}}!important;
+        color: {{component.subnavigation.txtcolor}} !important;  
+    }
+    
+    .navigation-v2.nav-header-{{component._id}} .navbar-default .nav-sub-menu  li:hover,
+    .navigation-v2.nav-header-{{component._id}} .navbar-default .nav-sub-menu  li:focus,
+    .navigation-v2.nav-header-{{component._id}} .navbar-default .nav-sub-menu  li a:hover,
+    .navigation-v2.nav-header-{{component._id}} .navbar-default .nav-sub-menu  li:hover, 
+    .navigation-v2.nav-header-{{component._id}} .navbar-default .nav-sub-menu li.nav-active a:focus{
+        background-color: {{component.subnavigation.hoverbg}} !important;
+        color: {{component.subnavigation.hover}} !important; 
+    }
 </style>
 <div ng-class="component.type+'-v'+component.version" class="nav-header-{{component._id}}">
     <nav class="navbar navbar-default" role="navigation">

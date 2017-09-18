@@ -1,9 +1,6 @@
 <div class="form-builder-{{vm.component._id}} form-builder-component">
-
-    <div
-        class="col-xs-12 component-body">
-
-        <div class="inner-page-1">
+	<div class="col-xs-12 component-body">
+		<div class="inner-page-1">
             <div  data-edit class="row">
                 <div class="component-content"
         ng-attr-style="{{vm.formStyle(vm.component.formSettings)}}" ng-class="{'default-font-size': vm.component.formSettings.formTextSize}">
@@ -16,7 +13,6 @@
                     <div class="clearfix mb15"></div>
                     <div class="col-sm-8">
                         <form name="formBuilder" ng-submit="vm.createUser(formBuilder)">
-
                             <div class="form-builder-layout" ng-switch="vm.component.layout">
                                 <div ng-switch-when="1" class="form-layout-1 input-fields {{vm.nthRow}}" ng-class="{'input-field-spacing': vm.component.formSettings.spacing.pr}"  ng-attr-style="{{vm.inputContainerStyle(vm.component.formSettings)}}">
                                     <div ng-attr-style="{{vm.fieldStyle(vm.component.formSettings)}}" class="form-group {{vm.fieldClass()}} input-field-container" ng-if="val.visible" ng-repeat="val in vm.component.contactInfo" ng-class="{ 'has-error' : (formBuilder.{{val.name}}.$invalid || formBuilder.{{val.name}}.$error.$required) && !formBuilder.{{val.name}}.$pristine }">
@@ -45,8 +41,6 @@
                                             <span class-name="btn-form-text" elem ng-model="vm.component.submitBtn"></span>
                                         </div>
                                     </div>
-
-
                                 </div>
                                 <div ng-switch-when="2" class="form-layout-2 input-fields {{vm.nthRow}}" ng-class="{'input-field-spacing': vm.component.formSettings.spacing.pr}" ng-attr-style="{{vm.inputContainerStyle(vm.component.formSettings)}}">
                                     <div ng-attr-style="{{vm.fieldStyle(vm.component.formSettings)}}" class="form-group {{vm.fieldClass()}} input-field-container" ng-if="val.visible" ng-repeat="val in vm.component.contactInfo" ng-class="{ 'has-error' : (formBuilder.{{val.name}}.$invalid || formBuilder.{{val.name}}.$error.$required) && !formBuilder.{{val.name}}.$pristine }">
@@ -102,7 +96,6 @@
                                             </div>
                                         </div>
                                     </div>
-
                                     <div class="clearfix mb15 visible-xs"></div>
                                     <div class="col-sm-12 form-builder-submit-btn-container">
                                         <button ng-if="!vm.isEditing" ng-attr-style="{{vm.buttonStyle(vm.component.btn)}}" ng-class="{'ssb-theme-btn form-submit-button': vm.component.submitBtn}" type="submit" class="btn btn-form btn-block pull-right" ng-disabled="formBuilder.$invalid">
@@ -112,7 +105,6 @@
                                             <span class-name="btn-form-text" elem ng-model="vm.component.submitBtn"></span>
                                         </div>
                                     </div>
-
                                 </div>
                                 <div ng-switch-when="4" class="form-layout-4 input-fields {{vm.nthRow}}" ng-class="{'input-field-spacing': vm.component.formSettings.spacing.pr}" ng-attr-style="{{vm.inputContainerStyle(vm.component.formSettings)}}">
                                     <div ng-attr-style="{{vm.fieldStyle(vm.component.formSettings)}}" class="form-group {{vm.fieldClass()}} input-field-container" ng-if="val.visible" ng-repeat="val in vm.component.contactInfo" ng-class="{ 'has-error' : (formBuilder.{{val.name}}.$invalid || formBuilder.{{val.name}}.$error.$required) && !formBuilder.{{val.name}}.$pristine }">
@@ -132,7 +124,6 @@
                                             </div>
                                         </div>
                                     </div>
-
                                     <div class="clearfix mb15 visible-xs"></div>
                                     <div class="col-sm-12 form-builder-submit-btn-container">
                                         <button ng-if="!vm.isEditing" ng-attr-style="{{vm.buttonStyle(vm.component.btn)}}" ng-class="{'ssb-theme-btn form-submit-button': vm.component.submitBtn}" type="submit" class="btn btn-form btn-block pull-right" ng-disabled="formBuilder.$invalid">
@@ -150,8 +141,8 @@
                                         <span class="help-block" ng-if="vm.checkDuplicateEmail(val)">Email already exists.</span>
                                         <textarea ng-if="val.name === 'message'" class="form-control input-lg" name="message" rows="5" ng-model="vm.formBuilder[val.name]" ng-attr-style="{{vm.inputStyle(vm.component.formSettings)}}" name="{{val.name}}" ng-required='!val.optional' ng-pattern="vm.addPattern(val)" placeholder="{{val.label || val.type}}"></textarea>
                                     </div>
-                                    <div class="form-group {{vm.fieldClass()}} input-field-container" ng-if="vm.component.optInRequired"  ng-class="{ 'has-error' : (formBuilder._optin.$invalid || formBuilder._optin.$error.$required) && !formBuilder._optin.$pristine }">
-                                        <span class="required">*</span>
+                                    <div class="form-group  input-field-container col-sm-12 " ng-if="vm.component.optInRequired"  ng-class="{ 'has-error' : (formBuilder._optin.$invalid || formBuilder._optin.$error.$required) && !formBuilder._optin.$pristine }">
+										<span class="required">*</span>
                                         <div class="form-checkbox-field">
                                             <input class="optin-checkbox" type="checkbox" ng-model="vm.formBuilder['_optin']"   name="_optin" ng-required='true' ng-change="vm.formFiedlsCHange('_optin')">
                                         </div>
@@ -171,7 +162,6 @@
                                     </div>
                                 </div>
                             </div>
-
                             <div class="clearfix mb15"></div>
                             <div ng-show="vm.formSuccess" ng-if="vm.component.formSettings.successMessage">
                                 <div class="row thank-you animated" ng-class="{fadeOut: !vm.formSuccess, tada: vm.formSuccess}">
@@ -281,8 +271,6 @@
             padding-left: {{vm.component.formSettings.spacing.pr/2}}px !important;
             padding-right: {{vm.component.formSettings.spacing.pr/2}}px !important;
         }
-
-
         .form-builder-{{vm.component._id}} .btn-simple-form:hover, .btn-simple-form:active, .btn-simple-form:active:focus, .btn-simple-form:active:hover
         {
             color: {{vm.component.btn.color}}!important

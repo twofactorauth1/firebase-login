@@ -326,7 +326,7 @@ var ziManager = {
             'OITM_BHeight1', 'OWGT_UnitName', 'OITM_SWeight1', 'OITM_SVolume'];
 
         _.each(fieldAry, function(field){
-            if(result[field] === term) {
+            if(result[field] && result[field].toLowerCase && result[field].toLowerCase() === term.toLowerCase()) {
                 matches = true;
             }
         });
@@ -360,6 +360,7 @@ var ziManager = {
         if(filter){
             query._shortVendorName = new RegExp('^' + filter);
         }
+
         
         if(term){
             term = term.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
@@ -383,12 +384,52 @@ var ziManager = {
         var _skip = skip || 0;
         var _limit = limit || 0;
 
+        var appliedSkip = _skip;
+        var appliedLimit = _limit;
+        if(term) {
+            //need to get all the results so we can rank
+            appliedSkip = 0;
+            appliedLimit = 0;
+        }
+        
+
         self._addUserInventoryFilter(accountId, userId, query, function(err, query){
-            ziDao.findRawWithFieldsLimitAndOrder(query, _skip, _limit, sortBy, fields, collection, sortDir, function(err, value){
+            ziDao.findRawWithFieldsLimitAndOrder(query, appliedSkip, appliedLimit, sortBy, fields, collection, sortDir, function(err, value){
                 if(err) {
                     self.log.error(accountId, userId, 'Error searching cached products:', err);
                     fn(err);
                 } else {
+                    if(term) {
+                        self.log.info('ranking');
+                        var leftOrRightRegexp = new RegExp('\.*'+term +'|'+ term+'\.*', 'i');
+                        _.each(value.results, function(result){
+                            if(self._findMatchEquals(result, term)) {
+                                if(result._shortVendorName.indexOf('hardware') >0) {
+                                    result.rank = 1;
+                                } else {
+                                    result.rank = 2;
+                                }
+                            } else if(self._findMatchRegexp(result, leftOrRightRegexp)){
+                                if(result._shortVendorName.indexOf('hardware') >0) {
+                                    result.rank = 3;
+                                } else {
+                                    result.rank = 4;
+                                }
+                            } else {
+                                if(result._shortVendorName.indexOf('hardware') >0) {
+                                    result.rank = 5;
+                                } else {
+                                    result.rank = 6;
+                                }
+                            }
+                        });
+                        //self.log.debug('about to apply skip [' + _skip + '] and limit [' + _limit + '] to array with length:' + value.results.length);
+                        var sortedResults = _.sortBy(value.results, 'rank');
+                        //self.log.debug('sortedResults.length:', sortedResults.length);
+                        sortedResults = sortedResults.slice(_skip, _limit+_skip);
+                        //self.log.debug('sliced sortedResults.length:', sortedResults.length);
+                        value.results = sortedResults;
+                    }
                     self.log.debug(accountId, userId, '<< productSearch');
                     fn(null, value);
                 }

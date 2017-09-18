@@ -242,6 +242,38 @@
     </div>
 
 </div>
+
+<div class="row padding-10" ng-if="component.type == 'products'">
+    <h4 class="ssb-sidebar-sub-heading-separator">Widget button Styles</h4>
+    
+    <div class="form-group ssb-spectrum-color-picker-small">
+        <div class="ssb-spectrum-color-picker-background-container">
+            <spectrum-colorpicker class="ssb-spectrum-color-picker-background" format="'rgb'" options="vm.spectrum.options" ng-model="component.formSettings.addToCartBtnBgColor"></spectrum-colorpicker>
+            <i class="fa fa-eyedropper" />
+        </div>
+        <label>
+            Fill color
+            <span tooltip-placement="top" tooltip-append-to-body="true"  tooltip-append-to-body="true" tooltip="Override the default 'Add to Cart' button background color">
+                <i class="fa fa-info-circle" />
+            </span>
+        </label>
+    </div>
+
+    <div class="form-group ssb-spectrum-color-picker-small">
+        <div class="ssb-spectrum-color-picker-background-container">
+            <spectrum-colorpicker class="ssb-spectrum-color-picker-background" format="'rgb'" options="vm.spectrum.options" ng-model="component.formSettings.addToCartBtnTxtColor"></spectrum-colorpicker>
+            <i class="fa fa-eyedropper" />
+        </div>
+        <label>
+            Text color
+            <span tooltip-placement="top" tooltip-append-to-body="true"  tooltip-append-to-body="true" tooltip="Override the default 'Add to Cart' button text color">
+                <i class="fa fa-info-circle" />
+            </span>
+        </label>
+    </div>
+
+</div>
+
 <div class="row padding-10" ng-if="component.type == 'products' && component.version == 2">
     <h4 class="ssb-sidebar-sub-heading-separator">Widget Style Settings</h4>
     <div class="form-group ssb-spectrum-color-picker-small">

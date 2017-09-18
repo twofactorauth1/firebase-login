@@ -80,6 +80,7 @@
 				pvm.component = vm.parentComponent.scope().vm.component;
 				vm.elementData = getStylesForModel();
 			}
+
 		}
 
 		function setupActiveElementWatch() {
@@ -196,7 +197,7 @@
 		function updateSettingsForModel() {
 
 			setStylesForModel();
-
+            console.warn('After setStyles:', vm.elementData);
 		}
 
 		function getStylesForModel() {
@@ -240,7 +241,9 @@
 				}
 
 			}
-
+            if(data.bg && data.bg.img && data.bg.img.url === null) {
+                data.bg.img.url = '';
+            }
 			return data;
 
 		}
@@ -460,7 +463,6 @@
 				//just set the style props on the frontend
 
 				applyStyles();
-
 			}
 
 		}

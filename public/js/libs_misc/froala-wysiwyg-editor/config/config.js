@@ -125,7 +125,8 @@ $.FroalaEditor.build = _.memoize(function(type) {
         fontFamily: {
             "'Arial',Helvetica,sans-serif": "Arial",
             "'Amatic SC', cursive": "Amatic SC",
-            "'Berlin', sans-serif": "Berlin",
+            "'Berlin',sans-serif": "Berlin",
+            "'Cinzel',serif": 'Cinzel',
             "Calibri,'Open Sans',sans-serif": "Calibri",
             "'Delius Swash Caps', cursive": 'Delius Swash Caps',
             "'Droid Serif',serif": 'Droid Serif',
