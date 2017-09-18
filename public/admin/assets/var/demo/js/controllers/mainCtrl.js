@@ -257,7 +257,7 @@ app.controller('AppCtrl', ['$rootScope', '$scope', '$state', '$translate', '$win
                 if(btn){
                     btn.addEventListener('click', function() {
                         if(!$(btn).hasClass("intercom-launcher-active")){
-                            Intercom("showNewMessage",$location.$$absUrl);
+                            window.intercomSettings.current_page = $location.$$absUrl;
                         }
                     });
                 }   
