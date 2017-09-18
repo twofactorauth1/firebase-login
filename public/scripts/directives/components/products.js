@@ -2134,6 +2134,21 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                 angular.element("#cart-checkout-modal .modal-body").scrollTop(0);
             };
 
+            scope.cartButtonStyle = function(style){
+                var styleString = ' ';
+                if(style){
+                    if (style.addToCartBtnBgColor) {
+                        styleString += 'background-color: ' + style.addToCartBtnBgColor + "!important;";
+                        styleString += 'border-color: ' + style.addToCartBtnBgColor + "!important;";
+                    }
+                    if (style.addToCartBtnTxtColor) {
+                        styleString += 'color: ' + style.addToCartBtnTxtColor + "!important;";
+                    }
+                }
+         
+                return styleString;
+            }
+
             scope.productSortOrderOptions = [
                 {
                     label: "Most Recent",

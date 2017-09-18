@@ -252,6 +252,21 @@ app.directive('productsComponent', ['ProductService', '$location', '$timeout', '
         return styleString;
       }
 
+      scope.cartButtonStyle = function(style){
+        var styleString = ' ';
+        if(style){
+          if (style.addToCartBtnBgColor) {
+            styleString += 'background-color: ' + style.addToCartBtnBgColor + "!important;";
+            styleString += 'border-color: ' + style.addToCartBtnBgColor + "!important;";
+          }
+          if (style.addToCartBtnTxtColor) {
+            styleString += 'color: ' + style.addToCartBtnTxtColor + "!important;";
+          }
+        }
+         
+        return styleString;
+      }
+
       scope.productSortOrderOptions = [
           {
               label: "Most Recent",
