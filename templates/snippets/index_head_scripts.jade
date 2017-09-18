@@ -144,6 +144,16 @@ if (typeof account.website.theme !== 'undefined' && typeof account.website.theme
             color: #{account.website.themeOverrides.styles.primarySliderActiveDotColor};
         }
 
+        .ssb-theme-btn.btnLaunchCart, .ssb-theme-btn.btnLaunchCart:hover {
+            background-color: #{account.website.themeOverrides.styles.checkoutBtnBgColor}!important;
+            color: #{account.website.themeOverrides.styles.checkoutBtnTextColor}!important;
+            border-color: #{account.website.themeOverrides.styles.checkoutBtnBgColor}!important;
+        }
+
+        .ssb-theme-btn.btnLaunchCart:hover, .ssb-theme-btn.btnLaunchCart:active, .ssb-theme-btn.btnLaunchCart:focus {
+            background-color: #{account.website.themeOverrides.styles.checkoutBtnBgColor}!important;
+        }
+
         @media screen and (min-width: 768px) {
 
             .ssb-theme-#{account.website.theme.handle} .ssb-page-section-layout-header [ssb-text-component] {
