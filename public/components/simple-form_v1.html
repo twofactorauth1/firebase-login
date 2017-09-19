@@ -36,7 +36,7 @@
 
                             <!-- PHONE -->
                             <div ng-attr-style="{{fieldStyle(component.formSettings)}}" class="form-group {{fieldClass()}}" ng-if="fieldShow('phone')" ng-class="{ 'has-error' : simpleForm.phone.$invalid && !simpleForm.phone.$pristine }">
-                                <input ng-attr-style="{{inputStyle(component.formSettings)}}" type="text" name="phone" ng-model="user.phone" class="form-control" required ind-international-tel-number form="simpleForm">
+                                <input ng-attr-style="{{inputStyle(component.formSettings)}}" type="text" name="phone" ng-model="user.phone" class="form-control" required ind-international-tel-number form="simpleForm" placeholder="Phone">
                                 <p ng-show="simpleForm.phone.$invalid && !simpleForm.phone.$pristine" class="help-block">Enter a valid phone number.</p>
                             </div>
 

@@ -9,6 +9,7 @@ app.directive('indInternationalTelNumber', function ($timeout, $window) {
 		},
 		link: function (scope, element, attrs, ngModel) {
 			$timeout(function () {
+				$(element).removeAttr("placeholder");
 				$(element).intlTelInput({utilsScript: "/js/libs/intl-tel-input/lib/libphonenumber/build/utils.js"});				
 			}, 0);
 
