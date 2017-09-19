@@ -161,7 +161,7 @@ app.use(function (req, res, next) {
             host = req.headers['x-host'];
         }
         var parsedUrl = urlUtils.getSubdomainFromHost(host);
-        if(parsedUrl.subdomain && !parsedUrl.isMainApp && !parsedUrl.isOrgRoot) {
+        if(parsedUrl.subdomain && !parsedUrl.isMainApp && !parsedUrl.isOrgRoot && parsedUrl.subdomain !== 'ruckus') {
             //console.log('short-circuit');
             res.type('text/plain');
             res.send("User-agent: *\nDisallow: /");

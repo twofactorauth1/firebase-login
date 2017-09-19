@@ -104,7 +104,7 @@ module.exports = {
             host = req.headers['x-host'];
         }
         var parsedUrl = urlUtils.getSubdomainFromHost(host);
-        if(parsedUrl.subdomain && !parsedUrl.isMainApp && !parsedUrl.isOrgRoot) {
+        if(parsedUrl.subdomain && !parsedUrl.isMainApp && !parsedUrl.isOrgRoot && parsedUrl.subdomain !== 'ruckus') {
             resp.header('X-Robots-Tag', 'noindex');
         } else {
             //console.log('parsedUrl:', parsedUrl);
