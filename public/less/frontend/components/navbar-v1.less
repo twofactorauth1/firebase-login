@@ -169,11 +169,8 @@ ul.nav {
 }
 @media (max-width: 767px) {
     ul.nav-sub-menu {
-        border-top: 1px solid #828284;
-        border-bottom: 1px solid #58585b;
-        background: #ffffff;
-        /* position: absolute; */
-        padding: 1px 0;
+        border: none !important;
+        padding: 0 !important;
         overflow-y: auto;
         overflow-x: visible;
         height: auto;
@@ -181,15 +178,16 @@ ul.nav {
         width: 100%;
         z-index: 1050;
         display: none;
+        li{
+            border-bottom: 4px solid transparent;
+        }
     }
 }
 @media  (min-width: 768px) {
     ul.nav-sub-menu {
-        border-right: 1px solid #eeeeee;
-        border-bottom: 1px solid #eeeeee;
-        background: #ffffff;
+        border: none !important;
         position: absolute;
-        padding: 1px 0;
+        padding: 0 !important;
         overflow-y: auto;
         overflow-x: visible;
         height: auto;
@@ -197,12 +195,13 @@ ul.nav {
         width: 199px;
         z-index: 1050;
         display: none;
+        li{
+            border-bottom: 4px solid transparent;
+        }
     }
     .ssb-page-section.ssb-wrap-left-fixed-left-nav ul.nav-sub-menu{
-        border-top: 1px solid #828284;
-        border-bottom: 1px solid #58585b;
-        background: #ffffff;
-        padding: 1px 0;
+        border: none !important;        
+        padding: 0 !important;
         overflow-y: auto;
         overflow-x: visible;
         position: relative;
@@ -213,7 +212,9 @@ ul.nav {
         display: none;
         position: relative;
         background: transparent;
-        border: none;
+        li{
+            border-bottom: 4px solid transparent;
+        }
     }
 }
 .overflow_visible{
@@ -225,4 +226,20 @@ ul.nav {
 }
 li.nav-active ul.nav-sub-menu{
     display: block!important;
+}
+
+ul.nav.navbar-nav{
+    .sub-nav-parent-menu{
+        .ssb-sub-nav-menu-arrow{
+            padding-left: 5px;
+        }
+        .ssb-sub-nav-menu-arrow:before {
+            content: "\f078";
+        }
+        &.nav-active{
+           .ssb-sub-nav-menu-arrow:before {
+                content: "\f077";
+            } 
+        }
+    }
 }

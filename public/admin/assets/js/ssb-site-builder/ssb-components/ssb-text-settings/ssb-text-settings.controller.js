@@ -241,7 +241,7 @@
 				}
 
 			}
-            if(data.bg && data.bg.img && data.bg.img.url === null) {
+            if(data && data.bg && data.bg.img && data.bg.img.url === null) {
                 data.bg.img.url = '';
             }
 			return data;

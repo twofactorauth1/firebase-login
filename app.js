@@ -47,7 +47,8 @@ var express = require('express')
     , mongodb = mongoskin.db(mongoConfig.MONGODB_CONNECT, {safe: true})
     , mongoStore = new MongoStore(mongodb)
     , consolidate = require('consolidate')
-    , busboy = require('connect-busboy');
+    , busboy = require('connect-busboy')
+    , urlUtils =null;
 
 
 //---------------------------------------------------------
@@ -146,7 +147,28 @@ app.use(busboy());
 app.use(express.json());
 app.use(express.urlencoded());
 app.use(express.methodOverride());
+//-----------------------------------------------------
+//  SETUP Robots.txt
+//-----------------------------------------------------
+app.use(function (req, res, next) {
+    if ('/robots.txt' == req.url) {
+        if(!urlUtils) {
+            urlUtils = require('./utils/urlutils');
+        }
+        var parsedUrl = urlUtils.getSubdomainFromRequest(req);
+        if(parsedUrl.subdomain && !parsedUrl.isMainApp && !parsedUrl.isOrgRoot) {
+            //console.log('short-circuit');
+            res.type('text/plain');
+            res.send("User-agent: *\nDisallow: /");
+        } else {
+            //console.log('next');
+            next();
+        }
 
+    } else {
+        next();
+    }
+});
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.cookieParser('mys3cr3tco00k13s'));
 /*
@@ -377,6 +399,7 @@ if (appConfig.cluster == true && process.env.NODE_ENV != "testing") {
 } else {
     setUpListener(app);
 }
+
 
 //-----------------------------------------------------
 //  SETUP API

@@ -3,6 +3,7 @@
 var logger = $$.g.getLogger("sharedMiddleware");
 var accountDao = require('../dao/account.dao');
 var appConfig = require('../configs/app.config');
+var urlUtils = require('../utils/urlutils');
 
 module.exports = {
     log:logger,
@@ -45,6 +46,8 @@ module.exports = {
         var key = 'host_' + req.get('host');
         if(!checkForTrial) {
             self._nocache(resp);
+        } else {
+            self._addHeaders(req, resp);
         }
 
         $$.g.cache.get(key, null, null, null, function(err, value){
@@ -67,6 +70,7 @@ module.exports = {
                             req.session.unAuthAccountId = value.id();
                             req.session.unAuthSubdomain = value.get('subdomain');
                             req.session.unAuthDomain = value.get('domain');
+
                             //req.session.locked = value.get('locked');
                             return next();
                         }
@@ -93,4 +97,14 @@ module.exports = {
         resp.header('Expires', '-1');
         resp.header('Pragma', 'no-cache');
     },
+
+    _addHeaders: function(req, resp) {
+        var parsedUrl = urlUtils.getSubdomainFromRequest(req);
+        if(parsedUrl.subdomain && !parsedUrl.isMainApp && !parsedUrl.isOrgRoot) {
+            resp.header('X-Robots-Tag', 'noindex');
+        } else {
+            //console.log('parsedUrl:', parsedUrl);
+        }
+
+    }
 };

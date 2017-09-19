@@ -150,9 +150,11 @@ var manager = {
                 optRegexp.push(  new RegExp(opt, "i") );
             });
             query = {
-                'accountId':accountId,
+                _id: promotionId,
+                'accountId':accountId,               
                 'participants.cardCode': {$in:optRegexp}
             };
+
         }
 
         if(vendorFilter){

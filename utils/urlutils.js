@@ -81,6 +81,9 @@ var urlutils = {
 
             domain = obj.domain;
             tld = obj.tld;
+        } else {
+            _log.warn('No host:', host);
+
         }
 
         //check if the subdomain matches a list of globalSubdomains that indicate mainApp
@@ -97,7 +100,7 @@ var urlutils = {
             isMainApp = true;
         }
         var isOrgRoot = false;
-        if(_.contains(orgRootHosts, domain + '.' + obj.tld)) {
+        if(obj.tld && _.contains(orgRootHosts, domain + '.' + obj.tld)) {
             isOrgRoot = true;
         } else {
             //_log.debug('orgRootHosts:', orgRootHosts);
