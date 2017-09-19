@@ -231,3 +231,19 @@ ul.nav {
 li.nav-active ul.nav-sub-menu{
     display: block!important;
 }
+
+ul.nav.navbar-nav{
+    .sub-nav-parent-menu{
+        .ssb-sub-nav-menu-arrow{
+            padding-left: 5px;
+        }
+        .ssb-sub-nav-menu-arrow:before {
+            content: "\f063";
+        }
+        &.nav-active{
+           .ssb-sub-nav-menu-arrow:before {
+                content: "\f062";
+            } 
+        }
+    }
+}
