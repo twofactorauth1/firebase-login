@@ -99,7 +99,11 @@ module.exports = {
     },
 
     _addHeaders: function(req, resp) {
-        var parsedUrl = urlUtils.getSubdomainFromRequest(req);
+        var host = req.host;
+        if(req.headers['x-host']) {
+            host = req.headers['x-host'];
+        }
+        var parsedUrl = urlUtils.getSubdomainFromHost(host);
         if(parsedUrl.subdomain && !parsedUrl.isMainApp && !parsedUrl.isOrgRoot) {
             resp.header('X-Robots-Tag', 'noindex');
         } else {
