@@ -8,7 +8,11 @@
     .navigation-v3.nav-header-{{component._id}} .navbar-default .navbar-nav.nav-font-family > li > a{
         font-family:{{component.nav.font.family}} !important;
     }
-    .navigation-v3.nav-header-{{component._id}} .navbar-default .navbar-nav > li > a:hover{
+    .navigation-v3.nav-header-{{component._id}} .navbar-default .navbar-nav > li > a:hover 
+    .navigation-v3.nav-header-{{component._id}} .navbar-default .navbar-nav > li:hover,
+    .navigation-v3.nav-header-{{component._id}} .navbar-default .navbar-nav > li.sub-nav-parent-menu:hover>div>div>div.sub-nav-link>a,
+    .navigation-v3.nav-header-{{component._id}} .navbar-default .navbar-nav > li.nav-active a:focus
+    {
         background-color: {{component.nav.hoverbg}} !important;
         color: {{component.nav.hover}}!important;
         font-weight: {{component.nav.hoverFontWeight}}!important;
