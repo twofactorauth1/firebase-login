@@ -1017,7 +1017,7 @@ app.constant('JS_REQUIRES', {
 				"../js/libs/froala-wysiwyg-editor/js/plugins/paragraph_style.min.js",
 				"../js/libs/froala-wysiwyg-editor/js/plugins/quote.min.js",
 				"../js/libs/froala-wysiwyg-editor/js/plugins/save.min.js",
-				"../js/libs/froala-wysiwyg-editor/js/plugins/table.min.js",
+				"../js/libs_misc/froala-wysiwyg-editor/js/plugins/table.min.js",
 				"../js/libs/froala-wysiwyg-editor/js/plugins/url.min.js",
 				"../js/libs_misc/froala-wysiwyg-editor/js/plugins/video.min.js",
 				"../js/libs_misc/froala-wysiwyg-editor/css/plugins/colors.css",
