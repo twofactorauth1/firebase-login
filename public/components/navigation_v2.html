@@ -26,7 +26,9 @@
          font-weight: {{component.nav.pressed.font.weight}};
     }
     .navigation-v2.nav-header-{{component._id}} .navbar-default .navbar-nav > li  a:hover,
-    .navigation-v2.nav-header-{{component._id}} .navbar-default .navbar-nav > li:hover, .navigation-v2.nav-header-{{component._id}} .navbar-default .navbar-nav > li.nav-active a:focus{
+    .navigation-v2.nav-header-{{component._id}} .navbar-default .navbar-nav > li:hover,
+    .navigation-v2.nav-header-{{component._id}} .navbar-default .navbar-nav > li.sub-nav-parent-menu:hover>div>div>div.sub-nav-link>a,
+    .navigation-v2.nav-header-{{component._id}} .navbar-default .navbar-nav > li.nav-active a:focus{
         background-color: {{component.nav.hoverbg}} !important;
         color: {{component.nav.hover}}!important;
         font-weight: {{component.nav.hoverFontWeight}}!important;
@@ -57,6 +59,7 @@
     }
     
     .navigation-v2.nav-header-{{component._id}} .navbar-default .nav-sub-menu  li:hover,
+    .navigation-v2.nav-header-{{component._id}} .navbar-default .nav-sub-menu  li:hover a,
     .navigation-v2.nav-header-{{component._id}} .navbar-default .nav-sub-menu  li:focus,
     .navigation-v2.nav-header-{{component._id}} .navbar-default .nav-sub-menu  li a:hover,
     .navigation-v2.nav-header-{{component._id}} .navbar-default .nav-sub-menu  li:hover, 

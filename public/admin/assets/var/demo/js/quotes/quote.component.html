@@ -56,6 +56,7 @@
 	                <th class="items-col hidden-xs" style="white-space: nowrap">Items</th>
 	                <th class="total-col hidden-xs" st-sort="total" style="white-space: nowrap">Total</th>
 	                <th class="status-col hidden-xs">Status</th>
+	                <th class="hidden" st-sort-default="reverse" st-sort="created.date"></th>
 	            </tr>
 	            <tr>
 	                <th class="title-col">
@@ -71,6 +72,7 @@
 	                <th class="items-col hidden-xs"></th>
 	                <th class="total-col hidden-xs"></th>
 	                <th class="status-col hidden-xs"></th>
+	                <th class="hidden"></th>
 	            </tr>
 	        </thead>
 	        <tbody>
@@ -89,6 +91,8 @@
 	                <td class="total-col hidden-xs text-adjust-col"><strong>Total: </strong><div class="text-adjust-inner-content">{{quote.total | currency : '$'}}</div></td>
 
 	                <td class="status-col hidden-xs text-adjust-col"><strong>Status: </strong><div class="text-adjust-inner-content">{{quote.status || '-'}}</div></td>
+
+	                <td class="hidden"></td>
 	            </tr>
 	        </tbody>
 	        <tfoot>
