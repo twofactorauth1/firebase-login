@@ -34,6 +34,7 @@
 		vm.formStyle = formStyle;
 		vm.addCustomField = addCustomField;
 		vm.addPattern = addPattern;
+		vm.inputFieldClass = inputFieldClass;
 		vm.checkDuplicateEmail = checkDuplicateEmail;
 		vm.formValidations = formValidations;
 		vm.formFiedlsCHange = formFiedlsCHange;
@@ -206,10 +207,14 @@
 		}
 
 		function addPattern(val) {
-			if (val.name === "phone") {
-				return vm.formValidations.phone;
-			} else if (val.name === "email") {
+			if (val.name === "email") {
 				return vm.formValidations.email;
+			}
+		}
+
+		function inputFieldClass(val) {
+			if (val.name === "phone") {
+				return 'ind-international-tel-number';
 			}
 		}
 
