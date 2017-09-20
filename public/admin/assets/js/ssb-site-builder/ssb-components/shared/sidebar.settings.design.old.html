@@ -14,14 +14,6 @@
             <label for="colorpicker">Active Text <span tooltip-placement="top" tooltip="Nav bar Active menu color."><i class="fa fa-info-circle" /></span></label>
         </div>
 
-        <div class="form-group" ng-show="component.type == 'navigation' && component.version == 1">
-            <div class="form-group">
-            <label for="colorpicker">Show Nav Box</label>
-            <span tooltip-placement="top" tooltip="Show/hide nav box."><i class="fa fa-info-circle" /></span>
-                <switch ng-model="component.shownavbox" class="pull-right"></switch>
-            </div>
-        </div>
-
         <div class="form-group ssb-spectrum-color-picker-small" ng-if="component.type === 'navigation'">
             <spectrum-colorpicker format="'rgb'" options="vm.spectrum.options" ng-model="component.nav.bg"></spectrum-colorpicker>
             <br />
