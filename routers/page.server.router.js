@@ -37,7 +37,7 @@ _.extend(router.prototype, BaseRouter.prototype, {
     initialize: function() {
         app.get('/simple-interim-page', [this.setupForPages.bind(this), this._handleBasicAuth.bind(this)], this.optimizedIndex.bind(this));
         app.get('/investors', [this.setupForPages.bind(this), this._handleBasicAuth.bind(this), sitemigration_middleware.checkForRedirect], this.optimizedIndex.bind(this));
-
+        app.get('/aws-eb-health', this.healthcheck.bind(this));
         app.get("/:page", [sitemigration_middleware.checkForRedirect, this.setupForPages.bind(this)], this.optimizedIndex.bind(this));
         //app.get(/^\/(?!api.*|static)(.*)$/, [sitemigration_middleware.checkForRedirect, this.setupForPages.bind(this)], this.optimizedRegexpIndex.bind(this));
 
@@ -45,6 +45,7 @@ _.extend(router.prototype, BaseRouter.prototype, {
         app.get('/preview/:pageId/:postId', this.isAuth.bind(this), this.previewIndex.bind(this));
         app.get('/:page/:page1', [sitemigration_middleware.checkForRedirect, this.setupForPages.bind(this)], this.optimizedSubpathIndex.bind(this));
         app.get('/:page/:page1/:page2*', [sitemigration_middleware.checkForRedirect, this.setupForPages.bind(this)], this.optimizedSubpathIndex.bind(this));
+
         return this;
     },
 
@@ -375,6 +376,11 @@ _.extend(router.prototype, BaseRouter.prototype, {
 
             });
         }
+    },
+
+    healthcheck: function(req, resp) {
+        resp.status(200);
+        resp.send({ok:true});
     }
 });
 
