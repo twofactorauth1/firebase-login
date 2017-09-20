@@ -50,12 +50,12 @@ module.exports = {
                 } else {
                     self.log.debug('S3 upload complete');
                     console.dir(value);
-		    if (value.url.substring(0, 5) == 'http:') {
-		      asset.set('url', value.url.substring(5, value.url.length));
-		    } else {
-		      asset.set('url', value.url);
-		    }
-		    console.log(asset);
+                    if (value.url.substring(0, 5) == 'http:') {
+                    asset.set('url', value.url.substring(5, value.url.length));
+                    } else {
+                    asset.set('url', value.url);
+                    }
+                    console.log(asset);
                     uploadPromise.resolve(value);
                 }
             });
@@ -304,8 +304,9 @@ module.exports = {
      }
      var oldUrl = asset.get("url");
         //append time in the end to avoid duplicate files.
+     var filename=asset.get("filename").replace(/[^a-z0-9]+/gi, "_") ; 
      var newDestUrl = oldUrl
-         .substring(0, oldUrl.indexOf(subdir) + subdir.length + 1) + asset.get("filename") + "_" + new Date().getTime();
+         .substring(0, oldUrl.indexOf(subdir) + subdir.length + 1) + filename + "_" + new Date().getTime();
      self.copyS3Asset(asset.get('accountId'), userId, oldUrl, newDestUrl, asset.get('mimeType'), function(err, value) {
          if (err) {
              self.log.error('Exception in updateAsset:copyS3Asset ' + err);
