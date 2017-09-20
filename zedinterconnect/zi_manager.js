@@ -258,7 +258,11 @@ var ziManager = {
                 $or: orQuery
             };
         }
+
+
         self.log.trace('query:', query);
+
+        self.log.debug('query:', query);
 
         var fields = null;
         var collection = 'inventory';
@@ -272,7 +276,10 @@ var ziManager = {
             appliedSkip = 0;
             appliedLimit = 0;
         }
-
+        else if(fieldSearch && fieldSearch["OITM_ItemName"]){
+            appliedSkip = 0;
+            appliedLimit = 0;
+        }
         self._addUserInventoryFilter(accountId, userId, query, function(err, query){
             ziDao.findRawWithFieldsLimitAndOrder(query, appliedSkip, appliedLimit, sortBy, fields, collection, sortDir, function(err, value){
                 if(err) {
@@ -310,6 +317,38 @@ var ziManager = {
                         //self.log.debug('sliced sortedResults.length:', sortedResults.length);
                         value.results = sortedResults;
                     }
+                    else if(fieldSearch && fieldSearch["OITM_ItemName"]){
+                        self.log.info('ranking');
+                        var leftOrRightRegexp = new RegExp('\.*'+fieldSearch["OITM_ItemName"] +'|'+ fieldSearch["OITM_ItemName"]+'\.*', 'i');
+                        var fieldArray = ["OITM_ItemName"]
+                        _.each(value.results, function(result){
+                            if(self._findMatchEquals(result, fieldSearch["OITM_ItemName"], fieldArray)) {
+                                if(result._shortVendorName.indexOf('hardware') >0) {
+                                    result.rank = 1;
+                                } else {
+                                    result.rank = 2;
+                                }
+                            } else if(self._findMatchRegexp(result, leftOrRightRegexp, fieldArray)){
+                                if(result._shortVendorName.indexOf('hardware') >0) {
+                                    result.rank = 3;
+                                } else {
+                                    result.rank = 4;
+                                }
+                            } else {
+                                if(result._shortVendorName.indexOf('hardware') >0) {
+                                    result.rank = 5;
+                                } else {
+                                    result.rank = 6;
+                                }
+                            }
+                        });
+                        //self.log.debug('about to apply skip [' + _skip + '] and limit [' + _limit + '] to array with length:' + value.results.length);
+                        var sortedResults = _.sortBy(value.results, 'rank');
+                        //self.log.debug('sortedResults.length:', sortedResults.length);
+                        sortedResults = sortedResults.slice(_skip, _limit+_skip);
+                        //self.log.debug('sliced sortedResults.length:', sortedResults.length);
+                        value.results = sortedResults;
+                    }
                     self.log.debug(accountId, userId, '<< inventorySearch');
                     fn(null, value);
                 }
@@ -318,12 +357,12 @@ var ziManager = {
 
     },
 
-    _findMatchEquals: function(result, term) {
+    _findMatchEquals: function(result, term, fieldAry) {
         var matches = false;
-
-        var fieldAry = ['@id', 'OITM_ItemName', 'OITM_U_dscription', 'OITB_ItmsGrpNam', 'In_Stock', 'Committed',
-            'Available', '_shortVendorName', 'OLGT_UnitName', 'OITM_SLength1', 'OLGT_UnitName_10', 'OITM_SWidth1',
-            'OITM_BHeight1', 'OWGT_UnitName', 'OITM_SWeight1', 'OITM_SVolume'];
+        if(!fieldAry)
+            fieldAry = ['@id', 'OITM_ItemName', 'OITM_U_dscription', 'OITB_ItmsGrpNam', 'In_Stock', 'Committed',
+                'Available', '_shortVendorName', 'OLGT_UnitName', 'OITM_SLength1', 'OLGT_UnitName_10', 'OITM_SWidth1',
+                'OITM_BHeight1', 'OWGT_UnitName', 'OITM_SWeight1', 'OITM_SVolume'];
 
         _.each(fieldAry, function(field){
             if(result[field] && result[field].toLowerCase && result[field].toLowerCase() === term.toLowerCase()) {
@@ -337,12 +376,13 @@ var ziManager = {
         return matches;
     },
 
-    _findMatchRegexp: function(result, regexp) {
+    _findMatchRegexp: function(result, regexp, fieldAry) {
         var matches = false;
 
-        var fieldAry = ['@id', 'OITM_ItemName', 'OITM_U_dscription', 'OITB_ItmsGrpNam', 'In_Stock', 'Committed',
-            'Available', '_shortVendorName', 'OLGT_UnitName', 'OITM_SLength1', 'OLGT_UnitName_10', 'OITM_SWidth1',
-            'OITM_BHeight1', 'OWGT_UnitName', 'OITM_SWeight1', 'OITM_SVolume'];
+        if(!fieldAry)
+            fieldAry = ['@id', 'OITM_ItemName', 'OITM_U_dscription', 'OITB_ItmsGrpNam', 'In_Stock', 'Committed',
+                'Available', '_shortVendorName', 'OLGT_UnitName', 'OITM_SLength1', 'OLGT_UnitName_10', 'OITM_SWidth1',
+                'OITM_BHeight1', 'OWGT_UnitName', 'OITM_SWeight1', 'OITM_SVolume'];
 
         _.each(fieldAry, function(field){
             if(result[field] && result[field].match && result[field].match(regexp)) {
