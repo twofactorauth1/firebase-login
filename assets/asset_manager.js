@@ -296,35 +296,35 @@ module.exports = {
     },
 
     updateAssetChangeUrl: function(asset, userId, fn) {
-     var self = this;
-     self.log = log;
-     var subdir = 'account_' + asset.get('accountId');
-     if (appConfig.nonProduction === true) {
-         subdir = 'test_' + subdir;
-     }
-     var oldUrl = asset.get("url");
+        var self = this;
+        self.log = log;
+        var subdir = 'account_' + asset.get('accountId');
+        if (appConfig.nonProduction === true) {
+            subdir = 'test_' + subdir;
+        }
+        var oldUrl = asset.get("url");
         //append time in the end to avoid duplicate files.
-     var filename=asset.get("filename").replace(/[^a-z0-9]+/gi, "_") ; 
-     var newDestUrl = oldUrl
+        var filename=asset.get("filename").replace(/[^a-z0-9]+/gi, "_") ; 
+        var newDestUrl = oldUrl
          .substring(0, oldUrl.indexOf(subdir) + subdir.length + 1) + filename + "_" + new Date().getTime();
-     self.copyS3Asset(asset.get('accountId'), userId, oldUrl, newDestUrl, asset.get('mimeType'), function(err, value) {
-         if (err) {
-             self.log.error('Exception in updateAsset:copyS3Asset ' + err);
-             fn(err, null);
-         } else {
-             self.log.debug('<< copyS3Asset');
-             asset.set('url', newDestUrl);
-             assetDao.saveOrUpdate(asset, function(err, value) {
-                 if (err) {
-                     self.log.error('Exception in updateAsset: ' + err);
-                     fn(err, null);
-                 } else {
-                     self.log.debug('<<< updateAsset');
-                     fn(null, value);
-                 }
-             });
-         }
-     });
+         self.copyS3Asset(asset.get('accountId'), userId, oldUrl, newDestUrl, asset.get('mimeType'), function(err, value) {
+             if (err) {
+                self.log.error('Exception in updateAsset:copyS3Asset ' + err);
+                fn(err, null);
+            } else {
+                self.log.debug('<< copyS3Asset');
+                asset.set('url', newDestUrl);
+                assetDao.saveOrUpdate(asset, function(err, value) {
+                    if (err) {
+                        self.log.error('Exception in updateAsset: ' + err);
+                        fn(err, null);
+                    } else {
+                        self.log.debug('<<< updateAsset');
+                        fn(null, value);
+                    }
+                });
+            }
+        });
     },
     updateAsset: function(asset, userId, fn) {
         var self = this;
