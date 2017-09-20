@@ -11,7 +11,9 @@
         <button type="button" class="btn btn-primary btn-o pull-right btn btn-primary btn-o margin-top-5 margin-bottom-5 margin-left-5" ng-click="vm.backToInventory()">
             Back to Inventory
         </button>
-        
+        <button type="button" ng-if="vm.state.orgCardAndPermissions.permissions.quote.create" class="btn btn-primary btn-warning pull-right margin-top-5 margin-bottom-5 margin-left-5" ng-click="vm.addItemToQuote(vm.inventory, 'new-quote-modal', 'NewQuoteModalController', 'lg')">
+            <span style="white-space: nowrap;">Add to Quote</span>
+        </button>
         <button ng-if="!vm.uiState.loadingWatchInventory && !vm.uiState.savingWatchInventory && vm.uiState.userPermissions.dashboard" type="button" class="btn btn-primary btn-o pull-right btn btn-primary btn-o margin-top-5 margin-bottom-5 margin-left-5" ng-click="vm.watchInventoryItem()">
             <span ng-show="!vm.uiState.watched">
                 Watch
@@ -20,9 +22,7 @@
                 Unwatch
             </span>
         </button>
-        <button type="button" ng-if="!vm.uiState.loadingWatchInventory && vm.state.orgCardAndPermissions.permissions.quote.create" class="btn btn-primary btn-warning pull-right margin-top-5 margin-bottom-5 margin-left-5" ng-click="vm.addItemToQuote(vm.inventory, 'new-quote-modal', 'NewQuoteModalController', 'lg')">
-            <span style="white-space: nowrap;">Add to Quote</span>
-        </button>
+        
     </div>
 </div>
 <div class="clearfix"></div>
