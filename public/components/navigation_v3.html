@@ -2,47 +2,14 @@
     .navigation-v3.nav-header-{{component._id}} .navbar-default .navbar-nav.nav-align{
         text-align:{{component.nav.align}} !important;
     }
-    .navigation-v3.nav-header-{{component._id}} .navbar-default .navbar-nav.nav-font-size > li > a{
+    .navigation-v3.nav-header-{{component._id}} .navbar-default .navbar-nav.nav-font-size > li a{
         font-size:{{component.nav.font.size}}px !important;
     }
-    .navigation-v3.nav-header-{{component._id}} .navbar-default .navbar-nav.nav-font-family > li > a{
+    .navigation-v3.nav-header-{{component._id}} .navbar-default .navbar-nav.nav-font-family > li a{
         font-family:{{component.nav.font.family}} !important;
     }
-    .navigation-v3.nav-header-{{component._id}} .navbar-default .navbar-nav > li > a:hover 
-    .navigation-v3.nav-header-{{component._id}} .navbar-default .navbar-nav > li:hover,
-    .navigation-v3.nav-header-{{component._id}} .navbar-default .navbar-nav > li.sub-nav-parent-menu:hover>div>div>div.sub-nav-link>a,
-    .navigation-v3.nav-header-{{component._id}} .navbar-default .navbar-nav > li.nav-active a:focus
-    {
-        background-color: {{component.nav.hoverbg}} !important;
-        color: {{component.nav.hover}}!important;
-        font-weight: {{component.nav.hoverFontWeight}}!important;
-    }
-    .navigation-v3.nav-header-{{component._id}} .navbar-default.navbgcolor {
-        background: {{component.nav.bg}}!important;
-    }
-    .navigation-v3.nav-header-{{component._id}} .navbar ul.navbar-nav li:hover, .navigation-v3.nav-header-{{component._id}} .navbar ul.navbar-nav li.nav-active a:focus {
-        border-bottom: 4px solid {{component.nav.hover}}!important;
-    }
-    .navigation-v3.nav-header-{{component._id}} .navbar ul.navbar-nav li a.active {
-         color: {{component.activetxtcolor}}!important;
-         background-color: {{component.nav.pressed.bg.color}};
-         font-weight: {{component.nav.pressed.font.weight}};
-    }
-    .navigation-v3.nav-header-{{component._id}} .navbar ul.navbar-nav li {
+    .navigation-v3.nav-header-{{component._id}} .navbar ul.navbar-nav> li {
         border-bottom: 4px solid transparent;
-    }
-    .navigation-v3.nav-header-{{component._id}} .navbar ul.navbar-nav li.sub-nav-parent-menu:hover {
-        border-bottom: 4px solid transparent !important;
-    }
-    
-    .navigation-v3.nav-header-{{component._id}} .navbar-default .navbar-header .navbar-toggle .icon-bar {
-        background-color: {{component.nav.txtcolor}} !important;
-    }
-
-    .navigation-v3.nav-header-{{component._id}} .navbar-default .navbar-header .navbar-toggle {
-        border-color: {{component.nav.txtcolor}} !important;
-    }
-    .navigation-v3.nav-header-{{component._id}} .navbar-default .navbar-nav > li ,.navigation-v3.nav-header-{{component._id}} .navbar-default .navbar-nav > li  a{
         color: {{component.nav.txtcolor}} !important;
         background-color: {{component.nav.menubgcolor}};
         font-size:{{component.nav.font.size}};
@@ -50,102 +17,126 @@
         font-weight:{{component.nav.font.weight}};
         text-transform:{{component.nav.allowMixedCase ? 'none' : 'uppercase' }}
     }
-
-    .navigation-v3.nav-header-{{component._id}} .navbar-default .nav-sub-menu, .navigation-v3.nav-header-{{component._id}} .navbar-default .nav-sub-menu  li,
-    .navigation-v3.nav-header-{{component._id}} .navbar-default .nav-sub-menu li a{
+    .navigation-v3.nav-header-{{component._id}} .navbar ul.nav-sub-menu> li{
+        border-color: {{component.subnavigation.menubgcolor || component.nav.menubgcolor}} !important;
+    }
+    .navigation-v3.nav-header-{{component._id}} .navbar ul.navbar-nav> li a{ 
+        color: {{component.nav.txtcolor}} !important;
+        background-color: {{component.nav.menubgcolor}};
+    }
+    .navigation-v3.nav-header-{{component._id}} .navbar ul.navbar-nav> li:hover ,
+    .navigation-v3.nav-header-{{component._id}} .navbar ul.navbar-nav> li.nav-active,
+    .navigation-v3.nav-header-{{component._id}} .navbar ul.navbar-nav> li.nav-active>div>a,
+    .navigation-v3.nav-header-{{component._id}} .navbar ul.nav-sub-menu> li:hover{
+        border-color: {{component.nav.hover}} !important;
+        background-color: {{component.nav.hoverbg}} !important;
+        color: {{component.nav.hover}} !important;
+        font-weight: {{component.nav.hoverFontWeight}}!important;
+    }
+    .navigation-v3.nav-header-{{component._id}} .navbar ul.navbar-nav> li:hover>div>a,
+    .navigation-v3.nav-header-{{component._id}} .navbar ul.nav-sub-menu> li:hover>div>a{ 
+        background-color: {{component.nav.hoverbg}} !important;
+        color: {{component.nav.hover}} !important;
+        font-weight: {{component.nav.hoverFontWeight}}!important;
+    }
+    .navigation-v3.nav-header-{{component._id}} .navbar ul.navbar-nav> li.sub-nav-parent-menu:hover {
+        border-bottom: 4px solid transparent !important;
+    }
+    .navigation-v3.nav-header-{{component._id}} .navbar ul.navbar-nav li a.active {
+         color: {{component.activetxtcolor}}!important;
+         background-color: {{component.nav.pressed.bg.color}};
+         font-weight: {{component.nav.pressed.font.weight}};
+    }
+    .navigation-v3.nav-header-{{component._id}} .navbar.navbgcolor {
+        background: {{component.nav.bg}}!important;
+        border: none;
+        border-radius: 0;
+    } 
+    .navigation-v3.nav-header-{{component._id}} .navbar-default .navbar-header .navbar-toggle .icon-bar {
+        background-color: {{component.nav.txtcolor}} !important;
+    }
+    .navigation-v3.nav-header-{{component._id}} .navbar-default .navbar-header .navbar-toggle {
+        border-color: {{component.nav.txtcolor}} !important;
+    }
+    .navigation-v3.nav-header-{{component._id}} .navbar-default  ul.nav-sub-menu>li,
+    .navigation-v3.nav-header-{{component._id}} .navbar-default ul.nav-sub-menu>li>div>a{
         background-color: {{component.subnavigation.menubgcolor}}!important; 
-        text-align:{{component.subnavigation.align}} !important;
-        border-color: {{component.subnavigation.menubgcolor}}!important;
+        text-align:{{component.subnavigation.align}} !important; 
         color: {{component.subnavigation.txtcolor}} !important;  
     }
-
-    .navigation-v3.nav-header-{{component._id}} .navbar-default .nav-sub-menu  li:focus,
-    .navigation-v3.nav-header-{{component._id}} .navbar-default .nav-sub-menu  li:hover,
-    .navigation-v3.nav-header-{{component._id}} .navbar-default .nav-sub-menu  li a:hover,
-    .navigation-v3.nav-header-{{component._id}} .navbar-default .nav-sub-menu  li:hover, 
-    .navigation-v3.nav-header-{{component._id}} .navbar-default .nav-sub-menu li.nav-active a:focus{
+    .navigation-v3.nav-header-{{component._id}} .navbar-default ul.nav-sub-menu>li:hover,  
+    .navigation-v3.nav-header-{{component._id}} .navbar-default ul.nav-sub-menu>li:hover>div>a{
         background-color: {{component.subnavigation.hoverbg}} !important;
         color: {{component.subnavigation.hover}} !important; 
     }
 </style>
 <div ng-class="component.type+'-v'+component.version" class="nav-header-{{component._id}}">
-    <nav class="navbar navbar-default" ng-class="{'navbar-box':component.shownavbox, 'navbgcolor' : !(component.bg.img.show && component.bg.img.url) }" role="navigation">
+    <nav class="navbar navbar-default" ng-class="{'navbar-box':component.shownavbox, 'navbgcolor' : !(component.bg.img.show && component.bg.img.url) }"
+        role="navigation">
         <div class="container">
-        <div class="col-sm-3">
-             <div class="navbar-header">
-                     <div ng-if="isEditing" class="navbar-brand" href="/" data-name="{{account.company.name}}" style="margin:{{component.logo.margin.t}} {{component.logo.margin.r}} {{component.logo.margin.b}} {{component.logo.margin.l}}!important;padding:{{component.logo.padding}};">
-                                 <div class="nav-logo">
-                                    <div ng-if="!isSinglePost" elem ng-model="component.logo" class="navigation-logo"></div>
-                                    <div ng-if="isSinglePost" class="navigation-logo" tooltip-placement="bottom" tooltip="This component is only editable on the single-post page" ng-bind-html="component.logo | unsafe"></div>
-                                </div>
-                            </div>
-                            <a ng-if="!isEditing" class="navbar-brand" href="/" data-name="{{account.company.name}}" style="margin:{{component.logo.margin.t}} {{component.logo.margin.r}} {{component.logo.margin.b}} {{component.logo.margin.l}}!important;padding:{{component.logo.padding}};">
-                                 <div class="nav-logo">
-                                    <div ng-if="!isSinglePost" elem ng-model="component.logo" class="navigation-logo"></div>
-                                    <div ng-if="isSinglePost" class="navigation-logo" tooltip-placement="bottom" tooltip="This component is only editable on the single-post page" ng-bind-html="component.logo | unsafe"></div>
-                                </div>
-                            </a>
-                             <button type="button" class="navbar-toggle" data-toggle="collapse"
-                            data-target="#bs-example-navbar-collapse-{{navbarId}}">
+            <div class="col-sm-3">
+                <div class="navbar-header">
+                    <div ng-if="isEditing" class="navbar-brand" href="/" data-name="{{account.company.name}}" style="margin:{{component.logo.margin.t}} {{component.logo.margin.r}} {{component.logo.margin.b}} {{component.logo.margin.l}}!important;padding:{{component.logo.padding}};">
+                        <div class="nav-logo">
+                            <div ng-if="!isSinglePost" elem ng-model="component.logo" class="navigation-logo"></div>
+                            <div ng-if="isSinglePost" class="navigation-logo" tooltip-placement="bottom" tooltip="This component is only editable on the single-post page"
+                                ng-bind-html="component.logo | unsafe"></div>
+                        </div>
+                    </div>
+                    <a ng-if="!isEditing" class="navbar-brand" href="/" data-name="{{account.company.name}}" style="margin:{{component.logo.margin.t}} {{component.logo.margin.r}} {{component.logo.margin.b}} {{component.logo.margin.l}}!important;padding:{{component.logo.padding}};">
+                        <div class="nav-logo">
+                            <div ng-if="!isSinglePost" elem ng-model="component.logo" class="navigation-logo"></div>
+                            <div ng-if="isSinglePost" class="navigation-logo" tooltip-placement="bottom" tooltip="This component is only editable on the single-post page"
+                                ng-bind-html="component.logo | unsafe"></div>
+                        </div>
+                    </a>
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-{{navbarId}}">
                         <span class="sr-only">Toggle navigation</span>
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
+                </div>
             </div>
-        </div>
-        <div class="col-sm-9">
-            <!-- Collect the nav links, forms, and other content for toggling -->
-            <div ng-if="!component.customnav" class="collapse navbar-collapse" id="bs-example-navbar-collapse-{{navbarId}}">
-                <ul ng-class="{'nav-font-size':component.nav.font.size, 'nav-font-family':component.nav.font.family, 'nav-align': component.nav.align, 'nav-mixed-case': component.nav.allowMixedCase}" class="nav navbar-nav navbar-right" data-edit="{ 'type': 'component' }" data-ng-repeat="mainMenu in website.linkLists" data-ng-if=" mainMenu.handle=='head-menu' ">
-                    <li ng-class="{'nav-font-size':component.nav.font.size, 'nav-font-family':component.nav.font.family, 'sub-nav-parent-menu': alink.linkTo.type == 'sub-nav'}" data-ng-repeat="alink in mainMenu.links">
-                        <div ng-if="alink.links && alink.links.length>0">
-                            <div ng-init="link = alink">
-                                <ssb-navigation-component-loader></ssb-navigation-component-loader>
+            <div class="col-sm-9">
+                <!-- Collect the nav links, forms, and other content for toggling -->
+                <div ng-if="!component.customnav" class="collapse navbar-collapse" id="bs-example-navbar-collapse-{{navbarId}}">
+                    <ul ng-class="{'nav-font-size':component.nav.font.size, 'nav-font-family':component.nav.font.family, 'nav-align': component.nav.align, 'nav-mixed-case': component.nav.allowMixedCase}"
+                        class="nav navbar-nav navbar-right" data-edit="{ 'type': 'component' }" data-ng-repeat="mainMenu in website.linkLists"
+                        data-ng-if=" mainMenu.handle=='head-menu' ">
+                        <li ng-class="{'nav-font-size':component.nav.font.size, 'nav-font-family':component.nav.font.family, 'sub-nav-parent-menu': alink.linkTo.type == 'sub-nav'}"
+                            data-ng-repeat="alink in mainMenu.links">
+                            <ssb-navigation-component-loader link="alink" is-sub-link="false"></ssb-navigation-component-loader>
+                            <div ng-if="alink.links && alink.links.length>0">
+                                <ul class="nav-sub-menu">
+                                    <li data-ng-repeat="sublink in alink.links" ng-style="{'text-align':component.nav.align}">
+                                        <ssb-navigation-component-loader link="sublink" is-sub-link="true"></ssb-navigation-component-loader>
+                                    </li>
+                                </ul>
                             </div>
-                            <ul class="nav-sub-menu">
-                                <li  data-ng-repeat="sublink in alink.links" ng-style="{'text-align':component.nav.align}">
-                                    <div ng-init="link = sublink">
-                                        <ssb-navigation-component-loader></ssb-navigation-component-loader>
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
-                        <div ng-if="!(alink.links && alink.links.length>0)">
-                            <div ng-init="link = alink">
-                                <ssb-navigation-component-loader></ssb-navigation-component-loader>
+                        </li>
+                    </ul>
+                </div>
+                <div ng-if="component.customnav" class="collapse navbar-collapse" id="bs-example-navbar-collapse-{{navbarId}}">
+                    <ul ng-class="{'nav-font-size':component.nav.font.size, 'nav-font-family':component.nav.font.family, 'nav-align': component.nav.align, 'nav-mixed-case': component.nav.allowMixedCase}"
+                        class="nav navbar-nav navbar-right" data-ng-repeat="mainMenu in component.linkLists" data-ng-if=" mainMenu.handle=='head-menu' "
+                        data-edit="{ 'type': 'component' }">
+                        <li data-ng-repeat="alink in mainMenu.links" ng-class="{'sub-nav-parent-menu': alink.linkTo.type == 'sub-nav'}">
+                            <ssb-navigation-component-loader link="alink" is-sub-link="false"></ssb-navigation-component-loader>
+                            <div ng-if="alink.links && alink.links.length>0">
+                                <ul class="nav-sub-menu">
+                                    <li data-ng-repeat="sublink in alink.links" ng-style="{'text-align':component.nav.align}">
+                                        <ssb-navigation-component-loader link="sublink" is-sub-link="true"></ssb-navigation-component-loader>
+                                    </li>
+                                </ul>
                             </div>
-                        </div>
-                    </li>
-                </ul>
+                        </li>
+                    </ul>
+                </div>
+                <!-- /.navbar-collapse -->
             </div>
-            <div ng-if="component.customnav" class="collapse navbar-collapse" id="bs-example-navbar-collapse-{{navbarId}}">
-                <ul ng-class="{'nav-font-size':component.nav.font.size, 'nav-font-family':component.nav.font.family, 'nav-align': component.nav.align, 'nav-mixed-case': component.nav.allowMixedCase}" class="nav navbar-nav navbar-right" data-ng-repeat="mainMenu in component.linkLists" data-ng-if=" mainMenu.handle=='head-menu' " data-edit="{ 'type': 'component' }">
-                    <li data-ng-repeat="alink in mainMenu.links" ng-class="{'sub-nav-parent-menu': alink.linkTo.type == 'sub-nav'}">
-                      <div ng-if="alink.links && alink.links.length>0">
-                            <div ng-init="link = alink">
-                                <ssb-navigation-component-loader></ssb-navigation-component-loader>
-                            </div>
-                            <ul class="nav-sub-menu">
-                                <li  data-ng-repeat="sublink in alink.links" ng-style="{'text-align':component.nav.align}">
-                                    <div ng-init="link = sublink">
-                                        <ssb-navigation-component-loader></ssb-navigation-component-loader>
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
-                        <div ng-if="!(alink.links && alink.links.length>0)">
-                            <div ng-init="link = alink">
-                                <ssb-navigation-component-loader></ssb-navigation-component-loader>
-                            </div>
-                        </div>
-                    </li>
-                </ul>
-            </div>
-            <!-- /.navbar-collapse -->
-        </div>
         </div>
         <!-- Collect the nav links, forms, and other content for toggling -->
-       <!-- /.container-fluid -->
+        <!-- /.container-fluid -->
     </nav>
 </div>
