@@ -13,9 +13,22 @@ app.directive('indInternationalTelNumber', function ($timeout, $window) {
 					$(element).removeAttr("placeholder");
 					$(element).intlTelInput({
 						nationalMode: false,
-						utilsScript: "/js/libs/intl-tel-input/lib/libphonenumber/build/utils.js"
+						utilsScript: "/js/libs/intl-tel-input/build/js/utils.js"
 					});
+
+
+					
+
 					if(scope.form){
+
+						$(element).on("open:countrydropdown", function(e) {
+  							$(element).parents("section").addClass("overflow_visible");
+						});
+
+						$(element).on("close:countrydropdown", function(e) {
+	  						$(element).parents("section").removeClass("overflow_visible");
+						});
+
 						scope.$watch(function () {
 		              		return ngModel.$modelValue;
 		            	}, function(newValue) {
