@@ -53,7 +53,7 @@
 <div class="form-group">
     <label>
         Contact
-        <span tooltip-placement="top" tooltip="Email is a required field for submitting a quote"><i class="fa fa-info-circle" /></span>
+        <span tooltip-placement="top" tooltip="A Contact (email) is required prior to submitting quote"><i class="fa fa-info-circle" /></span>
     </label>
     <tags-input
         ng-model="vm.state.cartDetail.recipients"
@@ -81,7 +81,7 @@
            accepted-formats="application/pdf"
         >
     </label>
-    
+
     <span class="file-name">{{vm.attachment.name || vm.state.cartDetail.attachment.name}}</span>
     <span class="margin-left-10" ng-if="vm.attachment.name || vm.state.cartDetail.attachment.name" ng-click="vm.initAttachment()"><i class="fa fa-trash-o"></i> </span>
 </div>
@@ -112,7 +112,7 @@
         </div>
         <div class="clearfix"></div>
     </li>
-    
+
     <li class="list-item-items" ng-repeat="item in vm.state.cartDetail.items track by $index">
         <div>
             <div class="col-xs-5">
