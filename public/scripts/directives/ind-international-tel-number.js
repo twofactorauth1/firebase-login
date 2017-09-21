@@ -22,11 +22,11 @@ app.directive('indInternationalTelNumber', function ($timeout, $window) {
 					if(scope.form){
 
 						$(element).on("open:countrydropdown", function(e) {
-  							$(element).parents("section").addClass("overflow_visible");
+  							$(element).parents("section").addClass("overflow_visible-without-index");
 						});
 
 						$(element).on("close:countrydropdown", function(e) {
-	  						$(element).parents("section").removeClass("overflow_visible");
+	  						$(element).parents("section").removeClass("overflow_visible-without-index");
 						});
 
 						scope.$watch(function () {
