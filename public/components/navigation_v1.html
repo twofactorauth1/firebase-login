@@ -1,77 +1,5 @@
-<style>
-    .navigation-v1.nav-header-{{component._id}} .navbar-default .navbar-nav.nav-align{
-        text-align:{{component.nav.align}} !important;
-    }
-    .navigation-v1.nav-header-{{component._id}} .navbar-default .navbar-nav.nav-font-size > li a{
-        font-size:{{component.nav.font.size}}px !important;
-    }
-    .navigation-v1.nav-header-{{component._id}} .navbar-default .navbar-nav.nav-font-family > li a{
-        font-family:{{component.nav.font.family}} !important;
-    }
 
-    .navigation-v1.nav-header-{{component._id}} .navbar ul.navbar-nav li:hover {
-        border-bottom: 4px solid {{component.nav.hover}}!important;
-    }
-
-    .navigation-v1.nav-header-{{component._id}} .navbar ul.navbar-nav> li {
-        border-bottom: 4px solid transparent;
-    }
-
-    .navigation-v1.nav-header-{{component._id}} .navbar ul.navbar-nav> li.sub-nav-parent-menu:hover {
-        border-bottom: 4px solid transparent !important;
-    }
-
-    .navigation-v1.nav-header-{{component._id}} .navbar ul.navbar-nav li a.active {
-         color: {{component.activetxtcolor}}!important;
-         background-color: {{component.nav.pressed.bg.color}};
-         font-weight: {{component.nav.pressed.font.weight}};
-    }
-
-    .navigation-v1.nav-header-{{component._id}} .navbar.navbgcolor {
-        background: {{component.nav.bg}}!important;
-        border: none;
-        border-radius: 0;
-    }
-    .navigation-v1.nav-header-{{component._id}} .navbar-default .navbar-nav > li a:hover,
-    .navigation-v1.nav-header-{{component._id}} .navbar-default .navbar-nav > li:hover, .navigation-v1.nav-header-{{component._id}} .navbar-default .navbar-nav > li.nav-active a:focus{
-        background-color: {{component.nav.hoverbg}} !important;
-        color: {{component.nav.hover}} !important;
-        font-weight: {{component.nav.hoverFontWeight}}!important;
-    }
-    
-    .navigation-v1.nav-header-{{component._id}} .navbar-default .navbar-header .navbar-toggle .icon-bar {
-        background-color: {{component.nav.txtcolor}} !important;
-    }
-
-    .navigation-v1.nav-header-{{component._id}} .navbar-default .navbar-header .navbar-toggle {
-        border-color: {{component.nav.txtcolor}} !important;
-    }
-    .navigation-v1.nav-header-{{component._id}} .navbar-default .navbar-nav > li, .navigation-v1.nav-header-{{component._id}} .navbar-default .navbar-nav > li a{
-        color: {{component.nav.txtcolor}} !important;
-        background-color: {{component.nav.menubgcolor}};
-        font-size:{{component.nav.font.size}};
-        font-family:{{component.nav.font.family}};
-        font-weight:{{component.nav.font.weight}};
-        text-transform:{{component.nav.allowMixedCase ? 'none' : 'uppercase' }}
-    }
-    
-    .navigation-v1.nav-header-{{component._id}} .navbar-default .nav-sub-menu,.navigation-v1.nav-header-{{component._id}} .navbar-default .nav-sub-menu  li,
-    .navigation-v1.nav-header-{{component._id}} .navbar-default .nav-sub-menu li a{
-        background-color: {{component.subnavigation.menubgcolor}}!important; 
-        text-align:{{component.subnavigation.align}} !important;
-        border-color: {{component.subnavigation.menubgcolor}}!important;
-        color: {{component.subnavigation.txtcolor}} !important;  
-    }
-    
-    .navigation-v1.nav-header-{{component._id}} .navbar-default .nav-sub-menu  li:hover,
-    .navigation-v1.nav-header-{{component._id}} .navbar-default .nav-sub-menu  li:focus,
-    .navigation-v1.nav-header-{{component._id}} .navbar-default .nav-sub-menu  li a:hover,
-    .navigation-v1.nav-header-{{component._id}} .navbar-default .nav-sub-menu  li:hover, 
-    .navigation-v1.nav-header-{{component._id}} .navbar-default .nav-sub-menu li.nav-active a:focus{
-        background-color: {{component.subnavigation.hoverbg}} !important;
-        color: {{component.subnavigation.hover}} !important; 
-    }
-</style>
+<ssb-navigation-component-css-loader component="component"></ssb-navigation-component-css-loader>
 <div ng-class="component.type+'-v'+component.version" data-color="component.txtcolor" class="nav-header-{{component._id}}">
     <div id="header">
         <nav class="navbar navbar-default" ng-class="{'navbar-box':component.shownavbox, 'navbgcolor' : !(component.bg.img.show && component.bg.img.url) }" role="navigation">
@@ -108,25 +36,15 @@
                 <!-- Collect the nav links, forms, and other content for toggling -->
                 <div  ng-if="!component.customnav" class="collapse navbar-collapse" id="bs-example-navbar-collapse-{{navbarId}}">
                     <ul ng-class="{'nav-font-size':component.nav.font.size, 'nav-font-family':component.nav.font.family, 'nav-align': component.nav.align, 'nav-mixed-case': component.nav.allowMixedCase}" class="nav navbar-nav navbar-right" data-ng-repeat="mainMenu in website.linkLists " data-ng-if=" mainMenu.handle=='head-menu' " data-edit="{ 'type': 'component' }">
-                        <li ng-class="{'nav-font-size':component.nav.font.size, 'nav-font-family':component.nav.font.family, 'sub-nav-parent-menu': alink.linkTo.type == 'sub-nav'}" data-ng-repeat="alink in mainMenu.links ">
+                        <li  ng-class="{'nav-font-size':component.nav.font.size, 'nav-font-family':component.nav.font.family, 'sub-nav-parent-menu': alink.linkTo.type == 'sub-nav'}" data-ng-repeat="alink in mainMenu.links ">
+                            <ssb-navigation-component-loader link="alink"  is-sub-link="false" ></ssb-navigation-component-loader>
                             <div ng-if="alink.links && alink.links.length>0">
-                                <div ng-init="link = alink">
-                                    <ssb-navigation-component-loader></ssb-navigation-component-loader>
-                                </div>
-                                
                                 <ul class="nav-sub-menu">
                                     <li  data-ng-repeat="sublink in alink.links" ng-style="{'text-align':component.nav.align}">
-                                        <div ng-init="link = sublink">
-                                            <ssb-navigation-component-loader></ssb-navigation-component-loader>
-                                        </div>
+                                        <ssb-navigation-component-loader link="sublink"  is-sub-link="true" ></ssb-navigation-component-loader>    
                                     </li>
                                 </ul>
-                            </div>
-                            <div ng-if="!(alink.links && alink.links.length>0)">
-                                <div ng-init="link = alink">
-                                    <ssb-navigation-component-loader></ssb-navigation-component-loader>
-                                </div>
-                            </div>
+                            </div> 
                         </li>
                         <li ng-if="cartDetails.length > 0">
                             <a href="" data-toggle="modal" data-target="#cart-checkout-modal"><i class="fa fa-shopping-cart"></i> ({{cartDetails.length || 0}})</a>
@@ -136,23 +54,14 @@
                 <div ng-if="component.customnav" class="collapse navbar-collapse" id="bs-example-navbar-collapse-{{navbarId}}">
                     <ul ng-class="{'nav-font-size':component.nav.font.size, 'nav-font-family':component.nav.font.family, 'nav-align': component.nav.align, 'nav-mixed-case': component.nav.allowMixedCase}" class="nav navbar-nav navbar-right" data-ng-repeat="mainMenu in component.linkLists" data-ng-if=" mainMenu.handle=='head-menu'" data-edit="{ 'type': 'component' }">
                         <li data-ng-repeat="alink in mainMenu.links" ng-class="{'sub-nav-parent-menu': alink.linkTo.type == 'sub-nav'}">
-                          <div ng-if="alink.links && alink.links.length > 0">
-                                <div ng-init="link = alink">
-                                    <ssb-navigation-component-loader></ssb-navigation-component-loader>
-                                </div>
+                            <ssb-navigation-component-loader link="alink"  is-sub-link="false" ></ssb-navigation-component-loader>
+                            <div ng-if="alink.links && alink.links.length > 0"> 
                                 <ul class="nav-sub-menu">
-                                    <li  data-ng-repeat="sublink in alink.links" ng-style="{'text-align':component.nav.align}">
-                                        <div ng-init="link = sublink">
-                                            <ssb-navigation-component-loader></ssb-navigation-component-loader>
-                                        </div>
+                                    <li  data-ng-repeat="sublink in alink.links" ng-style="{'text-align':component.nav.align}"> 
+                                        <ssb-navigation-component-loader link="sublink"  is-sub-link="true" ></ssb-navigation-component-loader>
                                     </li>
                                 </ul>
-                            </div>
-                            <div ng-if="!(alink.links && alink.links.length>0)">
-                                <div ng-init="link = alink">
-                                    <ssb-navigation-component-loader></ssb-navigation-component-loader>
-                                </div>
-                            </div>
+                            </div> 
                         </li>
                         <li ng-if="cartDetails.length > 0">
                             <a href="" data-toggle="modal" data-target="#cart-checkout-modal"><i class="fa fa-shopping-cart"></i> ({{cartDetails.length || 0}})</a>

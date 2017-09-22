@@ -43,20 +43,7 @@ app.directive('navigationComponent', ['WebsiteService', 'AccountService', '$time
 						$scope.account = account;
 					});
 				}
-			}
-			$scope.toggleNavClass = function (ele) {
-				var li = $(ele.target).parents("li");
-				if (li) {
-					if (!li.hasClass("nav-active")) {
-						li.parents("section").addClass("overflow_visible");
-						li.siblings().removeClass("nav-active");
-						li.addClass("nav-active");
-					} else {
-						li.removeClass("nav-active");
-						li.parents("section").remove("overflow_visible");
-					}
-				}
-			};
+			} 
 			$scope.currentpage = $scope.$parent.page;
 			$scope.$parent.$watchCollection('vm.state.page', function (page) {
 				if (page) {

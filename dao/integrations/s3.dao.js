@@ -94,7 +94,7 @@ var dao = {
             //Rename file to ensure uniqueness
             var regExp = /(.+?)(\.[^.]*$|$)/;
             var filenameParts = name.match(regExp);
-            var nameNoExt = filenameParts[1];
+            var nameNoExt = filenameParts[1].replace(/[^a-z0-9]+/gi, "_"); 
             var ext = filenameParts[2];
             name = nameNoExt + "_" + new Date().getTime() + ext;
         }else{

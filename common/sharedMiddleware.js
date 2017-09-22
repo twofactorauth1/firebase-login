@@ -99,8 +99,12 @@ module.exports = {
     },
 
     _addHeaders: function(req, resp) {
-        var parsedUrl = urlUtils.getSubdomainFromRequest(req);
-        if(parsedUrl.subdomain && !parsedUrl.isMainApp && !parsedUrl.isOrgRoot) {
+        var host = req.host;
+        if(req.headers['x-host']) {
+            host = req.headers['x-host'];
+        }
+        var parsedUrl = urlUtils.getSubdomainFromHost(host);
+        if(parsedUrl.subdomain && !parsedUrl.isMainApp && !parsedUrl.isOrgRoot && parsedUrl.subdomain !== 'ruckus') {
             resp.header('X-Robots-Tag', 'noindex');
         } else {
             //console.log('parsedUrl:', parsedUrl);
