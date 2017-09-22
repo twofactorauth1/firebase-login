@@ -135,7 +135,7 @@
                                                                     <label class="control-label">
                                                                         Phone Number
                                                                     </label>
-                                                                   <input type="text" placeholder="Phone number" class="form-control"  name="phone_{{$index}}" ng-model="contact.details[0].phones[$index].number" ng-blur="updateCustomer()" ind-international-tel-number form="form">
+                                                                   <input type="text" placeholder="Phone number" class="form-control"  name="phone_{{$index}}" ng-model="contact.details[0].phones[$index].number" ng-blur="updateCustomer()" ind-international-tel-number form="form" phone-field="true">
                                                                    <p ng-show="form.phone_{{$index}}.$invalid && !form.phone_{{$index}}.$pristine" class="help-block">Enter a valid phone number.</p>
                                                                 </div>
                                                             </div>
