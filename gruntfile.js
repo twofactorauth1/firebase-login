@@ -212,7 +212,8 @@ module.exports = function(grunt) {
                     'public/js/libs/perfect-scrollbar/css/perfect-scrollbar.min.css',
                     'public/js/libs/froala-wysiwyg-editor/css/froala_style.min.css',
                     'public/js/libs/blueimp-gallery/css/blueimp-gallery.min.css',
-                    'public/js/libs/font-awesome/css/font-awesome.min.css'
+                    'public/js/libs/font-awesome/css/font-awesome.min.css',
+                    'public/js/libs/intl-tel-input/build/css/intlTelInput.css'
                 ],
                 dest:'public/css/vendor.css',
                 nonull:true
