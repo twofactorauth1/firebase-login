@@ -201,7 +201,7 @@
                                             <label for="billing-phone">
                                                 Phone
                                             </label>
-                                            <input type="text" class="form-control" id="billing-phone" placeholder="Phone" ng-model="order.billing_address.phone">
+                                            <input type="text" class="form-control" id="billing-phone" placeholder="Phone" ng-model="order.billing_address.phone" ind-international-tel-number>
                                         </div>
                                     </div>
                                     <div class="margin-top-5" ng-if="!billingEdit">
@@ -272,7 +272,7 @@
                                                 <label for="shipping-phone">
                                                     Phone
                                                 </label>
-                                                <input type="text" class="form-control" id="shipping-phone" placeholder="Phone" ng-model="order.shipping_address.phone">
+                                                <input type="text" class="form-control" id="shipping-phone" placeholder="Phone" ng-model="order.shipping_address.phone" ind-international-tel-number>
                                             </div>
                                             <div class="form-group col-sm-6">
                                                 <label for="shipping-address-1">
