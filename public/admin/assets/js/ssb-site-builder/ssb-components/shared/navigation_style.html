@@ -39,7 +39,9 @@
         color: {{component.nav.hover}} !important;
         font-weight: {{component.nav.hoverFontWeight}}!important;
     }
-    .navigation-v{{component.version}}.nav-header-{{component._id}} .navbar ul.navbar-nav> li.sub-nav-parent-menu:hover {
+    .navigation-v{{component.version}}.nav-header-{{component._id}} .navbar ul.navbar-nav> li.sub-nav-parent-menu:hover ,
+    .navigation-v{{component.version}}.nav-header-{{component._id}} .navbar ul.navbar-nav> li.sub-nav-parent-menu.nav-active
+    {
         border-bottom: 4px solid transparent !important;
     }
     .navigation-v{{component.version}}.nav-header-{{component._id}} .navbar ul.navbar-nav li a.active {
