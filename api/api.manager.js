@@ -64,6 +64,7 @@ var insights2Api = require('./2.0/insights.api');
 var purchaseorders2Api = require('./2.0/purchaseorders.api');
 var promotions2Api = require('./2.0/promotions.api');
 var quotes2Api = require('./2.0/quotes.api');
+var analytics2Api = require('./2.0/analytics.api');
 
 module.exports = {
 

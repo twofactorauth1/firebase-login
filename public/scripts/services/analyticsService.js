@@ -14,10 +14,12 @@ mainApp.service('analyticsService', ['$http', '$location', 'ipCookie', function 
 		fullUrl = window.location.href,
 		parsedEntranceUrl = $.url(fullUrl),
 		parser = new UAParser(),
-		entrance = false;
+		entrance = false,
+        baseUrl2 = '/api/2.0/analytics/';
 
 	//api/1.0/analytics/session/{sessionId}/sessionStart
 	this.sessionStart = function (fn) {
+        var self = this;
 		var start = new Date().getTime(),
 			//Set the amount of time a session should last.
 			sessionExpireTime = new Date(),
@@ -204,6 +206,7 @@ mainApp.service('analyticsService', ['$http', '$location', 'ipCookie', function 
 
 	///api/1.0/analytics/session/{sessionId}/pageStart
 	this.pageStart = function (fn) {
+        var self = this;
 		var startPageTimer = new Date().getTime(),
 			parsedUrl,
 			sessionId,
@@ -217,32 +220,35 @@ mainApp.service('analyticsService', ['$http', '$location', 'ipCookie', function 
 		if (!session_cookie || !session_cookie.id) {
 			console.log('restarting session');
 			this.sessionStart(undefined);
-		}
-		sessionId = ipCookie("session_cookie").id || Math.uuid();
+		} else {
+            sessionId = ipCookie("session_cookie").id || Math.uuid();
 
-		pageProperties = {
-			url: {
-				source: parsedUrl.attr("source"),
-				protocol: parsedUrl.attr("protocol"),
-				domain: parsedUrl.attr("host"),
-				port: parsedUrl.attr("port"),
-				path: parsedUrl.attr("path"),
-				anchor: parsedUrl.attr("anchor")
-			},
-			pageActions: [],
-			start_time: startPageTimer,
-			end_time: 0,
-			session_id: sessionId,
-			entrance: entrance
-		};
+            pageProperties = {
+                url: {
+                    source: parsedUrl.attr("source"),
+                    protocol: parsedUrl.attr("protocol"),
+                    domain: parsedUrl.attr("host"),
+                    port: parsedUrl.attr("port"),
+                    path: parsedUrl.attr("path"),
+                    anchor: parsedUrl.attr("anchor")
+                },
+                pageActions: [],
+                start_time: startPageTimer,
+                end_time: 0,
+                session_id: sessionId,
+                entrance: entrance
+            };
 
-		entrance = false;
+            entrance = false;
+            var queryParams = {ev:'pg', fe:parsedUrl.attr('source'), sid:sessionId +'-collect'};
+            apiUrl = baseUrl + ['analytics', 'session', sessionId, 'pageStart'].join('/');
+            $http.post(apiUrl, pageProperties)
+                .success(function (data) {
+                    self.collect(queryParams, fn);
+                    //fn(data);
+                });
+        }
 
-		apiUrl = baseUrl + ['analytics', 'session', sessionId, 'pageStart'].join('/');
-		$http.post(apiUrl, pageProperties)
-			.success(function (data) {
-				fn(data);
-			});
 	};
 
 	///api/1.0/analytics/session/{sessionId}/ping
@@ -263,4 +269,188 @@ mainApp.service('analyticsService', ['$http', '$location', 'ipCookie', function 
 				fn(data);
 			});
 	};
+
+    this.collectPage = function(firstTime, fn) {
+        var self = this;
+        var session_cookie = ipCookie("session_cookie"); //Check if we have a session cookie: ;
+        var parsedUrl = $.url(window.location.href);
+        if (!session_cookie || !session_cookie.id) {
+            console.log('restarting session');
+            self.collect(null, function(){
+                var sessionId = ipCookie("session_cookie").id || Math.uuid();
+                var queryParams = {ev:'pg', fe:parsedUrl.attr('source'), sid:sessionId};
+                if(!firstTime) {
+                    queryParams.ev = 'p';
+                }
+                self.collect(queryParams, fn);
+            });
+        } else {
+            var sessionId = ipCookie("session_cookie").id || Math.uuid();
+            var queryParams = {ev:'pg', fe:parsedUrl.attr('source'), sid:sessionId};
+            if(!firstTime) {
+                queryParams.ev = 'p';
+            }
+            self.collect(queryParams, fn);
+        }
+
+    };
+
+    this.collect = function(queryParams, fn) {
+        var self = this;
+        var start = new Date().getTime(),
+        //Set the amount of time a session should last.
+            sessionExpireTime = new Date(),
+            session_cookie = ipCookie("session_cookie"), //Check if we have a session cookie:
+            device,
+            isMobile,
+            permanent_cookie = ipCookie("permanent_cookie"),
+            new_visitor = true,
+            fingerprint,
+            timezone,
+            campaign = {},
+            hasUtm = false,
+            referrer = document.referrer, //Add information about the referrer of the same format as the current page
+            parsedReferrer,
+            referrerObject = null,
+            apiUrl;
+        if(!queryParams) {
+
+
+            sessionExpireTime.setMinutes(sessionExpireTime.getMinutes() + 30);
+
+            //If it is undefined, set a new one.
+            if (!session_cookie || !session_cookie.id) {
+                entrance = true;
+                ipCookie("session_cookie", {
+                    id: Math.uuid()
+                }, {
+                    expires: sessionExpireTime,
+                    path: "/" //Makes this cookie readable from all pages
+                });
+            } else {
+                //If it does exist, delete it and set a new one with new expiration time
+                ipCookie.remove("session_cookie", {
+                    path: "/"
+                });
+                ipCookie("session_cookie", session_cookie, {
+                    expires: sessionExpireTime,
+                    path: "/"
+                });
+            }
+            //If it is undefined, set a new one.
+            if (permanent_cookie === undefined) {
+                ipCookie("permanent_cookie", {
+                    id: Math.uuid()
+                }, {
+                    expires: 3650, //10 year expiration date
+                    path: "/" //Makes this cookie readable from all pages
+                });
+            } else {
+                new_visitor = false;
+            }
+
+            //determine if the device is mobile or not
+            isMobile = {
+                Android: function () {
+                    return navigator.userAgent.match(/Android/i);
+                },
+                BlackBerry: function () {
+                    return navigator.userAgent.match(/BlackBerry/i);
+                },
+                iOS: function () {
+                    return navigator.userAgent.match(/iPhone|iPad|iPod/i);
+                },
+                Opera: function () {
+                    return navigator.userAgent.match(/Opera Mini/i);
+                },
+                Windows: function () {
+                    return navigator.userAgent.match(/IEMobile/i) || navigator.userAgent.match(/WPDesktop/i);
+                },
+                any: function () {
+                    return (isMobile.Android() || isMobile.BlackBerry() || isMobile.iOS() || isMobile.Opera() || isMobile.Windows());
+                }
+            };
+
+            if (isMobile.any()) {
+                device = 'mobile';
+            } else {
+                device = 'desktop';
+            }
+
+            //get browser fingerprint
+            fingerprint = new Fingerprint().get();
+            timezone = jstz.determine();
+
+            queryParams = {};
+            queryParams.sid= ipCookie('session_cookie').id;
+            queryParams.pt=ipCookie('permanent_cookie').id;
+            queryParams.ev='s';
+            if(parser.getBrowser()) {
+                queryParams.uabn=parser.getBrowser().name;
+                queryParams.uabv=parser.getBrowser().version;
+                queryParams.uabm=parser.getBrowser().major;
+            }
+            if(parser.getEngine()) {
+                queryParams.uaen=parser.getEngine().name;
+                queryParams.uaev=parser.getEngine().version;
+            }
+            if(parser.getOS()) {
+                queryParams.uaon=parser.getOS().name;
+                queryParams.uaov=parser.getOS().version;
+            }
+            queryParams.uad=device;
+            queryParams.f=fingerprint.toString();
+            queryParams.t=timezone.name();
+            queryParams.nv=new_visitor;
+            queryParams.fe=$location.absUrl();
+
+
+            if ($location.search().utm_source) {
+                hasUtm = true;
+                campaign.utm_source = $location.search().utm_source;
+            }
+
+            if ($location.search().utm_medium) {
+                hasUtm = true;
+                campaign.utm_medium = $location.search().utm_medium;
+            }
+
+            if ($location.search().utm_campaign) {
+                hasUtm = true;
+                campaign.utm_campaign = $location.search().utm_campaign;
+            }
+
+            if ($location.search().utm_term) {
+                hasUtm = true;
+                campaign.utm_term = $location.search().utm_term;
+            }
+
+            if ($location.search().utm_content) {
+                hasUtm = true;
+                campaign.utm_content = $location.search().utm_content;
+            }
+
+            if (hasUtm) {
+                queryParams.utms=campaign.utm_source;
+                queryParams.utmm=campaign.utm_medium;
+                queryParams.utmc=campaign.utm_campaign;
+                queryParams.utmt=campaign.utm_term;
+                queryParams.utmct=campaign.utm_content;
+            }
+
+            if (referrer !== undefined) {
+                parsedReferrer = $.url(referrer);
+                queryParams.r=parsedReferrer.attr('source');
+                queryParams.st=self.getSourceType(parsedReferrer.attr("host"));
+            }
+            console.log('queryParams:', queryParams);
+        }
+
+        //api/2.0/analytics/collect
+        apiUrl = baseUrl2 + 'collect';
+        $http.get(apiUrl, {params:queryParams})
+            .success(function (data) {
+                fn(data);
+            });
+    };
 }]);
