@@ -8,7 +8,10 @@
 				component: "="
 			},
 			templateUrl: '/admin/assets/js/ssb-site-builder/ssb-components/shared/navigation_style.html',
-			replace: true
+			replace: true,
+			controller: ['$scope', function ($scope) {
+				$scope.defalultHover="#939597";
+			}] 
 		};
 	});
 }());
