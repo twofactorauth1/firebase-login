@@ -644,7 +644,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                 if (!phone) {
                     scope.invalidPhone = false;
                 } else {
-                    scope.invalidPhone = !formValidations.phone.test(phone);
+                    scope.invalidPhone = !$("#checkout-billing-phone-number").intlTelInput("isValidNumber");
                 }
             };
 

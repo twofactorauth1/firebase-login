@@ -95,8 +95,8 @@
                 </div>
                 <div class="col-sm-6">
                   <div class="form-group" ng-class="{'has-error': invalidPhone}">
-                    <label class="control-label" for="phone">Phone</label>
-                    <input type="text" ng-blur="checkBillingPhone(newContact.details[0].phones[0].number); cookieUpdateContactFn()" placeholder="Phone" class="form-control" id="phone" ng-model="newContact.details[0].phones[0].number">
+                    <label class="control-label" for="checkout-billing-phone-number">Phone</label>
+                    <input type="text" ng-blur="checkBillingPhone(newContact.details[0].phones[0].number); cookieUpdateContactFn()" placeholder="Phone" class="form-control" id="checkout-billing-phone-number" ng-model="newContact.details[0].phones[0].number" ind-international-tel-number name="phone">
                     <span class="help-block" ng-if="invalidPhone"></i>Invalid</span>
                   </div>
                 </div>
