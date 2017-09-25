@@ -350,6 +350,8 @@ var insightsManager = {
                 var siteUrl = account.get('subdomain') + '.' + appConfig.subdomain_suffix;
                 if(account.get("orgId") == 1){
                     siteUrl = account.get('subdomain') + '.gorvlvr.com';
+                } else if(account.get("orgId") == 5){
+                    siteUrl = account.get('subdomain') + '.leadsource.cc';
                 }
 
                 vars.push({
@@ -509,6 +511,13 @@ var insightsManager = {
                     }
                     siteUrl = account.get('subdomain') + suffix;
                     vars.push({name:'ORGLOGO', content:'https://s3.amazonaws.com/indigenous-digital-assets/account_1301/rvlvr_logo_350.png'});
+                } else if(account.get("orgId") == 5) {
+                    var suffix = '.leadsource.cc'; // Todo: Get domain from orgId
+                    if (appConfig.nonProduction === true) {
+                        suffix = '.test' + suffix;
+                    }
+                    siteUrl = account.get('subdomain') + suffix;
+                    vars.push({name:'ORGLOGO', content:'https://s3-us-west-2.amazonaws.com/indigenous-admin/TESSCO_LOGO_DRAFT.jpg'});
                 } else {
                     vars.push({name:'ORGLOGO', content:'https://s3.amazonaws.com/indigenous-digital-assets/account_6/Indigenous-Logo_EmailSafe_1495057493172.png'});
                 }
@@ -536,6 +545,10 @@ var insightsManager = {
                     fromAddress = 'insights@gorvlvr.com';
                     fromName = 'RVLVR Insights';
                     subject = 'RVLVR Insights Report';
+                } else if(account.get('orgId') == 5) {
+                    fromAddress = 'insights@gorvlvr.com';
+                    fromName = 'Tessco LeadSource Insights';
+                    subject = 'Tessco LeadSource Insights Report';
                 }
                 var htmlContent = html;
                 var _accountId = customerAccountId;
