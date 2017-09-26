@@ -130,7 +130,8 @@ indigenous.collector = function(siteId, isTest){
             url+=key + '='+queryParams[key] + '&';
         });
         client.get(url, function(response) {
-            console.log('response:', response);
+            //console.log('response:', response);
+            indigenous.page();
         });
 
     });
@@ -273,4 +274,4 @@ indigenous._collectPage = function(queryParams) {
         }, 30000);
     });
 };
-indigenous.collector(1702, true);
+//indigenous.collector(1702, true);
