@@ -1919,9 +1919,14 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
             };
 
             scope.paypalLoginClickFn = function () {
-                var dgFlow = new PAYPAL.apps.DGFlow({expType: null});
-                dgFlow.startFlow($location.absUrl());
-                scope.close();
+                if(screen.width<769){
+                    var dgFlow=new PAYPAL.apps.DGFlow({expType: null});
+                    var dgFlow = new PAYPAL.apps.DGFlowMini({callbackFunction: 'mini'});                 
+                 }else{
+                    var dgFlow=new PAYPAL.apps.DGFlow({expType: null});
+                    dgFlow.startFlow($location.absUrl());
+                 }
+                 scope.close();
                 angular.element("body").hide();
                 $timeout(function () {
                     angular.element("body").show();
