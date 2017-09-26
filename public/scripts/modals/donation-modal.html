@@ -123,10 +123,10 @@
 
             <div class="donate-step thank-you" ng-show="vm.checkoutModalState == 3">
                 <!-- <h3 class="donate-step-header center mb20">Paypal Payment</h3> -->
-                <form action="{{vm.paypalURL}}" target="_self" class="center standard">
+                <form id="payPalDonateform" action="{{vm.paypalURL}}" target="_self" class="center standard">
                     <!-- <label for="buy">Buy Now:</label> -->
                     <input type="image" id="submitBtn" value="Pay with PayPal" src="https://www.paypalobjects.com/en_US/i/btn/btn_paynowCC_LG.gif" ng-click='vm.paypalLoginClickFn()'>
-                    <input id="type" type="hidden" name="expType" value="light">
+                    <input id="type" type="hidden" name="expType"value="{{vm.checkoutExpType|| 'light'}}">
                     <input id="paykey" type="hidden" name="paykey" value="{{vm.paypalKey}}">
                 </form>
             </div>

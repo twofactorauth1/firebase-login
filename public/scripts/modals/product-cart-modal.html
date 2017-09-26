@@ -380,10 +380,10 @@
       <div class="row thank-you" style="" ng-if="checkoutModalState == 7">
 
         <h3 class="center mb20">Paypal Payment</h3>
-        <form action="{{paypalURL}}" target="_self" class="center standard">
+        <form id="payPalform" action="{{paypalURL}}" target="_self" class="center standard">
           <!-- <label for="buy">Buy Now:</label> -->
           <input type="image" id="submitBtn" value="Pay with PayPal" src="https://www.paypalobjects.com/en_US/i/btn/btn_paynowCC_LG.gif" ng-click='paypalLoginClickFn()'>
-          <input id="type" type="hidden" name="expType" value="light">
+          <input id="type" type="hidden" name="expType" value="{{checkoutExpType|| 'light'}}">
           <input id="paykey" type="hidden" name="paykey" value="{{paypalKey}}">
         </form>
       </div>

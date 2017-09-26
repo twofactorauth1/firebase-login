@@ -42,7 +42,14 @@
     .navigation-v{{component.version}}.nav-header-{{component._id}} .navbar ul.navbar-nav> li.sub-nav-parent-menu:hover ,
     .navigation-v{{component.version}}.nav-header-{{component._id}} .navbar ul.navbar-nav> li.sub-nav-parent-menu.nav-active
     {
-        border-bottom: 4px solid transparent !important;
+        border-bottom: unset !important;
+    }
+    @media (min-width: 768px){ 
+        .navigation-v{{component.version}}.nav-header-{{component._id}} .navbar ul.navbar-nav> li.sub-nav-parent-menu:hover ,
+        .navigation-v{{component.version}}.nav-header-{{component._id}} .navbar ul.navbar-nav> li.sub-nav-parent-menu.nav-active
+        {
+            border-bottom: 4px solid transparent !important;
+        }
     }
     .navigation-v{{component.version}}.nav-header-{{component._id}} .navbar ul.navbar-nav li a.active {
          color: {{component.activetxtcolor}}!important;
