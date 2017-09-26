@@ -1204,7 +1204,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                                 }
                             }
                             scope.checkoutModalState = 7;
-                            scope.checkoutExpType=screen.width<769?'mini':'light'
+                            scope.checkoutExpType=screen.width<769?'mini':'light';
                             localStorageService.set(orderCookieKey, data);
                             scope.paypalKey = data.payment_details.payKey;
                             CartDetailsService.items = [];
