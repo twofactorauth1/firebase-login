@@ -1204,6 +1204,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                                 }
                             }
                             scope.checkoutModalState = 7;
+                            scope.checkoutExpType=screen.width<769?'mini':'light'
                             localStorageService.set(orderCookieKey, data);
                             scope.paypalKey = data.payment_details.payKey;
                             CartDetailsService.items = [];
@@ -1920,7 +1921,8 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
 
             scope.paypalLoginClickFn = function () {
                 if(screen.width<769){ 
-                    var dgFlow = new PAYPAL.apps.DGFlowMini({expType: 'mini'});                 
+                    var dgFlowMini = new PAYPAL.apps.DGFlowMini({trigger: 'submitBtn'});  
+                    $("#payPalform").submit();            
                  }else{
                     var dgFlow=new PAYPAL.apps.DGFlow({expType: null});
                     dgFlow.startFlow($location.absUrl());
