@@ -1919,8 +1919,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
             };
 
             scope.paypalLoginClickFn = function () {
-                if(screen.width<769){
-                    var dgFlow=new PAYPAL.apps.DGFlow({expType: null});
+                if(screen.width<769){ 
                     var dgFlow = new PAYPAL.apps.DGFlowMini({callbackFunction: 'mini'});                 
                  }else{
                     var dgFlow=new PAYPAL.apps.DGFlow({expType: null});
