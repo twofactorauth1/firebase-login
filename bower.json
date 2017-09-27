@@ -88,7 +88,7 @@
     "fastclick": "1.0.6",
     "fingerprint": "0.5.4",
     "font-awesome": ">=4.7.0",
-    "froala-wysiwyg-editor": "2.4.2",
+    "froala-wysiwyg-editor": "2.7.0",
     "highcharts-ng": "0.0.8",
     "highcharts-release": "latest",
     "highmaps-release": "latest",
@@ -139,8 +139,7 @@
     "videogular-themes-default": "0.4.2",
     "sticky-js": "1.0.4",
     "pdfobject": "latest",
-    "angular-google-analytics": "^1.1.9",
-    "intl-tel-input": "12.0.3",
+    "angular-google-analytics": "^1.1.9",    
     "fingerprintjs2": "^1.5.1"
   },
   "resolutions": {

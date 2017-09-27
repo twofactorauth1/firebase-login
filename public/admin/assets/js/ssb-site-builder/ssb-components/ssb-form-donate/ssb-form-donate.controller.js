@@ -570,16 +570,20 @@
                     vm.checkoutModalState = 3;
                     localStorageService.set(orderCookieKey, data);
                     vm.paypalKey = data.payment_details.payKey;
+                    vm.checkoutExpType=screen.width<769?'mini':'light';
                     // vm.formBuilder = {};
                 });
             }
         }
 
         function paypalLoginClickFn() {
-            var dgFlow = new PAYPAL.apps.DGFlow({
-                expType: null
-            });
-            dgFlow.startFlow($location.absUrl());
+            if(screen.width<769){ 
+                var dgFlowMini = new PAYPAL.apps.DGFlowMini({trigger: 'submitBtn'});  
+                $("#payPalDonateform").submit();            
+             }else{
+                var dgFlow=new PAYPAL.apps.DGFlow({expType: null});
+                dgFlow.startFlow($location.absUrl());
+            }
             vm.closeModalFn();
             angular.element("body").hide();
             $timeout(function () {

@@ -10,13 +10,13 @@
                 <ul ng-class="{'nav-font-size':component.nav.font.size, 'nav-font-family':component.nav.font.family, 'nav-align': component.nav.align, 'nav-mixed-case': component.nav.allowMixedCase}"
                     class="nav navbar-nav navbar-right" data-edit="{ 'type': 'component' }" data-ng-repeat="mainMenu in website.linkLists"
                     data-ng-if=" mainMenu.handle=='head-menu' ">
-                    <li ng-class="{'nav-font-size':component.nav.font.size, 'nav-font-family':component.nav.font.family, 'sub-nav-parent-menu': alink.linkTo.type == 'sub-nav'}"
+                    <li ng-class="{'nav-font-size':component.nav.font.size, 'nav-font-family':component.nav.font.family, 'sub-nav-parent-menu': alink.linkTo.type == 'sub-nav','activeLink' :alink.linkTo.data==currentpage.handle}"
                         data-ng-repeat="alink in mainMenu.links">
-                        <ssb-navigation-component-loader link="alink" is-sub-link="false"></ssb-navigation-component-loader>
+                        <ssb-navigation-component-loader currentpagehandle="currentpage.handle" link="alink" is-sub-link="false"></ssb-navigation-component-loader>
                         <div ng-if="alink.links && alink.links.length>0">
                             <ul class="nav-sub-menu">
-                                <li data-ng-repeat="sublink in alink.links" ng-style="{'text-align':component.nav.align}">
-                                    <ssb-navigation-component-loader link="sublink" is-sub-link="true"></ssb-navigation-component-loader>
+                                <li data-ng-repeat="sublink in alink.links" ng-style="{'text-align':component.nav.align}" ng-class="{'activeLink' :sublink.linkTo.data==currentpage.handle}">
+                                    <ssb-navigation-component-loader currentpagehandle="currentpage.handle" link="sublink" is-sub-link="true"></ssb-navigation-component-loader>
                                 </li>
                             </ul>
                         </div>
@@ -27,12 +27,12 @@
                 <ul ng-class="{'nav-font-size':component.nav.font.size, 'nav-font-family':component.nav.font.family, 'nav-align': component.nav.align, 'nav-mixed-case': component.nav.allowMixedCase}"
                     class="nav navbar-nav navbar-right" data-ng-repeat="mainMenu in component.linkLists" data-ng-if=" mainMenu.handle=='head-menu' "
                     data-edit="{ 'type': 'component' }">
-                    <li data-ng-repeat="alink in mainMenu.links" ng-class="{'sub-nav-parent-menu': alink.linkTo.type == 'sub-nav'}">
-                        <ssb-navigation-component-loader link="alink" is-sub-link="false"></ssb-navigation-component-loader>
+                    <li data-ng-repeat="alink in mainMenu.links" ng-class="{'sub-nav-parent-menu': alink.linkTo.type == 'sub-nav','activeLink' :alink.linkTo.data==currentpage.handle}">
+                        <ssb-navigation-component-loader currentpagehandle="currentpage.handle" link="alink" is-sub-link="false"></ssb-navigation-component-loader>
                         <div ng-if="alink.links && alink.links.length>0">
                             <ul class="nav-sub-menu">
-                                <li data-ng-repeat="sublink in alink.links" ng-style="{'text-align':component.nav.align}">
-                                    <ssb-navigation-component-loader link="sublink" is-sub-link="true"></ssb-navigation-component-loader>
+                                <li data-ng-repeat="sublink in alink.links" ng-style="{'text-align':component.nav.align}" ng-class="{'activeLink' :sublink.linkTo.data==currentpage.handle}">
+                                    <ssb-navigation-component-loader currentpagehandle="currentpage.handle" link="sublink" is-sub-link="true"></ssb-navigation-component-loader>
                                 </li>
                             </ul>
                         </div>

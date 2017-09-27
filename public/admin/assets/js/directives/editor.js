@@ -316,12 +316,17 @@ app.directive("elem", function ($rootScope, $timeout, $compile, SimpleSiteBuilde
 
 								if (cmd === 'html') {
 									if (editor.codeView.isActive()) {
-										var mirror = editor.$box.find(".CodeMirror")[0].CodeMirror;
-										mirror.on('change', function () {
-											$timeout(function () {
-												scope.updateFroalaContent(editor, editor.codeView.get());
-											}, 0);
-										});
+										var mirrors=editor.$box.find(".CodeMirror");
+										if(mirrors && mirrors.length>0) {
+											var mirror = mirrors[0].CodeMirror;
+											if(mirror){
+												mirror.on('change', function () {
+													$timeout(function () {
+														scope.updateFroalaContent(editor, editor.codeView.get());
+													}, 0);
+												});
+											}
+										}										
 									}
 								}
 								if (cmd === 'linkRemoveBtn') {

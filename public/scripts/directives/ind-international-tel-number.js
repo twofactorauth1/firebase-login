@@ -13,11 +13,8 @@ app.directive('indInternationalTelNumber', function ($timeout, $window) {
 					$(element).removeAttr("placeholder");
 					$(element).intlTelInput({
 						nationalMode: false,
-						utilsScript: "/js/libs/intl-tel-input/build/js/utils.js"
+						utilsScript: "/js/libs_misc/intl-tel-input/build/js/utils.js"
 					});
-
-
-					
 
 					if(scope.form){
 
