@@ -41,7 +41,7 @@ var deployUtils = {
                     } else {
                         console.log('waiting to check the environment');
                         setTimeout(function(){
-                            async.retry({times:60, interval:10000}, function(callback){
+                            async.retry({times:120, interval:15000}, function(callback){
                                 elasticbeanstalk.describeEnvironments({EnvironmentNames:[blueEnvironment]}, function(err, value){
                                     if(value && value.Environments && value.Environments[0] && value.Environments[0].Status && value.Environments[0].Status === 'Ready') {
                                         callback(null, value.Environments[0]);
