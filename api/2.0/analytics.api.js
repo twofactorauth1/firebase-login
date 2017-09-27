@@ -156,6 +156,7 @@ _.extend(api.prototype, baseApi.prototype, {
         } else {
             self.log.warn('Unknown event [' + expectedQuery.s + ']', expectedQuery);
         }
+        resp.set('Access-Control-Allow-Origin', '*');
         self.send200(resp);
         self.log.trace('<< collectAnalytics');
     },
