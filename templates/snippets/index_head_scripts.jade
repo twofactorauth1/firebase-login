@@ -99,7 +99,7 @@ if (typeof account.website.theme !== 'undefined' && typeof account.website.theme
             font-size: #{account.website.themeOverrides.styles.paragraphSize};
         }
 
-        .ssb-theme-#{account.website.theme.handle} .ssb-theme-btn, .ssb-theme-#{account.website.theme.handle} .ssb-theme-btn:hover {
+        .ssb-theme-#{account.website.theme.handle} .fr-view span[style~="color:"] a.ssb-theme-btn ,.ssb-theme-#{account.website.theme.handle} .ssb-theme-btn, .ssb-theme-#{account.website.theme.handle} .ssb-theme-btn:hover {
             background-color: #{account.website.themeOverrides.styles.primaryBtnBackgroundColor};
             color: #{account.website.themeOverrides.styles.primaryBtnTextColor};
             border-color: #{account.website.themeOverrides.styles.primaryBtnBackgroundColor};
