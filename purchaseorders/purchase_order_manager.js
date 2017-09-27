@@ -784,7 +784,7 @@ module.exports = {
                 } else {
                     self.log.debug('sending email to: ', emailTo);
                     console.log(html);
-                    emailMessageManager.sendNewPurchaseOrderEmail(fromEmail, fromName, emailTo, null, emailSubject, html, accountId, [], '', null, emailBcc, function(err, result){
+                    emailMessageManager.sendBasicDetailsEmail(fromEmail, fromName, emailTo, null, emailSubject, html, accountId, [], '', null, emailBcc, function(err, result){
                         self.log.debug('result: ', result);
                     });
                 }
