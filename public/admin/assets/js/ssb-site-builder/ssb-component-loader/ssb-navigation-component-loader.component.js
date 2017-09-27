@@ -6,7 +6,8 @@
 			restrict: 'E',
 			scope: {
 				link: "=",
-				isSubLink: '='
+				isSubLink: '=',
+				currentpagehandle: '='
 			},
 			templateUrl: '/admin/assets/js/ssb-site-builder/ssb-components/shared/link_2.html',
 			replace: true,
