@@ -273,7 +273,7 @@ _.extend(api.prototype, baseApi.prototype, {
         pageEvent.set('start_time', dateTime);
         pageEvent.set('accountId', self.currentAccountId(req));
         if(q.siteId) {
-            if(Number.isInteger(q.siteId)) {
+            if(!isNaN(q.siteId)) {
                 pageEvent.set('accountId', parseInt(q.siteId));
             } else {
                 pageEvent.set('siteId', q.siteId);
@@ -317,7 +317,7 @@ _.extend(api.prototype, baseApi.prototype, {
         pingEvent.set('server_time_dt', new Date());
         pingEvent.set('accountId', self.currentAccountId(req));
         if(q.siteId) {
-            if(Number.isInteger(q.siteId)) {
+            if(!isNaN(q.siteId)) {
                 pingEvent.set('accountId', parseInt(q.siteId));
             } else {
                 pingEvent.set('siteId', q.siteId);

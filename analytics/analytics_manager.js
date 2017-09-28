@@ -158,9 +158,10 @@ module.exports = {
             var orgId = 0;
             if(account && account.get('orgId')) {
                 orgId = account.get('orgId');
+                sessionEvent.set('subdomain', account.get('subdomain'));
             }
             sessionEvent.set('orgId', orgId);
-            sessionEvent.set('subdomain', account.get('subdomain'));
+
             orgManager.getOrgById(0,0,orgId, function(err, organization){
                 if(organization) {
                     sessionEvent.set('orgDomain', organization.get('orgDomain'));
