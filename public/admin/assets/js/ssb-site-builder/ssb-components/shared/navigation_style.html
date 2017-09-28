@@ -8,7 +8,7 @@
     .navigation-v{{component.version}}.nav-header-{{component._id}} .navbar-default .navbar-nav.nav-font-family > li a{
         font-family:{{component.nav.font.family}} !important;
     }
-    .navigation-v{{component.version}}.nav-header-{{component._id}} .navbar ul.navbar-nav> li {
+    .navigation-v{{component.version}}.nav-header-{{component._id}} .navbar ul.navbar-nav> li:not(.editable-cover) {
         border-bottom: 4px solid transparent;
         color: {{component.nav.txtcolor}} !important;
         background-color: {{component.nav.menubgcolor}};
@@ -17,14 +17,14 @@
         font-weight:{{component.nav.font.weight}};
         text-transform:{{component.nav.allowMixedCase ? 'none' : 'uppercase' }}
     }
-    .navigation-v{{component.version}}.nav-header-{{component._id}} .navbar ul.nav-sub-menu> li{
+    .navigation-v{{component.version}}.nav-header-{{component._id}} .navbar ul.nav-sub-menu> li {
         border-color: {{component.subnavigation.menubgcolor || component.nav.menubgcolor}} !important;
     }
     .navigation-v{{component.version}}.nav-header-{{component._id}} .navbar ul.navbar-nav> li a{ 
         color: {{component.nav.txtcolor}} !important;
         background-color: {{component.nav.menubgcolor}};
     }
-    .navigation-v{{component.version}}.nav-header-{{component._id}} .navbar ul.navbar-nav> li:hover ,
+    .navigation-v{{component.version}}.nav-header-{{component._id}} .navbar ul.navbar-nav> li:not(.editable-cover):hover ,
     .navigation-v{{component.version}}.nav-header-{{component._id}} .navbar ul.navbar-nav> li.nav-active,
     .navigation-v{{component.version}}.nav-header-{{component._id}} .navbar ul.navbar-nav> li.nav-active>div>a,
     .navigation-v{{component.version}}.nav-header-{{component._id}} .navbar ul.nav-sub-menu> li:hover{
@@ -88,5 +88,4 @@
         color: {{component.subnavigation.hover}} !important;  
         border-color: {{component.nav.hover || defalultHover}} !important;
     }
-    
 </style>
