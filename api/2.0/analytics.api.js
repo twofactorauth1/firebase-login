@@ -201,7 +201,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 sessionEvent.set('siteId', q.siteId);
             }
         }
-       
+
         //parse referrer and fullEntrance
         if(q.fe) {
             var obj = tldtools.extract(q.fe);
@@ -288,6 +288,7 @@ _.extend(api.prototype, baseApi.prototype, {
             if(err) {
                 self.log.error('Error saving page event: ' + err);
             }
+            self._buildPingEvent(req, q);
         });
     },
 
