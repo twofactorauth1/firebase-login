@@ -988,5 +988,26 @@ module.exports = {
             }
         });
 
+    },
+
+    getUserByUsername: function(accountId, userId, username, fn) {
+        var self = this;
+        self.log = log;
+        self.log.debug(accountId, userId, '>> getUserByUsername');
+        dao.getUserByUsername(username, function(err, value){
+            self.log.debug(accountId, userId, '<< getUserByUsername');
+            fn(err, value);
+        });
+
+    },
+
+    updateUser: function(accountId, userId, user, fn) {
+        var self = this;
+        self.log = log;
+        self.log.debug(accountId, userId, '>> updateUser');
+        dao.saveOrUpdate(user, function(err, updatedUser){
+            self.log.debug(accountId, userId, '<< updateUser');
+            fn(err, updatedUser);
+        });
     }
 };
