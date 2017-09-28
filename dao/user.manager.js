@@ -11,7 +11,7 @@ var accountDao = require('./account.dao');
 var cmsManager = require('../cms/cms_manager');
 var log = $$.g.getLogger("user.manager");
 var securityManager = require('../security/sm')(true);
-var contactDao = require('./contact.dao');
+
 var appConfig = require('../configs/app.config');
 var analyticsManager = require('../analytics/analytics_manager');
 var socialConfigManager = require('../socialconfig/socialconfig_manager');
