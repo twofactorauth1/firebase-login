@@ -195,7 +195,7 @@ _.extend(api.prototype, baseApi.prototype, {
         sessionEvent.set('ip_address', self.ip(req));
         sessionEvent.set('accountId', self.currentAccountId(req));
         if(q.siteId) {
-            if(Number.isInteger(q.siteId)) {
+            if(!isNaN(q.siteId)) {
                 sessionEvent.set('accountId', parseInt(q.siteId));
             } else {
                 sessionEvent.set('siteId', q.siteId);
