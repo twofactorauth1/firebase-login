@@ -11,7 +11,7 @@ indigenous.collector = function(siteId, isTest){
         indigenous.isTest = true;
     }
     indigenous.siteId = siteId;
-    queryParams.siteid = indigenous.siteId;
+    queryParams.siteId = indigenous.siteId;
     queryParams.sid = indigenous.sid;
     queryParams.pt = readCookie('permanent_cookie').id;
     var new_visitor = true;
@@ -247,7 +247,7 @@ indigenous.page = function(name) {
     if(name) {
         queryParams.n = name;
     }
-    queryParams.siteid = indigenous.siteId;
+    queryParams.siteId = indigenous.siteId;
     indigenous._collectPage(queryParams);
 };
 indigenous._collectPage = function(queryParams) {
