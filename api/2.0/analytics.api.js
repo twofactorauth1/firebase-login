@@ -201,17 +201,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 sessionEvent.set('siteId', q.siteId);
             }
         }
-
-        var subdomainObj = urlUtils.getSubdomainFromRequest(req);
-        if(subdomainObj.isMainApp===true) {
-            sessionEvent.set('subdomain', 'main');
-        } else {
-            sessionEvent.set('subdomain', subdomainObj.subdomain);
-        }
-
-        if(subdomainObj.isOrgRoot === true) {
-            sessionEvent.set('orgDomain', subdomainObj.orgDomain);
-        }
+       
         //parse referrer and fullEntrance
         if(q.fe) {
             var obj = tldtools.extract(q.fe);
