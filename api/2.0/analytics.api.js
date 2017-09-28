@@ -194,6 +194,13 @@ _.extend(api.prototype, baseApi.prototype, {
         sessionEvent.set('server_time_dt', new Date());
         sessionEvent.set('ip_address', self.ip(req));
         sessionEvent.set('accountId', self.currentAccountId(req));
+        if(q.siteId) {
+            if(Number.isInteger(q.siteId)) {
+                sessionEvent.set('accountId', parseInt(q.siteId));
+            } else {
+                sessionEvent.set('siteId', q.siteId);
+            }
+        }
 
         var subdomainObj = urlUtils.getSubdomainFromRequest(req);
         if(subdomainObj.isMainApp===true) {
@@ -275,9 +282,17 @@ _.extend(api.prototype, baseApi.prototype, {
         pageEvent.set('server_time_dt', new Date());
         pageEvent.set('start_time', dateTime);
         pageEvent.set('accountId', self.currentAccountId(req));
-        if(!self.currentAccountId) {
-            self.log.warn('current account ID is null for request:', req);
+        if(q.siteId) {
+            if(Number.isInteger(q.siteId)) {
+                pageEvent.set('accountId', parseInt(q.siteId));
+            } else {
+                pageEvent.set('siteId', q.siteId);
+            }
         }
+        if(q.name){
+            pageEvent.set('name', q.name);
+        }
+        
 
         analyticsManager.storePageEvent(pageEvent, function(err){
             if(err) {
@@ -310,6 +325,13 @@ _.extend(api.prototype, baseApi.prototype, {
         pingEvent.set('ping_time', dateTime);
         pingEvent.set('server_time_dt', new Date());
         pingEvent.set('accountId', self.currentAccountId(req));
+        if(q.siteId) {
+            if(Number.isInteger(q.siteId)) {
+                pingEvent.set('accountId', parseInt(q.siteId));
+            } else {
+                pingEvent.set('siteId', q.siteId);
+            }
+        }
         analyticsManager.storePingEvent(pingEvent, function(err){
             if(err) {
                 self.log.error('Error saving ping event: ' + err);
