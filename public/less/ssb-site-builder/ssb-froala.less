@@ -166,7 +166,12 @@ ssb-topbar #ssb-froala-scrollable-container {
         display: inline-block!important;
         margin: 0 1em;
     }
-
+    .fr-popup .fr-action-buttons{
+      padding: 5px;
+    }
+    .fr-video-embed-layer .fr-action-buttons{
+      min-height: 50px;
+    }
     .fr-popup .fr-input-line {
         padding: 0!important;
     }
@@ -931,7 +936,8 @@ body[ng-controller] .fr-image-upload-media-layer, body[ng-controller] .fr-video-
         width: 100% !important;
         background: #243948 !important;
         border: 0 !important;
-        min-height: 50px;
+        min-height: 100px;
+        padding-bottom: 20px;
         span{
             margin-left:5px;
         }
