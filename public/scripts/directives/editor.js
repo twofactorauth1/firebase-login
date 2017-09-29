@@ -30,9 +30,9 @@ angular.module('mainApp').directive("elem", function ($timeout) {
 			}, 0);
 
 			scope.getId=function(){
-				var parentComponentId =  element.closest('.ssb-component').attr('id');
-				var parentSectionId = element.closest('.ssb-section-layout').attr('id');
-				var elementModelName = element.attr("ng-model").replace('component.', '').replace('vm.', '').replace(/\./g, '/')
+				var parentComponentId =  element.closest('.ssb-component').attr('id'),
+					parentSectionId = element.closest('.ssb-section-layout').attr('id'),
+				 	elementModelName = element.attr("ng-model").replace('component.', '').replace('vm.', '').replace(/\./g, '/')
 				return  ('text-element_' + parentSectionId + "-" + parentComponentId + "-"+elementModelName);
 				
 			}
