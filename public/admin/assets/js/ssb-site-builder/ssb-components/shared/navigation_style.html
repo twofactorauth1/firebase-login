@@ -30,7 +30,10 @@
     .navigation-v{{component.version}}.nav-header-{{component._id}} .navbar ul.nav-sub-menu> li:hover{
         border-color: {{component.nav.hover|| defalultHover}} !important;
         background-color: {{component.nav.hoverbg}} !important;
-        color: {{component.nav.hover}} !important;
+        color: {{component.nav.hover}} !important; 
+    }
+    .navigation-v{{component.version}}.nav-header-{{component._id}} .navbar ul.navbar-nav> li.nav-active>div>a,
+    .navigation-v{{component.version}}.nav-header-{{component._id}} .navbar ul.navbar-nav> li:not(.editable-cover):hover>div>a {
         font-weight: {{component.nav.hoverFontWeight}}!important;
     }
     .navigation-v{{component.version}}.nav-header-{{component._id}} .navbar ul.navbar-nav> li:hover>div>a,
