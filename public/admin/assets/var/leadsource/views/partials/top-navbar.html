@@ -4,8 +4,8 @@
     <a href="#" class="sidebar-mobile-toggler pull-left hidden-md hidden-lg" ng-click="toggle('sidebar')" class="btn btn-navbar sidebar-toggle">
         <i class="ti-align-justify"></i>
     </a>
-    <a class="navbar-brand hidden-md hidden-lg" ui-sref="app.dohy">
-        <img ng-src="{{app.layout.logo}}" alt="{{app.name}}" class="pull-left" /> <p class="pull-left margin-bottom-0 margin-top-5" style="margin-left:10px;font-size:10px;line-height: 1;"></p>
+    <a class="navbar-brand hidden-md hidden-lg" ui-sref="app.dohy" style="padding:25px 15px;">
+        <img ng-src="{{app.layout.logo}}" alt="{{app.name}}" class="pull-left" style="width:250px;" /> <p class="pull-left margin-bottom-0 margin-top-5" style="margin-left:10px;font-size:10px;line-height: 1;"></p>
     </a>
     <a href="javascript:void(0)" class="sidebar-toggler pull-right visible-md visible-lg" ng-click="app.layout.isSidebarClosed = !app.layout.isSidebarClosed">
         <i class="ti-align-justify"></i>
@@ -18,7 +18,7 @@
 <!-- end: NAVBAR HEADER -->
 <!-- start: NAVBAR COLLAPSE -->
 <div class="navbar-collapse collapse padding-right-0" collapse="navbarCollapsed" ng-init="navbarCollapsed = true" off-click="navbarCollapsed = true" off-click-if='!navbarCollapsed' off-click-filter="#menu-toggler">
-    <a class="navbar-brand hidden-xs hidden-sm" ui-sref="app.dohy" style="height:100%; padding:22px 15px;">
+    <a class="navbar-brand hidden-xs hidden-sm" ui-sref="app.dohy" style="height:100%; padding: 15px;">
         <img ng-src="{{app.layout.logo}}" alt="{{app.name}}" class="pull-left" /> <p class="pull-left margin-bottom-0 margin-top-5" style="margin-left:10px;font-size:10px"></p>
     </a>
     <ul class="nav navbar-right margin-right-0">
