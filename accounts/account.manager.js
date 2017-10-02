@@ -10,7 +10,10 @@ var emailDao = require('../cms/dao/email.dao');
 var campaignDao = require('../campaign/dao/campaign.dao');
 var productDao = require('../products/dao/product.dao');
 var organizationDao = require('../organizations/dao/organization.dao');
-
+var userManager = null;
+var socialConfigManager = require('../socialconfig/socialconfig_manager');
+var securityManager = require('../security/sm')(true);
+var cmsManager = require('../cms/cms_manager');
 
 var async = require('async');
 
@@ -450,6 +453,218 @@ var accountManager = {
             } else {
                 self.log.debug(accountId, userId, '<< copyAccountTemplate');
                 fn(null, account);
+            }
+        });
+    },
+
+    createAccount: function(accountId, userId, orgId, subdomain, username, password, billing, fn) {
+        var self = this;
+        self.log.debug(accountId, userId, '>> createAccount');
+        if(!userManager) {
+            userManager = require('../dao/user.manager');
+        }
+        async.waterfall([
+            function(cb) {
+                // validate new account
+                accountDao.getAccountBySubdomain(subdomain, function(err, existingAccount){
+                    if(err || existingAccount) {
+                        cb(err || 'Account with subdomain [' + subdomain + '] already exists');
+                    } else {
+                        cb();
+                    }
+                });
+            },
+            function(cb) {
+                //validate user
+                userManager.getUserByUsername(username, function(err, user){
+                    if(err) {
+                        cb(err);
+                    } else if(user) {
+                        self.log.debug(accountId, userId, 'User with username [' + username + '] already exists.');
+                        cb(null, user);
+                    } else {
+                        cb(null);
+                    }
+                });
+            },
+            function(user, cb) {
+                var account = new $$.m.Account({
+                    orgId:orgId,
+                    subdomain:subdomain,
+                    created:{
+                        date: new Date(),
+                        by:userId
+                    }
+                });
+                accountDao.saveOrUpdate(account, function(err, newAccount){
+                    if(err) {
+                        self.log.error(accountId, userId, 'Error creating new account:', err);
+                        cb(err);
+                    } else {
+                        cb(null, newAccount, user);
+                    }
+
+                });
+                /*
+                 * - create account
+                 * - create user
+                 * - setupCustomerContactAndSocialConfig
+                 * - setupSecurity
+                 * - setupCMS
+                 * - finalizeAccount
+                 * - take care of billing
+                 * - add subscription privs
+                 * - add admin users
+                 */
+            },
+            function(newAccount, user, cb) {
+                var newAccountId = newAccount.id();
+                var roleAry = ["super","admin","member"];
+                var newUsername = user.get('username');
+                var newEmail = user.get('email');
+                if(user) {
+                    user.createUserAccount(newAccountId, newUsername, null, roleAry);
+
+                    userManager.updateUser(accountId, userId, user, function(err, savedUser) {
+                        if (err) {
+                            self.log.error('Error saving user: ' + err);
+                            cb(err);
+                        } else {
+                            cb(null, newAccount, savedUser);
+                        }
+                    });
+                } else {
+                    userManager.createUser(newAccountId, username, password, username, roleAry, userId, null, function(err, savedUser){
+                        if (err) {
+                            self.log.error('Error saving user: ' + err);
+                            cb(err);
+                        } else {
+                            cb(null, newAccount, savedUser);
+                        }
+                    });
+                }
+            },
+            function setupCustomerContactAndSocialConfig(newAccount, savedUser, callback){
+                socialConfigManager.createSocialConfigFromUser(newAccount.id(), savedUser, function(err, value){
+                    if(err) {
+                        self.log.error('Error creating social config for account:' + newAccount.id());
+                        callback(err);
+                    } else {
+                        callback(null, newAccount, savedUser);
+                    }
+
+                });
+            },
+            function setupSecurity(account, user, callback){
+                log.debug('Initializing user security.');
+                var userId = user.id();
+                var username = user.get('username');
+                var roleAry = ["super","admin","member"];
+                var accountId = account.id();
+                securityManager.initializeUserPrivileges(userId, username, roleAry, accountId, function(err, value) {
+                    if (err) {
+                        log.error('Error initializing user privileges for userID: ' + userId);
+                        callback(err);
+                    }
+                    callback(null, account, user);
+                });
+            },
+            function setupCMS(account, user, callback){
+                self.log.debug('creating website for account');
+                var accountId = account.id();
+                cmsManager.createWebsiteForAccount(accountId, 'admin', function(err, value){
+                    if(err) {
+                        self.log.error('Error creating website for account: ' + err);
+                        callback(err);
+                    } else {
+                        self.log.debug('creating default pages');
+                        cmsManager.createDefaultPageForAccount(accountId, value.id(), function (err, value) {
+                            if (err) {
+                                log.error('Error creating default page for account: ' + err);
+                                callback(err);
+                            } else {
+                                callback(null, account, user);
+                            }
+                        });
+                    }
+                });
+            },
+            /*
+             * - add subscription privs
+             * - add admin users
+             */
+            function finalizeAccount(account, user, cb){
+                accountDao.getAccountByID(account.id(), function(err, updatedAccount){
+                    if(err) {
+                        log.error('Error getting updated account: ' + err);
+                        callback(err);
+                    } else {
+                        var businessObj = updatedAccount.get('business');
+                        var email = user.get('email');
+                        businessObj.emails = [];
+                        businessObj.emails.push({
+                            _id: $$.u.idutils.generateUniqueAlphaNumericShort(),
+                            email: email
+                        });
+                        if(billing) {
+                            updatedAccount.set('billing', billing);
+                        }
+                        accountDao.saveOrUpdate(updatedAccount, function(err, savedAccount){
+                            if(err) {
+                                self.log.error('Error saving account: ' + err);
+                                callback(err);
+                            }
+                            cb(null, savedAccount, user);
+                        });
+                    }
+                });
+            },
+            function(newAccount, savedUser, cb) {
+                var subId = 'NOSUBSCRIPTION';
+                var plan = 'NO_PLAN_ARGUMENT';
+                securityManager.addSubscriptionToAccount(newAccount.id(), subId, plan, savedUser.id(), function(err, value){
+                    cb(err, newAccount, savedUser);
+                });
+            },
+
+            function(newAccount, savedUser, cb) {
+                self.log.debug('Adding the admin user to the new account');
+                userManager.addUserToAccount(newAccount.id(), 1, ["super","admin","member"], 1, function(err, value){
+                    if(err) {
+                        self.log.error('Error adding admin user to account:', err);
+                    } else {
+                        self.log.debug('Admin user added to account ' + accountId);
+                    }
+                    if(orgId && orgId > 0) {
+                        organizationDao.getById(orgId, $$.m.Organization, function(err, organization){
+                            if(organization && organization.get('adminUser') && organization.get('adminUser') > 1) {
+                                self.log.debug('Adding the org admin user to the new account');
+                                var orgAdminUser = organization.get('adminUser');
+                                userManager.addUserToAccount(newAccount.id(), orgAdminUser, ['super', 'admin', 'member'], orgAdminUser, function(err, value){
+                                    if(err) {
+                                        self.log.error('Error adding org admin user to account:', err);
+                                    } else {
+                                        self.log.debug('Org Admin user added to account ' + accountId);
+                                    }
+                                    cb(null, newAccount);
+                                });
+                            } else {
+                                cb(null, newAccount);
+                            }
+                        });
+                    } else {
+                        cb(null, newAccount);
+                    }
+                });
+            }
+
+        ], function(err, newAccount){
+            if(err) {
+                self.log.error('Error creating new account:', err);
+                fn(err);
+            } else {
+                self.log.debug(accountId, userId, '<< createAccount');
+                fn(null, newAccount);
             }
         });
     },

@@ -36,6 +36,9 @@ var dao = {
         //TODO: check if this is already a customer and add accountId
         var self = this;
         self.log.debug(accountId, null, ">> createStripeCustomer");
+        if(!contactDao || !contactDao.saveOrUpdateContact) {
+            contactDao = require('../../dao/contact.dao');
+        }
         var params = {};
         params.email = contact.getPrimaryEmail();
         params.description = 'Customer for ' + contact.getPrimaryEmail();
@@ -285,6 +288,9 @@ var dao = {
         if(fn === null) {
             fn = userId;
             userId = null;
+        }
+        if(!contactDao || !contactDao.saveOrUpdateContact) {
+            contactDao = require('../../dao/contact.dao');
         }
         var apiToken = self.delegateStripe(accessToken);
         //TODO: this is wrong!

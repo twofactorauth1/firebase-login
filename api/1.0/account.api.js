@@ -451,6 +451,30 @@ _.extend(api.prototype, baseApi.prototype, {
 
 
     createAccount: function(req,resp) {
+        var self = this;
+        var accountId = parseInt(self.accountId(req));
+        var userId = self.userId(req);
+        self.log.debug(accountId, userId, '>> createAccount');
+        var orgId = 0;
+        if(req.body.orgId) {
+            orgId = parseInt(req.body.orgId);
+        }
+        var subdomain = req.body.subdomain;
+        var username = req.body.username;
+        var password = req.body.password;
+        if(username) {
+            username = username.toLowerCase();
+        }
+        var billing = {plan:'NO_PLAN_ARGUMENT', signupDate:new Date(), trialLength:31};
+
+        if(req.body.billing) {
+            //TODO: handle billing
+        }
+
+        accountManager.createAccount(accountId, userId, orgId, subdomain, username, password, billing, function(err, account){
+            self.log.debug(accountId, userId, '<< createAccount');
+            self.sendResultOrError(resp, err, account, "Error creating account");
+        });
 
     },
 

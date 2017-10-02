@@ -195,23 +195,13 @@ _.extend(api.prototype, baseApi.prototype, {
         sessionEvent.set('ip_address', self.ip(req));
         sessionEvent.set('accountId', self.currentAccountId(req));
         if(q.siteId) {
-            if(Number.isInteger(q.siteId)) {
+            if(!isNaN(q.siteId)) {
                 sessionEvent.set('accountId', parseInt(q.siteId));
             } else {
                 sessionEvent.set('siteId', q.siteId);
             }
         }
 
-        var subdomainObj = urlUtils.getSubdomainFromRequest(req);
-        if(subdomainObj.isMainApp===true) {
-            sessionEvent.set('subdomain', 'main');
-        } else {
-            sessionEvent.set('subdomain', subdomainObj.subdomain);
-        }
-
-        if(subdomainObj.isOrgRoot === true) {
-            sessionEvent.set('orgDomain', subdomainObj.orgDomain);
-        }
         //parse referrer and fullEntrance
         if(q.fe) {
             var obj = tldtools.extract(q.fe);
@@ -283,7 +273,7 @@ _.extend(api.prototype, baseApi.prototype, {
         pageEvent.set('start_time', dateTime);
         pageEvent.set('accountId', self.currentAccountId(req));
         if(q.siteId) {
-            if(Number.isInteger(q.siteId)) {
+            if(!isNaN(q.siteId)) {
                 pageEvent.set('accountId', parseInt(q.siteId));
             } else {
                 pageEvent.set('siteId', q.siteId);
@@ -298,6 +288,7 @@ _.extend(api.prototype, baseApi.prototype, {
             if(err) {
                 self.log.error('Error saving page event: ' + err);
             }
+            self._buildPingEvent(req, q);
         });
     },
 
@@ -326,7 +317,7 @@ _.extend(api.prototype, baseApi.prototype, {
         pingEvent.set('server_time_dt', new Date());
         pingEvent.set('accountId', self.currentAccountId(req));
         if(q.siteId) {
-            if(Number.isInteger(q.siteId)) {
+            if(!isNaN(q.siteId)) {
                 pingEvent.set('accountId', parseInt(q.siteId));
             } else {
                 pingEvent.set('siteId', q.siteId);

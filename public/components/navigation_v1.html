@@ -1,10 +1,8 @@
-
 <ssb-navigation-component-css-loader component="component"></ssb-navigation-component-css-loader>
 <div ng-class="component.type+'-v'+component.version" data-color="component.txtcolor" class="nav-header-{{component._id}}">
     <div id="header">
         <nav class="navbar navbar-default" ng-class="{'navbar-box':component.shownavbox, 'navbgcolor' : !(component.bg.img.show && component.bg.img.url) }" role="navigation">
-            <div class="container">
-                <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="container"> <!-- Brand and toggle get grouped for better mobile display -->
                 <div class="navbar-header">
                     <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-{{navbarId}}">
                         <span class="sr-only">Toggle navigation</span>
@@ -32,8 +30,7 @@
                         <span data-ng-show="blog && !account.business.logo"><convert-html contents="{{account.business.name}}"></convert-html> </span>
                         </span>
                     </a>
-                </div>
-                <!-- Collect the nav links, forms, and other content for toggling -->
+                </div> <!-- Collect the nav links, forms, and other content for toggling -->
                 <div  ng-if="!component.customnav" class="collapse navbar-collapse" id="bs-example-navbar-collapse-{{navbarId}}">
                     <ul ng-class="{'nav-font-size':component.nav.font.size, 'nav-font-family':component.nav.font.family, 'nav-align': component.nav.align, 'nav-mixed-case': component.nav.allowMixedCase}" class="nav navbar-nav navbar-right" data-ng-repeat="mainMenu in website.linkLists " data-ng-if=" mainMenu.handle=='head-menu' " data-edit="{ 'type': 'component' }">
                         <li  ng-class="{'nav-font-size':component.nav.font.size, 'nav-font-family':component.nav.font.family, 'sub-nav-parent-menu': alink.linkTo.type == 'sub-nav', 'activeLink' :alink.linkTo.data==currentpage.handle }"  data-ng-repeat="alink in mainMenu.links ">
@@ -67,11 +64,8 @@
                             <a href="" data-toggle="modal" data-target="#cart-checkout-modal"><i class="fa fa-shopping-cart"></i> ({{cartDetails.length || 0}})</a>
                         </li>
                     </ul>
-                </div>
-                <!-- /.navbar-collapse -->
-            </div>
-            <!-- Collect the nav links, forms, and other content for toggling -->
-            <!-- /.container-fluid -->
+                </div> <!-- /.navbar-collapse -->
+            </div> <!-- Collect the nav links, forms, and other content for toggling --> <!-- /.container-fluid -->
         </nav>
     </div>
 </div>

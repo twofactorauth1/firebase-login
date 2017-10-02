@@ -21,6 +21,8 @@ var orderDao = require('../orders/dao/order.dao');
 var emailMessageManager = require('../emailmessages/emailMessageManager');
 var accountManager = require('../accounts/account.manager');
 var geoiputil = require('../utils/geoiputil');
+var orgManager = require('../organizations/organization_manager');
+
 require('./model/session_event');
 require('./model/page_event');
 require('./model/ping_event');
@@ -156,84 +158,92 @@ module.exports = {
             var orgId = 0;
             if(account && account.get('orgId')) {
                 orgId = account.get('orgId');
+                sessionEvent.set('subdomain', account.get('subdomain'));
             }
             sessionEvent.set('orgId', orgId);
-            dao.findOne({session_id: sessionEvent.get('session_id')}, $$.m.SessionEvent, function(err, value){
-                _log.debug('>> found session event ', value);
-                if(err) {
-                    _log.error('Error looking for duplicate sessionEvents: ' + err);
-                    fn(err, null);
-                } else if(value=== null) {
 
-
-                    var fingerprint = sessionEvent.get('fingerprint');
-                    _log.debug('>> searching for contacts that have fingerprint ', fingerprint);
-
-                    $$.dao.ContactDao.findMany({fingerprint:fingerprint}, $$.m.Contact, function(err, list){
-                        if(err) {
-                            _log.error('error creating contact activity for session event: ' + err);
-                        } else {
-                            //_log.trace('>> found contacts with matching fingerprint ', list);
-                            async.each(list, function(contact, cb){
-                                var contactActivity = new $$.m.ContactActivity({
-                                    accountId: contact.get('accountId'),
-                                    contactId: contact.id(),
-                                    activityType: $$.m.ContactActivity.types.PAGE_VIEW,
-                                    start: new Date(),
-                                    extraFields: {
-                                        page: sessionEvent.fullEntrance,
-                                        timespent: sessionEvent.session_length
-                                    }
-                                });
-                                _log.trace('>> createActivity2 ', contactActivity);
-                                contactActivityManager.createActivity(contactActivity, function(err, val){
-                                    if(err) {
-                                        _log.error('error creating contact activity for session event: ' + err);
-                                        cb(err);
-                                    } else {
-                                        cb();
-                                    }
-                                });
-                            }, function(err){
-                                _log.debug('Created contact activities for session event');
-                                geoiputil.getMaxMindGeoForIP(sessionEvent.get('ip_address'), function(err, ip_geo_info) {
-                                    if (ip_geo_info) {
-                                        var replacementObject = {
-                                            province: ip_geo_info.region,
-                                            city: ip_geo_info.city,
-                                            postal_code: ip_geo_info.postal,
-                                            continent: ip_geo_info.continent,
-                                            country: ip_geo_info.countryName
-                                        };
-                                        sessionEvent.set('maxmind', replacementObject);
-                                    } else {
-                                        var replacementObject = {
-                                            province: '',
-                                            city: '',
-                                            postal_code: '',
-                                            continent: '',
-                                            country: ''
-                                        };
-                                        sessionEvent.set('maxmind', replacementObject);
-                                        _log.warn('Could not find geo info for ' + sessionEvent.get('ip_address'));
-                                    }
-                                    dao.saveOrUpdate(sessionEvent, fn);
-                                });
-
-                            });
-                        }
-                    });
-                } else {
-                    //already have one.  Store a ping instead.
-                    var pingEvent = new $$.m.PingEvent({
-                        session_id: sessionEvent.get('session_id'),
-                        server_time: sessionEvent.get('server_time'),
-                        accountId:sessionEvent.get('accountId'),
-                        orgId:sessionEvent.get('orgId')
-                    });
-                    dao.saveOrUpdate(pingEvent, fn);
+            orgManager.getOrgById(0,0,orgId, function(err, organization){
+                if(organization) {
+                    sessionEvent.set('orgDomain', organization.get('orgDomain'));
                 }
+                dao.findOne({session_id: sessionEvent.get('session_id')}, $$.m.SessionEvent, function(err, value){
+                    _log.debug('>> found session event ', value);
+                    if(err) {
+                        _log.error('Error looking for duplicate sessionEvents: ' + err);
+                        fn(err, null);
+                    } else if(value=== null) {
+
+
+                        var fingerprint = sessionEvent.get('fingerprint');
+                        _log.debug('>> searching for contacts that have fingerprint ', fingerprint);
+
+                        $$.dao.ContactDao.findMany({fingerprint:fingerprint}, $$.m.Contact, function(err, list){
+                            if(err) {
+                                _log.error('error creating contact activity for session event: ' + err);
+                            } else {
+                                //_log.trace('>> found contacts with matching fingerprint ', list);
+                                async.each(list, function(contact, cb){
+                                    var contactActivity = new $$.m.ContactActivity({
+                                        accountId: contact.get('accountId'),
+                                        contactId: contact.id(),
+                                        activityType: $$.m.ContactActivity.types.PAGE_VIEW,
+                                        start: new Date(),
+                                        extraFields: {
+                                            page: sessionEvent.fullEntrance,
+                                            timespent: sessionEvent.session_length
+                                        }
+                                    });
+                                    _log.trace('>> createActivity2 ', contactActivity);
+                                    contactActivityManager.createActivity(contactActivity, function(err, val){
+                                        if(err) {
+                                            _log.error('error creating contact activity for session event: ' + err);
+                                            cb(err);
+                                        } else {
+                                            cb();
+                                        }
+                                    });
+                                }, function(err){
+                                    _log.debug('Created contact activities for session event');
+                                    geoiputil.getMaxMindGeoForIP(sessionEvent.get('ip_address'), function(err, ip_geo_info) {
+                                        if (ip_geo_info) {
+                                            var replacementObject = {
+                                                province: ip_geo_info.region,
+                                                city: ip_geo_info.city,
+                                                postal_code: ip_geo_info.postal,
+                                                continent: ip_geo_info.continent,
+                                                country: ip_geo_info.countryName
+                                            };
+                                            sessionEvent.set('maxmind', replacementObject);
+                                        } else {
+                                            var replacementObject = {
+                                                province: '',
+                                                city: '',
+                                                postal_code: '',
+                                                continent: '',
+                                                country: ''
+                                            };
+                                            sessionEvent.set('maxmind', replacementObject);
+                                            _log.warn('Could not find geo info for ' + sessionEvent.get('ip_address'));
+                                        }
+                                        dao.saveOrUpdate(sessionEvent, fn);
+                                    });
+
+                                });
+                            }
+                        });
+                    } else {
+                        //already have one.  Store a ping instead.
+                        var pingEvent = new $$.m.PingEvent({
+                            session_id: sessionEvent.get('session_id'),
+                            server_time: sessionEvent.get('server_time'),
+                            accountId:sessionEvent.get('accountId'),
+                            orgId:sessionEvent.get('orgId')
+                        });
+                        dao.saveOrUpdate(pingEvent, fn);
+                    }
+                });
             });
+
         });
 
 

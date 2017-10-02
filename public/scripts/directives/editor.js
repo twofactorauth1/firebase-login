@@ -9,7 +9,7 @@ angular.module('mainApp').directive("elem", function ($timeout) {
 			ngModel: '=',
 			className: '@className'
 		},
-		template: '<div class="element-wrap fr-view" ng-class="className">' +
+		template: '<div class="element-wrap fr-view" ng-class="className" id="{{getId()}}">' +
 			'<div  ng-class="{{vm.elementClass()}}"  ng-attr-style="{{vm.elementStyle(false)}}" class="ssb-text-settings {{vm.showHideClass()}}" >' +
 			'<div ng-if="component.isOverlayActive" class="bg slider-overlay-bg-1" ng-style ="{\'background\': component.overlayBackground, opacity: component.overlayOpacity === 0 ?  component.overlayOpacity : component.overlayOpacity/100  || 0 , \'height\': component.isOverlayActive ? component.gridHeight+\'px\':\'\' }"></div>' +
 			'<div class="word-break " ng-class ="{ \'abs_overlay\': component.isOverlayActive  }" ng-bind-html="ngModel | unsafe"></div>' +
@@ -29,6 +29,13 @@ angular.module('mainApp').directive("elem", function ($timeout) {
 				}
 			}, 0);
 
+			scope.getId=function(){
+				var parentComponentId =  element.closest('.ssb-component').attr('id'),
+					parentSectionId = element.closest('.ssb-section-layout').attr('id'),
+				 	elementModelName = element.attr("ng-model").replace('component.', '').replace('vm.', '').replace(/\./g, '/')
+				return  ('text-element_' + parentSectionId + "-" + parentComponentId + "-"+elementModelName);
+				
+			}
 			/*
 			 * Replace square bracket tokens with valid script tags
 			 *
