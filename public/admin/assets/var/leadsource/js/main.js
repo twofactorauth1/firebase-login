@@ -42,10 +42,9 @@ function ($rootScope, $state, $stateParams, $injector, $window, ENV) {
             isFooterFixed: false, // true if you want to initialize the template with fixed footer
             isMinimalAdminChrome: false, //minimal admin chrome for site builder experience
             theme: 'theme-6', // indicate the theme chosen for your project
-            logo: 'assets/var/leadsource/images/leadsource-logo.jpg', // relative path of the project logo
-            logo2: 'assets/var/leadsource/images/leadsource-logo.jpg', // relative path of the project logo
-            isAnalyticsDashboardMode: false, // relative path of the project logo
-            dashboardLogoText: "Tessco LeadSource"
+            logo: 'https://s3.amazonaws.com/indigenous-digital-assets/account_1377/LS_Logo_RGBsm.png', // relative path of the project logo
+            logo2: 'https://s3.amazonaws.com/indigenous-digital-assets/account_1377/LS_Logo_RGBsm.png', // relative path of the project logo
+            isAnalyticsDashboardMode: false // relative path of the project logo
 
 }
     };
