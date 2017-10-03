@@ -231,7 +231,8 @@ module.exports = function(grunt) {
                     'public/js/indigenous.js': ['public/js/indigenous.js'],
                     'public/js/ng-indigenous.js': ['public/js/ng-indigenous.js'],
                     'public/admin/assets/js/ng-admin-indigenous.js': ['public/admin/assets/js/ng-admin-indigenous.js'],
-                    'public/admin/assets/js/admin-vendor-indigenous.js': ['public/admin/assets/js/admin-vendor-indigenous.js']
+                    'public/admin/assets/js/admin-vendor-indigenous.js': ['public/admin/assets/js/admin-vendor-indigenous.js'],
+                    'public/js/scripts/collector-full.js':['public/js/scripts/collector-deps.js', 'public/js/scripts/collector.js']
                 }
             }
         },
