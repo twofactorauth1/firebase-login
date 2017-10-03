@@ -76,7 +76,7 @@ indigenous.collector = function(siteId, isTest){
         queryParams.f=result;
         queryParams.t=timezone.name();
         queryParams.nv=new_visitor;
-        queryParams.fe=window.location;
+        queryParams.fe=window.location.href;
         var hasUtm = false;
         var campaign = {};
         var searchParams = new URLSearchParams(window.location.search); //TODO: add shim for IE
@@ -215,35 +215,12 @@ getSourceType = function (host) {
 };
 
 indigenous.page = function(name) {
-    /*
-     var session_cookie = ipCookie("session_cookie"); //Check if we have a session cookie: ;
-     var parsedUrl = $.url(window.location.href);
-     if (!session_cookie || !session_cookie.id) {
-     console.log('restarting session');
-     self.collect(null, function(){
-     var sessionId = ipCookie("session_cookie").id || Math.uuid();
-     var queryParams = {ev:'pg', fe:parsedUrl.attr('source'), sid:sessionId};
-     if(!firstTime) {
-     queryParams.ev = 'p';
-     }
-     self.collect(queryParams, fn);
-     });
-     } else {
-     var sessionId = ipCookie("session_cookie").id || Math.uuid();
-     var queryParams = {ev:'pg', fe:parsedUrl.attr('source'), sid:sessionId};
-     if(!firstTime) {
-     queryParams.ev = 'p';
-     }
-     self.collect(queryParams, fn);
-     }
-     */
-
 
     clearTimeout(indigenous.runningInterval);
     if(!indigenous.sid) {
         indigenous.sid = Math.uuid();
     }
-    var queryParams = {ev:'pg', fe:window.location.href, sid:indigenous.sid};
+    var queryParams = {ev:'pg', sid:indigenous.sid,fe:encodeURIComponent(window.location.href)};
     if(name) {
         queryParams.n = name;
     }
