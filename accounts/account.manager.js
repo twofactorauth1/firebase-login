@@ -476,7 +476,7 @@ var accountManager = {
             },
             function(cb) {
                 //validate user
-                userManager.getUserByUsername(username, function(err, user){
+                userManager.getUserByUsername(accountId, userId, username, function(err, user){
                     if(err) {
                         cb(err);
                     } else if(user) {
@@ -523,9 +523,7 @@ var accountManager = {
                 var newUsername = user.get('username');
                 var newEmail = user.get('email');
                 if(user) {
-                    user.createUserAccount(newAccountId, newUsername, null, roleAry);
-
-                    userManager.updateUser(accountId, userId, user, function(err, savedUser) {
+                    userManager.addUserToAccount(newAccountId, userId, ["super","admin","member"], userId, function(err, savedUser){
                         if (err) {
                             self.log.error('Error saving user: ' + err);
                             cb(err);
@@ -556,7 +554,7 @@ var accountManager = {
                 });
             },
             function setupSecurity(account, user, callback){
-                log.debug('Initializing user security.');
+                self.log.debug('Initializing user security.');
                 var userId = user.id();
                 var username = user.get('username');
                 var roleAry = ["super","admin","member"];
@@ -635,26 +633,29 @@ var accountManager = {
                     } else {
                         self.log.debug('Admin user added to account ' + accountId);
                     }
-                    if(orgId && orgId > 0) {
-                        organizationDao.getById(orgId, $$.m.Organization, function(err, organization){
-                            if(organization && organization.get('adminUser') && organization.get('adminUser') > 1) {
-                                self.log.debug('Adding the org admin user to the new account');
-                                var orgAdminUser = organization.get('adminUser');
-                                userManager.addUserToAccount(newAccount.id(), orgAdminUser, ['super', 'admin', 'member'], orgAdminUser, function(err, value){
-                                    if(err) {
-                                        self.log.error('Error adding org admin user to account:', err);
-                                    } else {
-                                        self.log.debug('Org Admin user added to account ' + accountId);
-                                    }
+                    userManager.addUserToAccount(newAccount.id(), userId, ["super","admin","member"], userId, function(err, value){
+                        if(orgId && orgId > 0) {
+                            organizationDao.getById(orgId, $$.m.Organization, function(err, organization){
+                                if(organization && organization.get('adminUser') && organization.get('adminUser') > 1) {
+                                    self.log.debug('Adding the org admin user to the new account');
+                                    var orgAdminUser = organization.get('adminUser');
+                                    userManager.addUserToAccount(newAccount.id(), orgAdminUser, ['super', 'admin', 'member'], orgAdminUser, function(err, value){
+                                        if(err) {
+                                            self.log.error('Error adding org admin user to account:', err);
+                                        } else {
+                                            self.log.debug('Org Admin user added to account ' + accountId);
+                                        }
+                                        cb(null, newAccount);
+                                    });
+                                } else {
                                     cb(null, newAccount);
-                                });
-                            } else {
-                                cb(null, newAccount);
-                            }
-                        });
-                    } else {
-                        cb(null, newAccount);
-                    }
+                                }
+                            });
+                        } else {
+                            cb(null, newAccount);
+                        }
+                    });
+
                 });
             }
 

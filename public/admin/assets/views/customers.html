@@ -22,13 +22,19 @@
                                         <div class="form-group">
                                             <div class="col-xs-6 col-md-6 padding-left-0 padding-right-30">
                                                 <span class="input-icon">
-                                            <input type="text" st-search placeholder="Search by name, email, phone..." id="form-field-14" class="form-control">
-                                            <i class="ti-search"></i>
-                                        </span>
+                                                    <input type="text" st-search placeholder="Search by name, email, phone..." id="form-field-14" class="form-control">
+                                                    <i class="ti-search"></i>
+                                                </span>
                                             </div>
                                             <div class="col-xs-3 col-md-3 padding-right-0">
                                                 <button type="button" class="btn btn-o btn-info btn-wide btn-scroll btn-scroll-top ti-filter ng-click-active pull-right" ng-click="filterCustomers()">
                                                     <span>Filter</span>
+                                                </button>
+
+                                            </div>
+                                            <div class="col-xs-3 col-md-3 padding-right-0">
+                                                <button type="button" class="libtn btn btn-warning btn-wide btn-scroll btn-scroll-top ti ti-plus addnew" ng-click="openSimpleModal('new-customer-modal')">
+                                                    <span class="desktop-text">New</span>
                                                 </button>
                                             </div>
                                             <div class="col-xs-3 col-md-3 padding-right-0 hidden">
@@ -211,6 +217,4 @@
         </div>
     </div>
 </div>
-<div data-ng-include=" 'assets/views/partials/new-contact-modal.html' "></div>
-<div data-ng-include=" 'assets/views/partials/import-contact-modal.html' "></div>
-<div data-ng-include=" 'assets/views/partials/tags-bulk-action-modal.html' "></div>
+<div data-ng-include=" 'assets/views/partials/new-customer-modal.html' "></div>
