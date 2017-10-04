@@ -210,7 +210,14 @@
 				styleString += 'border-style: ' + section.border.style + ';';
 				styleString += 'border-radius: ' + section.border.radius + '%;';
 			}
-
+			if(section && section.fixedLeftNavigation){ 
+				angular.forEach(section.components, function (cmp, index) {
+					if(cmp.type=="navigation" && cmp.navigation){
+						cmp.navigation.wideMobileMode = false;
+						cmp.navigation.alwaysmobileMode = false;
+					}
+				});
+			}
 			if (section && section.layoutModifiers && section.layoutModifiers.grid && section.layoutModifiers.grid.isActive) {
 				angular.forEach(section.components, function (cmp, index) {
 					section.components[index].gridHeight = section.layoutModifiers.grid.height;
@@ -448,6 +455,16 @@
 			if (component.slider && component.slider.stretchImage) {
 				classString += ' ssb-component-stretch-image';
 			}
+			if(component.navigation){
+				if(component.navigation.wideMobileMode){
+					component.navigation.alwaysmobileMode=false
+					classString += ' ssb-component-wmm';
+				}
+				if(component.navigation.alwaysmobileMode){
+					component.navigation.wideMobileMode=false;
+					classString += ' ssb-component-amm';
+				}
+			} 
 			return classString;
 		}
 
