@@ -21,7 +21,9 @@
         display: inline-block;
     }
 } 
-.fr-view span.fr-emoticon,.fr-view span.fr-emoticon>span.ssb-bg-color-inline-block{
-     display: table-cell;
-     font-family: unset;
+@media (min-width: 720px) {
+    .fr-view span.fr-emoticon,.fr-view span.fr-emoticon>span.ssb-bg-color-inline-block{
+        display: table-cell;
+        font-family: unset;
   }
+}

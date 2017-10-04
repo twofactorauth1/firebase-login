@@ -144,7 +144,8 @@
     <div class="btn-group ssb-sidebar-btn-group ssb-sidebar-btn-group-small-top margin-bottom-15">
         <button type="button" ng-repeat="option in [
         'left', 'center', 'right'
-      ]" ng-click="component.subnavigation.align = option" ng-model="component.subnavigation.align" class="btn text-capitalize" ng-class="{'active': option == component.subnavigation.align }">{{option}}</button>
+      ]" ng-click="component.subnavigation.align = option" ng-model="component.subnavigation.align" class="btn text-capitalize"
+            ng-class="{'active': option == component.subnavigation.align }">{{option}}</button>
     </div>
     <div ng-init="sub_menuActive = 'normal'" class="btn-group ssb-sidebar-btn-group">
         <button type="button" ng-click="sub_menuActive = 'normal'" class="btn" ng-class="{'active': sub_menuActive === 'normal' }">Normal</button>
@@ -202,5 +203,25 @@
                 </span>
             </label>
         </div>
+    </div>
+</div>
+<div class="row padding-left-10 padding-right-10">
+    <div class="form-group">
+        <label for="bg_hide" class="margin-bottom-0">
+        Wide-Mobile Mode
+        <span tooltip-placement="top" tooltip-append-to-body="true" tooltip="Switch to mobile navigation (drop-down) at 1024px (instead of 767px)">
+            <i class="fa fa-info-circle" />
+        </span>
+    </label>
+        <switch ng-model="component.navigation.wideMobileMode" class="pull-right"></switch>
+    </div>
+    <div class="form-group">
+        <label for="bg_hide" class="margin-bottom-0">
+    Always-Mobile Mode
+    <span tooltip-placement="top" tooltip-append-to-body="true" tooltip="Always show navigation as drop-down">
+        <i class="fa fa-info-circle" />
+    </span>
+</label>
+        <switch ng-model="component.navigation.alwaysmobileMode" class="pull-right"></switch>
     </div>
 </div>
