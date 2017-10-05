@@ -84,3 +84,17 @@ div[data-type=blog] {
 .r-post>h3{
     margin: 0px;
 }
+ul.bread-crumb{
+  list-style: none;
+  padding: 5px 15px;
+  font-size: 15px;
+   li{
+    float: left;
+    padding: 1px 3px;
+    cursor:pointer;
+    }
+    li+li:before {
+      color: black;
+      content: '\003e';
+    }
+}
