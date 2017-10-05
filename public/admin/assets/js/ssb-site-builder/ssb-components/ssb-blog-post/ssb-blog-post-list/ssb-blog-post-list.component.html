@@ -1,44 +1,26 @@
-<div data-edit ng-class="vm.component.type+'-v'+vm.component.version">
-    <div class="ssb-blog-currently-viewing" ng-if="vm.blog.currentTag">
-        <h4> Displaying blog posts with the following tag: </h4>
-        <span class="currently-viewing-item" ng-bind-html="vm.blog.currentTag"></span> 
+<div data-edit ng-class="vm.component.type+'-v'+vm.component.version"> 
+    <div class="ssb-blog-currently-viewing">
+        <ul class="bread-crumb" ng-if="vm.blog.currentTag || vm.blog.currentCategory || vm.blog.currentAuthor">
+            <li><a href="/" target="_self">Home</a></li>
+            <li><a href="/blog" target="_self">Blog</a></li>
+            <li ng-if="vm.blog.currentTag">Tag ({{vm.blog.currentTag}}) </li>
+            <li ng-if="vm.blog.currentCategory">Category ({{vm.blog.currentCategory}})</li>
+            <li ng-if="vm.blog.currentAuthor">Author ({{vm.blog.currentAuthor}}) </li>
+        </ul>
     </div>
-     <div class="ssb-blog-currently-viewing" ng-if="vm.blog.currentCategory">
-        <h4> Displaying blog posts with the following category: </h4>
-        <span class="currently-viewing-item" ng-bind-html="vm.blog.currentCategory"></span>
-    </div>
-    <div class="ssb-blog-currently-viewing" ng-if="vm.blog.currentAuthor">
-        <h4> Displaying blog posts with the following author: </h4>
-        <span class="currently-viewing-item" ng-bind-html="vm.blog.currentAuthor"></span> 
-    </div>
-
-    <div class="ssb-blog-back-link" ng-if="vm.filteredPostView">
-        <a class="btn btn-link ssb-theme-btn" href="/blog" target="_self"><i class="fa fa-long-arrow-left"></i> Go Back to All Blog Posts </a>
-    </div>
-
-
     <div ng-if="!vm.blog.posts.length" class="ssb-in-context-info margin-top-20 padding-30">
         <span class="fa fa-info-circle"> No published posts were found.</span>
     </div>
     <div class="ssb-blog-featured-slider" ng-class="{'slider-dot-color': vm.component.slider.sliderDotColor, 'slider-active-dot-color': vm.component.slider.sliderActiveDotColor, 'slider-dot-color-opacity': vm.component.slider.sliderDotColorOpacity}">
-        <div
-            class="ssb-media-stacked"
-            ind-slider='{ adaptiveHeight: true, slidesToShow:1, dots:true, arrows:false, autoplay:false, touchMove:true, draggable:true }'>
-            <section
-                class="img-row col-sm-12 col-xs-12"
-                ng-repeat="post in vm.featuredPosts track by $index"
-                ssb-blog-post-card-component
+        <div class="ssb-media-stacked" ind-slider='{ adaptiveHeight: true, slidesToShow:1, dots:true, arrows:false, autoplay:false, touchMove:true, draggable:true }'>
+            <section class="img-row col-sm-12 col-xs-12" ng-repeat="post in vm.featuredPosts track by $index" ssb-blog-post-card-component
                 post="post">
             </section>
         </div>
     </div>
     <section class="ssb-media-stacked ssb-blog-post-list list-unstyled">
-        <article ng-attr-style="{{vm.listArticleStyle(vm.component)}}"
-            ssb-blog-post-card-component
-                 component="vm.component"
-            post="post"
-            filtered-post-view="vm.filteredPostView" 
-            ng-repeat="post in vm.filtered.posts = (vm.blog.posts | ssbPostFilter:vm.component) | orderBy:'-created.date' | orderBy:vm.sortBlogPosts:true track by $index">
+        <article ng-attr-style="{{vm.listArticleStyle(vm.component)}}" ssb-blog-post-card-component component="vm.component" post="post"
+            filtered-post-view="vm.filteredPostView" ng-repeat="post in vm.filtered.posts = (vm.blog.posts | ssbPostFilter:vm.component) | orderBy:'-created.date' | orderBy:vm.sortBlogPosts:true track by $index">
         </article>
     </section>
     <div ng-if="vm.blog.posts.length && !vm.filtered.posts.length" class="ssb-in-context-info margin-top-20 padding-30">
@@ -48,11 +30,9 @@
         [ssb-blog-post-list-component]#component_{{vm.component._id}} .slider-active-dot-color .slick-dots li.slick-active button:before{
             color: {{vm.component.slider.sliderActiveDotColor}} !important;
         }
-
         [ssb-blog-post-list-component]#component_{{vm.component._id}} .slider-dot-color .slick-dots li:not(.slick-active) button:before{
             color: {{vm.component.slider.sliderDotColor}} !important;
         }
-
         [ssb-blog-post-list-component]#component_{{vm.component._id}} .slider-dot-color-opacity .slick-dots li button:before{
             opacity: {{vm.component.slider.sliderDotColorOpacity}} !important;
         }

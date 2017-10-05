@@ -209,17 +209,23 @@ module.exports = {
                 });
             },
             function stepOne(user, callback){
-                var creds = user.getCredentials('lo');
-                var username = user.get('username');
-                user.createUserAccount(accountId, username, creds.password, roleAry);
-                dao.saveOrUpdate(user, function(err, savedUser){
-                    if(err) {
-                        log.error('Error saving user:', err);
-                        callback(err);
-                    } else {
-                        callback(null, savedUser, username);
-                    }
-                });
+                if(user.getUserAccount(accountId)) {
+                    log.warn('account already exists for user');
+                    callback(null, user, user.get('username'));
+                } else {
+                    var creds = user.getCredentials('lo');
+                    var username = user.get('username');
+                    user.createUserAccount(accountId, username, creds.password, roleAry);
+                    dao.saveOrUpdate(user, function(err, savedUser){
+                        if(err) {
+                            log.error('Error saving user:', err);
+                            callback(err);
+                        } else {
+                            callback(null, savedUser, username);
+                        }
+                    });
+                }
+
             },
             function stepTwo(user, username, callback) {
                 log.debug('Initializing user security.');

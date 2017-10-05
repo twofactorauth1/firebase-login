@@ -127,6 +127,43 @@
             });
         };
 
+        $scope.openSimpleModal = function (modal) {
+            var _modal = {
+                templateUrl: modal,
+                scope: $scope,
+                keyboard: true,
+                backdrop: 'static'
+            };
+            $scope.modalInstance = $modal.open(_modal);
+            $scope.modalInstance.result.then(null, function () {
+                angular.element('.sp-container').addClass('sp-hidden');
+            });
+        };
+
+        $scope.closeModal = function () {
+            $scope.modalInstance.close();
+            $scope.socailList = false;
+            $scope.groupList = false;
+        };
+
+        $scope.addCustomer = function() {
+            var orgId = $scope.orgId;
+            var subdomain = $scope.subdomain;
+            var username = $scope.username;
+            var password = $scope.password;
+            CustomerService.addNewCustomer(orgId, subdomain, username, password, function(err, value){
+                if(err) {
+                    toaster.pop('warning', err.message);
+                } else {
+                    $scope.closeModal();
+                    CustomerService.refreshCustomers(function(customers){
+                        $scope.customers = customers.results;
+                        $scope.showCustomers = true;
+                    });
+                }
+            });
+        };
+
 
     
 

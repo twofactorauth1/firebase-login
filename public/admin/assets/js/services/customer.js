@@ -7,6 +7,7 @@
         var adminUrl = '/api/1.0/admin';
         var awsUrl = '/api/1.0/integrations/aws';
         var insightUrl = '/api/2.0/insights';
+        var newCustomerUrl = '/api/1.0/account';
 
         this.getCache = function () {
             var cache = $cacheFactory.get('CustomerService');
@@ -51,7 +52,6 @@
         };
 
         this.loadAllCustomers = function(fn){
-            var apiUrl = baseUrl;
             var apiUrl = [baseUrl, 'all'].join('/');
             var data = this.getCache().get('customers');
             var cache = this.getCache();
@@ -66,6 +66,18 @@
                     fn(data);
                 });
             }
+        };
+
+        this.refreshCustomers = function(fn) {
+            var apiUrl = [baseUrl, 'all'].join('/');
+            var cache = this.getCache();
+            $http({
+                url: apiUrl,
+                method: 'GET'
+            }).success(function (data) {
+                cache.put('customers', data);
+                fn(data);
+            });
         };
 
         this.getCustomer = function(id, fn) {
@@ -277,6 +289,21 @@
         this.addUserToAccountTo = function(id, userId, fn) {
             var apiUrl = [adminUrl, 'user', 'account', id,'user',userId].join('/');
             $http.post(apiUrl).success(function(data){
+                fn(null, data);
+            }).error(function(err){
+                fn(err);
+            });
+        };
+
+        this.addNewCustomer = function(orgId, subdomain, username, password, fn) {
+            var apiUrl = newCustomerUrl;
+            var body = {
+                orgId:orgId,
+                subdomain:subdomain,
+                username:username,
+                password:password
+            };
+            $http.post(apiUrl, body).success(function(data){
                 fn(null, data);
             }).error(function(err){
                 fn(err);

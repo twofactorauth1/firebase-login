@@ -1,5 +1,4 @@
 /********** Form Builder **********/
-
 .form-builder-component {
     z-index: 2 !important;
     position: relative;
@@ -19,7 +18,6 @@
         margin: 0 10px;
         position: relative;
     }
-
     input, textarea{
         height: auto;
         border-radius: 4px !important;
@@ -27,8 +25,6 @@
         font-size: 14px;
         border: 1px solid #eeeeee;
     }
-
-
     .thank-you {
         padding: 0;
         margin-bottom: -70px;
@@ -39,7 +35,6 @@
         text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.4);
         margin-top: 10px;
     }
-
     .has-success {
         .form-control {
             border-color: #2ecc71;
@@ -64,11 +59,9 @@
         top: 8px;
         right: 8px;
     }
-
     textarea {
         resize: none;
     }
-
     .form-checkbox-field{
         width: 1%;
         float: left;
@@ -94,10 +87,7 @@
         padding-left: 15px;
     }
 }
-
-
 .form-builder-layout{
-
     input, textarea{
         min-height: 34px;
         height: auto;
@@ -106,17 +96,14 @@
         font-size: 14px;
         border: 1px solid #eeeeee;
     }
-
     .form-group label {
         margin-top: 8px;
         font-weight: normal;
         color: black;
     }
-
     .panel-active{
         box-shadow: inset 0px 0px 0px 8px rgba(71, 184, 217, 0.75);
     }
-
     .add-layout-btn{
         display:none;
         position: absolute;
@@ -128,7 +115,6 @@
         width: 170px;
         height: 35px;
     }
-
     margin: 10px;
     .form-layout-1{
          span.required{
@@ -138,7 +124,6 @@
         position: relative;
         width: 50%;
         margin: auto;
-
         label{
             display:block;
         }
@@ -216,12 +201,10 @@
         }
         position: relative;
         margin: auto;
-
         button{
             float:right;
             width:auto;
         }
-
         &:hover {
             cursor: pointer;
             .add-layout-btn{
@@ -232,7 +215,6 @@
 
     }
 }
-
 .form-builder.panel.panel-default{
     margin-left: -15px;
     margin-right: -15px;
@@ -242,7 +224,6 @@
 
     }
 }
-
 @media(max-width:767px) {
     .form-builder-layout{
     	.form-layout-1,  .form-layout-2,  .form-layout-3,  .form-layout-4, .form-layout-custom{
@@ -250,7 +231,6 @@
     	}
     }
 }
-
 .btn-form{
     min-height: 20px;
     width: auto;
@@ -264,8 +244,6 @@
     opacity: 0.65;
     display: table !important;
 }
-
-
 .form-builder-modal-body {
     background: white;
     padding: 0 15px;
@@ -274,5 +252,12 @@
         background: #e8e8e8;
         padding: 15px;
         margin: 0 0 15px;
+    }
+}
+@media(min-width:768px) {
+    .form-builder-layout{
+        div.message_right{
+            float: right;
+        }
     }
 }
