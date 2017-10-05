@@ -5,7 +5,7 @@
             <li><a href="/blog" target="_self">Bog</a></li>
             <li ng-if="vm.blog.currentTag">Tag ({{vm.blog.currentTag}}) </li>
             <li ng-if="vm.blog.currentCategory">Category ({{vm.blog.currentCategory}})</li>
-            <li ng-if="vm.blog.currentAuthor">Author ({{vm.blog.currentCategory}}) </li>
+            <li ng-if="vm.blog.currentAuthor">Author ({{vm.blog.currentAuthor}}) </li>
         </ul>
     </div>
     <div ng-if="!vm.blog.posts.length" class="ssb-in-context-info margin-top-20 padding-30">
