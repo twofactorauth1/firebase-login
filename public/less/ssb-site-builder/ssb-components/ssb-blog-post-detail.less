@@ -35,24 +35,19 @@
         max-width: none!important;
         width: 100vw!important;
     }
-
-    .ssb-post_tags {
+    .ssb-post_tags,.ssb-post_categories {
         margin-bottom: 20px;
+        li {
+            display: inline-block;
+            margin-bottom: 10px;
+            background: none !important;
+            padding: 0;
+            margin-right: 10px;
+            a {
+                padding: 4px 8px;
+            }
+        }
     }
-
-    .ssb-post_tags li {
-        display: inline-block;
-        margin-bottom: 10px;
-        background: none !important;
-        padding: 0;
-        margin-right: 10px;
-    }
-
-    .ssb-post_tags li a {
-        padding: 4px 8px;
-    }
-
-
    .ssb-theme-btn.btn-link {
         &:focus {
             background-color: transparent !important;
