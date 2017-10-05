@@ -36,10 +36,10 @@
             </div>
             <div class="feature-tab-content" ng-if="!isEditing">
                 <div ng-repeat="feature in component.features" ng-if="$index == features.featureIndex">
-                    <div class="{{component.features[features.featureIndex].media && component.features[features.featureIndex].media.indexOf('width: 0px')===-1?'col-md-4':'col-md-8'}} col-xs-12">
+                    <div class="{{component.elementStyles['features[features/featureIndex]/media'][features.featureIndex].visibility!==false && component.features[features.featureIndex].media && component.features[features.featureIndex].media.indexOf('width: 0px')===-1?'col-md-4':'col-md-8'}} col-xs-12">
                         <div elem ng-model="component.features[features.featureIndex].content"></div> 
                     </div>
-                    <div class="{{component.features[features.featureIndex].media && component.features[features.featureIndex].media.indexOf('width: 0px')===-1?'col-md-4 col-xs-12':'ng-hide'}} ">
+                    <div class="{{component.elementStyles['features[features/featureIndex]/media'][features.featureIndex].visibility!==false && component.features[features.featureIndex].media && component.features[features.featureIndex].media.indexOf('width: 0px')===-1?'col-md-4 col-xs-12':'ng-hide'}} ">
                         <div elem ng-model="component.features[features.featureIndex].media"></div>
                     </div>
                 </div>
