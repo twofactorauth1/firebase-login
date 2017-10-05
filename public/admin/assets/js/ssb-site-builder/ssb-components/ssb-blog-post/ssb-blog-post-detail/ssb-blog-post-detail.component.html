@@ -32,10 +32,17 @@
         </section>
 
         <ul class="ssb-post_tags" data-ng-if="vm.post.post_tags">
+            <li ><h4>Tags:</h4></li>
             <li ng-repeat="tag in vm.post.post_tags track by $index">
                 <a href="/tag/{{tag.text ? vm.encodeUrlText(tag.text): vm.encodeUrlText(tag)}}" class="btn ssb-theme-btn" target="_self" itemprop="url" rel="tag">{{tag.text ? tag.text: tag}}</a>
             </li>
         </ul>
+        <ul class="ssb-post_categories" data-ng-if="vm.post.post_categories">
+                <li ><h4>Categories:</h4></li>
+                <li ng-repeat="category in vm.post.post_categories track by $index">
+                    <a href="/tag/{{category.text ? vm.encodeUrlText(category.text): vm.encodeUrlText(category)}}" class="btn ssb-theme-btn" target="_self" itemprop="url" rel="tag">{{category.text ? category.text: category}}</a>
+                </li>
+            </ul>
     </div>
 
 </article>
