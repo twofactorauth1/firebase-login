@@ -75,7 +75,7 @@ app.directive('featureListComponent', [function () {
 			};
 			scope.updateFeatureClass=function(styles,index){ 
 				var visibility=true;
-				if(styles && styles['features[features/featureIndex]/media'][index] && styles['features[features/featureIndex]/media'][index].visibility===false ){
+				if(styles && styles['features[features/featureIndex]/media'] && styles['features[features/featureIndex]/media'][index] && styles['features[features/featureIndex]/media'][index].visibility===false ){
 					visibility=false;
 				}
 				return visibility && scope.component.features[index].media && scope.component.features[index].media.indexOf('width: 0px')===-1 ;
