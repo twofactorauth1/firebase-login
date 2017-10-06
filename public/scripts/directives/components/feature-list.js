@@ -37,30 +37,23 @@ app.directive('featureListComponent', [function () {
 					return "";
 				}
 			};
-
 			scope.featureStyle = function (component) {
 				var styleString = " ";
-
 				if (component && component.blockBorder && component.blockBorder.show && component.blockBorder.color) {
 					styleString += 'border-color: ' + component.blockBorder.color + ';';
 					styleString += 'border-width: ' + component.blockBorder.width + 'px;';
 					styleString += 'border-style: ' + component.blockBorder.style + ';';
 					styleString += 'border-radius: ' + component.blockBorder.radius + '%;';
 				}
-
 				if (component.blockbgcolor) {
 					styleString += 'background: ' + component.blockbgcolor;
 				}
-
 				return styleString;
 			};
-
-
 			scope.setSelectedFeatureIndex = function (index) {
 				scope.loading = true;
 				scope.features.featureIndex = index;
 				scope.loading = false;
-				//$timeout(function() {
 				var featureImges = angular.element("#" + scope.component._id + " .feature-tab-content .col-md-5 img");
 				angular.forEach(featureImges, function (el) {
 					var srcFeatureImage = angular.element(el).attr("src");
@@ -68,24 +61,25 @@ app.directive('featureListComponent', [function () {
 						angular.element(el).wrap('<a href="' + srcFeatureImage + '" title="Project A" data-gallery=""></a>');
 					}
 				});
-				// }, 0);
 			};
-
 			scope.setStyles = function (field) {
 				var styleString = ' ';
 				if (field) {
 					if (field.align === 'left' || field.align === 'right') {
 						styleString += 'float: ' + field.align + " !important;";
-					}
-
-					if (field.align === 'center') {
+					} else if (field.align === 'center') {
 						styleString += 'margin: 0 auto !important; float:none !important;';
 					}
 				}
 				return styleString;
 			};
-
-
+			scope.updateFeatureClass=function(styles,index){ 
+				var visibility=true;
+				if(styles && styles['features[features/featureIndex]/media'] && styles['features[features/featureIndex]/media'][index] && styles['features[features/featureIndex]/media'][index].visibility===false ){
+					visibility=false;
+				}
+				return visibility && scope.component.features[index].media && scope.component.features[index].media.indexOf('width: 0px')===-1 ;
+			}
 		}
 	};
 }]);
