@@ -120,58 +120,34 @@ app.controller('MediaModalCtrl', ['$scope', 'mediaManagerConstant', '$injector',
     removeAfterUpload: true,
     filters: [{
       name: "SizeLimit",
-      fn: function (item) {
-        if(item.name && _.contains([".ttf", ".woff", ".woff2", ".eot", ".otf"], item.name.substr(item.name.lastIndexOf('.')))){
-          SweetAlert.swal({
-            title: "",
-            text: "Indigenous is not responsible for acquiring your rights to the fonts uploaded here. Please ensure you've paid for or acquired the appropriate license for your use case(s)",
-            type: "warning",
-            showCancelButton: true,
-            confirmButtonColor: "#DD6B55",
-            confirmButtonText: "Yes, I agree!",
-            cancelButtonText: "No, do not agree!",
-            closeOnConfirm: true,
-            closeOnCancel: true,
-          }, function (isConfirm) {
-            if (isConfirm) {
-              angular.element('.modal.in').show();
+      fn: function (item) {        
+        switch (item.type.substring(0, item.type.indexOf('/'))) {
+          case "video":
+            if (500 * 1024 * 1024 + 1 > parseInt(item.size)) {
               return true;
             } else {
-              angular.element('.modal.in').show();
-              return false;
+              ToasterService.show('error', 'The maximum video file size 500MB. Unable to Upload.');
             }
-          });
+            break;
+          case "image":
+          case "audio":
+            //size in bytes
+            if (50 * 1024 * 1024 > parseInt(item.size)) {
+              return true;
+            } else {
+              ToasterService.show('error', 'The maximum audio file size 50MB. Unable to Upload.');
+            }
+            break;
+          case "document":
+          default:
+            //size in bytes
+            if (10 * 1024 * 1024 > parseInt(item.size)) {
+              return true;
+            } else {
+              ToasterService.show('error', 'The maximum file size 10MB. Unable to Upload.');
+            }
         }
-        else{
-
-          switch (item.type.substring(0, item.type.indexOf('/'))) {
-            case "video":
-              if (500 * 1024 * 1024 + 1 > parseInt(item.size)) {
-                return true;
-              } else {
-                ToasterService.show('error', 'The maximum video file size 500MB. Unable to Upload.');
-              }
-              break;
-            case "image":
-            case "audio":
-              //size in bytes
-              if (50 * 1024 * 1024 > parseInt(item.size)) {
-                return true;
-              } else {
-                ToasterService.show('error', 'The maximum audio file size 50MB. Unable to Upload.');
-              }
-              break;
-            case "document":
-            default:
-              //size in bytes
-              if (10 * 1024 * 1024 > parseInt(item.size)) {
-                return true;
-              } else {
-                ToasterService.show('error', 'The maximum file size 10MB. Unable to Upload.');
-              }
-          }
-          return false;
-        }
+        return false;
       }
     }]
   });
@@ -204,6 +180,32 @@ app.controller('MediaModalCtrl', ['$scope', 'mediaManagerConstant', '$injector',
     }
   });
 
+  uploader.filters.push({
+    name: 'customFonts',
+    fn: function (item, options) {
+      if(item.name && _.contains([".ttf", ".woff", ".woff2", ".eot", ".otf"], item.name.substr(item.name.lastIndexOf('.')))){
+        // SweetAlert.swal({
+        //   title: "",
+        //   text: "Indigenous is not responsible for acquiring your rights to the fonts uploaded here. Please ensure you've paid for or acquired the appropriate license for your use case(s)",
+        //   type: "warning",
+        //   showCancelButton: true,
+        //   confirmButtonColor: "#DD6B55",
+        //   confirmButtonText: "Yes, I agree!",
+        //   cancelButtonText: "No, do not agree!",
+        //   closeOnConfirm: true,
+        //   closeOnCancel: true,
+        // }, function (isConfirm) {
+        //   return isConfirm
+        // });
+
+        return true;
+      }
+      else{
+        return true;
+      }
+    }
+  });
+
   uploader.onSuccessItem = function (fileItem, response, status, headers) {
     $scope.uploadComplete = false;
     $scope.selectModel.select_all = false;
@@ -211,7 +213,7 @@ app.controller('MediaModalCtrl', ['$scope', 'mediaManagerConstant', '$injector',
     file_name = file_name.replace(/ /g, "_");
     response.files[0].filename = file_name;
     response.files[0].mimeType = fileItem.file.type;
-
+    
     if($scope.mediaModal.replace){
         if($scope.mediaModal.asset){
           $scope.cachebuster = new Date().getTime();

@@ -277,7 +277,6 @@ module.exports = {
             };
             var mimeTypesArray = typeMimes[filterType];
             console.log(filterType)
-            console.log("SSSSSSSSSSSSSSSSSSSS")
             if(filterType === 'fonts'){
                 andQuery.push({'type': 'fonts'}); 
             }
