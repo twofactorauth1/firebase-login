@@ -118,6 +118,15 @@
 					if (section.bg && section.bg.img && section.bg.img.show === false) {
 						classString += " hide-hero-bg-image";
 					}
+					angular.forEach(section.components, function (cmp, index) { 
+						if(cmp.type=="navigation" && cmp.navigation){
+							if(cmp.navigation.wideMobileMode){
+								classString += " ssb-section-wmm";
+							}else if(cmp.navigation.alwaysmobileMode){
+								classString += " ssb-section-amm";
+							}
+						}
+					});
 				}
 
 				if (section.filter) {
