@@ -34,6 +34,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.delete(this.url(':id'), this.isAuthAndSubscribedApi.bind(this), this.deleteAsset.bind(this));
 
         app.get(this.url('type/:type'), this.isAuthAndSubscribedApi.bind(this), this.getAssetsByType.bind(this));
+        app.get(this.url('custom/fonts'), this.isAuthAndSubscribedApi.bind(this), this.findByFontType.bind(this));
         app.get(this.url('tag/:tag'), this.isAuthAndSubscribedApi.bind(this), this.getAssetsByTag.bind(this));
         app.get(this.url('source/:source'), this.isAuthAndSubscribedApi.bind(this), this.getAssetsBySource.bind(this));
         app.post(this.url('editor/upload'), this.isAuthAndSubscribedApi.bind(this), this.uploadImage.bind(this));
@@ -420,6 +421,28 @@ _.extend(api.prototype, baseApi.prototype, {
         });
 
     },
+
+    findByFontType: function(req, res) {
+        var self = this;
+        self.log.debug('>> findByFontType');
+
+        var accountId = parseInt(self.accountId(req));
+        self.checkPermission(req, self.sc.privs.VIEW_ASSET, function(err, isAllowed){
+            if (isAllowed !== true) {
+                return self.send403(res);
+            } else {
+                var skip = req.query['skip'];
+                var limit = req.query['limit'];
+
+                assetManager.findByFontType(accountId, skip, limit, function(err, list){
+                    self.log.debug('<< findByFontType');
+                    self.sendResultOrError(res, err, list, "Error getting Assets by type");
+                });
+            }
+        });
+
+    },
+
 
     getAssetsBySource: function(req, res) {
         var self = this;

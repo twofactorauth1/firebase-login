@@ -178,6 +178,10 @@ app.directive("elem", function ($rootScope, $timeout, $compile, SimpleSiteBuilde
 					// Special case to allow empty healcode-widget tag
 					$.merge(froalaConfig.htmlAllowedEmptyTags, ["healcode-widget"]);
 
+					var fonts = SimpleSiteBuilderService.getFontFamilyOptions();
+					froalaConfig.fontFamily = fonts;
+
+
 					$timeout(function () {
 
 						$(elem).on('froalaEditor.initialized', function (e, editor) {

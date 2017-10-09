@@ -121,6 +121,27 @@ app.controller('MediaModalCtrl', ['$scope', 'mediaManagerConstant', '$injector',
     filters: [{
       name: "SizeLimit",
       fn: function (item) {
+        if(item.name && _.contains([".ttf", ".woff", ".woff2", ".eot"], item.name.substr(item.name.lastIndexOf('.')))){
+          SweetAlert.swal({
+            title: "",
+            text: "Indigenous is not responsible for acquiring your rights to the fonts uploaded here. Please ensure you've paid for or acquired the appropriate license for your use case(s)",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#DD6B55",
+            confirmButtonText: "Yes, I agree!",
+            cancelButtonText: "No, do not agree!",
+            closeOnConfirm: true,
+            closeOnCancel: true,
+          }, function (isConfirm) {
+            if (isConfirm) {
+              angular.element('.modal.in').show();
+              return true;
+            } else {
+              angular.element('.modal.in').show();
+              return false;
+            }
+          });
+        }
         switch (item.type.substring(0, item.type.indexOf('/'))) {
           case "video":
             if (500 * 1024 * 1024 + 1 > parseInt(item.size)) {
@@ -220,21 +241,6 @@ app.controller('MediaModalCtrl', ['$scope', 'mediaManagerConstant', '$injector',
     ToasterService.show('error', 'Connection timed out');
   };
 
-  // mediaModalElement.on('shown.bs.modal', function (e) {
-  //   console.log('$scope.$parent.showInsert ', $scope.$parent.showInsert);
-  //   if (e.relatedTarget) {
-  //     $scope.showInsert = $(e.relatedTarget).attr("media-modal-show-insert");
-  //     $scope.blogImage = $(e.relatedTarget).attr("blog-post-image");
-  //     angular.element($window).trigger("resize")
-  //     contentElement.css('visibility', 'visible')
-  //   } else if ($scope.$parent.showInsert) {
-  //     $scope.showInsert = true;
-  //     angular.element($window).trigger("resize")
-  //     contentElement.css('visibility', 'visible');
-  //   }
-
-  // });
-
   angular.element($window).resize(function () {
     resizeModal();
   });
@@ -271,10 +277,13 @@ app.controller('MediaModalCtrl', ['$scope', 'mediaManagerConstant', '$injector',
     document: ['application/octet-stream', 'application/pdf', 'text/plain']
   };
 
+  //.ttf, .woff, .woff2, .eot
 
-
-  $scope.getFileType = function(mime){
-    if(mime.match('audio.*'))
+  $scope.getFileType = function(mime, value){
+    if(value && value.type === 'fonts'){
+      return "fonts"
+    } 
+    else if(mime.match('audio.*'))
       return "audio"
     else if(mime.match('video.*'))
       return "video"
@@ -317,7 +326,7 @@ app.controller('MediaModalCtrl', ['$scope', 'mediaManagerConstant', '$injector',
           $scope.batch.push(value);
         }
       } else {
-        if ($scope.mimeList.indexOf(value.mimeType) > -1 || $scope.getFileType(value.mimeType) === $scope.showType ) {
+        if ($scope.mimeList.indexOf(value.mimeType) > -1 || $scope.getFileType(value.mimeType, value) === $scope.showType ) {
           $scope.assets.push(value);
           if (value.checked) {
             $scope.batch.push(value);
@@ -344,8 +353,6 @@ app.controller('MediaModalCtrl', ['$scope', 'mediaManagerConstant', '$injector',
     $scope.pagingParams.skip = 0;
     $scope.pageLoading = true;
   }
-
-
 
   $scope.m.singleSelect = function (asset) {
     $scope.singleSelected = asset.checked;
