@@ -1517,6 +1517,7 @@
             if(ssbService.customFonts){
                 _.each(ssbService.customFonts, function(font){
                     var _font = font.filename.substring(0, font.filename.indexOf('.'));
+                    var _fontValue = _font.replace(" ", "_");
                     fonts[_font] = _font;
                 })
             }
