@@ -1,7 +1,7 @@
 'use strict';
 /*global app, moment, angular*/
 /*jslint unparam:true*/
-app.controller('MediaModalCtrl', ['$scope', 'mediaManagerConstant', '$injector', '$modalInstance', '$http', '$timeout', 'FileUploader', 'AssetsService', 'ToasterService', 'showInsert', 'insertMedia', 'isSingleSelect', 'SweetAlert', "$window", "AccountService", "editableOptions", function ($scope, mediaManagerConstant, $injector, $modalInstance, $http, $timeout, FileUploader, AssetsService, ToasterService, showInsert, insertMedia, isSingleSelect, SweetAlert, $window, AccountService, editableOptions) {
+app.controller('MediaModalCtrl', ['$scope', '$rootScope', 'mediaManagerConstant', '$injector', '$modalInstance', '$http', '$timeout', 'FileUploader', 'AssetsService', 'ToasterService', 'showInsert', 'insertMedia', 'isSingleSelect', 'SweetAlert', "$window", "AccountService", "editableOptions", function ($scope, $rootScope, mediaManagerConstant, $injector, $modalInstance, $http, $timeout, FileUploader, AssetsService, ToasterService, showInsert, insertMedia, isSingleSelect, SweetAlert, $window, AccountService, editableOptions) {
   var uploader, footerElement, headerElement, contentElement, mediaElement, mediaModalElement;
 
   $scope.showInsert = showInsert;
@@ -213,7 +213,7 @@ app.controller('MediaModalCtrl', ['$scope', 'mediaManagerConstant', '$injector',
     file_name = file_name.replace(/ /g, "_");
     response.files[0].filename = file_name;
     response.files[0].mimeType = fileItem.file.type;
-    
+    $rootScope.$broadcast('$refreshCustomFonts');
     if($scope.mediaModal.replace){
         if($scope.mediaModal.asset){
           $scope.cachebuster = new Date().getTime();

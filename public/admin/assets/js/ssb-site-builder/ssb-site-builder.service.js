@@ -1517,8 +1517,8 @@
             if(ssbService.customFonts){
                 _.each(ssbService.customFonts, function(font){
                     var _font = font.filename.substring(0, font.filename.indexOf('.'));
-                    var _fontValue = _font.replace(/ /g,"_");
-                    fonts[_font] = _font;
+                    var _fontValue = _font.replace(/ /g, "_");
+                    fonts[_fontValue] = _font; 
                 })
             }
 
@@ -2117,11 +2117,22 @@
             });
         });
 
+        $rootScope.$on('$refreshCustomFonts', function(event, account) {
+            ssbService.getCustomFonts(true);
+        });
 
-        function getCustomFonts() {
 
-          function success(data) {
-            ssbService.customFonts = data;
+        function getCustomFonts(reload) {
+
+          function success(data) {            
+            if(reload){
+                ssbService.customFonts = null;
+                $timeout(function() {
+                    ssbService.customFonts = data;
+                },0);
+            }
+            else
+                ssbService.customFonts = data;
             console.log('SimpleSiteBuilderService getCustomFonts: ' + data);
           }
 
