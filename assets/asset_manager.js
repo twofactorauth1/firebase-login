@@ -55,12 +55,11 @@ module.exports = {
                     } else {
                     asset.set('url', value.url);
                     }
-                    console.log(asset);
 
-                    if(value.url && _.contains([".ttf", ".woff", ".woff2", ".eot"], value.url.substr(value.url.lastIndexOf('.')))){
+                    if(value.url && _.contains([".ttf", ".woff", ".woff2", ".eot", ".otf"], value.url.substr(value.url.lastIndexOf('.')))){
                         asset.set('type', 'fonts');
                     }
-
+                    console.log(asset);                    
 
                     uploadPromise.resolve(value);
                 }
@@ -277,6 +276,8 @@ module.exports = {
                 document: ['application/octet-stream', 'application/pdf', 'text/plain']
             };
             var mimeTypesArray = typeMimes[filterType];
+            console.log(filterType)
+            console.log("SSSSSSSSSSSSSSSSSSSS")
             if(filterType === 'fonts'){
                 andQuery.push({'type': 'fonts'}); 
             }

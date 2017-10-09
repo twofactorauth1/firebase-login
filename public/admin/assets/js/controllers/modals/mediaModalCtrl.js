@@ -121,7 +121,7 @@ app.controller('MediaModalCtrl', ['$scope', 'mediaManagerConstant', '$injector',
     filters: [{
       name: "SizeLimit",
       fn: function (item) {
-        if(item.name && _.contains([".ttf", ".woff", ".woff2", ".eot"], item.name.substr(item.name.lastIndexOf('.')))){
+        if(item.name && _.contains([".ttf", ".woff", ".woff2", ".eot", ".otf"], item.name.substr(item.name.lastIndexOf('.')))){
           SweetAlert.swal({
             title: "",
             text: "Indigenous is not responsible for acquiring your rights to the fonts uploaded here. Please ensure you've paid for or acquired the appropriate license for your use case(s)",
@@ -142,33 +142,36 @@ app.controller('MediaModalCtrl', ['$scope', 'mediaManagerConstant', '$injector',
             }
           });
         }
-        switch (item.type.substring(0, item.type.indexOf('/'))) {
-          case "video":
-            if (500 * 1024 * 1024 + 1 > parseInt(item.size)) {
-              return true;
-            } else {
-              ToasterService.show('error', 'The maximum video file size 500MB. Unable to Upload.');
-            }
-            break;
-          case "image":
-          case "audio":
-            //size in bytes
-            if (50 * 1024 * 1024 > parseInt(item.size)) {
-              return true;
-            } else {
-              ToasterService.show('error', 'The maximum audio file size 50MB. Unable to Upload.');
-            }
-            break;
-          case "document":
-          default:
-            //size in bytes
-            if (10 * 1024 * 1024 > parseInt(item.size)) {
-              return true;
-            } else {
-              ToasterService.show('error', 'The maximum file size 10MB. Unable to Upload.');
-            }
+        else{
+
+          switch (item.type.substring(0, item.type.indexOf('/'))) {
+            case "video":
+              if (500 * 1024 * 1024 + 1 > parseInt(item.size)) {
+                return true;
+              } else {
+                ToasterService.show('error', 'The maximum video file size 500MB. Unable to Upload.');
+              }
+              break;
+            case "image":
+            case "audio":
+              //size in bytes
+              if (50 * 1024 * 1024 > parseInt(item.size)) {
+                return true;
+              } else {
+                ToasterService.show('error', 'The maximum audio file size 50MB. Unable to Upload.');
+              }
+              break;
+            case "document":
+            default:
+              //size in bytes
+              if (10 * 1024 * 1024 > parseInt(item.size)) {
+                return true;
+              } else {
+                ToasterService.show('error', 'The maximum file size 10MB. Unable to Upload.');
+              }
+          }
+          return false;
         }
-        return false;
       }
     }]
   });
