@@ -244,8 +244,8 @@ mainApp.service('analyticsService', ['$http', '$location', 'ipCookie', function 
             apiUrl = baseUrl + ['analytics', 'session', sessionId, 'pageStart'].join('/');
             $http.post(apiUrl, pageProperties)
                 .success(function (data) {
-                    self.collect(queryParams, fn);
-                    //fn(data);
+                    //self.collect(queryParams, fn);
+                    fn(data);
                 });
         }
 
