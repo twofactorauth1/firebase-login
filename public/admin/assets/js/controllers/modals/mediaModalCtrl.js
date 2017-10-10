@@ -183,20 +183,28 @@ app.controller('MediaModalCtrl', ['$scope', '$rootScope', 'mediaManagerConstant'
   uploader.filters.push({
     name: 'customFonts',
     fn: function (item, options) {
+      var _this = this;
       if(item.name && _.contains([".ttf", ".woff", ".woff2", ".eot", ".otf"], item.name.substr(item.name.lastIndexOf('.')))){
-        // SweetAlert.swal({
-        //   title: "",
-        //   text: "Indigenous is not responsible for acquiring your rights to the fonts uploaded here. Please ensure you've paid for or acquired the appropriate license for your use case(s)",
-        //   type: "warning",
-        //   showCancelButton: true,
-        //   confirmButtonColor: "#DD6B55",
-        //   confirmButtonText: "Yes, I agree!",
-        //   cancelButtonText: "No, do not agree!",
-        //   closeOnConfirm: true,
-        //   closeOnCancel: true,
-        // }, function (isConfirm) {
-        //   return isConfirm
-        // });
+        SweetAlert.swal({
+          title: "",
+          text: "Indigenous is not responsible for acquiring your rights to the fonts uploaded here. Please ensure you've paid for or acquired the appropriate license for your use case(s)",
+          type: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#DD6B55",
+          confirmButtonText: "Yes, I agree!",
+          cancelButtonText: "No, do not agree!",
+          closeOnConfirm: true,
+          closeOnCancel: true,
+        }, function (isConfirm) {
+          if(isConfirm){
+            $timeout(function() {
+              return true;
+            }, 0);
+          }
+          else{
+            _this.clearQueue();
+          }
+        });
 
         return true;
       }
