@@ -120,7 +120,7 @@ app.controller('MediaModalCtrl', ['$scope', '$rootScope', 'mediaManagerConstant'
     removeAfterUpload: true,
     filters: [{
       name: "SizeLimit",
-      fn: function (item) {        
+      fn: function (item) {
         switch (item.type.substring(0, item.type.indexOf('/'))) {
           case "video":
             if (500 * 1024 * 1024 + 1 > parseInt(item.size)) {
@@ -188,7 +188,7 @@ app.controller('MediaModalCtrl', ['$scope', '$rootScope', 'mediaManagerConstant'
       if(item.name && _.contains([".ttf", ".woff", ".woff2", ".eot", ".otf"], item.name.substr(item.name.lastIndexOf('.')))){
         SweetAlert.swal({
           title: "",
-          text: "Indigenous is not responsible for acquiring your rights to the fonts uploaded here. Please ensure you've paid for or acquired the appropriate license for your use case(s)",
+          text: "Indigenous is not responsible for acquiring rights to the fonts uploaded here. Please ensure you have the appropriate license(s) or rights.",
           type: "warning",
           showCancelButton: true,
           confirmButtonColor: "#DD6B55",
@@ -303,7 +303,7 @@ app.controller('MediaModalCtrl', ['$scope', '$rootScope', 'mediaManagerConstant'
   $scope.getFileType = function(mime, value){
     if(value && value.type === 'fonts'){
       return "fonts"
-    } 
+    }
     else if(mime.match('audio.*'))
       return "audio"
     else if(mime.match('video.*'))
