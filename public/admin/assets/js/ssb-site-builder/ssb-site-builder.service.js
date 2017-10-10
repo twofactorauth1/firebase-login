@@ -2124,15 +2124,8 @@
 
         function getCustomFonts(reload) {
 
-          function success(data) {            
-            if(reload){
-                ssbService.customFonts = null;
-                $timeout(function() {
-                    ssbService.customFonts = data;
-                },0);
-            }
-            else
-                ssbService.customFonts = data;
+          function success(data) { 
+            ssbService.customFonts = data;
             console.log('SimpleSiteBuilderService getCustomFonts: ' + data);
           }
 

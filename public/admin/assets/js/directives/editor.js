@@ -178,9 +178,13 @@ app.directive("elem", function ($rootScope, $timeout, $compile, SimpleSiteBuilde
 					// Special case to allow empty healcode-widget tag
 					$.merge(froalaConfig.htmlAllowedEmptyTags, ["healcode-widget"]);
 
-					var fonts = SimpleSiteBuilderService.getFontFamilyOptions();
-					froalaConfig.fontFamily = fonts;
-
+					
+					scope.$watch(function() { return SimpleSiteBuilderService.customFonts }, function(customFonts) {
+				      	if(customFonts && angular.isDefined(customFonts)){
+					        var fonts = SimpleSiteBuilderService.getFontFamilyOptions();
+							froalaConfig.fontFamily = fonts;
+				      	}
+				    }, true);
 
 					$timeout(function () {
 
@@ -251,6 +255,9 @@ app.directive("elem", function ($rootScope, $timeout, $compile, SimpleSiteBuilde
 								scope.$emit('focusEditor', {
 									editor: editor
 								});
+
+								var fonts = SimpleSiteBuilderService.getFontFamilyOptions();
+								editor.opts.fontFamily = fonts;
 
 							}).on('froalaEditor.toolbar.hide', function (e, editor) {
 

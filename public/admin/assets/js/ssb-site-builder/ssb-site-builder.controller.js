@@ -480,14 +480,13 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
         vm.uiState.isBlogEditWritingMode = vm.isBlogEditWritingMode();
     }, true);
 
-    var unbindCustomFonts = $scope.$watch(function() { return SimpleSiteBuilderService.customFonts }, function(customFonts) {
+    $scope.$watch(function() { return SimpleSiteBuilderService.customFonts }, function(customFonts) {
       if(angular.isDefined(customFonts)){
         _.each(customFonts, function(font){
             font.name = font.filename.substring(0, font.filename.indexOf('.')).replace(/ /g, "_");
         })
         vm.state.customFonts = customFonts;
       }
-      unbindCustomFonts();
     }, true);
 
 
