@@ -4324,6 +4324,71 @@ module.exports = {
 
             }
         });
+    },
+
+    buildSiteManifest: function(accountId, userId, fn) {
+
+    },
+
+    buildPageManifest: function(accountId, userId, websiteId, handle, fn) {
+        var self = this;
+        self.log.debug(accountId, userId, '>> buildPageManifest [' + handle + ']');
+        async.waterfall([
+            function(cb) {
+                pageDao.getPublishedPageForWebsite(websiteId, handle, accountId, cb);
+            },
+            function(page, cb) {
+                var components = [];
+                _.each(page.get('sections'), function(section){
+                    if(section) {
+                        components = components.concat(section.components);
+                    }
+                });
+                var fontMap= {};
+                var componentMap = {};
+                async.eachSeries(components, function(component, callback){
+                    if(component) {
+                        var obj = {};
+                        obj.id = '/components/' + component.type + '_v' + component.version + '.html';
+                        if(component.text) {
+                            //var fontRegexp = /.*font-family: \'([a-zA-Z\s]+)\'.*/g;
+                            var fontRegexp = /font-family: ([a-zA-Z\s,\'\-]+)[^;]*/g;
+                            var font = fontRegexp.exec(component.text);
+                            if(font && font.length > 1) {
+                                for(var i=1; i<font.length; i+=3) {
+                                    //console.log('matched:', font[i]);
+                                    var fontAry = font[i].split(',');
+                                    _.each(fontAry, function(splitFont){
+                                        splitFont = splitFont.trim().replace('\'', '').replace('\'', '');
+                                        fontMap[splitFont] = splitFont;
+                                    });
+                                }
+
+                            }
+                        }
+                        componentMap[component.type + ':' + component.version] = component.type + ':' + component.version;
+                        callback();
+                    } else {
+                        callback();
+                    }
+
+                }, function done(err){
+                    self.log.debug('The following fonts are used:', fontMap);
+                    cb(null, page, components, fontMap, componentMap);
+                });
+            },
+            function(page, componentAry, fontMap, componentMap, cb) {
+                var manifest = {
+                    fonts:fontMap,
+                    components:componentMap
+                };
+                cb(null, manifest);
+            }
+        ], function(err, result){
+            self.log.debug(accountId, userId, '<< buildPageManifest', result);
+            fn(err, result);
+        });
+
     }
 
 };
