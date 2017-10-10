@@ -23,6 +23,7 @@
 			baseSectionAPIUrlv2 = '/api/2.0/cms/sections/',
 			baseComponentAPIUrlv2 = '/api/2.0/cms/components/',
 			basePagesWebsiteAPIUrl = '/api/2.0/cms/website/',
+            baseAssetsAPIUrl = '/api/1.0/assets/custom/fonts/',
 			baseAccountAPIUrl = '/api/1.0/account/';
 
         ssbService.getSite = getSite;
@@ -101,7 +102,7 @@
         ssbService.isImage = isImage;
         ssbService.getAccountTemplates = getAccountTemplates;
         ssbService.copyAccountTemplate = copyAccountTemplate;
-
+        ssbService.getCustomFonts = getCustomFonts;
         /**
          * This represents the category sorting for the add content panel
          */
@@ -1469,7 +1470,7 @@
          *
          */
         function getFontFamilyOptions() {
-            return {
+            var fonts =  {
                 "'Arial',Helvetica,sans-serif": "Arial",
                 "'Amatic SC', cursive": "Amatic SC",
                 "'Berlin', sans-serif": "Berlin",
@@ -1512,6 +1513,17 @@
                 "'Ubuntu',sans-serif": 'Ubuntu',
                 "'Verdana',Geneva,sans-serif": "Verdana"
             };
+
+            if(ssbService.customFonts){
+                _.each(ssbService.customFonts, function(font){
+                    var _font = font.filename.substring(0, font.filename.indexOf('.'));
+                    var _fontValue = _font.replace(/ /g, "_");
+                    fonts[_fontValue] = _font; 
+                })
+            }
+
+            return fonts;
+
         }
 
 
@@ -2105,6 +2117,30 @@
             });
         });
 
+        $rootScope.$on('$refreshCustomFonts', function(event, account) {
+            ssbService.getCustomFonts(true);
+        });
+
+
+        function getCustomFonts(reload) {
+
+          function success(data) { 
+            ssbService.customFonts = data;
+            console.log('SimpleSiteBuilderService getCustomFonts: ' + data);
+          }
+
+          function error(error) {
+            console.error('SimpleSiteBuilderService getCustomFonts error: ', JSON.stringify(error));
+          }
+
+          return (
+            ssbRequest($http({
+              url: baseAssetsAPIUrl,
+              method: 'GET',
+            }).success(success).error(error))
+          );
+
+        }
 
 
         (function init() {
@@ -2120,7 +2156,8 @@
                 ssbService.getTemplates();
                 ssbService.getLegacyTemplates();
                 ssbService.getPlatformSections();
-                //ssbService.getUserSections(); //not yet implemented
+                ssbService.getCustomFonts();
+
             });
 
         })();

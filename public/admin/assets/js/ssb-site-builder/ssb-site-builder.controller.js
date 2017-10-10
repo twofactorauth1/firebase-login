@@ -480,6 +480,15 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
         vm.uiState.isBlogEditWritingMode = vm.isBlogEditWritingMode();
     }, true);
 
+    $scope.$watch(function() { return SimpleSiteBuilderService.customFonts }, function(customFonts) {
+      if(angular.isDefined(customFonts)){
+        _.each(customFonts, function(font){
+            font.name = font.filename.substring(0, font.filename.indexOf('.')).replace(/ /g, "_");
+        })
+        vm.state.customFonts = customFonts;
+      }
+    }, true);
+
 
     function checkIfDirty() {
         return vm.state.pendingWebsiteChanges || vm.state.pendingPageChanges || vm.state.pendingBlogChanges;
@@ -1351,6 +1360,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
         unbindAccountWatcher();
         unbindOpenSidebarPanel();
         unbindOpenSidebarPanel();
+        unbindCustomFonts();
 
     }
 

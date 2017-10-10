@@ -1,5 +1,10 @@
 <link ng-if="vm.state.permissions.html" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.12.0/codemirror.min.css">
-
+<style ng-repeat="font in vm.state.customFonts">    
+    @font-face {
+      font-family: "{{font.name}}";
+      src: url("https:{{font.url}}");
+    }
+</style>
 <style>
     /*
 
@@ -161,6 +166,7 @@
     display: none!important;
 }
 </style>
+
 
 
 <!-- <div data-ng-include data-src=" 'assets/js/ssb-site-builder/ssb-site-builder.editor.styles.html' "></div> -->

@@ -12,7 +12,7 @@ var fs = require('fs');
 var async = require('async');
 var ssbManager = require('../ssb/ssb_manager');
 var analyticsManager = require('../analytics/analytics_manager');
-
+var assetManager = require('../assets/asset_manager');
 var view = function (req, resp, options) {
     this.init.apply(this, arguments);
 };
@@ -171,6 +171,13 @@ _.extend(view.prototype, BaseView.prototype, {
                     }
                 });
             },
+            function getCustomFonts(webpageData, page, cb){
+                assetManager.findByFontType(accountId, null, null, function(err, fonts){                
+                    data.customFonts = fonts;
+                    cb(null, webpageData, page);
+                });
+            },
+
             function(value, pages, cb) {
                 var pageHolder = {};
                 _.each(pages, function(page){
@@ -323,13 +330,7 @@ _.extend(view.prototype, BaseView.prototype, {
                    }
                 });
             },
-            function getAllPages(webpageData, cb) {
-                /*
-                ssbManager.listPagesWithSections(accountId, webpageData.website._id, function(err, pages){
-                    cb(err, webpageData, pages);
-                });
-                */
-
+            function getAllPages(webpageData, cb) {                
                 ssbManager.listPublishedPages(accountId, webpageData.website._id, function(err, pages){
                     cb(err, webpageData, pages);
                 });
@@ -446,6 +447,13 @@ _.extend(view.prototype, BaseView.prototype, {
                 }
             },
 
+            function getCustomFonts(webpageData, pages, cb){
+                assetManager.findByFontType(accountId, null, null, function(err, fonts){                
+                    data.customFonts = fonts;
+                    cb(null, webpageData, pages);
+                });
+            },
+
             function(value, pages, cb) {
                 var pageHolder = {};
                 _.each(pages, function(page){
@@ -470,8 +478,6 @@ _.extend(view.prototype, BaseView.prototype, {
                 else{
                     value.website.resources.userScripts.global = {};
                 }
-
-
 
                 if(pageHolder[handle]) {
                     data.title = pageHolder[handle].title || value.website.title;
