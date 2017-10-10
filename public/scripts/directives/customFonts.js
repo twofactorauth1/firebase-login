@@ -6,13 +6,12 @@ angular.module('mainApp')
 			return {
 				restrict: 'E',
 				replace: true,
-				template: '<div ng-repeat="font in customFonts"> ' +
-					'<style> ' +
+				template: '<style ng-repeat="font in customFonts"> ' +					
 						'@font-face { ' +
 							'font-family:{{font.family}}; ' +
 							'src: url(https:{{font.url}}); ' +
 						'} ' +
-					'</style></div>',
+					'</style>',
 				link: function (scope) {
 					if (window.indigenous && window.indigenous.precache && window.indigenous.precache.siteData && window.indigenous.precache.siteData.customFonts) {
 						var _fonts = window.indigenous.precache.siteData.customFonts;

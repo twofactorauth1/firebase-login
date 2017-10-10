@@ -1,12 +1,10 @@
 <link ng-if="vm.state.permissions.html" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.12.0/codemirror.min.css">
-<div ng-repeat="font in vm.state.customFonts">
-    <style>
-        @font-face {
-          font-family: "{{font.name}}";
-          src: url("https:{{font.url}}");
-        }
-    </style>
-</div>
+<style ng-repeat="font in vm.state.customFonts">    
+    @font-face {
+      font-family: "{{font.name}}";
+      src: url("https:{{font.url}}");
+    }
+</style>
 <style>
     /*
 
