@@ -1,5 +1,12 @@
 <link ng-if="vm.state.permissions.html" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.12.0/codemirror.min.css">
-
+<div ng-repeat="font in vm.state.customFonts">
+    <style>
+        @font-face {
+          font-family: "{{font.name}}";
+          src: url("https:{{font.url}}");
+        }
+    </style>
+</div>
 <style>
     /*
 
@@ -162,12 +169,7 @@
 }
 </style>
 
-<style ng-repeat="font in vm.state.customFonts">
-    @font-face {
-      font-family: "{{font.name}}";
-      src: url("https:{{font.url}}");
-    }
-</style>
+
 
 <!-- <div data-ng-include data-src=" 'assets/js/ssb-site-builder/ssb-site-builder.editor.styles.html' "></div> -->
 <div class="ssb-edit-mode" ng-class="{ 'ssb-page-blog-list': vm.state.page.handle === 'blog-list', 'ssb-page-blog-post': vm.state.page.handle === 'blog-post', 'ssb-blog-edit-mode': vm.uiState.isBlogEditMode, 'ssb-blog-edit-writing-mode': vm.uiState.isBlogEditWritingMode }"   >
