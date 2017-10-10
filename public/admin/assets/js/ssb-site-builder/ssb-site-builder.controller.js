@@ -1360,7 +1360,6 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
         unbindAccountWatcher();
         unbindOpenSidebarPanel();
         unbindOpenSidebarPanel();
-        unbindCustomFonts();
 
     }
 
