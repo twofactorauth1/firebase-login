@@ -171,6 +171,13 @@ _.extend(view.prototype, BaseView.prototype, {
                     }
                 });
             },
+            function getCustomFonts(webpageData, page, cb){
+                assetManager.findByFontType(accountId, null, null, function(err, fonts){                
+                    data.customFonts = fonts;
+                    cb(null, webpageData, page);
+                });
+            },
+
             function(value, pages, cb) {
                 var pageHolder = {};
                 _.each(pages, function(page){
