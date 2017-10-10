@@ -182,6 +182,8 @@ app.controller('AppCtrl', ['$rootScope', '$scope', '$state', '$translate', '$win
       //$scope.$apply();
     });
 
+    
+
     // Top Bar User
     // -----------------------------------
     UserService.getUser(function (user) {
