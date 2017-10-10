@@ -184,6 +184,7 @@ app.controller('MediaModalCtrl', ['$scope', '$rootScope', 'mediaManagerConstant'
     name: 'customFonts',
     fn: function (item, options) {
       var _this = this;
+      $scope.customFonts = false;
       if(item.name && _.contains([".ttf", ".woff", ".woff2", ".eot", ".otf"], item.name.substr(item.name.lastIndexOf('.')))){
         SweetAlert.swal({
           title: "",
@@ -198,10 +199,12 @@ app.controller('MediaModalCtrl', ['$scope', '$rootScope', 'mediaManagerConstant'
         }, function (isConfirm) {
           if(isConfirm){
             $timeout(function() {
+              $scope.customFonts = true;
               return true;
             }, 0);
           }
           else{
+            $scope.customFonts = false;
             _this.clearQueue();
           }
         });
@@ -221,7 +224,7 @@ app.controller('MediaModalCtrl', ['$scope', '$rootScope', 'mediaManagerConstant'
     file_name = file_name.replace(/ /g, "_");
     response.files[0].filename = file_name;
     response.files[0].mimeType = fileItem.file.type;
-    $rootScope.$broadcast('$refreshCustomFonts');
+    //$rootScope.$broadcast('$refreshCustomFonts');
     if($scope.mediaModal.replace){
         if($scope.mediaModal.asset){
           $scope.cachebuster = new Date().getTime();
@@ -242,6 +245,11 @@ app.controller('MediaModalCtrl', ['$scope', '$rootScope', 'mediaManagerConstant'
       if(uploader.queue.length <= 1){
         loadDefaultsForPaging();
         loadAssets(response.files[0]);
+      }
+
+      if($scope.customFonts){
+        ToasterService.showWithTitle('success', 'Custom fonts has been uploaded', 'You will need to log out and log back in to see the added font(s)');
+        $scope.customFonts = false;
       }
 
     }

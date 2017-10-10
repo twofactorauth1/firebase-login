@@ -179,12 +179,12 @@ app.directive("elem", function ($rootScope, $timeout, $compile, SimpleSiteBuilde
 					$.merge(froalaConfig.htmlAllowedEmptyTags, ["healcode-widget"]);
 
 					
-					scope.$watch(function() { return SimpleSiteBuilderService.customFonts }, function(customFonts) {
-				      	if(customFonts && angular.isDefined(customFonts)){
-					        var fonts = SimpleSiteBuilderService.getFontFamilyOptions();
-							froalaConfig.fontFamily = fonts;
-				      	}
-				    }, true);
+					
+			      	if(SimpleSiteBuilderService.customFonts && angular.isDefined(SimpleSiteBuilderService.customFonts)){
+				        var fonts = SimpleSiteBuilderService.getFontFamilyOptions();
+						froalaConfig.fontFamily = fonts;
+			      	}
+			    
 
 					$timeout(function () {
 
