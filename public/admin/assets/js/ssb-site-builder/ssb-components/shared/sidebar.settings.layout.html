@@ -1,4 +1,12 @@
-<tabset class="tabbable size-and-padding-tab" ng-if="component.components[0]">
+<div class="row padding-10" ng-if="component.components[0]" ng-init="defaultSpacing = !component.spacing.default">
+    <div class="form-group">
+        <label>Default vertical spacing<span tooltip-placement="top" tooltip-append-to-body="true" tooltip="Use the default vertical space of 50px between components. Turn off to reset vertical space to 0px.">
+                  <i class="fa fa-info-circle" />
+             </span></label>
+        <switch ng-model="defaultSpacing" ng-change="vm.uiState.setDefaultSpacing(component, defaultSpacing)" class="pull-right"></switch>
+    </div>
+</div>
+<tabset class="tabbable size-and-padding-tab row padding-left-5 padding-right-5" ng-if="component.components[0]">
     <tab heading="Large Desktop">
         <div class="row padding-10">
             <div class="form-group" ng-hide="component.disableTextSpacing && component.type === 'ssb-element-text'">
@@ -13,14 +21,7 @@
                 </ui-select>
             </div>
         </div>
-        <div class="row padding-10" ng-if="component.components[0]" ng-init="defaultSpacing = !component.spacing.default">
-            <div class="form-group">
-                <label>Default vertical spacing<span tooltip-placement="top" tooltip-append-to-body="true" tooltip="Use the default vertical space of 50px between components. Turn off to reset vertical space to 0px.">
-                          <i class="fa fa-info-circle" />
-                     </span></label>
-                <switch ng-model="defaultSpacing" ng-change="vm.uiState.setDefaultSpacing(component, defaultSpacing)" class="pull-right"></switch>
-            </div>
-        </div>
+        
         <div class="row padding-10" ng-class="{'disabled': component.disableTextSpacing && component.type === 'ssb-element-text'}">
             <div class="padding-15 margin-bottom-0 partition-light-primary">
                 <label class="text-white lead">Outer Spacing</label>
@@ -92,15 +93,7 @@
                     </ui-select-choices>
                 </ui-select>
             </div>
-        </div>
-        <div class="row padding-10" ng-if="component.components[0]" ng-init="defaultSpacing = !component.spacing.default">
-            <div class="form-group">
-                <label>Default vertical spacing<span tooltip-placement="top" tooltip-append-to-body="true" tooltip="Use the default vertical space of 50px between components. Turn off to reset vertical space to 0px.">
-                          <i class="fa fa-info-circle" />
-                     </span></label>
-                <switch ng-model="defaultSpacing" ng-change="vm.uiState.setDefaultSpacing(component, defaultSpacing)" class="pull-right"></switch>
-            </div>
-        </div>
+        </div>        
         <div class="row padding-10" ng-class="{'disabled': component.disableTextSpacing && component.type === 'ssb-element-text'}">
             <div class="padding-15 margin-bottom-0 partition-light-primary">
                 <label class="text-white lead">Outer Spacing</label>
@@ -173,14 +166,7 @@
                 </ui-select>
             </div>
         </div>
-        <div class="row padding-10" ng-if="component.components[0]" ng-init="defaultSpacing = !component.spacing.default">
-            <div class="form-group">
-                <label>Default vertical spacing<span tooltip-placement="top" tooltip-append-to-body="true" tooltip="Use the default vertical space of 50px between components. Turn off to reset vertical space to 0px.">
-                          <i class="fa fa-info-circle" />
-                     </span></label>
-                <switch ng-model="defaultSpacing" ng-change="vm.uiState.setDefaultSpacing(component, defaultSpacing)" class="pull-right"></switch>
-            </div>
-        </div>
+        
         <div class="row padding-10" ng-class="{'disabled': component.disableTextSpacing && component.type === 'ssb-element-text'}">
             <div class="padding-15 margin-bottom-0 partition-light-primary">
                 <label class="text-white lead">Outer Spacing</label>
@@ -253,14 +239,7 @@
                 </ui-select>
             </div>
         </div>
-        <div class="row padding-10" ng-if="component.components[0]" ng-init="defaultSpacing = !component.spacing.default">
-            <div class="form-group">
-                <label>Default vertical spacing<span tooltip-placement="top" tooltip-append-to-body="true" tooltip="Use the default vertical space of 50px between components. Turn off to reset vertical space to 0px.">
-                          <i class="fa fa-info-circle" />
-                     </span></label>
-                <switch ng-model="defaultSpacing" ng-change="vm.uiState.setDefaultSpacing(component, defaultSpacing)" class="pull-right"></switch>
-            </div>
-        </div>
+        
         <div class="row padding-10" ng-class="{'disabled': component.disableTextSpacing && component.type === 'ssb-element-text'}">
             <div class="padding-15 margin-bottom-0 partition-light-primary">
                 <label class="text-white lead">Outer Spacing</label>
@@ -349,14 +328,7 @@
 
             </div>
         </div>
-        <div class="row padding-10" ng-if="component.components[0]" ng-init="defaultSpacing = !component.spacing.default">
-            <div class="form-group">
-                <label>Default vertical spacing<span tooltip-placement="top" tooltip-append-to-body="true" tooltip="Use the default vertical space of 50px between components. Turn off to reset vertical space to 0px.">
-                          <i class="fa fa-info-circle" />
-                     </span></label>
-                <switch ng-model="defaultSpacing" ng-change="vm.uiState.setDefaultSpacing(component, defaultSpacing)" class="pull-right"></switch>
-            </div>
-        </div>
+        
         <div class="row padding-10" ng-class="{'disabled': component.disableTextSpacing && component.type === 'ssb-element-text'}">
             <div class="padding-15 margin-bottom-0 partition-light-primary">
                 <label class="text-white lead">Outer Spacing</label>

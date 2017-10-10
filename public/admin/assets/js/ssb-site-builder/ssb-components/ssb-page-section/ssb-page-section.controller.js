@@ -183,8 +183,7 @@
 
 		function sectionStyle (section) {
 			var styleString = ' ';
-			// Styles basis of screens sizes
-			
+			// Styles basis of screens sizes			
 			var _layout = screenLayout();
 
 			switch (_layout) {
