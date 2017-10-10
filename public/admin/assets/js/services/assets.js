@@ -56,6 +56,16 @@
           fn(data, status);
         });
     };
+
+    this.getAssetsByFontType = function (fn) {
+      var apiUrl = baseUrl + ['assets', 'fonts', 'fonts'].join('/');
+      $http.get(apiUrl)
+        .success(function (data) {
+          fn(data);
+        });
+    };
+
+
       this.updateMatadata = function (asset, fn) {
       var apiUrl = baseUrl + ['assets','cache', asset._id].join('/');
       $http.post(apiUrl, asset)

@@ -55,7 +55,12 @@ module.exports = {
                     } else {
                     asset.set('url', value.url);
                     }
-                    console.log(asset);
+
+                    if(value.url && _.contains([".ttf", ".woff", ".woff2", ".eot", ".otf"], value.url.substr(value.url.lastIndexOf('.')))){
+                        asset.set('type', 'fonts');
+                    }
+                    console.log(asset);                    
+
                     uploadPromise.resolve(value);
                 }
             });
@@ -271,7 +276,13 @@ module.exports = {
                 document: ['application/octet-stream', 'application/pdf', 'text/plain']
             };
             var mimeTypesArray = typeMimes[filterType];
-            andQuery.push({'mimeType': {$in: mimeTypesArray}});           
+            console.log(filterType)
+            if(filterType === 'fonts'){
+                andQuery.push({'type': 'fonts'}); 
+            }
+            else{
+                andQuery.push({'mimeType': {$in: mimeTypesArray}});
+            }       
         }
 
         if(search){
@@ -384,6 +395,26 @@ module.exports = {
                 fn(err, null);
             } else {
                 self.log.debug('<< findByType');
+                fn(null, list);
+            }
+        });
+    },
+
+    findByFontType: function(accountId, skip, limit, fn) {
+        var self = this;
+        self.log = log;
+
+        self.log.debug('>> findByType');
+        var query = {
+            'accountId': accountId,
+            'type': "fonts"
+        };
+        assetDao.findAllWithFieldsAndLimit(query, skip, limit, null, null, $$.m.Asset, function(err, list){
+            if(err) {
+                self.log.error('Exception in findByFontType: ' + err);
+                fn(err, null);
+            } else {
+                self.log.debug('<< findByFontType');
                 fn(null, list);
             }
         });

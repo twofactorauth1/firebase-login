@@ -161,53 +161,225 @@
 			return classString;
 		}
 
+
+		function screenLayout(){
+			var _layout = 3;
+			var windowWidth = angular.element($window).width();
+			if(windowWidth < 768){
+				_layout = 0
+			}      
+			else if(windowWidth >= 768 && windowWidth < 992){
+				_layout = 1;
+			}
+			else if(windowWidth >= 992 && windowWidth < 1200){
+				_layout = 2;
+			}
+			else if(windowWidth >= 1200){
+				_layout = 3;
+			}
+			return _layout;
+    	}
+
+
 		function sectionStyle (section) {
 			var styleString = ' ';
+			// Styles basis of screens sizes			
+			var _layout = screenLayout();
 
-			if (section && section.spacing) {
-				if (section.spacing.pt) {
-					styleString += 'padding-top: ' + section.spacing.pt + 'px;';
-				}
+			switch (_layout) {
+	            case 0:
+	                if (section && section.spacing) {
+						if (section.spacing.ptxs || section.spacing.ptsm || section.spacing.ptmd || section.spacing.pt) {
+							styleString += 'padding-top: ' + (section.spacing.ptxs || section.spacing.ptsm || section.spacing.ptmd || section.spacing.pt) + 'px;';
+						}
 
-				if (section.spacing.pb) {
-					styleString += 'padding-bottom: ' + section.spacing.pb + 'px;';
-				}
+						if (section.spacing.pbxs || section.spacing.pbsm || section.spacing.pbmd || section.spacing.pb) {
+							styleString += 'padding-bottom: ' + (section.spacing.pbxs || section.spacing.pbsm || section.spacing.pbmd || section.spacing.pb) + 'px;';
+						}
 
-				if (section.spacing.pl) {
-					styleString += 'padding-left: ' + section.spacing.pl + 'px;';
-				}
+						if (section.spacing.plxs || section.spacing.plsm || section.spacing.plmd || section.spacing.pl) {
+							styleString += 'padding-left: ' + (section.spacing.plxs || section.spacing.plsm || section.spacing.plmd || section.spacing.pl) + 'px;';
+						}
 
-				if (section.spacing.pr) {
-					styleString += 'padding-right: ' + section.spacing.pr + 'px;';
-				}
+						if (section.spacing.prxs || section.spacing.prsm || section.spacing.prmd || section.spacing.pr) {
+							styleString += 'padding-right: ' + (section.spacing.prxs || section.spacing.prsm || section.spacing.prmd || section.spacing.pr) + 'px;';
+						}
 
-				if (section.spacing.mt) {
-					styleString += 'margin-top: ' + section.spacing.mt + 'px;';
-				}
+						if (section.spacing.mtxs || section.spacing.mtsm || section.spacing.mtmd || section.spacing.mt) {
+							styleString += 'margin-top: ' + (section.spacing.mtxs || section.spacing.mtsm || section.spacing.mtmd || section.spacing.mt) + 'px;';
+						}
 
-				if (section.spacing.mb) {
-					styleString += 'margin-bottom: ' + section.spacing.mb + 'px;';
-				}
+						if (section.spacing.mbxs || section.spacing.mbsm || section.spacing.mbmd || section.spacing.mb) {
+							styleString += 'margin-bottom: ' + (section.spacing.mbxs || section.spacing.mbsm || section.spacing.mbmd || section.spacing.mb) + 'px;';
+						}
 
-				if (section.spacing.ml) {
-					styleString += section.spacing.ml == 'auto' ? 'margin-left: ' + section.spacing.ml + ';float: none;' : 'margin-left: ' + section.spacing.ml + 'px;';
-				}
+						if (section.spacing.mlxs || section.spacing.mlsm || section.spacing.mlmd || section.spacing.ml) {
+							var _ml = section.spacing.mlxs || section.spacing.mlsm || section.spacing.mlmd || section.spacing.ml;
+							styleString += _ml == 'auto' ? 'margin-left: ' + _ml + ';float: none;' : 'margin-left: ' + _ml + 'px;';
+						}
 
-				if (section.spacing.mr) {
-					styleString += (section.spacing.mr == 'auto') ? 'margin-right: ' + section.spacing.mr + ';float: none;' : 'margin-right: ' + section.spacing.mr + 'px;';
-				}
+						if (section.spacing.mrxs || section.spacing.mrsm || section.spacing.mrmd || section.spacing.mr) {
+							var _mr = section.spacing.mrxs || section.spacing.mrsm || section.spacing.mrmd || section.spacing.mr;
+							styleString += (_mr == 'auto') ? 'margin-right: ' + _mr + ';float: none;' : 'margin-right: ' + _mr + 'px;';
+						}
 
-				if (section.spacing.mw) {
-					styleString += (section.spacing.mw == '100%') ?
-						'max-width: ' + section.spacing.mw + ';' :
-						'max-width: ' + section.spacing.mw + 'px;margin-left:auto!important;margin-right:auto!important;';
-				}
+						if (section.spacing.mwxs || section.spacing.mwsm || section.spacing.mwmd || section.spacing.mw) {
+							var _mw = section.spacing.mwxs || section.spacing.mwsm || section.spacing.mwmd || section.spacing.mw;
+							styleString += (_mw == '100%') ?
+								'max-width: ' + _mw + ';' :
+								'max-width: ' + _mw + 'px;margin-left:auto!important;margin-right:auto!important;';
+						}
 
-				if (section.spacing.lineHeight) {
-					styleString += 'line-height: ' + section.spacing.lineHeight;
-				}
+						if (section.spacing.lineHeight) {
+							styleString += 'line-height: ' + section.spacing.lineHeight;
+						}
 
-			}
+					}
+	                break;
+	            case 1:
+	                if (section && section.spacing) {
+						if (section.spacing.ptsm || section.spacing.ptmd || section.spacing.pt) {
+							styleString += 'padding-top: ' + (section.spacing.ptsm || section.spacing.ptmd || section.spacing.pt) + 'px;';
+						}
+
+						if (section.spacing.pbsm || section.spacing.pbmd || section.spacing.pb) {
+							styleString += 'padding-bottom: ' + (section.spacing.pbsm || section.spacing.pbmd || section.spacing.pb) + 'px;';
+						}
+
+						if (section.spacing.plsm || section.spacing.plmd || section.spacing.pl) {
+							styleString += 'padding-left: ' + (section.spacing.plsm || section.spacing.plmd || section.spacing.pl) + 'px;';
+						}
+
+						if (section.spacing.prsm || section.spacing.prmd || section.spacing.pr) {
+							styleString += 'padding-right: ' + (section.spacing.prsm || section.spacing.prmd || section.spacing.pr) + 'px;';
+						}
+
+						if (section.spacing.mtsm || section.spacing.mtmd || section.spacing.mt) {
+							styleString += 'margin-top: ' + (section.spacing.mtsm || section.spacing.mtmd || section.spacing.mt) + 'px;';
+						}
+
+						if (section.spacing.mbsm || section.spacing.mbmd || section.spacing.mb) {
+							styleString += 'margin-bottom: ' + (section.spacing.mbsm || section.spacing.mbmd || section.spacing.mb) + 'px;';
+						}
+
+						if (section.spacing.mlsm || section.spacing.mlmd || section.spacing.ml) {
+							var _ml = section.spacing.mlsm || section.spacing.mlmd || section.spacing.ml;
+							styleString += _ml == 'auto' ? 'margin-left: ' + _ml + ';float: none;' : 'margin-left: ' + _ml + 'px;';
+						}
+
+						if (section.spacing.mrsm || section.spacing.mrmd || section.spacing.mr) {
+							var _mr = section.spacing.mrsm || section.spacing.mrmd || section.spacing.mr;
+							styleString += (_mr == 'auto') ? 'margin-right: ' + _mr + ';float: none;' : 'margin-right: ' + _mr + 'px;';
+						}
+
+						if (section.spacing.mwsm || section.spacing.mwmd || section.spacing.mw) {
+							var _mw = section.spacing.mwsm || section.spacing.mwmd || section.spacing.mw;
+							styleString += (_mw == '100%') ?
+								'max-width: ' + _mw + ';' :
+								'max-width: ' + _mw + 'px;margin-left:auto!important;margin-right:auto!important;';
+						}
+
+						if (section.spacing.lineHeight) {
+							styleString += 'line-height: ' + section.spacing.lineHeight;
+						}
+
+					}
+	                break;
+	            case 2:
+	                if (section && section.spacing) {
+						if (section.spacing.ptmd || section.spacing.pt) {
+							styleString += 'padding-top: ' + (section.spacing.ptmd || section.spacing.pt) + 'px;';
+						}
+
+						if (section.spacing.pbmd || section.spacing.pb) {
+							styleString += 'padding-bottom: ' + (section.spacing.pbmd || section.spacing.pb) + 'px;';
+						}
+
+						if (section.spacing.plmd || section.spacing.pl) {
+							styleString += 'padding-left: ' + (section.spacing.plmd || section.spacing.pl) + 'px;';
+						}
+
+						if (section.spacing.prmd || section.spacing.pr) {
+							styleString += 'padding-right: ' + (section.spacing.prmd || section.spacing.pr) + 'px;';
+						}
+
+						if (section.spacing.mtmd || section.spacing.mt) {
+							styleString += 'margin-top: ' + (section.spacing.mtmd || section.spacing.mt) + 'px;';
+						}
+
+						if (section.spacing.mbmd || section.spacing.mb) {
+							styleString += 'margin-bottom: ' + (section.spacing.mbmd || section.spacing.mb) + 'px;';
+						}
+
+						if (section.spacing.mlxs || section.spacing.mlsm || section.spacing.mlmd || section.spacing.ml) {
+							var _ml = section.spacing.mlmd || section.spacing.ml;
+							styleString += _ml == 'auto' ? 'margin-left: ' + _ml + ';float: none;' : 'margin-left: ' + _ml + 'px;';
+						}
+
+						if (section.spacing.mrmd || section.spacing.mr) {
+							var _mr = section.spacing.mrmd || section.spacing.mr;
+							styleString += (_mr == 'auto') ? 'margin-right: ' + _mr + ';float: none;' : 'margin-right: ' + _mr + 'px;';
+						}
+
+						if (section.spacing.mwmd || section.spacing.mw) {
+							var _mw = section.spacing.mwmd || section.spacing.mw;
+							styleString += (_mw == '100%') ?
+								'max-width: ' + _mw + ';' :
+								'max-width: ' + _mw + 'px;margin-left:auto!important;margin-right:auto!important;';
+						}
+
+						if (section.spacing.lineHeight) {
+							styleString += 'line-height: ' + section.spacing.lineHeight;
+						}
+
+					}
+	                break;      
+	            default:
+	            	if (section && section.spacing) {
+						if (section.spacing.pt) {
+							styleString += 'padding-top: ' + section.spacing.pt + 'px;';
+						}
+
+						if (section.spacing.pb) {
+							styleString += 'padding-bottom: ' + section.spacing.pb + 'px;';
+						}
+
+						if (section.spacing.pl) {
+							styleString += 'padding-left: ' + section.spacing.pl + 'px;';
+						}
+
+						if (section.spacing.pr) {
+							styleString += 'padding-right: ' + section.spacing.pr + 'px;';
+						}
+
+						if (section.spacing.mt) {
+							styleString += 'margin-top: ' + section.spacing.mt + 'px;';
+						}
+
+						if (section.spacing.mb) {
+							styleString += 'margin-bottom: ' + section.spacing.mb + 'px;';
+						}
+
+						if (section.spacing.ml) {
+							styleString += section.spacing.ml == 'auto' ? 'margin-left: ' + section.spacing.ml + ';float: none;' : 'margin-left: ' + section.spacing.ml + 'px;';
+						}
+
+						if (section.spacing.mr) {
+							styleString += (section.spacing.mr == 'auto') ? 'margin-right: ' + section.spacing.mr + ';float: none;' : 'margin-right: ' + section.spacing.mr + 'px;';
+						}
+
+						if (section.spacing.mw) {
+							styleString += (section.spacing.mw == '100%') ?
+								'max-width: ' + section.spacing.mw + ';' :
+								'max-width: ' + section.spacing.mw + 'px;margin-left:auto!important;margin-right:auto!important;';
+						}
+
+						if (section.spacing.lineHeight) {
+							styleString += 'line-height: ' + section.spacing.lineHeight;
+						}
+
+					}
+        	}
 
 			if (section && section.txtcolor) {
 				styleString += 'color: ' + section.txtcolor + ';';

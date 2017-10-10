@@ -1,7 +1,7 @@
 'use strict';
 /*global app, moment, angular*/
 /*jslint unparam:true*/
-app.controller('MediaModalCtrl', ['$scope', 'mediaManagerConstant', '$injector', '$modalInstance', '$http', '$timeout', 'FileUploader', 'AssetsService', 'ToasterService', 'showInsert', 'insertMedia', 'isSingleSelect', 'SweetAlert', "$window", "AccountService", "editableOptions", function ($scope, mediaManagerConstant, $injector, $modalInstance, $http, $timeout, FileUploader, AssetsService, ToasterService, showInsert, insertMedia, isSingleSelect, SweetAlert, $window, AccountService, editableOptions) {
+app.controller('MediaModalCtrl', ['$scope', '$rootScope', 'mediaManagerConstant', '$injector', '$modalInstance', '$http', '$timeout', 'FileUploader', 'AssetsService', 'ToasterService', 'showInsert', 'insertMedia', 'isSingleSelect', 'SweetAlert', "$window", "AccountService", "editableOptions", function ($scope, $rootScope, mediaManagerConstant, $injector, $modalInstance, $http, $timeout, FileUploader, AssetsService, ToasterService, showInsert, insertMedia, isSingleSelect, SweetAlert, $window, AccountService, editableOptions) {
   var uploader, footerElement, headerElement, contentElement, mediaElement, mediaModalElement;
 
   $scope.showInsert = showInsert;
@@ -180,6 +180,43 @@ app.controller('MediaModalCtrl', ['$scope', 'mediaManagerConstant', '$injector',
     }
   });
 
+  uploader.filters.push({
+    name: 'customFonts',
+    fn: function (item, options) {
+      var _this = this;
+      $scope.customFonts = false;
+      if(item.name && _.contains([".ttf", ".woff", ".woff2", ".eot", ".otf"], item.name.substr(item.name.lastIndexOf('.')))){
+        SweetAlert.swal({
+          title: "",
+          text: "Indigenous is not responsible for acquiring rights to the fonts uploaded here. Please ensure you have the appropriate license(s) or rights.",
+          type: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#DD6B55",
+          confirmButtonText: "Yes, I agree!",
+          cancelButtonText: "No, do not agree!",
+          closeOnConfirm: true,
+          closeOnCancel: true,
+        }, function (isConfirm) {
+          if(isConfirm){
+            $timeout(function() {
+              $scope.customFonts = true;
+              return true;
+            }, 0);
+          }
+          else{
+            $scope.customFonts = false;
+            _this.clearQueue();
+          }
+        });
+
+        return true;
+      }
+      else{
+        return true;
+      }
+    }
+  });
+
   uploader.onSuccessItem = function (fileItem, response, status, headers) {
     $scope.uploadComplete = false;
     $scope.selectModel.select_all = false;
@@ -187,7 +224,7 @@ app.controller('MediaModalCtrl', ['$scope', 'mediaManagerConstant', '$injector',
     file_name = file_name.replace(/ /g, "_");
     response.files[0].filename = file_name;
     response.files[0].mimeType = fileItem.file.type;
-
+    //$rootScope.$broadcast('$refreshCustomFonts');
     if($scope.mediaModal.replace){
         if($scope.mediaModal.asset){
           $scope.cachebuster = new Date().getTime();
@@ -210,6 +247,11 @@ app.controller('MediaModalCtrl', ['$scope', 'mediaManagerConstant', '$injector',
         loadAssets(response.files[0]);
       }
 
+      if($scope.customFonts){
+        ToasterService.showWithTitle('success', 'Custom fonts has been uploaded', 'You will need to log out and log back in to see the added font(s)');
+        $scope.customFonts = false;
+      }
+
     }
 
 
@@ -219,21 +261,6 @@ app.controller('MediaModalCtrl', ['$scope', 'mediaManagerConstant', '$injector',
     $scope.uploadComplete = false;
     ToasterService.show('error', 'Connection timed out');
   };
-
-  // mediaModalElement.on('shown.bs.modal', function (e) {
-  //   console.log('$scope.$parent.showInsert ', $scope.$parent.showInsert);
-  //   if (e.relatedTarget) {
-  //     $scope.showInsert = $(e.relatedTarget).attr("media-modal-show-insert");
-  //     $scope.blogImage = $(e.relatedTarget).attr("blog-post-image");
-  //     angular.element($window).trigger("resize")
-  //     contentElement.css('visibility', 'visible')
-  //   } else if ($scope.$parent.showInsert) {
-  //     $scope.showInsert = true;
-  //     angular.element($window).trigger("resize")
-  //     contentElement.css('visibility', 'visible');
-  //   }
-
-  // });
 
   angular.element($window).resize(function () {
     resizeModal();
@@ -271,10 +298,13 @@ app.controller('MediaModalCtrl', ['$scope', 'mediaManagerConstant', '$injector',
     document: ['application/octet-stream', 'application/pdf', 'text/plain']
   };
 
+  //.ttf, .woff, .woff2, .eot
 
-
-  $scope.getFileType = function(mime){
-    if(mime.match('audio.*'))
+  $scope.getFileType = function(mime, value){
+    if(value && value.type === 'fonts'){
+      return "fonts"
+    }
+    else if(mime.match('audio.*'))
       return "audio"
     else if(mime.match('video.*'))
       return "video"
@@ -317,7 +347,7 @@ app.controller('MediaModalCtrl', ['$scope', 'mediaManagerConstant', '$injector',
           $scope.batch.push(value);
         }
       } else {
-        if ($scope.mimeList.indexOf(value.mimeType) > -1 || $scope.getFileType(value.mimeType) === $scope.showType ) {
+        if ($scope.mimeList.indexOf(value.mimeType) > -1 || $scope.getFileType(value.mimeType, value) === $scope.showType ) {
           $scope.assets.push(value);
           if (value.checked) {
             $scope.batch.push(value);
@@ -344,8 +374,6 @@ app.controller('MediaModalCtrl', ['$scope', 'mediaManagerConstant', '$injector',
     $scope.pagingParams.skip = 0;
     $scope.pageLoading = true;
   }
-
-
 
   $scope.m.singleSelect = function (asset) {
     $scope.singleSelected = asset.checked;
