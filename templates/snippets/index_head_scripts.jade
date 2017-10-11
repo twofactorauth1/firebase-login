@@ -177,7 +177,7 @@ if (typeof account.website.theme !== 'undefined' && typeof account.website.theme
             }
 
             .ssb-page-layout-row-2-col .ssb-section-layout, .ssb-page-blog-list .ssb-page-layout-row-2-col>div.col-xs-12{
-                background-color: #{currentPageHandle};
+                background-color: #{account.website.settings.defaultBlogTemplateBgColor};
             }
         }
 
@@ -185,23 +185,13 @@ if (typeof account.website.theme !== 'undefined' && typeof account.website.theme
 
 
 if pages
-    script(type="text/javascript"). 
-        window.indigenous = window.indigenous || {};
-        window.indigenous.precache = window.indigenous.precache || {};
+    script(type="text/javascript").
+        window.indigenous = window.indigenous || {}; 
+        window.indigenous.precache = window.indigenous.precache || {}; 
         window.indigenous.precache.siteData = window.indigenous.precache.siteData || {};
+        window.indigenous.precache.siteData.themeHandle = "#{account.website.theme.handle}";     
         window.indigenous.precache.siteData.pages = !{JSON.stringify(pages)};
-    style.   
-        .ssb-theme-#{account.website.theme.handle} { 
-            background-color: #{pages[currentPageHandle].styles.bodyBackgroundColor};
-        }
-        .ssb-theme-#{account.website.theme.handle} .ssb-section-layout {
-            background-color: #{pages[currentPageHandle].styles.bodyBackgroundColor}; 
-        }
-        .ssb-theme-#{account.website.theme.handle} .ssb-page-section-layout-header {
-            background-color: #{pages[currentPageHandle].styles.headerBackgroundColor}; 
-        }
 
-        
 if posts
     script(type="text/javascript").
         window.indigenous = window.indigenous || {};
