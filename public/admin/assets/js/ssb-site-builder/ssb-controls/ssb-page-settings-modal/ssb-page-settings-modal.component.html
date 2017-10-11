@@ -118,6 +118,25 @@
                         </div>
                     </div>
                 </tab>
+                <tab>
+                    <tab-heading>
+                        Page Style
+                    </tab-heading>
+
+                    <div>
+                        <div class="row padding-10" style="min-height:300px">
+                            <div class="form-group ssb-spectrum-color-picker-small">
+                                <spectrum-colorpicker class="ssb-spectrum-color-picker-text" format="'rgb'" options="vm.spectrum.options" ng-model="vm.page.styles.bodyBackgroundColor"></spectrum-colorpicker>
+                                <label for="colorpicker">Body Background Color <span tooltip-placement="top" tooltip="Override the default body/page background color for your Page."><i class="fa fa-info-circle" /></span></label>
+                            </div>
+    
+                            <div class="form-group ssb-spectrum-color-picker-small">
+                                <spectrum-colorpicker class="ssb-spectrum-color-picker-text" format="'rgb'" options="vm.spectrum.options" ng-model="vm.page.styles.headerBackgroundColor"></spectrum-colorpicker>
+                                <label for="colorpicker">Header Background Color <span tooltip-placement="top" tooltip="Override the default header background color for your Page."><i class="fa fa-info-circle" /></span></label>
+                            </div>
+                        </div>
+                    </div>
+                </tab>
                 <tab ng-if='vm.parentVm.state.website.resources.toggles.userScripts'>
                     <tab-heading>
                         Page Scripts
