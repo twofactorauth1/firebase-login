@@ -4391,7 +4391,7 @@ module.exports = {
                 cb(null, manifest);
             }
         ], function(err, result){
-            self.log.debug(accountId, userId, '<< buildPageManifest', result);
+            self.log.debug(accountId, userId, '<< buildPageManifest');
             fn(err, result);
         });
 
