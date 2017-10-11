@@ -1129,6 +1129,7 @@ module.exports = {
     publishPage: function(accountId, pageId, userId, fn) {
         var self = this;
         self.log.debug(accountId, userId,'>> publishPage');
+        var websiteId, handle;
         async.waterfall([
             function getExistingPage(cb) {
                 pageDao.getPageById(accountId, pageId, function(err, page){
@@ -1142,6 +1143,7 @@ module.exports = {
             },
             function updatePagePublishedTimestamp(page, cb) {
               page.set('published', {date:new Date(), by: userId});
+              handle = page.get('handle');
               pageDao.saveOrUpdate(page, function(err, updatedPage) {
                 if (err) {
                   self.log.error(accountId, userId,'Error page published timestamp update');
@@ -1261,19 +1263,19 @@ module.exports = {
                         self.log.error('could not find account with id: ' + accountId);
                         cb(err);
                     }
+                    websiteId = value.get('website').websiteId;
                     var _status = value.get("showhide").ssbBlog && value.get("showhide").blog;
                     if(_status){
                         var query = {
                             accountId: accountId,
                             post_status: $$.m.BlogPost.status.PUBLISHED,
                             websiteId: publishedPage.get("websiteId")
-                        }
+                        };
                         self.getLatestPageByHandle(accountId, 'blog-list', publishedPage.get('websiteId'), function(err, page) {
                             if(err) {
                                 self.log.error('error getting account by id: ' + err);
                                 cb(err);
-                            }
-                            else{
+                            } else{
                                 if(page && page.get("mainmenu") !== false){
                                     blogPostDao.exists(query, $$.m.BlogPost, function(err, value){
 
@@ -1295,25 +1297,23 @@ module.exports = {
                                                                 type:"page",
                                                                 data:'blog'
                                                             }
-                                                        };
+                                                       };
 
-                                                        list.links.push(link);
-                                                        self.updateWebsiteLinklists(accountId, publishedPage.get('websiteId'),"head-menu",list,function(err, linkLists){
+                                                       list.links.push(link);
+                                                       self.updateWebsiteLinklists(accountId, publishedPage.get('websiteId'),"head-menu",list,function(err, linkLists){
                                                             if(err) {
                                                                 self.log.error(accountId, userId, 'Error updating website linklists by handle: ' + err);
                                                                 cb(err);
                                                             } else {
                                                                 cb(null, publishedPage);
                                                             }
-                                                        });
-                                                    }
-                                                    else{
+                                                       });
+                                                    } else{
                                                         cb(null, publishedPage);
                                                     }
                                                 }
                                             });
-                                        }
-                                        else{
+                                        } else {
                                             self.getWebsiteLinklistsByHandle(accountId, publishedPage.get('websiteId'), "head-menu", function(err, list) {
                                                 if (err) {
                                                     self.log.error(accountId, userId, 'Error getting website linklists by handle: ' + err);
@@ -1336,17 +1336,15 @@ module.exports = {
                                             });
                                         }
                                     })
-                                }
-                                else{
+                                } else{
                                     cb(null, publishedPage);
                                 }
                             }
                         })
-                    }
-                    else{
+                    } else{
                         cb(null, publishedPage);
                     }
-                })
+                });
 
             }
         ], function done(err, publishedPage){
@@ -1356,6 +1354,11 @@ module.exports = {
             } else {
                 self.log.debug(accountId, userId,'<< publishPage');
                 fn(null, publishedPage);
+                self.buildPageManifest(accountId, userId, websiteId, handle, function(err, value){
+                    self.log.debug('built manifest:', value);
+                    publishedPage.set('manifest', value);
+                    pageDao.savePublishedPage(publishedPage, function(err, value){});
+                });
             }
         });
     },
@@ -4350,10 +4353,13 @@ module.exports = {
                     if(component) {
                         var obj = {};
                         obj.id = '/components/' + component.type + '_v' + component.version + '.html';
-                        if(component.text) {
-                            //var fontRegexp = /.*font-family: \'([a-zA-Z\s]+)\'.*/g;
+                        _.each(component, function(value){
+                            //if value is an object, reduce it.
+                            if(_.isObject(value)){
+                                value = JSON.stringify(value);
+                            }
                             var fontRegexp = /font-family: ([a-zA-Z\s,\'\-]+)[^;]*/g;
-                            var font = fontRegexp.exec(component.text);
+                            var font = fontRegexp.exec(value);
                             if(font && font.length > 1) {
                                 for(var i=1; i<font.length; i+=3) {
                                     //console.log('matched:', font[i]);
@@ -4365,7 +4371,7 @@ module.exports = {
                                 }
 
                             }
-                        }
+                        });
                         componentMap[component.type + ':' + component.version] = component.type + ':' + component.version;
                         callback();
                     } else {
@@ -4385,7 +4391,7 @@ module.exports = {
                 cb(null, manifest);
             }
         ], function(err, result){
-            self.log.debug(accountId, userId, '<< buildPageManifest', result);
+            self.log.debug(accountId, userId, '<< buildPageManifest');
             fn(err, result);
         });
 
