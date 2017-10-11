@@ -12,6 +12,7 @@ var async = require('async');
 var ssbManager = require('../ssb/ssb_manager');
 var ngParser = require('../utils/ngparser');
 var jsonldbuilder = require('../utils/jsonldbuilder');
+var assetManager = require('../assets/asset_manager');
 var _req;
 
 var view = function (req, resp, options) {
@@ -47,6 +48,12 @@ _.extend(view.prototype, BaseView.prototype, {
             },
             function getPublishedPage(webpageData, allPages, cb) {
                 ssbManager.getPublishedPage(accountId, webpageData.website._id, handle, function(err, page){
+                    cb(err, webpageData, allPages, page);
+                });
+            },
+            function getCustomFonts(webpageData, allPages, page, cb){
+                assetManager.findByFontType(accountId, null, null, function(err, fonts){                
+                    data.customFonts = fonts;
                     cb(err, webpageData, allPages, page);
                 });
             },
@@ -592,6 +599,12 @@ _.extend(view.prototype, BaseView.prototype, {
             },
             function getPublishedPage(webpageData, allPages, cb) {
                 ssbManager.getPublishedPage(accountId, webpageData.website._id, handle, function(err, page){
+                    cb(err, webpageData, allPages, page);
+                });
+            },
+            function getCustomFonts(webpageData, allPages, page, cb){
+                assetManager.findByFontType(accountId, null, null, function(err, fonts){                
+                    data.customFonts = fonts;
                     cb(err, webpageData, allPages, page);
                 });
             },
