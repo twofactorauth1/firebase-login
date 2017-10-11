@@ -12,6 +12,7 @@ var async = require('async');
 var ssbManager = require('../ssb/ssb_manager');
 var ngParser = require('../utils/ngparser');
 var jsonldbuilder = require('../utils/jsonldbuilder');
+var assetManager = require('../assets/asset_manager');
 var _req;
 
 var view = function (req, resp, options) {
@@ -24,7 +25,7 @@ _.extend(view.prototype, BaseView.prototype, {
     log: $$.g.getLogger('blog.server.view'),
 
 
-    renderBlogPage: function(accountId) {
+    renderBlogPage: function(accountId, twoColBlog) {
         var self = this;
         self.log.debug(accountId, null, '>> renderBlogPage');
         var data = {ssbBlog:true};
@@ -50,8 +51,17 @@ _.extend(view.prototype, BaseView.prototype, {
                     cb(err, webpageData, allPages, page);
                 });
             },
+            function getCustomFonts(webpageData, allPages, page, cb){
+                assetManager.findByFontType(accountId, null, null, function(err, fonts){                
+                    data.customFonts = fonts;
+                    cb(err, webpageData, allPages, page);
+                });
+            },
             function readComponents(webpageData, allPages, page, cb) {
                 data.templates = '';
+                if(twoColBlog && twoColBlog === true) {
+                    //TODO: get the section from the blog-post page in allPages and replace in page
+                }
                 if(page) {
                     data.templateIncludes = [];
                     data.templateIncludes[0] = {id:'/components/component-wrap.html'};
@@ -589,6 +599,12 @@ _.extend(view.prototype, BaseView.prototype, {
             },
             function getPublishedPage(webpageData, allPages, cb) {
                 ssbManager.getPublishedPage(accountId, webpageData.website._id, handle, function(err, page){
+                    cb(err, webpageData, allPages, page);
+                });
+            },
+            function getCustomFonts(webpageData, allPages, page, cb){
+                assetManager.findByFontType(accountId, null, null, function(err, fonts){                
+                    data.customFonts = fonts;
                     cb(err, webpageData, allPages, page);
                 });
             },

@@ -519,7 +519,11 @@ _.extend(router.prototype, BaseRouter.prototype, {
                 var showHide = account.get('showhide');
                 if(showHide && showHide.ssbBlog && showHide.ssbBlog===true) {
                     //TODO: This is where the magic happens
-                    new BlogView(req, resp).renderBlogPage(accountId);
+                    var twoColBlog = false;
+                    if(showHide.blogPostSecondCol === true) {
+                        twoColBlog = true;
+                    }
+                    new BlogView(req, resp).renderBlogPage(accountId, twoColBlog);
                     self.log.debug(accountId, null, '<< renderBlogPage');
 
 
