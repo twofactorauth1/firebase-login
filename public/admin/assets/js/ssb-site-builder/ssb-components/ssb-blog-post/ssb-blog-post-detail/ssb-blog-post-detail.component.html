@@ -1,6 +1,13 @@
 <article itemscope="" itemtype="http://schema.org/BlogPosting">
-
+    
     <div ng-if="vm.post">
+        <div class="ssb-blog-currently-viewing">
+            <ul class="bread-crumb">
+                <li><a href="/" target="_self">Home</a></li>
+                <li><a href="/blog" target="_self">Blog</a></li>
+                <li >{{vm.post.post_title}}</li>
+            </ul>
+        </div>
         <img ng-if="vm.post.featured_image" itemprop="thumbnailUrl" class="center margin-top-30 img-responsive" ng-src="{{vm.getFeaturedImageUrl(vm.post.featured_image)}}" alt="{{(vm.post.post_excerpt) ? vm.post.post_excerpt : ''}}"/>
 
         <h1 itemprop="name headline">

@@ -332,56 +332,224 @@
 			}
 
 		}
-
+		function screenLayout(){
+			var _layout = 3;
+			var windowWidth = angular.element($window).width();
+			if(windowWidth < 768){
+				_layout = 0
+			}      
+			else if(windowWidth >= 768 && windowWidth < 992){
+				_layout = 1;
+			}
+			else if(windowWidth >= 992 && windowWidth < 1200){
+				_layout = 2;
+			}
+			else if(windowWidth >= 1200){
+				_layout = 3;
+			}
+			return _layout;
+    	}
 		function elementStyle(isEdit) {
 			if (vm.elementData && vm.elementData.type) {
 				var styleString = ' ',
 					component = vm.elementData;
 
-				if (component.spacing) {
+				var _layout = screenLayout();
 
-					if (component.spacing.pt) {
-						styleString += 'padding-top: ' + component.spacing.pt + 'px;';
-					}
+				switch (_layout) {
+		            case 0:
+		                if (component && component.spacing) {
+							if (component.spacing.ptxs || component.spacing.ptsm || component.spacing.ptmd || component.spacing.pt) {
+								styleString += 'padding-top: ' + (component.spacing.ptxs || component.spacing.ptsm || component.spacing.ptmd || component.spacing.pt) + 'px;';
+							}
 
-					if (component.spacing.pb) {
-						styleString += 'padding-bottom: ' + component.spacing.pb + 'px;';
-					}
+							if (component.spacing.pbxs || component.spacing.pbsm || component.spacing.pbmd || component.spacing.pb) {
+								styleString += 'padding-bottom: ' + (component.spacing.pbxs || component.spacing.pbsm || component.spacing.pbmd || component.spacing.pb) + 'px;';
+							}
 
-					if (component.spacing.pl) {
-						styleString += 'padding-left: ' + component.spacing.pl + 'px;';
-					}
+							if (component.spacing.plxs || component.spacing.plsm || component.spacing.plmd || component.spacing.pl) {
+								styleString += 'padding-left: ' + (component.spacing.plxs || component.spacing.plsm || component.spacing.plmd || component.spacing.pl) + 'px;';
+							}
 
-					if (component.spacing.pr) {
-						styleString += 'padding-right: ' + component.spacing.pr + 'px;';
-					}
+							if (component.spacing.prxs || component.spacing.prsm || component.spacing.prmd || component.spacing.pr) {
+								styleString += 'padding-right: ' + (component.spacing.prxs || component.spacing.prsm || component.spacing.prmd || component.spacing.pr) + 'px;';
+							}
 
-					if (component.spacing.mt) {
-						styleString += 'margin-top: ' + component.spacing.mt + 'px;';
-					}
+							if (component.spacing.mtxs || component.spacing.mtsm || component.spacing.mtmd || component.spacing.mt) {
+								styleString += 'margin-top: ' + (component.spacing.mtxs || component.spacing.mtsm || component.spacing.mtmd || component.spacing.mt) + 'px;';
+							}
 
-					if (component.spacing.mb) {
-						styleString += 'margin-bottom: ' + component.spacing.mb + 'px;';
-					}
+							if (component.spacing.mbxs || component.spacing.mbsm || component.spacing.mbmd || component.spacing.mb) {
+								styleString += 'margin-bottom: ' + (component.spacing.mbxs || component.spacing.mbsm || component.spacing.mbmd || component.spacing.mb) + 'px;';
+							}
 
-					if (component.spacing.ml) {
-						styleString += component.spacing.ml === 'auto' ? 'margin-left: ' + component.spacing.ml + ';float: none;' : 'margin-left: ' + component.spacing.ml + 'px;';
-					}
+							if (component.spacing.mlxs || component.spacing.mlsm || component.spacing.mlmd || component.spacing.ml) {
+								var _ml = component.spacing.mlxs || component.spacing.mlsm || component.spacing.mlmd || component.spacing.ml;
+								styleString += _ml == 'auto' ? 'margin-left: ' + _ml + ';float: none;' : 'margin-left: ' + _ml + 'px;';
+							}
 
-					if (component.spacing.mr) {
-						styleString += (component.spacing.mr === 'auto') ? 'margin-right: ' + component.spacing.mr + ';float: none;' : 'margin-right: ' + component.spacing.mr + 'px;';
-					}
+							if (component.spacing.mrxs || component.spacing.mrsm || component.spacing.mrmd || component.spacing.mr) {
+								var _mr = component.spacing.mrxs || component.spacing.mrsm || component.spacing.mrmd || component.spacing.mr;
+								styleString += (_mr == 'auto') ? 'margin-right: ' + _mr + ';float: none;' : 'margin-right: ' + _mr + 'px;';
+							}
 
-					if (component.spacing.mw) {
-						styleString += (component.spacing.mw === '100%') ?
-							'max-width: ' + component.spacing.mw + ';' :
-							'max-width: ' + component.spacing.mw + 'px;margin:0 auto!important;';
-					}
+							if (component.spacing.mwxs || component.spacing.mwsm || component.spacing.mwmd || component.spacing.mw) {
+								var _mw = component.spacing.mwxs || component.spacing.mwsm || component.spacing.mwmd || component.spacing.mw;
+								styleString += (_mw == '100%') ?
+									'max-width: ' + _mw + ';' :
+									'max-width: ' + _mw + 'px;margin-left:auto!important;margin-right:auto!important;';
+							}
 
-					if (component.spacing.lineHeight) {
-						styleString += 'line-height: ' + component.spacing.lineHeight;
-					}
-				}
+							if (component.spacing.lineHeight) {
+								styleString += 'line-height: ' + component.spacing.lineHeight;
+							}
+
+						}
+		                break;
+		            case 1:
+		                if (component && component.spacing) {
+							if (component.spacing.ptsm || component.spacing.ptmd || component.spacing.pt) {
+								styleString += 'padding-top: ' + (component.spacing.ptsm || component.spacing.ptmd || component.spacing.pt) + 'px;';
+							}
+
+							if (component.spacing.pbsm || component.spacing.pbmd || component.spacing.pb) {
+								styleString += 'padding-bottom: ' + (component.spacing.pbsm || component.spacing.pbmd || component.spacing.pb) + 'px;';
+							}
+
+							if (component.spacing.plsm || component.spacing.plmd || component.spacing.pl) {
+								styleString += 'padding-left: ' + (component.spacing.plsm || component.spacing.plmd || component.spacing.pl) + 'px;';
+							}
+
+							if (component.spacing.prsm || component.spacing.prmd || component.spacing.pr) {
+								styleString += 'padding-right: ' + (component.spacing.prsm || component.spacing.prmd || component.spacing.pr) + 'px;';
+							}
+
+							if (component.spacing.mtsm || component.spacing.mtmd || component.spacing.mt) {
+								styleString += 'margin-top: ' + (component.spacing.mtsm || component.spacing.mtmd || component.spacing.mt) + 'px;';
+							}
+
+							if (component.spacing.mbsm || component.spacing.mbmd || component.spacing.mb) {
+								styleString += 'margin-bottom: ' + (component.spacing.mbsm || component.spacing.mbmd || component.spacing.mb) + 'px;';
+							}
+
+							if (component.spacing.mlsm || component.spacing.mlmd || component.spacing.ml) {
+								var _ml = component.spacing.mlsm || component.spacing.mlmd || component.spacing.ml;
+								styleString += _ml == 'auto' ? 'margin-left: ' + _ml + ';float: none;' : 'margin-left: ' + _ml + 'px;';
+							}
+
+							if (component.spacing.mrsm || component.spacing.mrmd || component.spacing.mr) {
+								var _mr = component.spacing.mrsm || component.spacing.mrmd || component.spacing.mr;
+								styleString += (_mr == 'auto') ? 'margin-right: ' + _mr + ';float: none;' : 'margin-right: ' + _mr + 'px;';
+							}
+
+							if (component.spacing.mwsm || component.spacing.mwmd || component.spacing.mw) {
+								var _mw = component.spacing.mwsm || component.spacing.mwmd || component.spacing.mw;
+								styleString += (_mw == '100%') ?
+									'max-width: ' + _mw + ';' :
+									'max-width: ' + _mw + 'px;margin-left:auto!important;margin-right:auto!important;';
+							}
+
+							if (component.spacing.lineHeight) {
+								styleString += 'line-height: ' + component.spacing.lineHeight;
+							}
+
+						}
+		                break;
+		            case 2:
+		                if (component && component.spacing) {
+							if (component.spacing.ptmd || component.spacing.pt) {
+								styleString += 'padding-top: ' + (component.spacing.ptmd || component.spacing.pt) + 'px;';
+							}
+
+							if (component.spacing.pbmd || component.spacing.pb) {
+								styleString += 'padding-bottom: ' + (component.spacing.pbmd || component.spacing.pb) + 'px;';
+							}
+
+							if (component.spacing.plmd || component.spacing.pl) {
+								styleString += 'padding-left: ' + (component.spacing.plmd || component.spacing.pl) + 'px;';
+							}
+
+							if (component.spacing.prmd || component.spacing.pr) {
+								styleString += 'padding-right: ' + (component.spacing.prmd || component.spacing.pr) + 'px;';
+							}
+
+							if (component.spacing.mtmd || component.spacing.mt) {
+								styleString += 'margin-top: ' + (component.spacing.mtmd || component.spacing.mt) + 'px;';
+							}
+
+							if (component.spacing.mbmd || component.spacing.mb) {
+								styleString += 'margin-bottom: ' + (component.spacing.mbmd || component.spacing.mb) + 'px;';
+							}
+
+							if (component.spacing.mlxs || component.spacing.mlsm || component.spacing.mlmd || component.spacing.ml) {
+								var _ml = component.spacing.mlmd || component.spacing.ml;
+								styleString += _ml == 'auto' ? 'margin-left: ' + _ml + ';float: none;' : 'margin-left: ' + _ml + 'px;';
+							}
+
+							if (component.spacing.mrmd || component.spacing.mr) {
+								var _mr = component.spacing.mrmd || component.spacing.mr;
+								styleString += (_mr == 'auto') ? 'margin-right: ' + _mr + ';float: none;' : 'margin-right: ' + _mr + 'px;';
+							}
+
+							if (component.spacing.mwmd || component.spacing.mw) {
+								var _mw = component.spacing.mwmd || component.spacing.mw;
+								styleString += (_mw == '100%') ?
+									'max-width: ' + _mw + ';' :
+									'max-width: ' + _mw + 'px;margin-left:auto!important;margin-right:auto!important;';
+							}
+
+							if (component.spacing.lineHeight) {
+								styleString += 'line-height: ' + component.spacing.lineHeight;
+							}
+
+						}
+		                break;      
+		            default:
+		            	if (component && component.spacing) {
+							if (component.spacing.pt) {
+								styleString += 'padding-top: ' + component.spacing.pt + 'px;';
+							}
+
+							if (component.spacing.pb) {
+								styleString += 'padding-bottom: ' + component.spacing.pb + 'px;';
+							}
+
+							if (component.spacing.pl) {
+								styleString += 'padding-left: ' + component.spacing.pl + 'px;';
+							}
+
+							if (component.spacing.pr) {
+								styleString += 'padding-right: ' + component.spacing.pr + 'px;';
+							}
+
+							if (component.spacing.mt) {
+								styleString += 'margin-top: ' + component.spacing.mt + 'px;';
+							}
+
+							if (component.spacing.mb) {
+								styleString += 'margin-bottom: ' + component.spacing.mb + 'px;';
+							}
+
+							if (component.spacing.ml) {
+								styleString += component.spacing.ml == 'auto' ? 'margin-left: ' + component.spacing.ml + ';float: none;' : 'margin-left: ' + component.spacing.ml + 'px;';
+							}
+
+							if (component.spacing.mr) {
+								styleString += (component.spacing.mr == 'auto') ? 'margin-right: ' + component.spacing.mr + ';float: none;' : 'margin-right: ' + component.spacing.mr + 'px;';
+							}
+
+							if (component.spacing.mw) {
+								styleString += (component.spacing.mw == '100%') ?
+									'max-width: ' + component.spacing.mw + ';' :
+									'max-width: ' + component.spacing.mw + 'px;margin-left:auto!important;margin-right:auto!important;';
+							}
+
+							if (component.spacing.lineHeight) {
+								styleString += 'line-height: ' + component.spacing.lineHeight;
+							}
+
+						}
+	        	}
 
 				if (component.txtcolor) {
 					styleString += 'color: ' + component.txtcolor + ';';

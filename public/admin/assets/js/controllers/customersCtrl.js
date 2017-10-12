@@ -37,8 +37,7 @@
                 $scope.customers = customers.results;
                 $scope.showCustomers = true;
                 console.log('customers:', customers);
-            });
-
+            }); 
         };
 
         $scope.getCustomers();
@@ -169,14 +168,15 @@
             var subdomain = $scope.subdomain;
             var username = $scope.username;
             var password = $scope.password;
+            $scope.showCustomers = false;
             CustomerService.addNewCustomer(orgId, subdomain, username, password, function(err, value){
+                $scope.showCustomers = true;
                 if(err) {
                     toaster.pop('warning', err.message);
                 } else {
                     $scope.closeModal();
                     CustomerService.refreshCustomers(function(customers){
-                        $scope.customers = customers.results;
-                        $scope.showCustomers = true;
+                        $scope.customers = customers.results; 
                     });
                 }
             });

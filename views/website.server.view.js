@@ -404,7 +404,7 @@ _.extend(view.prototype, BaseView.prototype, {
                             }
 
                         }, function done(err){
-                            self.log.debug('The following fonts are used:', fontMap);
+                            //self.log.debug('The following fonts are used:', fontMap);
                             data.fontMap = fontMap;
                             cb(null, webpageData, pages);
                         });
