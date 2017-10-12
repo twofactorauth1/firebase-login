@@ -1,7 +1,7 @@
 'use strict';
 /*global app, window*/
 (function (angular) {
-    app.controller('CustomersCtrl', ["$scope", "$state", "toaster", "$modal", "$window", "CustomerService", "OrganozationService",'$timeout', 'SweetAlert', "$location", "$q", "DashboardService", function ($scope, $state, toaster, $modal, $window, CustomerService, OrganozationService,  $timeout, SweetAlert, $location, $q, DashboardService) {
+    app.controller('CustomersCtrl', ["$scope", "$state", "toaster", "$modal", "$window", "CustomerService", "OrganizationService",'$timeout', 'SweetAlert', "$location", "$q", "DashboardService", function ($scope, $state, toaster, $modal, $window, CustomerService, OrganizationService,  $timeout, SweetAlert, $location, $q, DashboardService) {
 
         $scope.tableView = 'list';
         $scope.itemPerPage = 100;
@@ -44,7 +44,7 @@
 
 
         $scope.getOrganizations = function (orgId) {
-            OrganozationService.loadOrganizations(orgId,function(organizations){
+            OrganizationService.loadOrganizations(orgId,function(organizations){
                 $scope.organizations = organizations;
                 $scope.orgId = organizations.filter(function(org) {
                   return org._id === orgId;

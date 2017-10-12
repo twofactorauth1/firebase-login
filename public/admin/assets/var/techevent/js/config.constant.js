@@ -722,6 +722,7 @@ app.constant('JS_REQUIRES', {
     //*** Filters
     'htmlToPlaintext': 'assets/js/filters/htmlToPlaintext.js',
     'secTotime': 'assets/js/filters/secTotime.js',
+    'decodeURIComponent': 'assets/js/filters/decodeURIComponent.js',
     'formatText': 'assets/js/filters/formatText.js',
     'offset': 'assets/js/filters/offset.js',
     'timeAgoFilter': 'assets/js/filters/timeAgoFilter.js',
