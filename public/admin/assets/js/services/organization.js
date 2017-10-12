@@ -13,8 +13,8 @@
             return $cacheFactory('OrganizationService');
         };
     
-        this.loadOrganizations = function(orgId,fn){
-            var apiUrl =orgId==0 ?[baseUrl, 'all'].join('/'):[baseUrl, orgId].join('/');
+        this.loadOrganizations = function(fn){
+            var apiUrl =[baseUrl, 'all'].join('/');
             var data = this.getCache().get('organizations');
             var cache = this.getCache();
             if(data) {

@@ -1,7 +1,7 @@
 'use strict';
 /*global app, window*/
 (function (angular) {
-    app.controller('CustomersCtrl', ["$scope", "$state", "toaster", "$modal", "$window", "CustomerService", "OrganizationService",'$timeout', 'SweetAlert', "$location", "$q", "DashboardService", function ($scope, $state, toaster, $modal, $window, CustomerService, OrganizationService,  $timeout, SweetAlert, $location, $q, DashboardService) {
+    app.controller('CustomersCtrl', ["$scope", "$state", "toaster", "$modal", "$window", "CustomerService", "OrganizationService",'$timeout', 'SweetAlert', "$location", "$q", function ($scope, $state, toaster, $modal, $window, CustomerService, OrganizationService,  $timeout, SweetAlert, $location, $q) {
 
         $scope.tableView = 'list';
         $scope.itemPerPage = 100;
@@ -11,9 +11,6 @@
         $scope.tagsBulkAction = {};
         $scope.organizations=[];
         
-        var AccData = DashboardService.getAccInstance();
-        console.log('AccData:', AccData);
-        $scope.orgId=AccData && AccData.orgId ?AccData.orgId:0;
 
         if (!$state.current.sort) {
             $scope.order = "reverse";
@@ -43,17 +40,21 @@
         $scope.getCustomers();
 
 
-        $scope.getOrganizations = function (orgId) {
-            OrganizationService.loadOrganizations(orgId,function(organizations){
+        $scope.getOrganizations = function () {
+            OrganizationService.loadOrganizations(function(organizations){
                 $scope.organizations = organizations;
-                $scope.orgId = organizations.filter(function(org) {
-                  return org._id === orgId;
-                })[0];
+                if(organizations.length==1){
+                    $scope.orgId =organizations[0];
+                }else{
+                    $scope.orgId = organizations.filter(function(org) {
+                      return org._id === 0;
+                    })[0];
+                }
                 console.log('organizations:', organizations,$scope.orgId);
             });
         };
 
-        $scope.getOrganizations($scope.orgId);
+        $scope.getOrganizations();
 
 
         $scope.viewSingle = function (customer) {
