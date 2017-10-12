@@ -9,7 +9,7 @@
                                 item="customer"></widget-header-label>
                         </span>
                         <span
-                          ng-if="customers.length==0" >No customers</span>.<span ng-if="showFilteredRecords()"> ({{filteredCollection.length || 0 | number : 0}} in filtered view)</span>
+                          ng-if="!customers" >No customers</span>.<span ng-if="showFilteredRecords()"> ({{filteredCollection.length || 0 | number : 0}} in filtered view)</span>
                     </span>
                 <span ng-if="!showCustomers" class="mainDescription">
                 Loading customers...
