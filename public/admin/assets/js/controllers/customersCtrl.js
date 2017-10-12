@@ -1,7 +1,7 @@
 'use strict';
 /*global app, window*/
 (function (angular) {
-    app.controller('CustomersCtrl', ["$scope", "$state", "toaster", "$modal", "$window", "CustomerService",'$timeout', 'SweetAlert', "$location", "$q", function ($scope, $state, toaster, $modal, $window, CustomerService,  $timeout, SweetAlert, $location, $q) {
+    app.controller('CustomersCtrl', ["$scope", "$state", "toaster", "$modal", "$window", "CustomerService", "OrganozationService",'$timeout', 'SweetAlert', "$location", "$q", "DashboardService", function ($scope, $state, toaster, $modal, $window, CustomerService, OrganozationService,  $timeout, SweetAlert, $location, $q, DashboardService) {
 
         $scope.tableView = 'list';
         $scope.itemPerPage = 100;
@@ -9,6 +9,11 @@
         $scope.selectAllChecked = false;
         $scope.bulkActionChoice = {};
         $scope.tagsBulkAction = {};
+        $scope.organizations=[];
+        
+        var AccData = DashboardService.getAccInstance();
+        console.log('AccData:', AccData);
+        $scope.orgId=AccData && AccData.orgId ?AccData.orgId:0;
 
         if (!$state.current.sort) {
             $scope.order = "reverse";
@@ -27,8 +32,6 @@
          */
 
 
-
-
         $scope.getCustomers = function () {
             CustomerService.loadAllCustomers(function(customers){
                 $scope.customers = customers.results;
@@ -38,6 +41,19 @@
         };
 
         $scope.getCustomers();
+
+
+        $scope.getOrganizations = function (orgId) {
+            OrganozationService.loadOrganizations(orgId,function(organizations){
+                $scope.organizations = organizations;
+                $scope.orgId = organizations.filter(function(org) {
+                  return org._id === orgId;
+                })[0];
+                console.log('organizations:', organizations,$scope.orgId);
+            });
+        };
+
+        $scope.getOrganizations($scope.orgId);
 
 
         $scope.viewSingle = function (customer) {
@@ -127,6 +143,7 @@
         };
 
         $scope.openSimpleModal = function (modal) {
+            //$scope.orgId = LocalAcObject.getter().orgId;
             var _modal = {
                 templateUrl: modal,
                 scope: $scope,
@@ -137,6 +154,7 @@
             $scope.modalInstance.result.then(null, function () {
                 angular.element('.sp-container').addClass('sp-hidden');
             });
+            //$scope.orgId = LocalAcObject.getter().orgId;
         };
 
         $scope.closeModal = function () {
@@ -146,7 +164,7 @@
         };
 
         $scope.addCustomer = function() {
-            var orgId = $scope.orgId;
+            var orgId = $scope.orgId._id;
             var subdomain = $scope.subdomain;
             var username = $scope.username;
             var password = $scope.password;
@@ -163,10 +181,5 @@
                 }
             });
         };
-
-
-    
-
-
     }]);
 }(angular));
