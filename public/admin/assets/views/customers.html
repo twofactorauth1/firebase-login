@@ -3,7 +3,11 @@
         <div class="row">
             <div class="col-sm-8">
                 <h1 class="mainTitle" translate="sidebar.nav.customers.MAIN"></h1>
-                <span ng-if="showCustomers" class="mainDescription"><widget-header-label count="{{customers.length}}" item="customer"></widget-header-label>. <span ng-if="showFilteredRecords()"> ({{filteredCollection.length || 0 | number : 0}} in filtered view)</span></span>
+                <span ng-if="showCustomers" class="mainDescription"> 
+                    <widget-header-label ng-if="customers.length >0 " count="{{customers.length}}" 
+                    item="customer"></widget-header-label><span ng-if="customers.length < 1" 
+                        >No customers</span>.<span ng-if="showFilteredRecords()"> ({{filteredCollection.length || 0 | number : 0}} in filtered view)</span>
+                    </span>
                 <span ng-if="!showCustomers" class="mainDescription">
                 Loading customers...
                 </span>
