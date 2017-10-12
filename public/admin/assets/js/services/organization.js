@@ -2,15 +2,15 @@
 /*global app, $$*/
 /*jslint unparam: true*/
 (function (angular) {
-    app.service('OrganozationService', ['$http', '$rootScope', '$cacheFactory', '$q', function ($http, $rootScope, $cacheFactory, $q) {
+    app.service('OrganizationService', ['$http', '$rootScope', '$cacheFactory', '$q', function ($http, $rootScope, $cacheFactory, $q) {
         var baseUrl = '/api/2.0/organization';
 
         this.getCache = function () {
-            var cache = $cacheFactory.get('OrganozationService');
+            var cache = $cacheFactory.get('OrganizationService');
             if (cache) {
                 return cache;
             }
-            return $cacheFactory('OrganozationService');
+            return $cacheFactory('OrganizationService');
         };
     
         this.loadOrganizations = function(orgId,fn){

@@ -87,7 +87,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         templateUrl: "/admin/assets/views/site-analytics.html",
         title: 'Site Analytics',
         icon: 'ti-layout-media-left-alt',
-        resolve: loadSequence('siteAnalyticsCtrl', 'highcharts', 'highmaps', 'highmaps-lib', 'secTotime', 'dateRangePicker', 'chartAnalyticsService', 'ipCookie', 'analyticsWidgetStateService')
+        resolve: loadSequence('siteAnalyticsCtrl', 'highcharts', 'highmaps', 'highmaps-lib', 'secTotime', 'dateRangePicker', 'chartAnalyticsService', 'ipCookie', 'analyticsWidgetStateService','decodeURIComponent')
     }).state('app.website.pages', {
         url: '/pages',
         templateUrl: "/admin/assets/views/pages.html",
