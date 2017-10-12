@@ -9,7 +9,7 @@
 	DashboardService.$inject = ['$http', '$q', '$rootScope', '$timeout', 'dashboardBackgrounds'];
 	/* @ngInject */
 	function DashboardService($http, $q, $rootScope, $timeout, dashboardBackgrounds) {
-
+		var acclocalInstance ;
 		var dashboardService = {
 				state: {
 					workstreams: [],
@@ -70,6 +70,12 @@
 		dashboardService.getLiveVisitorDetails = getLiveVisitorDetails;
 		dashboardService.getPlatformLiveTraffic = getPlatformLiveTraffic;
 		dashboardService.getRevenueFromStripe = getRevenueFromStripe;
+		dashboardService.getAccInstance = returnAccLocalInstance ;
+
+
+		function returnAccLocalInstance(){
+			return acclocalInstance;
+		};
 
 		function dashRequest(fn) {
 			dashboardService.loading.value = dashboardService.loading.value + 1;
@@ -225,6 +231,7 @@
 
 			function success(data) {
 				console.info('DashboardService getAccount:', JSON.stringify(data));
+				acclocalInstance = data ;
 				dashboardService.state.account = data;
 				if (data.ui_preferences && data.ui_preferences.polling === false) {
 					dashboardService.doPolling = false;

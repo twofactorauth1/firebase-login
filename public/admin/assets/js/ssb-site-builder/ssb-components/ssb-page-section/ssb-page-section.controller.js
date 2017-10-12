@@ -637,13 +637,27 @@
 				classString += ' ssb-component-stretch-image';
 			}
 			if(component.navigation){
-				if(component.navigation.wideMobileMode){
-					component.navigation.alwaysmobileMode=false
-					classString += ' ssb-component-wmm';
-				}
-				if(component.navigation.alwaysmobileMode){
-					component.navigation.wideMobileMode=false;
-					classString += ' ssb-component-amm';
+				if(component.navigation.wideMobileMode && component.navigation.alwaysmobileMode ){
+					if(component.navigation.lmma=='wmm'){
+						component.navigation.lmma="amm";
+						component.navigation.wideMobileMode=false;
+						classString += ' ssb-component-amm';
+					}else{
+						component.navigation.lmma="wmm"
+						component.navigation.alwaysmobileMode=false
+						classString += ' ssb-component-wmm';
+					}
+				}else{
+					if(component.navigation.wideMobileMode){
+						component.navigation.lmma="wmm"
+						component.navigation.alwaysmobileMode=false
+						classString += ' ssb-component-wmm';
+					}
+					if(component.navigation.alwaysmobileMode){
+						component.navigation.lmma="amm";
+						component.navigation.wideMobileMode=false;
+						classString += ' ssb-component-amm';
+					}
 				}
 			} 
 			return classString;

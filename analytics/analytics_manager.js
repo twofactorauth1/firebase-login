@@ -27,15 +27,7 @@ require('./model/session_event');
 require('./model/page_event');
 require('./model/ping_event');
 
-const not404s=[ "/404",
-             "/apple-touch-icon.png",
-             "/apple-touch-icon-120x120.png",
-             "/favicon.ico",
-             "/apple-touch-icon-120x120-precomposed.png",
-             "/apple-touch-icon-precomposed.png",
-             "/favicon-32x32.png",
-             "/favicon-16x16.png",
-             "/safari-pinned-tab.svg" ];
+const not404s= [ "/404", "/apple-touch-icon.png", "/apple-touch-icon-120x120.png", "/favicon.ico", "/apple-touch-icon-120x120-precomposed.png", "/apple-touch-icon-precomposed.png", "/favicon-32x32.png", "/favicon-16x16.png", "/safari-pinned-tab.svg" ];
 module.exports = {
 
 
@@ -2815,7 +2807,7 @@ module.exports = {
                     $lte:end
                 },
                 'url.path':'/404',
-                "requestedUrl.path": {  $nin:  not404s }
+                "requestedUrl.path": {  $nin:  not404s },
             }
         };
         if(isAggregate === true) {

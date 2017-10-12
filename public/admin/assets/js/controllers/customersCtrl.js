@@ -1,7 +1,7 @@
 'use strict';
 /*global app, window*/
 (function (angular) {
-    app.controller('CustomersCtrl', ["$scope", "$state", "toaster", "$modal", "$window", "CustomerService",'$timeout', 'SweetAlert', "$location", "$q", function ($scope, $state, toaster, $modal, $window, CustomerService,  $timeout, SweetAlert, $location, $q) {
+    app.controller('CustomersCtrl', ["$scope", "$state", "toaster", "$modal", "$window", "CustomerService", "OrganizationService",'$timeout', 'SweetAlert', "$location", "$q", function ($scope, $state, toaster, $modal, $window, CustomerService, OrganizationService,  $timeout, SweetAlert, $location, $q) {
 
         $scope.tableView = 'list';
         $scope.itemPerPage = 100;
@@ -9,6 +9,8 @@
         $scope.selectAllChecked = false;
         $scope.bulkActionChoice = {};
         $scope.tagsBulkAction = {};
+        $scope.organizations=[];
+        
 
         if (!$state.current.sort) {
             $scope.order = "reverse";
@@ -27,18 +29,32 @@
          */
 
 
-
-
         $scope.getCustomers = function () {
             CustomerService.loadAllCustomers(function(customers){
                 $scope.customers = customers.results;
                 $scope.showCustomers = true;
                 console.log('customers:', customers);
-            });
-
+            }); 
         };
 
         $scope.getCustomers();
+
+
+        $scope.getOrganizations = function () {
+            OrganizationService.loadOrganizations(function(organizations){
+                $scope.organizations = organizations;
+                if(organizations.length==1){
+                    $scope.orgId =organizations[0];
+                }else{
+                    $scope.orgId = organizations.filter(function(org) {
+                      return org._id === 0;
+                    })[0];
+                }
+                console.log('organizations:', organizations,$scope.orgId);
+            });
+        };
+
+        $scope.getOrganizations();
 
 
         $scope.viewSingle = function (customer) {
@@ -128,6 +144,7 @@
         };
 
         $scope.openSimpleModal = function (modal) {
+            //$scope.orgId = LocalAcObject.getter().orgId;
             var _modal = {
                 templateUrl: modal,
                 scope: $scope,
@@ -138,6 +155,7 @@
             $scope.modalInstance.result.then(null, function () {
                 angular.element('.sp-container').addClass('sp-hidden');
             });
+            //$scope.orgId = LocalAcObject.getter().orgId;
         };
 
         $scope.closeModal = function () {
@@ -147,26 +165,22 @@
         };
 
         $scope.addCustomer = function() {
-            var orgId = $scope.orgId;
+            var orgId = $scope.orgId._id;
             var subdomain = $scope.subdomain;
             var username = $scope.username;
             var password = $scope.password;
+            $scope.showCustomers = false;
             CustomerService.addNewCustomer(orgId, subdomain, username, password, function(err, value){
+                $scope.showCustomers = true;
                 if(err) {
                     toaster.pop('warning', err.message);
                 } else {
                     $scope.closeModal();
                     CustomerService.refreshCustomers(function(customers){
-                        $scope.customers = customers.results;
-                        $scope.showCustomers = true;
+                        $scope.customers = customers.results; 
                     });
                 }
             });
         };
-
-
-    
-
-
     }]);
 }(angular));

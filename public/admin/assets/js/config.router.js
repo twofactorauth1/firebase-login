@@ -87,7 +87,7 @@ app.config(['$stateProvider', '$urlRouterProvider', '$controllerProvider', '$com
 				templateUrl: "/admin/assets/views/site-analytics.html",
 				title: 'Site Analytics',
 				icon: 'ti-layout-media-left-alt',
-				resolve: loadSequence('siteAnalyticsCtrl', 'highcharts', 'highmaps', 'highmaps-lib', 'secTotime', 'dateRangePicker', 'chartAnalyticsService', 'ipCookie', 'analyticsWidgetStateService','spectrum')
+				resolve: loadSequence('siteAnalyticsCtrl', 'highcharts', 'highmaps', 'highmaps-lib', 'secTotime', 'dateRangePicker', 'chartAnalyticsService', 'ipCookie', 'analyticsWidgetStateService','spectrum','decodeURIComponent')
 			}).state('app.website.pages', {
 				url: '/pages',
 				templateUrl: "/admin/assets/views/pages.html",
@@ -111,7 +111,7 @@ app.config(['$stateProvider', '$urlRouterProvider', '$controllerProvider', '$com
 				templateUrl: "/admin/assets/views/customers.html",
 				title: 'Customers',
 				icon: 'ti-layout-media-left-alt',
-				resolve: loadSequence('customersCtrl', 'customerService','spectrum')
+				resolve: loadSequence('customersCtrl', 'customerService','organizationService','spectrum')
 			}).state('app.customeranalytics', {
 				url: '/customers/analytics',
 				templateUrl: "/admin/assets/views/customer-analytics.html",
