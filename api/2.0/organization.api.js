@@ -27,20 +27,7 @@ _.extend(api.prototype, baseApi.prototype, {
     initialize: function () {
         
         app.get(this.url('all'), this.isAuthAndSubscribedApi.bind(this), this.listAllOrganizations.bind(this));
-        app.get(this.url(':id'), this.isAuthAndSubscribedApi.bind(this), this.getOrganization.bind(this));
         
-    },
-
-    getOrganization: function(req, resp) {
-        var self = this;
-        var accountId = parseInt(self.accountId(req));
-        var userId = self.userId(req);
-        var orgId = req.params.id;
-
-        manager.getOrgById(accountId, userId, orgId, function(err, organization){
-                self.log.debug(accountId, userId, '<< getOrganization');
-                self.sendResultOrError(resp, err, _(organization).toArray(), 'Error listing organization');
-        });
     },
 
 
@@ -49,11 +36,20 @@ _.extend(api.prototype, baseApi.prototype, {
         var accountId = parseInt(self.accountId(req));
         var userId = self.userId(req);
         self.log.debug(accountId, userId, '>> listAllOrganizations');
+
+        if(accountId === appConfig.mainAccountID) {
+            manager.getOrganizations(accountId, userId, null, function(err, organizations){
+                self.log.debug(accountId, userId, '<< listAllOrganizations');
+                self.sendResultOrError(resp, err, organizations, 'Error listing organization');
+            });
+        }else {
+            manager.getOrgByAccountId(accountId, userId, function(err, organization){
+                self.log.debug(accountId, userId, '<< getOrgByAccountId');
+                self.sendResultOrError(resp, err, _(organization).toArray(), 'Error listing organization');
+            });
+        }
         
-        manager.getOrganizations(accountId, userId, null, function(err, organizations){
-            self.log.debug(accountId, userId, '<< listAllOrganizations');
-            self.sendResultOrError(resp, err, organizations, 'Error listing organization');
-        });
+        
 
     }
 });
