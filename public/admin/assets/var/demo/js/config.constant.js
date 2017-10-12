@@ -772,6 +772,7 @@ app.constant('JS_REQUIRES', {
     'userService': 'assets/js/services/user.js',
     'contactService': 'assets/js/services/contact.js',
     'customerService': 'assets/js/services/customer.js',
+    'organizationService': 'assets/js/services/organization.js',
     'campaignService': 'assets/js/services/campaign.js',
     'toasterService': 'assets/js/services/toaster.js',
     'ImportContactService': 'assets/js/services/import_contacts.js',

@@ -10,8 +10,9 @@
     <div class="modal-body contact-modal bg-white" stop-event="touchend">
         <form action="#" name="form" role="form" id="form">
             <div class="form-group">
-                <label class="">Organization ID</label>
-                <input id="input-orgId" class="form-control" ng-model="$parent.orgId" placeholder="orgId" type="number">
+                <label class="">Organization</label>
+                <select id="input-orgId" class="form-control" ng-options="org as org.name for org in $parent.organizations track by org._id" ng-model="$parent.orgId">
+                </select>
             </div>
             <div class="form-group">
                 <label class="">Subdomain</label>
@@ -29,7 +30,7 @@
     </div>
     <div class="clearfix"></div>
     <div class="modal-footer">
-        <button class="btn btn-primary" ng-disabled="(!$parent.orgId && $parent.orgId !== 0 )|| !$parent.subdomain || !$parent.username || !$parent.password" ng-click="addCustomer()">Add Customer</button>
+        <button class="btn btn-primary" ng-disabled="(!$parent.orgId && !$parent.orgId._id )|| !$parent.subdomain || !$parent.username || !$parent.password" ng-click="addCustomer()">Add Customer</button>
     </div>
 
 </script>
