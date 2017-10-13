@@ -1,14 +1,16 @@
 .text-only-v1 {
 	@media (max-width: 720px) {
-        
         .word-break {
             span, a{
                 display: inline-block;
             }
             ul{
                 li{
-                    span, a{
+                    a{
                         display: inherit !important;
+                    }
+                    span{
+                        display: inline;
                     }
                 }
             }
