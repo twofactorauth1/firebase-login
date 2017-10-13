@@ -540,7 +540,6 @@ module.exports = function(grunt) {
 
 
     grunt.registerTask('doCopyAccount', 'A task to copy an account with website and pages from one db to another', function(){
-
         var done = this.async();
         var accountId = parseInt(grunt.config('doCopyAccount.accountId'));
         var isTestToProd = grunt.config('doCopyAccount.testToProd');

@@ -359,16 +359,19 @@ var copyutil = {
         var accountToSave;
         var websiteToSave;
         var pagesToSaveArray = [];
+        var publishedpagesToSaveArray = [];
+        var privilegesToSaveArray = [];
         var productsToSaveArray = [];
         var postsToSaveArray = [];
         var sectionsToSaveArray = [];
         var accounts = srcMongo.collection('accounts');
         var websites = srcMongo.collection('websites');
         var pages = srcMongo.collection('pages');
+        var publishedpages = srcMongo.collection('published_pages');
+        var privileges = srcMongo.collection('privileges');
         var sections = srcMongo.collection('sections');
         var products = srcMongo.collection('products');
         var posts = srcMongo.collection('posts');
-
         async.waterfall([
             function(cb){
                 accounts.find({'_id':srcAccountId}).toArray(function(err, items){
@@ -377,6 +380,18 @@ var copyutil = {
                         cb(err);
                     } else {
                         accountToSave = items[0];
+                        cb(null);
+                    }
+
+                });
+            },
+            function(cb) {
+                privileges.find({'accountId':srcAccountId}).toArray(function(err, _privileges){
+                    if(err) {
+                        console.log('Error getting privileges:', err);
+                        cb(err);
+                    } else {
+                        privilegesToSaveArray = _privileges;
                         cb(null);
                     }
 
@@ -401,6 +416,17 @@ var copyutil = {
                     }
                     console.log('retrieved pages');
                     pagesToSaveArray = _pages;
+                    cb(null,websiteId);
+                });
+            },
+            function(websiteId, cb) {
+                publishedpages.find({'websiteId':websiteId, latest:true}).toArray(function(err, _publishedpages) {
+                    if (err) {
+                        console.log('Error getting published pages: ' + err);
+                        return cb(err);
+                    }
+                    console.log('retrieved published pages');
+                    publishedpagesToSaveArray = _publishedpages;
                     cb(null);
                 });
             },
@@ -538,6 +564,29 @@ var copyutil = {
                 });
             },
             function(newAccountId, cb) {
+                console.log('saving privileges with accountId:' + newAccountId);
+                var privilegesCollection = destMongo.collection('privileges');
+                async.eachSeries(privilegesToSaveArray, function(privilege, callback){
+                    privilege.accountId = newAccountId;
+
+                    if (forceNewAccount) {
+                        privilege._id = utils.idutils.generateUUID();
+                    }
+
+                    privilegesCollection.save(privilege, function(err, savedPrivilege){
+                        if(err) {
+                            console.log('Error saving privilege: ' + privilege._id);
+                            callback(err);
+                        } else {
+                            console.log('saved privilege [' + privilege._id + ']');
+                            callback();
+                        }
+                    });
+                }, function done(err){
+                    cb(err, newAccountId);
+                });
+            },
+            function(newAccountId, cb) {
                 websiteToSave.accountId = newAccountId;
                 if(!websiteToSave._id || forceNewAccount) {
                     websiteToSave._id = utils.idutils.generateUUID();
@@ -579,6 +628,33 @@ var copyutil = {
                             console.log('saved page [' + page._id + ']');
                             if(page.handle === 'blog') {
                                 blogPageId = page._id;
+                            }
+                            callback();
+                        }
+                    });
+                }, function done(err){
+                    cb(err, newAccountId, newWebsiteId, blogPageId);
+                });
+            },
+            function(newAccountId, newWebsiteId, blogPageId, cb) {
+                console.log('saving pages with accountId:' + newAccountId + ' and websiteId:' + newWebsiteId);
+                var publishedpagesCollection = destMongo.collection('published_pages');
+                async.eachSeries(publishedpagesToSaveArray, function(publishedpage, callback){
+                    publishedpage.accountId = newAccountId;
+                    publishedpage.websiteId = newWebsiteId;
+
+                    if (forceNewAccount) {
+                        publishedpage._id = utils.idutils.generateUUID();
+                    }
+
+                    publishedpagesCollection.save(publishedpage, function(err, savedPublishedPage){
+                        if(err) {
+                            console.log('Error saving publishedpage: ' + publishedpage._id);
+                            callback(err);
+                        } else {
+                            console.log('saved publishedpage [' + publishedpage._id + ']');
+                            if(publishedpage.handle === 'blog') {
+                                blogPageId = publishedpage._id;
                             }
                             callback();
                         }
@@ -679,7 +755,29 @@ var copyutil = {
                         console.log('Error saving subscription privs');
                         cb(err);
                     } else {
-                        cb();
+                        cb(null,newAccountId);
+                    }
+                });
+            },
+            function relateUser(newAccountId, cb) {
+                console.log('relate User: '+accountToSave.ownerUser+' to accountId:' + newAccountId);
+                var usersCollection = destMongo.collection('users');
+                usersCollection.findOne({"_id":accountToSave.ownerUser}, function(err, user){
+                    if(err) {
+                        console.log('Error getting user of privs account');
+                        cb(err);
+                    } else {
+                        var userNewAccount=user.accounts[0];
+                        userNewAccount.accountId=newAccountId;
+                        user.accounts.push(userNewAccount);
+                        usersCollection.update({"_id":accountToSave.ownerUser},{ $set:{accounts: user.accounts}},function(err, updateduser){
+                            if(err) {
+                                console.log('Error in updating user of privs account');
+                                cb(err);
+                            }else{
+                                cb();
+                            }
+                        }); 
                     }
                 });
             }
