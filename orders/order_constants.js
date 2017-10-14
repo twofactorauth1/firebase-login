@@ -17,6 +17,9 @@ statesThatDontTaxShipping[11] = 'UT';
 statesThatDontTaxShipping[12] = 'VA';
 statesThatDontTaxShipping[13] = 'WY';
 
+var firstOrderNo = 312;
+
 module.exports = {
-    statesThatDontTaxShipping: statesThatDontTaxShipping
+    statesThatDontTaxShipping: statesThatDontTaxShipping,
+    firstOrderNo:firstOrderNo
 };
