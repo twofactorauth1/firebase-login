@@ -4,8 +4,11 @@
         <div class="ssb-blog-currently-viewing">
             <ul class="bread-crumb">
                 <li><a href="/" target="_self">Home</a></li>
-                <li><a href="/blog" target="_self">Blog</a></li>
-                <li >{{vm.post.post_title}}</li>
+                <li><a href="/blog" target="_self">Blog</a></li> 
+                <li ng-if="vm.post.post_categories && vm.post.post_categories.length>0" >
+                        Category ({{vm.post.post_categories[0].text ? vm.post.post_categories[0].text: vm.post.post_categories[0]}})
+                </li >
+                <li ng-if="!(vm.post.post_categories && vm.post.post_categories.length>0)">{{vm.post.post_title}}</li>
             </ul>
         </div>
         <img ng-if="vm.post.featured_image" itemprop="thumbnailUrl" class="center margin-top-30 img-responsive" ng-src="{{vm.getFeaturedImageUrl(vm.post.featured_image)}}" alt="{{(vm.post.post_excerpt) ? vm.post.post_excerpt : ''}}"/>
@@ -45,11 +48,11 @@
             </li>
         </ul>
         <ul class="ssb-post_categories" data-ng-if="vm.post.post_categories && vm.post.post_categories.length>0">
-                <li ><h4>Categories:</h4></li>
-                <li ng-repeat="category in vm.post.post_categories track by $index">
-                    <a href="/category/{{category.text ? vm.encodeUrlText(category.text): vm.encodeUrlText(category)}}" class="btn ssb-theme-btn" target="_self" itemprop="url" rel="tag">{{category.text ? category.text: category}}</a>
-                </li>
-            </ul>
+            <li ><h4>Categories:</h4></li>
+            <li ng-repeat="category in vm.post.post_categories track by $index">
+                <a href="/category/{{category.text ? vm.encodeUrlText(category.text): vm.encodeUrlText(category)}}" class="btn ssb-theme-btn" target="_self" itemprop="url" rel="tag">{{category.text ? category.text: category}}</a>
+            </li>
+        </ul>
     </div>
 
 </article>

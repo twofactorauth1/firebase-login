@@ -68,6 +68,8 @@ module.exports = {
                 var max = 1;
                 if (value) {
                     max = parseInt(value) + 1;
+                }else{
+                    max=orderConstants.firstOrderNo;
                 }
                 var total = invoice.total / 100;
                 var subtotal = invoice.subtotal / 100;
@@ -437,6 +439,8 @@ module.exports = {
                                 var max = 1;
                                 if (value) {
                                     max = parseInt(value) + 1;
+                                }else{
+                                    max=orderConstants.firstOrderNo;
                                 }
 
                                 savedOrder.set('order_id', max);
@@ -1199,6 +1203,8 @@ module.exports = {
                                 var max = 1;
                                 if (value) {
                                     max = parseInt(value) + 1;
+                                }else{
+                                    max=orderConstants.firstOrderNo;
                                 }
 
                                 savedOrder.set('order_id', max);
@@ -1900,6 +1906,8 @@ module.exports = {
                                 var max = 1;
                                 if (value) {
                                     max = parseInt(value) + 1;
+                                }else{
+                                    max=orderConstants.firstOrderNo;
                                 }
 
                                 savedOrder.set('order_id', max);
@@ -2724,6 +2732,8 @@ module.exports = {
                                 var max = 1;
                                 if (value) {
                                     max = parseInt(value) + 1;
+                                }else{
+                                    max=orderConstants.firstOrderNo;
                                 }
 
                                 order.set('order_id', max);

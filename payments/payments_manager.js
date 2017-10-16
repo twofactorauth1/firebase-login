@@ -217,8 +217,8 @@ module.exports = {
         var customerId = account.get('billing').stripeCustomerId;
         var subscriptionId = account.get('billing').subscriptionId;
         if(!customerId || customerId === '') {
-            self.log.error(accountId, userId, 'No stripe customerId found for account: ' + accountId);
-            return fn('No stripe customerId found');
+            self.log.warn(accountId, userId, 'No stripe customerId found for account: ' + accountId);
+            return fn(null, {});
         }
         var billing = account.get('billing');
         if(account.get('orgId') && account.get('orgId') >= 1 && billing.stripeParent !== 6) {

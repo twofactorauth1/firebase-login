@@ -2452,6 +2452,55 @@ var emailMessageManager = {
         });
     },
 
+    getUnsubscribedCount: function(accountId, userId, startDate, endDate, previousStart, previousEnd, fn) {
+        var self = this;
+        self.log.debug('>> getUnsubscribedCount');
+
+        var unsubscribAry = ['unsubscribe'];
+        var query = {
+            'event.accountId':accountId.toString(),
+            'created.date':{
+                $gte:startDate,
+                $lte:endDate
+            },
+            'event.event':{$in:unsubscribAry}
+        };
+        var previousQuery = {
+            'event.accountId':accountId.toString(),
+            'created.date':{
+                $gte:previousStart,
+                $lte:previousEnd
+            },
+            'event.event':{$in:unsubscribAry}
+        };
+
+        dao.findCount(query, $$.m.Unsubscription, function(err, count){
+            if(err) {
+                self.log.error(accountId, userId, 'Error getting unsubscribed count: ', err);
+                fn(err);
+            } else {
+                var results = {
+                    currentCount: count || 0
+                };
+                dao.findCount(previousQuery, $$.m.Unsubscription, function(err, count){
+                    if(err) {
+                        self.log.error(accountId, userId, 'Error getting unsubscribed count: ', err);
+                        fn(err);
+                    } else {
+                        var previousCount = 0;
+                        if(count) {
+                            previousCount = count;
+                        }
+                        results.previousCount = previousCount;
+                        self.log.debug(accountId, userId, '<< getUnsubscribedCount');
+                        fn(null, results);
+                    }
+                });
+            }
+
+        });
+    },
+
     isAddressUnsubscribed: function(emailAddress, fn) {
 
     },

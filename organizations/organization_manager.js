@@ -59,7 +59,7 @@ var manager = {
     getOrganizations: function(accountId,userId,orgId, fn) {
         var self = this;
         self.log.debug(accountId, userId, '>> getOrganizations');
-        dao.findMany({}, $$.m.Organization, function(err, organizations){
+        dao.findMany({"_id":{ $ne: "__counter__"}}, $$.m.Organization, function(err, organizations){
             if(err) {
                 self.log.error(accountId, userId, 'Error getting org:', err);
                 fn(err);

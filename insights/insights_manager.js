@@ -389,6 +389,7 @@ var insightsManager = {
                         trend = 0;
                         row.trend = 'Unchanged';
                     } else {
+                        trend = 0;
                         row.trend = 'Rising';
                     }
                     row.rawTrend = trend;
@@ -420,14 +421,17 @@ var insightsManager = {
                     return row;
                 };
 
+                self.log.debug('data:', JSON.stringify(data));
+
                 rows.push(buildRow('visitsCount', 'Visits', 'currentCount', 'previousCount', data, '', ''));
                 rows.push(buildRow('visitorCount', 'Visitors', 'currentCount', 'previousCount', data, '', ''));
                 rows.push(buildRow('bounceRate', 'Bounce Rate', 'currentBounceRate', 'previousBounceRate', data, '', '%'));
                 rows.push(buildRow('searchReferrals', 'Inbounds from Search', 'currentCount', 'previousCount', data, '', ''));
                 rows.push(buildRow('ordersCount', 'Orders', 'currentCount', 'previousCount', data, '', ''));
+                rows.push(buildRow('unsubscribedReports', 'Unsubscribed', 'currentCount', 'previousCount', data, '', ''));
 
                 rows.push(buildRow('revenueReport', 'Revenue', 'currentRevenue', 'previousRevenue', data, '$', ''));
-                self.log.debug('data:', JSON.stringify(data));
+                
                 rows.push(buildRow('sentCount', 'Emails Delivered', 'current', 'previous', data.emailReports, '', ''));
                 rows.push(buildRow('openCount', 'Emails Opened', 'current', 'previous', data.emailReports, '', ''));
                 rows.push(buildRow('clickCount', 'Emails Clicked', 'current', 'previous', data.emailReports, '', ''));
@@ -1152,6 +1156,9 @@ var insightsManager = {
             },
             loginReports: function(callback) {
                 userActivityManager.countNonAdminLogins(accountId, userId, startDate, endDate, callback);
+            },
+            unsubscribedReports: function(callback) {
+                emailMessageManager.getUnsubscribedCount(accountId, userId, startDate, endDate, previousStart, previousEnd, callback);
             }
         }, function(err, results){
             fn(err, results);

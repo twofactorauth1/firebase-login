@@ -239,9 +239,9 @@
                         var mainAccount = AccountService.getMainAccount();
                         if (mainAccount) {
                             mainAccount.showhide.blog = $scope.account.showhide.blog;
-                        }
-
-                        if ($scope.account.showhide.userScripts && $scope.website.resources.toggles.userScripts) {
+                        } 
+                        if ($scope.account.showhide.userScripts && 
+                          ($scope.website.resources.toggles && $scope.website.resources.toggles.userScripts)) {
                           SimpleSiteBuilderService.updateScriptResource($scope.website).then();
                         }
                     });
