@@ -1,12 +1,12 @@
 <article itemscope="" itemtype="http://schema.org/BlogPosting">
-    
+
     <div ng-if="vm.post">
         <div class="ssb-blog-currently-viewing">
             <ul class="bread-crumb">
                 <li><a href="/" target="_self">Home</a></li>
-                <li><a href="/blog" target="_self">Blog</a></li> 
+                <li><a href="/blog" target="_self">Blog</a></li>
                 <li ng-if="vm.post.post_categories && vm.post.post_categories.length>0" >
-                        Category ({{vm.post.post_categories[0].text ? vm.post.post_categories[0].text: vm.post.post_categories[0]}})
+                        <a target="_self" href="/category/{{vm.post.post_categories[0].text ? vm.post.post_categories[0].text: vm.post.post_categories[0]}}">Category ({{vm.post.post_categories[0].text ? vm.post.post_categories[0].text: vm.post.post_categories[0]}})<a/>
                 </li >
                 <li ng-if="!(vm.post.post_categories && vm.post.post_categories.length>0)">{{vm.post.post_title}}</li>
             </ul>
@@ -30,7 +30,7 @@
             </span>
         </div>
 
-        
+
         <script src="/js/scripts/sharebar/sharebar.js" ng-if="vm.showSocialShare && vm.floatSocialShareLinks()" data-class="ssb-blog-post-social-share"></script>
         <script src="/js/scripts/sharebar/sharebar.js" ng-if="vm.showSocialShare && !vm.floatSocialShareLinks()" data-target=".ssb-blog-byline" data-class="ssb-blog-post-social-share"></script>
 
