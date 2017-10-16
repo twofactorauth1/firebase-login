@@ -27,6 +27,7 @@ var UAParser = require('ua-parser-js');
 var parser = new UAParser();
 var urlUtils = require('../utils/urlutils');
 var ssbManager = require('../ssb/ssb_manager');
+var orgManager = require('../organizations/organization_manager');
 
 var router = function() {
     this.init.apply(this, arguments);
@@ -37,7 +38,9 @@ _.extend(router.prototype, BaseRouter.prototype, {
     base: "home",
 
     initialize: function() {
-        app.get("/", this.setupForPages.bind(this), this.optimizedIndex.bind(this));
+        app.get("/", this.setupForPages.bind(this), this.optimizedIndexWithOrgChecks.bind(this));
+        app.get("/activate", this.setupForPages.bind(this), this.optimizedIndexWithOrgChecks.bind(this));
+        app.get("/activate/setup", this.setupForPages.bind(this), this.optimizedIndexWithOrgChecks.bind(this));
 
         //send all routes to index and let the app router to navigate to the appropriate view
         app.get("/index", this.setupForPages.bind(this), this.optimizedIndex.bind(this));
@@ -491,12 +494,63 @@ _.extend(router.prototype, BaseRouter.prototype, {
         self.log.debug('<< optimizedSignup');
     },
 
+    optimizedIndexWithOrgChecks: function(req, resp) {
+        var self = this;
+        var accountId = self.unAuthAccountId(req) || appConfig.mainAccountID;
+        if(accountId === 'new') {//we are on the signup page
+            accountId = appConfig.mainAccountID;
+        }
+        /*
+         * For orgId:5 we have a special check:
+         *  - if(orgId===5 && account.activated===false)
+         *      serve the page from org admin host
+         */
+        if(req.session.orgId === 5 && req.session.activated === false) {
+            self.log.debug('Serving orgAdmin page');
+            orgManager.getAdminAccountByOrgId(accountId, null, 5, function(err, adminAccount){
+                if(adminAccount && adminAccount.id()) {
+                    var adminAccountId = adminAccount.id();
+                    var pageName = req.route.path;
+                    if(pageName === '/') {
+                        pageName = 'index';
+                    } else {
+                        pageName = pageName.replace('/', '');
+                    }
+                    self.log.debug('>> optimizedIndexWithOrgChecks ' + adminAccountId + ', ' + pageName);
+
+                    //TODO: this can be simplified
+                    new WebsiteView(req, resp).renderCachedPage(adminAccountId, pageName);
+
+                    self.log.debug('<< optimizedIndexWithOrgChecks');
+                } else {
+                    resp.status(500);
+                    resp.render('500.html', {title: '500: Error serving page'});
+                    return;
+                }
+            });
+        } else {
+            var pageName = req.route.path;
+            if(pageName === '/') {
+                pageName = 'index';
+            } else {
+                pageName = pageName.replace('/', '');
+            }
+            self.log.debug('>> optimizedIndexWithOrgChecks ' + accountId + ', ' + pageName);
+
+            new WebsiteView(req, resp).renderCachedPage(accountId, pageName);
+
+            self.log.debug('<< optimizedIndexWithOrgChecks');
+        }
+
+    },
+
     optimizedIndex: function(req,resp) {
         var self = this;
         var accountId = self.unAuthAccountId(req) || appConfig.mainAccountID;
         if(accountId === 'new') {//we are on the signup page
             accountId = appConfig.mainAccountID;
         }
+
         var pageName = req.params.page || 'index';
         self.log.debug('>> optimizedIndex ' + accountId + ', ' + pageName);
 
@@ -504,6 +558,8 @@ _.extend(router.prototype, BaseRouter.prototype, {
 
         self.log.debug('<< optimizedIndex');
     },
+
+
 
     renderBlogPage: function(req, resp) {
         var self = this;

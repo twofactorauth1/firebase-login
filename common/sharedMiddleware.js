@@ -56,6 +56,8 @@ module.exports = {
                 req.session.unAuthAccountId = value.id();
                 req.session.unAuthSubdomain = value.get('subdomain');
                 req.session.unAuthDomain = value.get('domain');
+                req.session.orgId = value.get('orgId');
+                req.session.activated = value.get('activated');
                 return next();
             } else {
                 logger.trace('Not in cache');
@@ -70,7 +72,8 @@ module.exports = {
                             req.session.unAuthAccountId = value.id();
                             req.session.unAuthSubdomain = value.get('subdomain');
                             req.session.unAuthDomain = value.get('domain');
-
+                            req.session.orgId = value.get('orgId');
+                            req.session.activated = value.get('activated');
                             //req.session.locked = value.get('locked');
                             return next();
                         }
