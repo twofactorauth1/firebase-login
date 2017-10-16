@@ -75,8 +75,8 @@
                         <th class="hidden-xs" st-sort-default="{{defaultSortorder}}" st-sort="modified.date">Modified</th>
                     </tr>
                     <tr ng-if="showFilter" class="products-filter-header">
-                        <th>
-                            <input st-search="hasImage" placeholder="Image" class="form-control hidden" type="search" id="searchImage" ng-model="filterProduct.image.selected.data" />
+                        <th  ng-hide='tableView == "grid"'>
+                            <input st-search="hasImage"  placeholder="Image" class="form-control hidden" type="search" id="searchImage" ng-model="filterProduct.image.selected.data" />
                             <ui-select ng-model="filterProduct.image.selected" on-select="triggerInput('#searchImage')" theme="bootstrap">
                                 <ui-select-match placeholder="Select Image">
                                     <small ng-bind-html="$select.selected.label"></small>
@@ -87,7 +87,7 @@
                                 </ui-select-choices>
                             </ui-select>
                         </th>
-                        <th class="hidden-xs">
+                        <th  >
                             <input st-search="status" placeholder="Status" class="form-control hidden" type="search" id="searchStatus" ng-model="filterProduct.status.selected.data" />
                             <ui-select ng-model="filterProduct.status.selected" on-select="triggerInput('#searchStatus', true)" theme="bootstrap">
                                 <ui-select-match placeholder="Select Status">
@@ -113,9 +113,6 @@
                                     <small ng-bind-html="status.label | highlight: $select.search"></small>
                                 </ui-select-choices>
                             </ui-select>
-                        </th>
-                        <th class="hidden-xs">
-                            <input st-search="tags" placeholder="Tags" class="form-control" type="search" />
                         </th>
                     </tr>
                 </thead>

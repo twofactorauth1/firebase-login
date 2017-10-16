@@ -18,7 +18,7 @@
             </li>
 
             <li ng-click="vm.uiState.toggleSidebarPanel('design')" class="nav-tab" ng-class="{ 'nav-tab-is-active': vm.uiState.openSidebarPanel === 'design' }">
-                <div><div class="ti-brush display-ib"></div>Design</div>
+                <div><div class="ti-brush display-ib"></div>Styles</div>
             </li>
 
             <li
@@ -336,7 +336,7 @@
             <section class="ssb-sidebar-panel-inner-container">
                 <header class="ssb-sidebar-panel-header">
                     <h4 class="ssb-sidebar-sub-heading">
-                        Design
+                        Styles
                     </h4>
 
                     <div class="close-panel ti-close"  ng-click="vm.uiState.openSidebarPanel = ''"></div>
@@ -354,18 +354,18 @@
                     </ui-select>
                 </div>
 
-                <h4 class="ssb-sidebar-sub-heading">Theme Settings</h4>
-                <div class="form-group">
-
-                    <ui-select ng-model="vm.state.website.theme" ng-change="vm.applyThemeToSite($select.selected, true)" theme="bootstrap">
-                      <ui-select-match placeholder="Select a theme">
-                          <small ng-bind-html="$select.selected.name"></small>
-                      </ui-select-match>
-                      <ui-select-choices repeat="theme in vm.state.themes | filter: $select.search track by $index">
-                          <small ng-bind-html="theme.name | highlight: $select.search"></small>
-                      </ui-select-choices>
-                    </ui-select>
-
+                <h4 class="ssb-sidebar-sub-heading">Site Styles</h4>
+                <div class="form-group" >
+                    <div ng-hide="true">
+                        <ui-select ng-model="vm.state.website.theme" ng-change="vm.applyThemeToSite($select.selected, true)" theme="bootstrap">
+                        <ui-select-match placeholder="Select a theme">
+                            <small ng-bind-html="$select.selected.name"></small>
+                        </ui-select-match>
+                        <ui-select-choices repeat="theme in vm.state.themes | filter: $select.search track by $index">
+                            <small ng-bind-html="theme.name | highlight: $select.search"></small>
+                        </ui-select-choices>
+                        </ui-select>
+                    </div>
                     <div class="row padding-10">
                         <div class="form-group ssb-spectrum-color-picker-small">
                             <spectrum-colorpicker class="ssb-spectrum-color-picker-text" format="'rgb'" options="vm.spectrum.options" ng-model="vm.state.website.themeOverrides.styles.bodyBackgroundColor"></spectrum-colorpicker>
