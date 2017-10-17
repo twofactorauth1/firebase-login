@@ -1,10 +1,168 @@
 .activate-account-v1{
-	.ldsrc-header{
-		background-color: #1193D1;
-		color: #FFFFFF;
-		h1{
-			padding-top: 20px;
-			padding-bottom: 20px;
+	.ldsrc-container{
+		background: #FFFFFF;
+		.ldsrc-header{
+			padding: 20px;
+			background-color: #1193D1;
+			color: #FFFFFF;
+			h4{				
+				.steps{
+					position: absolute;
+    				right: 30px;
+    				display: inline-block;
+    				@media screen and (max-width: 496px) {
+	                    display: block;
+					    position: relative;
+					    right: 0;
+					    margin-top: 10px;
+                	}
+				}
+			}
+		}
+		.ldsrc-body{
+			color: #6C6C6C;
+			padding-top: 200px;
+			padding-bottom: 200px;
+		    padding-left: 15px;
+		    padding-right: 15px;
+		    max-width: 800px;
+		    margin: 0 auto;
+			.ldsrc-getting-started{
+				margin-bottom: 30px;
+			}
+			.features-wrap{
+				.feature-block{
+					cursor: pointer;
+					padding-left: 50px;
+				    padding-right: 50px;
+				    padding-top: 50px;
+				    padding-bottom: 50px;
+				    background-color: #F7F7F7;
+				    border: 1px solid #F1F1F1;
+				    .feature-block-content{
+				    	h3{
+				    		line-height: 1.5em;
+				    	}
+				    }
+				}
+				.selected-plan{
+					background-color: #1491D3;
+					border: 1px solid #1491D3;
+					color: #FFFFFF;
+				}
+			}
+		}
+		.ldsrc-body.steps-2{
+			max-width: 1000px;
+			.script-wrap{
+				max-width: 600px;
+				position: relative;
+				.pre-wrap-script{
+					font-size: 20px;
+					padding: 20px;
+				    padding-top: 30px;
+				    padding-bottom: 30px;
+				    text-align: left;
+				}
+				.copy-text{
+					position: absolute;
+				    top: 0;
+				    right: 0;
+				}
+				.step-btn-container{
+					.send-to-dev{
+						color: #969696 !important;
+					    text-decoration: underline !important;
+					    cursor: pointer;
+					    display: block;
+					}
+					.btn-complete-activation{
+						background: #1193D1;
+					    border-color: #1193D1;
+					    border-radius: 20px;
+					    margin-top: 30px;
+					    min-width: 200px;
+					}
+				}
+			}
+			
+		}
+		.ldsrc-body.steps-2.new-account{
+			padding-top: 100px;
+			max-width: 100%;
+			.templates-wrap{
+				.template-img-container{
+					height: 580px;
+					overflow: hidden;
+					margin-bottom: 15px;
+				}
+				.btn-choose-template{
+				    background: #1193D1;
+				    border-color: #1193D1;
+				    border-radius: 20px;
+				}
+				.preview-template{
+					margin-top: 10px;
+					display: block;
+					color: #6C6C6C !important;
+					text-decoration: none !important;
+					cursor: pointer;
+				}
+			}
+		}
+
+		.ldsrc-body.steps-3{
+			max-width: 100%;
+			.password-wrap{
+				#password{
+					margin-bottom: 30px;
+				}
+				max-width: 800px;
+				input{
+					height: 60px;
+				}
+				.btn-activate-template{
+					background: #1193D1;
+				    border-color: #1193D1;
+				    border-radius: 20px;
+				    padding: 10px 12px;
+				    min-width: 200px;
+				}
+			}
+		}
+	}
+	.template-preview{
+		.ldsrc-preview-header{
+			position: fixed;
+		    width: 100%;
+		    z-index: 9999;
+			background-color: #4A4A4A;
+			color: #FFFFFF;
+			padding: 20px;
+			.preview-header-buttons{
+				float: right;
+				.btn-choose-template{
+				    background: #1193D1;
+				    border-color: #1193D1;
+				    border-radius: 20px;
+				}
+				.template-back{
+					color: #969696 !important;
+				    margin-right: 10px;
+				    text-decoration: none !important;
+				    cursor: pointer;
+				}
+				@media screen and (max-width: 496px) {
+					float: none;
+				    display: block;
+				    margin-top: 10px;
+				    text-align: right;
+				}
+				    
+			}
+		}
+		.template-img-container{
+			width: 100%;
 		}
 	}
 }

@@ -1,7 +1,147 @@
 <div ng-class="component.type+'-v'+component.version">
-	<div class="ldsrc-header">
-    	<h1 class="center">
-    		LEADSOURCE
-    	</h1>
-    </div>
+	<div class="ldsrc-container" ng-if="!showPreview">
+		<div class="ldsrc-header">
+	    	<h4>
+		    	<div class="center">
+		    		<img src="/images/leadsource/header-leadsource-white-logo.png">
+		    		<div class="steps">
+		    			Step {{currentStep}} of {{totalSteps}}
+		    		</div>
+		    	</div>
+	    	</h4>
+	    </div>
+	    <div class="ldsrc-body steps-{{currentStep}}" ng-class="{'new-account':newAccount.plan === plans.NEW}">
+	    	<!--  Step 1 -->
+	    	<div ng-if="currentStep == 1">
+				<div class="ldsrc-getting-started center">
+		            <h1 class="text-bold margin-bottom-5 getting-started-text">LET'S GET STARTED</h1>
+		            <h3 class="choose-one-text margin-top-5">Choose One:</h3>
+		        </div>
+		        <div class="clearfix"></div>
+				<div class="features-wrap">
+
+		            <div class="col-sm-6 padding-top-15">
+		                <div class="feature-block selected-plan" ng-click="setUpPlan(plans.NEW)" >
+		                    <div class="feature-block-content">
+		                    	<h3 class="center">
+		                    		I WANT AN AWESOME NEW WEBSITE
+		                    	</h3>
+		                    </div>
+		                </div>
+		            </div>
+
+		            <div class="col-sm-6 padding-top-15">
+		                <div class="feature-block" ng-click="setUpPlan(plans.EXISTING)">
+		                    <div class="feature-block-content">
+		                    	<h3 class="center">
+		                    		I WANT TO KEEP MY WEBSITE
+		                    	</h3>	
+		                    </div>
+		                </div>
+		            </div>
+		            <div class="clearfix"></div>
+		        </div>
+	        </div>
+	        <!--  Step 2 with NEW Account -->
+
+	        <div ng-if="currentStep == 2 && newAccount.plan === plans.NEW">
+				<div class="ldsrc-getting-started center">
+		            <h1 class="text-bold margin-bottom-5 getting-started-text">PICK A TEMPLATE:</h1>
+		        </div>
+		        <div class="clearfix"></div>
+				<div class="templates-wrap">
+					<ul class="list-unstyled">
+
+			            <li ng-repeat="template in templates track by $index" class="template-grid-item col-sm-6 col-lg-4 col-xl-3">
+			                <div class="template-grid-item-inner">
+
+			                    <div class="template-img-container">
+			                        <img class="template-img img-responsive" ng-src="{{template.previewUrl}}"/>
+			                    </div>
+
+			                    <h4 class="center">
+			                        <a class="btn btn-primary btn-choose-template" ng-click="selectAccountTemplate(template)" >CHOOSE TEMPLATE</a>
+			                        <a class="preview-template" ng-click="previewTemplate(template)">PREVIEW</a>
+			                    </h4>
+
+			                </div>
+
+			            </li>
+
+			        </ul>
+			        <div class="clearfix"></div>   
+		            
+		        </div>
+	        </div>
+
+	        <!--  Step 2 with EXISTING Account -->
+
+	        <div ng-if="currentStep == 2 && newAccount.plan === plans.EXISTING">
+				<div class="ldsrc-getting-started center">
+		            <h1 class="text-bold margin-bottom-5 getting-started-text">YOU HAVE YOUR OWN WEBSITE, GREAT!</h1>
+		            <h3>
+		            	<div>
+		            	Most LeadSource features work best when we can see visitor data from your website. We just need your help to make this happen. Copy the code below (or send to your developer) and paste it into the header of your website, write before the closing </head> tag.
+		            	</div>
+						<div class="margin-top-30">We'll send you a confirmation email once we start recieving data.</div>
+		            </h3>
+		        </div>
+		        <div class="clearfix"></div>
+				<div class="script-wrap center">
+					<pre class="pre-wrap-script">
+  &lt;script&gt;
+    $(document).ready(function(){
+      setTimeout(function(){
+        console.log('deleting cookie');
+        $.cookie('cookie',null,{domain: document.domain});
+      },1000);
+    });
+  &lt;/script&gt;
+					</pre>
+					
+			        <button class="copy-text" ng-click="copyToClipboard('.pre-wrap-script')">COPY</button>   
+        			<h4 class="center margin-top-10 step-btn-container">                        
+                        <a class="send-to-dev">Send to your Web Developer</a>
+                        <a class="btn btn-primary btn-complete-activation btn-wide" ng-click="completeActivation()" >COMPLETE ACTIVATION</a>
+                    </h4>
+		        </div>
+		        
+	        </div>
+
+	        <!--  Step 3 -->
+
+	        <div ng-if="currentStep == 3">
+				<div class="ldsrc-getting-started center">
+		            <h1 class="text-bold margin-bottom-5 getting-started-text">LET'S SECURE YOUR ACCOUNT, ADAM@INDIGENOUS.IO:</h1>
+		        </div>
+		        <div class="clearfix"></div>
+		        
+				<div class="password-wrap center">
+					<div id="password" class="form-group col-xs-12 has-feedback">
+                    	<input class="form-control input-lg" type="password" ng-model="newAccount.password" />
+                	</div>
+			        <div class="clearfix"></div>   
+        			<h4 class="center">
+                        <a class="btn btn-primary btn-activate-template" ng-click="selectAccountTemplate(template)" >ACTIVATE</a>
+                    </h4>
+		        </div>
+	        </div>
+	    </div>
+	</div>
+	<div ng-if="showPreview" class="template-preview">
+		<div class="ldsrc-preview-header">
+	    	<h4 class="">
+	    		<img src="/images/leadsource/header-leadsource-white-logo.png">
+	    		<div class="preview-header-buttons">
+	    			<a class="template-back" ng-click="backToTemplates()">GO BACK</a>
+	    			<a class="btn btn-primary btn-choose-template" ng-click="selectAccountTemplate(selectedTemplate)" >CHOOSE TEMPLATE</a>
+	    		</div>
+	    		
+	    	</h4>
+			
+	    </div>
+    	<div class="template-img-container">
+            <img class="template-img img-responsive" ng-src="{{selectedTemplate.previewUrl}}"/>
+        </div>
+	</div>   
 </div>
