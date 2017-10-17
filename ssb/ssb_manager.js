@@ -820,9 +820,11 @@ module.exports = {
                     _id:'activate-account',
                     "components" : [ 
                         {
+                            _id:'activate-account-cmp',
                             "type" : "activate-account",
                             "title" : "",
-                            "version" : 1
+                            "version" : 1,
+                            visibility:true
                         }
                     ]
                 }
