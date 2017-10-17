@@ -119,7 +119,7 @@ module.exports = {
                             account.set('trialDaysRemaining', trialDaysRemaining);
 
                             //Check for inactive user
-                            if(account.orgId!=appConfig.leadSourceAccountID && (!billing.subscriptionId || (billing.subscriptionId && billing.subscriptionId==!appConfig.internalSubscription)) && billing.plan && billing.plan==!appConfig.internalSubscription && trialDaysRemaining==0){
+                            if(account.orgId!=appConfig.leadSourceAccountID && (!billing.subscriptionId || (billing.subscriptionId && billing.subscriptionId==!appConfig.internalSubscription)) && (!billing.plan || (billing.plan && billing.plan==!appConfig.internalSubscription)) && trialDaysRemaining==0){
                                 account.set('accountIsActive', false);
                             }else{
                                 account.set('accountIsActive', true);
@@ -239,7 +239,7 @@ module.exports = {
                         account.set('trialDaysRemaining', trialDaysRemaining);
 
                         //Check for inactive user
-                        if(account.orgId!=appConfig.leadSourceAccountID && (!billing.subscriptionId || (billing.subscriptionId && billing.subscriptionId==!appConfig.internalSubscription)) && billing.plan && billing.plan==!appConfig.internalSubscription && trialDaysRemaining==0){
+                        if(account.orgId!=appConfig.leadSourceAccountID && (!billing.subscriptionId || (billing.subscriptionId && billing.subscriptionId==!appConfig.internalSubscription)) && (!billing.plan || (billing.plan && billing.plan==!appConfig.internalSubscription)) && trialDaysRemaining==0){
                             account.set('accountIsActive', false);
                         }else{
                             account.set('accountIsActive', true);
