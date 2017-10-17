@@ -9,7 +9,17 @@ app.directive('activateAccountComponent', ['$filter', '$q', '$location', functio
 		},
 		templateUrl: '/components/component-wrap.html',
 		link: function (scope) {
-			console.log("Component loaded");
+			scope.plans = {
+                "NEW" : "NEW",
+                "EXISTING" : "EXISTING"
+            }
+
+			scope.newAccount = {
+				plan: scope.plans.NEW
+			}
+
+			scope.totalSteps = 3;
+			scope.currentStep = 1;
 		}
 	};
 }]);

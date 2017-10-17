@@ -1,7 +1,42 @@
 <div ng-class="component.type+'-v'+component.version">
-	<div class="ldsrc-header">
-    	<h1 class="center">
-    		LEADSOURCE
-    	</h1>
-    </div>
+	<div class="ldsrc-container">
+		<div class="ldsrc-header">
+	    	<h4 class="center">
+	    		<img src="/images/leadsource/header-leadsource-white-logo.png">
+	    		<div class="steps">
+	    			Step {{currentStep}} of {{totalSteps}}
+	    		</div>
+	    	</h4>
+	    </div>
+	    <div class="ldsrc-body">
+			<div class="ldsrc-getting-started center">
+	            <h1 class="text-bold margin-bottom-5 getting-started-text">LET'S GET STARTED</h1>
+	            <h3 class="choose-one-text margin-top-5">Choose One:</h3>
+	        </div>
+	        <div class="clearfix"></div>
+			<div class="features-wrap">
+
+	            <div class="col-sm-6 padding-top-15">
+	                <div class="feature-block" ng-click="newAccount.plan = plans.NEW" ng-class="{ 'selected-plan': newAccount.plan === plans.NEW }">
+	                    <div class="feature-block-content">
+	                    	<h3 class="center">
+	                    		I WANT AN AWESOME NEW WEBSITE
+	                    	</h3>
+	                    </div>
+	                </div>
+	            </div>
+
+	            <div class="col-sm-6 padding-top-15">
+	                <div class="feature-block" ng-click="newAccount.plan = plans.EXISTING" ng-class="{ 'selected-plan': newAccount.plan === plans.EXISTING }">
+	                    <div class="feature-block-content">
+	                    	<h3 class="center">
+	                    		I WANT TO KEEP MY WEBSITE
+	                    	</h3>	
+	                    </div>
+	                </div>
+	            </div>
+	            <div class="clearfix"></div>
+	        </div>
+	    </div>
+	</div>    
 </div>
