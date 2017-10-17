@@ -26,6 +26,7 @@ app.directive('activateAccountComponent', ['$filter', '$timeout', '$q', '$locati
 			scope.previewTemplate = previewTemplate;
 			scope.backToTemplates = backToTemplates;
 			scope.copyToClipboard = copyToClipboard;
+			scope.completeActivation = completeActivation;
 			scope.templates = [
 				{
 					_id: 1,
@@ -49,6 +50,11 @@ app.directive('activateAccountComponent', ['$filter', '$timeout', '$q', '$locati
 			function selectAccountTemplate(template){
 				resetSelectedTemplate();
 				scope.newAccount.templateId = template._id;
+				scope.currentStep = 3;
+			}
+
+			function completeActivation(){
+				resetSelectedTemplate();
 				scope.currentStep = 3;
 			}
 
