@@ -4388,10 +4388,22 @@ module.exports = {
                     fonts:fontMap,
                     components:componentMap
                 };
-                cb(null, manifest);
+                cb(null, manifest, page);
             }
-        ], function(err, result){
+        ], function(err, result, page){
+            /*
+            var htmlBuilder= require('./html_builder');
+            accountDao.getAccountByID(accountId, function(err, account){
+                var orgId = account.get('orgId');
+                websiteDao.getWebsiteById(accountId, websiteId, function(err, website){
+                    var defaultAccountUrl = '';
+                    var accountHost = '';
+                    htmlBuilder.buildPage(accountId, userId, orgId, page, '', website, defaultAccountUrl, accountHost, function(err, value){});
+                });
+            });
+
             self.log.debug(accountId, userId, '<< buildPageManifest');
+            */
             fn(err, result);
         });
 
