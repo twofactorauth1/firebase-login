@@ -120,9 +120,9 @@ module.exports = {
 
                             //Check for inactive user
                             if(account.orgId!=appConfig.leadSourceAccountID && (!billing.subscriptionId || (billing.subscriptionId && billing.subscriptionId==!appConfig.internalSubscription)) && (!billing.plan || (billing.plan && billing.plan==!appConfig.internalSubscription)) && trialDaysRemaining==0){
-                                account.set('accountIsActive', false);
+                                account.set('accountIsActive', "Account is Inactive");
                             }else{
-                                account.set('accountIsActive', true);
+                                account.set('accountIsActive', "Account is Active");
                             }
 
                             cb(err, account);
@@ -240,9 +240,9 @@ module.exports = {
 
                         //Check for inactive user
                         if(account.orgId!=appConfig.leadSourceAccountID && (!billing.subscriptionId || (billing.subscriptionId && billing.subscriptionId==!appConfig.internalSubscription)) && (!billing.plan || (billing.plan && billing.plan==!appConfig.internalSubscription)) && trialDaysRemaining==0){
-                            account.set('accountIsActive', false);
+                            account.set('accountIsActive', "Account is Inactive");
                         }else{
-                            account.set('accountIsActive', true);
+                            account.set('accountIsActive', "Account is Active");
                         }
                         cb(err, account);
                     } else {
