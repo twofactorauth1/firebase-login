@@ -519,7 +519,7 @@ _.extend(router.prototype, BaseRouter.prototype, {
                     self.log.debug('>> optimizedIndexWithOrgChecks ' + adminAccountId + ', ' + pageName);
 
                     //TODO: this can be simplified
-                    new WebsiteView(req, resp).renderCachedPage(adminAccountId, pageName);
+                    new WebsiteView(req, resp).renderActivateSetupPage(adminAccountId, pageName);
 
                     self.log.debug('<< optimizedIndexWithOrgChecks');
                 } else {
