@@ -1,42 +1,111 @@
 <div ng-class="component.type+'-v'+component.version">
-	<div class="ldsrc-container">
+	<div class="ldsrc-container" ng-if="!showPreview">
 		<div class="ldsrc-header">
-	    	<h4 class="center">
-	    		<img src="/images/leadsource/header-leadsource-white-logo.png">
-	    		<div class="steps">
-	    			Step {{currentStep}} of {{totalSteps}}
-	    		</div>
+	    	<h4>
+		    	<div class="center">
+		    		<img src="/images/leadsource/header-leadsource-white-logo.png">
+		    		<div class="steps">
+		    			Step {{currentStep}} of {{totalSteps}}
+		    		</div>
+		    	</div>
 	    	</h4>
 	    </div>
-	    <div class="ldsrc-body">
-			<div class="ldsrc-getting-started center">
-	            <h1 class="text-bold margin-bottom-5 getting-started-text">LET'S GET STARTED</h1>
-	            <h3 class="choose-one-text margin-top-5">Choose One:</h3>
+	    <div class="ldsrc-body steps-{{currentStep}}" >
+	    	<!--  Step 1 -->
+	    	<div ng-if="currentStep == 1">
+				<div class="ldsrc-getting-started center">
+		            <h1 class="text-bold margin-bottom-5 getting-started-text">LET'S GET STARTED</h1>
+		            <h3 class="choose-one-text margin-top-5">Choose One:</h3>
+		        </div>
+		        <div class="clearfix"></div>
+				<div class="features-wrap">
+
+		            <div class="col-sm-6 padding-top-15">
+		                <div class="feature-block selected-plan" ng-click="setUpPlan(plans.NEW)" >
+		                    <div class="feature-block-content">
+		                    	<h3 class="center">
+		                    		I WANT AN AWESOME NEW WEBSITE
+		                    	</h3>
+		                    </div>
+		                </div>
+		            </div>
+
+		            <div class="col-sm-6 padding-top-15">
+		                <div class="feature-block" ng-click="setUpPlan(plans.EXISTING)">
+		                    <div class="feature-block-content">
+		                    	<h3 class="center">
+		                    		I WANT TO KEEP MY WEBSITE
+		                    	</h3>	
+		                    </div>
+		                </div>
+		            </div>
+		            <div class="clearfix"></div>
+		        </div>
 	        </div>
-	        <div class="clearfix"></div>
-			<div class="features-wrap">
+	        <!--  Step 2 with New Account -->
 
-	            <div class="col-sm-6 padding-top-15">
-	                <div class="feature-block" ng-click="newAccount.plan = plans.NEW" ng-class="{ 'selected-plan': newAccount.plan === plans.NEW }">
-	                    <div class="feature-block-content">
-	                    	<h3 class="center">
-	                    		I WANT AN AWESOME NEW WEBSITE
-	                    	</h3>
-	                    </div>
-	                </div>
-	            </div>
+	        <div ng-if="currentStep == 2 && newAccount.plan === plans.NEW">
+				<div class="ldsrc-getting-started center">
+		            <h1 class="text-bold margin-bottom-5 getting-started-text">PICK A TEMPLATE:</h1>
+		        </div>
+		        <div class="clearfix"></div>
+				<div class="templates-wrap">
+					<ul class="list-unstyled">
 
-	            <div class="col-sm-6 padding-top-15">
-	                <div class="feature-block" ng-click="newAccount.plan = plans.EXISTING" ng-class="{ 'selected-plan': newAccount.plan === plans.EXISTING }">
-	                    <div class="feature-block-content">
-	                    	<h3 class="center">
-	                    		I WANT TO KEEP MY WEBSITE
-	                    	</h3>	
-	                    </div>
-	                </div>
-	            </div>
-	            <div class="clearfix"></div>
+			            <li ng-repeat="template in templates track by $index" class="template-grid-item col-sm-6 col-lg-4 col-xl-3">
+			                <div class="template-grid-item-inner">
+
+			                    <div class="template-img-container">
+			                        <img class="template-img img-responsive" ng-src="{{template.previewUrl}}"/>
+			                    </div>
+
+			                    <h4 class="center">
+			                        <a class="btn btn-primary btn-choose-template" ng-click="selectAccountTemplate(template)" >CHOOSE TEMPLATE</a>
+			                        <a class="preview-template" ng-click="previewTemplate(template)">PREVIEW</a>
+			                    </h1>
+
+			                </div>
+
+			            </li>
+
+			        </ul>
+			        <div class="clearfix"></div>   
+		            
+		        </div>
+	        </div>
+
+	        <!--  Step 3 -->
+
+	        <div ng-if="currentStep == 3">
+				<div class="ldsrc-getting-started center">
+		            <h1 class="text-bold margin-bottom-5 getting-started-text">LET'S SECURE YOUR ACCOUNT, ADAM@INDIGENOUS.IO:</h1>
+		        </div>
+		        <div class="clearfix"></div>
+		        <div id="password" class="form-group col-xs-12 has-feedback">
+                    <input class="form-control input-lg" type="password" ng-model="newAccount.password" ng-model-options="{ debounce: 800 }" />
+                </div>
+				<div class="password-wrap">
+					
+			        <div class="clearfix"></div>   
+		            
+		        </div>
 	        </div>
 	    </div>
-	</div>    
+	</div>
+	<div ng-if="showPreview" class="template-preview">
+		<div class="ldsrc-preview-header">
+	    	<h4 class="">
+	    		<img src="/images/leadsource/header-leadsource-white-logo.png">
+	    		<div class="preview-header-buttons">
+	    			<a class="template-back" ng-click="backToTemplates()">GO BACK</a>
+	    			<a class="btn btn-primary btn-choose-template" ng-click="selectAccountTemplate(selectedTemplate)" >CHOOSE TEMPLATE</a>
+	    		</div>
+	    		
+	    	</h4>
+			
+	    </div>
+    	<div class="template-img-container">
+            <img class="template-img img-responsive" ng-src="{{selectedTemplate.previewUrl}}"/>
+        </div>
+	</div>   
 </div>
