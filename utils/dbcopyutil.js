@@ -107,6 +107,28 @@ var copyutil = {
 
     },
 
+    copyPageFromTestToProd : function(pageId, accountId, cb) {
+         var self = this;
+        self._copyPage(pageId, accountId, mongoConfig.TEST_MONGODB_CONNECT, mongoConfig.PROD_MONGODB_CONNECT, cb);
+    },
+
+    copyPageFromTestToTest : function(pageId, accountId, cb) {
+        var self = this;
+        self._copyPage(pageId, accountId, mongoConfig.TEST_MONGODB_CONNECT, mongoConfig.TEST_MONGODB_CONNECT, cb);
+    },
+
+    copyPageFromProdToTest: function(pageId, accountId, cb) {
+        var self = this;
+        self._copyPage(pageId, accountId, mongoConfig.PROD_MONGODB_CONNECT, mongoConfig.TEST_MONGODB_CONNECT, cb);
+
+    },
+
+    copyPageFromProdToProd: function(pageId, accountId, cb) {
+        var self = this;
+        self._copyPage(pageId, accountId, mongoConfig.PROD_MONGODB_CONNECT, mongoConfig.PROD_MONGODB_CONNECT, cb);
+
+    },
+
     convertAccountToSiteTemplate: function(accountId, cb) {
         var self = this;
         self._convertAccountToSiteTemplate(accountId, cb);
@@ -347,6 +369,109 @@ var copyutil = {
             } else {
                 console.log('Finished updating account:' + accountId);
             }
+            fn();
+        });
+    },
+
+    _copyPage: function(srcPageId, destAccountId, srcDBUrl, destDBUrl, fn) {
+        var srcMongo = mongoskin.db(srcDBUrl, {safe: true});
+        var destMongo = mongoskin.db(destDBUrl, {safe: true});
+
+        var pageToSave;
+        var sectionsToSaveArray = [];
+        var pages = srcMongo.collection('pages');
+        var sections = srcMongo.collection('sections');
+        async.waterfall([
+            function(cb){
+                pages.find({'_id':srcPageId}).toArray(function(err, _page){
+                    if (err) {
+                        console.log('Error getting _page: ' + err);
+                        return cb(err);
+                    }
+                    pageToSave = _page[0];
+                    if(pageToSave){
+                        var sectionIdsArray=_.map(pageToSave.sections, function(section, key){ return section._id; });
+                        cb(null,sectionIdsArray);
+                    }else{  
+                        console.log("Page not found with this id: "+srcPageId);
+                        cb("Page not found with this id.");
+                    }
+                });
+            },
+            function(sectionIdsArray, cb) {
+                sections.find({ '_id': { $in: sectionIdsArray } }).toArray(function (err, sections) {
+                    if (err) {
+                        console.log('Error getting sections:', err);
+                        return cb(err);
+                    } else {
+                        sectionsToSaveArray = sections;
+                        cb(null);
+                    }
+                });
+            },
+            function(cb) {
+                console.log('Closing src mongo');
+                srcMongo.close();
+                cb(null);
+            },
+            function(cb) {
+
+                var accounts = destMongo.collection('accounts');
+                accounts.find({'_id':destAccountId}).toArray(function(err, account){
+                    if(err) {
+                        console.log('Error getting account:', err);
+                        cb(err);
+                    } else {
+                        destAccount = account[0];
+                        if(destAccount){
+                            cb(null,destAccount);
+                        }else{  
+                            console.log("Account not found with this id: "+destAccountId);
+                            cb("Account not found with this id.");
+                        }
+                    }
+
+                });
+            },
+            function saveSections(destAccount, cb) {
+                var sectionsCollection = destMongo.collection('sections');
+                var sections=[];
+                async.eachSeries(sectionsToSaveArray, function(section, callback){
+                    section.accountId = destAccount._id;
+                    section._id = utils.idutils.generateUUID();
+
+                    sectionsCollection.save(section, function(err, savedSection){
+                        if(err) {
+                            console.log('Error saving section:' + err);
+                            callback(err);
+                        } else {
+                            sections.push({'_id':section._id});
+                            callback(null);
+                        }
+                    });
+                }, function done(err,result){
+                    cb(null, destAccount, sections);
+                });
+            },
+            function (destAccount, sections, cb) {
+                    pageToSave.accountId = destAccount._id;
+                    pageToSave.websiteId = destAccount.website.websiteId;
+                    pageToSave._id = utils.idutils.generateUUID();
+                    pageToSave.sections = sections;
+
+                    pagesCollection.save(pageToSave, function(err, savedPage){
+                        if(err) {
+                            console.log('Error saving page: ' + pageToSave._id);
+                            cb(err);
+                        } else {
+                            console.log('saved page [' + pageToSave._id + ']');
+                            cb();
+                        }
+                    });
+            }
+        ], function done(err){
+            console.log('Closing mongo connections');
+            destMongo.close();
             fn();
         });
     },
