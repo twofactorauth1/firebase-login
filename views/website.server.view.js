@@ -367,28 +367,11 @@ _.extend(view.prototype, BaseView.prototype, {
                         });
                         //self.log.debug('components:', components);
                         var map = {};
-                        var fontMap= {};
                         async.eachSeries(components, function(component, _cb){
                             if(component) {
                                 var obj = {};
                                 obj.id = '/components/' + component.type + '_v' + component.version + '.html';
-                                if(component.text) {
-                                    //var fontRegexp = /.*font-family: \'([a-zA-Z\s]+)\'.*/g;
-                                    var fontRegexp = /font-family: ([a-zA-Z\s,\'\-]+)[^;]*/g;
-                                    var font = fontRegexp.exec(component.text);
-                                    if(font && font.length > 1) {
-                                        for(var i=1; i<font.length; i+=3) {
-                                            //console.log('matched:', font[i]);
-                                            var fontAry = font[i].split(',');
-                                            _.each(fontAry, function(splitFont){
-                                                splitFont = splitFont.trim().replace('\'', '').replace('\'', '');
-                                                fontMap[splitFont] = splitFont;
-                                            });
-                                        }
 
-                                    }
-
-                                }
                                 if(map[obj.id]) {
                                     _cb(null);
                                 } else {
@@ -404,8 +387,6 @@ _.extend(view.prototype, BaseView.prototype, {
                             }
 
                         }, function done(err){
-                            //self.log.debug('The following fonts are used:', fontMap);
-                            data.fontMap = fontMap;
                             cb(null, webpageData, pages);
                         });
 
@@ -527,6 +508,18 @@ _.extend(view.prototype, BaseView.prototype, {
 
                 if(!data.account.orgId) {
                     data.account.orgId = 0;
+                }
+
+                if(pageHolder[handle] && pageHolder[handle].manifest) {
+                    var fonts = pageHolder[handle].manifest.fonts;
+                    var usedFamilies = [];
+                    var googleFamilies = ['Roboto:200,400,700', 'Roboto Condensed:200,400,700', 'Roboto Slab:200,400,700', 'Oswald:200,400,700', 'Montserrat:200,400,700', 'Droid Serif:200,400,700', 'Open Sans:200,400,700', 'Open Sans Condensed:200,400,700', 'Lato:200,400,700', 'Raleway:200,400,700', 'Quicksand:200,400,700', 'Ubuntu:200,400,700', 'Merriweather:200,400,700', 'Quattrocento:200,400,700', 'Lora:200,400,700', 'Playfair Display:200,400,700', 'Pacifico:200,400,700', 'Satisfy:200,400,700', 'Parisienne:200,400,700', 'Petit Formal Script:200,400,700', 'Indie Flower:200,400,700', 'Shadows Into Light Two:200,400,700', 'Amatic SC:200,400,700', 'Neucha:200,400,700', 'Schoolbell:200,400,700', 'Itim:200,400,700', 'Patrick Hand SC:200,400,700', 'Delius Swash Caps:200,400,700', 'PT Sans:200,400,700', 'Nunito:200,400,700', 'Cinzel:200,400,700' ];
+                    _.each(fonts, function(fontName){
+                        usedFamilies.push(fontName + ':200,400,700');
+                    });
+                    self.log.debug('usedFamilies:', usedFamilies);
+                    data.account.fonts = _.intersection(googleFamilies, usedFamilies).join('|');
+                    self.log.debug('data.account.fonts:', data.account.fonts);
                 }
 
                 var blogUrlParts = [];
@@ -682,7 +675,6 @@ _.extend(view.prototype, BaseView.prototype, {
                         });
                         //self.log.debug('components:', components);
                         var map = {};
-                        var fontMap= {};
                         async.eachSeries(components, function(component, _cb){
                             if(component) {
                                 var obj = {};
@@ -703,8 +695,6 @@ _.extend(view.prototype, BaseView.prototype, {
                             }
 
                         }, function done(err){
-                            //self.log.debug('The following fonts are used:', fontMap);
-                            data.fontMap = fontMap;
                             cb(null, webpageData, pages);
                         });
 
