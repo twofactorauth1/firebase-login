@@ -405,6 +405,52 @@ module.exports = function(grunt) {
                     ]
                 }
             },
+            copyPage: {
+                options: {
+                    questions: [
+                        {
+                            config: 'doCopyPage.testToProd', // arbitray name or config for any other grunt task
+                            type: 'list', // list, checkbox, confirm, input, password
+                            message: 'Which direction are you copying?', // Question to ask the user, function needs to return a string,
+                            default: true, // default value if nothing is entered
+                            choices: [
+                                { name: 'From Test to Production', value: 'test2prod' },
+                                { name: 'From Test to Test', value: 'test2test' },
+                                { name: 'From Production to Test', value: 'prod2test', checked:true },
+                                { name: 'From Production to Production', value: 'prod2prod' }
+                                ]
+                        },
+                        {
+                            config: 'doCopyPage.pageId', // arbitray name or config for any other grunt task
+                            type: 'input', // list, checkbox, confirm, input, password
+                            message: 'Enter the PageId to copy', // Question to ask the user, function needs to return a string,
+                            validate: function(value){
+                                if(value == '') {
+                                    return 'PageId should not be blank';
+                                }else{
+                                    return true;
+                                }
+                            }
+                        },
+                        {
+                            config: 'doCopyPage.accountId', // arbitray name or config for any other grunt task
+                            type: 'input', // list, checkbox, confirm, input, password
+                            message: 'Enter the destination AccountID to copy', // Question to ask the user, function needs to return a string,
+                            //default: 0, // default value if nothing is entered
+                            //choices: 'Array|function(answers)',
+                            validate: function(value){
+                                if(isNaN(parseInt(value))){
+                                    return 'please enter a valid id. [' + value + ' is not valid.]';
+                                } else {
+                                    return true;
+                                }
+                            } // return true if valid, error message if invalid
+                            //filter:  function(value), // modify the answer
+                            //when: function(answers) // only ask this question when this function returns true
+                        }
+                    ]
+                }
+            },
             enableSiteBuilderOnLegacyAccount: {
                 options: {
                     questions: [
@@ -555,6 +601,25 @@ module.exports = function(grunt) {
 
     });
 
+    grunt.registerTask('doCopyPage', 'A task to copy an page with its sections to an account from one db to another', function(){
+        var done = this.async();
+        var accountId = parseInt(grunt.config('doCopyPage.accountId'));
+        var pageId = grunt.config('doCopyPage.pageId');
+        var isTestToProd = grunt.config('doCopyPage.testToProd');
+        if (isTestToProd === 'test2prod') {
+            dbcopyutil.copyPageFromTestToProd(pageId, accountId, done);
+        } else if (isTestToProd === 'test2test') {
+            dbcopyutil.copyPageFromTestToTest(pageId, accountId, done);
+        } else if (isTestToProd === 'prod2prod') {
+            dbcopyutil.copyPageFromProdToProd(pageId, accountId, done);
+        } else if (isTestToProd === 'prod2test') {
+            dbcopyutil.copyPageFromProdToTest(pageId, accountId, done);
+        }
+
+    });
+
+
+
     grunt.registerTask('doEnableSiteBuilderOnLegacyAccount', 'A task to enable SB on an account and update pages to be SB-compatible.', function(){
 
         var done = this.async();
@@ -588,6 +653,8 @@ module.exports = function(grunt) {
 
 
     grunt.registerTask('copyAccount',  ['prompt:copyAccount', 'doCopyAccount']);
+
+    grunt.registerTask('copyPage',  ['prompt:copyPage', 'doCopyPage']);
 
     grunt.registerTask('enableSiteBuilderOnLegacyAccount',  ['prompt:enableSiteBuilderOnLegacyAccount', 'doEnableSiteBuilderOnLegacyAccount']);
 
