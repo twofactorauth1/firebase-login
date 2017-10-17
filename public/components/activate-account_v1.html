@@ -42,9 +42,9 @@
 		            <div class="clearfix"></div>
 		        </div>
 	        </div>
-	        <!--  Step 2 -->
+	        <!--  Step 2 with New Account -->
 
-	        <div ng-if="currentStep == 2 && newAccount.plan == plans.NEW">
+	        <div ng-if="currentStep == 2 && newAccount.plan === plans.NEW">
 				<div class="ldsrc-getting-started center">
 		            <h1 class="text-bold margin-bottom-5 getting-started-text">PICK A TEMPLATE:</h1>
 		        </div>
@@ -69,6 +69,23 @@
 			            </li>
 
 			        </ul>
+			        <div class="clearfix"></div>   
+		            
+		        </div>
+	        </div>
+
+	        <!--  Step 3 -->
+
+	        <div ng-if="currentStep == 3">
+				<div class="ldsrc-getting-started center">
+		            <h1 class="text-bold margin-bottom-5 getting-started-text">LET'S SECURE YOUR ACCOUNT, ADAM@INDIGENOUS.IO:</h1>
+		        </div>
+		        <div class="clearfix"></div>
+		        <div id="password" class="form-group col-xs-12 has-feedback">
+                    <input class="form-control input-lg" type="password" ng-model="newAccount.password" ng-model-options="{ debounce: 800 }" />
+                </div>
+				<div class="password-wrap">
+					
 			        <div class="clearfix"></div>   
 		            
 		        </div>
