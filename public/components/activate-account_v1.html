@@ -10,7 +10,7 @@
 		    	</div>
 	    	</h4>
 	    </div>
-	    <div class="ldsrc-body steps-{{currentStep}}" >
+	    <div class="ldsrc-body steps-{{currentStep}}" ng-class="{'new-account':newAccount.plan === plans.NEW}">
 	    	<!--  Step 1 -->
 	    	<div ng-if="currentStep == 1">
 				<div class="ldsrc-getting-started center">
@@ -42,7 +42,7 @@
 		            <div class="clearfix"></div>
 		        </div>
 	        </div>
-	        <!--  Step 2 with New Account -->
+	        <!--  Step 2 with NEW Account -->
 
 	        <div ng-if="currentStep == 2 && newAccount.plan === plans.NEW">
 				<div class="ldsrc-getting-started center">
@@ -69,6 +69,35 @@
 			            </li>
 
 			        </ul>
+			        <div class="clearfix"></div>   
+		            
+		        </div>
+	        </div>
+
+	        <!--  Step 2 with EXISTING Account -->
+
+	        <div ng-if="currentStep == 2 && newAccount.plan === plans.EXISTING">
+				<div class="ldsrc-getting-started center">
+		            <h1 class="text-bold margin-bottom-5 getting-started-text">YOU HAVE YOUR OWN WEBSITE, GREAT!</h1>
+		            <h3>
+		            	<div>
+		            	Most LeadSource features work best when we can see visitor data from your website. We just need your help to make this happen. Copy the code below (or send to your developer) and paste it into the header of your website, write before the closing </head> tag.
+		            	</div>
+						<div class="margin-top-30">We'll send you a confirmation email once we start recieving data.</div>
+		            </h3>
+		        </div>
+		        <div class="clearfix"></div>
+				<div class="script-wrap">
+					<pre class="pre-wrap-script">
+  &lt;script&gt;
+    $(document).ready(function(){
+      setTimeout(function(){
+        console.log('deleting cookie');
+        $.cookie('cookie',null,{domain: document.domain});
+      },1000);
+    });
+  &lt;/script&gt;
+</pre>
 			        <div class="clearfix"></div>   
 		            
 		        </div>

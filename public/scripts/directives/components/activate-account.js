@@ -42,8 +42,7 @@ app.directive('activateAccountComponent', ['$filter', '$timeout', '$q', '$locati
 
 			function setUpPlan(plan){
 				scope.newAccount.plan = scope.plans[plan];
-				if(scope.newAccount.plan === scope.plans.NEW)
-					scope.currentStep = 2;
+				scope.currentStep = 2;
 			}
 
 			function selectAccountTemplate(template){
