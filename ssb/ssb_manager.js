@@ -817,6 +817,7 @@ module.exports = {
             "title" : "activate setup",
             "sections" : [ 
                 {
+                    _id:'activate-account',
                     "components" : [ 
                         {
                             "type" : "activate-account",
@@ -826,7 +827,7 @@ module.exports = {
                     ]
                 }
             ]
-        })
+        });
         pages.push(_page);
         return fn(null, pages);
     },

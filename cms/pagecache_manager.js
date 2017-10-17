@@ -343,8 +343,8 @@ module.exports = {
             if(res.statusCode === 200 && !update) {
                 //pipe it
                 self.log.debug('piping');
-                resp.setHeader('Content-Length', res.headers['content-length'])
-                resp.setHeader('Content-Type', res.headers['content-type'])
+                resp.setHeader('Content-Length', res.headers['content-length']);
+                resp.setHeader('Content-Type', res.headers['content-type']);
 
                 // cache-control?
                 // etag?

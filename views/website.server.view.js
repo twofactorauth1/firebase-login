@@ -669,23 +669,7 @@ _.extend(view.prototype, BaseView.prototype, {
                             if(component) {
                                 var obj = {};
                                 obj.id = '/components/' + component.type + '_v' + component.version + '.html';
-                                if(component.text) {
-                                    //var fontRegexp = /.*font-family: \'([a-zA-Z\s]+)\'.*/g;
-                                    var fontRegexp = /font-family: ([a-zA-Z\s,\'\-]+)[^;]*/g;
-                                    var font = fontRegexp.exec(component.text);
-                                    if(font && font.length > 1) {
-                                        for(var i=1; i<font.length; i+=3) {
-                                            //console.log('matched:', font[i]);
-                                            var fontAry = font[i].split(',');
-                                            _.each(fontAry, function(splitFont){
-                                                splitFont = splitFont.trim().replace('\'', '').replace('\'', '');
-                                                fontMap[splitFont] = splitFont;
-                                            });
-                                        }
 
-                                    }
-
-                                }
                                 if(map[obj.id]) {
                                     _cb(null);
                                 } else {
