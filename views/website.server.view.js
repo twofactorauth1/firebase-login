@@ -690,7 +690,8 @@ _.extend(view.prototype, BaseView.prototype, {
             'email-3-col': function(){return '<div email-component';},
             'email-hr': function(){return '<div email-component';},
             'email-social': function(){return '<div email-component';},
-            'email-footer': function(){return '<div email-component';}
+            'email-footer': function(){return '<div email-component';},
+            'activate-account': function(){return '<div activate-account';}
         };
         if(typeof lookup[type] !== 'function') {
             console.log('ERROR: could not find matching directive for component.type =' + type);

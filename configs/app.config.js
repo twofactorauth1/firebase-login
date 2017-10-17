@@ -92,6 +92,13 @@ if(process.env.GLOBAL_ENVIRONMENTS == null) {
  */
 var MAIN_ACCOUNT_ID = process.env.MAIN_ACCOUNT_ID || 6;
 
+/**
+ * A configuration for the db ID of the LeadSource account.  This can be useful
+ * in edge case redirections
+ * @type {string}
+ */
+var LEADSOURCE_ACCOUNT_ID = process.env.LEADSOURCE_ACCOUNT_ID || 5;
+
 
 //---------------------------------------------------------
 //  SET UP SERVER_URL
@@ -163,6 +170,7 @@ module.exports = {
     freeCpus: 2,
     xdhost_whitelist: XDHosts,
     mainAccountID: MAIN_ACCOUNT_ID,
+    leadSourceAccountID: LEADSOURCE_ACCOUNT_ID,
 
     SIGNATURE_SECRET: "ab#6938kxal39jg&*(#*K_Cd",
     cookie_subdomain: '.' + process.env.ROOT_HOST,
