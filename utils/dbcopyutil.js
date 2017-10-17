@@ -422,10 +422,10 @@ var copyutil = {
                         console.log('Error getting account:', err);
                         cb(err);
                     } else {
-                        destAccount = account[0];
+                        var destAccount = account[0];
                         if(destAccount){
                             cb(null,destAccount);
-                        }else{  
+                        } else{
                             console.log("Account not found with this id: "+destAccountId);
                             cb("Account not found with this id.");
                         }
