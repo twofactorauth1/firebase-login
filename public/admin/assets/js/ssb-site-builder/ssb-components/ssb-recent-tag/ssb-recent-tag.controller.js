@@ -74,11 +74,11 @@
 
 							if (blog_tags.length < 20) {
 								if (angular.isObject(tag) && tag.text) {
-									if (blog_tags.indexOf(tag.text) === -1) {
-										blog_tags.push(tag);
+									if (!isExit(tag.text,blog_tags)){
+										blog_tags.push(tag.text);
 									}
 								} else {
-									if (blog_tags.indexOf(tag) === -1) {
+									if (!isExit(tag,blog_tags)) {
 										blog_tags.push(tag);
 									}
 								}
@@ -89,7 +89,12 @@
 			}
 			return blog_tags;
 		}
-
+		function isExit(query, arr) {
+			var lowerQuery = query.toLowerCase();
+			return _.find(arr, function(term) {
+			  return term.toLowerCase() == lowerQuery;
+			})!==undefined;
+		}
 
 		function encodeUrlText(url) {
 			return encodeURI(url);
