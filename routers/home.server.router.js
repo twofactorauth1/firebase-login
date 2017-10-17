@@ -659,6 +659,11 @@ _.extend(router.prototype, BaseRouter.prototype, {
         if(req.session.orgId === 5 && req.session.activated === false && req.session.adminAccountId) {
             self.log.debug('Using adminAccountId:', req.session.adminAccountId);
             accountId = parseInt(req.session.adminAccountId);
+            if(pageName === 'index') {
+                pageName = 'splash';
+            } else if(pageName === 'activate') {
+                pageName = 'marketing';
+            }
         }
         self.log.debug('>> getOrCreateTemplate ' + accountId + ', ' + pageName + ', ' + update);
         //return pageCacheManager.getOrCreateLocalTemplate(accountId, pageName, resp);

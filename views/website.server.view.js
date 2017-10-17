@@ -639,10 +639,28 @@ _.extend(view.prototype, BaseView.prototype, {
                    }
                 });
             },
-            function getAllPages(webpageData, cb) { 
-                ssbManager.listActivateAccountPages(accountId, webpageData.website._id, function(err, pages){
-                    cb(err, webpageData, pages);
-                });
+            function getAllPages(webpageData, cb) {
+                if(handle === 'activate/setup') {
+                    ssbManager.listActivateAccountPages(accountId, webpageData.website._id, function(err, pages){
+                        cb(err, webpageData, pages);
+                    });
+                } else if(handle === 'index') {
+
+                    ssbManager.getPublishedPage(accountId, webpageData.website._id, 'splash', function(err, page){
+                        if(page) {
+                            page.set('handle', 'index');
+                        }
+                        cb(err, webpageData, [page]);
+                    });
+                } else {
+                    ssbManager.getPublishedPage(accountId, webpageData.website._id, 'marketing', function(err, page){
+                        if(page) {
+                            page.set('handle', 'activate');
+                        }
+                        cb(err, webpageData, [page]);
+                    });
+                }
+
             },
             
             function readComponents(webpageData, pages, cb) {
