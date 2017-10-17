@@ -25,6 +25,7 @@ app.directive('activateAccountComponent', ['$filter', '$timeout', '$q', '$locati
 			scope.selectAccountTemplate = selectAccountTemplate;
 			scope.previewTemplate = previewTemplate;
 			scope.backToTemplates = backToTemplates;
+			scope.copyToClipboard = copyToClipboard;
 			scope.templates = [
 				{
 					_id: 1,
@@ -63,6 +64,14 @@ app.directive('activateAccountComponent', ['$filter', '$timeout', '$q', '$locati
 			function resetSelectedTemplate(){
 				scope.selectedTemplate = undefined;
 				scope.showPreview = false;
+			}
+
+			function copyToClipboard(element) {
+			  var $temp = $("<input>");
+			  $("body").append($temp);
+			  $temp.val($(element).text()).select();
+			  document.execCommand("copy");
+			  $temp.remove();
 			}
 		}
 	};
