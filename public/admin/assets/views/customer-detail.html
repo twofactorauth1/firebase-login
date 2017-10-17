@@ -33,6 +33,7 @@
                                         <div class="map margin-bottom-15">
                                             <span class="text-bold">Location</span>
                                             <hr class="margin-top-5">
+                                            <span ng-show="!customer.accountIsActive" class="text-inactive-ac">Account is Inactive</span>
                                             <map zoom="10" center="{{location.lat}}, {{location.lon}}" disable-default-u-i="true" scale-control="false" pan-control="false" zoom-control="false" class="height-155" ng-if="!loadingMap && location.lat" scrollwheel="false">
                                                 <marker position="{{location.lat}}, {{location.lon}}"></marker>
                                             </map>
