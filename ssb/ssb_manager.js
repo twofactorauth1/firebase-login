@@ -810,6 +810,27 @@ module.exports = {
         });
     },
 
+    listActivateAccountPages: function(accountId, websiteId, fn) {
+        var pages = [];
+        var _page = new $$.m.ssb.Page({          
+            "handle" : "activate/setup",
+            "title" : "activate setup",
+            "sections" : [ 
+                {
+                    "components" : [ 
+                        {
+                            "type" : "activate-account",
+                            "title" : "",
+                            "version" : 1
+                        }
+                    ]
+                }
+            ]
+        })
+        pages.push(_page);
+        return fn(null, pages);
+    },
+
     getPublishedPage: function(accountId, websiteId, handle, fn) {
         var self = this;
         self.log.debug(accountId, null,'>> getPublishedPage');
