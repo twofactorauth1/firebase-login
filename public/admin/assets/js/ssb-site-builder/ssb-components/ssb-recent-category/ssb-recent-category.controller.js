@@ -62,18 +62,29 @@ function ssbBolgRecentCategoryComponentController(SimpleSiteBuilderBlogService, 
         if (vm.blog.posts.length > 0) {
             angular.forEach(vm.blog.posts, function(post, key) {
                 if (post.post_categories && post.post_categories.length > 0) {
-                    angular.forEach(post.post_categories, function(tag, key1) {
-
-                        if(blog_categories.length<20 && _.filter(blog_categories, function(intag){
-                            return intag.text == tag.text
-                        }).length ==0) {
-                            blog_categories.push(tag);
+                    angular.forEach(post.post_categories, function(tag, key1) { 
+                        if(blog_categories.length<20 ){ 
+                            if (angular.isObject(tag) && tag.text) {
+                                if (!isExit(tag.text,blog_categories)){
+                                    blog_categories.push(tag.text);
+                                }
+                            } else {
+                                if (!isExit(tag,blog_categories)) {
+                                    blog_categories.push(tag);
+                                }
+                            }
                         }
                     })
                 }
             })
         }
         return blog_categories;
+    }
+    function isExit(query, arr) {
+        var lowerQuery = query.toLowerCase();
+        return _.find(arr, function(term) {
+          return term.toLowerCase() == lowerQuery;
+        })!==undefined;
     }
 
 
