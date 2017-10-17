@@ -17,6 +17,9 @@ app.directive('activateAccountComponent', ['$filter', '$q', '$location', functio
 			scope.newAccount = {
 				plan: scope.plans.NEW
 			}
+
+			scope.totalSteps = 3;
+			scope.currentStep = 1;
 		}
 	};
 }]);
