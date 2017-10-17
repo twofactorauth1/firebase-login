@@ -458,7 +458,7 @@ var copyutil = {
                     pageToSave.websiteId = destAccount.website.websiteId;
                     pageToSave._id = utils.idutils.generateUUID();
                     pageToSave.sections = sections;
-
+                    var pagesCollection = destMongo.collectin('pages');
                     pagesCollection.save(pageToSave, function(err, savedPage){
                         if(err) {
                             console.log('Error saving page: ' + pageToSave._id);
