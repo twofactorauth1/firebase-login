@@ -2,11 +2,10 @@
 	.ldsrc-container{
 		background: #FFFFFF;
 		.ldsrc-header{
+			padding: 20px;
 			background-color: #1193D1;
 			color: #FFFFFF;
-			h4{
-				padding-top: 20px;
-				padding-bottom: 20px;
+			h4{				
 				.steps{
 					position: absolute;
     				right: 30px;
@@ -57,6 +56,11 @@
 			padding-top: 100px;
 			max-width: 100%;
 			.templates-wrap{
+				.template-img-container{
+					height: 580px;
+					overflow: hidden;
+					margin-bottom: 15px;
+				}
 				.btn-choose-template{
 				    background: #1193D1;
 				    border-color: #1193D1;
@@ -71,5 +75,31 @@
 			}
 		}
 	}
-	
+	.template-preview{
+		.ldsrc-preview-header{
+			position: fixed;
+		    width: 100%;
+		    z-index: 9999;
+			background-color: #4A4A4A;
+			color: #FFFFFF;
+			padding: 20px;
+			.preview-header-buttons{
+				float: right;
+				.btn-choose-template{
+				    background: #1193D1;
+				    border-color: #1193D1;
+				    border-radius: 20px;
+				}
+				.template-back{
+					color: #969696 !important;
+				    margin-right: 10px;
+				    text-decoration: none !important;
+				    cursor: pointer;
+				}
+			}
+		}
+		.template-img-container{
+			width: 100%;
+		}
+	}
 }

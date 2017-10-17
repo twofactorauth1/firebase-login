@@ -1,5 +1,5 @@
 <div ng-class="component.type+'-v'+component.version">
-	<div class="ldsrc-container">
+	<div class="ldsrc-container" ng-if="!showPreview">
 		<div class="ldsrc-header">
 	    	<h4 class="center">
 	    		<img src="/images/leadsource/header-leadsource-white-logo.png">
@@ -50,7 +50,7 @@
 				<div class="templates-wrap">
 					<ul class="list-unstyled">
 
-			            <li ng-repeat="template in templates track by $index" ng-click="vm.selectSiteTemplate(template)" class="template-grid-item col-sm-6 col-lg-4 col-xl-3">
+			            <li ng-repeat="template in templates track by $index" class="template-grid-item col-sm-6 col-lg-4 col-xl-3">
 			                <div class="template-grid-item-inner">
 
 			                    <div class="template-img-container">
@@ -58,8 +58,8 @@
 			                    </div>
 
 			                    <h4 class="center">
-			                        <a href class="btn btn-primary btn-choose-template">CHOOSE TEMPLATE</a>
-			                        <a href class="preview-template">PREVIEW</a>
+			                        <a class="btn btn-primary btn-choose-template" ng-click="selectAccountTemplate(template)" >CHOOSE TEMPLATE</a>
+			                        <a class="preview-template" ng-click="previewTemplate(template)">PREVIEW</a>
 			                    </h1>
 
 			                </div>
@@ -72,5 +72,21 @@
 		        </div>
 	        </div>
 	    </div>
-	</div>    
+	</div>
+	<div ng-if="showPreview" class="template-preview">
+		<div class="ldsrc-preview-header">
+	    	<h4 class="">
+	    		<img src="/images/leadsource/header-leadsource-white-logo.png">
+	    		<div class="preview-header-buttons">
+	    			<a class="template-back" ng-click="backToTemplates()">GO BACK</a>
+	    			<a class="btn btn-primary btn-choose-template" ng-click="selectAccountTemplate(selectedTemplate)" >CHOOSE TEMPLATE</a>
+	    		</div>
+	    		
+	    	</h4>
+			
+	    </div>
+    	<div class="template-img-container">
+            <img class="template-img img-responsive" ng-src="{{selectedTemplate.previewUrl}}"/>
+        </div>
+	</div>   
 </div>

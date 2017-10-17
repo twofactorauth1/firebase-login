@@ -22,25 +22,42 @@ app.directive('activateAccountComponent', ['$filter', '$q', '$location', functio
 			scope.currentStep = 1;
 
 			scope.setUpPlan = setUpPlan;
-
+			scope.selectAccountTemplate = selectAccountTemplate;
+			scope.previewTemplate = previewTemplate;
+			scope.backToTemplates = backToTemplates;
 			scope.templates = [
 				{
 					_id: 1,
-					previewUrl: "https://s3.amazonaws.com/indigenous-digital-assets/test_account_2715/leadsource_1508228298810.png"
+					previewUrl: "https://s3.amazonaws.com/indigenous-digital-assets/test_account_2715/Tessco_content_png_1508233372188"
 				},
 				{
 					_id: 12,
-					previewUrl: "https://s3.amazonaws.com/indigenous-digital-assets/test_account_2715/leadsource_1508228298810.png"
+					previewUrl: "https://s3.amazonaws.com/indigenous-digital-assets/test_account_2715/Tessco_content_png_1508233372188"
 				},
 				{
 					_id: 3,
-					previewUrl: "https://s3.amazonaws.com/indigenous-digital-assets/test_account_2715/leadsource_1508228298810.png"
+					previewUrl: "https://s3.amazonaws.com/indigenous-digital-assets/test_account_2715/Tessco_content_png_1508233372188"
 				}
 			]
 
 			function setUpPlan(plan){
 				scope.newAccount.plan = scope.plans[plan];
 				scope.currentStep = 2;
+			}
+
+			function selectAccountTemplate(template){
+				scope.newAccount.templateId = template._id;
+				scope.currentStep = 3;
+			}
+
+			function previewTemplate(template){
+				scope.selectedTemplate = template;
+				scope.showPreview = true;
+			}
+
+			function backToTemplates(){
+				scope.selectedTemplate = undefined;
+				scope.showPreview = false;
 			}
 		}
 	};
