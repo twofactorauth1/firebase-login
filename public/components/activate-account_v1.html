@@ -1,11 +1,13 @@
 <div ng-class="component.type+'-v'+component.version">
 	<div class="ldsrc-container" ng-if="!showPreview">
 		<div class="ldsrc-header">
-	    	<h4 class="center">
-	    		<img src="/images/leadsource/header-leadsource-white-logo.png">
-	    		<div class="steps">
-	    			Step {{currentStep}} of {{totalSteps}}
-	    		</div>
+	    	<h4>
+		    	<div class="center">
+		    		<img src="/images/leadsource/header-leadsource-white-logo.png">
+		    		<div class="steps">
+		    			Step {{currentStep}} of {{totalSteps}}
+		    		</div>
+		    	</div>
 	    	</h4>
 	    </div>
 	    <div class="ldsrc-body steps-{{currentStep}}" >
