@@ -118,7 +118,7 @@
 					if (section.bg && section.bg.img && section.bg.img.show === false) {
 						classString += " hide-hero-bg-image";
 					}
-					angular.forEach(section.components, function (cmp, index) { 
+					angular.forEach(section.components, function (cmp, index) {
 						if(cmp.type=="navigation" && cmp.navigation){
 							if(cmp.navigation.wideMobileMode){
 								classString += " ssb-section-wmm";
@@ -167,7 +167,7 @@
 			var windowWidth = angular.element($window).width();
 			if(windowWidth < 768){
 				_layout = 0
-			}      
+			}
 			else if(windowWidth >= 768 && windowWidth < 992){
 				_layout = 1;
 			}
@@ -183,7 +183,7 @@
 
 		function sectionStyle (section) {
 			var styleString = ' ';
-			// Styles basis of screens sizes			
+			// Styles basis of screens sizes
 			var _layout = screenLayout();
 
 			switch (_layout) {
@@ -333,7 +333,7 @@
 						}
 
 					}
-	                break;      
+	                break;
 	            default:
 	            	if (section && section.spacing) {
 						if (section.spacing.pt) {
@@ -391,7 +391,7 @@
 				styleString += 'border-style: ' + section.border.style + ';';
 				styleString += 'border-radius: ' + section.border.radius + '%;';
 			}
-			if(section && section.fixedLeftNavigation){ 
+			if(section && section.fixedLeftNavigation){
 				angular.forEach(section.components, function (cmp, index) {
 					if(cmp.type=="navigation" && cmp.navigation){
 						cmp.navigation.wideMobileMode = false;
@@ -659,7 +659,7 @@
 						classString += ' ssb-component-amm';
 					}
 				}
-			} 
+			}
 			return classString;
 		}
 
@@ -1008,17 +1008,15 @@
 					if (newValue && newValue > 0 && !vm.uiState.backgroundImagesLoaded) {
 						var elem = angular.element('div[id^="px-ele-"]').first();
 						vm.uiState.backgroundImagesLoaded = true;
-						$timeout(function () {
-							elem.waitForImages(true).done(function () {
+						elem.waitForImages(true).done(function () {
+							$scope.$broadcast('parallaxCall', {});
+							$(window).scroll();
+							console.log("Image loaded");
+							$timeout(function () {
 								$scope.$broadcast('parallaxCall', {});
 								$(window).scroll();
-								console.log("Image loaded");
-								$timeout(function () {
-									$scope.$broadcast('parallaxCall', {});
-									$(window).scroll();
-								}, 1000);
-							});
-						}, 500);
+							}, 100);
+						});
 						unbindWatcher();
 					}
 				});
