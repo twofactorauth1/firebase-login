@@ -21,8 +21,8 @@
 				<div class="features-wrap">
 
 		            <div class="col-sm-6 padding-top-15">
-		                <div class="feature-block selected-plan" ng-click="setUpPlan(plans.NEW)" >
-		                    <div class="feature-block-content">
+		                <div class="feature-block selected-plan" style="height:210px;display:table;" ng-click="setUpPlan(plans.NEW)" >
+		                    <div class="feature-block-content" style="display:table-cell;vertical-align:middle;">
 		                    	<h3 class="center">
 		                    		I WANT AN AWESOME NEW WEBSITE
 		                    	</h3>
@@ -31,11 +31,11 @@
 		            </div>
 
 		            <div class="col-sm-6 padding-top-15">
-		                <div class="feature-block" ng-click="setUpPlan(plans.EXISTING)">
-		                    <div class="feature-block-content">
+		                <div class="feature-block"  style="height:210px;display:table;" ng-click="setUpPlan(plans.EXISTING)">
+		                    <div class="feature-block-content" style="display:table-cell;vertical-align:middle;">
 		                    	<h3 class="center">
-		                    		I WANT TO KEEP MY WEBSITE
-		                    	</h3>	
+		                    		I WANT TO KEEP MY WEBSITE<br>&nbsp;
+		                    	</h3>
 		                    </div>
 		                </div>
 		            </div>
@@ -69,8 +69,8 @@
 			            </li>
 
 			        </ul>
-			        <div class="clearfix"></div>   
-		            
+			        <div class="clearfix"></div>
+
 		        </div>
 	        </div>
 
@@ -98,14 +98,14 @@
     });
   &lt;/script&gt;
 					</pre>
-					
-			        <button class="copy-text" ng-click="copyToClipboard('.pre-wrap-script')">COPY</button>   
-        			<h4 class="center margin-top-10 step-btn-container">                        
+
+			        <button class="copy-text" ng-click="copyToClipboard('.pre-wrap-script')">COPY</button>
+        			<h4 class="center margin-top-10 step-btn-container">
                         <a class="send-to-dev">Send to your Web Developer</a>
                         <a class="btn btn-primary btn-complete-activation btn-wide" ng-click="completeActivation()" >COMPLETE ACTIVATION</a>
                     </h4>
 		        </div>
-		        
+
 	        </div>
 
 	        <!--  Step 3 -->
@@ -115,12 +115,12 @@
 		            <h1 class="text-bold margin-bottom-5 getting-started-text">LET'S SECURE YOUR ACCOUNT, ADAM@INDIGENOUS.IO:</h1>
 		        </div>
 		        <div class="clearfix"></div>
-		        
+
 				<div class="password-wrap center">
 					<div id="password" class="form-group col-xs-12 has-feedback">
                     	<input class="form-control input-lg" type="password" ng-model="newAccount.password" />
                 	</div>
-			        <div class="clearfix"></div>   
+			        <div class="clearfix"></div>
         			<h4 class="center">
                         <a class="btn btn-primary btn-activate-template" ng-click="selectAccountTemplate(template)" >ACTIVATE</a>
                     </h4>
@@ -136,12 +136,12 @@
 	    			<a class="template-back" ng-click="backToTemplates()">GO BACK</a>
 	    			<a class="btn btn-primary btn-choose-template" ng-click="selectAccountTemplate(selectedTemplate)" >CHOOSE TEMPLATE</a>
 	    		</div>
-	    		
+
 	    	</h4>
-			
+
 	    </div>
     	<div class="template-img-container">
             <img class="template-img img-responsive" ng-src="{{selectedTemplate.previewUrl}}"/>
         </div>
-	</div>   
+	</div>
 </div>
