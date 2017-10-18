@@ -36,12 +36,14 @@ block content
                       span www.indigenous.io
                     if val.domain
                       span=val.domain
-                    if !val.domain && val.subdomain && val.subdomain != 'main' && val.orgId != 1 && val.orgId != 4
+                    if !val.domain && val.subdomain && val.subdomain != 'main' && val.orgId == 0
                       span=val.subdomain+ '.indigenous.io'
                     if !val.domain && val.subdomain && val.subdomain != 'main' && val.orgId == 1
                       span=val.subdomain+ '.gorvlvr.com'
                     if !val.domain && val.subdomain && val.subdomain != 'main' && val.orgId == 4
                       span=val.subdomain+ '.techevent.us'
+                    if !val.domain && val.subdomain && val.subdomain != 'main' && val.orgId == 5
+                      span=val.subdomain + '.leadsource.cc'
                     i.fa.fa-chevron-right.pull-right
                   div.clearfix
         // start: COPYRIGHT

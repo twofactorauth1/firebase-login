@@ -89,9 +89,9 @@ mainApp.controller('CacheCtrl', ['$scope', '$rootScope', 'embeddedSiteDataServic
 
 			_.each(data.sections, function (section, index1) {
 				if (section) {
-					 if(section.layout== "nav-hero" && firstheroNavId==undefined){
-						 firstheroNavId="section_"+section._id
-					 }
+					if(section.layout== "nav-hero" && firstheroNavId==undefined){
+					    firstheroNavId="section_"+section._id
+					}
 					if (section.ssb === false) {
 						$scope.components = $scope.components.concat(section.components);
 					} else {

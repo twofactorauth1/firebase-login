@@ -422,10 +422,10 @@ var copyutil = {
                         console.log('Error getting account:', err);
                         cb(err);
                     } else {
-                        destAccount = account[0];
+                        var destAccount = account[0];
                         if(destAccount){
                             cb(null,destAccount);
-                        }else{  
+                        } else{
                             console.log("Account not found with this id: "+destAccountId);
                             cb("Account not found with this id.");
                         }
@@ -458,7 +458,7 @@ var copyutil = {
                     pageToSave.websiteId = destAccount.website.websiteId;
                     pageToSave._id = utils.idutils.generateUUID();
                     pageToSave.sections = sections;
-
+                    var pagesCollection = destMongo.collection('pages');
                     pagesCollection.save(pageToSave, function(err, savedPage){
                         if(err) {
                             console.log('Error saving page: ' + pageToSave._id);

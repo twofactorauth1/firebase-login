@@ -367,28 +367,11 @@ _.extend(view.prototype, BaseView.prototype, {
                         });
                         //self.log.debug('components:', components);
                         var map = {};
-                        var fontMap= {};
                         async.eachSeries(components, function(component, _cb){
                             if(component) {
                                 var obj = {};
                                 obj.id = '/components/' + component.type + '_v' + component.version + '.html';
-                                if(component.text) {
-                                    //var fontRegexp = /.*font-family: \'([a-zA-Z\s]+)\'.*/g;
-                                    var fontRegexp = /font-family: ([a-zA-Z\s,\'\-]+)[^;]*/g;
-                                    var font = fontRegexp.exec(component.text);
-                                    if(font && font.length > 1) {
-                                        for(var i=1; i<font.length; i+=3) {
-                                            //console.log('matched:', font[i]);
-                                            var fontAry = font[i].split(',');
-                                            _.each(fontAry, function(splitFont){
-                                                splitFont = splitFont.trim().replace('\'', '').replace('\'', '');
-                                                fontMap[splitFont] = splitFont;
-                                            });
-                                        }
 
-                                    }
-
-                                }
                                 if(map[obj.id]) {
                                     _cb(null);
                                 } else {
@@ -404,8 +387,6 @@ _.extend(view.prototype, BaseView.prototype, {
                             }
 
                         }, function done(err){
-                            //self.log.debug('The following fonts are used:', fontMap);
-                            data.fontMap = fontMap;
                             cb(null, webpageData, pages);
                         });
 
@@ -529,6 +510,18 @@ _.extend(view.prototype, BaseView.prototype, {
                     data.account.orgId = 0;
                 }
 
+                if(pageHolder[handle] && pageHolder[handle].manifest) {
+                    var fonts = pageHolder[handle].manifest.fonts;
+                    var usedFamilies = [];
+                    var googleFamilies = ['Roboto:200,400,700', 'Roboto Condensed:200,400,700', 'Roboto Slab:200,400,700', 'Oswald:200,400,700', 'Montserrat:200,400,700', 'Droid Serif:200,400,700', 'Open Sans:200,400,700', 'Open Sans Condensed:200,400,700', 'Lato:200,400,700', 'Raleway:200,400,700', 'Quicksand:200,400,700', 'Ubuntu:200,400,700', 'Merriweather:200,400,700', 'Quattrocento:200,400,700', 'Lora:200,400,700', 'Playfair Display:200,400,700', 'Pacifico:200,400,700', 'Satisfy:200,400,700', 'Parisienne:200,400,700', 'Petit Formal Script:200,400,700', 'Indie Flower:200,400,700', 'Shadows Into Light Two:200,400,700', 'Amatic SC:200,400,700', 'Neucha:200,400,700', 'Schoolbell:200,400,700', 'Itim:200,400,700', 'Patrick Hand SC:200,400,700', 'Delius Swash Caps:200,400,700', 'PT Sans:200,400,700', 'Nunito:200,400,700', 'Cinzel:200,400,700' ];
+                    _.each(fonts, function(fontName){
+                        usedFamilies.push(fontName + ':200,400,700');
+                    });
+                    self.log.debug('usedFamilies:', usedFamilies);
+                    data.account.fonts = _.intersection(googleFamilies, usedFamilies).join('|');
+                    self.log.debug('data.account.fonts:', data.account.fonts);
+                }
+
                 var blogUrlParts = [];
                 if (self.req.params.length && self.req.params[0]!=undefined) {
                     blogUrlParts = self.req.params[0].split('/');
@@ -565,6 +558,229 @@ _.extend(view.prototype, BaseView.prototype, {
                         self = data = value = null;
                     });
                 }
+            }
+
+        ], function done(err){
+            if(err) {
+                self.log.error('Error during rendering:', err);
+                //can we get a session id here?
+                var sessionCookie = $$.u.cookies.getCookie(self.req, 'session_cookie');
+                var sessionId = $$.u.idutils.generateUUID();
+                if(sessionCookie) {
+                    try {
+                        sessionCookie = JSON.parse(sessionCookie);
+                        sessionId = sessionCookie.id;
+                    } catch(e){
+
+                    }
+
+                }
+                var pageProperties = {
+                    url: {
+                        source: self.req.protocol + '://' + self.req.host + '/404',
+                        protocol: self.req.protocol,
+                        domain: self.req.host,
+                        port: '',
+                        path: '/404',
+                        anchor: ''
+                    },
+                    requestedUrl:{
+                        source: self.req.protocol + '://' + self.req.host + self.req.url,
+                        protocol: self.req.protocol,
+                        domain: self.req.host,
+                        port: '',
+                        path: self.req.path,
+                        anchor: ''
+                    },
+                    pageActions: [],
+                    start_time: new Date().getTime(),
+                    end_time: 0,
+                    session_id: sessionId,
+                    entrance: false
+                };
+
+                var pageEvent = new $$.m.PageEvent(pageProperties);
+                pageEvent.set('server_time', new Date().getTime());
+                pageEvent.set('server_time_dt', new Date());
+
+                pageEvent.set('accountId', accountId);
+                analyticsManager.storePageEvent(pageEvent, function(err){});
+                app.render('404.html', {}, function(err, html){
+                    if(err) {
+                        self.log.error('Error during render:', err);
+                    }
+                    self.resp.status(404).send(html);
+                });
+            }
+        });
+    },
+
+
+    renderActivateSetupPage: function (accountId, handle) {
+        var data = {},
+            self = this;
+        self.log.debug('>> renderCachedPage', handle);
+
+        async.waterfall([
+            function getWebpageData(cb) {
+                cmsDao.getDataForWebpage(accountId, 'index', function (err, value) {
+                   if(err) {
+                       self.log.error('Error getting data for website:', err);
+                       cb(err);
+                   } else {
+                       cb(null, value);
+                   }
+                });
+            },
+            function getAllPages(webpageData, cb) {
+                if(handle === 'activate/setup') {
+                    ssbManager.listActivateAccountPages(accountId, webpageData.website._id, function(err, pages){
+                        cb(err, webpageData, pages);
+                    });
+                } else if(handle === 'index') {
+
+                    ssbManager.getPublishedPage(accountId, webpageData.website._id, 'splash', function(err, page){
+                        if(page) {
+                            page.set('handle', 'index');
+                        }
+                        cb(err, webpageData, [page]);
+                    });
+                } else {
+                    ssbManager.getPublishedPage(accountId, webpageData.website._id, 'marketing', function(err, page){
+                        if(page) {
+                            page.set('handle', 'activate');
+                        }
+                        cb(err, webpageData, [page]);
+                    });
+                }
+
+            },
+            
+            function readComponents(webpageData, pages, cb) {
+                data.templates = '';
+                if(pages) {
+                    data.templateIncludes = [];
+                    data.templateIncludes[0] = {id:'/components/component-wrap.html'};
+                    fs.readFile('public/components/component-wrap.html', 'utf8', function(err, html){
+                        data.templateIncludes[0].data = html;
+                        var components = [];
+                        _.each(pages, function(page){
+                            _.each(page.get('sections'), function(section){
+                                if(section) {
+                                    //self.log.debug('Page ' + page.get('handle'));
+                                    //self.log.debug(' has components:', section.components);
+                                    components = components.concat(section.components);
+                                }
+                            });
+                        });
+                        //self.log.debug('components:', components);
+                        var map = {};
+                        async.eachSeries(components, function(component, _cb){
+                            if(component) {
+                                var obj = {};
+                                obj.id = '/components/' + component.type + '_v' + component.version + '.html';
+
+                                if(map[obj.id]) {
+                                    _cb(null);
+                                } else {
+                                    fs.readFile('public' + obj.id, 'utf8', function(err, html){
+                                        obj.data = html;
+                                        data.templateIncludes.push(obj);
+                                        map[obj.id] = obj;
+                                        _cb();
+                                    });
+                                }
+                            } else {
+                                _cb();
+                            }
+
+                        }, function done(err){
+                            cb(null, webpageData, pages);
+                        });
+
+
+                    });
+                } else {
+                    cb('Could not find ' + handle);
+                }
+
+            },
+
+            function(value, pages, cb) {
+                var pageHolder = {};
+                _.each(pages, function(page){
+                    pageHolder[page.get('handle')] = page.toJSON('frontend');
+                });
+
+                data.pages = pageHolder;
+                data.account = value;
+                data.canonicalUrl = pageHolder[handle].canonicalUrl || null;
+                data.account.website.themeOverrides = data.account.website.themeOverrides ||{};
+                data.account.website.themeOverrides.styles = data.account.website.themeOverrides.styles || {};
+
+
+                value.website = value.website || {};
+                value.website.resources = value.website.resources || {};
+                value.website.resources.userScripts = value.website.resources.userScripts || {};
+                value.website.resources.userScripts.global = value.website.resources.userScripts.global || {};
+                data.userScripts = value.website.resources.userScripts[handle] ? value.website.resources.userScripts[handle].sanitized : '';
+                if(value.website.resources.toggles && value.website.resources.toggles.userScripts){
+                    value.website.resources.userScripts.global = value.website.resources.userScripts.global || {};
+                }
+                else{
+                    value.website.resources.userScripts.global = {};
+                }
+
+                if(pageHolder[handle]) {
+                    data.title = pageHolder[handle].title || value.website.title;
+                } else {
+                    data.title = value.website.title;
+                }
+
+                data.currentPageHandle = handle;
+
+                data.author = 'Indigenous';//TODO: wut?
+                data.segmentIOWriteKey = '';
+                data.website = value.website || {};
+                if(pageHolder[handle] && pageHolder[handle].seo) {
+                    data.seo = {
+                        description: pageHolder[handle].seo.description || value.website.seo.description,
+                        keywords: ''
+                    };
+                } else {
+                    data.seo = {
+                        description: value.website.seo.description,
+                        keywords: ''
+                    };
+                }
+
+
+                if (pageHolder[handle] && pageHolder[handle].seo && pageHolder[handle].seo.keywords && pageHolder[handle].seo.keywords.length) {
+                    data.seo.keywords = _.pluck(pageHolder[handle].seo.keywords,"text").join(",");
+                } else if (value.website.seo.keywords && value.website.seo.keywords.length) {
+                    data.seo.keywords = _.pluck(value.website.seo.keywords,"text").join(",");
+                }
+
+
+                data.og = {
+                    type: 'website',
+                    title: (pageHolder[handle] || {}).title || value.website.title,
+                    image: value.website.settings.favicon
+                };
+                if (data.og.image && data.og.image.indexOf('//') === 0) {
+                    data.og.image = 'http:' + data.og.image;
+                }
+                
+                app.render('index', data, function (err, html) {
+                    if (err) {
+                        self.log.error('Error during render: ' + err);
+                    }
+
+                    self.resp.send(html);
+                    self.cleanUp();
+                    self.log.debug('<< renderActivateSetupPage');
+                    self = data = value = null;
+                });
             }
 
         ], function done(err){

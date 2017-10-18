@@ -510,6 +510,7 @@ _.extend(router.prototype, BaseRouter.prototype, {
             orgManager.getAdminAccountByOrgId(accountId, null, 5, function(err, adminAccount){
                 if(adminAccount && adminAccount.id()) {
                     var adminAccountId = adminAccount.id();
+                    req.session.adminAccountId = adminAccountId;
                     var pageName = req.route.path;
                     if(pageName === '/') {
                         pageName = 'index';
@@ -519,7 +520,7 @@ _.extend(router.prototype, BaseRouter.prototype, {
                     self.log.debug('>> optimizedIndexWithOrgChecks ' + adminAccountId + ', ' + pageName);
 
                     //TODO: this can be simplified
-                    new WebsiteView(req, resp).renderCachedPage(adminAccountId, pageName);
+                    new WebsiteView(req, resp).renderActivateSetupPage(adminAccountId, pageName);
 
                     self.log.debug('<< optimizedIndexWithOrgChecks');
                 } else {
@@ -655,6 +656,15 @@ _.extend(router.prototype, BaseRouter.prototype, {
             pageName += '/' + req.params.page_1;
         }
         var update = req.query.cachebuster || false;
+        if(req.session.orgId === 5 && req.session.activated === false && req.session.adminAccountId) {
+            self.log.debug('Using adminAccountId:', req.session.adminAccountId);
+            accountId = parseInt(req.session.adminAccountId);
+            if(pageName === 'index') {
+                pageName = 'splash';
+            } else if(pageName === 'activate') {
+                pageName = 'marketing';
+            }
+        }
         self.log.debug('>> getOrCreateTemplate ' + accountId + ', ' + pageName + ', ' + update);
         //return pageCacheManager.getOrCreateLocalTemplate(accountId, pageName, resp);
         return pageCacheManager.getOrCreateS3Template(accountId, pageName, update, resp);
