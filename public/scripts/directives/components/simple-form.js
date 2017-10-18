@@ -443,10 +443,10 @@ app.directive('simpleFormComponent', ["ipCookie", '$window', '$timeout', 'userSe
 								scope.formSuccess = false;
 							}, 3000);
 							if (scope.component.redirectType === 'page') {
-								window.location.href = scope.component.redirectUrl;
+								window.location.pathname = scope.component.redirectUrl;
 							}
 							if (scope.component.redirectType === 'external') {
-								window.location.href = 'http://' + scope.component.redirectUrl;
+								window.location.href = scope.component.redirectUrl;
 							}
 						}
 

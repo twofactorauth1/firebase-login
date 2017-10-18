@@ -406,9 +406,9 @@
 					if (vm.component.redirect) {
 						$timeout(function () {
 							if (vm.component.redirectType === 'page') {
-								window.location.href = vm.component.redirectUrl;
+								window.location.pathname = vm.component.redirectUrl;
 							} else if (vm.component.redirectType === 'external') {
-								window.location.href = 'http://' + vm.component.redirectUrl;
+								window.location.href = vm.component.redirectUrl;
 							}
 						}, 2000);
 					}
