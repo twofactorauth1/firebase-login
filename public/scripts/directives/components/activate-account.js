@@ -1,7 +1,7 @@
 /*global app, angular, window,Fingerprint,CryptoJS,document,console, $*/
 /*jslint unparam:true*/
 /* eslint-disable no-console */
-app.directive('activateAccountComponent', ['$filter', '$timeout', '$q', '$location', function ($filter, $timeout, $q, $location) {
+app.directive('activateAccountComponent', ['$filter', '$timeout', '$q', '$location', 'activateAccountService', function ($filter, $timeout, $q, $location, activateAccountService) {
 	'use strict';
 	return {
 		scope: {
@@ -12,11 +12,11 @@ app.directive('activateAccountComponent', ['$filter', '$timeout', '$q', '$locati
 			scope.plans = {
                 "NEW" : "NEW",
                 "EXISTING" : "EXISTING"
-            }
+            };
 
 			scope.newAccount = {
 				plan: scope.plans.NEW
-			}
+			};
 
 			scope.totalSteps = 3;
 			scope.currentStep = 1;
@@ -40,7 +40,7 @@ app.directive('activateAccountComponent', ['$filter', '$timeout', '$q', '$locati
 					_id: 3,
 					previewUrl: "https://s3.amazonaws.com/indigenous-digital-assets/test_account_2715/Tessco_content_png_1508233372188"
 				}
-			]
+			];
 
 			function setUpPlan(plan){
 				scope.newAccount.plan = scope.plans[plan];
@@ -79,6 +79,13 @@ app.directive('activateAccountComponent', ['$filter', '$timeout', '$q', '$locati
 			  document.execCommand("copy");
 			  $temp.remove();
 			}
+
+            function getUsername() {
+                activateAccountService.getOwnerUsername(function(username){
+                    scope.username = username;
+                });
+            }
+            getUsername();
 		}
 	};
 }]);

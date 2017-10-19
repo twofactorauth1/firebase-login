@@ -50,6 +50,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.post(this.url('emailpreferences'), this.isAuthApi.bind(this), this.updateCurrentAccountEmailPreferences.bind(this));
         app.get(this.url('users'), this.isAuthAndSubscribedApi.bind(this), this.listUsersForAccount.bind(this));
         app.get(this.url('templates'), this.isAuthApi.bind(this), this.listAccountTemplates.bind(this));
+        app.get(this.url('owner'), this.setup.bind(this), this.getOwnerUser.bind(this));
 
         app.get(this.url(':id'), this.isAuthApi.bind(this), this.getAccountById.bind(this));
         app.post(this.url(''), this.isAuthApi.bind(this), this.createAccount.bind(this));
@@ -71,6 +72,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.post(this.url('user/:id/password'), this.isAuthApi.bind(this), this.setUserPassword.bind(this));
         app.post(this.url('copyUser/:userId'), this.isAuthApi.bind(this), this.addUserToAccount.bind(this));
 
+
     },
 
     listUsersForAccount: function(req, resp) {
@@ -88,6 +90,23 @@ _.extend(api.prototype, baseApi.prototype, {
                     self.log.debug(accountId, userId, '<< listUsersForAccount');
                     return self.sendResultOrError(resp, err, users, 'Error listing users', null);
                 });
+            }
+        });
+    },
+
+    getOwnerUser: function(req, resp) {
+        var self = this;
+        var accountId = parseInt(self.currentAccountId(req));
+        var userId = null;
+        self.log.debug(accountId, userId, '>> getOwnerUser');
+        self.getOrgId(accountId, userId, req, function(err, orgId){
+            if(orgId && orgId === 5) {
+                accountManager.getOwnerUsername(accountId, userId, orgId, function(err,username){
+                    return self.sendResultOrError(resp, err, username, 'Error getting username');
+                });
+            } else {
+                self.log.debug('orgId:', orgId);
+                self.send403(resp);
             }
         });
     },

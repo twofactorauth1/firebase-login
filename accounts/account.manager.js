@@ -14,6 +14,7 @@ var userManager = null;
 var socialConfigManager = require('../socialconfig/socialconfig_manager');
 var securityManager = require('../security/sm')(true);
 var cmsManager = require('../cms/cms_manager');
+var contactDao = require('../dao/contact.dao');
 
 var async = require('async');
 
@@ -48,6 +49,34 @@ var defaultBilling = {
 
 var accountManager = {
     log:LOG,
+
+    getOwnerUsername: function(accountId, userId, orgId, fn) {
+        var self = this;
+        self.log.debug(accountId, userId, '>> getOwnerUsername');
+        organizationDao.getById(orgId, $$.m.Organization, function(err, organization){
+            if(err) {
+                self.log.error('Error getting organization:', err);
+                fn(err);
+            } else {
+                if(!contactDao.getContactsByTagArray) {
+                    contactDao = require('../dao/contact.dao');
+                }
+                contactDao.getContactsByTagArray(accountId, userId, ['Pre-Activation'], function(err, contacts){
+                    if(err) {
+                        self.log.error('Error getting contacts:', err);
+                        fn(err);
+                    } else {
+                        var userName = '';
+                        if(contacts && contacts.length > 0) {
+                            userName = contacts[0].getPrimaryEmail();
+                        }
+                        self.log.debug(accountId, userId, '<< getOwnerUsername');
+                        fn(null, userName);
+                    }
+                });
+            }
+        });
+    },
 
     cancelAccount: function(accountId, userId, targetAccountId, reason, cancelNow, fn) {
         var self = this;
