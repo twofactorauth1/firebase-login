@@ -11,6 +11,7 @@ var userDao = require('../../../dao/user.dao');
 var appConfig = require('../../../configs/app.config');
 var accountDao = require('../../../dao/account.dao');
 var accountManager = require('../../../accounts/account.manager');
+var ssbManager = require('../../../ssb/ssb_manager');
 
 var api = function() {
     this.init.apply(this, arguments);
@@ -26,6 +27,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         app.post(this.url(':id/trial/:newlength'), this.isAuthApi.bind(this), this.updateTrialLength.bind(this));
         app.post(this.url(':id/cancel'), this.isAuthApi.bind(this), this.cancelAccount.bind(this));
+        app.post(this.url(':id/blog-templates'), this.isAuthApi.bind(this), this.addBlogTemplates.bind(this));
     },
 
     updateTrialLength: function(req, resp) {
@@ -85,6 +87,32 @@ _.extend(api.prototype, baseApi.prototype, {
                     self.log.debug(accountId, userId, '<< cancelAccount');
                     return self.sendResultOrError(resp, err, value, 'Error cancelling account');
                 });
+            }
+        });
+    },
+
+    addBlogTemplates: function(req, resp) {
+        var self = this;
+        var userId = self.userId(req);
+        var accountId = parseInt(req.params.id);
+        self.log.debug(accountId, userId, '>> addBlogTemplates');
+        self._isAdmin(req, function(err, value) {
+            if (value !== true) {
+                return self.send403(resp);
+            } else {
+                accountDao.getAccountByID(accountId, function(err, account){
+                    if(account) {
+                        var websiteId = account.get('website').websiteId;
+                        ssbManager.addBlogPages(accountId, websiteId, userId, function(err, value){
+                            self.log.debug(accountId, userId, '<< addBlogTemplates');
+                            return self.sendResultOrError(resp, err, value, 'Error adding blog templates');
+                        });
+                    } else {
+                        self.log.error('Could not find account');
+                        resp.send(404, {code:404, status:'Not Found', message:'Not Found', detail:'The specified account was not found.'});
+                    }
+                });
+
             }
         });
     },
