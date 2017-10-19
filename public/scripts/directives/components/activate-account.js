@@ -73,7 +73,7 @@ app.directive('activateAccountComponent', ['$filter', '$timeout', '$q', '$locati
 			}
 
 			function copyToClipboard(element) {
-			  var $temp = $("<input>");
+			  var $temp = $("<textarea>");
 			  $("body").append($temp);
 			  $temp.val($(element).text()).select();
 			  document.execCommand("copy");
