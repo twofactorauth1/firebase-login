@@ -172,7 +172,7 @@ _.extend(view.prototype, BaseView.prototype, {
                 });
             },
             function getCustomFonts(webpageData, page, cb){
-                assetManager.findByFontType(accountId, null, null, function(err, fonts){                
+                assetManager.findByFontType(accountId, null, null, function(err, fonts){
                     data.customFonts = fonts;
                     cb(null, webpageData, page);
                 });
@@ -181,13 +181,13 @@ _.extend(view.prototype, BaseView.prototype, {
             function(value, pages, cb) {
                 var pageHolder = {};
                 _.each(pages, function(page){
-                    // We should not add page to sitedata while Preview the page 
+                    // We should not add page to sitedata while Preview the page
                     //pageHolder[page.get('handle')] = page.toJSON('frontend');
                     pageHolder['/preview/' + pageId ] = page.toJSON('frontend');
                 });
 
                 data.pages = pageHolder;
-                
+
                 // self.log.debug('pageHolder:', pageHolder);
                 data.account = value;
 
@@ -203,7 +203,7 @@ _.extend(view.prototype, BaseView.prototype, {
                 value.website.resources.userScripts = value.website.resources.userScripts || {};
                 value.website.resources.userScripts.global = value.website.resources.userScripts.global || {};
                 data.userScripts = value.website.resources.userScripts[handle] ? value.website.resources.userScripts[handle].sanitized : '';
-                
+
 
                 if(value.website.resources.toggles && value.website.resources.toggles.userScripts){
                     value.website.resources.userScripts.global = value.website.resources.userScripts.global || {};
@@ -330,7 +330,7 @@ _.extend(view.prototype, BaseView.prototype, {
                    }
                 });
             },
-            function getAllPages(webpageData, cb) {                
+            function getAllPages(webpageData, cb) {
                 ssbManager.listPublishedPages(accountId, webpageData.website._id, function(err, pages){
                     cb(err, webpageData, pages);
                 });
@@ -418,7 +418,7 @@ _.extend(view.prototype, BaseView.prototype, {
                 || _.contains(componentTypes, "ssb-recent-tag") || _.contains(componentTypes, "ssb-recent-category");
 
                 if(_blogComponents){
-                    ssbManager.getPublishedPosts(accountId, null, null, function(err, posts){                
+                    ssbManager.getPublishedPosts(accountId, null, null, function(err, posts){
                         data.posts = posts;
                         cb(null, webpageData, pages);
                     });
@@ -429,7 +429,7 @@ _.extend(view.prototype, BaseView.prototype, {
             },
 
             function getCustomFonts(webpageData, pages, cb){
-                assetManager.findByFontType(accountId, null, null, function(err, fonts){                
+                assetManager.findByFontType(accountId, null, null, function(err, fonts){
                     data.customFonts = fonts;
                     cb(null, webpageData, pages);
                 });
@@ -513,7 +513,7 @@ _.extend(view.prototype, BaseView.prototype, {
                 if(pageHolder[handle] && pageHolder[handle].manifest) {
                     var fonts = pageHolder[handle].manifest.fonts;
                     var usedFamilies = [];
-                    var googleFamilies = ['Roboto:200,400,700', 'Roboto Condensed:200,400,700', 'Roboto Slab:200,400,700', 'Oswald:200,400,700', 'Montserrat:200,400,700', 'Droid Serif:200,400,700', 'Open Sans:200,400,700', 'Open Sans Condensed:200,400,700', 'Lato:200,400,700', 'Raleway:200,400,700', 'Quicksand:200,400,700', 'Ubuntu:200,400,700', 'Merriweather:200,400,700', 'Quattrocento:200,400,700', 'Lora:200,400,700', 'Playfair Display:200,400,700', 'Pacifico:200,400,700', 'Satisfy:200,400,700', 'Parisienne:200,400,700', 'Petit Formal Script:200,400,700', 'Indie Flower:200,400,700', 'Shadows Into Light Two:200,400,700', 'Amatic SC:200,400,700', 'Neucha:200,400,700', 'Schoolbell:200,400,700', 'Itim:200,400,700', 'Patrick Hand SC:200,400,700', 'Delius Swash Caps:200,400,700', 'PT Sans:200,400,700', 'Nunito:200,400,700', 'Cinzel:200,400,700' ];
+                    var googleFamilies = ['Roboto:200,400,700', 'Roboto Condensed:200,400,700', 'Roboto Slab:200,400,700', 'Oswald:200,400,700', 'Montserrat:200,400,700', 'Droid Serif:200,400,700', 'Open Sans:200,400,700', 'Open Sans Condensed:200,400,700', 'Lato:200,400,700', 'Raleway:200,400,700', 'Quicksand:200,400,700', 'Ubuntu:200,400,700', 'Merriweather:200,400,700', 'Quattrocento:200,400,700', 'Lora:200,400,700', 'Playfair Display:200,400,700', 'Pacifico:200,400,700', 'Satisfy:200,400,700', 'Parisienne:200,400,700', 'Petit Formal Script:200,400,700', 'Indie Flower:200,400,700', 'Shadows Into Light Two:200,400,700', 'Amatic SC:200,400,700', 'Neucha:200,400,700', 'Schoolbell:200,400,700', 'Itim:200,400,700', 'Patrick Hand SC:200,400,700', 'Delius Swash Caps:200,400,700', 'PT Sans:200,400,700', 'Nunito:200,400,700', 'Titillium Web:200,400,700', 'Source Sans Pro:200,400,700', 'Cinzel:200,400,700' ];
                     _.each(fonts, function(fontName){
                         usedFamilies.push(fontName + ':200,400,700');
                     });
@@ -656,7 +656,7 @@ _.extend(view.prototype, BaseView.prototype, {
                 }
 
             },
-            
+
             function readComponents(webpageData, pages, cb) {
                 data.templates = '';
                 if(pages) {
@@ -771,7 +771,7 @@ _.extend(view.prototype, BaseView.prototype, {
                 if (data.og.image && data.og.image.indexOf('//') === 0) {
                     data.og.image = 'http:' + data.og.image;
                 }
-                
+
                 app.render('index', data, function (err, html) {
                     if (err) {
                         self.log.error('Error during render: ' + err);
