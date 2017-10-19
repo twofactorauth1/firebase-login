@@ -27,6 +27,7 @@ app.directive('activateAccountComponent', ['$filter', '$timeout', '$q', '$locati
 			scope.backToTemplates = backToTemplates;
 			scope.copyToClipboard = copyToClipboard;
 			scope.completeActivation = completeActivation;
+
 			scope.templates = [
 				{
 					_id: 1,
@@ -86,6 +87,17 @@ app.directive('activateAccountComponent', ['$filter', '$timeout', '$q', '$locati
                 });
             }
             getUsername();
+
+            function getServerName() {
+                var protocol = $location.protocol();
+                var host = $location.host();
+                var port = $location.port();
+
+                scope.servername = protocol + '://' + host;
+                if (port && port !== 80)
+                    scope.servername += ':' + port;
+            }
+            getServerName();
 		}
 	};
 }]);
