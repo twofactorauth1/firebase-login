@@ -1,7 +1,7 @@
 /*global app, angular, window,Fingerprint,CryptoJS,document,console, $*/
 /*jslint unparam:true*/
 /* eslint-disable no-console */
-app.directive('activateAccountComponent', ['$filter', '$timeout', '$q', '$location', 'activateAccountService', function ($filter, $timeout, $q, $location, activateAccountService) {
+app.directive('activateAccountComponent', ['$filter', '$timeout', '$q', '$location', 'accountService', 'activateAccountService', function ($filter, $timeout, $q, $location, accountService, activateAccountService) {
 	'use strict';
 	return {
 		scope: {
@@ -98,6 +98,10 @@ app.directive('activateAccountComponent', ['$filter', '$timeout', '$q', '$locati
                     scope.servername += ':' + port;
             }
             getServerName();
+
+            accountService(function (err, account) {
+                scope.account = account;
+            });
 		}
 	};
 }]);
