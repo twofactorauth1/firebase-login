@@ -342,10 +342,10 @@
                     if (!vm.component.redirect) {
                          $timeout(function () {
                              if (vm.component.redirectType === 'page') {
-                                window.location.href = vm.component.redirectUrl;
+                                window.location.pathname = vm.component.redirectUrl;
                             }
                             if (vm.component.redirectType === 'external') {
-                                window.location.href = 'http://' + vm.component.redirectUrl;
+                                window.location.href = vm.component.redirectUrl;
                             }
                         }, 2000);
 
@@ -577,9 +577,9 @@
         }
 
         function paypalLoginClickFn() {
-            if(screen.width<769){ 
-                var dgFlowMini = new PAYPAL.apps.DGFlowMini({trigger: 'submitBtn'});  
-                $("#payPalDonateform").submit();            
+            if(screen.width<769){
+                var dgFlowMini = new PAYPAL.apps.DGFlowMini({trigger: 'submitBtn'});
+                $("#payPalDonateform").submit();
              }else{
                 var dgFlow=new PAYPAL.apps.DGFlow({expType: null});
                 dgFlow.startFlow($location.absUrl());
@@ -859,10 +859,10 @@
             if (vm.component.redirect && vm.checkoutModalState == 5) {
                 vm.checkoutModalState = 1;
                 if (vm.component.redirectType === 'page') {
-                    window.location.href = vm.component.redirectUrl;
+                    window.location.pathname = vm.component.redirectUrl;
                 }
                 if (vm.component.redirectType === 'external') {
-                    window.location.href = 'http://' + vm.component.redirectUrl;
+                    window.location.href = vm.component.redirectUrl;
                 }
             } else {
                 $('#donation-card-details').find("input[type=text]").val("");

@@ -34,7 +34,7 @@
 		                <div class="feature-block" ng-click="setUpPlan(plans.EXISTING)">
 		                    <div class="feature-block-content">
 		                    	<h3 class="center">
-		                    		I WANT TO KEEP MY WEBSITE<br>&nbsp;
+		                    		I WANT TO KEEP MY WEBSITE
 		                    	</h3>
 		                    </div>
 		                </div>
@@ -78,7 +78,7 @@
 
 	        <div ng-if="currentStep == 2 && newAccount.plan === plans.EXISTING">
 				<div class="ldsrc-getting-started center">
-		            <h1 class="text-bold margin-bottom-5 getting-started-text">YOU HAVE YOUR OWN WEBSITE, GREAT!</h1>
+		            <h1 class="text-bold margin-bottom-5 getting-started-text">YOU HAVE YOUR OWN WEBSITE. GREAT!</h1>
 		            <h3>
 		            	<div>
 		            	Most LeadSource features work best when we can see visitor data from your website. We just need your help to make this happen. Copy the code below (or send to your developer) and paste it into the header of your website, write before the closing </head> tag.
@@ -89,14 +89,10 @@
 		        <div class="clearfix"></div>
 				<div class="script-wrap center">
 					<pre class="pre-wrap-script">
-  &lt;script&gt;
-    $(document).ready(function(){
-      setTimeout(function(){
-        console.log('deleting cookie');
-        $.cookie('cookie',null,{domain: document.domain});
-      },1000);
-    });
-  &lt;/script&gt;
+&lt;script src=&quot;http://domain/js/scripts/collector-full.js&quot;&gt;&lt;/script&gt;
+&lt;script type=&quot;text/javascript&quot;&gt;
+  indigenous.collector(ACCOUNT-NO-HERE, true);
+&lt;/script&gt;
 					</pre>
 
 			        <button class="copy-text" ng-click="copyToClipboard('.pre-wrap-script')">COPY</button>
