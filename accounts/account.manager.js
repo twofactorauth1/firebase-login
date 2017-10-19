@@ -15,6 +15,7 @@ var socialConfigManager = require('../socialconfig/socialconfig_manager');
 var securityManager = require('../security/sm')(true);
 var cmsManager = require('../cms/cms_manager');
 var contactDao = require('../dao/contact.dao');
+var ssbManager = require('../ssb/ssb_manager');
 
 var async = require('async');
 
@@ -604,13 +605,23 @@ var accountManager = {
                         self.log.error('Error creating website for account: ' + err);
                         callback(err);
                     } else {
+                        var websiteId = value.id();
                         self.log.debug('creating default pages');
-                        cmsManager.createDefaultPageForAccount(accountId, value.id(), function (err, value) {
+                        cmsManager.createDefaultPageForAccount(accountId, websiteId, function (err, value) {
                             if (err) {
                                 log.error('Error creating default page for account: ' + err);
                                 callback(err);
                             } else {
-                                callback(null, account, user);
+                                log.debug(accountId, user.id(), 'creating blog pages');
+                                ssbManager.addBlogPages(accountId, websiteId, user.id(), function(err, blogPages){
+                                    if(err) {
+                                        self.log.error(accountId, user.id(), 'Error adding blog pages:', err);
+                                        callback(err);
+                                    } else {
+                                        callback(null, account, user);
+                                    }
+                                });
+
                             }
                         });
                     }
