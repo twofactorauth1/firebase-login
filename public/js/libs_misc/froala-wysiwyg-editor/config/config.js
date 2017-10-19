@@ -159,6 +159,7 @@ $.FroalaEditor.build = _.memoize(function(type) {
             "'Satisfy', cursive": 'Satisfy',
             "'Schoolbell', cursive": 'Schoolbell',
             "'Shadows Into Light Two', cursive": 'Shadows Into Light Two',
+            "'Source Sans Pro', sans-serif": 'Source Sans Pro',
             "'Tahoma',Geneva,sans-serif": "Tahoma",
             "'Times New Roman',Times,serif": "Times New Roman",
             "'Titillium Web', sans-serif": "Titillium Web",

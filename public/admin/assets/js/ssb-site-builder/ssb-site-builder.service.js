@@ -1393,7 +1393,7 @@
                 return angular.isDefined(window.WebFont);
             }, function(newValue, oldValue) {
                 if (newValue) {
-                    var defaultFamilies = ['Roboto:200,400,700', 'Roboto Condensed:200,400,700', 'Roboto Slab:200,400,700', 'Oswald:200,400,700', 'Montserrat:200,400,700', 'Droid Serif:200,400,700', 'Open Sans:200,400,700', 'Open Sans Condensed:200,400,700', 'Lato:200,400,700', 'Raleway:200,400,700', 'Quicksand:200,400,700', 'Ubuntu:200,400,700', 'Merriweather:200,400,700', 'Quattrocento:200,400,700', 'Lora:200,400,700', 'Playfair Display:200,400,700', 'Pacifico:200,400,700', 'Satisfy:200,400,700', 'Parisienne:200,400,700', 'Petit Formal Script:200,400,700', 'Indie Flower:200,400,700', 'Shadows Into Light Two:200,400,700', 'Amatic SC:200,400,700', 'Delius Swash Caps:200,400,700', 'Itim:200,400,700', 'Neucha:200,400,700', 'Patrick Hand SC:200,400,700', 'Schoolbell:200,400,700', 'PT Sans:200,400,700','Nunito:200,400,700','Cinzel:200,400,700','Titillium+Web:200,400,700'];
+                    var defaultFamilies = ['Roboto:200,400,700', 'Roboto Condensed:200,400,700', 'Roboto Slab:200,400,700', 'Oswald:200,400,700', 'Montserrat:200,400,700', 'Droid Serif:200,400,700', 'Open Sans:200,400,700', 'Open Sans Condensed:200,400,700', 'Lato:200,400,700', 'Raleway:200,400,700', 'Quicksand:200,400,700', 'Ubuntu:200,400,700', 'Merriweather:200,400,700', 'Quattrocento:200,400,700', 'Lora:200,400,700', 'Playfair Display:200,400,700', 'Pacifico:200,400,700', 'Satisfy:200,400,700', 'Parisienne:200,400,700', 'Petit Formal Script:200,400,700', 'Indie Flower:200,400,700', 'Shadows Into Light Two:200,400,700', 'Amatic SC:200,400,700', 'Delius Swash Caps:200,400,700', 'Itim:200,400,700', 'Neucha:200,400,700', 'Patrick Hand SC:200,400,700', 'Schoolbell:200,400,700', 'PT Sans:200,400,700','Nunito:200,400,700','Cinzel:200,400,700','Titillium Web:200,400,700','Source Sans Pro:200,400,700'];
                     if (theme.name && theme.hasCustomFonts) {
                       var _fontStack = theme.defaultFontStack.split(',')[0].replace(/"/g, '');
                       if(defaultFamilies.indexOf(_fontStack) === -1)
@@ -1507,6 +1507,7 @@
                 "'Satisfy', cursive": 'Satisfy',
                 "'Schoolbell', cursive": 'Schoolbell',
                 "'Shadows Into Light Two', cursive": 'Shadows Into Light Two',
+                "'Source Sans Pro', sans-serif": 'Source Sans Pro',
                 "'Tahoma',Geneva,sans-serif": "Tahoma",
                 "'Times New Roman',Times,serif": "Times New Roman",
                 "'Titillium Web', sans-serif": "Titillium Web",
