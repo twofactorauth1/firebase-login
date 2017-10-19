@@ -1,7 +1,7 @@
 /*global app, angular, window,Fingerprint,CryptoJS,document,console, $*/
 /*jslint unparam:true*/
 /* eslint-disable no-console */
-app.directive('activateAccountComponent', ['$filter', '$timeout', '$q', '$location', function ($filter, $timeout, $q, $location) {
+app.directive('activateAccountComponent', ['$filter', '$timeout', '$q', '$location', 'accountService', 'activateAccountService', function ($filter, $timeout, $q, $location, accountService, activateAccountService) {
 	'use strict';
 	return {
 		scope: {
@@ -12,11 +12,11 @@ app.directive('activateAccountComponent', ['$filter', '$timeout', '$q', '$locati
 			scope.plans = {
                 "NEW" : "NEW",
                 "EXISTING" : "EXISTING"
-            }
+            };
 
 			scope.newAccount = {
 				plan: scope.plans.NEW
-			}
+			};
 
 			scope.totalSteps = 3;
 			scope.currentStep = 1;
@@ -27,6 +27,7 @@ app.directive('activateAccountComponent', ['$filter', '$timeout', '$q', '$locati
 			scope.backToTemplates = backToTemplates;
 			scope.copyToClipboard = copyToClipboard;
 			scope.completeActivation = completeActivation;
+
 			scope.templates = [
 				{
 					_id: 1,
@@ -40,7 +41,7 @@ app.directive('activateAccountComponent', ['$filter', '$timeout', '$q', '$locati
 					_id: 3,
 					previewUrl: "https://s3.amazonaws.com/indigenous-digital-assets/test_account_2715/Tessco_content_png_1508233372188"
 				}
-			]
+			];
 
 			function setUpPlan(plan){
 				scope.newAccount.plan = scope.plans[plan];
@@ -73,12 +74,34 @@ app.directive('activateAccountComponent', ['$filter', '$timeout', '$q', '$locati
 			}
 
 			function copyToClipboard(element) {
-			  var $temp = $("<input>");
+			  var $temp = $("<textarea>");
 			  $("body").append($temp);
 			  $temp.val($(element).text()).select();
 			  document.execCommand("copy");
 			  $temp.remove();
 			}
+
+            function getUsername() {
+                activateAccountService.getOwnerUsername(function(username){
+                    scope.username = username;
+                });
+            }
+            getUsername();
+
+            function getServerName() {
+                var protocol = $location.protocol();
+                var host = $location.host();
+                var port = $location.port();
+
+                scope.servername = protocol + '://' + host;
+                if (port && port !== 80)
+                    scope.servername += ':' + port;
+            }
+            getServerName();
+
+            accountService(function (err, account) {
+                scope.account = account;
+            });
 		}
 	};
 }]);

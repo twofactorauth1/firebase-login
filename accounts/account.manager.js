@@ -14,6 +14,8 @@ var userManager = null;
 var socialConfigManager = require('../socialconfig/socialconfig_manager');
 var securityManager = require('../security/sm')(true);
 var cmsManager = require('../cms/cms_manager');
+var contactDao = require('../dao/contact.dao');
+var ssbManager = require('../ssb/ssb_manager');
 
 var async = require('async');
 
@@ -48,6 +50,34 @@ var defaultBilling = {
 
 var accountManager = {
     log:LOG,
+
+    getOwnerUsername: function(accountId, userId, orgId, fn) {
+        var self = this;
+        self.log.debug(accountId, userId, '>> getOwnerUsername');
+        organizationDao.getById(orgId, $$.m.Organization, function(err, organization){
+            if(err) {
+                self.log.error('Error getting organization:', err);
+                fn(err);
+            } else {
+                if(!contactDao.getContactsByTagArray) {
+                    contactDao = require('../dao/contact.dao');
+                }
+                contactDao.getContactsByTagArray(accountId, userId, ['Pre-Activation'], function(err, contacts){
+                    if(err) {
+                        self.log.error('Error getting contacts:', err);
+                        fn(err);
+                    } else {
+                        var userName = '';
+                        if(contacts && contacts.length > 0) {
+                            userName = contacts[0].getPrimaryEmail();
+                        }
+                        self.log.debug(accountId, userId, '<< getOwnerUsername');
+                        fn(null, userName);
+                    }
+                });
+            }
+        });
+    },
 
     cancelAccount: function(accountId, userId, targetAccountId, reason, cancelNow, fn) {
         var self = this;
@@ -575,13 +605,23 @@ var accountManager = {
                         self.log.error('Error creating website for account: ' + err);
                         callback(err);
                     } else {
+                        var websiteId = value.id();
                         self.log.debug('creating default pages');
-                        cmsManager.createDefaultPageForAccount(accountId, value.id(), function (err, value) {
+                        cmsManager.createDefaultPageForAccount(accountId, websiteId, function (err, value) {
                             if (err) {
                                 log.error('Error creating default page for account: ' + err);
                                 callback(err);
                             } else {
-                                callback(null, account, user);
+                                log.debug(accountId, user.id(), 'creating blog pages');
+                                ssbManager.addBlogPages(accountId, websiteId, user.id(), function(err, blogPages){
+                                    if(err) {
+                                        self.log.error(accountId, user.id(), 'Error adding blog pages:', err);
+                                        callback(err);
+                                    } else {
+                                        callback(null, account, user);
+                                    }
+                                });
+
                             }
                         });
                     }

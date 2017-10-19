@@ -81,19 +81,17 @@
 		            <h1 class="text-bold margin-bottom-5 getting-started-text">YOU HAVE YOUR OWN WEBSITE. GREAT!</h1>
 		            <h3>
 		            	<div>
-		            	Most LeadSource features work best when we can see visitor data from your website. We just need your help to make this happen. Copy the code below (or send to your developer) and paste it into the header of your website, write before the closing </head> tag.
+		            	Most LeadSource features work best when we can see visitor data from your website. We just need your help to make this happen. Copy the code below (or send it to your developer) and paste it into the HEAD section of your website, before the closing &lt;/head&gt; tag.
 		            	</div>
 						<div class="margin-top-30">We'll send you a confirmation email once we start recieving data.</div>
 		            </h3>
 		        </div>
 		        <div class="clearfix"></div>
 				<div class="script-wrap center">
-					<pre class="pre-wrap-script">
-&lt;script src=&quot;http://domain/js/scripts/collector-full.js&quot;&gt;&lt;/script&gt;
+					<pre class="pre-wrap-script">&lt;script src=&quot;http://{{servername}}/js/scripts/collector-full.js&quot;&gt;&lt;/script&gt;
 &lt;script type=&quot;text/javascript&quot;&gt;
-  indigenous.collector(ACCOUNT-NO-HERE, true);
-&lt;/script&gt;
-					</pre>
+  indigenous.collector({{account._id}}, true);
+&lt;/script&gt;</pre>
 
 			        <button class="copy-text" ng-click="copyToClipboard('.pre-wrap-script')">COPY</button>
         			<h4 class="center margin-top-10 step-btn-container">
@@ -108,7 +106,7 @@
 
 	        <div ng-if="currentStep == 3">
 				<div class="ldsrc-getting-started center">
-		            <h1 class="text-bold margin-bottom-5 getting-started-text">LET'S SECURE YOUR ACCOUNT, ADAM@INDIGENOUS.IO:</h1>
+		            <h1 class="text-bold margin-bottom-5 getting-started-text">LET'S SECURE YOUR ACCOUNT, {{username | uppercase}}:</h1>
 		        </div>
 		        <div class="clearfix"></div>
 

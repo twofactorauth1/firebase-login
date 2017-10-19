@@ -518,6 +518,7 @@ _.extend(view.prototype, BaseView.prototype, {
                         usedFamilies.push(fontName + ':200,400,700');
                     });
                     self.log.debug('usedFamilies:', usedFamilies);
+                    //TODO: need to handle NO fonts.
                     data.account.fonts = _.intersection(googleFamilies, usedFamilies).join('|');
                     self.log.debug('data.account.fonts:', data.account.fonts);
                 }
