@@ -1959,7 +1959,7 @@ var emailMessageManager = {
                     } else {
                         //build personalizations
                         var personalizations = [];
-                
+
                         var p = {
                             to: [
                                 {email:toEmail}
@@ -2029,7 +2029,7 @@ var emailMessageManager = {
                         }
                     }
 
-                    request.body.personalizations = personalizations;                    
+                    request.body.personalizations = personalizations;
 
                     self._safeStoreEmail(request.body, accountId, null, null, function(err, emailmessage){
                         //we should not have an err here
@@ -3754,7 +3754,8 @@ var emailMessageManager = {
     _getFromAdressNameAndReplyTo: function(accountId, fromAddress, fromName, fn) {
         var self = this;
         var senderAddress = notificationConfig.DEFAULT_SENDER_ADDRESS;
-        var senderName = fromName + ' via Indigenous';
+        //var senderName = fromName + ' via Indigenous';
+        var senderName = fromName;
         if(fromName === 'Indigenous') {
             senderName = 'Indigenous';
         }
@@ -3797,7 +3798,7 @@ var emailMessageManager = {
             batchId: campaignId
         };
         if(term){
-            term = term.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');   
+            term = term.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
             var regex = new RegExp('\.*'+term+'\.*', 'i');
             var orQuery = [
                 {contactId:parseInt(term)},
@@ -3812,16 +3813,16 @@ var emailMessageManager = {
             for(var i=0; i <= Object.keys(fieldSearch).length - 1; i++){
                 var key = Object.keys(fieldSearch)[i];
                 var value = fieldSearch[key];
-                self.log.debug('value:', value);                
+                self.log.debug('value:', value);
                 var obj = {};
                 value = value.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
                 console.log(value);
-                if(value){ 
+                if(value){
                     if(key == 'deliveredDate' || key == 'openedDate' || key == 'clickedDate' || key == 'unsubscribedDate'){
-                        if(value == "true"){                           
+                        if(value == "true"){
                             obj[key] = {$ne:null};
                             fieldSearchArr.push(obj);
-                        } else{                            
+                        } else{
                             obj[key] = null;
                             fieldSearchArr.push(obj);
                         }
@@ -3829,11 +3830,11 @@ var emailMessageManager = {
                     else if (key == 'contactId') {
                         obj[key] = parseInt(value);
                         fieldSearchArr.push(obj);
-                    } 
+                    }
                     else{
-                        obj[key] = new RegExp(value, 'i');                    
+                        obj[key] = new RegExp(value, 'i');
                         fieldSearchArr.push(obj);
-                    } 
+                    }
                 }
             }
             if(fieldSearchArr.length){
@@ -3843,9 +3844,9 @@ var emailMessageManager = {
 
         //console.log(query);
         self.log.debug('>> getCampaignRecipientStatistics');
-        
-        dao.findWithFieldsLimitOrderAndTotal(query, skip, limit, sortBy, null, $$.m.Emailmessage, sortDir, fn);   
-        
+
+        dao.findWithFieldsLimitOrderAndTotal(query, skip, limit, sortBy, null, $$.m.Emailmessage, sortDir, fn);
+
     }
 
 };
