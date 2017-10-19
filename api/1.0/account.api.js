@@ -96,8 +96,9 @@ _.extend(api.prototype, baseApi.prototype, {
 
     getOwnerUser: function(req, resp) {
         var self = this;
-        var accountId = parseInt(self.accountId(req));
+        var accountId = parseInt(self.currentAccountId(req));
         var userId = null;
+        self.log.debug(accountId, userId, '>> getOwnerUser');
         self.getOrgId(accountId, userId, req, function(err, orgId){
             if(orgId && orgId === 5) {
                 accountManager.getOwnerUsername(accountId, userId, orgId, function(err,username){
