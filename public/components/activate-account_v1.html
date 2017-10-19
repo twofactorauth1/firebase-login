@@ -89,14 +89,10 @@
 		        <div class="clearfix"></div>
 				<div class="script-wrap center">
 					<pre class="pre-wrap-script">
-  &lt;script&gt;
-    $(document).ready(function(){
-      setTimeout(function(){
-        console.log('deleting cookie');
-        $.cookie('cookie',null,{domain: document.domain});
-      },1000);
-    });
-  &lt;/script&gt;
+&lt;script src=&quot;http://domain/js/scripts/collector-full.js&quot;&gt;&lt;/script&gt;
+&lt;script type=&quot;text/javascript&quot;&gt;
+  indigenous.collector(ACCOUNT-NO-HERE, true);
+&lt;/script&gt;
 					</pre>
 
 			        <button class="copy-text" ng-click="copyToClipboard('.pre-wrap-script')">COPY</button>
