@@ -516,25 +516,30 @@ var securityManager = {
                 log.error('Error adding subscription to account: ' + err);
                 return fn(err, null);
             }
-            accountDao.removeSubscriptionLockFromAccount(accountId, function(err, value){});
-            var subpriv = new $$.m.SubscriptionPrivilege({
-                accountId: accountId,
-                subscriptionId: planId,
-                activePrivs: defaultSubscriptionPrivs,
-                created: {
-                    date: new Date(),
-                    by: userId
-                }
+            accountDao.removeSubscriptionLockFromAccount(accountId, function(err, savedAccount){
+                savedAccount.set('activated', false);
+                accountDao.saveOrUpdate(savedAccount, function(err, updatedAccount){
+                    var subpriv = new $$.m.SubscriptionPrivilege({
+                        accountId: accountId,
+                        subscriptionId: planId,
+                        activePrivs: defaultSubscriptionPrivs,
+                        created: {
+                            date: new Date(),
+                            by: userId
+                        }
+                    });
+                    subscriptionPrivilegeDao.saveOrUpdate(subpriv, function(err, savedSubPriv){
+                        if(err) {
+                            log.error('Error saving subscription privileges: ' + err);
+                            return fn(err, null);
+                        } else {
+                            log.debug('<< addBillingInfoToAccount');
+                            return fn(null, savedSubPriv);
+                        }
+                    });
+                });
             });
-            subscriptionPrivilegeDao.saveOrUpdate(subpriv, function(err, savedSubPriv){
-                if(err) {
-                    log.error('Error saving subscription privileges: ' + err);
-                    return fn(err, null);
-                } else {
-                    log.debug('<< addBillingInfoToAccount');
-                    return fn(null, savedSubPriv);
-                }
-            });
+
         });
     },
 
@@ -546,7 +551,9 @@ var securityManager = {
                 log.error('Error adding subscription to account: ' + err);
                 return fn(err, null);
             }
-            accountDao.removeSubscriptionLockFromAccount(accountId, function(err, value){});
+            accountDao.removeSubscriptionLockFromAccount(accountId, function(err, savedAccount){
+
+            });
             var subpriv = new $$.m.SubscriptionPrivilege({
                 accountId: accountId,
                 subscriptionId: planId,

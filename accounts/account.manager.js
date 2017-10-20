@@ -10,7 +10,7 @@ var emailDao = require('../cms/dao/email.dao');
 var campaignDao = require('../campaign/dao/campaign.dao');
 var productDao = require('../products/dao/product.dao');
 var organizationDao = require('../organizations/dao/organization.dao');
-var userManager = null;
+var userManager = null;//This is needed because of circular dependencies
 var socialConfigManager = require('../socialconfig/socialconfig_manager');
 var securityManager = require('../security/sm')(true);
 var cmsManager = require('../cms/cms_manager');
@@ -487,6 +487,94 @@ var accountManager = {
         });
     },
 
+    activateAccount: function(accountId, userId, orgId, username, password, template, fn) {
+        var self = this;
+        self.log.debug(accountId, userId, '>> activateAccount');
+        /*
+         create User, Delete Contact and associate Template w/ Account (if applicable). At successful completion change activation flag
+         */
+        async.waterfall([
+            function(cb) {
+                accountDao.getAccountByID(accountId, function(err, account){
+                    cb(err, account);
+                });
+            },
+            function(account, cb) {
+                organizationDao.getById(orgId, $$.m.Organization, function(err, organization){
+                    cb(err, account, organization);
+                });
+            },
+            function(account, organization, cb) {
+                //VALIDATION STEP
+                if(account.get('activated') !== false) {
+                    cb('Cannot activate an active account');
+                } else if(account.get('orgId') !== orgId) {
+                    cb('OrgID mismatch');
+                } else {
+                    cb(null, account, organization);
+                }
+            },
+            function(account,organization, cb){
+                var params = null;
+                var roleAry = ['super','admin','member'];
+                var callingUser = null;
+                if(!userManager) {
+                    userManager = require('../dao/user.manager');
+                }
+                userManager.createUser(accountId, username, password, username, roleAry, callingUser, params, function(err, user){
+                    cb(err, account, organization, user);
+                });
+            },
+            function(account, organization, user, cb) {
+                if(template) {
+                    var created = {
+                        date: new Date(),
+                        by: user.id()
+                    };
+                    ssbManager.setSiteTemplate(accountId, template, 'default', null, account.get('website').websiteId, created, function(err, value){
+                        cb(err, account, organization, user);
+                    });
+                } else {
+                    cb(null, account, organization, user);
+                }
+            },
+            function(account, organization, user, cb) {
+                contactDao.findContactsByEmail(accountId, username, function(err, contacts){
+                    if(contacts) {
+                        var contactIDAry = [];
+                        _.each(contacts, function(contact){
+                            contactIDAry.push(contact.id());
+                        });
+                        contactDao.removeByQuery({_id:{$in:contactIDAry}}, $$.m.Contact, function(err, value){
+                            cb(err, account, organization, user);
+                        });
+                    } else {
+                        cb(null, account, organization, user);
+                    }
+                });
+            },
+            function(account, organization, user, cb) {
+                //TODO: we might want to get the plan from the organization settings here
+
+                var subscriptionId = appConfig.internalSubscription;
+                var planId = appConfig.internalSubscription;
+
+                self.sm.setPlanAndSubOnAccount(accountId, subscriptionId, planId, userId, function(err, value){
+                    cb(err, account);
+                });
+            }
+
+        ], function(err, account){
+            if(err) {
+                self.log.error('Error activating account:', err);
+                fn(err);
+            } else {
+                self.log.debug(accountId, userId, '<< activateAccount');
+                fn(null, account);
+            }
+        });
+    },
+
     createAccount: function(accountId, userId, orgId, subdomain, username, password, billing, fn) {
         var self = this;
         self.log.debug(accountId, userId, '>> createAccount');
@@ -513,7 +601,7 @@ var accountManager = {
                         self.log.debug(accountId, userId, 'User with username [' + username + '] already exists.');
                         cb(null, user);
                     } else {
-                        cb(null);
+                        cb(null, null);
                     }
                 });
             },
@@ -550,9 +638,10 @@ var accountManager = {
             function(newAccount, user, cb) {
                 var newAccountId = newAccount.id();
                 var roleAry = ["super","admin","member"];
-                var newUsername = user.get('username');
-                var newEmail = user.get('email');
+
                 if(user) {
+                    var newUsername = user.get('username');
+                    var newEmail = user.get('email');
                     userManager.addUserToAccount(newAccountId, userId, ["super","admin","member"], userId, function(err, savedUser){
                         if (err) {
                             self.log.error('Error saving user: ' + err);
@@ -612,7 +701,7 @@ var accountManager = {
                                 log.error('Error creating default page for account: ' + err);
                                 callback(err);
                             } else {
-                                log.debug(accountId, user.id(), 'creating blog pages');
+                                self.log.debug(accountId, user.id(), 'creating blog pages');
                                 ssbManager.addBlogPages(accountId, websiteId, user.id(), function(err, blogPages){
                                     if(err) {
                                         self.log.error(accountId, user.id(), 'Error adding blog pages:', err);

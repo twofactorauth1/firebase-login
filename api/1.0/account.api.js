@@ -51,6 +51,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url('users'), this.isAuthAndSubscribedApi.bind(this), this.listUsersForAccount.bind(this));
         app.get(this.url('templates'), this.isAuthApi.bind(this), this.listAccountTemplates.bind(this));
         app.get(this.url('owner'), this.setup.bind(this), this.getOwnerUser.bind(this));
+        app.post(this.url('activate'), this.setup.bind(this), this.activateAccount.bind(this));
 
         app.get(this.url(':id'), this.isAuthApi.bind(this), this.getAccountById.bind(this));
         app.post(this.url(''), this.isAuthApi.bind(this), this.createAccount.bind(this));
@@ -468,6 +469,24 @@ _.extend(api.prototype, baseApi.prototype, {
         });
     },
 
+    activateAccount: function(req, resp) {
+        var self = this;
+        var accountId = parseInt(self.currentAccountId(req));
+        var userId = self.userId(req);
+        self.log.debug(accountId, userId, '>> activateAccount');
+        self.getOrgId(accountId, userId, req, function(err, orgId){
+            var username = req.body.username;
+            var password = req.body.password;
+            var templateId = req.body.templateId;
+            accountManager.activateAccount(accountId, userId, orgId, username, password, templateId, function(err, account){
+                self.log.debug(accountId, userId, '<< activateAccount');
+                self.sendResultOrError(resp, err, account, "Error creating account");
+            });
+        });
+
+
+    },
+
 
     createAccount: function(req,resp) {
         var self = this;
@@ -491,7 +510,7 @@ _.extend(api.prototype, baseApi.prototype, {
         }
 
         accountManager.createAccount(accountId, userId, orgId, subdomain, username, password, billing, function(err, account){
-            self.log.debug(accountId, userId, '<< createAccount');
+            self.log.debug(accountId, userId, '<< createAccount', account.toJSON());
             self.sendResultOrError(resp, err, account, "Error creating account");
         });
 

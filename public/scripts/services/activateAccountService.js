@@ -16,6 +16,21 @@ mainApp.service('activateAccountService', ['$http', function ($http) {
             });
     };
 
+    this.activateAccount = function(username, password, templateId, fn) {
+        var apiUrl = baseUrl + ['account', 'activate'].join('/');
+        var params = {
+            username:username,
+            password:password,
+            templateId:templateId
+        };
+        $http.post(apiUrl, params)
+            .success(function(data){
+                fn(null, data);
+            }).error(function(err){
+                fn(err);}
+        );
+    };
+
 
 
 }]);
