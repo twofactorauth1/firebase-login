@@ -517,7 +517,7 @@ var securityManager = {
                 return fn(err, null);
             }
             accountDao.removeSubscriptionLockFromAccount(accountId, function(err, savedAccount){
-                savedAccount.set('activated', false);
+                savedAccount.set('activated', true);
                 accountDao.saveOrUpdate(savedAccount, function(err, updatedAccount){
                     var subpriv = new $$.m.SubscriptionPrivilege({
                         accountId: accountId,
