@@ -139,9 +139,9 @@
                                     <textarea ng-if="val.name === 'message'" class="form-control input-lg" name="message" rows="5" ng-model="vm.formBuilder[val.name]" ng-attr-style="{{vm.inputStyle(vm.component.formSettings)}}" name="{{val.name}}" ng-required='!val.optional' ng-pattern="vm.addPattern(val)" placeholder="{{val.label || val.type}}"></textarea>
                                 </div>
                                 <div class="form-group  input-field-container col-sm-12" ng-if="vm.component.optInRequired"  ng-class="{ 'has-error' : (formBuilder._optin.$invalid || formBuilder._optin.$error.$required) && !formBuilder._optin.$pristine }">
-									
+
 									<div class="form-checkbox-field">
-                                        <span class="required">*</span> 
+                                        <span class="required">*</span>
 										<input class="optin-checkbox" type="checkbox" ng-model="vm.formBuilder['_optin']" name="_optin" ng-required='true' ng-change="vm.formFiedlsCHange('_optin')">
 									</div>
 									<div class="form-checkbox-label">
@@ -162,12 +162,12 @@
                         </div>
                         <div class="clearfix mb15"></div>
                         <div ng-show="vm.formSuccess" ng-if="vm.component.formSettings.successMessage">
-                            <div class="row thank-you animated" ng-class="{fadeOut: !vm.formSuccess, tada: vm.formSuccess}">
+                            <div class="row thank-you">
                                 <h3 class="center mb20" ng-bind-html="vm.component.formSettings.successMessage"></h3>
                             </div>
                         </div>
                          <div ng-show="vm.formError">
-                            <div class="row thank-you animated" ng-class="{fadeOut: !vm.formError, tada: vm.formError}">
+                            <div class="row thank-you">
                                 <h3 class="center mb20" ng-bind-html="vm.component.formSettings.errorMessage || 'Error while Submitting!'"></h3>
                             </div>
                         </div>
