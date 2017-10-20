@@ -31,6 +31,13 @@ mainApp.service('activateAccountService', ['$http', function ($http) {
         );
     };
 
+    this.getAccountTemplates = function(fn) {
+        var apiUrl = baseUrl + ['account', 'templates'].join('/');
+        $http.get(apiUrl).success(function(data){fn(data);});
+    };
+
+
+
 
 
 }]);

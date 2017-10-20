@@ -268,6 +268,24 @@ _.extend(apiBase.prototype, {
         }
     },
 
+    /**
+     * This method is used to get the accountId of an optionally authenticated session
+     * @param req
+     */
+    oaAccountId: function(req) {
+        try {
+            var accountId = 0;
+            if(req.session.accountId) {
+                accountId = req.session.accountId;
+            } else if(req.session.unAuthAccountId) {
+                accountId = req.session.unAuthAccountId;
+            }
+            return accountId;
+        } catch(exception) {
+            return null;
+        }
+    },
+
     subdomain: function(req) {
         try {
             return req.session.subdomain;

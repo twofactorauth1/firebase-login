@@ -49,7 +49,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url('emailpreferences'), this.isAuthApi.bind(this), this.getCurrentAccountEmailPreferences.bind(this));
         app.post(this.url('emailpreferences'), this.isAuthApi.bind(this), this.updateCurrentAccountEmailPreferences.bind(this));
         app.get(this.url('users'), this.isAuthAndSubscribedApi.bind(this), this.listUsersForAccount.bind(this));
-        app.get(this.url('templates'), this.isAuthApi.bind(this), this.listAccountTemplates.bind(this));
+        app.get(this.url('templates'), this.setup.bind(this), this.listAccountTemplates.bind(this));
         app.get(this.url('owner'), this.setup.bind(this), this.getOwnerUser.bind(this));
         app.post(this.url('activate'), this.setup.bind(this), this.activateAccount.bind(this));
 
@@ -866,7 +866,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
     listAccountTemplates: function(req, resp) {
         var self = this;
-        var accountId = parseInt(self.accountId(req));
+        var accountId = parseInt(self.oaAccountId(req));
         var userId = self.userId(req);
         self.log.debug(accountId, userId, '>> listAccountTemplates');
         accountDao.listAccountTemplates(accountId, userId, function(err, templates){

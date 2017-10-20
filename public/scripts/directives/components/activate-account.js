@@ -110,6 +110,18 @@ app.directive('activateAccountComponent', ['$filter', '$timeout', '$q', '$locati
                     //TODO: forward to welcome page
                 });
             };
+
+            function loadTemplates() {
+                activateAccountService.getAccountTemplates(function(data){
+                    if(data) {
+                        scope.templates = [];
+                        _.each(data, function(accountTemplate){
+                            scope.templates.push({_id:accountTemplate._id, previewUrl:accountTemplate.templateImageUrl});
+                        });
+                    }
+                });
+            }
+            loadTemplates();
 		}
 	};
 }]);
