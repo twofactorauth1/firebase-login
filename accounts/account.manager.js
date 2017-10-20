@@ -16,6 +16,7 @@ var securityManager = require('../security/sm')(true);
 var cmsManager = require('../cms/cms_manager');
 var contactDao = require('../dao/contact.dao');
 var ssbManager = require('../ssb/ssb_manager');
+var sm = require('../security/sm')(false);
 
 var async = require('async');
 
@@ -487,7 +488,7 @@ var accountManager = {
         });
     },
 
-    activateAccount: function(accountId, userId, orgId, username, password, template, fn) {
+    activateAccount: function(accountId, userId, orgId, username, password, templateAccountId, fn) {
         var self = this;
         self.log.debug(accountId, userId, '>> activateAccount');
         /*
@@ -526,12 +527,8 @@ var accountManager = {
                 });
             },
             function(account, organization, user, cb) {
-                if(template) {
-                    var created = {
-                        date: new Date(),
-                        by: user.id()
-                    };
-                    ssbManager.setSiteTemplate(accountId, template, 'default', null, account.get('website').websiteId, created, function(err, value){
+                if(templateAccountId) {
+                    self.copyAccountTemplate(accountId, userId, templateAccountId, accountId, function(err, value){
                         cb(err, account, organization, user);
                     });
                 } else {
@@ -559,7 +556,7 @@ var accountManager = {
                 var subscriptionId = appConfig.internalSubscription;
                 var planId = appConfig.internalSubscription;
 
-                self.sm.setPlanAndSubOnAccount(accountId, subscriptionId, planId, userId, function(err, value){
+                sm.setPlanAndSubOnAccount(accountId, subscriptionId, planId, userId, function(err, value){
                     cb(err, account);
                 });
             }
