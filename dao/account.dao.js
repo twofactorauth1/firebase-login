@@ -598,7 +598,7 @@ var dao = {
                 return fn(err, null);
             }
             account.set('locked_sub', false);
-            account.set('activated', true);
+
             self.saveOrUpdate(account, function (err, savedAccount) {
                 if (err) {
                     self.log.error('Error updating account for id [' + accountId + ']: ' + err);

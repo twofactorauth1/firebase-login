@@ -110,6 +110,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 var planId = appConfig.internalSubscription;
                 var userId = self.userId(req);
                 self.sm.setPlanAndSubOnAccount(accountId, subscriptionId, planId, userId, function(err, value){
+
                     self.log.debug('<< convertAccountToInternal');
                     return self.sendResultOrError(resp, err, value, 'Error converting account', null);
                 });

@@ -27,6 +27,7 @@ app.directive('activateAccountComponent', ['$filter', '$timeout', '$q', '$locati
 			scope.backToTemplates = backToTemplates;
 			scope.copyToClipboard = copyToClipboard;
 			scope.completeActivation = completeActivation;
+            scope.activateAccount = activateAccount;
 
 			scope.templates = [
 				{
@@ -102,6 +103,13 @@ app.directive('activateAccountComponent', ['$filter', '$timeout', '$q', '$locati
             accountService(function (err, account) {
                 scope.account = account;
             });
+
+            function activateAccount() {
+                //TODO: Load Spinner
+                activateAccountService.activateAccount(scope.username, scope.newAccount.password, scope.newAccount.templateId, function(err, data){
+                    //TODO: forward to welcome page
+                });
+            };
 		}
 	};
 }]);

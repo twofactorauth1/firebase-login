@@ -1169,9 +1169,12 @@ _.extend(api.prototype, baseApi.prototype, {
                                         }
                                         var fromName = account.get('business').name;
                                         self._sendEmailOnCreateAccount(accountEmail, activity.contact, account.id(), ccAry, tagSet, accountSubdomain, true, fromName, account, savedContact);
-                                    } else{
-                                        var fromName = value.get('business').name;
-                                        userDao.getUserAccount(value.id(), function(err, user){
+                                    } else {
+                                        var fromName = '';
+                                        if(account && account.get('business')) {
+                                            fromName = account.get('business').name;
+                                        }
+                                        userDao.getUserAccount(account.id(), function(err, user){
                                             accountEmail = user.get("email");
                                             self._sendEmailOnCreateAccount(accountEmail, activity.contact, account.id(), null, tagSet, accountSubdomain, false, fromName, account, savedContact);
                                         })

@@ -3178,7 +3178,7 @@ module.exports = {
         async.waterfall([
             function getWebsite(cb){
                 websiteDao.getWebsiteById(accountId, websiteId, function(err, website){
-                    if(err) {
+                    if(err || !website) {
                         self.log.error(accountId, userId, 'Error getting website:', err);
                         cb(err);
                     } else {
