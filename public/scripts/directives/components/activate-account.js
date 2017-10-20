@@ -107,7 +107,8 @@ app.directive('activateAccountComponent', ['$filter', '$timeout', '$q', '$locati
             function activateAccount() {
                 //TODO: Load Spinner
                 activateAccountService.activateAccount(scope.username, scope.newAccount.password, scope.newAccount.templateId, function(err, data){
-                    //TODO: forward to welcome page
+                    scope.currentStep = 4;
+                    scope.siteurl = scope.account.accountUrl;
                 });
             };
 
