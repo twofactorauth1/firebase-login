@@ -31,7 +31,7 @@ app.directive('activateAccountComponent', ['$filter', '$timeout', '$q', '$locati
 
 			scope.templates = [
 				{
-					_id: 1,
+					_id: 2746,
 					previewUrl: "https://s3.amazonaws.com/indigenous-digital-assets/test_account_2715/Tessco_content_png_1508233372188"
 				},
 				{
