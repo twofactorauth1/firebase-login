@@ -552,11 +552,17 @@ var accountManager = {
             },
             function(account, organization, user, cb) {
                 //TODO: we might want to get the plan from the organization settings here
-
-                var subscriptionId = appConfig.internalSubscription;
-                var planId = appConfig.internalSubscription;
+                var orgSettings = organization.get('signupSettings');
+                var subscriptionId = orgSettings.internalSubscription;
+                var planId = orgSettings.internalSubscription;
 
                 sm.setPlanAndSubOnAccount(accountId, subscriptionId, planId, userId, function(err, value){
+                    cb(err, account, user);
+                });
+            },
+            function(account, user, cb) {
+                //send welcome email
+                userManager.sendWelcomeEmail(accountId, account, user, username, username, null, function(err){
                     cb(err, account);
                 });
             }

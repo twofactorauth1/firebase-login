@@ -584,7 +584,8 @@ var securityManager = {
     },
 
     _isEvergreen: function(billing) {
-        return billing.subscriptionId === appConfig.internalSubscription;
+        return (billing.subscriptionId === appConfig.internalSubscription
+            || _.contains(appConfig.orgInternalSubscriptions, billing.subscriptionId));
     },
 
     isValidSub: function(accountId, billing, cb) {

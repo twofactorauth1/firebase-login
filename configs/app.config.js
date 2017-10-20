@@ -179,6 +179,7 @@ module.exports = {
     nonProduction:nonProduction,
     trialLength: 30,
     internalSubscription:'EVERGREEN',
+    orgInternalSubscriptions:['LEADSOURCE-EVERGREEN'],
 
     runJobs: runJobs,
 
