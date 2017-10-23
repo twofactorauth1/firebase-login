@@ -96,7 +96,7 @@
 
 			        <button class="copy-text" ng-click="copyToClipboard('.pre-wrap-script')">COPY</button>
         			<h4 class="center margin-top-10 step-btn-container">
-                        <a class="send-to-dev">Send to your Web Developer</a>
+                        <a class="send-to-dev" ng-click="openModal('leadsource-existing-account-email')">Send to your Web Developer</a>
                         <a class="btn btn-primary btn-complete-activation btn-wide" ng-click="completeActivation()" >COMPLETE ACTIVATION</a>
                     </h4>
 		        </div>
@@ -167,3 +167,4 @@
 		</h1>
 	</div>
 </div>
+<div data-ng-include data-src="'/views/partials/leadsource-existing-account-email.html'"></div>

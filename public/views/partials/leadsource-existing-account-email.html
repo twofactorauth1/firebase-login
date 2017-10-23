@@ -1,0 +1,28 @@
+<script type="text/ng-template" id="leadsource-existing-account-email">
+
+    <div class="leadsource-existing-account-content" id="existing-account-email-content">
+        <div class="modal-header">
+          <button type="button" class="close hidden-xs" aria-hidden="true" ng-click="closeModal();">&times;</button>
+          <div class="model-back-close visible-xs" ng-click="closeModal();"><i class="fa fa-arrow-left" aria-hidden="true"></i></div>
+        </div>
+        <div class="modal-body">
+        	<div>
+                <h3 class="center">
+                    Need assistance from your web developer? Add their email(s) below and we&rsquo;ll send implementation instructions: 
+                </h3>
+
+                
+                <div class="form-group email-input-field">
+                    <input placeholder="Add email(s) here" ng-blur="checkCardNumber()" type="text" class="form-control">
+                </div>
+
+                <h4 class="center">
+                    <a class="btn btn-primary btn-send-email btn-wide">SEND!</a>
+                </h4>
+
+            </div> 	   
+          <div class="clearfix"></div>
+        </div>
+    </div>
+
+</script>
