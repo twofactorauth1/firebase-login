@@ -138,14 +138,14 @@ _.extend(api.prototype, baseApi.prototype, {
         var customerId = parseInt(req.params.id);
 
         if(accountId === appConfig.mainAccountID) {
-            manager.getMainCustomer(accountId, userId, customerId, function(err, customer){
+            manager.getMainCustomer(req, accountId, userId, customerId, function(err, customer){
                 self.log.debug(accountId, userId, '<< getCustomer');
                 self.sendResultOrError(resp, err, customer, 'Error getting customer');
             });
         } else {
             self.isOrgAdmin(accountId, userId, req, function(err, val){
                 if(val === true) {
-                    manager.getOrgCustomer(accountId, userId, customerId, urlUtils.getSubdomainFromRequest(req).orgDomain, function(err, customer){
+                    manager.getOrgCustomer(req, accountId, userId, customerId, urlUtils.getSubdomainFromRequest(req).orgDomain, function(err, customer){
                         self.log.debug(accountId, userId, '<< getCustomer');
                         self.sendResultOrError(resp, err, customer, 'Error getting customer');
                     });

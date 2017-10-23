@@ -3,8 +3,9 @@
 		<div class="ldsrc-header">
 	    	<h4>
 		    	<div class="center">
+		    		<span ng-if="currentStep <= totalSteps" ng-click="backToPrevStep()" class="fa fa-arrow-left step-back"></span>
 		    		<img src="/images/leadsource/header-leadsource-white-logo.png">
-		    		<div class="steps">
+		    		<div class="steps" ng-if="currentStep <= totalSteps">
 		    			Step {{currentStep}} of {{totalSteps}}
 		    		</div>
 		    	</div>
@@ -88,14 +89,14 @@
 		        </div>
 		        <div class="clearfix"></div>
 				<div class="script-wrap center">
-					<pre class="pre-wrap-script">&lt;script src=&quot;http://{{servername}}/js/scripts/collector-full.js&quot;&gt;&lt;/script&gt;
+					<pre class="pre-wrap-script">&lt;script src=&quot;{{servername}}/js/scripts/collector-full.js&quot;&gt;&lt;/script&gt;
 &lt;script type=&quot;text/javascript&quot;&gt;
   indigenous.collector({{account._id}}, true);
 &lt;/script&gt;</pre>
 
 			        <button class="copy-text" ng-click="copyToClipboard('.pre-wrap-script')">COPY</button>
         			<h4 class="center margin-top-10 step-btn-container">
-                        <a class="send-to-dev">Send to your Web Developer</a>
+                        <a class="send-to-dev" ng-click="openModal('leadsource-existing-account-email')">Send to your Web Developer</a>
                         <a class="btn btn-primary btn-complete-activation btn-wide" ng-click="completeActivation()" >COMPLETE ACTIVATION</a>
                     </h4>
 		        </div>
@@ -125,13 +126,19 @@
             <div ng-if="currentStep == 4">
                 <div class="ldrsrc-welcome center">
                     <h1 class="text-bold margin-bottom-5 getting-started-text">WELCOME TO THE LEADSOURCE FAMILY</h1>
-                    <h3 class="choose-one-text margin-top-5">Here's what's next:</h3>
-                    <ul>
-                        <li>You'll receive an email shortly with all the essentail information for your account</li>
-                        <li>Someone from the Tessco team will be in touch to discuss program details</li>
-                    </ul>
-                    <h3 class="choose-one-text margin-top-5">The site you created can be found here:</h3>
-                    <h3>{{siteurl}}</h3>
+                    <h3 class="welcome-text-next margin-top-10">Here's what's next:</h3>
+                    <h3 class="welcome-line-items">
+                    	<ul>
+	                        <li>You'll receive an email shortly with all the essentail information for your account</li>
+	                        <li>Someone from the Tessco team will be in touch to discuss program details</li>
+                    	</ul>
+                    </h3>
+                    
+                    <h3 class="welcome-site-url-text margin-top-5">The site you created can be found here:</h3>
+                    <h3 class="welcome-site-url">{{siteurl}}</h3>
+                    <h4 class="center">
+                        <a class="btn btn-primary btn-welcome-account" href="{{accountUrl}}" >GO TO MY ACCOUNT</a>
+                    </h4>
                 </div>
             </div>
 	    </div>
@@ -152,4 +159,12 @@
             <img class="template-img img-responsive" ng-src="{{selectedTemplate.previewUrl}}"/>
         </div>
 	</div>
+	<div class="activate-bg-overlay" ng-if="loading">
+		<h1 class="bg-overlay-spinner">
+			<span class="fa fa-spinner fa-spin">
+				
+			</span>
+		</h1>
+	</div>
 </div>
+<div data-ng-include data-src="'/views/partials/leadsource-existing-account-email.html'"></div>
