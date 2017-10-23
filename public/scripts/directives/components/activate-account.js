@@ -1,7 +1,7 @@
 /*global app, angular, window,Fingerprint,CryptoJS,document,console, $*/
 /*jslint unparam:true*/
 /* eslint-disable no-console */
-app.directive('activateAccountComponent', ['$filter', '$timeout', '$q', '$location', 'accountService', 'activateAccountService', function ($filter, $timeout, $q, $location, accountService, activateAccountService) {
+app.directive('activateAccountComponent', ['$filter', '$timeout', '$modal', '$location', 'accountService', 'activateAccountService', function ($filter, $timeout, $modal, $location, accountService, activateAccountService) {
 	'use strict';
 	return {
 		scope: {
@@ -29,6 +29,8 @@ app.directive('activateAccountComponent', ['$filter', '$timeout', '$q', '$locati
 			scope.completeActivation = completeActivation;
             scope.activateAccount = activateAccount;
             scope.backToPrevStep = backToPrevStep;
+            scope.openModal = openModal;
+            scope.closeModal = closeModal;
 			scope.templates = [
 				{
 					_id: 2746,
@@ -106,9 +108,12 @@ app.directive('activateAccountComponent', ['$filter', '$timeout', '$q', '$locati
 
             function activateAccount() {
                 //TODO: Load Spinner
+                scope.loading = true;
                 activateAccountService.activateAccount(scope.username, scope.newAccount.password, scope.newAccount.templateId, function(err, data){
+                    scope.loading = false;
                     scope.currentStep = 4;
                     scope.siteurl = scope.account.accountUrl;
+                    scope.accountUrl = scope.account.accountUrl + "/admin";
                 });
             };
 
@@ -123,6 +128,19 @@ app.directive('activateAccountComponent', ['$filter', '$timeout', '$q', '$locati
                 });
             }
 
+            function openModal(template) {
+                scope.modalInstance = $modal.open({
+                    templateUrl: template,
+                    keyboard: true,
+                    size: 'lg',
+                    scope: scope
+                });
+            };
+
+            function closeModal() {
+                scope.modalInstance.close();
+            };
+
             function backToPrevStep(){
             	if(scope.currentStep == 1){
             		$location.path("/activate");
@@ -134,5 +152,5 @@ app.directive('activateAccountComponent', ['$filter', '$timeout', '$q', '$locati
             }
             loadTemplates();
 		}
-	}; - 1;
+	};
 }]);
