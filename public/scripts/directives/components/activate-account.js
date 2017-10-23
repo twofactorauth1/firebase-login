@@ -143,7 +143,7 @@ app.directive('activateAccountComponent', ['$filter', '$timeout', '$modal', '$lo
             };
 
             function sendEmailToDevs(emailTo){
-            	var script = $(".pre-wrap-script").text();
+            	var script = $(".pre-wrap-script").html();
             	activateAccountService.sendEmailToDevs(script, emailTo, function(){
                     closeModal();
                 })
