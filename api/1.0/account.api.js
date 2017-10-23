@@ -548,7 +548,7 @@ _.extend(api.prototype, baseApi.prototype, {
         }
 
         accountManager.createAccount(accountId, userId, orgId, subdomain, username, password, billing, function(err, account){
-            self.log.debug(accountId, userId, '<< createAccount', account.toJSON());
+            self.log.debug(accountId, userId, '<< createAccount', account);
             self.sendResultOrError(resp, err, account, "Error creating account");
         });
 

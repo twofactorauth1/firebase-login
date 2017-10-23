@@ -108,6 +108,7 @@ var page = $$.m.ModelBase.extend({
              * Check if the page is secure OR not.
              */
             secure:false,
+            restriction:null,
 
             type:'page',
 
@@ -229,6 +230,9 @@ var page = $$.m.ModelBase.extend({
         storage: "mongo",
         table: "pages",
         idStrategy: "uuid"
+    },
+    restrictionTypes: {
+        RESTRICTION_ORGWIDE:'RESTRICTION_ORGWIDE'
     }
 });
 

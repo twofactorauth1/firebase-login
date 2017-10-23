@@ -272,17 +272,36 @@ app.controller('SiteBuilderPageSettingsModalController', ['$scope', '$timeout', 
       }
     });
 
+    $scope.$watch('vm.page.restriction', function(restriction){
+        console.log('restriction:', restriction);
+        if(restriction && restriction === 'no-restrictions') {
+            vm.page.secure = false;
+        } else if(restriction && restriction === 'RESTRICTION_ORGWIDE') {
+            vm.page.secure = true;
+        }
+        console.log('vm.page.secure:', vm.page.secure);
+    });
+
     vm.loading = true;
     if(vm.pageId === vm.parentVm.state.page._id){
         vm.page = angular.copy(vm.parentVm.state.page);
         vm.originalPage = angular.copy(vm.page);
         vm.loading = false;
-    }
-    else{
+        if(vm.page.secure === false) {
+            vm.page.restriction = 'no-restrictions';
+        } else {
+            vm.page.restriction = 'RESTRICTION_ORGWIDE';
+        }
+    } else{
         SimpleSiteBuilderService.getPage(vm.pageId, true).then(function(page) {
             vm.page = page.data;
             vm.originalPage = angular.copy(vm.page);
             vm.loading = false;
+            if(vm.page.secure === false) {
+                vm.page.restriction = 'no-restrictions';
+            } else {
+                vm.page.restriction = 'RESTRICTION_ORGWIDE';
+            }
         })
     }
 

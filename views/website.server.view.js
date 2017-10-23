@@ -13,6 +13,8 @@ var async = require('async');
 var ssbManager = require('../ssb/ssb_manager');
 var analyticsManager = require('../analytics/analytics_manager');
 var assetManager = require('../assets/asset_manager');
+var cookies = require('../utils/cookieutil');
+
 var view = function (req, resp, options) {
     this.init.apply(this, arguments);
 };
@@ -338,14 +340,44 @@ _.extend(view.prototype, BaseView.prototype, {
             },
             function checkFor404(webpageData, pages, cb) {
                 var pageHandle = handle || 'index';
+                var _page = null;
                 var foundPage = _.find(pages, function(page){
-                    return page.get('handle') === pageHandle;
+                    if(page.get('handle') === pageHandle) {
+                        _page = page;
+                        return true;
+                    }
                 });
                 if(foundPage) {
-                   cb(null, webpageData, pages);
+                   cb(null, webpageData, pages, _page);
                 } else {
                     self.log.warn('Page [' + pageHandle + '] Not Found');
                     cb('Page [' + pageHandle + '] Not Found');
+                }
+            },
+            function checkForAuth(webpageData, pages, page, cb) {
+                if(page.get('secure') !== true) {
+                    cb(null, webpageData, pages);
+                } else {
+                    //need to check for auth
+                    if(page.get('restriction') === $$.m.ssb.Page.restrictionTypes.RESTRICTION_ORGWIDE) {
+                        /*
+                         * check that the user is authenticated
+                         * check that the account to which the user is authenticated shares an ORG with this page
+                         */
+                        if (self.req.isAuthenticated() && self.req.session.orgId === webpageData.orgId) {
+                            //we are golden
+                            cb(null, webpageData, pages);
+                        } else {
+                            //return 401
+
+                            cookies.setRedirectUrl(self.req, self.resp);
+                            self.log.debug('Redirecting to /login');
+                            return self.resp.redirect("/login?redirectTo=" + handle);
+
+                        }
+                    } else {
+                        cb('Restricted page with no supported restricted type');
+                    }
                 }
             },
             function readComponents(webpageData, pages, cb) {

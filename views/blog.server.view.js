@@ -13,6 +13,7 @@ var ssbManager = require('../ssb/ssb_manager');
 var ngParser = require('../utils/ngparser');
 var jsonldbuilder = require('../utils/jsonldbuilder');
 var assetManager = require('../assets/asset_manager');
+var cookies = require('../utils/cookieutil');
 var _req;
 
 var view = function (req, resp, options) {
@@ -601,6 +602,33 @@ _.extend(view.prototype, BaseView.prototype, {
                 ssbManager.getPublishedPage(accountId, webpageData.website._id, handle, function(err, page){
                     cb(err, webpageData, allPages, page);
                 });
+            },
+            function checkForAuth(webpageData, pages, page, cb) {
+                if(page.get('secure') !== true) {
+                    cb(null, webpageData, pages, page);
+                } else {
+                    //need to check for auth
+                    if(page.get('restriction') === $$.m.ssb.Page.restrictionTypes.RESTRICTION_ORGWIDE) {
+                        /*
+                         * check that the user is authenticated
+                         * check that the account to which the user is authenticated shares an ORG with this page
+                         */
+                        if (self.req.isAuthenticated() && self.req.session.orgId === webpageData.orgId) {
+                            //we are golden
+                            self.log.info('Authenticated!');
+                            cb(null, webpageData, pages, page);
+                        } else {
+                            //return 401
+
+                            cookies.setRedirectUrl(self.req, self.resp);
+                            self.log.debug('Redirecting to /login');
+                            return self.resp.redirect("/login?redirectTo=" + handle);
+
+                        }
+                    } else {
+                        cb('Restricted page with no supported restricted type');
+                    }
+                }
             },
             function getCustomFonts(webpageData, allPages, page, cb){
                 assetManager.findByFontType(accountId, null, null, function(err, fonts){                
