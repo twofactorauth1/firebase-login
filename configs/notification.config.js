@@ -22,7 +22,7 @@ var newNoteEmailSubject = "New note created";
 var notificationPurchaseOrderToEmail = process.env.NEW_PURCHASE_ORDER_EMAIL_TO || 'smaticsdemo-portal@indigenous.io';
 var notificationPurchaseOrderBccEmail = process.env.NEW_PURCHASE_ORDER_EMAIL_BCC || '';
 var defaulSenderAddress = process.env.DEFAULT_SENDER_ADDRESS || 'messages-noreply-bounce@indigenous.io';
-var accountActivateEmailToDevSubject = process.env.ACTIVATE_ACCOUNT_EMAIL_SUBJECT || 'Implementation Instructions';
+var accountActivateEmailToDevSubject = process.env.ACTIVATE_ACCOUNT_EMAIL_SUBJECT || 'LeadSource Javascript Listener';
 /*
  * Override the connection string with an environment variable
  */
