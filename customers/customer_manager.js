@@ -9,6 +9,7 @@ var dao = require('./dao/customer.dao');
 var accountDao = require('../dao/account.dao');
 var userManager = require('../dao/user.manager');
 var paymentsManager = require('../payments/payments_manager');
+var securityManager = require('../security/sm')(false);
 var orgDao = require('../organizations/dao/organization.dao');
 
 var log = $$.g.getLogger('customer_manager');
@@ -122,7 +123,7 @@ module.exports = {
                                 account.set('accountIsActive', "Account is Active");
                                 cb(null, account);
                             }else{
-                                self.sm.verifySubscriptionWithoutSettingSessionVariables(req, customerId, function(err, isValid){
+                                securityManager.verifySubscriptionWithoutSettingSessionVariables(req, customerId, function(err, isValid){
                                     if(account.orgId==appConfig.leadSourceOrgID || isValid){
                                         account.set('accountIsActive', "Account is Active");
                                     }else{
@@ -225,7 +226,7 @@ module.exports = {
         });
     },
 
-    getMainCustomer: function(x`,accountId, userId, customerId, fn) {
+    getMainCustomer: function(req,accountId, userId, customerId, fn) {
         var self = this;
         self.log.debug(accountId, userId, '>> getMainCustomer');
 
@@ -247,7 +248,7 @@ module.exports = {
                                 account.set('accountIsActive', "Account is Active");
                                 cb(null, account);
                         }else{
-                            self.sm.verifySubscriptionWithoutSettingSessionVariables(req, customerId, function(err, isValid){
+                            securityManager.verifySubscriptionWithoutSettingSessionVariables(req, customerId, function(err, isValid){
                                 if(account.orgId==appConfig.leadSourceOrgID || isValid){
                                     account.set('accountIsActive', "Account is Active");
                                 }else{
