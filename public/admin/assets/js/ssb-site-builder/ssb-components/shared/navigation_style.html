@@ -28,7 +28,7 @@
     .navigation-v{{component.version}}.nav-header-{{component._id}} .navbar ul.navbar-nav> li.nav-active,
     .navigation-v{{component.version}}.nav-header-{{component._id}} .navbar ul.navbar-nav> li.nav-active>div>a,
     .navigation-v{{component.version}}.nav-header-{{component._id}} .navbar ul.nav-sub-menu> li:hover{
-        border-color: {{component.nav.hover || component.nav.txtcolor}} !important;
+        border-color: {{component.nav.hover || component.nav.txtcolor || defalultHover}} !important;
         background-color: {{component.nav.hoverbg}} !important;
         color: {{component.nav.hover}} !important; 
     }
@@ -89,6 +89,6 @@
     .navigation-v{{component.version}}.nav-header-{{component._id}} .navbar-default ul.nav-sub-menu>li:hover>div>a{
         background-color: {{component.subnavigation.hoverbg}} !important;
         color: {{component.subnavigation.hover}} !important;  
-        border-color: {{component.nav.hover || component.nav.txtcolor}} !important;
+        border-color: {{component.nav.hover || component.nav.txtcolor || defalultHover}} !important;
     }
 </style>
