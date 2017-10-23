@@ -536,6 +536,9 @@ var accountManager = {
                 }
             },
             function(account, organization, user, cb) {
+                if(!contactDao) {
+                    contactDao = require('../dao/contact.dao');
+                }
                 contactDao.findContactsByEmail(accountId, username, function(err, contacts){
                     if(contacts) {
                         var contactIDAry = [];
