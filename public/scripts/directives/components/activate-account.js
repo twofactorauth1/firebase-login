@@ -28,7 +28,7 @@ app.directive('activateAccountComponent', ['$filter', '$timeout', '$q', '$locati
 			scope.copyToClipboard = copyToClipboard;
 			scope.completeActivation = completeActivation;
             scope.activateAccount = activateAccount;
-
+            scope.backToPrevStep = backToPrevStep;
 			scope.templates = [
 				{
 					_id: 2746,
@@ -122,7 +122,17 @@ app.directive('activateAccountComponent', ['$filter', '$timeout', '$q', '$locati
                     }
                 });
             }
+
+            function backToPrevStep(){
+            	if(scope.currentStep == 1){
+            		$location.path("/activate");
+            	}
+            	else{
+            		scope.currentStep = scope.currentStep - 1;
+            	}
+            	
+            }
             loadTemplates();
 		}
-	};
+	}; - 1;
 }]);
