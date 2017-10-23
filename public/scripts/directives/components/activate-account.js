@@ -107,7 +107,9 @@ app.directive('activateAccountComponent', ['$filter', '$timeout', '$q', '$locati
 
             function activateAccount() {
                 //TODO: Load Spinner
+                scope.loading = true;
                 activateAccountService.activateAccount(scope.username, scope.newAccount.password, scope.newAccount.templateId, function(err, data){
+                    scope.loading = false;
                     scope.currentStep = 4;
                     scope.siteurl = scope.account.accountUrl;
                     scope.accountUrl = scope.account.accountUrl + "/admin";
@@ -136,5 +138,5 @@ app.directive('activateAccountComponent', ['$filter', '$timeout', '$q', '$locati
             }
             loadTemplates();
 		}
-	}; - 1;
+	};
 }]);
