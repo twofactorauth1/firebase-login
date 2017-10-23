@@ -93,6 +93,9 @@ var emailMessageManager = {
                                     "click_tracking": {
                                         "enable": true,
                                         "enable_text": true
+                                    },
+                                    "subscription_tracking":{
+                                        enable:false
                                     }
                                 }
                             };
@@ -1241,11 +1244,12 @@ var emailMessageManager = {
                         "click_tracking": {
                             "enable": true,
                             "enable_text": true
+                        },
+                        "subscription_tracking":{
+                            enable:false
                         }
-                    },
-                    "subscription_tracking":{
-                        enable:false
                     }
+
                 };
                 request.method = 'POST';
                 request.path = '/v3/mail/send';

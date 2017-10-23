@@ -155,6 +155,40 @@ module.exports = {
         });
     },
 
+    sendOrgWelcomeEmail: function(accountId, account, orginzation, user, email, username, contactId, fn) {
+        if(process.env.NODE_ENV != 'testing') {
+            var orgSettings = orginzation.get('signupSettings');
+            var emailSettings = orgSettings.welcomeEmail || {};
+            var welcomeFromName  = emailSettings.fromName;
+            var welcomeFromEmail = emailSettings.fromEmail;
+            var welcomeFromFile = emailSettings.fromFile;
+            var welcomeSubject = emailSettings.subject;
+            var siteUrl = appConfig.getOrganizationUrl(account.get('subdomain'), orgSettings.suffix);
+            fs.readFile(welcomeFromFile, 'utf-8', function (err, htmlContent) {
+                if (err) {
+                    log.error('Error getting welcome email file.  Welcome email not sent for accountId ' + accountId);
+                    fn(err);
+                } else {
+
+                    var vars = [
+                        {
+                            "name": "SITEURL",
+                            "content": siteUrl
+                        },
+                        {
+                            "name": "USERNAME",
+                            "content": username
+                        }
+                    ];
+                    emailMessageManager.sendAccountWelcomeEmail(welcomeFromEmail, welcomeFromName, email, username,
+                        welcomeSubject, htmlContent, accountId, user.id(), vars, null, contactId, fn);
+                }
+            });
+        } else {
+            fn();
+        }
+    },
+
     sendWelcomeEmail: function(accountId, account, user, email, username, contactId, callback){
         /*
          * Send welcome email.  This is done asynchronously.

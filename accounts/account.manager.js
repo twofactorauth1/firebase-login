@@ -560,14 +560,22 @@ var accountManager = {
                 var planId = orgSettings.internalSubscription;
 
                 sm.setPlanAndSubOnAccount(accountId, subscriptionId, planId, userId, function(err, value){
-                    cb(err, account, user);
+                    cb(err, account, user, organization);
                 });
             },
-            function(account, user, cb) {
+            function(account, user, organization, cb) {
                 //send welcome email
-                userManager.sendWelcomeEmail(accountId, account, user, username, username, null, function(err){
-                    cb(err, account);
-                });
+                var orgSettings = organization.get('signupSettings');
+                if(orgSettings && orgSettings.welcomeEmail) {
+                    userManager.sendOrgWelcomeEmail(accountId, account, organization, user, username, username, null, function(err, value){
+                        cb(err, account);
+                    });
+                } else {
+                    userManager.sendWelcomeEmail(accountId, account, user, username, username, null, function(err){
+                        cb(err, account);
+                    });
+                }
+
             }
 
         ], function(err, account){
