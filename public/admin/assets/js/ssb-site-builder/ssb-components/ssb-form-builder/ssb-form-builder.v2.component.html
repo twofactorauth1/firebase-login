@@ -164,12 +164,12 @@
                             </div>
                             <div class="clearfix mb15"></div>
                             <div ng-show="vm.formSuccess" ng-if="vm.component.formSettings.successMessage">
-                                <div class="row thank-you animated" ng-class="{fadeOut: !vm.formSuccess, tada: vm.formSuccess}">
+                                <div class="row thank-you">
                                     <h3 class="center mb20" ng-bind-html="vm.component.formSettings.successMessage"></h3>
                                 </div>
                             </div>
                              <div ng-show="vm.formError">
-                                <div class="row thank-you animated" ng-class="{fadeOut: !vm.formError, tada: vm.formError}">
+                                <div class="row thank-you">
                                     <h3 class="center mb20" ng-bind-html="vm.component.formSettings.errorMessage || 'Error while Submitting!'"></h3>
                                 </div>
                             </div>

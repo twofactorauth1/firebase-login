@@ -14,6 +14,7 @@ var appConfig = require('../../configs/app.config');
 var paymentManager = require('../../payments/payments_manager');
 var productManager = require('../../products/product_manager');
 var emailMessageManager = require('../../emailmessages/emailMessageManager');
+var notificationConfig = require('../../configs/notification.config');
 var userManager = require('../../dao/user.manager');
 var moment = require('moment');
 var accountManager = require('../../accounts/account.manager');
@@ -49,9 +50,10 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url('emailpreferences'), this.isAuthApi.bind(this), this.getCurrentAccountEmailPreferences.bind(this));
         app.post(this.url('emailpreferences'), this.isAuthApi.bind(this), this.updateCurrentAccountEmailPreferences.bind(this));
         app.get(this.url('users'), this.isAuthAndSubscribedApi.bind(this), this.listUsersForAccount.bind(this));
-        app.get(this.url('templates'), this.isAuthApi.bind(this), this.listAccountTemplates.bind(this));
+        app.get(this.url('templates'), this.setup.bind(this), this.listAccountTemplates.bind(this));
         app.get(this.url('owner'), this.setup.bind(this), this.getOwnerUser.bind(this));
         app.post(this.url('activate'), this.setup.bind(this), this.activateAccount.bind(this));
+        app.post(this.url('email/dev'), this.setup.bind(this), this.sendEmailToDevs.bind(this));
 
         app.get(this.url(':id'), this.isAuthApi.bind(this), this.getAccountById.bind(this));
         app.post(this.url(''), this.isAuthApi.bind(this), this.createAccount.bind(this));
@@ -483,8 +485,44 @@ _.extend(api.prototype, baseApi.prototype, {
                 self.sendResultOrError(resp, err, account, "Error creating account");
             });
         });
+    },
 
-
+    sendEmailToDevs: function(req, resp) {
+        var self = this;
+        var accountId = parseInt(self.currentAccountId(req));
+        var userId = self.userId(req);
+        self.log.debug(accountId, userId, '>> sendEmailToDevs');
+        
+        var script = req.body.script;
+        var emailTo = req.body.emailTo;
+       
+        var component = {};
+        component.script = script;
+        var fromEmail = notificationConfig.FROM_EMAIL;
+        var fromName =  notificationConfig.WELCOME_FROM_NAME;
+        var emailSubject = notificationConfig.ACTIVATE_ACCOUNT_EMAIL_SUBJECT;
+        accountDao.getAccountByID(accountId, function(err, account){
+            if(account && account.get('business') && account.get('business').name) {
+                fromName = account.get('business').name;
+            }
+            app.render('emails/send_email_to_developer', component, function(err, html){
+                if(err) {
+                    self.log.error('error rendering html: ' + err);
+                    self.log.warn('email will not be sent to configured email.');
+                } else {
+                    console.log(html);
+                    //var emailToArray = quote.get("recipients");
+                   // if(emailToArray && emailToArray.length){
+                        //_.each(emailToArray, function(emailTo){
+                            emailMessageManager.sendBasicDetailsEmail(fromEmail, fromName, emailTo, null, emailSubject, html, accountId, [], '', null, null, function(err, result){
+                            
+                                self.sendResultOrError(resp, err, result, "Error sending email");
+                            });
+                       // })
+                    //}
+                }
+            });
+        });
     },
 
 
@@ -866,7 +904,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
     listAccountTemplates: function(req, resp) {
         var self = this;
-        var accountId = parseInt(self.accountId(req));
+        var accountId = parseInt(self.oaAccountId(req));
         var userId = self.userId(req);
         self.log.debug(accountId, userId, '>> listAccountTemplates');
         accountDao.listAccountTemplates(accountId, userId, function(err, templates){

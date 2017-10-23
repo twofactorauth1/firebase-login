@@ -31,6 +31,25 @@ mainApp.service('activateAccountService', ['$http', function ($http) {
         );
     };
 
+    this.getAccountTemplates = function(fn) {
+        var apiUrl = baseUrl + ['account', 'templates'].join('/');
+        $http.get(apiUrl).success(function(data){fn(data);});
+    };
+
+
+    this.sendEmailToDevs = function(script, emailTo, fn) {
+        var apiUrl = baseUrl + ['account', 'email', 'dev'].join('/');
+        var params = {
+            script: script,
+            emailTo: emailTo
+        };
+        $http.post(apiUrl, params)
+            .success(function(data){
+                fn(null, data);
+            }).error(function(err){
+                fn(err);}
+        );
+    };
 
 
 }]);

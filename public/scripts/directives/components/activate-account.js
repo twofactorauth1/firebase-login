@@ -1,7 +1,7 @@
 /*global app, angular, window,Fingerprint,CryptoJS,document,console, $*/
 /*jslint unparam:true*/
 /* eslint-disable no-console */
-app.directive('activateAccountComponent', ['$filter', '$timeout', '$q', '$location', 'accountService', 'activateAccountService', function ($filter, $timeout, $q, $location, accountService, activateAccountService) {
+app.directive('activateAccountComponent', ['$filter', '$timeout', '$modal', '$location', 'accountService', 'activateAccountService', function ($filter, $timeout, $modal, $location, accountService, activateAccountService) {
 	'use strict';
 	return {
 		scope: {
@@ -28,10 +28,13 @@ app.directive('activateAccountComponent', ['$filter', '$timeout', '$q', '$locati
 			scope.copyToClipboard = copyToClipboard;
 			scope.completeActivation = completeActivation;
             scope.activateAccount = activateAccount;
-
+            scope.backToPrevStep = backToPrevStep;
+            scope.openModal = openModal;
+            scope.closeModal = closeModal;
+            scope.sendEmailToDevs = sendEmailToDevs;
 			scope.templates = [
 				{
-					_id: 1,
+					_id: 2746,
 					previewUrl: "https://s3.amazonaws.com/indigenous-digital-assets/test_account_2715/Tessco_content_png_1508233372188"
 				},
 				{
@@ -106,10 +109,55 @@ app.directive('activateAccountComponent', ['$filter', '$timeout', '$q', '$locati
 
             function activateAccount() {
                 //TODO: Load Spinner
+                scope.loading = true;
                 activateAccountService.activateAccount(scope.username, scope.newAccount.password, scope.newAccount.templateId, function(err, data){
-                    //TODO: forward to welcome page
+                    scope.loading = false;
+                    scope.currentStep = 4;
+                    scope.siteurl = scope.account.accountUrl;
+                    scope.accountUrl = scope.account.accountUrl + "/admin";
                 });
             };
+
+            function loadTemplates() {
+                activateAccountService.getAccountTemplates(function(data){
+                    if(data) {
+                        scope.templates = [];
+                        _.each(data, function(accountTemplate){
+                            scope.templates.push({_id:accountTemplate._id, previewUrl:accountTemplate.templateImageUrl});
+                        });
+                    }
+                });
+            }
+
+            function openModal(template) {
+                scope.modalInstance = $modal.open({
+                    templateUrl: template,
+                    keyboard: true,
+                    size: 'lg',
+                    scope: scope
+                });
+            };
+
+            function closeModal() {
+                scope.modalInstance.close();
+            };
+
+            function sendEmailToDevs(emailTo){
+            	var script = $(".pre-wrap-script").html();
+            	activateAccountService.sendEmailToDevs(script, emailTo, function(){
+                    closeModal();
+                })
+            }
+
+            function backToPrevStep(){
+            	if(scope.currentStep == 1){
+            		$location.path("/activate");
+            	}
+            	else{
+            		scope.currentStep = scope.currentStep - 1;
+            	}
+            }
+            loadTemplates();
 		}
 	};
 }]);

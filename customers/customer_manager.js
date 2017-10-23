@@ -9,6 +9,7 @@ var dao = require('./dao/customer.dao');
 var accountDao = require('../dao/account.dao');
 var userManager = require('../dao/user.manager');
 var paymentsManager = require('../payments/payments_manager');
+var securityManager = require('../security/sm')(false);
 var orgDao = require('../organizations/dao/organization.dao');
 
 var log = $$.g.getLogger('customer_manager');
@@ -93,7 +94,7 @@ module.exports = {
         fn(null, null);
     },
 
-    getOrgCustomer: function(accountId, userId, customerId, orgDomain, fn) {
+    getOrgCustomer: function(req,accountId, userId, customerId, orgDomain, fn) {
         var self = this;
         self.log.debug(accountId, userId, '>> getOrgCustomer');
 
@@ -118,14 +119,19 @@ module.exports = {
                             }
                             account.set('trialDaysRemaining', trialDaysRemaining);
 
-                            //Check for inactive user
-                            if(account.orgId!=appConfig.leadSourceAccountID && (!billing.subscriptionId || (billing.subscriptionId && billing.subscriptionId==!appConfig.internalSubscription)) && (!billing.plan || (billing.plan && billing.plan==!appConfig.internalSubscription)) && trialDaysRemaining==0){
-                                account.set('accountIsActive', "Account is Inactive");
-                            }else{
+                            if(account.orgId==appConfig.leadSourceOrgID){
                                 account.set('accountIsActive', "Account is Active");
+                                cb(null, account);
+                            }else{
+                                securityManager.verifySubscriptionWithoutSettingSessionVariables(req, customerId, function(err, isValid){
+                                    if(account.orgId==appConfig.leadSourceOrgID || isValid){
+                                        account.set('accountIsActive', "Account is Active");
+                                    }else{
+                                        account.set('accountIsActive', "Account is Inactive");
+                                    }
+                                    cb(err, account);
+                                });
                             }
-
-                            cb(err, account);
                         } else {
                             cb('account not found', null);
                         }
@@ -220,7 +226,7 @@ module.exports = {
         });
     },
 
-    getMainCustomer: function(accountId, userId, customerId, fn) {
+    getMainCustomer: function(req,accountId, userId, customerId, fn) {
         var self = this;
         self.log.debug(accountId, userId, '>> getMainCustomer');
 
@@ -238,13 +244,19 @@ module.exports = {
                         }
                         account.set('trialDaysRemaining', trialDaysRemaining);
 
-                        //Check for inactive user
-                        if(account.orgId!=appConfig.leadSourceAccountID && (!billing.subscriptionId || (billing.subscriptionId && billing.subscriptionId==!appConfig.internalSubscription)) && (!billing.plan || (billing.plan && billing.plan==!appConfig.internalSubscription)) && trialDaysRemaining==0){
-                            account.set('accountIsActive', "Account is Inactive");
+                        if(account.orgId==appConfig.leadSourceOrgID){
+                                account.set('accountIsActive', "Account is Active");
+                                cb(null, account);
                         }else{
-                            account.set('accountIsActive', "Account is Active");
-                        }
-                        cb(err, account);
+                            securityManager.verifySubscriptionWithoutSettingSessionVariables(req, customerId, function(err, isValid){
+                                if(account.orgId==appConfig.leadSourceOrgID || isValid){
+                                    account.set('accountIsActive', "Account is Active");
+                                }else{
+                                    account.set('accountIsActive', "Account is Inactive");
+                                }
+                                cb(err, account);
+                            });
+                            }                        
                     } else {
                         cb('account not found', null);
                     }

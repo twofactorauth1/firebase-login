@@ -97,7 +97,7 @@ var MAIN_ACCOUNT_ID = process.env.MAIN_ACCOUNT_ID || 6;
  * in edge case redirections
  * @type {string}
  */
-var LEADSOURCE_ACCOUNT_ID = process.env.LEADSOURCE_ACCOUNT_ID || 5;
+var LEADSOURCE_ORG_ID = process.env.LEADSOURCE_ORG_ID || 5;
 
 
 //---------------------------------------------------------
@@ -170,7 +170,7 @@ module.exports = {
     freeCpus: 2,
     xdhost_whitelist: XDHosts,
     mainAccountID: MAIN_ACCOUNT_ID,
-    leadSourceAccountID: LEADSOURCE_ACCOUNT_ID,
+    leadSourceOrgID: LEADSOURCE_ORG_ID,
 
     SIGNATURE_SECRET: "ab#6938kxal39jg&*(#*K_Cd",
     cookie_subdomain: '.' + process.env.ROOT_HOST,
@@ -179,6 +179,7 @@ module.exports = {
     nonProduction:nonProduction,
     trialLength: 30,
     internalSubscription:'EVERGREEN',
+    orgInternalSubscriptions:['LEADSOURCE-EVERGREEN'],
 
     runJobs: runJobs,
 

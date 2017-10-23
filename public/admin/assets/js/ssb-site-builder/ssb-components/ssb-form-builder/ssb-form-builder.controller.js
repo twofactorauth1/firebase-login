@@ -46,8 +46,7 @@
 		vm.removeBorderStyle = removeBorderStyle;
 		vm.setBorderStyle = setBorderStyle;
 
-		function setBorderStyle(currentElement, btnStyle) {
-			vm.removeBorderStyle(currentElement);
+		function setBorderStyle(currentElement, btnStyle) { 
 			if (btnStyle.border &&
 				btnStyle.border.show) {
 				removeBorderStyleForNewForms(currentElement);
@@ -172,9 +171,11 @@
 						vm.originalData.btn = {};
 						vm.originalData.btn.border = btn.border;
 					}
-					if (btn.border.width) {
-						styleString += ' border-width: ' + btn.border.width + 'px   !important;';
-					}
+					if (!btn.border.width) {
+						btn.border.width = 0;
+					} 
+					styleString += ' border-width: ' + btn.border.width + 'px   !important;';
+					
 					if (!btn.border.radius) {
 						btn.border.radius = 0;
 					}
@@ -467,7 +468,7 @@
 										}
 										vm.setBorderStyle(this, btnHoverStyle);
 									} else {
-										vm.removeBorderStyle(this);
+										vm.removeBorderStyleForNewForms(this);
 									}
 									if (btnHoverStyle && btnHoverStyle.txtcolor) {
 										this.style.setProperty('color', btnHoverStyle.txtcolor, 'important');
@@ -481,7 +482,7 @@
 									if (btn) {
 										vm.setBorderStyle(this, btn);
 									} else {
-										vm.removeBorderStyle(this);
+										vm.removeBorderStyleForNewForms(this);
 									}
 								});
 
@@ -497,7 +498,7 @@
 									vm.setBorderStyle(this, btnActiveStyle);
 
 								} else {
-									vm.removeBorderStyle(this);
+									vm.removeBorderStyleForNewForms(this);
 								}
 								if (btnActiveStyle && btnActiveStyle.txtcolor) {
 									this.style.setProperty('color', btnActiveStyle.txtcolor, 'important');
@@ -514,7 +515,7 @@
 									if (btn) {
 										vm.setBorderStyle(elem, btn);
 									} else {
-										vm.removeBorderStyle(elem);
+										vm.removeBorderStyleForNewForms(elem);
 									}
 								}, 1000);
 							});

@@ -3,7 +3,7 @@
 		background: #FFFFFF;
         margin-top: -50px;
         margin-bottom: -50px;
-    .ldsrc-header{
+    	.ldsrc-header{
 			padding: 20px;
 			background-color: #1193D1;
 			color: #FFFFFF;
@@ -19,6 +19,10 @@
 					    margin-top: 10px;
                 	}
 				}
+			}
+			.step-back{
+				float: left;
+				cursor: pointer;
 			}
 		}
 		.ldsrc-body{
@@ -136,6 +140,34 @@
 			}
 		}
 	}
+	.ldrsrc-welcome{
+		.welcome-text-next{
+			margin-bottom: 30px;
+		}
+		.welcome-line-items{
+			margin-bottom: 30px;
+			text-align: left;
+			ul{
+				li{
+					line-height: 1.6em;
+				}
+			}
+
+		}
+		h3{
+			font-size: 20px;
+		}
+		.welcome-site-url{
+			font-size: 24px;
+			color: #1193D1;
+		}
+		.btn-welcome-account{
+		    background: #1193D1;
+		    border-color: #1193D1;
+		    border-radius: 20px;
+		    margin-top: 30px;
+		}
+	}
 	.template-preview{
 		.ldsrc-preview-header{
 			position: fixed;
@@ -168,6 +200,48 @@
 		}
 		.template-img-container{
 			width: 100%;
+		}
+	}
+
+	.activate-bg-overlay{
+		height: 100%;
+	    width: 100%;
+	    position: fixed;
+	    top: 0;
+	    background-color: rgba(0,0,0, 0.5);
+	    .bg-overlay-spinner{
+	    	margin: auto 0;
+		    position: absolute;
+		    top: 50%;
+		    z-index: 99999;
+		    left: 50%;
+		    color: white;
+	    }
+	}
+}
+.leadsource-existing-account-content{
+	.modal-body{
+		@media screen and (min-width: 768px){
+			padding: 40px;
+		}
+		.email-input-field.form-group{
+		    margin-top: 40px;
+			margin-bottom: 40px;
+		}
+
+		.form-group{
+			input{
+				height: 60px;
+			}
+		}
+
+
+		.btn-send-email{
+			background: #1193D1;
+		    border-color: #1193D1;
+		    border-radius: 20px;
+		    margin-bottom: 30px;
+		    min-width: 150px;
 		}
 	}
 }
