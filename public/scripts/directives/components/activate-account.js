@@ -29,6 +29,7 @@ app.directive('activateAccountComponent', ['$filter', '$timeout', '$q', '$locati
 			scope.completeActivation = completeActivation;
             scope.activateAccount = activateAccount;
             scope.backToPrevStep = backToPrevStep;
+            //scope.navigateToMyAccount = navigateToMyAccount;
 			scope.templates = [
 				{
 					_id: 2746,
@@ -109,6 +110,7 @@ app.directive('activateAccountComponent', ['$filter', '$timeout', '$q', '$locati
                 activateAccountService.activateAccount(scope.username, scope.newAccount.password, scope.newAccount.templateId, function(err, data){
                     scope.currentStep = 4;
                     scope.siteurl = scope.account.accountUrl;
+                    scope.accountUrl = scope.account.accountUrl + "/admin";
                 });
             };
 
