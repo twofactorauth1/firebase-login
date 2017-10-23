@@ -31,6 +31,7 @@ app.directive('activateAccountComponent', ['$filter', '$timeout', '$modal', '$lo
             scope.backToPrevStep = backToPrevStep;
             scope.openModal = openModal;
             scope.closeModal = closeModal;
+            scope.sendEmailToDevs = sendEmailToDevs;
 			scope.templates = [
 				{
 					_id: 2746,
@@ -141,6 +142,13 @@ app.directive('activateAccountComponent', ['$filter', '$timeout', '$modal', '$lo
                 scope.modalInstance.close();
             };
 
+            function sendEmailToDevs(emailTo){
+            	var script = $(".pre-wrap-script").text();
+            	activateAccountService.sendEmailToDevs(script, emailTo, function(){
+                    closeModal();
+                })
+            }
+
             function backToPrevStep(){
             	if(scope.currentStep == 1){
             		$location.path("/activate");
@@ -148,7 +156,6 @@ app.directive('activateAccountComponent', ['$filter', '$timeout', '$modal', '$lo
             	else{
             		scope.currentStep = scope.currentStep - 1;
             	}
-            	
             }
             loadTemplates();
 		}

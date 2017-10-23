@@ -37,7 +37,19 @@ mainApp.service('activateAccountService', ['$http', function ($http) {
     };
 
 
-
+    this.sendEmailToDevs = function(script, emailTo, fn) {
+        var apiUrl = baseUrl + ['account', 'email', 'dev'].join('/');
+        var params = {
+            script: script,
+            emailTo: emailTo
+        };
+        $http.post(apiUrl, params)
+            .success(function(data){
+                fn(null, data);
+            }).error(function(err){
+                fn(err);}
+        );
+    };
 
 
 }]);

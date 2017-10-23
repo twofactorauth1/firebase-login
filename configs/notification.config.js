@@ -22,6 +22,7 @@ var newNoteEmailSubject = "New note created";
 var notificationPurchaseOrderToEmail = process.env.NEW_PURCHASE_ORDER_EMAIL_TO || 'smaticsdemo-portal@indigenous.io';
 var notificationPurchaseOrderBccEmail = process.env.NEW_PURCHASE_ORDER_EMAIL_BCC || '';
 var defaulSenderAddress = process.env.DEFAULT_SENDER_ADDRESS || 'messages-noreply-bounce@indigenous.io';
+var accountActivateEmailToDevSubject = process.env.ACTIVATE_ACCOUNT_EMAIL_SUBJECT || 'Implementation Instructions';
 /*
  * Override the connection string with an environment variable
  */
@@ -57,5 +58,6 @@ module.exports = {
     NEW_PURCHASE_ORDER_EMAIL_TO : notificationPurchaseOrderToEmail,
     NEW_PURCHASE_ORDER_EMAIL_BCC : notificationPurchaseOrderBccEmail,
     THANKS_HTML: thanksForInterest,
-    DEFAULT_SENDER_ADDRESS: defaulSenderAddress
+    DEFAULT_SENDER_ADDRESS: defaulSenderAddress,
+    ACTIVATE_ACCOUNT_EMAIL_SUBJECT: accountActivateEmailToDevSubject
 };

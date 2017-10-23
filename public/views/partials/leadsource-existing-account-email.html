@@ -13,11 +13,11 @@
 
                 
                 <div class="form-group email-input-field">
-                    <input placeholder="Add email(s) here" ng-blur="checkCardNumber()" type="text" class="form-control">
+                    <input placeholder="Add email(s) here" ng-model="developers.email" type="text" class="form-control">
                 </div>
 
                 <h4 class="center">
-                    <a class="btn btn-primary btn-send-email btn-wide">SEND!</a>
+                    <a class="btn btn-primary btn-send-email btn-wide" ng-click="sendEmailToDevs(developers.email)">SEND!</a>
                 </h4>
 
             </div> 	   
