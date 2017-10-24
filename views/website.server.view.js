@@ -90,9 +90,11 @@ _.extend(view.prototype, BaseView.prototype, {
             };
             data.og = {
                 type: 'website',
-                title: value.website.title,
-                image: value.website.settings.favicon
+                title: value.website.title
             };
+            if(value.website.settings && value.website.settings.favicon) {
+                data.og.image = value.website.settings.favicon
+            }
             if (data.og.image && data.og.image.indexOf('//') === 0) {
                 data.og.image = 'http:' + data.og.image;
             }
@@ -253,9 +255,11 @@ _.extend(view.prototype, BaseView.prototype, {
 
                 data.og = {
                     type: 'website',
-                    title: (pageHolder[handle] || {}).title || value.website.title,
-                    image: value.website.settings.favicon
+                    title: (pageHolder[handle] || {}).title || value.website.title
                 };
+                if(value.website.settings && value.website.settings.favicon) {
+                    data.og.image = value.website.settings.favicon
+                }
                 if (data.og.image && data.og.image.indexOf('//') === 0) {
                     data.og.image = 'http:' + data.og.image;
                 }
@@ -525,9 +529,11 @@ _.extend(view.prototype, BaseView.prototype, {
 
                 data.og = {
                     type: 'website',
-                    title: (pageHolder[handle] || {}).title || value.website.title,
-                    image: value.website.settings.favicon
+                    title: (pageHolder[handle] || {}).title || value.website.title
                 };
+                if(value.website.settings && value.website.settings.favicon) {
+                    data.og.image = value.website.settings.favicon
+                }
                 if (data.og.image && data.og.image.indexOf('//') === 0) {
                     data.og.image = 'http:' + data.og.image;
                 }
@@ -797,9 +803,11 @@ _.extend(view.prototype, BaseView.prototype, {
 
                 data.og = {
                     type: 'website',
-                    title: (pageHolder[handle] || {}).title || value.website.title,
-                    image: value.website.settings.favicon
+                    title: (pageHolder[handle] || {}).title || value.website.title
                 };
+                if(value.website.settings && value.website.settings.favicon) {
+                    data.og.image = value.website.settings.favicon
+                }
                 if (data.og.image && data.og.image.indexOf('//') === 0) {
                     data.og.image = 'http:' + data.og.image;
                 }
