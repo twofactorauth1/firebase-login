@@ -507,35 +507,76 @@
 		            default:
 		            	if (component && component.spacing) {
 							if (component.spacing.pt) {
-								styleString += 'padding-top: ' + component.spacing.pt + 'px;';
+
+								if(component.spacing.pt.indexOf("%") > -1) {
+									styleString += 'padding-top: ' + component.spacing.pt + ';';	
+								}else{
+									styleString += 'padding-top: ' + component.spacing.pt + 'px;';	
+								}
+
+								
 							}
 
 							if (component.spacing.pb) {
-								styleString += 'padding-bottom: ' + component.spacing.pb + 'px;';
+								if(component.spacing.pb.indexOf("%") > -1) {
+									styleString += 'padding-bottom: ' + component.spacing.pb + ';';	
+								}else{
+									styleString += 'padding-bottom: ' + component.spacing.pb + 'px;';	
+								}
+
+								
 							}
 
 							if (component.spacing.pl) {
-								styleString += 'padding-left: ' + component.spacing.pl + 'px;';
+								if(component.spacing.pl.indexOf("%") > -1) {
+									styleString += 'padding-left: ' + component.spacing.pl + ';';	
+								}else{
+									styleString += 'padding-left: ' + component.spacing.pl + 'px;';	
+								}
+
+								
 							}
 
 							if (component.spacing.pr) {
-								styleString += 'padding-right: ' + component.spacing.pr + 'px;';
+								if(component.spacing.mt.indexOf("%") > -1) {
+									styleString += 'padding-right: ' + component.spacing.mt + ';';	
+								}else{
+									styleString += 'padding-right: ' + component.spacing.mt + 'px;';	
+								}
+
+								
 							}
 
 							if (component.spacing.mt) {
-								styleString += 'margin-top: ' + component.spacing.mt + 'px;';
+                        
+								if(component.spacing.mt.indexOf("%") > -1) {
+									styleString += 'margin-top: ' + component.spacing.mt + ';';	
+								}else{
+									styleString += 'margin-top: ' + component.spacing.mt + 'px;';	
+								}
 							}
 
 							if (component.spacing.mb) {
-								styleString += 'margin-bottom: ' + component.spacing.mb + 'px;';
+
+								if(component.spacing.mb.indexOf("%") > -1) {
+									styleString += 'margin-bottom: ' + component.spacing.mb + ';';	
+								}else{
+									styleString += 'margin-bottom: ' + component.spacing.mb + 'px;';	
+								}
+
+								
 							}
 
 							if (component.spacing.ml) {
-								styleString += component.spacing.ml == 'auto' ? 'margin-left: ' + component.spacing.ml + ';float: none;' : 'margin-left: ' + component.spacing.ml + 'px;';
+								var type;
+								(component.spacing.ml.indexOf("%") > -1) ? type = "" : type = "px"; 
+								styleString += component.spacing.ml == 'auto' ? 'margin-left: ' + component.spacing.ml + ';float: none;' : 'margin-left: ' + component.spacing.ml + type + ';';
 							}
 
 							if (component.spacing.mr) {
-								styleString += (component.spacing.mr == 'auto') ? 'margin-right: ' + component.spacing.mr + ';float: none;' : 'margin-right: ' + component.spacing.mr + 'px;';
+								var spacing_type;
+								(component.spacing.mr.indexOf("%") > -1) ? spacing_type = "" : spacing_type = "px"; 
+								styleString += (component.spacing.mr == 'auto') ? 'margin-right: ' + component.spacing.mr + ';float: none;' : 'margin-right: ' + component.spacing.mr + spacing_type +';';
 							}
 
 							if (component.spacing.mw) {
