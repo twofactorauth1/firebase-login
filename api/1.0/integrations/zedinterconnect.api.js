@@ -788,7 +788,7 @@ _.extend(api.prototype, baseApi.prototype, {
         var self = this;
         userManager.getUserById(userId, function(err, user){
             orgManager.getOrgByAccountId(accountId, userId, function(err, organization){
-                if(user && organization && user.getOrgConfig(organization.id()).modules) {
+                if(user && organization && user.getOrgConfig(organization.id()) && user.getOrgConfig(organization.id()).modules) {
                     var modules = user.getOrgConfig(organization.id()).modules;
                     if(modules[module] !== undefined && modules[module] === false) {
                         fn(null, false);
