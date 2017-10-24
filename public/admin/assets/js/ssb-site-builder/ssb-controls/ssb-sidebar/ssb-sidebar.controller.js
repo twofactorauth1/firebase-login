@@ -845,6 +845,10 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
                     if(donationIndex > -1){
                         vm.sectionFilters.splice(donationIndex, 1);
                     }
+
+                    vm.enabledPlatformSections = _.filter(vm.enabledPlatformSections, function(section){
+                        return section.type != 'products'
+                    })
                 }
 
 
