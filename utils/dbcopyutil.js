@@ -485,7 +485,7 @@ var copyutil = {
         var websiteToSave;
         var pagesToSaveArray = [];
         var publishedpagesToSaveArray = [];
-        var privilegesToSaveArray = [];
+        var privilegeToSave = [];
         var productsToSaveArray = [];
         var postsToSaveArray = [];
         var sectionsToSaveArray = [];
@@ -511,12 +511,12 @@ var copyutil = {
                 });
             },
             function(cb) {
-                privileges.find({'accountId':srcAccountId}).toArray(function(err, _privileges){
+                privileges.find({'accountId':srcAccountId,'userId':1}).toArray(function(err, _privilege){
                     if(err) {
-                        console.log('Error getting privileges:', err);
+                        console.log('Error getting _privilege:', err);
                         cb(err);
                     } else {
-                        privilegesToSaveArray = _privileges;
+                        privilegeToSave = _privilege[0];
                         cb(null);
                     }
 
@@ -688,27 +688,23 @@ var copyutil = {
                    }
                 });
             },
-            function(newAccountId, cb) {
+            function(newAccountId, cb) { 
                 console.log('saving privileges with accountId:' + newAccountId);
                 var privilegesCollection = destMongo.collection('privileges');
-                async.eachSeries(privilegesToSaveArray, function(privilege, callback){
-                    privilege.accountId = newAccountId;
+                privilegeToSave.accountId = newAccountId;
 
-                    if (forceNewAccount) {
-                        privilege._id = utils.idutils.generateUUID();
-                    }
+                if (forceNewAccount) {
+                    privilegeToSave._id = utils.idutils.generateUUID();
+                }
 
-                    privilegesCollection.save(privilege, function(err, savedPrivilege){
+                privilegesCollection.save(privilegeToSave, function(err, savedPrivilege){
                         if(err) {
-                            console.log('Error saving privilege: ' + privilege._id);
-                            callback(err);
+                            console.log('Error saving privilege: ' + privilegeToSave._id);
+                            cb(err, null);
                         } else {
-                            console.log('saved privilege [' + privilege._id + ']');
-                            callback();
+                            console.log('saved privilege [' + privilegeToSave._id + ']');
+                            cb(null, newAccountId);
                         }
-                    });
-                }, function done(err){
-                    cb(err, newAccountId);
                 });
             },
             function(newAccountId, cb) {
@@ -885,9 +881,9 @@ var copyutil = {
                 });
             },
             function relateUser(newAccountId, cb) {
-                console.log('relate User: '+accountToSave.ownerUser+' to accountId:' + newAccountId);
+                console.log('relate User: 1 to accountId:' + newAccountId);
                 var usersCollection = destMongo.collection('users');
-                usersCollection.findOne({"_id":accountToSave.ownerUser}, function(err, user){
+                usersCollection.findOne({"_id":1}, function(err, user){
                     if(err) {
                         console.log('Error getting user of privs account');
                         cb(err);
@@ -895,7 +891,7 @@ var copyutil = {
                         var userNewAccount=user.accounts[0];
                         userNewAccount.accountId=newAccountId;
                         user.accounts.push(userNewAccount);
-                        usersCollection.update({"_id":accountToSave.ownerUser},{ $set:{accounts: user.accounts}},function(err, updateduser){
+                        usersCollection.update({"_id":1},{ $set:{accounts: user.accounts}},function(err, updateduser){
                             if(err) {
                                 console.log('Error in updating user of privs account');
                                 cb(err);
