@@ -553,6 +553,7 @@ var insightsManager = {
                     fromAddress = 'insights@gorvlvr.com';
                     fromName = 'Tessco LeadSource Insights';
                     subject = 'Tessco LeadSource Insights Report';
+                    replyToAddress = "admin@gorvlvr.com";
                 }
                 var htmlContent = html;
                 var _accountId = customerAccountId;
