@@ -701,7 +701,6 @@
 					}
 
 					if (component.spacing.mt) {
-						console.log('---------component.spacing.mt----------',component.spacing.mt);
 						styleString += 'margin-top: ' + component.spacing.mt + 'px;';
 					}
 
