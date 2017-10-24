@@ -54,7 +54,7 @@ app.config(['$stateProvider', '$urlRouterProvider', '$controllerProvider', '$com
 				template: '<div ui-view class=""></div>',
 				title: 'Simple Site Builder'
 			})
-			// .state('app.website.ssbSiteBuilder.pages', {
+			// .state('app.website.ssbSiteBuilder.pages', {> `,k`
 			//     url: '/pages/',
 			//     template: "<ssb-site-templates></ssb-site-templates>",
 			//     title: 'Choose a site template',
