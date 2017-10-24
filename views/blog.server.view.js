@@ -600,7 +600,12 @@ _.extend(view.prototype, BaseView.prototype, {
             },
             function getPublishedPage(webpageData, allPages, cb) {
                 ssbManager.getPublishedPage(accountId, webpageData.website._id, handle, function(err, page){
-                    cb(err, webpageData, allPages, page);
+                    if(page) {
+                        cb(err, webpageData, allPages, page);
+                    } else {
+                        cb(err || 'Page not found');
+                    }
+
                 });
             },
             function checkForAuth(webpageData, pages, page, cb) {
