@@ -553,7 +553,6 @@ var insightsManager = {
                     fromAddress = 'insights@gorvlvr.com';
                     fromName = 'Tessco LeadSource Insights';
                     subject = 'Tessco LeadSource Insights Report';
-                    replyToAddress = "admin@gorvlvr.com";
                 }
                 var htmlContent = html;
                 var _accountId = customerAccountId;
@@ -570,6 +569,9 @@ var insightsManager = {
                 if(_accountId === appConfig.mainAccountID && appConfig.nonProduction !== true) {
                     ccAry = ccAry || [];
                     ccAry.push('jim@indigenous.io');
+                }
+                if(account.get('orgId') == 5) {                    
+                    replyToAddress = "admin@gorvlvr.com";
                 }
                 emailMessageManager.sendInsightEmail(fromAddress, fromName, toAddress, toName, subject, htmlContent,
                     _accountId, userId, contactId, vars, emailId, ccAry, replyToAddress, replyToName, accountId, function(err, value){
