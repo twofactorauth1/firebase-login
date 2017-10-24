@@ -370,6 +370,12 @@ var securityManager = {
                 log.trace('<< verifySubscriptionWithoutSettingSessionVariables(evergreen: ' + accountId + ')');
                 return cb(null, true);
             }
+
+            if(self.isCancelled(billing)){
+                log.trace('<< verifySubscriptionWithoutSettingSessionVariables(Cancelled: ' + accountId + ')');
+                return cb(null, false);
+            }
+
             if(self.isWithinTrial(billing)) {
                 log.trace('<< verifySubscriptionWithoutSettingSessionVariables(freetrial: ' + accountId + ')');
                 return cb(null, true);
@@ -573,6 +579,11 @@ var securityManager = {
                 }
             });
         });
+    },
+
+    isCancelled: function(billing) {
+        var cancellationReason = billing.cancellationReason;
+        return cancellationReason=="immediately"?true:false;
     },
 
     isWithinTrial: function(billing) {
