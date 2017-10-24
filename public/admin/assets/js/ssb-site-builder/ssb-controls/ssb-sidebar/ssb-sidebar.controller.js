@@ -837,6 +837,14 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
                     if(prodExists){
                         prodExists.capitalized = "Services";
                     }
+
+                    var donationIndex = _.findIndex(vm.sectionFilters, {
+                        lowercase: 'donations'
+                    });
+
+                    if(donationIndex > -1){
+                        vm.sectionFilters.splice(donationIndex, 1);
+                    }
                 }
 
 
