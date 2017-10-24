@@ -7,7 +7,7 @@
 
                 <a class="footer-link" ng-if="website.settings.footerlink" href="{{!website.settings.footerlink && website.settings.footerLinkText != '' ? website.settings.footerLinkURL : footerLinkUrl}}"><img class="footer-logo" src="/images/footer-logo.png"></a>
                 <a class="footer-link padding-bottom-15" ng-if="!website.settings.footerlink && website.settings.footerLinkText != ''" href="{{website.settings.footerLinkURL}}" rel="nofollow">{{website.settings.footerLinkText}}</a>
-                <a class="footer-link" ng-if="website.settings.footerlink" href="{{footerLinkUrl}}" rel="nofollow">Powered by  Indigenous</a>
+                <a class="footer-link" ng-if="website.settings.footerlink" href="{{footerLinkUrl}}" rel="nofollow">Powered by {{poweredByText}}</a>
             </p>
             <!-- <p class="col-sm-4 powered-by text-right" ng-if="!website.settings.footerlink">
                {{website.title}}
@@ -19,7 +19,7 @@
 
                 <a class="footer-link" ng-if="website.settings.footerlink" href="{{!website.settings.footerlink && website.settings.footerLinkText != '' ? website.settings.footerLinkURL : footerLinkUrl}}"><img class="footer-logo" src="/images/footer-logo.png"></a>
                 <a class="footer-link padding-bottom-15" ng-if="!website.settings.footerlink && website.settings.footerLinkText != ''" href="{{website.settings.footerLinkURL}}" rel="nofollow">{{website.settings.footerLinkText}}</a>
-                <a class="footer-link" ng-if="website.settings.footerlink" href="{{footerLinkUrl}}" rel="nofollow">Powered by  Indigenous</a>
+                <a class="footer-link" ng-if="website.settings.footerlink" href="{{footerLinkUrl}}" rel="nofollow">Powered by {{poweredByText}}</a>
             </p>
 
             <p ng-if="component.text === undefined" class="col-xs-12 col-sm-8 copyright">Copyright © {{copyright.year}}. All Rights reserved.</p>
