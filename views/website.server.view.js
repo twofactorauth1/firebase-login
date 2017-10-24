@@ -374,7 +374,7 @@ _.extend(view.prototype, BaseView.prototype, {
                         } else {
                             //return 401
 
-                            cookies.setRedirectUrl(self.req, self.resp);
+                            cookies.setRedirectUrl(self.req, self.resp, handle);
                             self.log.debug('Redirecting to /login');
                             return self.resp.redirect("/login?redirectTo=" + handle);
 
