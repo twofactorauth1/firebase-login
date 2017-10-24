@@ -8,7 +8,7 @@ app.directive('footerComponent', ['$window', 'websiteService', '$location', func
 		},
 		templateUrl: '/components/component-wrap.html',
 		link: function (scope, element) {
-
+			scope.poweredByText = "Indigenous";
 			scope.orgId = $window.indigenous.orgId;
 			scope.component.spacing = scope.$parent.defaultSpacings;
 			var accountHost = $location.$$host,
@@ -17,6 +17,9 @@ app.directive('footerComponent', ['$window', 'websiteService', '$location', func
 				defaultAccountUrl = "//www.gorvlvr.com";
 			} else if (scope.orgId == 4) {
 				defaultAccountUrl = "//techevent.us";
+			}
+			else if(scope.orgId == 5){
+				scope.poweredByText = "RVLVR";
 			}
 			scope.footerLinkUrl = defaultAccountUrl + "?utm_source=" + accountHost + "&utm_medium=footer_link";
 			WebsiteService(function (err, data) {

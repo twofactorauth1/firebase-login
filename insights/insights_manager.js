@@ -570,6 +570,9 @@ var insightsManager = {
                     ccAry = ccAry || [];
                     ccAry.push('jim@indigenous.io');
                 }
+                if(account.get('orgId') == 5) {                    
+                    replyToAddress = "admin@gorvlvr.com";
+                }
                 emailMessageManager.sendInsightEmail(fromAddress, fromName, toAddress, toName, subject, htmlContent,
                     _accountId, userId, contactId, vars, emailId, ccAry, replyToAddress, replyToName, accountId, function(err, value){
                         cb(err, sectionDataMap, value);

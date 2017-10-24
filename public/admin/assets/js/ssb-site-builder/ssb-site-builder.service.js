@@ -2149,6 +2149,7 @@
 
             AccountService.getAccount(function(data) {
                 ssbService.account = data;
+                ssbService.orgId = data.orgId;
                 ssbService.setPermissions();
                         ssbService.websiteId = data.website.websiteId;
                 ssbService.getSite(data.website.websiteId).then(function(website){
