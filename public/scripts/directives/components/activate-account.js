@@ -113,8 +113,10 @@ app.directive('activateAccountComponent', ['$filter', '$timeout', '$modal', '$lo
                 activateAccountService.activateAccount(scope.username, scope.newAccount.password, scope.newAccount.templateId, function(err, data){
                     scope.loading = false;
                     scope.currentStep = 4;
+                    if(scope.account.accountUrl)
+                        scope.account.accountUrl = scope.account.accountUrl.replace("indigenous.io", "leadsource.cc");
                     scope.siteurl = scope.account.accountUrl;
-                    scope.accountUrl = scope.account.accountUrl + "/admin";
+                    scope.account.accountUrl = scope.account.accountUrl + "/admin";
                 });
             };
 

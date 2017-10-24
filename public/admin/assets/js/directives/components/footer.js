@@ -10,6 +10,7 @@ app.directive('footerComponent', ['$window', 'WebsiteService', '$location', func
 		templateUrl: '/components/component-wrap.html',
 		link: function (scope, element) {
 			scope.orgId = $window.indigenous.orgId;
+			scope.poweredByText = "Indigenous";
 			scope.isEditing = true;
 			var accountHost = $location.$$host,
 				defaultAccountUrl = "//www.indigenous.io";
@@ -17,6 +18,9 @@ app.directive('footerComponent', ['$window', 'WebsiteService', '$location', func
 				defaultAccountUrl = "//www.gorvlvr.com";
 			} else if (scope.orgId == 4) {
 				defaultAccountUrl = "//techevent.us";
+			}
+			else if(scope.orgId == 5){
+				scope.poweredByText = "RVLVR";
 			}
 			scope.footerLinkUrl = defaultAccountUrl + "?utm_source=" + accountHost + "&utm_medium=footer_link";
 			if (!scope.ssbEditor) {

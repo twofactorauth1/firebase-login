@@ -828,6 +828,31 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
                     'icon': sectionIcons['all'].icon
                 });
 
+                // Special case for LeadSource
+
+                if(SimpleSiteBuilderService.orgId == 5){
+                    var prodExists = _.find(vm.sectionFilters, function (section) {
+                        return section.lowercase === 'products & services';
+                    });
+                    if(prodExists){
+                        prodExists.capitalized = "Services";
+                    }
+
+                    var donationIndex = _.findIndex(vm.sectionFilters, {
+                        lowercase: 'donations'
+                    });
+
+                    if(donationIndex > -1){
+                        vm.sectionFilters.splice(donationIndex, 1);
+                    }
+
+                    vm.enabledPlatformSections = _.filter(vm.enabledPlatformSections, function(section){
+                        return section.type != 'products'
+                    })
+                }
+
+
+
                 vm.setFilterType = function (label) {
                     vm.typefilter = label;
                 };

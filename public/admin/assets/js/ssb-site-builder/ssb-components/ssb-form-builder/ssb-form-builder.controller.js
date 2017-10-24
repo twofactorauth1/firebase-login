@@ -43,7 +43,7 @@
 		vm.isEditing = $scope.$parent.vm && $scope.$parent.vm.uiState;
 
 		vm._campaignObj = null;
-		vm.removeBorderStyle = removeBorderStyle;
+		vm.removeBorderStyleForNewForms = removeBorderStyleForNewForms;
 		vm.setBorderStyle = setBorderStyle;
 
 		function setBorderStyle(currentElement, btnStyle) { 
