@@ -185,7 +185,7 @@
 			var styleString = ' ';
 			// Styles basis of screens sizes
 			var _layout = screenLayout();
-           
+
 			switch (_layout) {
 	            case 0:
 	                if (section && section.spacing) {
@@ -337,50 +337,35 @@
 	            default:
 	            	if (section && section.spacing) {
 						if (section.spacing.pt) {
-						
-							styleString += (section.spacing.pt.toString().indexOf('%') > 0) ? 'padding-top: ' + section.spacing.pt + ';' : 'padding-top: ' + section.spacing.pt + 'px;';
+							styleString += 'padding-top: ' + section.spacing.pt + 'px;';
 						}
 
 						if (section.spacing.pb) {
-							
-							styleString += (section.spacing.pb.toString().indexOf('%') > 0) ? 'padding-bottom: ' + section.spacing.pb + ';' : 'padding-bottom: ' + section.spacing.pb + 'px;';
-
+							styleString += 'padding-bottom: ' + section.spacing.pb + 'px;';
 						}
 
 						if (section.spacing.pl) {
-							
-							styleString += (section.spacing.pl.toString().indexOf('%') > 0) ? 'padding-left: ' + section.spacing.pl + ';' : 'padding-left: ' + section.spacing.pl + 'px;';
-
+							styleString += 'padding-left: ' + section.spacing.pl + 'px;';
 						}
 
 						if (section.spacing.pr) {
-							
-							styleString += (section.spacing.pr.toString().indexOf('%') > 0) ? 'padding-right: ' + section.spacing.pr + ';' : 'padding-right: ' + section.spacing.pr + 'px;';
-
+							styleString += 'padding-right: ' + section.spacing.pr + 'px;';
 						}
 
 						if (section.spacing.mt) {
-														
-							styleString += (section.spacing.mt.toString().indexOf('%') > 0) ? 'margin-top: ' + section.spacing.mt + ';' : 'margin-top: ' + section.spacing.mt + 'px;';
-
+							styleString += 'margin-top: ' + section.spacing.mt + 'px;';
 						}
 
 						if (section.spacing.mb) {
-							
-							styleString += (section.spacing.mb.toString().indexOf('%') > 0) ? 'margin-bottom: ' + section.spacing.mb + ';' : 'margin-bottom: ' + section.spacing.mb + 'px;';
-
+							styleString += 'margin-bottom: ' + section.spacing.mb + 'px;';
 						}
 
 						if (section.spacing.ml) {
-							var type;
-							(section.spacing.ml.indexOf("%") > -1) ? type = "" : type = "px"; 
-							styleString += section.spacing.ml == 'auto' ? 'margin-left: ' + section.spacing.ml + ';float: none;' : 'margin-left: ' + section.spacing.ml + type +';';
+							styleString += section.spacing.ml == 'auto' ? 'margin-left: ' + section.spacing.ml + ';float: none;' : 'margin-left: ' + section.spacing.ml + 'px;';
 						}
 
 						if (section.spacing.mr) {
-							var spacing_type;
-							(section.spacing.mr.indexOf("%") > -1) ? spacing_type = "" : spacing_type = "px"; 
-							styleString += (section.spacing.mr == 'auto') ? 'margin-right: ' + section.spacing.mr + ';float: none;' : 'margin-right: ' + section.spacing.mr + spacing_type + ';';
+							styleString += (section.spacing.mr == 'auto') ? 'margin-right: ' + section.spacing.mr + ';float: none;' : 'margin-right: ' + section.spacing.mr + 'px;';
 						}
 
 						if (section.spacing.mw) {
@@ -445,7 +430,7 @@
 			}
 			setUpFroalaVideoSize(section);
 			resizeSliderImagesToFullHeight(section);
-          
+
 
 			return styleString;
 		}
@@ -701,7 +686,6 @@
 					}
 
 					if (component.spacing.mt) {
-						console.log('---------component.spacing.mt----------',component.spacing.mt);
 						styleString += 'margin-top: ' + component.spacing.mt + 'px;';
 					}
 
