@@ -12,7 +12,7 @@ app.directive('featureListComponent', [function () {
 
 				var styleString = ' ',
 					color;
-				if (isActive) {
+				if (isActive && !component.hideActiveFeautureUnderline) {
 					color = $(".list-features-" + component._id + " li.active .fr-view span:not('.fr-marker'):not('.fr-placeholder'):not(:empty):last").css("color");
 					if (!color) {
 						color = $(".list-features-" + component._id + " li.active").css("color");
