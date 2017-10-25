@@ -19,9 +19,9 @@ app.directive('footerComponent', ['$window', 'WebsiteService', '$location', func
 			} else if (scope.orgId == 4) {
 				defaultAccountUrl = "//techevent.us";
 			}
-			else if(scope.orgId == 5){
-				scope.poweredByText = "RVLVR";
-			}
+
+			scope.isRvlvr = scope.orgId == 5 || scope.orgId == 1;
+
 			scope.footerLinkUrl = defaultAccountUrl + "?utm_source=" + accountHost + "&utm_medium=footer_link";
 			if (!scope.ssbEditor) {
 				scope.component.spacing = scope.$parent.defaultSpacings;

@@ -1,6 +1,6 @@
-<div id="footer" class="footer-container {{orgId==1?'rvlvrfooter':''}}" ng-class="component.type+'-v'+component.version">
+<div id="footer" class="footer-container {{isRvlvr?'rvlvrfooter':''}}" ng-class="component.type+'-v'+component.version">
     <div class="footer-after section"  ng-class="{'footerEditing':isEditing}">
-        <div class="container" ng-if="component.reverse && orgId!=1">
+        <div class="container" ng-if="component.reverse && !isRvlvr">
             <p ng-if="component.text === undefined" class="col-xs-12 col-sm-8 copyright">Copyright © {{copyright.year}}. All Rights reserved.</p>
             <p ng-if="component.text !== undefined" class="col-xs-12 col-sm-8 copyright" elem ng-model="component.text"></p>
             <p class="col-xs-12 col-sm-4 powered-by {{website.settings.footerlink ? ' ' : 'text-right'}}">
@@ -13,7 +13,7 @@
                {{website.title}}
             </p> -->
         </div>
-        <div class="container" ng-if="component.reverse && orgId==1">
+        <div class="container" ng-if="component.reverse && isRvlvr">
             <p ng-if="component.text === undefined" class="col-xs-12 col-sm-8 copyright">New Copyright © {{copyright.year}}. All Rights reserved.</p>
             <p ng-if="component.text !== undefined" class="col-xs-12 col-sm-8 copyright" elem ng-model="component.text"></p>
             <p class="col-xs-12 col-sm-4 powered-by {{website.settings.footerlink ? ' ' : 'text-right'}}">
@@ -27,7 +27,7 @@
                {{website.title}}
             </p> -->
         </div>
-        <div class="container reverse-footer" ng-if="!component.reverse && orgId!=1">
+        <div class="container reverse-footer" ng-if="!component.reverse && !isRvlvr">
             
             <p class="col-xs-12 col-sm-4 powered-by {{website.settings.footerlink ? ' ' : 'text-right'}}">
 
@@ -39,7 +39,7 @@
             <p ng-if="component.text === undefined" class="col-xs-12 col-sm-8 copyright">Copyright © {{copyright.year}}. All Rights reserved.</p>
             <p ng-if="component.text !== undefined" class="col-xs-12 col-sm-8 copyright" elem ng-model="component.text"></p>
         </div>
-        <div class="container reverse-footer" ng-if="!component.reverse && orgId==1">
+        <div class="container reverse-footer" ng-if="!component.reverse && isRvlvr">
 
             <p class="col-xs-12 col-sm-4 powered-by {{website.settings.footerlink ? ' ' : 'text-right'}}">
                 <a class="footer-link padding-bottom-15" ng-if="!website.settings.footerlink && website.settings.footerLinkText != ''" href="{{website.settings.footerLinkURL}}" rel="nofollow">{{website.settings.footerLinkText}}</a>
