@@ -132,7 +132,7 @@
 .fr-color-set.sp-container .sp-palette-toggle.fr-command:hover
 {
     background: inherit !important;
-    color: #ffffff !important;
+    color: #243948 !important;
 }
 button.sp-palette-toggle.fr-command
 {
@@ -170,4 +170,3 @@ button.sp-palette-toggle.fr-command
 .fr-color-set.sp-container .sp-picker-container .sp-input-container{
     padding-top: 5px;
 }
-
