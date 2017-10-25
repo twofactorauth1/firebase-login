@@ -57,6 +57,15 @@
         </ssb-sidebar-settings-panel>
 
         <ssb-sidebar-settings-panel
+            class="ssb-sidebar-section-panel-component-panel container-fluid"
+            ng-if="vm.uiState.activeComponentIndex !== null && 'layout' === vm.uiState.openSidebarSectionPanel.id"
+            settings-template="assets/js/ssb-site-builder/ssb-components/shared/sidebar.settings.layout.html"
+            component="vm.state.email.components[vm.uiState.activeComponentIndex]"
+            state="vm.state"
+            ui-state="vm.uiState">
+        </ssb-sidebar-settings-panel>
+
+        <ssb-sidebar-settings-panel
             class="ssb-sidebar-section-panel-component-panel"
             ng-if="vm.uiState.openSidebarSectionPanel.id === vm.uiState.activeElement._id && vm.uiState.activeElement._id.indexOf('button-element_') == 0"
             settings-template="assets/js/ssb-site-builder/ssb-components/ssb-theme-btn/sidebar.settings.html"
