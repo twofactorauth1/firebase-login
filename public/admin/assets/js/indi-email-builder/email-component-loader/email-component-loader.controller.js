@@ -1,52 +1,133 @@
-(function () {
+(function() {
 
-  app.controller('EmailBuilderComponentLoaderController', emailbComponentLoaderController);
+    app.controller('EmailBuilderComponentLoaderController', emailbComponentLoaderController);
 
-  emailbComponentLoaderController.$inject = ['$rootScope', '$scope', '$attrs', '$filter', '$timeout'];
-  /* @ngInject */
-  function emailbComponentLoaderController($rootScope, $scope, $attrs, $filter, $timeout) {
+    emailbComponentLoaderController.$inject = ['$rootScope', '$scope', '$attrs', '$filter', '$timeout'];
+    /* @ngInject */
+    function emailbComponentLoaderController($rootScope, $scope, $attrs, $filter, $timeout) {
 
-    console.info('component-loader directive init...');
+        console.info('component-loader directive init...');
 
-    var vm = this;
-    var pVm = $scope.$parent.vm;
+        var vm = this;
+        var pVm = $scope.$parent.vm;
 
-    vm.ssbEditor = true;
-    vm.components = pVm.state.email.components;
+        vm.ssbEditor = true;
+        vm.components = pVm.state.email.components;
 
-    $scope.component = vm.component;
-    $scope.isEditing = true;
-    $scope.website = vm.state.website;
+        $scope.component = vm.component;
+        $scope.isEditing = true;
+        $scope.website = vm.state.website;
 
-    vm.init = init;
-    vm.componentStyleFn = componentStyleFn;
+        vm.init = init;
+        vm.componentStyleFn = componentStyleFn;
 
 
-    function componentStyleFn(component) {
+        function componentStyleFn(component) {
 
-        var styleString = ' ';
+            var styleString = ' ';
 
-        if (component.bg) {
+            if (component.bg) {
 
-            if (component.bg.color) {
-                styleString += 'background-color: ' + component.bg.color + ';';
+                if (component.bg.color) {
+                    styleString += 'background-color: ' + component.bg.color + ';';
+                }
+
+                if (component.bg.img && component.bg.img.show && component.bg.img.url !== '') {
+                    styleString += 'background-image: url("' + component.bg.img.url + '");';
+                }
+
             }
 
-            if (component.bg.img && component.bg.img.show && component.bg.img.url !== '') {
-                styleString += 'background-image: url("' + component.bg.img.url + '");';
+            if (component && component.spacing) {
+                if (component.spacing.pt) {
+
+                    if (component.spacing.pt.indexOf("%") > -1) {
+                        styleString += 'padding-top: ' + component.spacing.pt + ';';
+                    } else {
+                        styleString += 'padding-top: ' + component.spacing.pt + 'px;';
+                    }
+
+                }
+
+                if (component.spacing.pb) {
+                    if (component.spacing.pb.indexOf("%") > -1) {
+                        styleString += 'padding-bottom: ' + component.spacing.pb + ';';
+                    } else {
+                        styleString += 'padding-bottom: ' + component.spacing.pb + 'px;';
+                    }
+
+                }
+
+                if (component.spacing.pl) {
+                    if (component.spacing.pl.indexOf("%") > -1) {
+                        styleString += 'padding-left: ' + component.spacing.pl + ';';
+                    } else {
+                        styleString += 'padding-left: ' + component.spacing.pl + 'px;';
+                    }
+
+                }
+
+                if (component.spacing.pr) {
+                    if (component.spacing.pr.indexOf("%") > -1) {
+                        styleString += 'padding-right: ' + component.spacing.pr + ';';
+                    } else {
+                        styleString += 'padding-right: ' + component.spacing.pr + 'px;';
+                    }
+
+                }
+
+                if (component.spacing.mt) {
+
+                    if (component.spacing.mt.indexOf("%") > -1) {
+                        styleString += 'margin-top: ' + component.spacing.mt + ';';
+                    } else {
+                        styleString += 'margin-top: ' + component.spacing.mt + 'px;';
+                    }
+                }
+
+                if (component.spacing.mb) {
+
+                    if (component.spacing.mb.indexOf("%") > -1) {
+                        styleString += 'margin-bottom: ' + component.spacing.mb + ';';
+                    } else {
+                        styleString += 'margin-bottom: ' + component.spacing.mb + 'px;';
+                    }
+
+                }
+
+                if (component.spacing.ml) {
+                    var type;
+                    (component.spacing.ml.indexOf("%") > -1) ? type = "": type = "px";
+                    styleString += component.spacing.ml == 'auto' ? 'margin-left: ' + component.spacing.ml + ';float: none;' : 'margin-left: ' + component.spacing.ml + type + ';';
+                }
+
+                if (component.spacing.mr) {
+                    var spacing_type;
+                    (component.spacing.mr.indexOf("%") > -1) ? spacing_type = "": spacing_type = "px";
+                    styleString += (component.spacing.mr == 'auto') ? 'margin-right: ' + component.spacing.mr + ';float: none;' : 'margin-right: ' + component.spacing.mr + spacing_type + ';';
+                }
+
+                if (component.spacing.mw) {
+                    styleString += (component.spacing.mw == '100%') ?
+                        'max-width: ' + component.spacing.mw + ';' :
+                        'max-width: ' + component.spacing.mw + 'px;margin-left:auto!important;margin-right:auto!important;';
+                }
+
+                if (component.spacing.lineHeight) {
+                    styleString += 'line-height: ' + component.spacing.lineHeight;
+                }
+
             }
+
+            return styleString;
 
         }
 
-        return styleString;
+
+        function init(element) {
+            vm.element = element;
+        }
 
     }
-
-
-    function init(element) {
-      vm.element = element;
-    }
-
-  }
 
 })();
