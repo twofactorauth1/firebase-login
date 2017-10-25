@@ -472,9 +472,9 @@
 						}
 					}
 					sectionElement.find(".single-testimonial .component-slider-image img").css("min-height", sectionElementTextHeight);
-					//var windowWidth = angular.element($window).width();
-					//if(sectionElement.hasClass("ssb-page-section-layout-nav-hero-v4") && windowWidth < 768)
-						//sectionElement.find(".flex-container-absolute-column").css("min-height", sectionElementTextHeight);
+					var windowWidth = angular.element($window).width();
+					if(sectionElement.hasClass("ssb-page-section-layout-nav-hero-v4") && windowWidth < 768)
+						sectionElement.find(".flex-container-absolute-column").css("min-height", sectionElementTextHeight);
 					
 				}
 			}
