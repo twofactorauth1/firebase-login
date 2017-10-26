@@ -252,6 +252,7 @@ var insightsManager = {
     generateInsightReport: function(accountId, userId, customerAccountId, sections, destinationAddress, startDate, endDate, fn) {
         var self = this;
         self.log.debug(accountId, userId, '>> generateInsightReport');
+        var emailId;
         async.waterfall([
             function(cb) {
                 accountDao.getAccountByID(customerAccountId, function(err, customerAccount){
@@ -302,8 +303,12 @@ var insightsManager = {
             },
             function(account, sectionDataMap, cb) {
                 //get the email HTML
-                self.log.debug('Looking for email with ID:', self.config.emailId);
-                emailDao.getEmailById(self.config.emailId, function(err, email){
+                emailId = self.config.emailId;
+                if(account.get("orgId") == 1){
+                    emailId = self.config.rvlvrEmailId;
+                }
+                self.log.debug('Looking for email with ID:', emailId);
+                emailDao.getEmailById(emailId, function(err, email){
                     if(err || !email) {
                         if(!err) {
                             err = 'Email not found';
@@ -560,8 +565,7 @@ var insightsManager = {
                 if(contact) {
                     contactId = contact.id();
                 }
-                var vars = reportVars;
-                var emailId = self.config.emailId;
+                var vars = reportVars;                
                 var ccAry = self.config.ccAry;
                 var replyToAddress = self.config.replyToAddress;
                 var replyToName = self.config.replyToName;
