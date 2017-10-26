@@ -8,6 +8,7 @@
 var fromAddress = 'insights@indigenous.io';
 var fromName = 'Indigenous Insights';
 var emailId = process.env.INSIGHTS_EMAIL_ID || 'bfa86581-c8e4-444e-bf0f-15519eff2bc8';
+var rvlvrEmailId = process.env.INSIGHTS_RVLVR_EMAIL_ID || 'bfa86581-c8e4-444e-bf0f-15519eff2bc9';
 var subject = 'Insight Report';
 var ccAry = [];
 var replyToAddress='account_managers@indigenous.io';
@@ -29,6 +30,7 @@ module.exports = {
     fromAddress: fromAddress,
     fromName : fromName,
     emailId : emailId,
+    rvlvrEmailId: rvlvrEmailId,
     subject : subject,
     ccAry : ccAry,
     replyToAddress : replyToAddress,
