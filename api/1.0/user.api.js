@@ -455,7 +455,7 @@ _.extend(api.prototype, baseApi.prototype, {
             last:lastName
         };
         var ipAddress = self.ip(req);
-        var organization, product;
+        var organization, product, originalOrganization;
 
         async.waterfall([
             function(callback) {
@@ -465,6 +465,7 @@ _.extend(api.prototype, baseApi.prototype, {
                         self.log.error('Could not get organization:', err);
                         callback(err);
                     } else {
+                        originalOrganization = _organization;
                         var adminAccountId = _organization.get('adminAccount');
                         productManager.getProductByStripePlan(adminAccountId, null, plan, function(err, _product){
                             if(err) {
@@ -694,9 +695,17 @@ _.extend(api.prototype, baseApi.prototype, {
                         self.log.debug('Created customer for user:' + user.id());
 
                         self.createLead(user, account, sub, ipAddress, function(err, leadId) {
-                            userManager.sendWelcomeEmail(accountId, account, user, email, username, contact.id(), function(){
-                                self.log.debug('Sent welcome email');
-                            });
+                            var orgSettings = originalOrganization.get('signupSettings');
+                            if(orgSettings && orgSettings.welcomeEmail) {
+                                userManager.sendOrgWelcomeEmail(accountId, account, originalOrganization, user, email, username, contact.id(), function(){
+                                    self.log.debug('Sent welcome email');
+                                });
+
+                            }else {
+                                userManager.sendWelcomeEmail(accountId, account, user, email, username, contact.id(), function(){
+                                    self.log.debug('Sent welcome email');
+                                });
+                            }
                             if(leadId) {
                                 //set the close.io leadId in the account billing section.
                                 var billing = account.get('billing');
