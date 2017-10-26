@@ -74,6 +74,7 @@ app.directive('featureListComponent', [function () {
 				return styleString;
 			};
 			scope.updateFeatureClass=function(styles,index){ 
+				debugger
 				var visibility=true;
 				if(styles && styles['features[features/featureIndex]/media'] && styles['features[features/featureIndex]/media'][index] && styles['features[features/featureIndex]/media'][index].visibility===false ){
 					visibility=false;
