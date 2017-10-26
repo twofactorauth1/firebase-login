@@ -121,7 +121,8 @@
 		};
 
 		$scope.generateSubdomainURL = function (subdomain) {
-			var url = $location.protocol() + '://' + location.host.replace('main', subdomain);
+			var _subdomain = location.host.split(".")[0];
+			var url = $location.protocol() + '://' + location.host.replace(_subdomain, subdomain);
 			return url;
 		};
 
