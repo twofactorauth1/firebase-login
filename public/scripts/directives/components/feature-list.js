@@ -9,7 +9,6 @@ app.directive('featureListComponent', [function () {
 		templateUrl: '/components/component-wrap.html',
 		link: function (scope) {
 			function listStyles(component, isActive) {
-
 				var styleString = ' ',
 					color;
 				if (isActive && !component.hideActiveFeautureUnderline) {
@@ -73,11 +72,13 @@ app.directive('featureListComponent', [function () {
 				}
 				return styleString;
 			};
-			scope.updateFeatureClass=function(styles,index){ 
-				debugger
-				var visibility=true;
-				if(styles && styles['features[features/featureIndex]/media'] && styles['features[features/featureIndex]/media'][index] && styles['features[features/featureIndex]/media'][index].visibility===false ){
-					visibility=false;
+			scope.updateFeatureClass=function(styles,index){  
+				var visibility=true; 
+				if(styles && styles['features[features/featureIndex]/media'] && styles['features[features/featureIndex]/media'][index] ){
+					var mediaObj= styles['features[features/featureIndex]/media'][index];
+					if(mediaObj.visibility===false || mediaObj.showOnlyMobile) {
+						visibility=false;
+					}
 				}
 				return visibility && scope.component.features[index].media && scope.component.features[index].media.indexOf('width: 0px')===-1 ;
 			}
