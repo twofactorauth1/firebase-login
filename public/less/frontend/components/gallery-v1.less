@@ -71,3 +71,11 @@
         height: 170px;
     }
 }
+body[style*="hidden"] {
+    .sticky-wrapper .ssb-section-layout.ssb-fixed.sticky{
+        position: unset;
+    }
+    div.is-sticky>div {
+        z-index: 2 !important;
+    }
+}
