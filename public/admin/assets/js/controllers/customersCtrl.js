@@ -182,5 +182,11 @@
                 }
             });
         };
+
+        $scope.clearCustomerModal =function(){
+            $scope.subdomain = "";
+            $scope.username = "";
+            $scope.password = "";
+        }
     }]);
 }(angular));

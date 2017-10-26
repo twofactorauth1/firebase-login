@@ -538,10 +538,10 @@
 							}
 
 							if (component.spacing.pr) {
-								if(component.spacing.mt.indexOf("%") > -1) {
-									styleString += 'padding-right: ' + component.spacing.mt + ';';
+								if(component.spacing.pr.indexOf("%") > -1) {
+									styleString += 'padding-right: ' + component.spacing.pr + ';';
 								}else{
-									styleString += 'padding-right: ' + component.spacing.mt + 'px;';
+									styleString += 'padding-right: ' + component.spacing.pr + 'px;';
 								}
 
 

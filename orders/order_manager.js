@@ -1220,7 +1220,7 @@ module.exports = {
             function (account, savedOrder, contact, productAry, coupon, callback) {
                 var customerId = contact.get('stripeId');
                 if (customerId) {
-                    callback(null, account, savedOrder, contact, productAry);
+                    callback(null, account, savedOrder, contact, productAry, coupon);
                 } else {
                     var cardToken = savedOrder.get('payment_details').card_token;
                     stripeDao.createStripeCustomer(null, contact, accountId, accountId, accessToken, function (err, customer) {

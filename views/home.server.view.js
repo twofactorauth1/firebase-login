@@ -6,6 +6,7 @@
  */
 
 var BaseView = require('./base.server.view');
+var appConfig = require('../configs/app.config');
 var _req = null;
 var isGroupAdmin = false;
 var view = function(req,resp,options) {
@@ -24,9 +25,13 @@ _.extend(view.prototype, BaseView.prototype, {
             root:root || "home",
             location:"home",
             includeHeader:true,
-            includeFooter:true
+            includeFooter:true,
+            domainPrefix: ''
         };
-
+        
+        if (appConfig.nonProduction === true && appConfig.environment !== appConfig.environments.DEVELOPMENT) {
+            data.domainPrefix = ".test";
+        }
         var self = this;
         this.getAccountByHost(_req, function(err, value) {
             if (!err && value != null) {

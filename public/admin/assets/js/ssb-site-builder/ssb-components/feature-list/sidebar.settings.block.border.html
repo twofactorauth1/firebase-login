@@ -94,3 +94,18 @@
         </div>
     </div>
 </div>
+
+
+<div  ng-if="component.type=='feature-list' && (component.version== 5 || component.version== 6) ">
+    <h4 class="ssb-sidebar-sub-heading-separator">Active feature styles</h4>
+    <div class="form-group">
+        <label for="hide_underline" class="margin-bottom-0">
+            Hide underline
+            <span tooltip-placement="top" tooltip-append-to-body="true" tooltip="Hide underline below the active feature.">
+                <i class="fa fa-info-circle" />
+            </span>
+        </label>
+        <switch ng-model="component.hideActiveFeautureUnderline" class="pull-right"></switch>
+    </div>
+</div>
+

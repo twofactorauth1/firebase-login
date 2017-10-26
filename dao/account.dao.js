@@ -738,9 +738,13 @@ var dao = {
             if(err) {
                 self.log.error('Exception retrieving current account: ' + err);
             } else {
+                var orgId = 0;
+                if(account && account.get('orgId')) {
+                    orgId = account.get('orgId');
+                }
                 var query = {
                     isTemplateAccount: true,
-                    orgId: account.get("orgId") || 0                   
+                    orgId: orgId
                 };
                 self.findMany(query, fn);
             }

@@ -13,7 +13,7 @@ app.directive('activateAccountComponent', ['$filter', '$timeout', '$modal', '$lo
                 "NEW" : "NEW",
                 "EXISTING" : "EXISTING"
             };
-
+            scope.errorMessage = "";
 			scope.newAccount = {
 				plan: scope.plans.NEW
 			};
@@ -110,12 +110,24 @@ app.directive('activateAccountComponent', ['$filter', '$timeout', '$modal', '$lo
             function activateAccount() {
                 //TODO: Load Spinner
                 scope.loading = true;
+                scope.errorMessage = "";
                 activateAccountService.activateAccount(scope.username, scope.newAccount.password, scope.newAccount.templateId, function(err, data){
                     scope.loading = false;
-                    scope.currentStep = 4;
-                    scope.account.accountUrl = scope.account.accountUrl.replace("indigenous.io", "leadsource.cc");
-                    scope.siteurl = scope.account.accountUrl;
-                    scope.accountUrl = scope.account.accountUrl + "/login";
+                    if(err){
+                        if(err.message){
+                            scope.errorMessage = err.message;
+                        }
+                        else{
+                            scope.errorMessage = "Error while activating account";
+                        }
+                    }
+                    else{
+                        scope.currentStep = 4;
+                        scope.account.accountUrl = scope.account.accountUrl.replace("indigenous.io", "leadsource.cc");
+                        scope.siteurl = scope.account.accountUrl;
+                        scope.accountUrl = scope.account.accountUrl + "/login";
+                    }
+                    
                 });
             };
 

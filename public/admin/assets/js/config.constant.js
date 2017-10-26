@@ -707,7 +707,7 @@ app.constant('JS_REQUIRES', {
 		'jquery-sparkline': '../js/libs/jquery.sparkline.build/dist/jquery.sparkline.min.js',
 		'jsVideoUrlParser': '../js/libs/js-video-url-parser/dist/jsVideoUrlParser.min.js',
 		'jquery-nestable-plugin': ['../js/libs_misc/jquery-nestable/jquery.nestable.js'],
-		'touchspin-plugin': ['../js/libs/bootstrap-touchspin/dist/jquery.bootstrap-touchspin.min.js', '../js/libs/bootstrap-touchspin/dist/jquery.bootstrap-touchspin.min.css'],
+		'touchspin-plugin': ['../js/libs_misc/jquery.bootstrap-touchspin.min.js', '../js/libs/bootstrap-touchspin/dist/jquery.bootstrap-touchspin.min.css'],
 		// 'bootstrap': '../js/libs/bootstrap/dist/js/bootstrap.min.js',
 		"bootstrap-confirmation": ['../js/libs/bootstrap-confirmation/bootstrap-confirmation.js'],
 		'uuid': '../js/libs_misc/uuid.js',
