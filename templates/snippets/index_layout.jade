@@ -37,6 +37,12 @@ html(class="no-js", lang="en" ng-app="mainApp" ng-controller="MainCtrl as main",
             if og.image
                 meta(property='og:image', content=og.image)
             base(href="/")
+            if account && account.business
+                script(type="text/javascript"). 
+                    window.indigenous = window.indigenous || {};
+                    window.indigenous.precache = window.indigenous.precache || {}; 
+                    window.indigenous.business ={'name' :'#{account.business.name}', 'logo': '#{account.business.logo}'};
+
             if account.website.settings.favicon
                 link(rel="shortcut icon", href=account.website.settings.favicon)
             else

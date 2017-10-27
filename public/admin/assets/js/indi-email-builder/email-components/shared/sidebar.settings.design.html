@@ -1,12 +1,39 @@
 <div class="form-group padding-top-10 ssb-spectrum-color-picker-small">
-    <div class="ssb-spectrum-color-picker-background-container">
-        <spectrum-colorpicker class="ssb-spectrum-color-picker-background" format="'rgb'" options="vm.spectrum.options" ng-model="component.bg.color"></spectrum-colorpicker>
-        <i class="fa fa-eyedropper" />
-    </div>
-    <label>
-        Section background
-        <span tooltip-placement="top" tooltip-append-to-body="true" tooltip="Background color of email.">
-            <i class="fa fa-info-circle" />
-        </span>
-    </label>
+   <div class="ssb-spectrum-color-picker-background-container">
+      <spectrum-colorpicker class="ssb-spectrum-color-picker-background" format="'rgb'" options="vm.spectrum.options" ng-model="component.bg.color"></spectrum-colorpicker>
+      <i class="fa fa-eyedropper" />
+   </div>
+   <label>
+   Section background
+   <span tooltip-placement="top" tooltip-append-to-body="true" tooltip="Background color of email.">
+   <i class="fa fa-info-circle" />
+   </span>
+   </label>
 </div>
+
+
+<div class="form-group">
+   <label for="bg_hide" class="margin-bottom-0">
+   Show image
+   <span tooltip-placement="top" tooltip-append-to-body="true" tooltip="Show/hide background image of component.">
+   <i class="fa fa-info-circle" />
+   </span>
+   </label>
+   <switch ng-model="component.bg.img.show" class="pull-right"></switch>
+</div>
+<div class="form-group add-image" ng-show="component.bg.img.show" ng-if="!component.bg.img.url">
+   <div class="btn-wrap">
+      <input id="abi" ng-model="component.bg.img.url" type="button" class="btn btn-primary" value="Add BG Image" ng-click="vm.addBackground(vm.uiState.activeComponentIndex, null)">
+   </div>
+</div>
+<div class="form-group ssb-background-image-picker" ng-if="component.bg.img.url" ng-show="component.bg.img.show">
+   <label for="bg_hide" class="margin-bottom-0">
+   Select image
+   <span tooltip-placement="top" tooltip-append-to-body="true" tooltip="Select an image to use as a background.">
+   <i class="fa fa-info-circle" />
+   </span>
+   </label>
+   <i class="fa fa-close hidden" ng-click="vm.removeBackgroundImage(component)"></i>
+   <img ng-src="{{component.bg.img.url}}" ng-model="component.bg.img.url" ng-click="vm.addBackground(vm.uiState.activeComponentIndex, null)" class="img-thumbnail">
+</div>
+

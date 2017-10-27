@@ -533,13 +533,18 @@ function ssbEmailBuilderSidebarController($scope, $attrs, $filter, $document, $t
         vm.openMediaModal('media-modal', 'MediaModalCtrl', null, 'lg');
 
         vm.insertMediaCallback = function(asset) {
-            if (componentIndex !== undefined && componentIndex !== null) {
-                vm.state.page.sections[vm.uiState.activeSectionIndex].components[vm.uiState.activeComponentIndex].bg.img.url = asset.url;
-            } else if (!angular.isDefined(sectionIndex) && vm.uiState.activeElement  && vm.uiState.activeElement.hasOwnProperty("bg")) {
-                vm.uiState.activeElement.bg.img.url = asset.url;
-            } else {
-                vm.state.page.sections[vm.uiState.activeSectionIndex].bg.img.url = asset.url;
-            }
+            debugger
+            if(vm.state.page){
+                if (componentIndex !== undefined && componentIndex !== null) {
+                    vm.state.page.sections[vm.uiState.activeSectionIndex].components[vm.uiState.activeComponentIndex].bg.img.url = asset.url;
+                } else if (!angular.isDefined(sectionIndex) && vm.uiState.activeElement  && vm.uiState.activeElement.hasOwnProperty("bg")) {
+                    vm.uiState.activeElement.bg.img.url = asset.url;
+                } else {
+                    vm.state.page.sections[vm.uiState.activeSectionIndex].bg.img.url = asset.url;
+                }    
+            }else{
+                vm.state.email.components[vm.uiState.activeComponentIndex].bg.img.url = asset.url;
+            }        
         }
 
         SimpleSiteBuilderService.setActiveSection(sectionIndex);

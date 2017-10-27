@@ -91,6 +91,10 @@ html(class="no-js", lang="en" ng-app="mainApp" ng-controller="MainCtrl as main",
             if account.showhide.blogSocialSharing
                 script(type="text/javascript").
                     window.indigenous.blogSocialSharing = #{account.showhide.blogSocialSharing};
+            
+            if account && account.business
+                script(type="text/javascript").  
+                    window.indigenous.business ={'name' :'#{account.business.name}', 'logo': '#{account.business.logo}'};
 
             if jsonld
                 script(type="application/ld+json").
