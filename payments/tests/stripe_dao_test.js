@@ -90,7 +90,7 @@ exports.stripe_dao_test = {
                         test.ok(false, err);
                         return test.done();
                     }
-                    test.equals(customerId, user1.get('stripeId'));
+                    test.equals(customerId, user1.getStripeIDByOrg(0));
                     stripeDao.createStripeCustomerForUser(null, user, accountId, 0, 0, null, 0, function(err, customer) {
                         if (err) {
                             test.ok(false, err);
@@ -102,7 +102,7 @@ exports.stripe_dao_test = {
                                 test.ok(false, err);
                                 return test.done();
                             }
-                            test.equals(customerId, user1.get('stripeId'));
+                            test.equals(customerId, user1.getStripeIDByOrg(0));
                             test.done();
                         });
                     });

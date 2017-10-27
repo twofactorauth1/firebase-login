@@ -136,7 +136,7 @@ exports.testGroup = {
                 test.ok(false, 'Error getting user by id: ' + err);
                 test.done();
             } else {
-                test.equals(user.get('stripeId'), testContext.stripeCustomer.id);
+                test.equals(user.getStripeIDByOrg(0), testContext.stripeCustomer.id);
                 p1.resolve();
             }
         });
