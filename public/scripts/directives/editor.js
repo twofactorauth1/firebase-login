@@ -29,17 +29,22 @@ angular.module('mainApp').directive("elem", function ($timeout) {
 				}
 			}, 0);
 			function updateTextView(text){
-				if (scope.ngModel.indexOf("[BUSINESSLOGO]")> -1 ){
-					var logo = window.indigenous.business.logo;
-					if(logo){ 
-						text=scope.ngModel.replace("[BUSINESSLOGO]",'<img class="business-logo" src="'+logo+'">');
-					}else{
-						text=text.replace("[BUSINESSLOGO]",'');
+				if(window.indigenous.business){
+					if (scope.ngModel.indexOf("[BUSINESSLOGO]")> -1 ){
+						var logo = window.indigenous.business.logo;
+						if(logo){ 
+							text=scope.ngModel.replace("[BUSINESSLOGO]",'<img class="business-logo" src="'+logo+'">');
+						}else{
+							text=text.replace("[BUSINESSLOGO]",'');
+						}
 					}
-				}
-				if(window.indigenous.business.name){
-					text=text.replace("[BUSINESSNAME]",window.indigenous.business.name);
-				}else{
+					if(window.indigenous.business.name){
+						text=text.replace("[BUSINESSNAME]",window.indigenous.business.name);
+					}else{
+						text=text.replace("[BUSINESSNAME]",'');
+					}
+				}else{ 
+					text=text.replace("[BUSINESSLOGO]",""); 
 					text=text.replace("[BUSINESSNAME]",'');
 				}
 				return text;
