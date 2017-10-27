@@ -33,10 +33,14 @@ angular.module('mainApp').directive("elem", function ($timeout) {
 					var logo = window.indigenous.business.logo;
 					if(logo){ 
 						text=scope.ngModel.replace("[BUSINESSLOGO]",'<img class="business-logo" src="'+logo+'">');
+					}else{
+						text=text.replace("[BUSINESSLOGO]",'');
 					}
 				}
 				if(window.indigenous.business.name){
 					text=text.replace("[BUSINESSNAME]",window.indigenous.business.name);
+				}else{
+					text=text.replace("[BUSINESSNAME]",'');
 				}
 				return text;
 			}
