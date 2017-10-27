@@ -28,7 +28,18 @@ angular.module('mainApp').directive("elem", function ($timeout) {
 					element.parents(".ssb-text-only").addClass("ssb-text-o-moblie");
 				}
 			}, 0);
-
+			function updateTextView(text){
+				if (scope.ngModel.indexOf("[BUSINESSLOGO]")> -1 ){
+					var logo = window.indigenous.business.logo;
+					if(logo){ 
+						text=scope.ngModel.replace("[BUSINESSLOGO]",'<img class="business-logo" src="'+logo+'">');
+					}
+				}
+				if(window.indigenous.business.name){
+					text=text.replace("[BUSINESSNAME]",window.indigenous.business.name);
+				}
+				return text;
+			}
 			scope.getId=function(){
 				var parentComponentId =  element.closest('.ssb-component').attr('id'),
 					parentSectionId = element.closest('.ssb-section-layout').attr('id'),
@@ -72,10 +83,9 @@ angular.module('mainApp').directive("elem", function ($timeout) {
 					scope.ngModel = unescapeHTML(modelString);
 				} else if (scope.ngModel.indexOf('&lt;!-- more --&gt;') !== -1) {
 					scope.ngModel = scope.ngModel.replace(/&lt;!-- more --&gt;/, '');
-				}
+				} 
+				scope.ngModel=updateTextView(scope.ngModel);
 			}
-
-
 		}
 	};
 });
