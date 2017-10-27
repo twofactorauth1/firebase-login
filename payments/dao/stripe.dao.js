@@ -89,7 +89,7 @@ var dao = {
         });
     },
 
-    createStripeCustomerForUser: function(cardToken, user, accountId, accountBalance, newAccountId, accessToken, fn) {
+    createStripeCustomerForUser: function(cardToken, user, accountId, accountBalance, newAccountId, accessToken, orgId, fn) {
         //TODO: check if this is already a customer and add accountId
         var self = this;
         var userId = user.id();
@@ -111,7 +111,7 @@ var dao = {
         }
         var apiToken = self.delegateStripe(accessToken);
 
-        if(user.get('stripeId') === '') {
+        if(!user.getStripeIDByOrg(orgId)) {
             stripe.customers.create(params, apiToken, function(err, customer) {
 
                 if(err) {
@@ -119,14 +119,12 @@ var dao = {
                     fn = null;
                     return;
                 }
-                user.set('stripeId', customer.id);
+                //user.set('stripeId', customer.id);
+                user.setStripeIDByOrg(customer.id, orgId);
                 self.log.debug(accountId, userId, 'Setting user stripeId to ' + user.get('stripeId'));
                 var p1 = $.Deferred(), p2 = $.Deferred();
                 var savedCustomer = customer;
-                // TESTING
-                //console.log('this: ', this);
-                //console.log('userDao:', userDao);
-                //DONE TESTING
+
                 userDao.saveOrUpdate(user, function(err, value){
                     if (err) {
                         fn(err, value);
@@ -158,7 +156,8 @@ var dao = {
             });
         } else {
             self.log.warn(accountId, userId, 'Attempted to create customer that already exists.');
-            stripe.customers.retrieve(user.get('stripeId'), apiToken, function(err, customer) {
+            var stripeId = user.getStripeIDByOrg(orgId);
+            stripe.customers.retrieve(stripeId, apiToken, function(err, customer) {
                 // asynchronously called
                 if (err) {
                     fn(err, customer);

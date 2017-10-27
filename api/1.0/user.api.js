@@ -564,7 +564,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 if(orgId && orgId !== 0) {
                     ownerAccountId = organization.get('adminAccount');
                 }
-                paymentsManager.createStripeCustomerForUser(cardToken, user, ownerAccountId, account.id(), accessToken, function(err, stripeCustomer) {
+                paymentsManager.createStripeCustomerForUser(cardToken, user, ownerAccountId, account.id(), accessToken, orgId, function(err, stripeCustomer) {
                     if (err) {
                         self.log.error('Error creating Stripe customer: ' + err);
                         accountDao.deleteAccountAndArtifacts(account.id(), function(_err, value){
