@@ -82,6 +82,41 @@ app.directive('featureListComponent', [function () {
 				}
 				return visibility && scope.component.features[index].media && scope.component.features[index].media.indexOf('width: 0px')===-1 ;
 			}
+			var move=100;
+			scope.moveLeft = function (){
+				var view=$(".list-features-"+scope.component._id),
+				currentPosition = parseInt(view.css("left")) +move; 
+				scope.scroll.element={ left:true, right:true } ;
+				if(currentPosition>100){
+					currentPosition=100
+					scope.scroll.element.left = false ;
+				}
+				view.stop(false,true).animate({left:currentPosition},{ duration: 400});
+			}
+			scope.moveRight = function (){
+				scope.scroll.started=1;
+				var view = $(".list-features-"+scope.component._id),
+					sliderLimit=window.innerWidth-view.width()-100,
+					currentPosition = parseInt(view.css("left"))-move; 
+				scope.scroll.element={ left:true, right:true } ;
+				if(currentPosition<=sliderLimit) {
+					currentPosition = sliderLimit;
+					scope.scroll.element.right = false ;
+				}
+				view.stop(false,true).animate({left:currentPosition},{ duration: 400}) 
+			}  
+			scope.$watch(function(){
+				var view = $(".list-features-"+scope.component._id)
+				if(view.length){
+					return  window.innerWidth-view.width()<0;
+				}
+				return false;
+			}, function(value) {
+				scope.scroll.hasScroll=value;
+			});
+			scope.loading = true;
+			scope.listStyles = listStyles;
+			scope.scroll={ hasScroll:false,started:0, element:{ left:false, right:false } };
 		}
 	};
 }]);
