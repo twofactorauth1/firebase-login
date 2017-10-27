@@ -849,6 +849,12 @@ module.exports = function(grunt) {
     });
     grunt.registerTask('logs',  ['prompt:logs', 'doLogsearch']);
 
+    grunt.registerTask('updateStripeIDs', 'updateStripeIDs', function(){
+        var done = this.async();
+        var dbCopyUtil = require('./utils/dbcopyutil');
+        dbCopyUtil.updateStripeIDs(done);
+    });
+
     // grunt.registerTask('serve', 'Start a custom web server.', function() {
     //     grunt.log.writeln('Starting web server on port 80.');
     //     require('./app.js');
