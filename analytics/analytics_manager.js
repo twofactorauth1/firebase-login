@@ -476,6 +476,7 @@ module.exports = {
                 }
             };
             stageAry.push(group);
+
             dao.aggregateWithCustomStages(stageAry, $$.m.SessionEvent, function(err, results) {
                 if(err) {
                     self.log.error('Error getting analytics:', err);
@@ -495,7 +496,7 @@ module.exports = {
                             pageEvents:[]
                         };
                         _.each(result.sessions, function(session){
-
+                           console.log('-------------session===========',session);
                             if(!_.contains(_result.session_id, session.session_id)){
                                 _result.session_id.push(session.session_id);
                             }
@@ -523,14 +524,17 @@ module.exports = {
                         var _pageEvents = [];
                         _.each(_result.pageEvents, function(pageEvent){
                             var obj = {};
-                            console.log(pageEvent);
-                            if(pageEvent.server_time_dt) {
-                                obj.pageTime = pageEvent.server_time_dt;
-                            }
-                            if(pageEvent.url && pageEvent.url.source) {
-                                obj.pageRequested = pageEvent.url.source;
-                            }
-                            _pageEvents.push(obj);
+                            var source_url = pageEvent.url.source;
+                            if(source_url.indexOf('404') === -1){
+                                    console.log('------------------------',pageEvent.url.source);
+                                    if(pageEvent.server_time_dt) {
+                                        obj.pageTime = pageEvent.server_time_dt;
+                                    }
+                                    if(pageEvent.url && pageEvent.url.source) {
+                                        obj.pageRequested = pageEvent.url.source;
+                                    }
+                                    _pageEvents.push(obj);
+                          }
                         });
                         _result.pageEvents = _pageEvents;
                         _resultDetails.push(_result);
