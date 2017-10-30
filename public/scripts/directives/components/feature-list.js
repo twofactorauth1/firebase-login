@@ -91,42 +91,27 @@ app.directive('featureListComponent', [function () {
 			}
 			var move=100;
 			scope.moveLeft = function (){
-				var view=$(".list-features-"+scope.component._id),
-				currentPosition = parseInt(view.css("left")) +move; 
-				scope.scroll.element={ left:true, right:true } ;
-				if(currentPosition>100){
-					currentPosition=100
+				var view = $(".list-features-"+scope.component._id);
+				scope.scroll.element = { left:true, right:true } ; 
+				view.animate( { scrollLeft: '-=100' }, 400);
+				if(view.scrollLeft()<1){ 
 					scope.scroll.element.left = false ;
 				}
-				view.stop(false,true).animate({left:currentPosition},{ duration: 400});
+				//view.stop(false,true).animate({left:currentPosition},{ duration: 400});
 			}
 			scope.moveRight = function (){
 				scope.scroll.started=1;
-				var view = $(".list-features-"+scope.component._id),
-					sliderLimit=window.innerWidth-view.width()-100,
-					currentPosition = parseInt(view.css("left"))-move; 
-				scope.scroll.element={ left:true, right:true } ;
-				if(currentPosition<=sliderLimit) {
-					currentPosition = sliderLimit;
+				var view = $(".list-features-"+scope.component._id);
+				scope.scroll.element = { left:true, right:true } ;
+				view.animate({ scrollLeft: '+=100' }, 400);
+				if((view[0].scrollWidth-view.width()) <= view.scrollLeft()) { 
 					scope.scroll.element.right = false ;
-				}
-				view.stop(false,true).animate({left:currentPosition},{ duration: 400}) 
+				} 
 			}  
 			scope.$watch(function(){
 				var view = $(".list-features-"+scope.component._id);
-				
-				if(view.length){
-					var total=view.width();
-					if(scope.component.version==6){
-						total=0;
-						angular.forEach(view.children(), function (child) {
-							total += $(child).width();
-						})
-					}
-					if( window.innerWidth>768){
-						return false;
-					}
-					return  window.innerWidth-total<0;
+				if(view.length && window.innerWidth<=768){   
+					return  (view.width() - view[0].scrollWidth) < 0;
 				}
 				return false;
 			}, function(value) {
