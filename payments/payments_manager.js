@@ -15,10 +15,10 @@ var accountDao = require('../dao/account.dao');
 var orgDao = require('../organizations/dao/organization.dao');
 
 module.exports = {
-    createStripeCustomerForUser: function(cardToken, user, accountId, newAccountId, accessToken, fn) {
+    createStripeCustomerForUser: function(cardToken, user, accountId, newAccountId, accessToken, orgId, fn) {
         log.debug(accountId, user.id(), '>> createStripeCustomerForUser');
         //check for customer first.
-        var customerId = user.get('stripeId');
+        var customerId = user.getStripeIDByOrg(orgId);
         if(customerId && customerId.length >0){
             stripeDao.getStripeCustomer(customerId, accessToken, function(err, stripeCustomer){
                 if(err) {
@@ -35,7 +35,7 @@ module.exports = {
                 }
             });
         } else {
-            stripeDao.createStripeCustomerForUser(cardToken, user, accountId, 0, newAccountId, accessToken, fn);
+            stripeDao.createStripeCustomerForUser(cardToken, user, accountId, 0, newAccountId, accessToken, orgId, fn);
         }
     },
 

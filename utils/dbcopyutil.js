@@ -2243,6 +2243,60 @@ var copyutil = {
             }
             fn();
         });
+    },
+
+    updateStripeIDs: function(fn) {
+        var srcDBUrl = mongoConfig.TEST_MONGODB_CONNECT;
+        var srcMongo = mongoskin.db(srcDBUrl, {safe:true});
+        var accountsCollection = srcMongo.collection('accounts');
+        var usersCollection = srcMongo.collection('users');
+        async.waterfall([
+            function(cb) {
+                usersCollection.find({_id:{$gt:4}}).toArray(function(err, users){
+                    if(err) {
+                        console.log('error:', err);
+                        cb(err);
+                    } else {
+                        cb(null, users);
+                    }
+                });
+            },
+            function(users, cb) {
+                console.log('Updating ' + users.length + ' users');
+                async.eachLimit(users, 10, function(user, callback){
+                    if(user && user.accounts && user.accounts[0] && user.accounts[0].accountId) {
+                        var accountId = user.accounts[0].accountId;
+                        accountsCollection.find({_id:accountId}).toArray(function(err, account){
+                            if(account) {
+                                var orgId = account.orgId || 0;
+                                user.customerIds =  [];
+                                if(user.stripeId) {
+                                    user.customerIds.push({orgId:orgId, stripeId:user.stripeId});
+                                    usersCollection.save(user, function(err, value){
+                                        console.log('Updated userId ' + user._id);
+                                        callback();
+                                    });
+                                } else {
+                                    callback();
+                                }
+
+                            } else {
+                                callback();
+                            }
+                        });
+                    } else {
+                        callback();
+                    }
+
+
+                }, function(err){
+                    cb(err);
+                })
+            }
+        ], function(err){
+            console.log('done');
+            fn();
+        });
     }
 };
 

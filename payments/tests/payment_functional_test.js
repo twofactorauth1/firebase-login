@@ -84,7 +84,7 @@ exports.testGroup = {
         log.debug('runTest');
 
         //create a stripe customer for a user
-        stripeDao.createStripeCustomerForUser(null, testContext.user, testContext.accountId, 0, 0, null, function(err, value){
+        stripeDao.createStripeCustomerForUser(null, testContext.user, testContext.accountId, 0, 0, null, 0, function(err, value){
             if(err) {
                 test.ok(false, 'Error creating Stripe Customer: ' + err);
                 test.done();
@@ -136,7 +136,7 @@ exports.testGroup = {
                 test.ok(false, 'Error getting user by id: ' + err);
                 test.done();
             } else {
-                test.equals(user.get('stripeId'), testContext.stripeCustomer.id);
+                test.equals(user.getStripeIDByOrg(0), testContext.stripeCustomer.id);
                 p1.resolve();
             }
         });
