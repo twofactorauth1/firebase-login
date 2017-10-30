@@ -22,7 +22,8 @@ app.directive('indigNavprompt', function ($rootScope, $location, $state, SweetAl
 
 
             $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
-                if (scope.myState && $state.$current.name === scope.myState && scope.checkIfDirty && scope.checkIfDirty()) {
+                console.log(event,'------', toState,'----', toParams,'------' ,fromState, '--------',fromParams)
+                if (scope.myState && scope.myState !== "app.singleContact" && $state.$current.name === scope.myState && scope.checkIfDirty && scope.checkIfDirty()) {
                     event.preventDefault();
 
                     $rootScope.app.layout.isMinimalAdminChrome=true;

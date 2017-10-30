@@ -95,12 +95,7 @@
 		 */
 
 		$scope.newNote = {};
-        $rootScope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams) {
-           if($scope.newNote.text && $scope.newNote.text !== ''){
-           	 console.log('save note');
-             $scope.addNote($scope.newNote.text);
-           }	       
-	    });
+
 		function getUserName() {
 			var _userName = $scope.$parent.currentUser.email;
 			if ($scope.$parent.currentUser.first || $scope.$parent.currentUser.last) {
@@ -949,7 +944,7 @@
 
 		$scope.setDefaults = function () {
 			// New contact
-			if ($scope.contact.details && $scope.contact.details.length === 0) {
+			if ($scope.contact.details.length === 0) {
 				$scope.contact.details[0] = {};
 			}
 			if (!$scope.contact.details[0].emails) {
