@@ -755,6 +755,7 @@ _.extend(api.prototype, baseApi.prototype, {
         }
 
         var _accountId = req.body.accountId || self.accountId(req);
+        var orgId = req.body.orgId || 0;
 
         /*
          * This can be called before we have a subscription
@@ -779,7 +780,8 @@ _.extend(api.prototype, baseApi.prototype, {
                     self = value = null;
                 });
             } else {
-                stripeDao.createStripeCustomerForUser(cardToken, user, _accountId, 0, _accountId, accessToken, function(err, value){
+                //TODO: this
+                stripeDao.createStripeCustomerForUser(cardToken, user, _accountId, 0, _accountId, accessToken, orgId, function(err, value){
                     self.log.debug('<< createCustomer');
                     self.sendResultOrError(resp, err, value, "Error creating Stripe Customer");
                 });
