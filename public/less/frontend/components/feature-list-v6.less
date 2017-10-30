@@ -1,4 +1,18 @@
 .feature-list-v6 {
+	@media screen and (max-width: 768px){
+		.feature-left ,.feature-right{
+			font-size:40px;
+			 position:absolute;  
+			 z-index:1000;
+			 margin-top: 25px;
+		} 
+		.feature-left{
+			left:0px;
+		}
+		.feature-right { 
+			right:0px; 
+		}
+	}
 	.feature-list-container{
 		margin:0;
 		ul.list-features{
@@ -73,6 +87,15 @@
 				}
 				&.active{
 					opacity: 1;
+				}
+				@media screen and (max-width: 768px){
+					&.feature-col-5-layout,
+					&.feature-col-4-layout,
+					&.feature-col-3-layout,
+					&.feature-col-2-layout,
+					&.feature-col-1-layout{
+						width:unset;
+					}
 				}				
 			}
 			li:last-child{

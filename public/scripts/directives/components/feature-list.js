@@ -106,9 +106,20 @@ app.directive('featureListComponent', [function () {
 				view.stop(false,true).animate({left:currentPosition},{ duration: 400}) 
 			}  
 			scope.$watch(function(){
-				var view = $(".list-features-"+scope.component._id)
+				var view = $(".list-features-"+scope.component._id);
+				
 				if(view.length){
-					return  window.innerWidth-view.width()<0;
+					var total=view.width();
+					if(scope.component.version==6){
+						total=0;
+						angular.forEach(view.children(), function (child) {
+							total += $(child).width();
+						})
+					}
+					if( window.innerWidth>768){
+						return false;
+					}
+					return  window.innerWidth-total<0;
 				}
 				return false;
 			}, function(value) {
