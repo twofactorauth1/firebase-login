@@ -111,7 +111,7 @@ app.directive('featureListComponent', [function () {
 			scope.$watch(function(){
 				var view = $(".list-features-"+scope.component._id);
 				if(view.length && window.innerWidth<=768){   
-					return  (window.innerWidth - view[0].scrollWidth) < 0;
+					return  (view.width() - view[0].scrollWidth) < 0;
 				}
 				return false;
 			}, function(value) {
