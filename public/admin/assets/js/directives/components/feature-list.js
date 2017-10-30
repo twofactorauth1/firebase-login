@@ -53,6 +53,10 @@ app.directive('featureListComponent', ["$window", "$timeout", function ($window,
 				scope.component.features.splice(index, 1);
 			};
 
+			scope.accordionIconColor = function(component){
+				return component.accordionIconColor;
+			}
+
 			scope.featureStyle = function (component) {
 				var styleString = " ";
 

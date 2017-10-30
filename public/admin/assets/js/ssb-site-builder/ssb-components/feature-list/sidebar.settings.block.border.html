@@ -109,3 +109,18 @@
     </div>
 </div>
 
+<div  ng-if="component.type=='feature-list' && (component.version== 7) ">
+    <h4 class="ssb-sidebar-sub-heading-separator">Accordion feature styles</h4>
+    <div class="form-group ssb-spectrum-color-picker-small">
+        <div class="ssb-spectrum-color-picker-background-container">
+            <spectrum-colorpicker class="ssb-spectrum-color-picker-background" format="'rgb'" options="vm.spectrum.options" ng-model="component.accordionIconColor"></spectrum-colorpicker>
+            <i class="fa fa-eyedropper" />
+        </div>
+        <label for="colorpicker">
+            Icon color
+            <span tooltip-placement="top" tooltip-append-to-body="true"  tooltip-append-to-body="true" tooltip="Choose a color for the accordion icon.">
+                <i class="fa fa-info-circle" />
+            </span>
+        </label>
+    </div>
+</div>
