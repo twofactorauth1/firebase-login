@@ -12,13 +12,14 @@ app.directive('indiAccordion', function ($timeout) {
 				},
 				function (value) {
 					var acc = element.find(".accordion");
-
 					var i;
-
+					
 					for (i = 0; i < acc.length; i++) {
-
 					    acc[i].onclick = function(){
-					    	element.find(".accordion").removeClass("active");
+					    	var el = element;
+					    	if(!$(this).hasClass("active")){
+					    		element.find(".accordion").removeClass("active")
+					    	}					    	
 					        this.classList.toggle("active");
 					    }
 					}
