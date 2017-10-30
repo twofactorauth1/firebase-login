@@ -423,6 +423,7 @@ var dao = {
                                 self.log.error('Error removing courses for user: ' + err);
                             } else {
                                 self.log.debug('Removed courses for user ' + user.id());
+                                /*
                                 var customerId = user.get('stripeId');
                                 if (customerId && customerId.length > 0) {
                                     self.getStripeTokensFromAccount(accountId, function(err, creds){
@@ -439,6 +440,7 @@ var dao = {
                                         });
                                     });
                                 }
+                                */
                                 $$.dao.UserDao.remove(user, function (err, value) {
                                     if (err) {
                                         self.log.error('Error deleting user: ' + err);

@@ -148,7 +148,9 @@ var user = $$.m.ModelBase.extend({
        * }]
              */
             details: [],
+            //@deprecated
             stripeId: "", //stripe CustomerID if available.  This is separate from login credentials
+            customerIds:[],
             user_preferences: {
                 default_contact_address: {
                     address1: '',
@@ -329,6 +331,30 @@ var user = $$.m.ModelBase.extend({
         return orgConfig;
     },
 
+    getStripeIDByOrg: function(orgId) {
+        var stripeIds = this.get('customerIds');
+        var record = _.find(stripeIds, function(customerId){
+            return customerId.orgId === orgId;
+        });
+        if(record) {
+            return record.stripeId
+        } else {
+            //fallback for legacy
+            return null;
+        }
+    },
+
+    setStripeIDByOrg: function(stripeId, orgId) {
+        var stripeIds = this.get('customerIds') || [];
+        var record = _.find(stripeIds, function(customerId){
+            return customerId.orgId === orgId;
+        });
+        if(record) {
+            record.stripeId = stripeId;
+        } else {
+            stripeIds.push({orgId:orgId, stripeId:stripeId});
+        }
+    },
 
     //region Profile
     updateProfileInformation: function (email, firstName, lastName, gender, birthday, overwrite) {
