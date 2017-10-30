@@ -20,10 +20,19 @@ app.directive('featureListComponent', ["$window", "$timeout", function ($window,
 				if (!index) {
 					index = 0;
 				}
+
 				var newFeature = {
 					"top": "<div style='text-align:center'><span class=\"fa fa-arrow-right\" style=\"font-size:96px;\">&zwnj;</span></div>",
 					"content": "<div style=\"text-align: center;\"><br><span style=\"font-size:24px;\">Feature Title</span></div><div style=\"text-align: center;\"><br>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nisi ab, placeat. Officia qui molestiae incidunt est adipisci.</div><div style=\"text-align: center;\"><br><a class=\"btn ssb-theme-btn\" data-cke-saved-href=\"http://\" href=\"http://\">Learn More</a></div>"
 				};
+
+				if(scope.component.version == 7){
+					newFeature = {
+						"heading" : "<div><span style=\"font-size:20px;\">Lorem ipsum dolor sit amet</span></div>",
+	                    "content" : "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+                	}
+				}
+
 				scope.component.features.splice(index + 1, 0, newFeature);
 			};
 
@@ -43,6 +52,12 @@ app.directive('featureListComponent', ["$window", "$timeout", function ($window,
 			scope.deleteFeatureList = function (index) {
 				scope.component.features.splice(index, 1);
 			};
+
+			scope.accordionIconColor = function(component){
+				var styleString = " ";
+				styleString += 'color: ' + component.accordionIconColor;
+				return styleString;
+			}
 
 			scope.featureStyle = function (component) {
 				var styleString = " ";
