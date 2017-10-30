@@ -10,8 +10,8 @@ app.directive('indiAccordion', function ($timeout) {
 				function () {
 					return element.find(".accordion").length;
 				},
-				function (value) {
-					var acc = document.getElementsByClassName("accordion");
+				function (value) {					
+					var acc = element.find(".accordion");
 					var i;
 
 					for (i = 0; i < acc.length; i++) {
