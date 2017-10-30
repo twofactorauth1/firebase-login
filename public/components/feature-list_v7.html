@@ -9,8 +9,8 @@
         <indi-accordion>
             <div ng-repeat="feature in component.features" class="feature">
                 <a class="accordion" ng-class="{'active': $index == 0}">
-                    <span class="fa fa-plus-square accordion-button" ng-style-ng-attr-style="accordionIconColor(component)"></span>
-                    <span class="fa fa-minus-square accordion-button" ng-style-ng-attr-style="accordionIconColor(component)">
+                    <span class="fa fa-plus-square accordion-button" ng-attr-style="{{accordionIconColor(component)}}"></span>
+                    <span class="fa fa-minus-square accordion-button" ng-attr-style="{{accordionIconColor(component)}}">
                     </span>
                     <span class="accordion-title">
                         <div elem ng-model="feature.heading"></div>

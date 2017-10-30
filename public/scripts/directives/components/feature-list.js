@@ -38,7 +38,9 @@ app.directive('featureListComponent', [function () {
 			};
 
 			scope.accordionIconColor = function(component){
-				return component.accordionIconColor;
+				var styleString = " ";
+				styleString += 'color: ' + component.accordionIconColor;
+				return styleString;
 			}
 			
 			scope.featureStyle = function (component) {
