@@ -2,6 +2,8 @@
     <div class="title mb30">
         <div elem ng-model="component.title"></div>
     </div>
+    <span  ng-show="scroll.element.left" ng-click="moveLeft()" class="feature-left fa fa-chevron-left" ></span>
+    <span  ng-show="(scroll.hasScroll && scroll.started==0) || scroll.element.right"  ng-click="moveRight()" class="feature-right fa fa-chevron-right" ></span>
     <div class="row features-wrap feature-list-container" ng-init="setSelectedFeatureIndex(0)">
         <ul class="list-features list-features-{{component._id}} col-sm-4">
             <li class="feature" ng-attr-style="{{listStyles(component, $index == features.featureIndex)}}" ng-repeat="feature in component.features" ng-click="setSelectedFeatureIndex($index)" ng-class="{'active': $index == features.featureIndex}">
