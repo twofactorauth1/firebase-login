@@ -381,7 +381,7 @@
 			if ($scope.displayAddressFormat(_address)) {
 				ContactService.getGeoSearchAddress($scope.displayAddressFormat(_address), function (data) {
 					if (data.error === undefined) {
-						fn(data);
+						fn(data);_userName
 					} else {
 						console.warn(data.error);
 						fn();
@@ -1122,8 +1122,8 @@
 
 		$scope.checkIfDirty = function () {
 			var isDirty = false;
-			if ($scope.newNote && $scope.newNote.text)
-				isDirty = true;
+			// if ($scope.newNote && $scope.newNote.text)
+			// if ($scope.newNote)	isDirty = true;
 			if ($scope.originalContact && !angular.equals($scope.originalContact, $scope.contact))
 				isDirty = true;
 			return isDirty;
