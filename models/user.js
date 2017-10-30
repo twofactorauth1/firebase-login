@@ -340,7 +340,7 @@ var user = $$.m.ModelBase.extend({
             return record.stripeId
         } else {
             //fallback for legacy
-            return this.get('stripeId');
+            return null;
         }
     },
 
