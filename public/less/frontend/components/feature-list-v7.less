@@ -1,0 +1,39 @@
+.feature-list-v7 {
+	indi-accordion{
+		.accordion{
+
+			text-decoration: none;
+    		color: inherit;
+    		.accordion-button.fa-plus-square{
+				display:inline-block;
+			}
+			.accordion-button.fa-minus-square{
+				display:none;
+			}
+		}
+		.accordion-button{
+			font-size:20px;
+		}
+		.panel-accordion{
+			margin-left:40px;
+			display: none !important;
+		}
+
+		accordion.active+.panel-accordion{
+			display: block !important;
+		}
+
+		.accordion-title{
+			margin-left: 20px;
+			display:inline-block;
+		}
+		.accordion.active{
+			.accordion-button.fa-plus-square{
+				display:none;
+			}
+			.accordion-button.fa-minus-square{
+				display:inline-block;
+			}
+		}
+	}
+}
