@@ -36,6 +36,13 @@ app.directive('featureListComponent', [function () {
 					return "";
 				}
 			};
+
+			scope.accordionIconColor = function(component){
+				var styleString = " ";
+				styleString += 'color: ' + component.accordionIconColor;
+				return styleString;
+			}
+			
 			scope.featureStyle = function (component) {
 				var styleString = " ";
 				if (component && component.blockBorder && component.blockBorder.show && component.blockBorder.color) {
