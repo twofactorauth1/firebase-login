@@ -19,6 +19,7 @@ module.exports = {
         log.debug(accountId, user.id(), '>> createStripeCustomerForUser');
         //check for customer first.
         var customerId = user.getStripeIDByOrg(orgId);
+        log.debug(accountId, user.id(), 'customerID found [' + customerId + '] for org [' + orgId + ']');
         if(customerId && customerId.length >0){
             stripeDao.getStripeCustomer(customerId, accessToken, function(err, stripeCustomer){
                 if(err) {

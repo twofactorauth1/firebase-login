@@ -73,54 +73,55 @@ html
       //- <!--<![endif]-->
   body
     div(class="body email-body ssb-theme-", style="width: 100%; -webkit-text-size-adjust: 100% !important; -ms-text-size-adjust: 100% !important; margin: 0; padding: 0;background-color:"+email.emailBg+";")
-      table(width='100%', align='center', cellpadding='0', cellspacing='0', border='0', style='border-collapse: collapse;')
+      table(width='680px', align='center', cellpadding='0', cellspacing='0', border='0', style='border-collapse: collapse;')
         tr
           td
             each component in email.components
               if component.type === 'email'
-                table(width='100%', align='center', cellpadding='0', cellspacing='0', border='0', style="border-collapse: collapse;background-color:"+email.emailBg+";")
+                table(width='680px', align='center', cellpadding='0', cellspacing='0', border='0', style="border-collapse: collapse;background-image: url(https:"+ component.bg.img.url+");padding-top: "+ component.spacing.pt +";padding-bottom: "+ component.spacing.pb + ";padding-left: "+ component.spacing.pl +";padding-right: "+ component.spacing.pr +";margin-top: "+ component.spacing.mt +";margin-bottom: "+ component.spacing.mb +";margin-left: "+ component.spacing.ml +";margin-right: "+ component.spacing.mr +";background-color: "+ component.bg.color +";")
                   tr
-                    td(align='center', width='100%')
-                      if component.logo
-                        table.device-width(align='center', width='640', cellpadding='0', cellspacing='0', border='0', style='border-collapse: collapse;margin-top: 45px;background-color:'+component.bg.color+';')
-                          tr
-                            td.wrapper(width='100%')
-                                table.device-width(width='640', cellpadding='0', cellspacing='0', border='0', style='border-collapse: collapse;')
+                    td
+                      div(style='padding-left: 20px;padding-right: 20px;padding-top: 45px;padding-bottom: 45px;')
+                        if component.logo
+                          table.device-width(align='center', width='100%', cellpadding='0', cellspacing='0', border='0', style='border-collapse: collapse;background-color:'+component.bg.color+';')
+                            tr
+                              td.wrapper(width='100%')
+                                  table.device-width(width='680', cellpadding='0', cellspacing='0', border='0', style='border-collapse: collapse;')
+                                    tr
+                                      td.device-width(width='100%')
+                                        table.device-width(width='100%', cellpadding='0', cellspacing='0', border='0', style='border-collapse: collapse;')
+                                          tr
+                                            td.device-width(width='100%', style='text-align: center; padding-bottom: 15px; padding-left:20px;padding-right:20px')
+                                              div.logo-img
+                                                |!{component.logo}
+
+                        if component.title
+                          table.device-width(width='100%', align='center', cellpadding='0', cellspacing='0', border='0', style='border-collapse: collapse;background-color:'+component.bg.color+';')
+                            tr
+                              td(align='center', width='100%')
+                                table.device-width(align='center', width='100%', cellpadding='0', cellspacing='0', border='0', style='border-collapse: collapse;')
                                   tr
-                                    td.device-width(width='100%')
-                                      table.device-width(width='100%', cellpadding='0', cellspacing='0', border='0', style='border-collapse: collapse;')
-                                        tr
-                                          td.device-width(width='100%', style='text-align: center; padding-bottom: 15px; padding-left:20px;padding-right:20px')
-                                            div.logo-img
-                                              |!{component.logo}
+                                    td.wrapper(width='100%', style='padding-left: 20px; padding-right: 20px; padding-top: 45px; padding-bottom: 45px;')
+                                      div !{component.title}
 
-                      if component.title
-                        table.device-width(width='640', align='center', cellpadding='0', cellspacing='0', border='0', style='border-collapse: collapse;background-color:'+component.bg.color+';')
-                          tr
-                            td(align='center', width='100%')
-                              table.device-width(align='center', width='100%', cellpadding='0', cellspacing='0', border='0', style='border-collapse: collapse;')
-                                tr
-                                  td.wrapper(width='100%', style='padding-left: 20px; padding-right: 20px; padding-top: 45px; padding-bottom: 45px;')
-                                    div !{component.title}
-
-                      if component.text
-                        table.device-width(width='640', align='center', cellpadding='0', cellspacing='0', border='0', style='border-collapse: collapse;background-color:'+component.bg.color+';')
-                          tr
-                            td(align='center', width='100%')
-                              table.device-width(align='center', width='100%', cellpadding='0', cellspacing='0', border='0', style='border-collapse: collapse;')
-                                tr
-                                  td.wrapper(width='100%', style='padding-left: 20px; padding-right: 20px; padding-top: 45px; padding-bottom: 45px;')
-                                    div !{component.text}
-
+                        if component.text
+                          table.device-width(width='100%', align='center', cellpadding='0', cellspacing='0', border='0', style='border-collapse: collapse;background-color:'+component.bg.color+';')
+                            tr
+                              td(align='center', width='100%')
+                                table.device-width(align='center', width='100%', cellpadding='0', cellspacing='0', border='0', style='border-collapse: collapse;')
+                                  tr
+                                    td.wrapper(width='100%', style='padding-left: 20px; padding-right: 20px; padding-top: 45px; padding-bottom: 45px;')
+                                      div !{component.text}
+              
               if component.type === 'email-header'
                 table(width='100%', align='center', cellpadding='0', cellspacing='0', border='0', style="border-collapse: collapse;")
                   tr
                     td(align='center', width='100%')
                       if component.logo
-                        table.device-width(align='center', width='640', cellpadding='0', cellspacing='0', border='0', style='border-collapse: collapse;background-color:'+component.bg.color)
+                        table(align='center', width='100%', cellpadding='0', cellspacing='0', border='0', style="border-collapse: collapse;background-image: url(https:"+ component.bg.img.url+"');padding-top: "+ component.spacing.pt +";padding-bottom: "+ component.spacing.pb + ";padding-left: "+ component.spacing.pl +";padding-right: "+ component.spacing.pr +";margin-top: "+ component.spacing.mt +";margin-bottom: "+ component.spacing.mb +";margin-left: "+ component.spacing.ml +";margin-right: "+ component.spacing.mr +";background-color: "+ component.bg.color +";")
                           tr
                             td.wrapper(width='100%')
-                                table.device-width(width='640', cellpadding='0', cellspacing='0', border='0', style='border-collapse: collapse;margin-top: 45px;')
+                                table.device-width(width='680', cellpadding='0', cellspacing='0', border='0', style='border-collapse: collapse;margin-top: 45px;')
                                   tr
                                     td.device-width(width='100%')
                                       table.device-width(width='100%', cellpadding='0', cellspacing='0', border='0', style='border-collapse: collapse;')
@@ -130,7 +131,7 @@ html
                                               |!{component.logo}
 
                       if component.title
-                        table.device-width(width='640', align='center', cellpadding='0', cellspacing='0', border='0', style='border-collapse: collapse;')
+                        table.device-width(width='680', align='center', cellpadding='0', cellspacing='0', border='0', style='border-collapse: collapse;')
                           tr
                             td(align='center', width='100%')
                               table.device-width(align='center', width='100%', cellpadding='0', cellspacing='0', border='0', style='border-collapse: collapse;')
@@ -139,11 +140,12 @@ html
                                     div !{component.title}
 
               if component.type === 'email-1-col'
-                | <table class="email-component-container {{component.type}}-v{{component.version}}" align="center" border="0" cellpadding="0" cellspacing="0" width="100%">
+                - var url="https:"+component.bg.img.url;
+                | <table class="email-component-container {{component.type}}-v{{component.version}}" align="center" border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: !{component.bg.color};background-image: url(!{url});padding-top: !{component.spacing.pt};padding-bottom: !{component.spacing.pb};padding-left: !{component.spacing.pl};padding-right: !{component.spacing.pr};margin-top: !{component.spacing.mt};margin-bottom: !{component.spacing.mb};margin-left: !{component.spacing.ml};margin-right: !{component.spacing.mr};">
                 if component.title
                     |     <tr>
                     |         <td>
-                    |             <table align="center" border="0" cellpadding="0" cellspacing="0" width="640" id="templateColumns" class="email-1-col-title-table" style="background-color: !{component.bg.color};">
+                    |             <table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" id="templateColumns" class="email-1-col-title-table" >
                     |                 <tr>
                     |                     <td align="center" valign="top" width="100%" class="templateColumnContainer" style="padding-left:20px; padding-right: 20px;">
                     |                         <table border="0" cellpadding="10" cellspacing="0" width="100%" style="color: !{component.txtcolor};">
@@ -161,7 +163,7 @@ html
 
                 |    <tr>
                 |        <td>
-                |            <table align="center" border="0" cellpadding="0" cellspacing="0" width="640" id="templateColumns" style="background-color: !{component.bg.color};">
+                |            <table align="center" border="0" cellpadding="0" cellspacing="0" width="680" id="templateColumns">
                 |                <tr>
                 |                    <td align="center" width="100%" class="templateColumnContainer" style="padding-left:20px; padding-right: 20px;">
                 |                        <table border="0" cellpadding="10" cellspacing="0" width="100%" style="color: !{component.txtcolor};">
@@ -179,11 +181,12 @@ html
                 | </table>
 
               if component.type === 'email-2-col'
-                | <table class="email-component-container {{component.type}}-v{{component.version}}" align="center" border="0" cellpadding="0" cellspacing="0" width="100%">
+                - var url="https:"+component.bg.img.url;
+                | <table class="email-component-container {{component.type}}-v{{component.version}}" align="center" border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: !{component.bg.color};background-image: url(!{url});padding-top: !{component.spacing.pt};padding-bottom: !{component.spacing.pb};padding-left: !{component.spacing.pl};padding-right: !{component.spacing.pr};margin-top: !{component.spacing.mt};margin-bottom: !{component.spacing.mb};margin-left: !{component.spacing.ml};margin-right: !{component.spacing.mr};">
                 if component.title
                     |     <tr>
                     |         <td>
-                    |             <table align="center" border="0" cellpadding="0" cellspacing="0" width="640" id="templateColumns" style="background-color: !{component.bg.color};">
+                    |             <table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" id="templateColumns">
                     |                 <tr>
                     |                     <td align="center" valign="top" width="100%" class="templateColumnContainer" style="padding-left:20px; padding-right: 20px;">
                     |                         <table border="0" cellpadding="10" cellspacing="0" width="100%" style="color: !{component.txtcolor};">
@@ -201,7 +204,7 @@ html
 
                 |     <tr>
                 |         <td>
-                |             <table align="center" border="0" cellpadding="0" cellspacing="0" width="640" id="templateColumns" style="background-color: !{component.bg.color};">
+                |             <table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" id="templateColumns" style="background-color: !{component.bg.color};">
                 |                 <tr>
                 |                     <td align="center" valign="top" width="50%" class="templateColumnContainer" style="padding-left:20px;padding-right:10px;">
                 |                         <table border="0" cellpadding="10" cellspacing="0" width="100%" style="color: !{component.txtcolor};">
@@ -228,11 +231,12 @@ html
                 | </table>
 
               if component.type === 'email-3-col'
-                | <table class="email-component-container {{component.type}}-v{{component.version}}" align="center" border="0" cellpadding="0" cellspacing="0" width="100%">
+                - var url="https:"+component.bg.img.url;
+                | <table class="email-component-container {{component.type}}-v{{component.version}}" align="center" border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: !{component.bg.color};background-image: url(!{url});padding-top: !{component.spacing.pt};padding-bottom: !{component.spacing.pb};padding-left: !{component.spacing.pl};padding-right: !{component.spacing.pr};margin-top: !{component.spacing.mt};margin-bottom: !{component.spacing.mb};margin-left: !{component.spacing.ml};margin-right: !{component.spacing.mr};">
                 if component.title
                     |     <tr>
                     |         <td>
-                    |             <table align="center" border="0" cellpadding="0" cellspacing="0" width="640" id="templateColumns" style="background-color: !{component.bg.color};">
+                    |             <table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" id="templateColumns">
                     |                 <tr>
                     |                     <td align="center" valign="top" width="100%" class="templateColumnContainer" style="padding-left:20px; padding-right: 20px;">
                     |                         <table border="0" cellpadding="10" cellspacing="0" width="100%" style="color: !{component.txtcolor};">
@@ -250,7 +254,7 @@ html
 
                 |     <tr>
                 |         <td>
-                |             <table align="center" border="0" cellpadding="0" cellspacing="0" width="640" id="templateColumns" style="background-color: !{component.bg.color};">
+                |             <table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" id="templateColumns" style="background-color: !{component.bg.color};">
                 |                 <tr>
                 |                     <td align="center" valign="top" width="33%" class="templateColumnContainer" style="padding-left:20px;padding-right:10px;">
                 |                         <table border="0" cellpadding="10" cellspacing="0" width="100%" style="color: !{component.txtcolor};">
@@ -286,10 +290,11 @@ html
                 | </table>
 
               if component.type === 'email-footer'
-                | <table class="email-component-container {{component.type}}-v{{component.version}}" align="center" border="0" cellpadding="0" cellspacing="0" width="100%">
+                - var url="https:"+component.bg.img.url;
+                | <table class="email-component-container {{component.type}}-v{{component.version}}" align="center" border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: !{component.bg.color};background-image: url(!{url});padding-top: !{component.spacing.pt};padding-bottom: !{component.spacing.pb};padding-left: !{component.spacing.pl};padding-right: !{component.spacing.pr};margin-top: !{component.spacing.mt};margin-bottom: !{component.spacing.mb};margin-left: !{component.spacing.ml};margin-right: !{component.spacing.mr};">
                 |     <tr>
                 |         <td>
-                |             <table align="center" border="0" cellpadding="0" cellspacing="0" width="640" id="templateColumns" style="background-color: !{component.bg.color};">
+                |             <table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" id="templateColumns">
                 |                 <tr>
                 |                     <td align="center" width="100%" class="templateColumnContainer" style="padding-left:20px; padding-right: 20px;">
                 |                         <table border="0" cellpadding="10" cellspacing="0" width="100%" style="color: !{component.txtcolor};">
@@ -307,10 +312,11 @@ html
                 | </table>
 
               if component.type === 'email-hr'
+                - var url="https:"+component.bg.img.url;
                 | <table class="email-component-container-hr {{component.type}}-v{{component.version}}" align="center" border="0" cellpadding="0" cellspacing="0" width="100%">
                 |     <tr>
                 |         <td>
-                |             <table align="center" border="0" cellpadding="0" cellspacing="0" width="640" style="background-color: !{component.bg.color};">
+                |             <table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: !{component.bg.color};background-image: url(!{url});padding-top: !{component.spacing.pt};padding-bottom: !{component.spacing.pb};padding-left: !{component.spacing.pl};padding-right: !{component.spacing.pr};margin-top: !{component.spacing.mt};margin-bottom: !{component.spacing.mb};margin-left: !{component.spacing.ml};margin-right: !{component.spacing.mr};">
                 |                 <tr>
                 |                     <td align="center" style="height:10px; padding-left:20px; padding-right: 20px;">
                 |                         <div class="hr"></div>
@@ -322,10 +328,11 @@ html
                 |</table>
 
               if component.type === 'email-social'
+                - var url="https:"+component.bg.img.url;
                 | <table class="email-component-container {{component.type}}-v{{component.version}}" align="center" border="0" cellpadding="0" cellspacing="0" width="100%">
                 |     <tr>
                 |         <td>
-                |             <table align="center" border="0" cellpadding="0" cellspacing="0" width="640" id="templateColumns" style="background-color: !{component.bg.color};">
+                |             <table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" id="templateColumns" style="background-color: !{component.bg.color};background-image: url(!{url});padding-top: !{component.spacing.pt};padding-bottom: !{component.spacing.pb};padding-left: !{component.spacing.pl};padding-right: !{component.spacing.pr};margin-top: !{component.spacing.mt};margin-bottom: !{component.spacing.mb};margin-left: !{component.spacing.ml};margin-right: !{component.spacing.mr};">
                 |                 <tr>
                 |                     <td align="center" width="100%" class="templateColumnContainer" style="padding-left:20px; padding-right: 20px;">
                 |                         <table border="0" cellpadding="10" cellspacing="0" width="100%" style="color: !{component.txtcolor};">

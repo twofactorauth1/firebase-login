@@ -324,7 +324,7 @@ module.exports = {
                 var query = {
                     $query: {
                         accountId:accountId,
-                        
+
                         global:true,
                         latest: true,
                         'components.0.type': 'footer'
@@ -396,7 +396,7 @@ module.exports = {
 
                 if(footer) {
                     //find and remove the default footer
-                    sections = _.filter(sections, function(section){                        
+                    sections = _.filter(sections, function(section){
                         if(section.get("components").length && section.get("components")[0].type !== 'footer') {
                             return true;
                         }
@@ -413,7 +413,7 @@ module.exports = {
 
 
 
-                _.each(sections, function(section){                    
+                _.each(sections, function(section){
                     jsonSections.push(section.toReference());
                 });
 
@@ -812,13 +812,13 @@ module.exports = {
 
     listActivateAccountPages: function(accountId, websiteId, fn) {
         var pages = [];
-        var _page = new $$.m.ssb.Page({          
+        var _page = new $$.m.ssb.Page({
             "handle" : "activate/setup",
             "title" : "activate setup",
-            "sections" : [ 
+            "sections" : [
                 {
                     _id:'activate-account',
-                    "components" : [ 
+                    "components" : [
                         {
                             _id:'activate-account-cmp',
                             "type" : "activate-account",
@@ -1192,7 +1192,7 @@ module.exports = {
                     }
                 });
             },
-            //delete existing page 
+            //delete existing page
             function removeExistingPage(page, cb) {
                 pageDao.removePublishedPageByHandle(accountId, page.get("handle"), function(err){
                     if(err) {
@@ -1652,7 +1652,7 @@ module.exports = {
                 // We should never delete global sections on other pages while saving 'blog' pages
                 if(updatedPage.get("handle") ==='blog-list' || updatedPage.get("handle") ==='blog-post' || updatedPage.get("isBlogCopy") === true && sectionsToBeDeleted.length > 0){
                     var nonBlogGlobalSections = [];
-                    _.each(sectionsToBeDeleted, function(gSection){                        
+                    _.each(sectionsToBeDeleted, function(gSection){
                         if(gSection.get('globalHeader') === true || gSection.get('globalFooter') === true){
                             nonBlogGlobalSections.push(gSection);
                         }
@@ -2176,14 +2176,14 @@ module.exports = {
                                     });
                                     if(index > -1){
                                         sections[index]._id = globalHeader.id();
-                                        pageDao.saveOrUpdate(page, callback);    
+                                        pageDao.saveOrUpdate(page, callback);
                                     }
                                     else{
                                         callback();
                                     }
-                                    
+
                                 })
-                                
+
                             }, function(err){
                                 cb(err, updatedPage, updatedSections);
                             });
@@ -2207,12 +2207,12 @@ module.exports = {
                         else{
                             cb(null, updatedPage, updatedSections);
                         }
-                    }); 
+                    });
                 }
                 else
                 {
                     cb(null, updatedPage, updatedSections);
-                }                
+                }
             }
 
         ], function done(err, updatedPage, updatedSections){
@@ -3225,7 +3225,7 @@ module.exports = {
 
                         pagesToCreate = _.reject(pagesToCreate, function(page){ return page.pageHandle === 'blog-post' ||  page.pageHandle === 'blog-list'});
 
-                        
+
                         async.eachSeries(pagesToCreate, function(pageData, callback){
                             self.log.debug(accountId, userId, 'pagesToCreate', pagesToCreate);
 
@@ -3848,7 +3848,7 @@ module.exports = {
                         latest:true,
                         handle: {$in: ['blog-post', 'blog-list']}
                     };
-                    
+
                     pageDao.findMany(query, $$.m.ssb.Page, function(err, pages){
                         if(err) {
                             self.log.error(accountId, userId, 'Error finding website:', err);
@@ -3967,9 +3967,9 @@ module.exports = {
             function getTemplates(cb) {
                 templateDao.findMany({handle:{$in:['blog-list', 'blog-post']}}, $$.m.ssb.Template, function(err, templates){
                     var uniqueTemplates = _.uniq(templates, function(template) {
-                        return template.get("handle"); 
+                        return template.get("handle");
                     });
-                    
+
                     cb(err, uniqueTemplates);
                 });
             },
@@ -4070,7 +4070,7 @@ module.exports = {
     updateEmail: function(email, emailId, fn) {
         var self = this;
         var nameCheckQuery = {'title': new RegExp('^'+email.get('title')+'$', "i"), _id : { $ne: emailId }, 'accountId': email.get('accountId')};
-        
+
         emailDao.exists(nameCheckQuery, $$.m.cms.Email, function(err, value){
             if(err) {
                 self.log.error('Exception thrown checking for uniqueness: ' + err);
@@ -4095,8 +4095,8 @@ module.exports = {
         var userId = created.by;
         self.log.debug(accountId, userId, '>> createDuplicateEmail');
 
-        var emailHandle = slug(email.get('handle')) +  '-' + $$.u.idutils.generateUniqueAlphaNumeric(5, true, true);        
-        
+        var emailHandle = slug(email.get('handle')) +  '-' + $$.u.idutils.generateUniqueAlphaNumeric(5, true, true);
+
         var components = email.get('components');
 
         email.set('_id', null);
@@ -4127,7 +4127,7 @@ module.exports = {
 
     updateLinkPages:function(accountId, pagesArr, userId, fn) {
         var self = this;
-        
+
         var query = {accountId:accountId, handle: {'$in': pagesArr}, latest:true};
 
         pageDao.findMany(query, $$.m.ssb.Page, function(err, pages){
@@ -4136,7 +4136,7 @@ module.exports = {
                 cb(err);
             } else {
                 self.log.debug('Found:', pages);
-                _.each(pages, function(page){                    
+                _.each(pages, function(page){
                     page.set('mainmenu', false);
                 });
                 pageDao.batchUpdate(pages, $$.m.ssb.Page, function(err, updatedPages){
@@ -4246,13 +4246,13 @@ module.exports = {
                 });
                 self.log.debug(accountId, userId, '<< listFeeds');
                 return fn(err, feeds);
-            }       
-           
+            }
+
         });
     },
 
     getShortDescription: function (content) {
-        
+
         var $$$ = cheerio.load('<div id="temp_wrap">' + content + '</div>');
         // Replace table
         //$$$('#temp_wrap').find('table').replaceWith("");
@@ -4274,7 +4274,7 @@ module.exports = {
         var lastIndexOfExclamation= description.lastIndexOf("!");
         var lastIndexOfQuestionMark = description.lastIndexOf("?");
 
-        
+
         //get largest of indexes
         var lastIndexCutOff = Math.max.apply(Math, [lastIndexOfSpace, lastIndexOfPeriod, lastIndexOfExclamation, lastIndexOfQuestionMark]);
 
@@ -4313,7 +4313,7 @@ module.exports = {
                             entry+= page.get('handle') + '</loc>';
                         }
 
-                        entry += '<lastMod>' + moment(page.get('modified').date).format('YYYY-MM-DD') + '</lastMod></url>';
+                        entry += '<lastmod>' + moment(page.get('modified').date).format('YYYY-MM-DD') + '</lastmod></url>';
 
                         //hide blog-post page
                         if(page.get('handle') !== 'blog-post') {
@@ -4327,7 +4327,7 @@ module.exports = {
                         if(posts && posts.length > 0) {
                             _.each(posts, function(post){
                                 var entry = '<url><loc>' + prefix + 'blog/' + post.get('post_url') + '</loc>';
-                                entry += '<lastMod>' + moment(post.get('modified').date).format('YYYY-MM-DD') + '</lastMod></url>';
+                                entry += '<lastmod>' + moment(post.get('modified').date).format('YYYY-MM-DD') + '</lastmod></url>';
                                 entryAry.push(entry);
                             });
                         }
