@@ -33,19 +33,19 @@ angular.module('mainApp').directive("elem", function ($timeout) {
 					if (scope.ngModel.indexOf("[BUSINESSLOGO]")> -1 ){
 						var logo = window.indigenous.business.logo;
 						if(logo){ 
-							text=scope.ngModel.replace("[BUSINESSLOGO]",'<img class="business-logo" src="'+logo+'">');
+							text=scope.ngModel.replace(/\[BUSINESSLOGO\]/g,'<img class="business-logo" src="'+logo+'">');
 						}else{
-							text=text.replace("[BUSINESSLOGO]",'');
+							text=text.replace(/\[BUSINESSLOGO\]/g,'');
 						}
 					}
-					if(window.indigenous.business.name){
-						text=text.replace("[BUSINESSNAME]",window.indigenous.business.name);
+					if(window.indigenous.business.name){ 
+						text=text.replace(/\[BUSINESSNAME\]/g,window.indigenous.business.name);
 					}else{
-						text=text.replace("[BUSINESSNAME]",'');
+						text=text.replace(/\[BUSINESSNAME\]/g,'');
 					}
 				}else{ 
-					text=text.replace("[BUSINESSLOGO]",""); 
-					text=text.replace("[BUSINESSNAME]",'');
+					text=text.replace(/\[BUSINESSLOGO\]/g,""); 
+					text=text.replace(/\[BUSINESSNAME\]/g,'');
 				}
 				return text;
 			}
