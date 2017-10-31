@@ -1,7 +1,14 @@
 [class*="ssb-theme-"] { 
     /*
      * Common for all versions
-    */
+    */ 
+     @media screen and (max-width: 575px) {
+        .ssb-page-section-layout-nav-hero-v1 ul.nav.navbar-nav {
+            width: 100%;
+            margin-left: auto;
+            text-align: center !important;
+        } 
+    }
     .ssb-page-section-layout-nav-hero {
         .ssb-theme-btn {
             line-height: 1em;
@@ -493,4 +500,7 @@
     .ssb-nav-hero-text-full-wdith{
         width: 100%
     }
+}
+.ssb-theme-default .ssb-page-section-nav-hero [ssb-text-component] {
+    font-size: 70px;
 }
