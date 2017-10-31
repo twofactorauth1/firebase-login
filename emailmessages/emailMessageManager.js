@@ -3617,6 +3617,7 @@ var emailMessageManager = {
                     if (!component.txtcolor) {
                         component.txtcolor = '#000000';
                     }
+                    component.spacing = component.spacing || {};
                     components.push(component);
                 }
             });
