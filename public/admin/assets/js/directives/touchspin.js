@@ -27,7 +27,7 @@ app.directive('touchspin', function() {
 				'buttonup_class'				
 				];
 			var options = {};
-			console.log(tsOptions,'tsOptions');
+			
 			for(var i = 0, l = tsOptions.length; i < l; i++) {
 				var opt = tsOptions[i];
 				if(attr[opt] !== undefined) {
