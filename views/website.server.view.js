@@ -655,10 +655,10 @@ _.extend(view.prototype, BaseView.prototype, {
     },
 
 
-    renderActivateSetupPage: function (accountId, handle) {
+    renderActivateSetupPage: function (originalAccount, accountId, handle) {
         var data = {},
             self = this;
-        self.log.debug('>> renderCachedPage', handle);
+        self.log.debug('>> renderActivateSetupPage', handle);
 
         async.waterfall([
             function getWebpageData(cb) {
@@ -767,6 +767,8 @@ _.extend(view.prototype, BaseView.prototype, {
 
                 data.pages = pageHolder;
                 data.account = value;
+                data.originalAccountBusiness = originalAccount.get('business');
+                
                 data.canonicalUrl = pageHolder[handle].canonicalUrl || null;
                 data.account.website.themeOverrides = data.account.website.themeOverrides ||{};
                 data.account.website.themeOverrides.styles = data.account.website.themeOverrides.styles || {};

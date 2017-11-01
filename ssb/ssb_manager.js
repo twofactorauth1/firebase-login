@@ -3004,6 +3004,7 @@ module.exports = {
             name:1,
             type:1,
             preview:1,
+            orgConfig:1,
             filter:1,
             description:1,
             enabled:1
@@ -3031,6 +3032,7 @@ module.exports = {
             name:1,
             type:1,
             preview:1,
+            orgConfig:1,
             filter:1,
             description:1,
             enabled:1
@@ -3058,6 +3060,7 @@ module.exports = {
             name:1,
             type:1,
             preview:1,
+            orgConfig:1,
             filter:1,
             description:1,
             enabled:1,
