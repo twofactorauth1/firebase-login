@@ -520,8 +520,9 @@ _.extend(router.prototype, BaseRouter.prototype, {
                     self.log.debug('>> optimizedIndexWithOrgChecks ' + adminAccountId + ', ' + pageName);
 
                     //TODO: this can be simplified
-                    new WebsiteView(req, resp).renderActivateSetupPage(adminAccountId, pageName);
-
+                    accountDao.getAccountByID(accountId, function(err, account){
+                        new WebsiteView(req, resp).renderActivateSetupPage(account, adminAccountId, pageName);
+                    })
                     self.log.debug('<< optimizedIndexWithOrgChecks');
                 } else {
                     resp.status(500);

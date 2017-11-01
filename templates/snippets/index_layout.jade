@@ -42,7 +42,11 @@ html(class="no-js", lang="en" ng-app="mainApp" ng-controller="MainCtrl as main",
                     window.indigenous = window.indigenous || {};
                     window.indigenous.precache = window.indigenous.precache || {}; 
                     window.indigenous.business ={'name' :'#{account.business.name}', 'logo': '#{account.business.logo}'};
-
+            if originalAccountBusiness
+                script(type="text/javascript"). 
+                    window.indigenous = window.indigenous || {};
+                    window.indigenous.precache = window.indigenous.precache || {}; 
+                    window.indigenous.business ={'name' :'#{originalAccountBusiness.name}', 'logo': '#{originalAccountBusiness.logo}'};
             if account.website.settings.favicon
                 link(rel="shortcut icon", href=account.website.settings.favicon)
             else
