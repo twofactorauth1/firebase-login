@@ -141,7 +141,7 @@ html
 
               if component.type === 'email-1-col'
                 - var url="https:"+component.bg.img.url;
-                | <div style="background-color: !{component.bg.color};background-image: url(!{url});padding-top: !{component.spacing && component.spacing.pt};padding-bottom: !{component.spacing && component.spacing.pb};padding-left: !{component.spacing && component.spacing.pl};padding-right: !{component.spacing && component.spacing.pr};margin-top: !{component.spacing && component.spacing.mt};margin-bottom: !{component.spacing && component.spacing.mb};margin-left: !{component.spacing && component.spacing.ml};margin-right: !{component.spacing && component.spacing.mr};"> <table class="email-component-container {{component.type}}-v{{component.version}}" align="center" border="0" cellpadding="0" cellspacing="0" width="100%">
+                | <div style="background-color: !{component.bg.color};background-image: url(!{url});padding-top: !{component.spacing.pt};padding-bottom: !{component.spacing.pb || 0};padding-left: !{component.spacing.pl || 0};padding-right: !{component.spacing.pr || 0};margin-top: !{component.spacing.mt || 0};margin-bottom: !{component.spacing.mb  || 0};margin-left: !{component.spacing.ml  || 0};margin-right: !{component.spacing.mr || 0};"> <table class="email-component-container {{component.type}}-v{{component.version}}" align="center" border="0" cellpadding="0" cellspacing="0" width="100%">
                 if component.title
                     |     <tr>
                     |         <td>
@@ -182,7 +182,7 @@ html
 
               if component.type === 'email-2-col'
                 - var url="https:"+component.bg.img.url;
-                | <div style="background-color: !{component.bg.color};background-image: url(!{url});padding-top: !{component.spacing && component.spacing.pt};padding-bottom: !{component.spacing && component.spacing.pb};padding-left: !{component.spacing && component.spacing.pl};padding-right: !{component.spacing && component.spacing.pr};margin-top: !{component.spacing && component.spacing.mt};margin-bottom: !{component.spacing && component.spacing.mb};margin-left: !{component.spacing && component.spacing.ml};margin-right: !{component.spacing && component.spacing.mr};"> <table class="email-component-container {{component.type}}-v{{component.version}}" align="center" border="0" cellpadding="0" cellspacing="0" width="100%">
+                | <div style="background-color: !{component.bg.color};background-image: url(!{url});padding-top: !{component.spacing.pt || 0};padding-bottom: !{component.spacing.pb  || 0};padding-left: !{component.spacing.pl || 0};padding-right: !{component.spacing.pr  || 0};margin-top: !{component.spacing.mt || 0};margin-bottom: !{component.spacing.mb || 0};margin-left: !{component.spacing.ml || 0};margin-right: !{component.spacing.mr || 0};"> <table class="email-component-container {{component.type}}-v{{component.version}}" align="center" border="0" cellpadding="0" cellspacing="0" width="100%">
                 if component.title
                     |     <tr>
                     |         <td>
@@ -232,7 +232,7 @@ html
 
               if component.type === 'email-3-col'
                 - var url="https:"+component.bg.img.url;
-                | <div style="background-color: !{component.bg.color};background-image: url(!{url});padding-top: !{component.spacing && component.spacing.pt};padding-bottom: !{component.spacing && component.spacing.pb};padding-left: !{component.spacing && component.spacing.pl};padding-right: !{component.spacing && component.spacing.pr};margin-top: !{component.spacing && component.spacing.mt};margin-bottom: !{component.spacing && component.spacing.mb};margin-left: !{component.spacing && component.spacing.ml};margin-right: !{component.spacing && component.spacing.mr};"><table class="email-component-container {{component.type}}-v{{component.version}}" align="center" border="0" cellpadding="0" cellspacing="0" width="100%">
+                | <div style="background-color: !{component.bg.color};background-image: url(!{url});padding-top: !{component.spacing.pt || 0};padding-bottom: !{component.spacing.pb || 0};padding-left: !{component.spacing.pl || 0};padding-right: !{component.spacing.pr || 0};margin-top: !{component.spacing.mt || 0};margin-bottom: !{component.spacing.mb || 0};margin-left: !{component.spacing.ml || 0};margin-right: !{component.spacing.mr || 0};"><table class="email-component-container {{component.type}}-v{{component.version}}" align="center" border="0" cellpadding="0" cellspacing="0" width="100%">
                 if component.title
                     |     <tr>
                     |         <td>
@@ -291,7 +291,7 @@ html
 
               if component.type === 'email-footer'
                 - var url="https:"+component.bg.img.url;
-                | <div style="background-color: !{component.bg.color};background-image: url(!{url});padding-top: !{component.spacing && component.spacing.pt};padding-bottom: !{component.spacing && component.spacing.pb};padding-left: !{component.spacing && component.spacing.pl};padding-right: !{component.spacing && component.spacing.pr};margin-top: !{component.spacing && component.spacing.mt};margin-bottom: !{component.spacing && component.spacing.mb};margin-left: !{component.spacing && component.spacing.ml};margin-right: !{component.spacing && component.spacing.mr};"><table class="email-component-container {{component.type}}-v{{component.version}}" align="center" border="0" cellpadding="0" cellspacing="0" width="100%">
+                | <div style="background-color: !{component.bg.color};background-image: url(!{url});padding-top: !{component.spacing.pt || 0};padding-bottom: !{component.spacing.pb || 0};padding-left: !{component.spacing.pl || 0};padding-right: !{component.spacing.pr || 0};margin-top: !{component.spacing.mt || 0};margin-bottom: !{component.spacing.mb || 0};margin-left: !{component.spacing.ml || 0};margin-right: !{component.spacing.mr || 0};"><table class="email-component-container {{component.type}}-v{{component.version}}" align="center" border="0" cellpadding="0" cellspacing="0" width="100%">
                 |     <tr>
                 |         <td>
                 |             <table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" id="templateColumns">
@@ -316,7 +316,7 @@ html
                 | <table class="email-component-container-hr {{component.type}}-v{{component.version}}" align="center" border="0" cellpadding="0" cellspacing="0" width="100%">
                 |     <tr>
                 |         <td>
-                |             <div style="background-color: !{component.bg.color};background-image: url(!{url});padding-top: !{component.spacing && component.spacing.pt};padding-bottom: !{component.spacing && component.spacing.pb};padding-left: !{component.spacing && component.spacing.pl};padding-right: !{component.spacing && component.spacing.pr};margin-top: !{component.spacing && component.spacing.mt};margin-bottom: !{component.spacing && component.spacing.mb};margin-left: !{component.spacing && component.spacing.ml};margin-right: !{component.spacing && component.spacing.mr};"><table align="center" border="0" cellpadding="0" cellspacing="0" width="100%">
+                |             <div style="background-color: !{component.bg.color};background-image: url(!{url});padding-top: !{component.spacing.pt || 0};padding-bottom: !{component.spacing.pb || 0};padding-left: !{component.spacing.pl || 0};padding-right: !{component.spacing.pr || 0};margin-top: !{component.spacing.mt || 0};margin-bottom: !{component.spacing.mb || 0};margin-left: !{component.spacing.ml || 0};margin-right: !{component.spacing.mr || 0};"><table align="center" border="0" cellpadding="0" cellspacing="0" width="100%">
                 |                 <tr>
                 |                     <td align="center" style="height:10px; padding-left:20px; padding-right: 20px;">
                 |                         <div class="hr"></div>
@@ -332,7 +332,7 @@ html
                 | <table class="email-component-container {{component.type}}-v{{component.version}}" align="center" border="0" cellpadding="0" cellspacing="0" width="100%">
                 |     <tr>
                 |         <td>
-                |             <div style="background-color: !{component.bg.color};background-image: url(!{url});padding-top: !{component.spacing && component.spacing.pt};padding-bottom: !{component.spacing && component.spacing.pb};padding-left: !{component.spacing && component.spacing.pl};padding-right: !{component.spacing && component.spacing.pr};margin-top: !{component.spacing && component.spacing.mt};margin-bottom: !{component.spacing && component.spacing.mb};margin-left: !{component.spacing && component.spacing.ml};margin-right: !{component.spacing && component.spacing.mr};"><table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" id="templateColumns">
+                |             <div style="background-color: !{component.bg.color};background-image: url(!{url});padding-top: !{component.spacing.pt || 0};padding-bottom: !{component.spacing.pb || 0};padding-left: !{component.spacing.pl || 0};padding-right: !{component.spacing.pr || 0};margin-top: !{component.spacing.mt || 0};margin-bottom: !{component.spacing.mb || 0};margin-left: !{component.spacing.ml || 0};margin-right: !{component.spacing.mr || 0};"><table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" id="templateColumns">
                 |                 <tr>
                 |                     <td align="center" width="100%" class="templateColumnContainer" style="padding-left:20px; padding-right: 20px;">
                 |                         <table border="0" cellpadding="10" cellspacing="0" width="100%" style="color: !{component.txtcolor};">
