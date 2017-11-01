@@ -681,6 +681,13 @@ _.extend(view.prototype, BaseView.prototype, {
                     ssbManager.getPublishedPage(accountId, webpageData.website._id, 'splash', function(err, page){
                         if(page) {
                             page.set('handle', 'index');
+                            _.each(page.get('sections'), function(section){
+                                if (section.global && section.hiddenOnPages) {
+                                    if(section.hiddenOnPages['splash']) {
+                                        section.hiddenOnPages['index'] = section.hiddenOnPages['splash'];
+                                    }
+                                }
+                            });
                         }
                         cb(err, webpageData, [page]);
                     });
@@ -688,6 +695,13 @@ _.extend(view.prototype, BaseView.prototype, {
                     ssbManager.getPublishedPage(accountId, webpageData.website._id, 'marketing', function(err, page){
                         if(page) {
                             page.set('handle', 'activate');
+                            _.each(page.get('sections'), function(section){
+                                if (section.global && section.hiddenOnPages) {
+                                    if(section.hiddenOnPages['marketing']) {
+                                        section.hiddenOnPages['activate'] = section.hiddenOnPages['marketing'];
+                                    }
+                                }
+                            });
                         }
                         cb(err, webpageData, [page]);
                     });

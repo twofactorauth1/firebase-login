@@ -11,7 +11,11 @@
 			},
 			templateUrl: '/admin/assets/js/ssb-site-builder/ssb-components/shared/link_2.html',
 			replace: true,
-			controller: ['$scope', function ($scope) {
+			controller: ['$scope', '$injector', function ($scope, $injector) {
+				var SsbPageSectionService = {};
+				if ($injector.has("SsbPageSectionService")) {
+					SsbPageSectionService = $injector.get("SsbPageSectionService");
+				}
 				var pageList;
 				if (window.indigenous && window.indigenous.precache && window.indigenous.precache.siteData && window.indigenous.precache.siteData.pages) {
 					pageList = window.indigenous.precache.siteData.pages;
@@ -43,6 +47,11 @@
 					}
 					return false;
 				};
+				$scope.$watchCollection(function () {
+					return SsbPageSectionService.offset;
+				}, function (offset) {
+					$scope.scrollOffsetTop = offset;
+				});
 			}]
 		};
 	});
