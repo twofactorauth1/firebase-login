@@ -939,12 +939,9 @@ _.extend(api.prototype, baseApi.prototype, {
                         }
                         var fromAddress = null;
                         var fromName = business.name;
-                        if(account.orgId!==5 || account.activated){
-                            // send email if not leadsource or (if leadsource then it should be activated)
-                            emailMessageManager.sendNewCustomerEmail(toAddress, toName, fromName, fromAddress, accountId, vars, ccAry, function(err, value){
-                                self.log.debug('email sent');
-                            });
-                        }
+                        emailMessageManager.sendNewCustomerEmail(toAddress, toName, fromName, fromAddress, accountId, vars, ccAry, function(err, value){
+                            self.log.debug('email sent');
+                        });
 
                     }
                     delete req.body.skipWelcomeEmail;
@@ -1171,16 +1168,21 @@ _.extend(api.prototype, baseApi.prototype, {
                                             }
                                         }
                                         var fromName = account.get('business').name;
-                                        self._sendEmailOnCreateAccount(accountEmail, activity.contact, account.id(), ccAry, tagSet, accountSubdomain, true, fromName, account, savedContact);
-                                    } else {
-                                        var fromName = '';
-                                        if(account && account.get('business')) {
-                                            fromName = account.get('business').name;
+                                        if(account.get("orgId")!==5 || account.get("activated")){
+                                            self._sendEmailOnCreateAccount(accountEmail, activity.contact, account.id(), ccAry, tagSet, accountSubdomain, true, fromName, account, savedContact);
                                         }
-                                        userDao.getUserAccount(account.id(), function(err, user){
-                                            accountEmail = user.get("email");
-                                            self._sendEmailOnCreateAccount(accountEmail, activity.contact, account.id(), null, tagSet, accountSubdomain, false, fromName, account, savedContact);
-                                        })
+                                    } else {
+
+                                        if(account.get("orgId")!==5 || account.get("activated")){
+                                            var fromName = '';
+                                            if(account && account.get('business')) {
+                                                fromName = account.get('business').name;
+                                            }
+                                            userDao.getUserAccount(account.id(), function(err, user){
+                                                accountEmail = user.get("email");
+                                                self._sendEmailOnCreateAccount(accountEmail, activity.contact, account.id(), null, tagSet, accountSubdomain, false, fromName, account, savedContact);
+                                            })
+                                        }
                                     }
 
                                 }
