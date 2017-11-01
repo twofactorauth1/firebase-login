@@ -1168,16 +1168,21 @@ _.extend(api.prototype, baseApi.prototype, {
                                             }
                                         }
                                         var fromName = account.get('business').name;
-                                        self._sendEmailOnCreateAccount(accountEmail, activity.contact, account.id(), ccAry, tagSet, accountSubdomain, true, fromName, account, savedContact);
-                                    } else {
-                                        var fromName = '';
-                                        if(account && account.get('business')) {
-                                            fromName = account.get('business').name;
+                                        if(account.get("orgId")!==5 || account.get("activated")){
+                                            self._sendEmailOnCreateAccount(accountEmail, activity.contact, account.id(), ccAry, tagSet, accountSubdomain, true, fromName, account, savedContact);
                                         }
-                                        userDao.getUserAccount(account.id(), function(err, user){
-                                            accountEmail = user.get("email");
-                                            self._sendEmailOnCreateAccount(accountEmail, activity.contact, account.id(), null, tagSet, accountSubdomain, false, fromName, account, savedContact);
-                                        })
+                                    } else {
+
+                                        if(account.get("orgId")!==5 || account.get("activated")){
+                                            var fromName = '';
+                                            if(account && account.get('business')) {
+                                                fromName = account.get('business').name;
+                                            }
+                                            userDao.getUserAccount(account.id(), function(err, user){
+                                                accountEmail = user.get("email");
+                                                self._sendEmailOnCreateAccount(accountEmail, activity.contact, account.id(), null, tagSet, accountSubdomain, false, fromName, account, savedContact);
+                                            })
+                                        }
                                     }
 
                                 }
