@@ -1168,7 +1168,7 @@ _.extend(api.prototype, baseApi.prototype, {
                                             }
                                         }
                                         var fromName = account.get('business').name;
-                                            if(account.get("orgId")!==5 || account.get("activated")){
+                                        if(account.get("orgId")!==5 || account.get("activated")){
                                             self._sendEmailOnCreateAccount(accountEmail, activity.contact, account.id(), ccAry, tagSet, accountSubdomain, true, fromName, account, savedContact);
                                         }
                                     } else {
