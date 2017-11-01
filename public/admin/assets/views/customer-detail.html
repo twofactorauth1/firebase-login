@@ -131,6 +131,14 @@
                                                     </td>
                                                 </tr>
                                                 <tr>
+                                                    <td>OEM Account:</td>
+                                                    <td>
+                                                        <div ng-show="customer">
+                                                            <switch ng-model="customer.oem" ng-change="updateCustomerOEMAccount(customer.oem)" class="pull-right margin-bottom-10"></switch>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
                                                     <td>Insight Emails Enabled:</td>
                                                     <td>
                                                         <div ng-show="customer">
