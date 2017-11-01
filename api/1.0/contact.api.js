@@ -939,9 +939,12 @@ _.extend(api.prototype, baseApi.prototype, {
                         }
                         var fromAddress = null;
                         var fromName = business.name;
-                        emailMessageManager.sendNewCustomerEmail(toAddress, toName, fromName, fromAddress, accountId, vars, ccAry, function(err, value){
-                            self.log.debug('email sent');
-                        });
+                        if(account.orgId!==5 || account.activated){
+                            // send email if not leadsource or (if leadsource then it should be activated)
+                            emailMessageManager.sendNewCustomerEmail(toAddress, toName, fromName, fromAddress, accountId, vars, ccAry, function(err, value){
+                                self.log.debug('email sent');
+                            });
+                        }
 
                     }
                     delete req.body.skipWelcomeEmail;
