@@ -15,9 +15,6 @@
             vertical-align: middle;
             padding: 1em;
         }
-        .ssb-media-query-small-only({
-            // padding: 0 0 2em 0!important;
-        });
         .ssb-theme-btn * {
             display: inline-block;
             line-height: 1.2;
@@ -91,8 +88,7 @@
             position: relative;
         }
         .ssb-media-query-small-only({
-            background: no-repeat 0 0;
-            //background-size: cover;
+            background: no-repeat 0 0; 
             min-height: 100%;
             background-position: 50% 0px;
             position: absolute;
@@ -100,39 +96,33 @@
             left: 0;
             width: 100%;
             z-index: 0!important;
-
             img {
                 display: none;
             }
         });
-
         .ssb-media-query-medium({
             background: transparent!important;
         });
 
     }
 
-    .ssb-page-section-layout-blur-image [ssb-image-component] img {
-        -webkit-filter: blur(5px);
-        -moz-filter: blur(5px);
-        -o-filter: blur(5px);
-        -ms-filter: blur(5px);
-        filter: blur(5px);
-    }
+    .ssb-page-section-layout-blur-image [ssb-image-component]{ 
 
-
-    .ssb-page-section-layout-blur-image [ssb-image-component] .nav-header-div {
-        -webkit-filter: blur(5px);
-        -moz-filter: blur(5px);
-        -o-filter: blur(5px);
-        -ms-filter: blur(5px);
-        filter: blur(5px);
-    }
-
-    .ssb-page-section-layout-nav-hero .ssb-hero-main-header [ssb-text-component] {
-        //font-size set in ssb-themes.less default
-    }
-
+        img {
+            -webkit-filter: blur(5px);
+            -moz-filter: blur(5px);
+            -o-filter: blur(5px);
+            -ms-filter: blur(5px);
+            filter: blur(5px);
+        }
+        .nav-header-div {
+            -webkit-filter: blur(5px);
+            -moz-filter: blur(5px);
+            -o-filter: blur(5px);
+            -ms-filter: blur(5px);
+            filter: blur(5px);
+        }
+    } 
     .ssb-page-section-layout-nav-hero.hide-hero-bg-image [ssb-image-component] {
         background-image: none !important;
         .ssb-image-component-container{
@@ -143,17 +133,14 @@
             background-image: none !important;
         }
     }
-
     .ssb-page-section-layout-nav-hero .flex-container-absolute-column {
         margin: 35px 0px;
         justify-content: flex-start;
     }
-
     .ssb-page-section-layout-nav-hero [social-link-component] {
         max-width: 100%;
         z-index: 2 !important;
     }
-
     .ssb-page-section-layout-nav-hero-v1,
     .ssb-page-section-layout-nav-hero-v2,
     .ssb-page-section-layout-nav-hero-v3,
@@ -164,8 +151,7 @@
                 padding: 30px 15px!important;
             });
         }
-        .ssb-media-query-small-only({
-            padding: 30px 15px!important;
+        .ssb-media-query-small-only({ 
             .navigation-v2 .navbar .navbar-header{
                 float: none;
                 display: flex;
@@ -184,9 +170,7 @@
     .ssb-page-section-layout-nav-hero-v3{
         .flex-container-absolute-column {
             top:0;
-            .ssb-media-query-small-only({
-                //position: absolute;
-                //top:-30px;
+            .ssb-media-query-small-only({ 
                 min-width: 100%;
                 min-height: 250px !important;
                 margin: 0;
@@ -261,9 +245,7 @@
 
 				li button:before{
 					opacity: 0.4;
-					color: #FFF;
-					// border: 4px solid #666;
-					// border-radius: 50%;
+					color: #FFF; 
 					font-size: 8px;
 					line-height: 10px;
 					width: 16px;
@@ -301,11 +283,8 @@
 					}
 				}
 			}
-
         	.slick-slide .img img {
-
 				width: 100%;
-
 				@media screen and (max-width: 767px) {
 					max-width: inherit;
 					width: inherit;
@@ -333,11 +312,9 @@
 		}
 
     }
-
     /*
      * layout-hero-v2
     */
-    
     .ssb-page-section-layout-nav-hero-v4 {
 
 
@@ -426,8 +403,6 @@
                 li button:before{
                     opacity: 0.4;
                     color: #FFF;
-                    // border: 4px solid #666;
-                    // border-radius: 50%;
                     font-size: 8px;
                     line-height: 10px;
                     width: 16px;
@@ -467,17 +442,13 @@
             }
 
             .slick-slide .img img {
-
                 width: 100%;
-
                 @media screen and (max-width: 767px) {
                     max-width: inherit;
                     width: inherit;
                     transform: translateX(0%);
                 }
-
             }
-
             .container.inner-page {
                 @media screen and (max-width: 767px) {
                     padding: 0!important;
