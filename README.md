@@ -24,7 +24,7 @@ Download and install these dependencies to start developing on the application
 
 5. Open a new Terminal/Command Prompt and make sure Mongo is running with 'mongo' or 'mongod'
 
-6. Go back to Original Tab and run 'node app.js'
+6. Go back to Original Tab and run 'npm start'
 
 7. Open a new Terminal/Command Prompt and run 'grunt less' which will manually compile all the less files and then run 'grunt watch' which will watch the less folder for any changes and then compile them into css and live reload the browser
 

@@ -3004,6 +3004,7 @@ module.exports = {
             name:1,
             type:1,
             preview:1,
+            orgConfig:1,
             filter:1,
             description:1,
             enabled:1
@@ -3031,6 +3032,7 @@ module.exports = {
             name:1,
             type:1,
             preview:1,
+            orgConfig:1,
             filter:1,
             description:1,
             enabled:1
@@ -3058,6 +3060,7 @@ module.exports = {
             name:1,
             type:1,
             preview:1,
+            orgConfig:1,
             filter:1,
             description:1,
             enabled:1,
@@ -4301,15 +4304,17 @@ module.exports = {
                 var prefix = protocol + '://' + host + '/';
                 var entryAry = [];
                 var expandBlogPosts = false;
-                _.each(pages, function(page){
+                _.each(pages, function(page){      
+
                     if(!page.get('hideFromVisitors') && page.get('showinseo') !== false) {//TODO: check these props
                         var entry = '<url><loc>' + prefix;
                         if(page.get('handle') === 'index') {
+
                             entry+= '</loc>';
-                        } else if(page.get('handle') === 'blog-list'){
+                        } else if(page.get('handle') === 'blog-list'){                         
                             expandBlogPosts = true;
                             entry += 'blog</loc>';
-                        } else {
+                        } else {                          
                             entry+= page.get('handle') + '</loc>';
                         }
 
@@ -4323,21 +4328,48 @@ module.exports = {
                     }
                 });
                 if(expandBlogPosts === true) {
+                    var dates_arr = [];
                     self.getPublishedPosts(accountId, null, null, function(err, posts){
                         if(posts && posts.length > 0) {
                             _.each(posts, function(post){
+                                dates_arr.push(moment(post.get('modified').date).unix());                                  
                                 var entry = '<url><loc>' + prefix + 'blog/' + post.get('post_url') + '</loc>';
                                 entry += '<lastmod>' + moment(post.get('modified').date).format('YYYY-MM-DD') + '</lastmod></url>';
                                 entryAry.push(entry);
                             });
                         }
-                        var xmlString = '<?xml version="1.0" encoding="utf-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">';
-                        _.each(entryAry, function(entry){
-                            xmlString += entry;
-                        });
-                        xmlString += '</urlset>';
-                        self.log.debug(accountId, userId, '<< generateSiteMap');
-                        return fn(null, xmlString);
+                         
+                        var latest_date_parsed = "";
+                        if(dates_arr.length > 0){
+                          var latest_date = Math.max.apply(Math, dates_arr);
+                              latest_date_parsed = moment.unix(latest_date).format("YYYY-MM-DD");
+                        }
+
+
+                        async.mapSeries(entryAry,function(url_entry,callback_final){ 
+                                  var url_entry_arr = url_entry.split('//');
+                                  var url_parse_arr = url_entry_arr[1].split('/');
+                                  if(url_parse_arr[1].slice(0, -1) === "blog")
+                                  {
+                                    callback_final(null,url_entry_arr[0]+'//'+url_parse_arr[0]+'/blog</loc><lastmod>'+latest_date_parsed+'</lastmod></url>');
+                                  }
+                                  else
+                                  {
+                                    callback_final(null,url_entry);
+                                  }
+                                 
+                                  
+                        }, function(err,response_final){
+                                     
+                                      var xmlString = '<?xml version="1.0" encoding="utf-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">';
+                                      _.each(response_final, function(entry){
+                                          xmlString += entry;
+                                      });
+                                      xmlString += '</urlset>';
+                                      self.log.debug(accountId, userId, '<< generateSiteMap');
+                                      return fn(null, xmlString);
+                                      });                         
+                        
                     });
                 } else {
                     var xmlString = '<?xml version="1.0" encoding="utf-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">';
