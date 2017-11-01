@@ -589,7 +589,7 @@ var accountManager = {
         });
     },
 
-    createAccount: function(accountId, userId, orgId, subdomain, username, password, billing, fn) {
+    createAccount: function(accountId, userId, orgId, subdomain, username, password, billing, oem, fn) {
         var self = this;
         self.log.debug(accountId, userId, '>> createAccount');
         if(!userManager) {
@@ -623,6 +623,7 @@ var accountManager = {
                 var account = new $$.m.Account({
                     orgId:orgId,
                     subdomain:subdomain,
+                    oem:oem,
                     created:{
                         date: new Date(),
                         by:userId

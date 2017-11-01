@@ -313,13 +313,14 @@
             });
         };
 
-        this.addNewCustomer = function(orgId, subdomain, username, password, fn) {
+        this.addNewCustomer = function(orgId, subdomain, username, password, oem, fn) {
             var apiUrl = newCustomerUrl;
             var body = {
                 orgId:orgId,
                 subdomain:subdomain,
                 username:username,
-                password:password
+                password:password,
+                oem:oem
             };
             $http.post(apiUrl, body).success(function(data){
                 fn(null, data);
