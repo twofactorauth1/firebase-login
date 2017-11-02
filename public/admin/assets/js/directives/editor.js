@@ -25,7 +25,7 @@ app.directive("elem", function ($rootScope, $timeout, $compile, SimpleSiteBuilde
 				'<div ng-if="component.isOverlayActive"' +
 				'class="bg slider-overlay-bg" ng-style ="{\'background\': component.overlayBackground, opacity: component.overlayOpacity === 0 ?  component.overlayOpacity : component.overlayOpacity/100  || 0 , \'height\': component.isOverlayActive ? component.gridHeight+\'px\':\'\' }"> ' +
 				'</div>' +
-				'<div ng-show="vm.showHide()" class="editable element-wrap" ng-bind-html="ngModel | unsafe"></div>' +
+				'<div ng-show="vm.showHide()" ng-class={\'admin_overlay\':component.isOverlayActive} class="editable element-wrap" ng-bind-html="ngModel | unsafe"></div>' +
 				'<div ng-if="!vm.showHide()" class="text-center">HIDDEN</div>' +
 				'</div>' +
 				'</div>',
