@@ -1129,3 +1129,15 @@
     </div>
 </div>
 <div ng-if="component.type==='feature-list'" data-ng-include data-src=" 'assets/js/ssb-site-builder/ssb-components/feature-list/sidebar.settings.block.border.html' "></div>
+<div ng-if="component.type =='ssb-element-text'">
+        <div>
+            <h4 class="ssb-sidebar-sub-heading-separator">Vertical alignment</h4>
+            <div class="row padding-left-10 padding-right-10">
+                <div class="btn-group ssb-sidebar-btn-group ssb-sidebar-btn-group-small-top margin-bottom-15">
+                    <button type="button" ng-repeat="option in [
+                    'auto', 'top', 'center', 'bottom'
+                ]" ng-click="component.vertical_align = option" ng-model="component.vertical_align" class="btn text-capitalize" ng-class="{'active': option == component.vertical_align }">{{option}}</button>
+                </div>
+            </div>
+        </div>
+    </div>
