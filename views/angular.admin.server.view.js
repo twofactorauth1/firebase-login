@@ -105,7 +105,7 @@ _.extend(view.prototype, BaseView.prototype, {
                             logger.debug('Starting render');
                             if(data.account.orgId && data.account.orgId === 2) {
                                 logger.debug('Rendering var admin');
-                                self.resp.render('var/demo/admin', data);
+                                self.resp.send("Not supported");
                             } else if(data.account.orgId && data.account.orgId === 1){
                                 logger.debug('Rendering rvlvr admin');
                                 self.resp.render('var/rvlvr/admin', data);
