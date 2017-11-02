@@ -692,19 +692,36 @@ _.extend(view.prototype, BaseView.prototype, {
                         cb(err, webpageData, [page]);
                     });
                 } else {
-                    ssbManager.getPublishedPage(accountId, webpageData.website._id, 'marketing', function(err, page){
-                        if(page) {
-                            page.set('handle', 'activate');
-                            _.each(page.get('sections'), function(section){
-                                if (section.global && section.hiddenOnPages) {
-                                    if(section.hiddenOnPages['marketing']) {
-                                        section.hiddenOnPages['activate'] = section.hiddenOnPages['marketing'];
+                    if(originalAccount.get("oem") === true){
+                        ssbManager.getPublishedPage(accountId, webpageData.website._id, 'oem-landing', function(err, page){
+                            if(page) {
+                                page.set('handle', 'activate');
+                                _.each(page.get('sections'), function(section){
+                                    if (section.global && section.hiddenOnPages) {
+                                        if(section.hiddenOnPages['oem-landing']) {
+                                            section.hiddenOnPages['activate'] = section.hiddenOnPages['oem-landing'];
+                                        }
                                     }
-                                }
-                            });
-                        }
-                        cb(err, webpageData, [page]);
-                    });
+                                });
+                            }
+                            cb(err, webpageData, [page]);
+                        });
+                    }
+                    else{
+                        ssbManager.getPublishedPage(accountId, webpageData.website._id, 'marketing', function(err, page){
+                            if(page) {
+                                page.set('handle', 'activate');
+                                _.each(page.get('sections'), function(section){
+                                    if (section.global && section.hiddenOnPages) {
+                                        if(section.hiddenOnPages['marketing']) {
+                                            section.hiddenOnPages['activate'] = section.hiddenOnPages['marketing'];
+                                        }
+                                    }
+                                });
+                            }
+                            cb(err, webpageData, [page]);
+                        });
+                    }
                 }
 
             },

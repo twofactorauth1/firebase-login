@@ -14,12 +14,24 @@ app.directive('activateAccountComponent', ['$filter', '$sce', '$timeout', '$moda
                 "EXISTING" : "EXISTING"
             };
             scope.errorMessage = "";
-			scope.newAccount = {
-				plan: scope.plans.NEW
-			};
 
-			scope.totalSteps = 3;
-			scope.currentStep = 1;
+            accountService(function (err, account) {
+                scope.account = account;
+                if(scope.account.oem == true){
+                    scope.totalSteps = 1;
+                    scope.currentStep = 3;
+                    scope.newAccount = {
+
+                    }
+                }
+                else{
+                    scope.totalSteps = 3;
+                    scope.currentStep = 1;
+                    scope.newAccount = {
+                        plan: scope.plans.NEW
+                    };
+                }
+            });
 
 			scope.setUpPlan = setUpPlan;
 			scope.selectAccountTemplate = selectAccountTemplate;
@@ -116,9 +128,7 @@ app.directive('activateAccountComponent', ['$filter', '$sce', '$timeout', '$moda
             }
             getServerName();
 
-            accountService(function (err, account) {
-                scope.account = account;
-            });
+            
 
             function activateAccount() {
                 //TODO: Load Spinner
