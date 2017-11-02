@@ -566,7 +566,27 @@
         // }
 
         function sendOneTimeEmailFn(address) {
+            
             vm.uiState.dataLoaded = false;
+            if(vm.state.email.components && vm.state.email.components.length > 0)
+            {
+              for(var i = 0, comp_length=vm.state.email.components.length;i<comp_length; i++){
+
+                    var current_component = vm.state.email.components[i];
+                    if(current_component.spacing) {
+                     
+                      for(var m in current_component.spacing){
+                        var current_spacing = String(current_component.spacing[m]);                      
+                        if(current_spacing && current_spacing.indexOf("%") === -1 && current_spacing !== 'auto' && /^\d+$/.test(current_spacing)){
+                          vm.state.email.components[i].spacing[m] = current_spacing+"px";
+                         
+                        }
+                      }
+                      
+                    }
+              }
+            }
+            
             EmailBuilderService.sendOneTimeEmail(address, vm.state.email).then(function() {
                 vm.uiState.dataLoaded = true;
                 vm.uiState.closeModal();
