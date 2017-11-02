@@ -230,6 +230,24 @@
             });
         };
 
+        this.updateCustomerOEM = function(customer, oem, fn) {
+            var id = customer._id;
+
+            var apiUrl = [baseUrl, 'customer', id, 'oem'].join('/');
+            var body = {
+                oem:oem
+            };
+            var cache = this.getCache();
+            $http.post(apiUrl, body).success(function(data){
+                if(cache) {
+                    cache.get(id).oem = data.oem;
+                }
+                fn(null, data);
+            }).error(function(err){
+                fn(err);
+            });
+        };
+
         this.updateCustomerReceiveInsights = function(customer, receiveInsights, fn) {
             var id = customer._id;
 
@@ -295,13 +313,14 @@
             });
         };
 
-        this.addNewCustomer = function(orgId, subdomain, username, password, fn) {
+        this.addNewCustomer = function(orgId, subdomain, username, password, oem, fn) {
             var apiUrl = newCustomerUrl;
             var body = {
                 orgId:orgId,
                 subdomain:subdomain,
                 username:username,
-                password:password
+                password:password,
+                oem:oem
             };
             $http.post(apiUrl, body).success(function(data){
                 fn(null, data);

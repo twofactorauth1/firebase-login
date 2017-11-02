@@ -480,7 +480,28 @@ module.exports = {
                 return fn('account not found');
             }
         });
+    },
 
+    updateCustomerOEM: function(accountId, userId, customerId, oem, fn) {
+        var self = this;
+        self.log.debug(accountId, userId, '>> updateCustomerOEM');
+        accountDao.getAccountByID(customerId, function(err, account){
+            if(account) {
+                account.set('oem', oem);
+                accountDao.saveOrUpdate(account, function(err, savedCustomer){
+                    if(err) {
+                        self.log.error("Error saving account:", err);
+                        return fn(err);
+                    } else {
+                        self.log.debug(accountId, userId, '<< updateCustomerOEM');
+                        fn(null, savedCustomer);
+                    }
+                });
+            } else {
+                self.log.error('Account not found');
+                return fn('account not found');
+            }
+        });
     },
 
     updateCustomerShowHide: function(accountId, userId, customerId, customerDetails, fn) {

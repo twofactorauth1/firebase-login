@@ -33,6 +33,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url('single/:id'), this.isAuthAndSubscribedApi.bind(this), this.getSingleCustomer.bind(this));
         app.post(this.url('customer/:id/notes'), this.isAuthAndSubscribedApi.bind(this), this.addCustomerNotes.bind(this));
         app.post(this.url('customer/:id/templateAccount'), this.isAuthAndSubscribedApi.bind(this), this.updateCustomerTemplateAccount.bind(this));
+        app.post(this.url('customer/:id/oem'), this.isAuthAndSubscribedApi.bind(this), this.updateCustomerOEM.bind(this));
         app.post(this.url('customer/:id/insights'), this.isAuthAndSubscribedApi.bind(this), this.updateCustomerInsights.bind(this));
         app.post(this.url('customer/:id/showhide'), this.isAuthAndSubscribedApi.bind(this), this.updateCustomerShowHide.bind(this));
         //app.delete(this.url(':type/:key'), this.isAuthAndSubscribedApi.bind(this), this.deleteComponentData.bind(this));
@@ -256,6 +257,33 @@ _.extend(api.prototype, baseApi.prototype, {
                     var orgDomain = urlUtils.getSubdomainFromRequest(req).orgDomain;
                     manager.updateCustomerInsights(accountId, userId, customerId, customerDetails, function(err, updatedCustomer){
                         self.log.debug(accountId, userId, '<< updateCustomerInsights');
+                        self.sendResultOrError(resp, err, updatedCustomer, 'Error updating insights');
+                    });
+                } else {
+                    self.wrapError(resp, 400, 'Unsupported Method', 'This method is unsupported');
+                }
+            });
+        }
+    },
+
+    updateCustomerOEM: function(req, resp) {
+        var self = this;
+        var accountId = parseInt(self.accountId(req));
+        var userId = self.userId(req);
+        self.log.debug(accountId, userId, '>> updateCustomerOEM');
+        var customerId = parseInt(req.params.id);
+        var oem = req.body.oem;
+        if(accountId === appConfig.mainAccountID) {
+            manager.updateCustomerOEM(accountId, userId, customerId, oem, function(err, updatedCustomer){
+                self.log.debug(accountId, userId, '<< updateCustomerOEM');
+                self.sendResultOrError(resp, err, updatedCustomer, 'Error updating insights');
+            });
+        } else {
+            self.isOrgAdmin(accountId, userId, req, function(err, val) {
+                if (val === true) {
+                    var orgDomain = urlUtils.getSubdomainFromRequest(req).orgDomain;
+                    manager.updateCustomerOEM(accountId, userId, customerId, oem, function(err, updatedCustomer){
+                        self.log.debug(accountId, userId, '<< updateCustomerOEM');
                         self.sendResultOrError(resp, err, updatedCustomer, 'Error updating insights');
                     });
                 } else {
