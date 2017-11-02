@@ -256,6 +256,29 @@
 			});
 		};
 
+        $scope.updateCustomerOEMAccount = function(oem) {
+            var text = oem ? "Set this customer as OEM account" : "Unset this customer as OEM account";
+            SweetAlert.swal({
+                title: "Are you sure?",
+                text: text,
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Yes",
+                cancelButtonText: "No",
+                noActionButtonText: 'Cancel',
+                closeOnConfirm: true,
+                closeOnCancel: true
+            }, function (isConfirm) {
+                //Update template account flag
+                if (isConfirm) {
+                    updateCustomerOEM(oem);
+                } else {
+                    $scope.customer.oem = !oem;
+                }
+            });
+        };
+
 		$scope.updateCustomerTemplateAccount = function (isTemplateAccount) {
 			var text = isTemplateAccount ? "Set this customer as template account" : "Unset this customer as template account";
 			SweetAlert.swal({
@@ -320,10 +343,31 @@
 				if (err) {
 					toaster.pop('warning', err.message);
 				} else {
-					toaster.pop('success', 'Account template updated.');
+					if(isTemplateAccount){
+						customerService.makeEvergreen($scope.customer._id, function (err, value) {
+							if (err) {
+								toaster.pop('warning', err.message);
+							} else {
+								toaster.pop('success', 'Account template updated.');
+							}
+						});
+					}
+					else{
+						toaster.pop('success', 'Account template updated.');
+					}
 				}
 			});
 		}
+
+        function updateCustomerOEM(oem) {
+            customerService.updateCustomerOEM($scope.customer, oem, function(err, customer){
+                if (err) {
+                    toaster.pop('warning', err.message);
+                } else {
+                    toaster.pop('success', 'Account oem updated.');
+                }
+            });
+        }
 
 		$scope.addNewUser = function () {
 			console.log('Adding the following:', $scope.newuser);

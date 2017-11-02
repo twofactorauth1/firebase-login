@@ -106,6 +106,7 @@ var account = $$.m.ModelBase.extend({
                 taxnexus : []
             },
             activated:false,
+            oem:false,
             created: {
                 date: new Date(),
                 by: null

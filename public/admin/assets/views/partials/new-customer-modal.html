@@ -19,6 +19,13 @@
                 <input id="input-subdomain" class="form-control" ng-model="$parent.subdomain" placeholder="subdomain" type="text">
             </div>
             <div class="form-group">
+                <label for="oem">OEM Account</label>
+                <span tooltip-placement="top" tooltip="OEM Account"><i class="fa fa-info-circle" /></span>
+                <div class="input-group pull-right">
+                    <switch id="oem" ng-model="$parent.oem" class="pull-right"></switch>
+                </div>
+            </div>
+            <div class="form-group">
                 <label class="">Username</label>
                 <input name="futureuser" id="input-username" class="form-control" ng-model="$parent.username" placeholder="Email Address" type="text" autocomplete="false" >
             </div>

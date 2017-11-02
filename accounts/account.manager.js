@@ -334,6 +334,31 @@ var accountManager = {
             },
             function(account, cb) {
                 /*
+                 * Copy published pages
+                 */
+                var query = {accountId:srcAccountId, latest:true};
+
+                pageDao.findPublishedPages(query, function(err, pages){
+                    if(err) {
+                        self.log.error(accountId, userId, 'Error finding pages:', err);
+                        cb(err);
+                    } else {
+                        idMap.published_pages = idMap.published_pages || {};
+                        async.eachSeries(pages, function(page, callback){
+                            self._copyPublishedPages(accountId, userId, srcAccountId, account.id(), idMap.website.destId, idMap, page, callback);
+                        }, function(err){
+                            if(err) {
+                                self.log.error(accountId, userId, 'Error copyingPublishedPage:', err);
+                                cb(err);
+                            } else {
+                                cb(null, account);
+                            }
+                        });
+                    }
+                });
+            },
+            function(account, cb) {
+                /*
                  * Update old emails
                  */
                 var query = {accountId:account.id(), latest:true};
@@ -589,7 +614,7 @@ var accountManager = {
         });
     },
 
-    createAccount: function(accountId, userId, orgId, subdomain, username, password, billing, fn) {
+    createAccount: function(accountId, userId, orgId, subdomain, username, password, billing, oem, fn) {
         var self = this;
         self.log.debug(accountId, userId, '>> createAccount');
         if(!userManager) {
@@ -623,6 +648,7 @@ var accountManager = {
                 var account = new $$.m.Account({
                     orgId:orgId,
                     subdomain:subdomain,
+                    oem:oem,
                     created:{
                         date: new Date(),
                         by:userId
@@ -914,6 +940,28 @@ var accountManager = {
             } else {
                 self.log.debug(accountId, userId, '<< _copySections');
                 fn(null, sectionIdAry);
+            }
+        });
+    },
+
+    _copyPublishedPages: function(accountId, userId, srcAccountId, destAccountId, destWebsiteId, idMap, page, fn) {
+        var self = this;
+        self.log.debug(accountId, userId, '>> _copyPublishedPages [' + page.id() + ']');
+        var created = {date:new Date(), by:userId};
+        var srcPageId = page.id();
+        page.set('_id', null);
+        page.set('websiteId', destWebsiteId);
+        page.set('accountId', destAccountId);
+        page.set('created', created);
+        page.set('modified', created);
+        pageDao.savePublishedPage(page, function(err, destPage){
+            if(err) {
+                self.log.error(accountId, userId, 'Error saving page:', err);
+                fn(err);
+            } else {
+                var destPageId = destPage.id();
+                idMap.published_pages[srcPageId] = destPageId;
+                fn();
             }
         });
     },

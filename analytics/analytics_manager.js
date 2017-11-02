@@ -496,7 +496,7 @@ module.exports = {
                             pageEvents:[]
                         };
                         _.each(result.sessions, function(session){
-                           console.log('-------------session===========',session);
+                           //console.log('-------------session===========',session);
                             if(!_.contains(_result.session_id, session.session_id)){
                                 _result.session_id.push(session.session_id);
                             }
@@ -525,8 +525,8 @@ module.exports = {
                         _.each(_result.pageEvents, function(pageEvent){
                             var obj = {};
                             var source_url = pageEvent.url.source;
-                            if(source_url.indexOf('404') === -1){
-                                    console.log('------------------------',pageEvent.url.source);
+                            // if(source_url.indexOf('404') === -1){
+                                    //console.log('------------------------',pageEvent.url.source);
                                     if(pageEvent.server_time_dt) {
                                         obj.pageTime = pageEvent.server_time_dt;
                                     }
@@ -534,7 +534,7 @@ module.exports = {
                                         obj.pageRequested = pageEvent.url.source;
                                     }
                                     _pageEvents.push(obj);
-                          }
+                          // }
                         });
                         _result.pageEvents = _pageEvents;
                         _resultDetails.push(_result);

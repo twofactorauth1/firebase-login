@@ -172,8 +172,11 @@
 		</a>
 		<ul class="sub-menu">
 			<li ui-sref-active="active">
-				<a ng-href="https://help.leadsource.cc">
+				<a ng-href="https://help.leadsource.cc" ng-if="!account.oem">
 					<span class="title" translate="sidebar.nav.support.HELPTOPICS"> Help Topics </span>
+				</a>
+				<a ng-if="account.oem" onclick="Intercom('showNewMessage', 'I need some additional assistance.');">
+					<span class="title"> Help </span>
 				</a>
 			</li>
 		</ul>

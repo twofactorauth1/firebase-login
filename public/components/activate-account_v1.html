@@ -11,6 +11,7 @@
 		    	</div>
 	    	</h4>
 	    </div>
+
 	    <div class="ldsrc-body steps-{{currentStep}}" ng-class="{'new-account':newAccount.plan === plans.NEW}">
 	    	<!--  Step 1 -->
 	    	<div ng-if="currentStep == 1">
@@ -57,7 +58,7 @@
 			                <div class="template-grid-item-inner">
 
 			                    <div class="template-img-container">
-			                        <img class="template-img img-responsive" ng-src="{{template.previewUrl}}"/>
+			                        <img class="template-img img-responsive" ng-src="{{template.templateImageUrl}}"/>
 			                    </div>
 
 			                    <h4 class="center">
@@ -144,6 +145,15 @@
                     </h4>
                 </div>
             </div>
+
+            <div class="activate-bg-overlay" ng-if="loading">
+				<h1 class="bg-overlay-spinner">
+					<span class="fa fa-spinner fa-spin">
+						
+					</span>
+				</h1>
+			</div>
+
 	    </div>
 	</div>
 	<div ng-if="showPreview" class="template-preview">
@@ -158,16 +168,10 @@
 	    	</h4>
 
 	    </div>
-    	<div class="template-img-container">
-            <img class="template-img img-responsive" ng-src="{{selectedTemplate.previewUrl}}"/>
+    	<div class="template-preview-container">            
+     		<iframe id="frame_template_loader" ng-src="{{frameSrc}}" >
         </div>
 	</div>
-	<div class="activate-bg-overlay" ng-if="loading">
-		<h1 class="bg-overlay-spinner">
-			<span class="fa fa-spinner fa-spin">
-				
-			</span>
-		</h1>
-	</div>
+	
 </div>
 <div data-ng-include data-src="'/views/partials/leadsource-existing-account-email.html'"></div>

@@ -31,7 +31,7 @@
         }
         function setFilterDates(){
             var _startDate = moment().subtract(29, 'days');
-            var _endDate = moment();
+            var _endDate = moment(new Date()).add(1,'days');
             // Today
             if($scope.accountDayDiffrence < 1){
                 _startDate = moment().startOf('day');

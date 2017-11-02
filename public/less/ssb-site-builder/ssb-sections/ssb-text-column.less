@@ -117,11 +117,28 @@
 	    padding-right: 0px;
 	    padding-left: 0px;
 	}
-    .abs_overlay{
+    .abs_overlay, .admin_grid_view{
         width: 100%;
-        position: absolute;
+		position: absolute;
+		top: 0;
+		bottom: 0;
+		left: 0;
     }
-
+	.v-dispaly-center-align{
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+	.v-dispaly-top-align{
+		display: flex; 
+		align-items: flex-start;
+		justify-content: center;
+	}
+	.v-dispaly-bottom-align{
+		display: flex; 
+		align-items: flex-end;
+		justify-content: center;
+	}		
     [class*="ssb-component-layout-columns-spacing-1"],
     [class*="ssb-component-layout-columns-spacing-2"],
     [class*="ssb-component-layout-columns-spacing-3"],

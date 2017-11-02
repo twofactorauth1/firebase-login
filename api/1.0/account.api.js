@@ -546,8 +546,12 @@ _.extend(api.prototype, baseApi.prototype, {
         if(req.body.billing) {
             //TODO: handle billing
         }
+        var oem = false;
+        if(req.body.oem && req.body.oem == true) {
+            oem = true;
+        }
 
-        accountManager.createAccount(accountId, userId, orgId, subdomain, username, password, billing, function(err, account){
+        accountManager.createAccount(accountId, userId, orgId, subdomain, username, password, billing, oem, function(err, account){
             self.log.debug(accountId, userId, '<< createAccount', account);
             self.sendResultOrError(resp, err, account, "Error creating account");
         });
