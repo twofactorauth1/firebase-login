@@ -908,8 +908,15 @@ _.extend(api.prototype, baseApi.prototype, {
                 } else {
                     tagSet = tagSet.concat(contact_type);
                 }
-
-                var passkey = req.body.passkey;
+                var extra = req.body.extra;
+                var passkey = '';
+                if(extra) {
+                    _.each(extra, function(extraField){
+                        if(extraField.name === 'passkey') {
+                            passkey = extraField.value;
+                        }
+                    });
+                }
                 /*
                  * Do some validation for orgId:5
                  */
