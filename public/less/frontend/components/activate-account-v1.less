@@ -177,6 +177,7 @@
 			color: #FFFFFF;
 			padding: 20px;
 			top: 0;
+			left: 0;
 			.preview-header-buttons{
 				float: right;
 				.btn-choose-template{
@@ -238,6 +239,10 @@
 			bottom:0; 
 			width:100%; 
 			height:calc(~"100vh - 84px");
+			@media screen and (max-width: 496px){
+				height:calc(~"100vh - 123px");
+				top:123px; 
+			}
 		}
 	}
 }
