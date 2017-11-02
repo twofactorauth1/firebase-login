@@ -34,7 +34,10 @@
             </a>
         </li>
         <li>
-            <a class="topbar-help-topics" href="https://help.leadsource.cc">
+            <a ng-if="account.oem" class="topbar-help-topics" onclick="Intercom('showNewMessage', 'I need some additional assistance.');">
+                <i class="ti-help-alt"></i> <span translate="topbar.help.MAIN">Help</span>
+            </a>
+            <a ng-if="!account.oem" class="topbar-help-topics" href="https://help.leadsource.cc">
                 <i class="ti-help-alt"></i> <span translate="topbar.help.MAIN">Help</span>
             </a>
         </li>

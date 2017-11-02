@@ -183,6 +183,25 @@
 			</li>
 		</ul>
 	</li>
+	<li ng-if="account.oem" ng-class="{'active open':$state.includes('app.support')}">
+		<a href="javascript:void(0)">
+			<div class="item-content">
+				<div class="item-media">
+					<i class="ti-info-alt"></i>
+				</div>
+				<div class="item-inner">
+					<span class="title" translate="sidebar.nav.support.MAIN"> Support </span><i class="icon-desktop"></i>
+				</div>
+			</div>
+		</a>		
+		<ul class="sub-menu">
+			<li ui-sref-active="active">
+				<a onclick="Intercom('showNewMessage', 'I need some additional assistance.');">
+					<span class="title"> Help</span>
+				</a>
+			</li>
+		</ul>
+	</li>
 </ul>
 <div class="wrapper ng-scope" ng-if="account.billing.plan==='NO_PLAN_ARGUMENT'">
     <!--accountConstant.plan_types.TRIAL-->
