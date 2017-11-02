@@ -12,7 +12,7 @@ angular.module('mainApp').directive("elem", function ($timeout) {
 		template: '<div class="element-wrap fr-view" ng-class="className" id="{{getId()}}">' +
 			'<div  ng-class="{{vm.elementClass()}}"  ng-attr-style="{{vm.elementStyle(false)}}" class="ssb-text-settings {{vm.showHideClass()}}" >' +
 			'<div ng-if="component.isOverlayActive" class="bg slider-overlay-bg-1" ng-style ="{\'background\': component.overlayBackground, opacity: component.overlayOpacity === 0 ?  component.overlayOpacity : component.overlayOpacity/100  || 0 , \'height\': component.isOverlayActive ? component.gridHeight+\'px\':\'\' }"></div>' +
-			'<div class="word-break " ng-class ="{ \'abs_overlay\': component.isOverlayActive  }" ng-bind-html="ngModel | unsafe"></div>' +
+			'<div class="word-break {{vm.verticalAlignment()}}" ng-class ="{ \'abs_overlay\': component.isOverlayActive  }" ng-bind-html="ngModel | unsafe"></div>' +
 			'</div>' +
 			'</div>',
 		link: function (scope, element) {

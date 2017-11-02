@@ -19,6 +19,7 @@
 		vm.elementId = null;
 		vm.parentTextElement = null;
 		vm.showHideClass = showHideClass;
+		vm.verticalAlignment=verticalAlignment;
 		vm.parentTextElementModelAttribute = null;
 		vm.parentTextElementClassNameAttribute = null;
 		vm.parentComponent = null;
@@ -55,7 +56,13 @@
 			'spacing': {}
 		};
 		vm.showHide = showHide;
-
+		function verticalAlignment(){
+			if(vm.elementData.vertical_align){
+				return "v-dispaly-"+vm.elementData.vertical_align+"-align";
+			} else{
+				return "v-dispaly-auto-align";
+			}
+		}
 		function showHideClass() {
 			var classString = "";
 			if (vm.elementData) {
