@@ -632,7 +632,7 @@ module.exports = {
                 width: 'window',
                 height: 'all'
             },
-            renderDelay: 25000,
+            renderDelay: 5000,
             phantomConfig:{'ignore-ssl-errors': 'true', 'debug':'true', 'ssl-protocol':'any'}
         };
         self.log.debug('calling webshot [' + uri + ']');
