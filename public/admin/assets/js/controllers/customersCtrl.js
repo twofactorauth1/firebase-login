@@ -170,8 +170,9 @@
             var username = $scope.username;
             var password = $scope.password;
             var oem = $scope.oem;
+            var passkey = $scope.passkey;
             $scope.showCustomers = false;
-            CustomerService.addNewCustomer(orgId, subdomain, username, password, oem, function(err, value){
+            CustomerService.addNewCustomer(orgId, subdomain, username, password, oem, passkey, function(err, value){
                 $scope.showCustomers = true;
                 if(err) {
                     toaster.pop('warning', err.message);

@@ -908,6 +908,15 @@ _.extend(api.prototype, baseApi.prototype, {
                 } else {
                     tagSet = tagSet.concat(contact_type);
                 }
+
+                var passkey = req.body.passkey;
+                /*
+                 * Do some validation for orgId:5
+                 */
+                if(account.get('orgId') ===5 && account.get('oem') === false && account.get('passkey') && account.get('passkey') !== passkey) {
+                    self.log.warn('Passkey [' + passkey + '] does not match the passkey on account [' + account.get('passkey') + ']');
+                    return self.wrapError(resp, 400, 'Passkey mismatch', 'Account ID incorrect. Please try again or contact Tessco to confirm your Account ID.');
+                }
                 contactDao.findMany(query, $$.m.Contact, function(err, list){
                     if(err) {
                         self.log.error('Error checking for existing contact: ' + err);

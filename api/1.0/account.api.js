@@ -550,8 +550,9 @@ _.extend(api.prototype, baseApi.prototype, {
         if(req.body.oem && req.body.oem == true) {
             oem = true;
         }
+        var passkey = req.body.passkey;
 
-        accountManager.createAccount(accountId, userId, orgId, subdomain, username, password, billing, oem, function(err, account){
+        accountManager.createAccount(accountId, userId, orgId, subdomain, username, password, billing, oem, passkey, function(err, account){
             self.log.debug(accountId, userId, '<< createAccount', account);
             self.sendResultOrError(resp, err, account, "Error creating account");
         });
