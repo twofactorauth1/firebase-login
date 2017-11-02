@@ -57,7 +57,7 @@
 			                <div class="template-grid-item-inner">
 
 			                    <div class="template-img-container">
-			                        <img class="template-img img-responsive" ng-src="{{template.previewUrl}}"/>
+			                        <img class="template-img img-responsive" ng-src="{{template.templateImageUrl}}"/>
 			                    </div>
 
 			                    <h4 class="center">
@@ -158,8 +158,8 @@
 	    	</h4>
 
 	    </div>
-    	<div class="template-img-container">
-            <img class="template-img img-responsive" ng-src="{{selectedTemplate.previewUrl}}"/>
+    	<div class="template-preview-container">            
+     		<iframe id="frame_template_loader" ng-src="{{frameSrc}}" >
         </div>
 	</div>
 	<div class="activate-bg-overlay" ng-if="loading">

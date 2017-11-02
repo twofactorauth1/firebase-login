@@ -1,7 +1,7 @@
 /*global app, angular, window,Fingerprint,CryptoJS,document,console, $*/
 /*jslint unparam:true*/
 /* eslint-disable no-console */
-app.directive('activateAccountComponent', ['$filter', '$timeout', '$modal', '$location', 'accountService', 'activateAccountService', function ($filter, $timeout, $modal, $location, accountService, activateAccountService) {
+app.directive('activateAccountComponent', ['$filter', '$sce', '$timeout', '$modal', '$location', 'accountService', 'activateAccountService', function ($filter, $sce, $timeout, $modal, $location, accountService, activateAccountService) {
 	'use strict';
 	return {
 		scope: {
@@ -35,15 +35,15 @@ app.directive('activateAccountComponent', ['$filter', '$timeout', '$modal', '$lo
 			scope.templates = [
 				{
 					_id: 2746,
-					previewUrl: "https://s3.amazonaws.com/indigenous-digital-assets/test_account_2715/Tessco_content_png_1508233372188"
+					templateImageUrl: "https://s3.amazonaws.com/indigenous-digital-assets/test_account_2715/Tessco_content_png_1508233372188"
 				},
 				{
 					_id: 2,
-					previewUrl: "https://s3.amazonaws.com/indigenous-digital-assets/test_account_2715/Tessco_content_png_1508233372188"
+					templateImageUrl: "https://s3.amazonaws.com/indigenous-digital-assets/test_account_2715/Tessco_content_png_1508233372188"
 				},
 				{
 					_id: 3,
-					previewUrl: "https://s3.amazonaws.com/indigenous-digital-assets/test_account_2715/Tessco_content_png_1508233372188"
+					templateImageUrl: "https://s3.amazonaws.com/indigenous-digital-assets/test_account_2715/Tessco_content_png_1508233372188"
 				}
 			];
 
@@ -63,9 +63,21 @@ app.directive('activateAccountComponent', ['$filter', '$timeout', '$modal', '$lo
 				scope.currentStep = 3;
 			}
 
+            function generateTemplateUrl(template){
+                var windowHostname = window.location.hostname;
+                var hostname = "";
+                if (windowHostname.indexOf(".local") > -1 || windowHostname.indexOf(".test.") > -1) {
+                    hostname = template.subdomain + '.test.leadsource.cc';
+                } else {
+                    hostname = template.subdomain + '.leadsource.cc';
+                }
+                return $sce.trustAsResourceUrl("//" + hostname);
+            }
+
 			function previewTemplate(template){
 				scope.selectedTemplate = template;
 				scope.showPreview = true;
+                scope.frameSrc = generateTemplateUrl(template);
 			}
 
 			function backToTemplates(){
@@ -73,6 +85,7 @@ app.directive('activateAccountComponent', ['$filter', '$timeout', '$modal', '$lo
 			}
 
 			function resetSelectedTemplate(){
+                scope.frameSrc = "";
 				scope.selectedTemplate = undefined;
 				scope.showPreview = false;
 			}
@@ -134,10 +147,7 @@ app.directive('activateAccountComponent', ['$filter', '$timeout', '$modal', '$lo
             function loadTemplates() {
                 activateAccountService.getAccountTemplates(function(data){
                     if(data) {
-                        scope.templates = [];
-                        _.each(data, function(accountTemplate){
-                            scope.templates.push({_id:accountTemplate._id, previewUrl:accountTemplate.templateImageUrl});
-                        });
+                        scope.templates = data;                        
                     }
                 });
             }
