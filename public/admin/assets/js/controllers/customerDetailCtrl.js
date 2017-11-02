@@ -343,7 +343,18 @@
 				if (err) {
 					toaster.pop('warning', err.message);
 				} else {
-					toaster.pop('success', 'Account template updated.');
+					if(isTemplateAccount){
+						customerService.makeEvergreen($scope.customer._id, function (err, value) {
+							if (err) {
+								toaster.pop('warning', err.message);
+							} else {
+								toaster.pop('success', 'Account template updated.');
+							}
+						});
+					}
+					else{
+						toaster.pop('success', 'Account template updated.');
+					}
 				}
 			});
 		}
