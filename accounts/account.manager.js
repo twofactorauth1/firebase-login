@@ -614,7 +614,7 @@ var accountManager = {
         });
     },
 
-    createAccount: function(accountId, userId, orgId, subdomain, username, password, billing, oem, fn) {
+    createAccount: function(accountId, userId, orgId, subdomain, username, password, billing, oem, passkey, fn) {
         var self = this;
         self.log.debug(accountId, userId, '>> createAccount');
         if(!userManager) {
@@ -649,6 +649,7 @@ var accountManager = {
                     orgId:orgId,
                     subdomain:subdomain,
                     oem:oem,
+                    passkey:passkey,
                     created:{
                         date: new Date(),
                         by:userId

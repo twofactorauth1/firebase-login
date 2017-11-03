@@ -338,6 +338,16 @@
 			updateCustomerDetails(false);
 		};
 
+		$scope.refreshTemplateImage = function () {
+			customerService.refreshTemplateImage($scope.customer, function (err, customer) {
+				if (err) {
+					toaster.pop('warning', err.message);
+				} else {
+					toaster.pop('success', 'Template image updated.');
+				}
+			});
+		};
+
 		function updateCustomerDetails(isTemplateAccount) {
 			customerService.updateCustomerTemplateAccount($scope.customer, isTemplateAccount, function (err, customer) {
 				if (err) {

@@ -126,6 +126,21 @@
             'misc'
         ];
 
+
+        ssbService.contentSectionDisplayOrderLeadSource = [
+            'navigation',
+            'carousels',
+            'services',            
+            'forms',
+            'gallery',
+            'text',
+            'team',
+            'contact',
+            'social',
+            'footer',
+            'blog'
+        ];
+
         ssbService.contentSectionIcons = {
             'navigation':{
                 'icon': 'fa-reorder'
@@ -133,7 +148,13 @@
             'welcome hero':{
                 'icon': 'fa-bullhorn'
             },
+            'carousels':{
+                'icon': 'fa-bullhorn'
+            },
             'products & services':{
+                'icon': 'fa-shopping-cart'
+            },
+            'services':{
                 'icon': 'fa-shopping-cart'
             },
             'donations':{
@@ -737,6 +758,24 @@
         function getPlatformSections() {
 
             function success(data) {
+                // Special case to handle platform sections on basis of orgId
+                _.each(data, function(section){
+                    if(ssbService.orgId){
+                        if(section.orgConfig){
+                            var orgConfig = _.find(section.orgConfig, function(config){
+                                return config.orgId == ssbService.orgId
+                            });
+                            if(orgConfig){
+                                if(orgConfig.filter){
+                                    section.filter = orgConfig.filter;
+                                }
+                                if(orgConfig.preview){
+                                    section.preview = orgConfig.preview;
+                                }
+                            }
+                        }
+                    }
+                })
                 ssbService.platformSections = data;
                 //console.log('SimpleSiteBuilderService requested getPlatformSections: ' + data);
             }

@@ -4,7 +4,7 @@
     </div>
     <div class="modal-body bg-white no-padding" stop-event="touchend">
         <div ng-show="settingsView == 'all'" class="padding-10 padding-top-20">
-            <div class="col-sm-4">
+            <div class="col-sm-4" ng-if="!account.oem">
                 <div class="panel panel-transparent margin-bottom-0">
                     <div class="panel-heading padding-bottom-0 padding-top-0" style="min-height: inherit">
                         <div class="panel-title text-azure text-large">
