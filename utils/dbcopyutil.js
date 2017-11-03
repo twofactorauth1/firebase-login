@@ -165,6 +165,59 @@ var copyutil = {
         });
     },
 
+    updatePlatformSectionsLeadSource :function(fn) {
+        var srcURL = mongoConfig.TEST_MONGODB_CONNECT;
+        //var srcURL = mongoConfig.PROD_MONGODB_CONNECT
+        var srcMongo = mongoskin.db(srcURL, {safe: true});
+
+        var sections = srcMongo.collection('sections');
+
+        sections.find({accountId:0, enabled: true}).toArray(function(err, sectionArry){
+            async.each(sectionArry, function(section, cb){
+                if(section.filter == 'welcome hero'){
+                    section.orgConfig = [
+                        {
+                            "orgId" : 5,
+                            "filter" : "carousels"
+                        }
+                    ]
+                    sections.save(section, function(){
+                        cb();
+                    });
+                }
+                else if(section.filter == 'testimonials' && section.version == 2){
+                    section.orgConfig = [
+                        {
+                            "orgId" : 5,
+                            "filter" : "carousels"
+                        }
+                    ]
+                    sections.save(section, function(){
+                        cb();
+                    });
+                }
+                else if(section.filter == 'products & services' && section.type !== 'products'){                    
+                    section.orgConfig = [
+                        {
+                            "orgId" : 5,
+                            "filter" : "services"
+                        }
+                    ]
+                    sections.save(section, function(){
+                        cb();
+                    });
+                }
+                else{
+                    cb();
+                }
+            }, function done(){
+                console.log('done');
+                fn();
+            });
+        });
+    },
+
+
     _ensureLatestSectionProperty: function(accountId, dbConnect, fn) {
         var self = this;
         var srcMongo = mongoskin.db(dbConnect, {safe:true});

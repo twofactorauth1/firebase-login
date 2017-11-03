@@ -671,10 +671,18 @@ module.exports = function(grunt) {
 
     });
 
-    grunt.registerTask('doUpdateBlogPages', 'A task to update blocg pages', function(){
+    grunt.registerTask('doUpdateBlogPages', 'A task to update blog pages', function(){
 
         var done = this.async();
         dbcopyutil.updateBlogPages( done);
+
+    });
+
+
+    grunt.registerTask('doUpdatePlatformSectionsLeadSource', 'A task to update platform sections for leadsource', function(){
+
+        var done = this.async();
+        dbcopyutil.updatePlatformSectionsLeadSource( done);
 
     });
 

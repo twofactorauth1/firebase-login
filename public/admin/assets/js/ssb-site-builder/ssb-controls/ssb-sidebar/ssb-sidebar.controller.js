@@ -755,6 +755,8 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
                 * - an array of sections to add to a page, sorted and filtered
                 */
                 vm.uiState.contentSectionDisplayOrder = _.invert(_.object(_.pairs(SimpleSiteBuilderService.contentSectionDisplayOrder)));
+                if(SimpleSiteBuilderService.orgId == 5)
+                    vm.uiState.contentSectionDisplayOrder = _.invert(_.object(_.pairs(SimpleSiteBuilderService.contentSectionDisplayOrderLeadSource)));
                 vm.enabledPlatformSections = _(vm.state.platformSections).chain() // allow chaining underscore methods
 
                                                 .sortBy(function(x) { // sort by predetermined order
@@ -831,27 +833,10 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
                 // Special case for LeadSource
 
                 if(SimpleSiteBuilderService.orgId == 5){
-                    var prodExists = _.find(vm.sectionFilters, function (section) {
-                        return section.lowercase === 'products & services';
-                    });
-                    if(prodExists){
-                        prodExists.capitalized = "Services";
-                    }
-
-                    var donationIndex = _.findIndex(vm.sectionFilters, {
-                        lowercase: 'donations'
-                    });
-
-                    if(donationIndex > -1){
-                        vm.sectionFilters.splice(donationIndex, 1);
-                    }
-
-                    vm.enabledPlatformSections = _.filter(vm.enabledPlatformSections, function(section){
-                        return section.type != 'products'
+                    vm.sectionFilters = _.filter(vm.sectionFilters, function(section){
+                        return _.contains(SimpleSiteBuilderService.contentSectionDisplayOrderLeadSource, section.lowercase)
                     })
                 }
-
-
 
                 vm.setFilterType = function (label) {
                     vm.typefilter = label;
@@ -886,7 +871,7 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
             var orgConfig = _.find(section.orgConfig, function(config){
                 return config.orgId == orgId
             });
-            if(orgConfig){
+            if(orgConfig && orgConfig.preview){
                 previewImage = orgConfig.preview;
             }
         }
