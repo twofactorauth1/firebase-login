@@ -6,6 +6,7 @@ app.controller('AppCtrl', ['$rootScope', '$scope', '$state', '$translate', '$win
   function ($rootScope, $scope, $state, $translate, $window, $document, $timeout, $modal, cfpLoadingBar, UserService, AccountService, accountConstant) {
 
     AccountService.getAccount(function (account) {
+      account.oem = true;
       $scope.account = account;
 
       $rootScope.account = account;
