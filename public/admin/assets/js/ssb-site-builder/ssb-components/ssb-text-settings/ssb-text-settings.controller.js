@@ -57,10 +57,12 @@
 		};
 		vm.showHide = showHide;
 		function verticalAlignment(){
-			if(vm.elementData.vertical_align){
-				return "v-dispaly-"+vm.elementData.vertical_align+"-align";
-			} else{
-				return "v-dispaly-auto-align";
+			if (vm.elementData) {
+				if(vm.elementData.vertical_align){
+					return "v-dispaly-"+vm.elementData.vertical_align+"-align";
+				} else{
+					return "v-dispaly-auto-align";
+				}
 			}
 		}
 		function showHideClass() {
