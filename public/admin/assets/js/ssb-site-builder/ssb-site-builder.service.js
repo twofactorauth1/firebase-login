@@ -148,7 +148,13 @@
             'welcome hero':{
                 'icon': 'fa-bullhorn'
             },
+            'carousels':{
+                'icon': 'fa-bullhorn'
+            },
             'products & services':{
+                'icon': 'fa-shopping-cart'
+            },
+            'services':{
                 'icon': 'fa-shopping-cart'
             },
             'donations':{
