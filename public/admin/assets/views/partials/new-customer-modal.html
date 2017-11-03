@@ -33,6 +33,11 @@
                 <label class="">Password</label>
                 <input name="futureuserpassword" id="input-password" class="form-control" ng-model="$parent.password" placeholder="Password" type="password" autocomplete="false">
             </div>
+            <div class="form-group">
+                <label ng-if="orgId._id == 5" class="">VAR Account ID</label>
+                <label ng-if="orgId._id != 5" class="">Passkey</label>
+                <input name="passkey" id="input-passkey" class="form-control" ng-model="$parent.passkey" placeholder="{{orgId._id == 5 ? 'VAR Account ID' : 'Passkey'}}" type="text">
+            </div>
         </form>
     </div>
     <div class="clearfix"></div>
