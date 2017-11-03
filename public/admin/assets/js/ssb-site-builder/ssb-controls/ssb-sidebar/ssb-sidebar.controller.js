@@ -74,7 +74,6 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
     vm.fontWeightOptions = SimpleSiteBuilderService.getFontWeightOptions();
     vm.bodyFontWeightOptions = SimpleSiteBuilderService.bodyFontWeightOptions();
     vm.checkIfSelected = checkIfSelected;
-    vm.getPreviewImage = getPreviewImage;
     function checkIfSelected(value, newValue){
         if(value && newValue)
             return value.replace(/'/g, "").replace(/, /g, ",") == newValue.replace(/"/g, "").replace(/, /g, ",");
@@ -862,20 +861,6 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
             }
         }, true);
 
-    }
-
-
-    function getPreviewImage(section, orgId){
-        var previewImage = section.preview;
-        if(section.orgConfig){
-            var orgConfig = _.find(section.orgConfig, function(config){
-                return config.orgId == orgId
-            });
-            if(orgConfig && orgConfig.preview){
-                previewImage = orgConfig.preview;
-            }
-        }
-        return previewImage;
     }
 
     function hideFromMenu(){
