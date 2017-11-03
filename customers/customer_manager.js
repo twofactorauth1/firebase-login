@@ -573,6 +573,36 @@ module.exports = {
         });
     },
 
+    refreshTemplateImage: function(accountId, userId, customerId, fn) {
+        var self = this;
+        self.log.debug(accountId, userId, '>> updateCustomerTemplateAccount');
+        accountDao.getAccountByID(customerId, function(err, account){
+            if(account) {
+                var date = moment();
+                self.generateScreenshot(customerId, accountId, "index", function(err, url){
+                    if(err) {
+                        self.log.error(accountId, userId, 'Error saving customer template account:', err);
+                        return fn(err);
+                    } else{
+                        account.set("templateImageUrl", url);
+                        accountDao.saveOrUpdate(account, function(err, updatedCustomer){
+                            if(err) {
+                                self.log.error(accountId, userId, 'Error saving customer template account:', err);
+                                return fn(err);
+                            }
+                            else{
+                                return fn(null, updatedCustomer);
+                            }
+                        })
+                    }
+                });
+            } else {
+                return fn('requested customer not found', null);
+            }
+
+        });
+    },
+
     generateScreenshot: function(customerId, accountId,  pageHandle, fn) {
         var self = this;
         log.debug('>> generateScreenshot');

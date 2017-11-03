@@ -230,6 +230,21 @@
             });
         };
 
+        this.refreshTemplateImage = function(customer, fn){
+            var id = customer._id;
+            
+            var apiUrl = [baseUrl, 'customer', id, 'refreshTemplateImage'].join('/');
+            var cache = this.getCache();
+            $http.post(apiUrl).success(function(data){
+                if(cache) {
+                    cache.get(id).templateImageUrl = data.templateImageUrl;
+                }
+                fn(null, data);
+            }).error(function(err){
+                fn(err);
+            });
+        };
+
         this.updateCustomerOEM = function(customer, oem, fn) {
             var id = customer._id;
 

@@ -33,6 +33,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url('single/:id'), this.isAuthAndSubscribedApi.bind(this), this.getSingleCustomer.bind(this));
         app.post(this.url('customer/:id/notes'), this.isAuthAndSubscribedApi.bind(this), this.addCustomerNotes.bind(this));
         app.post(this.url('customer/:id/templateAccount'), this.isAuthAndSubscribedApi.bind(this), this.updateCustomerTemplateAccount.bind(this));
+        app.post(this.url('customer/:id/refreshTemplateImage'), this.isAuthAndSubscribedApi.bind(this), this.refreshTemplateImage.bind(this));
         app.post(this.url('customer/:id/oem'), this.isAuthAndSubscribedApi.bind(this), this.updateCustomerOEM.bind(this));
         app.post(this.url('customer/:id/insights'), this.isAuthAndSubscribedApi.bind(this), this.updateCustomerInsights.bind(this));
         app.post(this.url('customer/:id/showhide'), this.isAuthAndSubscribedApi.bind(this), this.updateCustomerShowHide.bind(this));
@@ -230,6 +231,32 @@ _.extend(api.prototype, baseApi.prototype, {
                     var orgDomain = urlUtils.getSubdomainFromRequest(req).orgDomain;
                     manager.updateCustomerTemplateAccount(accountId, userId, customerId, customerDetails, function(err, updatedCustomer){
                         self.log.debug(accountId, userId, '<< updateCustomerTemplateAccount');
+                        self.sendResultOrError(resp, err, updatedCustomer, 'Error updating template account');
+                    });
+                } else {
+                    self.wrapError(resp, 400, 'Unsupported Method', 'This method is unsupported');
+                }
+            });
+        }
+    },
+
+    refreshTemplateImage: function(req, resp) {
+        var self = this;
+        var accountId = parseInt(self.accountId(req));
+        var userId = self.userId(req);
+        self.log.debug(accountId, userId, '>> refreshTemplateImage');
+        var customerId = parseInt(req.params.id);        
+        if(accountId === appConfig.mainAccountID) {
+            manager.refreshTemplateImage(accountId, userId, customerId, function(err, updatedCustomer){
+                self.log.debug(accountId, userId, '<< refreshTemplateImage');
+                self.sendResultOrError(resp, err, updatedCustomer, 'Error updating template account');
+            });
+        } else {
+            self.isOrgAdmin(accountId, userId, req, function(err, val) {
+                if (val === true) {
+                    var orgDomain = urlUtils.getSubdomainFromRequest(req).orgDomain;
+                    manager.refreshTemplateImage(accountId, userId, customerId, function(err, updatedCustomer){
+                        self.log.debug(accountId, userId, '<< refreshTemplateImage');
                         self.sendResultOrError(resp, err, updatedCustomer, 'Error updating template account');
                     });
                 } else {
