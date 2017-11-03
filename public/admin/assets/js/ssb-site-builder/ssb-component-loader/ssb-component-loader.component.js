@@ -24,6 +24,7 @@
 			},
 			replace: true,
 			link: function (scope, element, attrs, ctrl) {
+        //console.log('------------------',ctrl.component.type);
 				var newEl, compiled, template = '<div ' + ctrl.component.type + '-component ' +
 					'id="component_' + ctrl.component._id + '" component="vm.component" ' +
 					'class="ssb-component ssb-{{vm.component.type}} {{vm.componentClass(vm.component)}}" ' +
