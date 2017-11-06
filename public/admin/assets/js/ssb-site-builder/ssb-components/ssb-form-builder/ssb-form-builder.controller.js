@@ -44,6 +44,7 @@
 
 		vm._campaignObj = null;
 		vm.removeBorderStyleForNewForms = removeBorderStyleForNewForms;
+    vm.removeBorderStyle = removeBorderStyle;
 		vm.setBorderStyle = setBorderStyle;
 
 		function setBorderStyle(currentElement, btnStyle) { 
@@ -73,7 +74,7 @@
 			currentElement.style.setProperty('border-radius', '4px', 'important'); // old default is 4px
 			currentElement.style.setProperty('border-style', "solid", 'important');
 		}
-
+    
 		function removeBorderStyleForNewForms(currentElement) { // for new
 			currentElement.style.setProperty('border-color', "none", 'important');
 			currentElement.style.setProperty('border-width', '0px', 'important');
@@ -456,6 +457,7 @@
 							// bind hover and active events to button
 
 							element.hover(function () {
+
 									var btnHoverStyle = null;
 									if (vm.component.formSettings && vm.component.formSettings.btnStyle && vm.component.formSettings.btnStyle.hover) {
 										btnHoverStyle = vm.component.formSettings.btnStyle.hover;
@@ -474,13 +476,14 @@
 										this.style.setProperty('color', btnHoverStyle.txtcolor, 'important');
 									}
 								},
-								function () {
+								function () {                
 									this.style.setProperty('background-color', (vm.originalData.bg.color || originalData.bg.color), 'important');
 									this.style.setProperty('color', (vm.originalData.txtcolor || originalData.txtcolor), 'important');
 									this.style.setProperty('border-color', (vm.originalData.borderColor || originalData.borderColor), 'important');
 									var btn = vm.originalData.btn || vm.component.btn;
 									if (btn) {
-										vm.setBorderStyle(this, btn);
+										//vm.setBorderStyle(this, btn);
+                      vm.removeBorderStyle(this);
 									} else {
 										vm.removeBorderStyleForNewForms(this);
 									}

@@ -713,6 +713,7 @@ var ziManager = {
                         }
                         row._vendorName = row.OMRC_FirmName.toLowerCase();
                         row._shortVendorName = self._getTruncatedVendorName(row._vendorName);
+                        row._shortVendorDisplayName = self._getTruncatedVendorName(row.OMRC_FirmName);
                     }
 
                 });
