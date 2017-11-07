@@ -316,6 +316,8 @@ var insightsManager = {
                         self.log.error('Error getting email to render: ' + err);
                         cb(err);
                     } else {
+                       
+                        (email.attributes['handle']==="insights-template") ?  email.attributes['tableBgColor']='#ffffff' : email.attributes['tableBgColor']='transparent' ; 
                         app.render('emails/base_email_v2', emailMessageManager.contentTransformations(email.toJSON()), function(err, html) {
                             cb(err, account, sectionDataMap, html);
                         });
