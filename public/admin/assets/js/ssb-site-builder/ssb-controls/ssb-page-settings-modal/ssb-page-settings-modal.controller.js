@@ -279,7 +279,6 @@ app.controller('SiteBuilderPageSettingsModalController', ['$scope', '$timeout', 
         } else if(restriction && restriction === 'RESTRICTION_ORGWIDE') {
             vm.page.secure = true;
         }
-        console.log('vm.page.secure:', vm.page.secure);
     });
 
     vm.loading = true;
