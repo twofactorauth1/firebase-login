@@ -6,13 +6,14 @@
  */
 
 var mongoBaseDao = require('./base.dao.mongo');
+var mysqlBaseDao = require('./base.dao.mysql');
 var utils = require("../utils/commonutils");
 
 var baseDao = function () {
 
 };
 
-_.extend(baseDao.prototype, mongoBaseDao, {
+_.extend(baseDao.prototype, mongoBaseDao, mysqlBaseDao, {
 
     name: "",
     model: null,
