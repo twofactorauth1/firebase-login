@@ -4,8 +4,8 @@
     class="ssb-sidebar-section-panel draggable fade-in"
     ind-draggable>
 
-    <h4 class="ssb-sidebar-sub-heading draggable-handle">
-    <span
+    <h4 class="ssb-sidebar-sub-heading draggable-handle">   
+         <span
             onhide="vm.state.editSection=false"
             id="edit_section_name"
             ng-if="vm.state.editSection"
@@ -358,6 +358,14 @@
             ui-state="vm.uiState">
         </ssb-sidebar-settings-panel>
 
+        <ssb-sidebar-settings-panel
+            class="ssb-sidebar-section-panel-component-panel"
+            ng-if="(vm.uiState.openSidebarSectionPanel.id === vm.uiState.activeElement._id) && vm.uiState.activeElement._id.indexOf('image-element') == 0"
+            settings-template="assets/js/ssb-site-builder/ssb-components/ssb-image-gallery/ssb-gallery-setting.html"
+            component="vm.uiState.activeElement"
+            state="vm.state"
+            ui-state="vm.uiState">
+        </ssb-sidebar-settings-panel>
 
         <ssb-sidebar-settings-panel
             class="ssb-sidebar-section-panel-component-panel container-fluid"
