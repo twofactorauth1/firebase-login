@@ -483,6 +483,8 @@ _.extend(api.prototype, baseApi.prototype, {
             accountManager.activateAccount(accountId, userId, orgId, username, password, templateId, function(err, account){
                 self.log.debug(accountId, userId, '<< activateAccount');
                 req.session.activated=true;
+                var key = 'host_' + req.get('host');
+                $$.g.cache.remove(key);
                 self.sendResultOrError(resp, err, account, "Error creating account");
             });
         });
