@@ -532,8 +532,7 @@ function ssbEmailBuilderSidebarController($scope, $attrs, $filter, $document, $t
     function addBackground(sectionIndex, componentIndex) {
         vm.openMediaModal('media-modal', 'MediaModalCtrl', null, 'lg');
 
-        vm.insertMediaCallback = function(asset) {
-            debugger
+        vm.insertMediaCallback = function(asset) { 
             if(vm.state.page){
                 if (componentIndex !== undefined && componentIndex !== null) {
                     vm.state.page.sections[vm.uiState.activeSectionIndex].components[vm.uiState.activeComponentIndex].bg.img.url = asset.url;

@@ -16,10 +16,11 @@ function ssbEditWrap($rootScope, $compile, $timeout, SimpleSiteBuilderService,Ut
                 init();
             }
 
-            function init() {
+            function init() { 
                 var isSection = element.hasClass('ssb-page-section');
                 var isComponent = element.hasClass('component-wrap');
                 var isElement = element.hasClass('ssb-element');
+                var isImage = element.hasClass('ssb-img');
                 var compileInProcess = false;
 
                 (function setupEvents() {
@@ -70,7 +71,7 @@ function ssbEditWrap($rootScope, $compile, $timeout, SimpleSiteBuilderService,Ut
                         element.find('> .editable-title:first').addClass('ssb-on');
                         element.find('> .editable-cover:first').addClass('ssb-on');
 
-                    } else if (isElement) {
+                    } else if (isElement|| isImage) {
 
                         handleElementMouseOver(e);
 
@@ -118,7 +119,7 @@ function ssbEditWrap($rootScope, $compile, $timeout, SimpleSiteBuilderService,Ut
                                                 'section-index="null" ' +
                                                 'component-index="null">' +
                                             '</ssb-edit-control>';
-                            componentScope.ssbElement = { title: 'Text Element', type: 'Text Element' };
+                            componentScope.ssbElement = { title: isImage? 'Image Overlay':'Text Element', type: isImage? 'Image Overlay':'Text Element' };
                             $compile(template)(componentScope, function(clonedEditControl, scope) {
                                 compiledEditControl(el, clonedEditControl);
                             });
@@ -274,14 +275,19 @@ function ssbEditWrap($rootScope, $compile, $timeout, SimpleSiteBuilderService,Ut
 
                         }
 
-                    } else if (isElement) {
-
+                    } else if (isElement ) { 
                         if (el.find('.ssb-active-component').length === 0) {
                             e.stopPropagation();
                             handleElementClick(el, el.closest('.ssb-component'));
                         }
 
-                    } else {
+                    } else if (isImage ) { 
+                        if (el.find('.ssb-active-component').length === 0) {
+                            e.stopPropagation();
+                            handleImageClick(el, el.closest('.ssb-component'));
+                        }
+
+                    }else {
 
                         console.log('component has clickable child area, allow bubble up to section');
 
@@ -565,7 +571,61 @@ function ssbEditWrap($rootScope, $compile, $timeout, SimpleSiteBuilderService,Ut
                     }, 100);
 
                 }
+                function handleImageClick(el, clickedComponent) {
+                    UtilService.flyoverhideonclick();
+                    console.log('isImage edit control');
 
+                    var clickedComponentScope = clickedComponent.scope();
+                    var clickedTextElement = el.find('.ssb-img-settings:first');
+
+                    if (clickedTextElement.length === 0) {
+                        clickedTextElement = el.closest('.ssb-img-settings');
+                    }
+
+                    hideAllControls();
+
+                    $timeout(function() {
+
+                        var dataEditId = el.attr('data-edit-id');
+
+                        if (!dataEditId) {
+                            dataEditId = el.closest('[data-edit-id]').attr('data-edit-id');
+                        }
+
+                        var editControlComponent = angular.element('[data-control-id="control_' + dataEditId + '"]');
+                        var editControlId = editControlComponent.attr('data-control-id');
+                        var uiStateObj = {};
+                        if (clickedTextElement && clickedTextElement.scope() && clickedTextElement.scope().vm) {
+                            uiStateObj.hoveredComponentEl = clickedTextElement;
+                            uiStateObj.hoveredComponentEditControl = editControlComponent;
+                            uiStateObj.activeElement = clickedTextElement.scope().vm.elementData;
+                        }
+
+                        /**
+                         * update uiState
+                         */
+                        $rootScope.$broadcast('$ssbUpdateUiState', uiStateObj);
+
+                        /**
+                         * show menu pen
+                         */
+                        $rootScope.$broadcast('$ssbMenuPenVisibleForElement', editControlId, 'element');
+
+                        editControlComponent.addClass('ssb-active-edit-control ssb-on');
+                        clickedTextElement.addClass('ssb-active-component');
+
+                        /*
+                         * if contextual menu is already open, open directly from single click
+                         */
+                        if (clickedComponentScope && (clickedComponentScope.vm.uiState.showSectionPanel || SimpleSiteBuilderService.isIENotEdge)) {
+                            $timeout(function() {
+                                editControlComponent.find('.ssb-settings-btn').click();
+                            });
+                        }
+
+                    }, 100);
+
+                }
                 function hideHoverControls() {
 
                     //hide editable-title's and borders
