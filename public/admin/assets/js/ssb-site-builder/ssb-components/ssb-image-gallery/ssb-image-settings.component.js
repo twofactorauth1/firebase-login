@@ -9,7 +9,7 @@
 			bindToController: true,
 			scope: true,
 			link: function (scope, element, attrs, ctrl) {  
-				ctrl.init(element,attrs.index);
+				ctrl.init(element,attrs.index,attrs.id);
 			}
 		};
 
