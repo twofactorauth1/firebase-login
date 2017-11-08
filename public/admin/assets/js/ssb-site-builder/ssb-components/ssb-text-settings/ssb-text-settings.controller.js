@@ -18,8 +18,7 @@
 		vm.element = null;
 		vm.elementId = null;
 		vm.parentTextElement = null;
-		vm.showHideClass = showHideClass;
-		vm.verticalAlignment=verticalAlignment;
+		vm.showHideClass = showHideClass;		
 		vm.parentTextElementModelAttribute = null;
 		vm.parentTextElementClassNameAttribute = null;
 		vm.parentComponent = null;
@@ -56,8 +55,9 @@
 			'spacing': {}
 		};
 		vm.showHide = showHide;
+		vm.verticalAlignment = verticalAlignment;
 		function verticalAlignment(){
-			if (vm.elementData) {
+			if (vm && vm.elementData) {
 				if(vm.elementData.vertical_align){
 					return "v-dispaly-"+vm.elementData.vertical_align+"-align";
 				} else{
