@@ -88,7 +88,12 @@ app.directive('featureListComponent', ["$window", "$timeout", function ($window,
 				}
 			};
 
-			scope.setSelectedFeatureIndex = function (index) {
+			scope.setSelectedFeatureIndex = function (index, event) {
+        var el = angular.element(event.target.parentNode);
+        if(el) {
+          el.addClass('ssb-edit-wrap');
+          el.attr("elem");          
+        }  
 				scope.loading = true;
 				scope.features.featureIndex = index;
 				$timeout(function () {
