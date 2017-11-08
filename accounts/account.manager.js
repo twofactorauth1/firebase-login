@@ -63,7 +63,7 @@ var accountManager = {
                 if(!contactDao.getContactsByTagArray) {
                     contactDao = require('../dao/contact.dao');
                 }
-                contactDao.getContactsByTagArray(accountId, userId, ['Pre-Activation'], function(err, contacts){
+                contactDao.getContactsByTagArray(accountId, userId, ['pre-activation'], function(err, contacts){
                     if(err) {
                         self.log.error('Error getting contacts:', err);
                         fn(err);
