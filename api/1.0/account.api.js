@@ -482,6 +482,7 @@ _.extend(api.prototype, baseApi.prototype, {
             var templateId = req.body.templateId;
             accountManager.activateAccount(accountId, userId, orgId, username, password, templateId, function(err, account){
                 self.log.debug(accountId, userId, '<< activateAccount');
+                req.session.activated=true;
                 self.sendResultOrError(resp, err, account, "Error creating account");
             });
         });
