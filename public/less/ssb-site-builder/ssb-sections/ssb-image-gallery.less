@@ -144,8 +144,34 @@
                     }
                 }
             }
-            .image-gallery{
+            .image-gallery,.image-overlay{
                 min-height: 250px!important;
+            }
+            div.image-overlay{
+                overflow: hidden;
+                &.mouse-off{
+                    display: block;
+                }
+                &.mouse-on {
+                    display: none
+                }
+                div.header{
+                    display: flex; 
+                    align-items: flex-end;
+                    justify-content: center;
+                    font-weight: bold;
+                    height: 50%;
+                    text-decoration: none;
+                    min-height: 125px!important;
+                }
+                div.desc{
+                    display: flex; 
+                    align-items: flex-start;
+                    justify-content: center;
+                    height: 50%;
+                    text-decoration: none;
+                    min-height: 125px!important;
+                }
             }
         }
     }
