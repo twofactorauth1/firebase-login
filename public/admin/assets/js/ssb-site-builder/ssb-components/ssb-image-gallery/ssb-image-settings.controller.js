@@ -10,11 +10,12 @@
 			pvm = null,
 			limit = 10,
 			pScope = $scope.$parent;
-		vm.init = function (ele,imageIndex) { 
+		vm.init = function (ele,imageIndex ,id) { 
+			debugger;
 			vm.element=ele; 
 			vm.imageIndex=angular.copy(imageIndex);
-			vm.elementData.id= angular.copy("image-element" + vm.imageIndex);
-			vm.elementData._id= angular.copy("image-element" + vm.imageIndex);
+			vm.elementData.id= angular.copy("image-element" + id);
+			vm.elementData._id= angular.copy("image-element" + id);
 			setupActiveElementWatch();
 			vm.elementData.imageOverlay = 
 				angular.extend(vm.elementData.imageOverlay, getStylesForModel());
