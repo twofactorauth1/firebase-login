@@ -11,7 +11,6 @@
 			limit = 10,
 			pScope = $scope.$parent;
 		vm.init = function (ele,imageIndex ,id) { 
-			debugger;
 			vm.element=ele; 
 			vm.imageIndex=angular.copy(imageIndex);
 			vm.elementData.id= angular.copy("image-element" + id);

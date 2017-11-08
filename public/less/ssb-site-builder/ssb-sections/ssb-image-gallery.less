@@ -81,6 +81,32 @@
                 min-height: 250px!important;
             }
         }
+        div.image-overlay{
+            overflow: hidden;
+            &.mouse-off{
+                display: block;
+            }
+            &.mouse-on {
+                display: none
+            }
+            div.header{
+                display: flex; 
+                align-items: flex-end;
+                justify-content: center;
+                font-weight: bold;
+                height: 50%;
+                text-decoration: none;
+                min-height: 125px;
+            }
+            div.desc{
+                display: flex; 
+                align-items: flex-start;
+                justify-content: center;
+                height: 50%;
+                text-decoration: none;
+                min-height: 125px;
+            }
+        }
 
     }
 
@@ -269,8 +295,34 @@
                 text-align: center;
                 margin: 0 auto;
             }
-            .image-gallery{
+            .image-gallery,.image-overlay{
                 min-height: 250px!important;
+            }
+            div.image-overlay{
+                overflow: hidden;
+                &.mouse-off{
+                    display: block;
+                }
+                &.mouse-on {
+                    display: none
+                }
+                div.header{
+                    display: flex; 
+                    align-items: flex-end;
+                    justify-content: center;
+                    font-weight: bold;
+                    height: 50%;
+                    text-decoration: none;
+                    min-height: 125px
+                }
+                div.desc{
+                    display: flex; 
+                    align-items: flex-start;
+                    justify-content: center;
+                    height: 50%;
+                    text-decoration: none;
+                    min-height: 125px
+                }
             }
         }
     }
@@ -288,12 +340,36 @@
             .single-image{
                 border: 0 !important;
             }
-            div.image-gallery{
+            div.image-gallery,div.image-overlay{
                 border-radius: 50%!important;
                 min-height: 350px;
                 width: 350px !important;
                 height: 350px;
                 float: none !important;
+            }
+            div.image-overlay{
+                overflow: hidden;
+                &.mouse-off{
+                    display: block;
+                }
+                &.mouse-on {
+                    display: none
+                }
+                div.header{
+                    display: flex; 
+                    align-items: flex-end;
+                    justify-content: center;
+                    font-weight: bold;
+                    height: 50%;
+                    text-decoration: none;
+                }
+                div.desc{
+                    display: flex; 
+                    align-items: flex-start;
+                    justify-content: center;
+                    height: 50%;
+                    text-decoration: none;
+                }
             }
             .editing.image-wrap {
                 &:hover {
