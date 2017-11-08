@@ -3588,7 +3588,7 @@ var emailMessageManager = {
         return arr;
     },
 
-    contentTransformations: function(email) {
+    contentTransformations: function(email) {      
         var self = this;
         var components = [];
         var keys = ['logo','title','text','text1','text2','text3'];

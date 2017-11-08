@@ -234,6 +234,7 @@ function ssbSiteBuilderEditControlController($scope, $rootScope, $interval, $att
         section = SimpleSiteBuilderService.setTempUUIDForSection(section);
 
         section.accountId = 0;
+        
 
         SimpleSiteBuilderService.addSectionToPage(section, null, null, null, insertAtIndex).then(function() {
             console.log('duplicateSection -> SimpleSiteBuilderService.addSectionToPage')

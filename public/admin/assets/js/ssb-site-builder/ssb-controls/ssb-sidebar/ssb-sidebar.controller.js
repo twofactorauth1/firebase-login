@@ -263,7 +263,7 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
     }
 
     function addSectionToPage(section, version, replaceAtIndex, oldSection, copyAtIndex) {
-        vm.uiState.showSectionPanel = false;
+        vm.uiState.showSectionPanel = false;   
         return (
             SimpleSiteBuilderService.addSectionToPage(section, version, replaceAtIndex, vm.state.page.sections[vm.uiState.activeSectionIndex], copyAtIndex).then(function() {
                 vm.scrollToActiveSection();
@@ -274,6 +274,7 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
     }
 
     function addSectionToPageToIndex(section) {
+
         var el = angular.element(".ssb-page-section.ssb-active-edit-control");
         
         var insertAtIndex = undefined;

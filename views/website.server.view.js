@@ -708,13 +708,13 @@ _.extend(view.prototype, BaseView.prototype, {
                         });
                     }
                     else{
-                        ssbManager.getPublishedPage(accountId, webpageData.website._id, 'marketing', function(err, page){
+                        ssbManager.getPublishedPage(accountId, webpageData.website._id, 'var-landing', function(err, page){
                             if(page) {
                                 page.set('handle', 'activate');
                                 _.each(page.get('sections'), function(section){
                                     if (section.global && section.hiddenOnPages) {
-                                        if(section.hiddenOnPages['marketing']) {
-                                            section.hiddenOnPages['activate'] = section.hiddenOnPages['marketing'];
+                                        if(section.hiddenOnPages['var-landing']) {
+                                            section.hiddenOnPages['activate'] = section.hiddenOnPages['var-landing'];
                                         }
                                     }
                                 });
