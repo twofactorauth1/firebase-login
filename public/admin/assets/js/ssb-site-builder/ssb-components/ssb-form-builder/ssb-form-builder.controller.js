@@ -47,7 +47,7 @@
     vm.removeBorderStyle = removeBorderStyle;
 		vm.setBorderStyle = setBorderStyle;
 
-		function setBorderStyle(currentElement, btnStyle) { 
+		function setBorderStyle(currentElement, btnStyle) {
 			if (btnStyle.border &&
 				btnStyle.border.show) {
 				removeBorderStyleForNewForms(currentElement);
@@ -74,7 +74,7 @@
 			currentElement.style.setProperty('border-radius', '4px', 'important'); // old default is 4px
 			currentElement.style.setProperty('border-style', "solid", 'important');
 		}
-    
+
 		function removeBorderStyleForNewForms(currentElement) { // for new
 			currentElement.style.setProperty('border-color', "none", 'important');
 			currentElement.style.setProperty('border-width', '0px', 'important');
@@ -174,9 +174,9 @@
 					}
 					if (!btn.border.width) {
 						btn.border.width = 0;
-					} 
+					}
 					styleString += ' border-width: ' + btn.border.width + 'px   !important;';
-					
+
 					if (!btn.border.radius) {
 						btn.border.radius = 0;
 					}
@@ -239,6 +239,7 @@
 
 
 		vm.createUser = function (form) {
+
 			// Admin check
 			$scope.setinvalid = true;
 
@@ -344,9 +345,11 @@
 				},
 				extra: extra
 			};
-			if (vm.formBuilder.email)
+
+            //make email lowercase
+           	if (vm.formBuilder.email)
 				formatted.details[0].emails.push({
-					email: vm.formBuilder.email
+					email: (vm.formBuilder.email && vm.formBuilder.email !== "") ? vm.formBuilder.email.toLowerCase() : vm.formBuilder.email
 				});
 			if (vm.formBuilder.phone) {
 				formatted.details[0].phones.push({
@@ -476,7 +479,7 @@
 										this.style.setProperty('color', btnHoverStyle.txtcolor, 'important');
 									}
 								},
-								function () {                
+								function () {
 									this.style.setProperty('background-color', (vm.originalData.bg.color || originalData.bg.color), 'important');
 									this.style.setProperty('color', (vm.originalData.txtcolor || originalData.txtcolor), 'important');
 									this.style.setProperty('border-color', (vm.originalData.borderColor || originalData.borderColor), 'important');
