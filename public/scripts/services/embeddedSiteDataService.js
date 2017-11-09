@@ -70,7 +70,7 @@ mainApp.factory('embeddedSiteDataService', ['$http', '$location', '$cacheFactory
 			path = path.replace('/', '');
 		}
 
-		return path;
+		return path.trim();
 	}
 
 

@@ -324,7 +324,7 @@ _.extend(view.prototype, BaseView.prototype, {
         var data = {},
             self = this;
         self.log.debug('>> renderCachedPage', handle);
-        
+        handle = handle.trim();
         async.waterfall([
             function getWebpageData(cb) {
                 cmsDao.getDataForWebpage(accountId, 'index', function (err, value) {
