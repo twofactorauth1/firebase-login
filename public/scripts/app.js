@@ -191,6 +191,7 @@ var mainApp = angular
                 template: function (urlattr) {
                     var s = '<ssb-page-styles></ssb-page-styles><div class="main-include" ssb-data-styles  data-ng-include="';
                     s += " '/template/" + urlattr.name.toLowerCase();
+                    s = s.trim();
                     if (urlattr.cachebuster) {
                         s += '?cachebuster=' + urlattr.cachebuster;
                     }
@@ -219,6 +220,7 @@ var mainApp = angular
                 template: function (urlattr) {
                     var s = '<ssb-page-styles></ssb-page-styles><div class="main-include" ssb-data-styles data-ng-include="';
                     s += " '/template/" + urlattr.name.toLowerCase() + '/' + urlattr.name_1.toLowerCase();
+                    s = s.trim();
                     if (urlattr.cachebuster) {
                         s += '?cachebuster=' + urlattr.cachebuster;
                     }
