@@ -372,6 +372,7 @@
 					vm.userExists = true;
 				} else if (err && err.code !== 409) {
 					vm.formError = true;
+					$scope.setinvalid = false;
 					$timeout(function () {
 						vm.formError = false;
 					}, 5000);
