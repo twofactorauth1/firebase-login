@@ -315,6 +315,7 @@ app.directive('simpleFormComponent', ["ipCookie", '$window', '$timeout', 'userSe
 			scope.formValidations = formValidations;
 			scope.user = {};
 			scope.createUser = function (simpleForm) {
+
 				scope.userExists = false;
 				scope.isBusy = true;
 				var fingerprint = new Fingerprint().get(),
@@ -380,7 +381,8 @@ app.directive('simpleFormComponent', ["ipCookie", '$window', '$timeout', 'userSe
 					}
 				};
 				formatted.details[0].emails.push({
-					email: scope.user.email
+                    email: (scope.user.email && scope.user.email !== "") ?scope.user.email.toLowerCase() :scope.user.email
+
 				});
 				if (scope.user.phone || scope.user.extension) {
 					formatted.details[0].phones.push({
