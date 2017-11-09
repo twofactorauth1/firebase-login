@@ -31,7 +31,21 @@
                <span tooltip-placement="top" tooltip-append-to-body="true" tooltip="Overlay description"><i class="fa fa-info-circle" /></span>
                </label>
                <textarea id="successMessage" class="form-control  autosize area-animated msd-elastic: \n;" ng-model="component.imageOverlay.description"></textarea>
-        </div> 
+        </div>
+        <div class="form-group ssb-spectrum-color-picker-small"> 
+            <div class="ssb-spectrum-color-picker-background-container">
+                    <spectrum-colorpicker class="ssb-spectrum-color-picker-background" 
+                    format="'rgb'" options="vm.spectrum.options" ng-model="component.imageOverlay.color"></spectrum-colorpicker>
+                    <i class="fa fa-eyedropper" />
+            </div>
+            <label>Font color
+                <span tooltip-placement="top"
+                    tooltip-append-to-body="true" tooltip-append-to-body="true" 
+                    tooltip="Font color."> <i 
+                    class="fa fa-info-circle" />
+                </span>
+            </label> 
+        </div>
         <div class="form-group">
             <div>
                 <label>
@@ -90,19 +104,6 @@
                 </rzslider>
             </div>
         </div>
-        <div class="form-group ssb-spectrum-color-picker-small"> 
-            <div class="ssb-spectrum-color-picker-background-container">
-                    <spectrum-colorpicker class="ssb-spectrum-color-picker-background" 
-                    format="'rgb'" options="vm.spectrum.options" ng-model="component.imageOverlay.color"></spectrum-colorpicker>
-                    <i class="fa fa-eyedropper" />
-            </div>
-            <label>Fill color
-                <span tooltip-placement="top"
-                    tooltip-append-to-body="true" tooltip-append-to-body="true" 
-                    tooltip="Overlay color."> <i 
-                    class="fa fa-info-circle" />
-                </span>
-            </label> 
-        </div>
+        
     </div>
 </div> 
