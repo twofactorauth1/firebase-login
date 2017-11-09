@@ -23,6 +23,7 @@
 				$scope.toggleNavClass = function (ele) {
 					var li = $(ele.target).parents("li");
 					if (li) {
+						var subnavul = $(li).find(".nav-sub-menu");
 						if (!li.hasClass("nav-active")) {
 							li.parents("section").addClass("overflow_visible");
 							li.siblings().removeClass("nav-active");
@@ -30,6 +31,16 @@
 						} else {
 							li.removeClass("nav-active");
 							li.parents("section").remove("overflow_visible");
+						}
+
+						if(subnavul){
+							subnavul.css("top", "");
+							var offset = subnavul.offset();
+							var height = subnavul.height();
+							var screenHeight = $(".wrap-content").height() || $("body").innerHeight();
+							if(offset.top + height >= screenHeight){
+								subnavul.css("top", -height +"px");
+							}
 						}
 					}
 				};
