@@ -1,7 +1,7 @@
 'use strict';
 /*global app, window*/
 (function (angular) {
-    app.controller('CustomersCtrl', ["$scope", "$state", "toaster", "$modal", "$window", "CustomerService", "OrganizationService",'$timeout', 'SweetAlert', "$location", "$q", function ($scope, $state, toaster, $modal, $window, CustomerService, OrganizationService,  $timeout, SweetAlert, $location, $q) {
+    app.controller('CustomersCtrl', ["$scope", "$state", "toaster", "$modal", "$window", "CustomerService", "OrganizationService",'$timeout', 'SweetAlert', "$location", "$q","formValidations", function ($scope, $state, toaster, $modal, $window, CustomerService, OrganizationService,  $timeout, SweetAlert, $location, $q,formValidations) {
 
         $scope.tableView = 'list';
         $scope.itemPerPage = 100;
@@ -10,7 +10,7 @@
         $scope.bulkActionChoice = {};
         $scope.tagsBulkAction = {};
         $scope.organizations=[];
-        
+
 
         if (!$state.current.sort) {
             $scope.order = "reverse";
@@ -34,12 +34,12 @@
                 $scope.customers = customers.results;
                 $scope.showCustomers = true;
                 console.log('customers:', customers);
-            }); 
+            });
         };
 
         $scope.getCustomers();
 
-
+        $scope.emailRegexPattern = formValidations.email;
         $scope.getOrganizations = function () {
             OrganizationService.loadOrganizations(function(organizations){
                 $scope.organizations = organizations;
@@ -76,7 +76,7 @@
             modified: function (value) {
                 return value.modified.date;
             },
-            
+
             trialDays: function(value){
                 var _days = 'N/A';
                 if(value.billing && value.billing.plan == 'NO_PLAN_ARGUMENT'){
@@ -179,7 +179,7 @@
                 } else {
                     $scope.closeModal();
                     CustomerService.refreshCustomers(function(customers){
-                        $scope.customers = customers.results; 
+                        $scope.customers = customers.results;
                     });
                 }
             });
