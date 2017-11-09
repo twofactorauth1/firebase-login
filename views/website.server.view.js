@@ -324,7 +324,9 @@ _.extend(view.prototype, BaseView.prototype, {
         var data = {},
             self = this;
         self.log.debug('>> renderCachedPage', handle);
-
+        if(handle){
+            handle = handle.trim();
+        }
         async.waterfall([
             function getWebpageData(cb) {
                 cmsDao.getDataForWebpage(accountId, 'index', function (err, value) {
@@ -659,7 +661,9 @@ _.extend(view.prototype, BaseView.prototype, {
         var data = {},
             self = this;
         self.log.debug('>> renderActivateSetupPage', handle);
-
+        if(handle){
+            handle = handle.trim();
+        }
         async.waterfall([
             function getWebpageData(cb) {
                 cmsDao.getDataForWebpage(accountId, 'index', function (err, value) {
