@@ -16,11 +16,12 @@
                 <div class="col-sm-6 col-md-4 col-xs-12 image-wrap {{isEditing ? 'editing' : ''}}">
                     <div data-edit class="edit-wrap ssb-edit-wrap ssb-img thumbnail img-height single-image" >
                         <a href="{{image.url}}" title="{{image.label}}" data-gallery id="img-gallery-{{$index}}">
-                            <div id="{{component._id}}-{{$index}}"  class="ssb-img-settings img-responsive img-gallery-{{$index}}
-                             image-gallery center" data-index="{{$index}}"
-                             alt="{{image.label}}" style="background-image:url('{{image.url}}')" >
+                            <div id="{{component._id}}-{{$index}}"  class="ssb-img-settings img-responsive img-gallery-{{$index}} image-gallery center" data-index="{{$index}}"
+                             alt="{{image.label}}" ng-attr-style="background-image: url('{{image.url}}')" image= "image">
                                 <div class="image-overlay" ng-if="isEditing && vm.elementData.imageOverlay.active"
-                                ng-style="{ 'width': '100%' , 'height': '100%' , 'background-color':vm.elementData.imageOverlay.backgroundcolor,
+                                ng-style="{ 'width': '100%' ,
+                                            'height': '100%' ,
+                                            'background-color':vm.elementData.imageOverlay.backgroundcolor,
                                             'opacity':vm.elementData.imageOverlay.backgroundopacity/100,
                                             'font-size':vm.elementData.imageOverlay.font.fontSize+'px',
                                             'font-family':vm.elementData.imageOverlay.font.fontFamily,

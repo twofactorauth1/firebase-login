@@ -80,36 +80,23 @@ function ssbEditWrap($rootScope, $compile, $timeout, SimpleSiteBuilderService,Ut
                 }
 
 
-                function handleElementMouseOver(e) {
-
+                function handleElementMouseOver(e) { 
                     var el = angular.element(e.currentTarget);
                     var hasActiveEditControl = el.hasClass('ssb-active-edit-control');
-
                     if (!hasActiveEditControl) {
                         e.stopPropagation();
-
-                        hideHoverControls();
-                        // angular.element('.ssb-edit-wrap, .editable-title, .editable-cover, [data-edit]', '.ssb-main').removeClass('ssb-on');
-
+                        hideHoverControls(); 
                         var isList = el.is('ul') || el.is('ol');
                         var componentScope = el.closest('.ssb-component').scope();
-
                         if (!componentScope) {
                             return
                         }
-
                         var editableTitleText = componentScope.vm.component.type;
-
-                        el.addClass('ssb-on');
-
-                        var hasEditControl = angular.element('[data-control-id="control_' + el.attr('data-edit-id') + '"]').length > 0;
-
-                        if (!hasEditControl && !compileInProcess) {
+                        el.addClass('ssb-on');                        
+                        if (!compileInProcess) {
                             compileInProcess = true;
                             var tempUUID = SimpleSiteBuilderService.getTempUUID();
-
                             el.attr('data-edit-id', tempUUID);
-
                             var template = '<ssb-edit-control ' +
                                                 'data-control-id="control_' + tempUUID + '" ' +
                                                 'class="ssb-edit-control ssb-edit-control-component ssb-edit-control-element" ' +
@@ -125,33 +112,22 @@ function ssbEditWrap($rootScope, $compile, $timeout, SimpleSiteBuilderService,Ut
                             });
                         }
                     }
-
                 }
 
-
                 function handleComponentPartialAreaMouseOver(e) {
-
                     var el = angular.element(e.currentTarget);
                     var hasActiveEditControl = el.hasClass('ssb-active-edit-control');
-
                     if (!hasActiveEditControl) {
                         e.stopPropagation();
-
-                        hideHoverControls();
-                        // angular.element('.ssb-edit-wrap, .editable-title, .editable-cover, [data-edit]', '.ssb-main').removeClass('ssb-on');
-
+                        hideHoverControls(); 
                         var isList = el.is('ul') || el.is('ol');
                         var componentScope = el.closest('.ssb-component').scope();
-
                         if (!componentScope) {
                             return
                         }
-
                         var editableTitleText = componentScope.vm.component.type;
                         var hasEditableCover = el.children('.editable-cover').length > 0;
-
                         el.addClass('ssb-on');
-
                         if (!hasEditableCover) {
                             if (!isList) {
                                 el.append(
@@ -165,7 +141,6 @@ function ssbEditWrap($rootScope, $compile, $timeout, SimpleSiteBuilderService,Ut
                                 )
                             }
                         }
-
                         var hasEditControl = angular.element('[data-control-id="control_' + el.attr('data-edit-id') + '"]').length > 0;
 
                         if (!hasEditControl && !compileInProcess) {
@@ -193,11 +168,9 @@ function ssbEditWrap($rootScope, $compile, $timeout, SimpleSiteBuilderService,Ut
                 }
 
                 function handleSectionOrComponentMouseLeave(e) {
-
                     element.removeClass('ssb-on');
                     element.find('.editable-title:first').removeClass('ssb-on');
                     element.find('.editable-cover:first').removeClass('ssb-on');
-
                 }
 
                 function handleComponentPartialAreaMouseLeave(e) {
