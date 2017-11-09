@@ -321,7 +321,6 @@ _.extend(view.prototype, BaseView.prototype, {
     },
 
     renderCachedPage: function (accountId, handle) {
-        handle = "index ";
         var data = {},
             self = this;
         self.log.debug('>> renderCachedPage', handle);
