@@ -746,7 +746,8 @@ var dao = {
                 }
                 var query = {
                     isTemplateAccount: true,
-                    orgId: orgId
+                    orgId: orgId,
+                    _id: {$ne: accountId}
                 };
                 self.findMany(query, fn);
             }
