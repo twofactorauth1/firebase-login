@@ -115,7 +115,8 @@ function ssbSiteBuilderAccountTemplatesController($scope, $attrs, $filter, $docu
 
                 //set theme
                 SimpleSiteBuilderService.setupTheme(vm.state.website).then(function() {
-
+                    // Load Custom fonts
+                    SimpleSiteBuilderService.getCustomFonts();
                     // Set code permissions
 
                     SimpleSiteBuilderService.setPermissions();
