@@ -124,11 +124,17 @@ mainApp.controller('CacheCtrl', ['$scope', '$rootScope', 'embeddedSiteDataServic
                 			|| document.getElementById("section_" + $location.$$hash) 
                 			|| document.getElementById("component_" + $location.$$hash)
 		            	}, function(newValue, oldValue) {
-			                if (newValue && !angular.equals(newValue, oldValue)) {
+			                if (newValue) {
 			                	unbindWatcher();
 								var waitTime = 1000;
 								if(firstheroNavId){
 									waitTime = 2000;
+								}
+								if(SsbPageSectionService.isSticky)
+									waitTime = 2000;
+								// if page is loaded from cache 
+								if(angular.equals(newValue, oldValue)){
+									waitTime = 500;
 								}
 			                	$timeout(function() {
 			                		var element = document.getElementById($location.$$hash);

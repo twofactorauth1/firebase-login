@@ -836,6 +836,8 @@
 					}
 
 				} else {
+					if (ssbPageSectionService)
+						ssbPageSectionService.isSticky = true;
 					$timeout(function () {
 						$(vm.element[0]).sticky({
 							zIndex: 999
@@ -853,6 +855,7 @@
 						//new StickyState(vm.element[0]);
 					}, 1000);
 				}
+				
 			}
 			vm.elementLoaded = true;
 		}
@@ -1014,7 +1017,7 @@
 				);
 			}
 
-			if (!vm.uiState && vm.section && vm.section.layoutModifiers && vm.section.layoutModifiers.fixed) {
+			if (!vm.uiState && vm.section && vm.section.layoutModifiers && vm.section.layoutModifiers.fixed) {				
 				$timeout(function () {
 					vm.setFixedPosition(_isVerticalNav);
 				}, 0);

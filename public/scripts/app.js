@@ -190,7 +190,7 @@ var mainApp = angular
             .when('/:name', {
                 template: function (urlattr) {
                     var s = '<ssb-page-styles></ssb-page-styles><div class="main-include" ssb-data-styles  data-ng-include="';
-                    s += " '/template/" + urlattr.name.toLowerCase();
+                    s += " '/template/" + urlattr.name.toLowerCase().trim();
                     if (urlattr.cachebuster) {
                         s += '?cachebuster=' + urlattr.cachebuster;
                     }
@@ -235,7 +235,7 @@ var mainApp = angular
 						urlattr.name = window.location.pathname.substr(1);
 					}
                     var s = '<ssb-page-styles></ssb-page-styles><div class="main-include" ssb-data-styles  data-ng-include="';
-                    s += " '/template/" + encodeURIComponent(urlattr.name.toLowerCase());
+                    s += " '/template/" + encodeURIComponent(urlattr.name.toLowerCase().trim());
                     if (urlattr.cachebuster) {
                         s += '?cachebuster=' + urlattr.cachebuster;
                     }

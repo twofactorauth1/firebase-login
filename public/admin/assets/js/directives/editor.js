@@ -150,6 +150,7 @@ app.directive("elem", function ($rootScope, $timeout, $compile, SimpleSiteBuilde
 				$(function () {
 					var blogPostEditor = attrs.ssbBlogEditor,
 						helpTopicsEditor = attrs.helpTopics,
+						ssbEmailEditor = attrs.ssbEmailEditor,
 						froalaConfig = $.FroalaEditor.build(
 							(function () {
 								if (attrs.broadcastMessageEditor) {
@@ -177,9 +178,8 @@ app.directive("elem", function ($rootScope, $timeout, $compile, SimpleSiteBuilde
 					// Special case to allow empty healcode-widget tag
 					$.merge(froalaConfig.htmlAllowedEmptyTags, ["healcode-widget"]);
 
+			      	if(!ssbEmailEditor && SimpleSiteBuilderService.customFonts && angular.isDefined(SimpleSiteBuilderService.customFonts)){
 
-
-			      	if(SimpleSiteBuilderService.customFonts && angular.isDefined(SimpleSiteBuilderService.customFonts)){
 				        var fonts = SimpleSiteBuilderService.getFontFamilyOptions();
 						froalaConfig.fontFamily = fonts;
 			      	}
