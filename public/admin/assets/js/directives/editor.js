@@ -282,6 +282,11 @@ app.directive("elem", function ($rootScope, $timeout, $compile, SimpleSiteBuilde
 
 							}).on('froalaEditor.commands.before', function (e, editor, cmd) {
 
+                                //wrap current element with div for list
+                                if(cmd==="formatOL" || cmd === "formatUL"){
+                                   editor.format.apply('span');
+                                }
+
                                 //wrap element with span before applying changes.
                                 if(cmd === "fontFamily" || cmd === "fontWeight"){
                                        editor.format.apply('span', { class: 'custom-span' });
