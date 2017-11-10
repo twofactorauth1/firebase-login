@@ -98,19 +98,23 @@
                 if (component.spacing.ml) {
                     var type;
                     (component.spacing.ml.indexOf("%") > -1) ? type = "": type = "px";
-                    styleString += component.spacing.ml == 'auto' ? 'margin-left: ' + component.spacing.ml + ';float: none;' : 'margin-left: ' + component.spacing.ml + type + ';';
+                    styleString += component.spacing.ml == 'auto' ? 'margin-left: ' + component.spacing.ml + ';' : 'margin-left: ' + component.spacing.ml + type + ';';
                 }
 
                 if (component.spacing.mr) {
                     var spacing_type;
                     (component.spacing.mr.indexOf("%") > -1) ? spacing_type = "": spacing_type = "px";
-                    styleString += (component.spacing.mr == 'auto') ? 'margin-right: ' + component.spacing.mr + ';float: none;' : 'margin-right: ' + component.spacing.mr + spacing_type + ';';
+                    styleString += (component.spacing.mr == 'auto') ? 'margin-right: ' + component.spacing.mr + ';' : 'margin-right: ' + component.spacing.mr + spacing_type + ';';
                 }
 
+                //adding margin auto only if both margin left is auto and margin right is auto
+                if (component.spacing.mr ==="auto" && component.spacing.ml === "auto") {
+                  styleString += "float:none;";
+                }
                 if (component.spacing.mw) {
                     styleString += (component.spacing.mw == '100%') ?
                         'max-width: ' + component.spacing.mw + ';' :
-                        'max-width: ' + component.spacing.mw + 'px;margin-left:auto!important;margin-right:auto!important;';
+                        'max-width: ' + component.spacing.mw + 'px;';
                 }
 
                 if (component.spacing.lineHeight) {
