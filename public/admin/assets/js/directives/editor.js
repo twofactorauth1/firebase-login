@@ -177,13 +177,13 @@ app.directive("elem", function ($rootScope, $timeout, $compile, SimpleSiteBuilde
 					// Special case to allow empty healcode-widget tag
 					$.merge(froalaConfig.htmlAllowedEmptyTags, ["healcode-widget"]);
 
-					
-					
+
+
 			      	if(SimpleSiteBuilderService.customFonts && angular.isDefined(SimpleSiteBuilderService.customFonts)){
 				        var fonts = SimpleSiteBuilderService.getFontFamilyOptions();
 						froalaConfig.fontFamily = fonts;
 			      	}
-			    
+
 
 					$timeout(function () {
 
@@ -281,6 +281,11 @@ app.directive("elem", function ($rootScope, $timeout, $compile, SimpleSiteBuilde
 								// $('.ssb-site-builder .ssb-edit-control').removeClass('hide-edit-control');
 
 							}).on('froalaEditor.commands.before', function (e, editor, cmd) {
+
+                                //wrap element with span before applying changes.
+                                if(cmd === "fontFamily"){
+                                       editor.format.apply('span', { class: 'custom-span' });
+                                }
 								if (cmd === 'videoInsertEmbed') {
 									if ($.FE)
 										$.FE.VIDEO_EMBED_REGEX = froalaConfig.VIDEO_EMBED_REGEX;
@@ -318,7 +323,7 @@ app.directive("elem", function ($rootScope, $timeout, $compile, SimpleSiteBuilde
 								if (cmd === 'undo') {
 									scope.compileEditorElements(editor, true);
 								}
-
+                                 console.log('command----------',cmd);
 
 								if (cmd === 'imageStyle' || cmd === 'imageDisplay' || cmd === 'linkInsert' || cmd === 'imageAlign' || cmd === 'imageSetSize' || cmd === 'linkRemove' || cmd === 'imageRemove' || cmd === 'imageSetAlt') {
 									scope.updateFroalaContent(editor);
@@ -336,7 +341,7 @@ app.directive("elem", function ($rootScope, $timeout, $compile, SimpleSiteBuilde
 													}, 0);
 												});
 											}
-										}										
+										}
 									}
 								}
 								if (cmd === 'linkRemoveBtn') {
@@ -347,7 +352,7 @@ app.directive("elem", function ($rootScope, $timeout, $compile, SimpleSiteBuilde
 										}
 									}
 								}
-								
+
 								if(cmd=== 'tableRows' || cmd === 'tableHeader'){
 									if(editor.$el.find('.fr-selected-cell').length){
 										var padding = editor.$el.find('.fr-selected-cell').css("padding");
@@ -359,8 +364,8 @@ app.directive("elem", function ($rootScope, $timeout, $compile, SimpleSiteBuilde
 								        tableCells.css("border-width", border);
 								        tableHeaders.css("border-width", border);
 									}
-									
-							        
+
+
 							        if(cmd === 'tableHeader'){
 							        	var $popup = editor.popups.get('table.edit');
 										if ($popup) {
