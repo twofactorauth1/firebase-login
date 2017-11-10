@@ -283,7 +283,7 @@ app.directive("elem", function ($rootScope, $timeout, $compile, SimpleSiteBuilde
 							}).on('froalaEditor.commands.before', function (e, editor, cmd) {
 
                                 //wrap element with span before applying changes.
-                                if(cmd === "fontFamily"){
+                                if(cmd === "fontFamily" || cmd === "fontWeight"){
                                        editor.format.apply('span', { class: 'custom-span' });
                                 }
 								if (cmd === 'videoInsertEmbed') {
