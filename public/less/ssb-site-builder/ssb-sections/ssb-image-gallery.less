@@ -72,12 +72,12 @@
 
             .editing.image-wrap {
                 &:hover {
-                    .image-gallery,.image-overlay{
+                    .image-gallery,.image-overlay,div.image-overlay div.full_height{
                         min-height: 246px!important;
                     }
                 }
             }
-            .image-gallery,.image-overlay{
+            .image-gallery,.image-overlay,div.image-overlay div.full_height{
                 min-height: 250px!important;
             }
         }
@@ -106,6 +106,12 @@
                 height: 50%;
                 text-decoration: none;
                 min-height: 125px;
+            }
+            div.full_height{
+                display: flex; 
+                align-items: center;
+                justify-content: center; 
+                text-decoration: none;
             }
         }
         div.image-gallery:hover div.image-overlay.mouse-on{
@@ -150,7 +156,7 @@
                     }
                 }
             }
-            .image-gallery,.image-overlay{
+            .image-gallery,.image-overlay,div.image-overlay div.full_height{
                 min-height: 250px!important;
             }
             div.image-overlay{
@@ -179,6 +185,12 @@
                     text-decoration: none;
                     min-height: 125px!important;
                 }
+                div.full_height{
+                    display: flex; 
+                    align-items: center;
+                    justify-content: center; 
+                    text-decoration: none;
+                }
             }
             div.image-gallery:hover div.image-overlay.mouse-on{
                 display: block;
@@ -202,7 +214,7 @@
             .single-image{
                 border: 0 !important;
             }
-            div.image-gallery,div.image-overlay{
+            div.image-gallery,div.image-overlay,div.image-overlay div.full_height{
                 border-radius: 50%!important;
                 min-height: 350px;
                 width: 350px !important;
@@ -231,6 +243,12 @@
                     align-items: flex-start;
                     justify-content: center;
                     height: 50%;
+                    text-decoration: none;
+                }
+                div.full_height{
+                    display: flex; 
+                    align-items: center;
+                    justify-content: center; 
                     text-decoration: none;
                 }
             }
@@ -263,7 +281,7 @@
             .image-gallery-title, .image-title{
                 display:none;
             }
-            div.image-gallery,div.image-overlay{
+            div.image-gallery,div.image-overlay,div.image-overlay div.full_height{
                 min-height: 280px!important;
             }
             div.image-overlay{
@@ -291,6 +309,12 @@
                     height: 50%;
                     text-decoration: none;
                     min-height: 140px
+                }
+                div.full_height{
+                    display: flex; 
+                    align-items: center;
+                    justify-content: center; 
+                    text-decoration: none;
                 }
             }
             div.image-gallery:hover div.image-overlay.mouse-on{
@@ -339,7 +363,7 @@
                 text-align: center;
                 margin: 0 auto;
             }
-            .image-gallery,div.image-overlay{
+            .image-gallery,div.image-overlay,div.image-overlay div.full_height{
                 min-height: 250px!important;
             }
             div.image-gallery:hover div.image-overlay.mouse-on{
@@ -373,6 +397,12 @@
                     height: 50%;
                     text-decoration: none;
                     min-height: 125px
+                }
+                div.full_height{
+                    display: flex; 
+                    align-items: center;
+                    justify-content: center; 
+                    text-decoration: none;
                 }
             }
         }
@@ -401,7 +431,7 @@
                 text-align: center;
                 margin: 0 auto;
             }
-            .image-gallery,.image-overlay{
+            .image-gallery,.image-overlay,div.image-overlay div.full_height{
                 min-height: 250px!important;
             }
             div.image-overlay{
@@ -430,6 +460,12 @@
                     text-decoration: none;
                     min-height: 125px
                 }
+                div.full_height{
+                    display: flex; 
+                    align-items: center;
+                    justify-content: center; 
+                    text-decoration: none;
+                }
             }
             div.image-gallery:hover div.image-overlay.mouse-on{
                 display: block;
@@ -453,7 +489,7 @@
             .single-image{
                 border: 0 !important;
             }
-            div.image-gallery,div.image-overlay{
+            div.image-gallery,div.image-overlay,div.image-overlay div.full_height{
                 border-radius: 50%!important;
                 min-height: 350px;
                 width: 350px !important;
@@ -482,6 +518,12 @@
                     align-items: flex-start;
                     justify-content: center;
                     height: 50%;
+                    text-decoration: none;
+                }
+                div.full_height{
+                    display: flex; 
+                    align-items: center;
+                    justify-content: center; 
                     text-decoration: none;
                 }
             }
@@ -531,7 +573,7 @@
                         }
                     }
                 }
-                .image-gallery,div.image-overlay{
+                .image-gallery,div.image-overlay,div.image-overlay div.full_height{
                     min-height: 150px!important;
                 }
                 div.image-overlay{
@@ -560,6 +602,12 @@
                         text-decoration: none;
                         min-height: 75px;
                     }
+                    div.full_height{
+                        display: flex; 
+                        align-items: center;
+                        justify-content: center; 
+                        text-decoration: none;
+                    }
                 }
                 div.image-gallery:hover div.image-overlay.mouse-on{
                     display: block;
@@ -570,7 +618,7 @@
                 .img-container .img-row:nth-child(8n), .img-container .img-row:first-child{
                     .image-wrap{
                         width:50%;
-                        .image-gallery, div.image-overlay{
+                        .image-gallery, div.image-overlay,div.image-overlay div.full_height{
                             min-height: 330px!important;
                         }
                         &:hover {
@@ -592,6 +640,12 @@
                             }
                             div.desc{ 
                                 min-height: 165px;
+                            }
+                            div.full_height{
+                                display: flex; 
+                                align-items: center;
+                                justify-content: center; 
+                                text-decoration: none;
                             }
                         }
                         div.image-gallery:hover div.image-overlay.mouse-on{
