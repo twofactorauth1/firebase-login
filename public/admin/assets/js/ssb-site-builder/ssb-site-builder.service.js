@@ -1265,7 +1265,7 @@
          *
          */
         function extendComponentData(oldSection, newSection) {
-
+debugger
             var keysToOmitSection = ['$$hashKey', 'anchor', 'version', 'type', 'layout', 'visibility', 'bg', 'border', 'layoutModifiers', 'componentSortOrder', 'thumbnailCollection'];
             var keysToOmitComponent = ['$$hashKey', 'anchor', 'accountId', 'version', 'type', 'layout', 'visibility', 'bg', 'border', 'layoutModifiers', 'componentSortOrder', 'thumbnailCollection', 'nav'];
             var newComponents = angular.copy(newSection.components);
@@ -1300,6 +1300,11 @@
                
                 newSection.components = _.map(newComponents, function(c, index) {
                     var component = _.findWhere(oldComponents, { type: c.type });
+                    if(!component){
+                        component={};
+                        component._id = ssbService.getTempUUID();
+                        component.anchor = component._id;
+                    }
                     return $.extend({}, c, _.omit(component || oldComponents[index], keysToOmitComponent));
                 });
                 
