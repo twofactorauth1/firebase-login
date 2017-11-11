@@ -36,7 +36,6 @@
 					'fontFamily': '',
 					'fontSize': 12,
 				},
-				'backgroundopacity':10,
 				'backgroundcolor': '',
 				'color': '',
 				'onMouseOver': true,

@@ -16,27 +16,19 @@
                             <div id="{{component._id}}-{{$index}}" class="ssb-img-settings img-responsive img-gallery-{{$index}} image-gallery center"
                              data-index="{{$index}}" alt="{{image.label}}" ng-attr-style="background-image: url('{{image.url}}')" >
                                     <div class="image-overlay" ng-if="isEditing && vm.elementData.imageOverlay.active"
-                                    ng-style="{ 'width': '100%' ,
-                                                'height': '100%' ,
-                                                'background-color':vm.elementData.imageOverlay.backgroundcolor,
-                                                'opacity':vm.elementData.imageOverlay.backgroundopacity/100,
+                                    ng-style="{ 'background-color':vm.elementData.imageOverlay.backgroundcolor, 
                                                 'font-size':vm.elementData.imageOverlay.font.fontSize+'px',
                                                 'font-family':vm.elementData.imageOverlay.font.fontFamily,
-                                                'color':vm.elementData.imageOverlay.color
-                                            }" >
+                                                'color':vm.elementData.imageOverlay.color }" >
                                             <div class="header">{{vm.elementData.imageOverlay.heading}}</div>
                                             <div class="desc">{{vm.elementData.imageOverlay.description}}</div>
                                         
                                     </div>
                                     <div ng-if="!isEditing && image.imageOverlay.active" class="image-overlay {{image.imageOverlay.onMouseOver?'mouse-on':'mouse-off'}}"
-                                    ng-style="{ 'width': '100%' ,
-                                                'height': '100%' ,
-                                                'background-color':image.imageOverlay.backgroundcolor,
-                                                'opacity':image.imageOverlay.backgroundopacity/100,
+                                    ng-style="{ 'background-color':image.imageOverlay.backgroundcolor, 
                                                 'font-size':image.imageOverlay.font.fontSize+'px',
                                                 'font-family':image.imageOverlay.font.fontFamily,
-                                                'color':image.imageOverlay.color
-                                            }" >
+                                                'color':image.imageOverlay.color }" >
                                             <div class="header">{{image.imageOverlay.heading}}</div>
                                             <div class="desc">{{image.imageOverlay.description}}</div>
                                     </div>
