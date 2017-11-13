@@ -111,6 +111,9 @@
                 if (component.spacing.mr ==="auto" && component.spacing.ml === "auto") {
                   styleString += "float:none;";
                 }
+                else{
+                  styleString += "float:left;";
+                }
                 if (component.spacing.mw) {
                     styleString += (component.spacing.mw == '100%') ?
                         'max-width: ' + component.spacing.mw + ';' :
