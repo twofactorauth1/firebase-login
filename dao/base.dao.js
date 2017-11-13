@@ -195,6 +195,27 @@ _.extend(baseDao.prototype, mongoBaseDao, mysqlBaseDao, {
                 fn(null, value);
                 fn = type = id = null;
             });
+        } else if(self.getStorage(type) === 'mysql'){
+            if(self.getRawData(type)) {
+                self._getRawByIdMysql(id, type, function(err, value){
+                    if (err) {
+                        fn(err, value);
+                        fn = type = id = null;
+                        return;
+                    }
+
+                    if (useCache && value != null) {
+                        var key = self.getTable(type) + "_" + id;
+                        $$.g.cache.set(key, value);
+                    }
+
+                    fn(null, value);
+                    fn = type = id = null;
+                });
+            } else {
+                fn("No storage medium available for this model");
+                fn = type = id = null;
+            }
         } else {
             fn("No storage medium available for this model");
             fn = type = id = null;
@@ -239,6 +260,8 @@ _.extend(baseDao.prototype, mongoBaseDao, mysqlBaseDao, {
     findMany: function (query, type, fn) {
         if (this.getStorage(type) === "mongo") {
             this._findManyMongo(query, type, fn);
+        } else if(this.getStorage(type) === 'mysql') {
+            this._findManyRawMysql(query, type, fn);
         } else {
             fn("No storage medium available for this model type");
         }
@@ -379,6 +402,18 @@ _.extend(baseDao.prototype, mongoBaseDao, mysqlBaseDao, {
             }
         }
         return this.defaultModel.db.storage;
+    },
+
+    getRawData: function(type) {
+        if(type !== null && type.hasOwnProperty !== null) {
+            if(type.hasOwnProperty('db') && type.db.hasOwnProperty('createObject')){
+                return (type.db.createObject == true);
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
     },
 
 

@@ -19,22 +19,56 @@ if(config.useConnectionPool) {
 }
 $$.g.mysqls = $$.g.mysqls || [];
 
+var LOGGER = $$.g.getLogger("base_dao_mysql");
+
 var mysqldao = {
 
-    _getByIdMysql: function (id, type, fn) {
+    log: LOGGER,
+
+    _getRawByIdMysql: function (id, type, fn) {
+        var self = this;
         var table = this.getTable(type);
         connectionHolder.query('SELECT * FROM ' + table + ' WHERE id = ?', [id], function (error, results, fields) {
-            if (error) throw error;
-            // ...
+            if (error){
+                self.log.error('Error querying mysql:', error);
+                fn(error);
+            } else {
+                fn(null, results);
+            }
         });
     },
 
-    _findOneMysql: function (query, type, fn) {
+    _findOneRawMysql: function (query, type, fn) {
 
     },
 
-    _findManyMysql: function (query, type, fn) {
+    _findManyRawMysql: function (query, type, fn) {
+        var self = this;
+        var table = this.getTable(type);
+        var whereClause = '';
+        if(query) {
+            whereClause += query;
+        }
+        connectionHolder.query('SELECT * FROM ' + table + ' ' + whereClause,null, function (error, results, fields) {
+            if (error){
+                self.log.error('Error querying mysql:', error);
+                fn(error);
+            } else {
+                fn(null, results);
+            }
+        });
+    },
 
+
+    _createModel: function (object, type, xFields) {
+        if (object == null) {
+            return null;
+        }
+        if (_.isFunction(type)) {
+            return new type(object, xFields);
+        } else {
+            return new this.defaultModel(object, xFields);
+        }
     }
 };
 
