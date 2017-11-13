@@ -78,7 +78,8 @@ html
           td
             each component in email.components
               if component.type === 'email'
-                table(width='680px', align='center', cellpadding='0', cellspacing='0', border='0', style="border-collapse: collapse;background-image: url(https:"+ component.bg.img.url+");padding-top: "+ component.spacing.pt +";padding-bottom: "+ component.spacing.pb + ";padding-left: "+ component.spacing.pl +";padding-right: "+ component.spacing.pr +";margin-top: "+ component.spacing.mt +";margin-bottom: "+ component.spacing.mb +";margin-left: "+ component.spacing.ml +";margin-right: "+ component.spacing.mr +";background-color: "+ component.bg.color +";")
+                - var url="'https:"+component.bg.img.url+"'";
+                table(width='680px', align='center', cellpadding='0', cellspacing='0', border='0', style="border-collapse: collapse;background-image: url(!{url});padding-top: "+ component.spacing.pt +";padding-bottom: "+ component.spacing.pb + ";padding-left: "+ component.spacing.pl +";padding-right: "+ component.spacing.pr +";margin-top: "+ component.spacing.mt +";margin-bottom: "+ component.spacing.mb +";margin-left: "+ component.spacing.ml +";margin-right: "+ component.spacing.mr +";background-color: "+ component.bg.color +";")
                   tr
                     td
                       div(style='padding-left: 20px;padding-right: 20px;padding-top: 45px;padding-bottom: 45px;')
@@ -118,7 +119,8 @@ html
                   tr
                     td(align='center', width='100%')
                       if component.logo
-                        table(align='center', width='100%', cellpadding='0', cellspacing='0', border='0', style="border-collapse: collapse;background-image: url(https:"+ component.bg.img.url+"');padding-top: "+ component.spacing.pt +";padding-bottom: "+ component.spacing.pb + ";padding-left: "+ component.spacing.pl +";padding-right: "+ component.spacing.pr +";margin-top: "+ component.spacing.mt +";margin-bottom: "+ component.spacing.mb +";margin-left: "+ component.spacing.ml +";margin-right: "+ component.spacing.mr +";background-color: "+ component.bg.color +";")
+                        - var url="'https:"+component.bg.img.url+"'";
+                        table(align='center', width='100%', cellpadding='0', cellspacing='0', border='0', style="border-collapse: collapse;background-image: url(!{url});padding-top: "+ component.spacing.pt +";padding-bottom: "+ component.spacing.pb + ";padding-left: "+ component.spacing.pl +";padding-right: "+ component.spacing.pr +";margin-top: "+ component.spacing.mt +";margin-bottom: "+ component.spacing.mb +";margin-left: "+ component.spacing.ml +";margin-right: "+ component.spacing.mr +";background-color: "+ component.bg.color +";")
                           tr
                             td.wrapper(width='100%')
                                 table.device-width(width='680', cellpadding='0', cellspacing='0', border='0', style='border-collapse: collapse;margin-top: 45px;')
@@ -141,7 +143,7 @@ html
 
               if component.type === 'email-1-col'
                 - var url="https:"+component.bg.img.url;
-                | <div style="background-color: !{component.bg.color};background-image: url(!{url});padding-top: !{component.spacing.pt};padding-bottom: !{component.spacing.pb || 0};padding-left: !{component.spacing.pl || 0};padding-right: !{component.spacing.pr || 0};margin-top: !{component.spacing.mt || 0};margin-bottom: !{component.spacing.mb  || 0};margin-left: !{component.spacing.ml  || 0};margin-right: !{component.spacing.mr || 0};"> <table class="email-component-container {{component.type}}-v{{component.version}}" align="center" border="0" cellpadding="0" cellspacing="0" width="100%">
+                | <div style="background-color: !{component.bg.color};background-image: url(!{url});padding-top: !{component.spacing.pt};padding-bottom: !{component.spacing.pb || 0};padding-left: !{component.spacing.pl || 0};padding-right: !{component.spacing.pr || 0};margin-top: !{component.spacing.mt || 0};margin-bottom: !{component.spacing.mb  || 0};margin-left: !{component.spacing.ml  || 0};margin-right: !{component.spacing.mr || 0};"> <table class="email-component-container 1 {{component.type}}-v{{component.version}}" align="center" border="0" cellpadding="0" cellspacing="0" width="100%">
                 if component.title
                     |     <tr>
                     |         <td>
@@ -182,7 +184,7 @@ html
 
               if component.type === 'email-2-col'
                 - var url="https:"+component.bg.img.url;
-                | <div style="background-color: !{component.bg.color};background-image: url(!{url});padding-top: !{component.spacing.pt || 0};padding-bottom: !{component.spacing.pb  || 0};padding-left: !{component.spacing.pl || 0};padding-right: !{component.spacing.pr  || 0};margin-top: !{component.spacing.mt || 0};margin-bottom: !{component.spacing.mb || 0};margin-left: !{component.spacing.ml || 0};margin-right: !{component.spacing.mr || 0};"> <table class="email-component-container {{component.type}}-v{{component.version}}" align="center" border="0" cellpadding="0" cellspacing="0" width="100%">
+                | <div style="background-color: !{component.bg.color};padding-top: !{component.spacing.pt || 0};padding-bottom: !{component.spacing.pb  || 0};padding-left: !{component.spacing.pl || 0};padding-right: !{component.spacing.pr  || 0};margin-top: !{component.spacing.mt || 0};margin-bottom: !{component.spacing.mb || 0};margin-left: !{component.spacing.ml || 0};margin-right: !{component.spacing.mr || 0};"> <table class="email-component-container 2 {{component.type}}-v{{component.version}}" align="center" border="0" cellpadding="0" cellspacing="0" width="100%">
                 if component.title
                     |     <tr>
                     |         <td>
@@ -204,7 +206,7 @@ html
 
                 |     <tr>
                 |         <td>
-                |             <table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" id="templateColumns" style="background-color: !{component.bg.color};">
+                |             <table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" id="templateColumns" style="background-color: !{component.bg.color};background-image: url(!{url});">
                 |                 <tr>
                 |                     <td align="center" valign="top" width="50%" class="templateColumnContainer" style="padding-left:20px;padding-right:10px;">
                 |                         <table border="0" cellpadding="10" cellspacing="0" width="100%" style="color: !{component.txtcolor};">
@@ -232,7 +234,7 @@ html
 
               if component.type === 'email-3-col'
                 - var url="https:"+component.bg.img.url;
-                | <div style="background-color: !{component.bg.color};background-image: url(!{url});padding-top: !{component.spacing.pt || 0};padding-bottom: !{component.spacing.pb || 0};padding-left: !{component.spacing.pl || 0};padding-right: !{component.spacing.pr || 0};margin-top: !{component.spacing.mt || 0};margin-bottom: !{component.spacing.mb || 0};margin-left: !{component.spacing.ml || 0};margin-right: !{component.spacing.mr || 0};"><table class="email-component-container {{component.type}}-v{{component.version}}" align="center" border="0" cellpadding="0" cellspacing="0" width="100%">
+                | <div style="background-color: !{component.bg.color};background-image: url(!{url});padding-top: !{component.spacing.pt || 0};padding-bottom: !{component.spacing.pb || 0};padding-left: !{component.spacing.pl || 0};padding-right: !{component.spacing.pr || 0};margin-top: !{component.spacing.mt || 0};margin-bottom: !{component.spacing.mb || 0};margin-left: !{component.spacing.ml || 0};margin-right: !{component.spacing.mr || 0};"><table class="email-component-container 3 {{component.type}}-v{{component.version}}" align="center" border="0" cellpadding="0" cellspacing="0" width="100%">
                 if component.title
                     |     <tr>
                     |         <td>
@@ -291,7 +293,7 @@ html
 
               if component.type === 'email-footer'
                 - var url="https:"+component.bg.img.url;
-                | <div style="background-color: !{component.bg.color};background-image: url(!{url});padding-top: !{component.spacing.pt || 0};padding-bottom: !{component.spacing.pb || 0};padding-left: !{component.spacing.pl || 0};padding-right: !{component.spacing.pr || 0};margin-top: !{component.spacing.mt || 0};margin-bottom: !{component.spacing.mb || 0};margin-left: !{component.spacing.ml || 0};margin-right: !{component.spacing.mr || 0};"><table class="email-component-container {{component.type}}-v{{component.version}}" align="center" border="0" cellpadding="0" cellspacing="0" width="100%">
+                | <div style="background-color: !{component.bg.color};background-image: url(!{url});padding-top: !{component.spacing.pt || 0};padding-bottom: !{component.spacing.pb || 0};padding-left: !{component.spacing.pl || 0};padding-right: !{component.spacing.pr || 0};margin-top: !{component.spacing.mt || 0};margin-bottom: !{component.spacing.mb || 0};margin-left: !{component.spacing.ml || 0};margin-right: !{component.spacing.mr || 0};"><table class="email-component-container 4 {{component.type}}-v{{component.version}}" align="center" border="0" cellpadding="0" cellspacing="0" width="100%">
                 |     <tr>
                 |         <td>
                 |             <table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" id="templateColumns">
@@ -329,7 +331,7 @@ html
 
               if component.type === 'email-social'
                 - var url="https:"+component.bg.img.url;
-                | <table class="email-component-container {{component.type}}-v{{component.version}}" align="center" border="0" cellpadding="0" cellspacing="0" width="100%">
+                | <table class="email-component-container 4 {{component.type}}-v{{component.version}}" align="center" border="0" cellpadding="0" cellspacing="0" width="100%">
                 |     <tr>
                 |         <td>
                 |             <div style="background-color: !{component.bg.color};background-image: url(!{url});padding-top: !{component.spacing.pt || 0};padding-bottom: !{component.spacing.pb || 0};padding-left: !{component.spacing.pl || 0};padding-right: !{component.spacing.pr || 0};margin-top: !{component.spacing.mt || 0};margin-bottom: !{component.spacing.mb || 0};margin-left: !{component.spacing.ml || 0};margin-right: !{component.spacing.mr || 0};"><table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" id="templateColumns">
