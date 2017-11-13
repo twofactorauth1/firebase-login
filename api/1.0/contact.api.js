@@ -884,8 +884,10 @@ _.extend(api.prototype, baseApi.prototype, {
                 var query = {};
                 query.accountId = value.id();
                 query['details.emails.email'] = "";
-                if(req.body.details[0].emails.length)
-                    query['details.emails.email'] = new RegExp('^'+req.body.details[0].emails[0].email+'$', "i");
+                if(req.body.details[0].emails.length){
+                    var emailStr = req.body.details[0].emails[0].email.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+                    query['details.emails.email'] = new RegExp('^'+emailStr+'$', "i");
+                }
                 var skipWelcomeEmail = req.body.skipWelcomeEmail;
                 var fromContactEmail = req.body.fromEmail;
                 var campaignId = req.body.campaignId;

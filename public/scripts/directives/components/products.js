@@ -13,6 +13,9 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
             scope.order = null;
             scope.shippingStates = shippingStates;
             scope.detailedDescription = false;
+            scope.paging = {
+                currentProductPage : 1
+            }
             //cookie data fetch
             CartDetailsService.reloadItems = false;
             var cookieKey = ""; //'cart_cookie_' + scope.component._id;
@@ -31,7 +34,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
 
             scope.newShippingContactAddress = {};
             //assign and hold the currentProductPage for pagination
-            scope.currentProductPage = 1;
+            scope.paging.currentProductPage = 1;
 
             scope.addresses = {
                 labelText: "Address",
@@ -211,7 +214,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                 productComponentCookieData.productSortOrder = scope.productSortOrder.order;
                 localStorageService.set(productComponentCookieKey, productComponentCookieData);
                 filterProducts(scope.originalProducts, function() {
-                    scope.pageChanged(1);
+                    scope.pageChanged(1);                    
                 });
             }
 
@@ -1616,9 +1619,9 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
              */
 
             scope.pageChanged = function(pageNo) {
-                scope.currentProductPage = pageNo;
+                scope.paging.currentProductPage = pageNo;
                 if (scope.products) {
-                    var begin = ((scope.currentProductPage - 1) * scope.component.numtodisplay);
+                    var begin = ((scope.paging.currentProductPage - 1) * scope.component.numtodisplay);
                     var numDisplay = scope.component.numtodisplay;
                     //check if set to 0 and change to all products
                     if (numDisplay === 0) {

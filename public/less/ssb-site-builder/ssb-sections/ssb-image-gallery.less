@@ -56,6 +56,41 @@
                 margin:20px;
             }
         }
+        div.image-overlay{
+            overflow: hidden;
+            width: 100%;
+            height: 100%;
+            max-width: 100%;
+            &.mouse-off{
+                display: block;
+            }
+            &.mouse-on {
+                display: none
+            }
+            div.header, div.desc ,div.full_height{
+                display: flex; 
+                text-decoration: none; 
+                justify-content: center;
+            }
+            div.header{ 
+                align-items: flex-end;
+                font-weight: bold;  
+                height: 50%;
+            }
+            div.desc{ 
+                align-items: flex-start;  
+                height: 50%;
+            }
+            div.full_height{ 
+                align-items: center; 
+            }
+        }
+        div.image-gallery:hover div.image-overlay.mouse-on{
+            display: block;
+        }
+        div.image-gallery:hover div.image-overlay.mouse-off{
+            display: none;
+        }
     }
 
 
@@ -72,48 +107,20 @@
 
             .editing.image-wrap {
                 &:hover {
-                    .image-gallery,.image-overlay{
+                    .image-gallery,.image-overlay,div.image-overlay div.full_height{
                         min-height: 246px!important;
                     }
                 }
             }
-            .image-gallery,.image-overlay{
+            .image-gallery,.image-overlay,div.image-overlay div.full_height{
                 min-height: 250px!important;
             }
         }
-        div.image-overlay{
-            overflow: hidden;
-            max-width: 100%;
-            &.mouse-off{
-                display: block;
-            }
-            &.mouse-on {
-                display: none
-            }
-            div.header{
-                display: flex; 
-                align-items: flex-end;
-                justify-content: center;
-                font-weight: bold;
-                height: 50%;
-                text-decoration: none;
+        div.image-overlay{ 
+            div.header, div.desc{ 
                 min-height: 125px;
-            }
-            div.desc{
-                display: flex; 
-                align-items: flex-start;
-                justify-content: center;
-                height: 50%;
-                text-decoration: none;
-                min-height: 125px;
-            }
-        }
-        div.image-gallery:hover div.image-overlay.mouse-on{
-            display: block;
-        }
-        div.image-gallery:hover div.image-overlay.mouse-off{
-            display: none;
-        }
+            }  
+        } 
     }
 
     /*
@@ -150,42 +157,14 @@
                     }
                 }
             }
-            .image-gallery,.image-overlay{
+            .image-gallery,.image-overlay,div.image-overlay div.full_height{
                 min-height: 250px!important;
             }
             div.image-overlay{
-                overflow: hidden;
-                max-width: 100%;
-                &.mouse-off{
-                    display: block;
-                }
-                &.mouse-on {
-                    display: none
-                }
-                div.header{
-                    display: flex; 
-                    align-items: flex-end;
-                    justify-content: center;
-                    font-weight: bold;
-                    height: 50%;
-                    text-decoration: none;
+                div.header, div.desc{ 
                     min-height: 125px!important;
-                }
-                div.desc{
-                    display: flex; 
-                    align-items: flex-start;
-                    justify-content: center;
-                    height: 50%;
-                    text-decoration: none;
-                    min-height: 125px!important;
-                }
-            }
-            div.image-gallery:hover div.image-overlay.mouse-on{
-                display: block;
-            }
-            div.image-gallery:hover div.image-overlay.mouse-off{
-                display: none;
-            }
+                } 
+            } 
         }
     }
 
@@ -202,44 +181,18 @@
             .single-image{
                 border: 0 !important;
             }
-            div.image-gallery,div.image-overlay{
+            div.image-gallery,div.image-overlay,div.image-overlay div.full_height{
                 border-radius: 50%!important;
                 min-height: 350px;
                 width: 350px !important;
                 height: 350px;
                 float: none !important;
             }
-            div.image-overlay{
-                overflow: hidden;
-                max-width: 100%;
-                &.mouse-off{
-                    display: block;
-                }
-                &.mouse-on {
-                    display: none
-                }
-                div.header{
-                    display: flex; 
-                    align-items: flex-end;
-                    justify-content: center;
-                    font-weight: bold;
-                    height: 50%;
-                    text-decoration: none;
-                }
-                div.desc{
-                    display: flex; 
-                    align-items: flex-start;
-                    justify-content: center;
-                    height: 50%;
-                    text-decoration: none;
-                }
-            }
-            div.image-gallery:hover div.image-overlay.mouse-on{
-                display: block;
-            }
-            div.image-gallery:hover div.image-overlay.mouse-off{
-                display: none;
-            }
+            div.image-overlay{ 
+                div.header, div.desc{  
+                    height: 50%; 
+                } 
+            } 
             .editing.image-wrap {
                 &:hover {
                     .image-gallery{
@@ -263,42 +216,15 @@
             .image-gallery-title, .image-title{
                 display:none;
             }
-            div.image-gallery,div.image-overlay{
+            div.image-gallery,div.image-overlay,div.image-overlay div.full_height{
                 min-height: 280px!important;
             }
-            div.image-overlay{
-                overflow: hidden;
-                max-width: 100%;
-                &.mouse-off{
-                    display: block;
-                }
-                &.mouse-on {
-                    display: none
-                }
-                div.header{
-                    display: flex; 
-                    align-items: flex-end;
-                    justify-content: center;
-                    font-weight: bold;
-                    height: 50%;
-                    text-decoration: none;
+            div.image-overlay{ 
+                div.header, div.desc{ 
                     min-height: 140px
-                }
-                div.desc{
-                    display: flex; 
-                    align-items: flex-start;
-                    justify-content: center;
-                    height: 50%;
-                    text-decoration: none;
-                    min-height: 140px
-                }
+                } 
             }
-            div.image-gallery:hover div.image-overlay.mouse-on{
-                display: block;
-            }
-            div.image-gallery:hover div.image-overlay.mouse-off{
-                display: none;
-            }
+             
             .editing.image-wrap {
                 &:hover {
                     .image-gallery{
@@ -339,7 +265,7 @@
                 text-align: center;
                 margin: 0 auto;
             }
-            .image-gallery,div.image-overlay{
+            .image-gallery,div.image-overlay,div.image-overlay div.full_height{
                 min-height: 250px!important;
             }
             div.image-gallery:hover div.image-overlay.mouse-on{
@@ -348,32 +274,10 @@
             div.image-gallery:hover div.image-overlay.mouse-off{
                 display: none;
             }
-            div.image-overlay{
-                overflow: hidden;
-                max-width: 100%;
-                &.mouse-off{
-                    display: block;
-                }
-                &.mouse-on {
-                    display: none
-                }
-                div.header{
-                    display: flex; 
-                    align-items: flex-end;
-                    justify-content: center;
-                    font-weight: bold;
-                    height: 50%;
-                    text-decoration: none;
+            div.image-overlay{ 
+                div.header, div.desc{ 
                     min-height: 125px
-                }
-                div.desc{
-                    display: flex; 
-                    align-items: flex-start;
-                    justify-content: center;
-                    height: 50%;
-                    text-decoration: none;
-                    min-height: 125px
-                }
+                } 
             }
         }
     }
@@ -401,42 +305,14 @@
                 text-align: center;
                 margin: 0 auto;
             }
-            .image-gallery,.image-overlay{
+            .image-gallery,.image-overlay,div.image-overlay div.full_height{
                 min-height: 250px!important;
             }
-            div.image-overlay{
-                overflow: hidden;
-                max-width: 100%;
-                &.mouse-off{
-                    display: block;
-                }
-                &.mouse-on {
-                    display: none
-                }
-                div.header{
-                    display: flex; 
-                    align-items: flex-end;
-                    justify-content: center;
-                    font-weight: bold;
-                    height: 50%;
-                    text-decoration: none;
+            div.image-overlay{ 
+                div.header,div.desc{  
                     min-height: 125px
-                }
-                div.desc{
-                    display: flex; 
-                    align-items: flex-start;
-                    justify-content: center;
-                    height: 50%;
-                    text-decoration: none;
-                    min-height: 125px
-                }
-            }
-            div.image-gallery:hover div.image-overlay.mouse-on{
-                display: block;
-            }
-            div.image-gallery:hover div.image-overlay.mouse-off{
-                display: none;
-            }
+                } 
+            } 
         }
     }
 
@@ -453,44 +329,14 @@
             .single-image{
                 border: 0 !important;
             }
-            div.image-gallery,div.image-overlay{
+            div.image-gallery,div.image-overlay,div.image-overlay div.full_height{
                 border-radius: 50%!important;
                 min-height: 350px;
                 width: 350px !important;
                 height: 350px;
                 float: none !important;
             }
-            div.image-overlay{
-                overflow: hidden;
-                max-width: 100%;
-                &.mouse-off{
-                    display: block;
-                }
-                &.mouse-on {
-                    display: none
-                }
-                div.header{
-                    display: flex; 
-                    align-items: flex-end;
-                    justify-content: center;
-                    font-weight: bold;
-                    height: 50%;
-                    text-decoration: none;
-                }
-                div.desc{
-                    display: flex; 
-                    align-items: flex-start;
-                    justify-content: center;
-                    height: 50%;
-                    text-decoration: none;
-                }
-            }
-            div.image-gallery:hover div.image-overlay.mouse-on{
-                display: block;
-            }
-            div.image-gallery:hover div.image-overlay.mouse-off{
-                display: none;
-            }
+             
             .editing.image-wrap {
                 &:hover {
                     .image-gallery{
@@ -531,46 +377,20 @@
                         }
                     }
                 }
-                .image-gallery,div.image-overlay{
+                .image-gallery,div.image-overlay,div.image-overlay div.full_height{
                     min-height: 150px!important;
                 }
                 div.image-overlay{
-                    overflow: hidden;
-                    max-width: 100%;
-                    &.mouse-off{
-                        display: block;
-                    }
-                    &.mouse-on {
-                        display: none
-                    }
-                    div.header{
-                        display: flex; 
-                        align-items: flex-end;
-                        justify-content: center;
-                        font-weight: bold;
-                        height: 50%;
-                        text-decoration: none;
+                    
+                    div.header,div.desc{ 
                         min-height: 75px;
-                    }
-                    div.desc{
-                        display: flex; 
-                        align-items: flex-start;
-                        justify-content: center;
-                        height: 50%;
-                        text-decoration: none;
-                        min-height: 75px;
-                    }
+                    } 
                 }
-                div.image-gallery:hover div.image-overlay.mouse-on{
-                    display: block;
-                }
-                div.image-gallery:hover div.image-overlay.mouse-off{
-                    display: none;
-                }
+                 
                 .img-container .img-row:nth-child(8n), .img-container .img-row:first-child{
                     .image-wrap{
                         width:50%;
-                        .image-gallery, div.image-overlay{
+                        .image-gallery, div.image-overlay,div.image-overlay div.full_height{
                             min-height: 330px!important;
                         }
                         &:hover {
@@ -578,28 +398,11 @@
                                 min-height: 326px!important;
                             }
                         }
-                        div.image-overlay{
-                            overflow: hidden;
-                            max-width: 100%;
-                            &.mouse-off{
-                                display: block;
-                            }
-                            &.mouse-on {
-                                display: none
-                            }
-                            div.header{ 
+                        div.image-overlay{ 
+                            div.header, div.desc{ 
                                 min-height: 165px;
-                            }
-                            div.desc{ 
-                                min-height: 165px;
-                            }
-                        }
-                        div.image-gallery:hover div.image-overlay.mouse-on{
-                            display: block;
-                        }
-                        div.image-gallery:hover div.image-overlay.mouse-off{
-                            display: none;
-                        }
+                            } 
+                        } 
                     }
                 }
             })

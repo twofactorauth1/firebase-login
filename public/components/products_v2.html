@@ -62,7 +62,7 @@
             <div class="clearfix mb15"></div>
         </div>
         <div ng-if="products.length > component.numtodisplay && component.numtodisplay != 0">
-            <pagination total-items="products.length" items-per-page="component.numtodisplay" ng-model="currentProductPage" ng-change="pageChanged(currentProductPage)"></pagination>
+            <pagination total-items="products.length" items-per-page="component.numtodisplay" ng-model="paging.currentProductPage" ng-change="pageChanged(paging.currentProductPage)"></pagination>
         </div>
         <div ng-if="isEditing && originalProducts && originalProducts.length === 0" class="col-xs-12 center">
             <h2 class="margin-bottom-30">No product to display.</h2>

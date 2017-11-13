@@ -8,7 +8,7 @@
 app.controller('AsideCtrl', ["$scope", "$aside", function ($scope, $aside) {
   $scope.openAside = function (position) {
     $aside.open({
-      templateUrl: '/admin/assets/var/rvlvr/views/partials/settings.html',
+      templateUrl: '/admin/assets/var/techevent/views/partials/settings.html',
       placement: position,
       size: 'lg',
       backdrop: true,
