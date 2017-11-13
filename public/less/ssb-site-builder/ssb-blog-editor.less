@@ -299,12 +299,17 @@ ssb-blog-editor {
                     margin-left: -15px;
                     margin-right: 5px;
                     overflow-y: auto;
-                    width: 290px;
+                    width: calc(~"100% - 30px");
                     height: calc(~"100vh - 140px");
 
                     .ssb-blog-editor-controls-tags{
                         max-height: 150px;
                         overflow-y: auto;
+                    }
+
+                    @media all and (-ms-high-contrast:none)
+                    {
+                        width: calc(~"100% - 15px");
                     }
 
                 }
