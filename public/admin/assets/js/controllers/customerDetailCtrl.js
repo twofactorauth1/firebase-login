@@ -11,6 +11,8 @@
 		$scope.dataloaded = false;
 		$scope.searchUsers = [];
 		$scope.isAdmin = true;
+		$scope.itemPerPage = 20;
+    	$scope.showPages = 10;
 		$scope.updateUsers = function (typed) {
 			$scope.searchUsers = [];
 			var getUsers = UserService.getUsersForAutocomplete(typed),
