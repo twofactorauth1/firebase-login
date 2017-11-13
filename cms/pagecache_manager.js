@@ -540,8 +540,12 @@ module.exports = {
             */
 
             var layoutData = page.get('layoutModifiers');
+            var isBlogCopy = page.get('isBlogCopy');
+            var extraClass = "";
+            if(isBlogCopy)
+                extraClass = 'blog-list'
             var layoutMarkupString =
-                '<div class="ssb-layout__header_2-col_footer ssb-page-' + handle + '">' +
+                '<div class="ssb-layout__header_2-col_footer ssb-page-' + handle + ' ssb-page-' + extraClass + '" >' +
                     '<div class="ssb-page-layout-row-header ssb-page-layout-row">' +
                         '<div class="col-xs-12">' +
                             '{{header}}' +
