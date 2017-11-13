@@ -168,7 +168,7 @@
 
 
 <!-- <div data-ng-include data-src=" 'assets/js/ssb-site-builder/ssb-site-builder.editor.styles.html' "></div> -->
-<div class="ssb-edit-mode" ng-class="{ 'ssb-page-blog-list': vm.state.page.handle === 'blog-list', 'ssb-page-blog-post': vm.state.page.handle === 'blog-post', 'ssb-blog-edit-mode': vm.uiState.isBlogEditMode, 'ssb-blog-edit-writing-mode': vm.uiState.isBlogEditWritingMode }"   >
+<div class="ssb-edit-mode" ng-class="{ 'ssb-page-blog-list': vm.state.page.handle === 'blog-list' || vm.state.page.isBlogCopy, 'ssb-page-blog-post': vm.state.page.handle === 'blog-post', 'ssb-blog-edit-mode': vm.uiState.isBlogEditMode, 'ssb-blog-edit-writing-mode': vm.uiState.isBlogEditWritingMode }"   >
     <indig-navprompt class="indig-navprompt" my-state="app.website.ssbSiteBuilder.editor" reset-dirty="vm.resetDirty()" check-if-dirty="vm.checkIfDirty()" save-page="vm.savePage()" save-page-check="!vm.state.saveLoading"></indig-navprompt>
     <div class="loading-editor" ct-fullheight="window" data-ct-fullheight-exclusion="header" ng-hide="vm.uiState.loaded">
         <div class="col-xs-12">
