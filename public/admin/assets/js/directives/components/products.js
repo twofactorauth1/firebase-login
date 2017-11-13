@@ -13,7 +13,9 @@ app.directive('productsComponent', ['ProductService', '$location', '$timeout', '
       //assign and hold the checkout modal state
       scope.checkoutModalState = 1;
       //assign and hold the currentProductPage for pagination
-      scope.currentProductPage = 1;
+      scope.paging = {
+          currentProductPage : 1
+      }
 
       scope.currentPath = angular.copy($location);
       
@@ -167,9 +169,9 @@ app.directive('productsComponent', ['ProductService', '$location', '$timeout', '
        */
 
       scope.pageChanged = function (pageNo) {
-        scope.currentProductPage = pageNo;
+        scope.paging.currentProductPage = pageNo;
         if (scope.products) {
-          var begin = ((scope.currentProductPage - 1) * scope.component.numtodisplay);
+          var begin = ((scope.paging.currentProductPage - 1) * scope.component.numtodisplay);
           var numDisplay = scope.component.numtodisplay;
           //check if set to 0 and change to all products
           if (numDisplay === 0) {
