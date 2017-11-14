@@ -693,7 +693,7 @@ _.extend(view.prototype, BaseView.prototype, {
                          */
                         if (self.req.isAuthenticated() && self.req.session.orgId === webpageData.orgId) {
                             //we are golden
-                            cb(null, webpageData, pages);
+                            cb(null, webpageData, page);
                         } else {
                             //return 401
 
@@ -1013,7 +1013,7 @@ _.extend(view.prototype, BaseView.prototype, {
                          */
                         if (self.req.isAuthenticated() && self.req.session.orgId === webpageData.orgId) {
                             //we are golden
-                            cb(null, webpageData, pages);
+                            cb(null, webpageData, page);
                         } else {
                             //return 401
 
@@ -1238,7 +1238,7 @@ _.extend(view.prototype, BaseView.prototype, {
             
         });
     },
-    
+
     renderActivateSetupPage: function (originalAccount, accountId, handle) {
         var data = {},
             self = this;
@@ -1254,10 +1254,10 @@ _.extend(view.prototype, BaseView.prototype, {
                    }
                 });
             },
-            function getAllPages(webpageData, cb) {
+            function getAccountPages(webpageData, cb) {
                 if(handle === 'activate/setup') {
-                    ssbManager.listActivateAccountPages(accountId, webpageData.website._id, function(err, pages){
-                        cb(err, webpageData, pages);
+                    ssbManager.listActivateAccountPage(accountId, webpageData.website._id, function(err, page){
+                        cb(err, webpageData, page);
                     });
                 } else if(handle === 'index') {
 
@@ -1272,7 +1272,7 @@ _.extend(view.prototype, BaseView.prototype, {
                                 }
                             });
                         }
-                        cb(err, webpageData, [page]);
+                        cb(err, webpageData, page);
                     });
                 } else {
                     if(originalAccount.get("oem") === true){
@@ -1287,7 +1287,7 @@ _.extend(view.prototype, BaseView.prototype, {
                                     }
                                 });
                             }
-                            cb(err, webpageData, [page]);
+                            cb(err, webpageData, page);
                         });
                     }
                     else{
@@ -1302,29 +1302,28 @@ _.extend(view.prototype, BaseView.prototype, {
                                     }
                                 });
                             }
-                            cb(err, webpageData, [page]);
+                            cb(err, webpageData, page);
                         });
                     }
                 }
 
             },
 
-            function readComponents(webpageData, pages, cb) {
+            function readComponents(webpageData, page, cb) {
                 data.templates = '';
-                if(pages) {
+                if(page) {
                     data.templateIncludes = [];
                     data.templateIncludes[0] = {id:'/components/component-wrap.html'};
                     fs.readFile('public/components/component-wrap.html', 'utf8', function(err, html){
                         data.templateIncludes[0].data = html;
                         var components = [];
-                        _.each(pages, function(page){
-                            _.each(page.get('sections'), function(section){
-                                if(section) {
-                                    //self.log.debug('Page ' + page.get('handle'));
-                                    //self.log.debug(' has components:', section.components);
-                                    components = components.concat(section.components);
-                                }
-                            });
+                       
+                        _.each(page.get('sections'), function(section){
+                            if(section) {
+                                //self.log.debug('Page ' + page.get('handle'));
+                                //self.log.debug(' has components:', section.components);
+                                components = components.concat(section.components);
+                            }
                         });
                         //self.log.debug('components:', components);
                         var map = {};
@@ -1348,7 +1347,7 @@ _.extend(view.prototype, BaseView.prototype, {
                             }
 
                         }, function done(err){
-                            cb(null, webpageData, pages);
+                            cb(null, webpageData, page);
                         });
 
 
@@ -1359,13 +1358,13 @@ _.extend(view.prototype, BaseView.prototype, {
 
             },
 
-            function(value, pages, cb) {
+            function(value, page, cb) {
                 var pageHolder = {};
-                _.each(pages, function(page){
-                    pageHolder[page.get('handle')] = page.toJSON('frontend');
-                });
+                
+                pageHolder[page.get('handle')] = page.toJSON('frontend');
+                
 
-                data.pages = pageHolder;
+                data.page = page;
                 data.account = value;
                 data.originalAccountBusiness = originalAccount.get('business');
                 
