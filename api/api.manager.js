@@ -66,6 +66,7 @@ var promotions2Api = require('./2.0/promotions.api');
 var quotes2Api = require('./2.0/quotes.api');
 var analytics2Api = require('./2.0/analytics.api');
 var adminOrganizationApi = require('./2.0/organization.api');
+var externalProductsApi = require('./2.0/externalproducts.api');
 
 module.exports = {
 
