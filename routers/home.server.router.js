@@ -489,7 +489,10 @@ _.extend(router.prototype, BaseRouter.prototype, {
         var pageName = 'signup';
         self.log.debug('>> optimizedSignup ' + accountId + ', ' + pageName);
 
-        new WebsiteView(req, resp).renderCachedPage(accountId, pageName);
+        if(req.query.requestpage)
+            new WebsiteView(req, resp).renderPublishedPage(accountId, pageName);
+        else
+            new WebsiteView(req, resp).renderWebsitePage(accountId, pageName);
 
         self.log.debug('<< optimizedSignup');
     },
@@ -538,8 +541,10 @@ _.extend(router.prototype, BaseRouter.prototype, {
                 pageName = pageName.replace('/', '');
             }
             self.log.debug('>> optimizedIndexWithOrgChecks ' + accountId + ', ' + pageName);
-
-            new WebsiteView(req, resp).renderCachedPage(accountId, pageName);
+            if(req.query.requestpage)
+                new WebsiteView(req, resp).renderPublishedPage(accountId, pageName);
+            else
+                new WebsiteView(req, resp).renderWebsitePage(accountId, pageName);
 
             self.log.debug('<< optimizedIndexWithOrgChecks');
         }
@@ -555,8 +560,10 @@ _.extend(router.prototype, BaseRouter.prototype, {
 
         var pageName = req.params.page || 'index';
         self.log.debug('>> optimizedIndex ' + accountId + ', ' + pageName);
-
-        new WebsiteView(req, resp).renderCachedPage(accountId, pageName);
+        if(req.query.requestpage)
+            new WebsiteView(req, resp).renderPublishedPage(accountId, pageName);
+        else
+            new WebsiteView(req, resp).renderWebsitePage(accountId, pageName);
 
         self.log.debug('<< optimizedIndex');
     },
@@ -593,8 +600,10 @@ _.extend(router.prototype, BaseRouter.prototype, {
                     }
                     var pageName = req.params.page || 'blog';
                     self.log.debug('>> optimizedIndex ' + accountId + ', ' + pageName);
-
-                    new WebsiteView(req, resp).renderCachedPage(accountId, pageName);
+                    if(req.query.requestpage)
+                        new WebsiteView(req, resp).renderPublishedPage(accountId, pageName);
+                    else
+                        new WebsiteView(req, resp).renderWebsitePage(accountId, pageName);
 
                     self.log.debug('<< optimizedIndex');
                 }
@@ -629,8 +638,10 @@ _.extend(router.prototype, BaseRouter.prototype, {
                     }
                     var pageName = req.params.page || 'blog';
                     self.log.debug('>> optimizedIndex ' + accountId + ', ' + pageName);
-
-                    new WebsiteView(req, resp).renderCachedPage(accountId, pageName);
+                    if(req.query.requestpage)
+                        new WebsiteView(req, resp).renderPublishedPage(accountId, pageName);
+                    else
+                        new WebsiteView(req, resp).renderWebsitePage(accountId, pageName);
 
                     self.log.debug('<< optimizedIndex');
                 }
@@ -695,8 +706,10 @@ _.extend(router.prototype, BaseRouter.prototype, {
                     }
                     var pageName = req.params.page || 'blog';
                     self.log.debug('>> optimizedIndex ' + accountId + ', ' + pageName);
-
-                    new WebsiteView(req, resp).renderCachedPage(accountId, pageName);
+                    if(req.query.requestpage)
+                        new WebsiteView(req, resp).renderPublishedPage(accountId, pageName);
+                    else
+                        new WebsiteView(req, resp).renderWebsitePage(accountId, pageName);
 
                     self.log.debug('<< optimizedIndex');
                 }

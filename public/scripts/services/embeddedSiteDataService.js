@@ -94,13 +94,20 @@ mainApp.factory('embeddedSiteDataService', ['$http', '$location', '$cacheFactory
 	 *
 	 */
 	function getPageData(websiteId, callback) {
-
 		service.path = urlPathFallbacks();
-
-		if (typeof service.siteData.pages[service.path] !== 'undefined') {
-			callback(null, service.siteData.pages[service.path]);
-		} else {
-			callback("page not found", null);
+		if(service.siteData.page && service.siteData.page.handle === service.path){
+			callback(null, service.siteData.page);
+		}
+		else{
+			$http.get('/'+service.path+'?requestpage=true')
+			.then(function(res){
+			    if(service.siteData.page && service.siteData.page.handle === service.path){
+					callback(null, service.siteData.page);
+				}
+				else{
+					callback("page not found", null);
+				}
+			})
 		}
 	}
 

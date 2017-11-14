@@ -42,23 +42,18 @@ _.extend(view.prototype, BaseView.prototype, {
                     }
                 });
             },
-            function getAllPages(webpageData, cb) {
-                ssbManager.listPublishedPages(accountId, webpageData.website._id, function(err, allPages){
-                    cb(err, webpageData, allPages);
-                });
-            },
-            function getPublishedPage(webpageData, allPages, cb) {
+            function getPublishedPage(webpageData, cb) {
                 ssbManager.getPublishedPage(accountId, webpageData.website._id, handle, function(err, page){
-                    cb(err, webpageData, allPages, page);
+                    cb(err, webpageData, page);
                 });
             },
-            function getCustomFonts(webpageData, allPages, page, cb){
+            function getCustomFonts(webpageData, page, cb){
                 assetManager.findByFontType(accountId, null, null, function(err, fonts){                
                     data.customFonts = fonts;
-                    cb(err, webpageData, allPages, page);
+                    cb(err, webpageData, page);
                 });
             },
-            function readComponents(webpageData, allPages, page, cb) {
+            function readComponents(webpageData, page, cb) {
                 data.templates = '';
                 if(twoColBlog && twoColBlog === true) {
                     //TODO: get the section from the blog-post page in allPages and replace in page
@@ -95,7 +90,7 @@ _.extend(view.prototype, BaseView.prototype, {
                             }
 
                         }, function done(err){
-                            cb(null, webpageData, allPages, page);
+                            cb(null, webpageData, page);
                         });
 
 
@@ -106,25 +101,22 @@ _.extend(view.prototype, BaseView.prototype, {
 
             },
 
-            function addSSBSection(webpageData, allPages, page, cb){
+            function addSSBSection(webpageData, page, cb){
                 var ssbSectionTemplate = {'id':'/admin/assets/js/ssb-site-builder/ssb-components/ssb-page-section/ssb-page-section.component.html'};
                 fs.readFile('public/admin/assets/js/ssb-site-builder/ssb-components/ssb-page-section/ssb-page-section.component.html', 'utf8', function(err, html) {
                     ssbSectionTemplate.data = '<div class="blog-list-section">'+html+'</div>';
                     data.templateIncludes.push(ssbSectionTemplate);
-                    cb(null, webpageData, allPages, page);
+                    cb(null, webpageData, page);
                 });
             },
 
-            function getBlogPosts(webpageData, allPages, page, cb) {
-
+            function getBlogPosts(webpageData, page, cb) {
                 ssbManager.getPublishedPosts(accountId, null, null, function(err, posts){                
-
-                    cb(err, webpageData, allPages, page, posts);
-
+                    cb(err, webpageData, page, posts);
                 });
             },
 
-            function addBlogTemplate(webpageData, allPages, page, posts, cb) {
+            function addBlogTemplate(webpageData, page, posts, cb) {
                 fs.readFile('public/admin/assets/js/ssb-site-builder/ssb-components/ssb-blog-post/ssb-blog-post-list/ssb-blog-post-list.component.html', 'utf-8', function(err, html) {
                     if (err) {
                         self.log.error('Error reading post-list:', err);
@@ -145,7 +137,7 @@ _.extend(view.prototype, BaseView.prototype, {
                                 };
                                 data.templateIncludes.push(blogListTemplate);
                                 data.templateIncludes.push(blogCardTemplate);
-                                cb(null, webpageData, allPages, page, posts);
+                                cb(null, webpageData, page, posts);
                             }
                         });
                     }
@@ -153,13 +145,11 @@ _.extend(view.prototype, BaseView.prototype, {
 
             },
 
-            function prepareForRender(value, allPages, page, posts, cb) {
+            function prepareForRender(value, page, posts, cb) {
                 var pageHolder = {};
-                _.each(allPages, function(page){
-                    pageHolder[page.get('handle')] = page.toJSON('frontend');
-                });
+                pageHolder[page.get('handle')] = page.toJSON('frontend');
 
-                data.pages = pageHolder;
+                data.page = page;
                 data.posts = posts;
                 data.account = value;
                 data.canonicalUrl = pageHolder[handle].canonicalUrl || null;
@@ -592,25 +582,20 @@ _.extend(view.prototype, BaseView.prototype, {
                         cb(null, value);
                     }
                 });
-            },
-            function getAllPages(webpageData, cb) {
-                ssbManager.listPublishedPages(accountId, webpageData.website._id, function(err, allPages){
-                    cb(err, webpageData, allPages);
-                });
-            },
-            function getPublishedPage(webpageData, allPages, cb) {
+            },            
+            function getPublishedPage(webpageData, cb) {
                 ssbManager.getPublishedPage(accountId, webpageData.website._id, handle, function(err, page){
                     if(page) {
-                        cb(err, webpageData, allPages, page);
+                        cb(err, webpageData, page);
                     } else {
                         cb(err || 'Page not found');
                     }
 
                 });
             },
-            function checkForAuth(webpageData, pages, page, cb) {
+            function checkForAuth(webpageData, page, cb) {
                 if(page.get('secure') !== true) {
-                    cb(null, webpageData, pages, page);
+                    cb(null, webpageData, page);
                 } else {
                     //need to check for auth
                     if(page.get('restriction') === $$.m.ssb.Page.restrictionTypes.RESTRICTION_ORGWIDE) {
@@ -621,7 +606,7 @@ _.extend(view.prototype, BaseView.prototype, {
                         if (self.req.isAuthenticated() && self.req.session.orgId === webpageData.orgId) {
                             //we are golden
                             self.log.info('Authenticated!');
-                            cb(null, webpageData, pages, page);
+                            cb(null, webpageData, page);
                         } else {
                             //return 401
 
@@ -635,13 +620,13 @@ _.extend(view.prototype, BaseView.prototype, {
                     }
                 }
             },
-            function getCustomFonts(webpageData, allPages, page, cb){
+            function getCustomFonts(webpageData, page, cb){
                 assetManager.findByFontType(accountId, null, null, function(err, fonts){                
                     data.customFonts = fonts;
-                    cb(err, webpageData, allPages, page);
+                    cb(err, webpageData, page);
                 });
             },
-            function readComponents(webpageData, allPages, page, cb) {
+            function readComponents(webpageData, page, cb) {
                 data.templates = '';
                 if(page) {
                     data.templateIncludes = [];
@@ -675,7 +660,7 @@ _.extend(view.prototype, BaseView.prototype, {
                             }
 
                         }, function done(err){
-                            cb(null, webpageData, allPages, page);
+                            cb(null, webpageData, page);
                         });
 
 
@@ -686,26 +671,26 @@ _.extend(view.prototype, BaseView.prototype, {
 
             },
 
-            function addSSBSection(webpageData, allPages, page, cb){
+            function addSSBSection(webpageData, page, cb){
                 var ssbSectionTemplate = {'id':'/admin/assets/js/ssb-site-builder/ssb-components/ssb-page-section/ssb-page-section.component.html'};
                 fs.readFile('public/admin/assets/js/ssb-site-builder/ssb-components/ssb-page-section/ssb-page-section.component.html', 'utf8', function(err, html) {
                     ssbSectionTemplate.data = html;
                     data.templateIncludes.push(ssbSectionTemplate);
-                    cb(null, webpageData, allPages, page);
+                    cb(null, webpageData, page);
                 });
             },
 
-            function getBlogPost(webpageData, allPages, page, cb) {
+            function getBlogPost(webpageData, page, cb) {
                 ssbManager.getPublishedPost(accountId, postName, function(err, post){
                     if (!post) {
                         cb('Could not find post with handle: ' + postName);
                     } else {
-                        cb(err, webpageData, allPages, page, post);
+                        cb(err, webpageData, page, post);
                     }
                 });
             },
 
-            function addBlogTemplate(webpageData, allPages, page, post, cb) {
+            function addBlogTemplate(webpageData, page, post, cb) {
                 //assuming single column layout
                 var sections = page.get('sections');
                 var templateSectionArray = [];
@@ -720,17 +705,15 @@ _.extend(view.prototype, BaseView.prototype, {
                     data: templateSectionArray.join('')
                 });
 
-                cb(null, webpageData, allPages, page, post);
+                cb(null, webpageData, page, post);
 
             },
 
-            function prepareForRender(value, allPages, page, post, cb) {
+            function prepareForRender(value, page, post, cb) {
                 var pageHolder = {};
-                _.each(allPages, function(page){
-                    pageHolder[page.get('handle')] = page.toJSON('frontend');
-                });
+                pageHolder[page.get('handle')] = page.toJSON('frontend');
 
-                data.pages = pageHolder;
+                data.page = page;
                 data.post = post.toJSON('frontend');
                 data.account = value;
                 data.canonicalUrl = pageHolder[handle].canonicalUrl || null;
