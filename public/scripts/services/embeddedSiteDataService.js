@@ -99,7 +99,7 @@ mainApp.factory('embeddedSiteDataService', ['$http', '$location', '$cacheFactory
 			callback(null, service.siteData.page);
 		}
 		else{
-			$http.get('/'+service.path+'?requestpage=true')
+			$http.get('/'+service.path+'?requestpage=true&cachebuster'+new Date().getTime())
 			.then(function(res){
 			    if(service.siteData.page && service.siteData.page.handle === service.path){
 					callback(null, service.siteData.page);
