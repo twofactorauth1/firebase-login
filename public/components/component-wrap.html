@@ -88,10 +88,11 @@
                              {{component.bg.img.parallax ? parallax-background : ""}}
                              ng-attr-parallax-ratio="{{component.bg.img.parallax ? '0.4' : '1'}}"
                              ng-attr-parallax-x-position="{{component.bg.img.position}}"
-                             style='background: url("{{component.bg.img.url}}");
-                                background-size: cover;
-                                background-repeat: no-repeat;
-                                background-position: {{component.bg.img.position}};'>
+                             ng-style="{'background': 'url(' + component.bg.img.url + ')',
+                                'background-size': 'cover',
+                                'background-repeat': 'no-repeat',
+                                'background-position': component.bg.img.position}";
+                        >
                         </div>
                         <div id="px-ele-{{vm.component._id}}" ng-if="component.bg.img.show && component.type != 'masthead'"
                              class="bg"
@@ -99,10 +100,10 @@
                                 'blur-image':component.bg.img.blur}"
                              {{component.bg.img.parallax ? parallax-background : ""}}
                              ng-attr-parallax-ratio="{{component.bg.img.parallax ? '0.4' : '1'}}"
-                             ng-attr-style='
-                                background: url("{{component.bg.img.url}}") repeat-y;
-                                background-size: cover;
-                                background: {{component.bg.img.url}};'
+                             ng-style="{
+                                'background': 'url(' + component.bg.img.url + ') repeat-y',
+                                'background-size': 'cover',
+                                'background': component.bg.img.url}";
                                 >
                         </div>
                         <div ng-if="component.bg.img.show && component.bg.img.overlay"
