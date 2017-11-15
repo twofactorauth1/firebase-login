@@ -9,6 +9,13 @@
             text-align: center !important;
         }
     }
+    @media screen and (max-width: 1024px) {
+        .ssb-page-section-layout-nav-hero-v1{
+            .bg{
+                z-index: 1;
+            }
+        }
+    }
     .ssb-page-section-layout-nav-hero {
         .navbar-collapse{
             border-top: none !important;
@@ -52,12 +59,7 @@
             flex: inherit !important;
             min-width:100%;
             z-index: 2 !important;
-        }
-        @media screen and (max-width: 767px) {
-            .bg{
-                z-index: 1;
-            }
-        }
+        }        
 
     }
     .ssb-page-section-layout-nav-hero [ssb-text-component] {

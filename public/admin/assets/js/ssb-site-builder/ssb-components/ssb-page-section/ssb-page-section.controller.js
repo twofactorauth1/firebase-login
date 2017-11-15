@@ -185,42 +185,91 @@
 			var styleString = ' ';
 			// Styles basis of screens sizes
 			var _layout = screenLayout();
-
+			var _style = "";
 			switch (_layout) {
 	            case 0:
 	                if (section && section.spacing) {
 						if (section.spacing.ptxs || section.spacing.ptsm || section.spacing.ptmd || section.spacing.pt) {
-							styleString += 'padding-top: ' + (section.spacing.ptxs || section.spacing.ptsm || section.spacing.ptmd || section.spacing.pt) + 'px;';
+							_style = (section.spacing.ptxs || section.spacing.ptsm || section.spacing.ptmd || section.spacing.pt);
+							if(_style.indexOf('%') > 0){
+								styleString += 'padding-top: ' + _style + ';';	
+							}
+							else{
+								styleString += 'padding-top: ' + _style + 'px;';
+							}							
 						}
 
 						if (section.spacing.pbxs || section.spacing.pbsm || section.spacing.pbmd || section.spacing.pb) {
-							styleString += 'padding-bottom: ' + (section.spacing.pbxs || section.spacing.pbsm || section.spacing.pbmd || section.spacing.pb) + 'px;';
+							_style = (section.spacing.pbxs || section.spacing.pbsm || section.spacing.pbmd || section.spacing.pb);
+							if(_style.indexOf('%') > 0){
+								styleString += 'padding-bottom: ' + _style + ';';	
+							}
+							else{
+								styleString += 'padding-bottom: ' + _style + 'px;';
+							}
 						}
 
 						if (section.spacing.plxs || section.spacing.plsm || section.spacing.plmd || section.spacing.pl) {
-							styleString += 'padding-left: ' + (section.spacing.plxs || section.spacing.plsm || section.spacing.plmd || section.spacing.pl) + 'px;';
+							_style = (section.spacing.plxs || section.spacing.plsm || section.spacing.plmd || section.spacing.pl);
+							if(_style.indexOf('%') > 0){
+								styleString += 'padding-left: ' + _style + ';';	
+							}
+							else{
+								styleString += 'padding-left: ' + _style + 'px;';
+							}
 						}
 
 						if (section.spacing.prxs || section.spacing.prsm || section.spacing.prmd || section.spacing.pr) {
-							styleString += 'padding-right: ' + (section.spacing.prxs || section.spacing.prsm || section.spacing.prmd || section.spacing.pr) + 'px;';
+							_style = (section.spacing.prxs || section.spacing.prsm || section.spacing.prmd || section.spacing.pr);
+							if(_style.indexOf('%') > 0){
+								styleString += 'padding-right: ' + _style + ';';	
+							}
+							else{
+								styleString += 'padding-right: ' + _style + 'px;';
+							}
 						}
 
 						if (section.spacing.mtxs || section.spacing.mtsm || section.spacing.mtmd || section.spacing.mt) {
-							styleString += 'margin-top: ' + (section.spacing.mtxs || section.spacing.mtsm || section.spacing.mtmd || section.spacing.mt) + 'px;';
+							_style = (section.spacing.mtxs || section.spacing.mtsm || section.spacing.mtmd || section.spacing.mt);
+							if(_style.indexOf('%') > 0){
+								styleString += 'margin-top: ' + _style + ';';	
+							}
+							else{
+								styleString += 'margin-top: ' + _style + 'px;';
+							}
 						}
 
 						if (section.spacing.mbxs || section.spacing.mbsm || section.spacing.mbmd || section.spacing.mb) {
-							styleString += 'margin-bottom: ' + (section.spacing.mbxs || section.spacing.mbsm || section.spacing.mbmd || section.spacing.mb) + 'px;';
+							_style = (section.spacing.mbxs || section.spacing.mbsm || section.spacing.mbmd || section.spacing.mb);
+							if(_style.indexOf('%') > 0){
+								styleString += 'margin-bottom: ' + _style + ';';	
+							}
+							else{
+								styleString += 'margin-bottom: ' + _style + 'px;';
+							}
 						}
 
+						
 						if (section.spacing.mlxs || section.spacing.mlsm || section.spacing.mlmd || section.spacing.ml) {
 							var _ml = section.spacing.mlxs || section.spacing.mlsm || section.spacing.mlmd || section.spacing.ml;
-							styleString += _ml == 'auto' ? 'margin-left: ' + _ml + ';float: none;' : 'margin-left: ' + _ml + 'px;';
+							if(_ml.indexOf('%') > 0){
+								_style = "";
+							}
+							else{
+								_style = "px";
+							}
+							styleString += _ml == 'auto' ? 'margin-left: ' + _ml + ';float: none;' : 'margin-left: ' + _ml + _style + ';';
 						}
 
 						if (section.spacing.mrxs || section.spacing.mrsm || section.spacing.mrmd || section.spacing.mr) {
 							var _mr = section.spacing.mrxs || section.spacing.mrsm || section.spacing.mrmd || section.spacing.mr;
-							styleString += (_mr == 'auto') ? 'margin-right: ' + _mr + ';float: none;' : 'margin-right: ' + _mr + 'px;';
+							if(_mr.indexOf('%') > 0){
+								_style = "";
+							}
+							else{
+								_style = "px";
+							}
+							styleString += (_mr == 'auto') ? 'margin-right: ' + _mr + ';float: none;' : 'margin-right: ' + _mr + _style + ';';
 						}
 
 						if (section.spacing.mwxs || section.spacing.mwsm || section.spacing.mwmd || section.spacing.mw) {
@@ -239,37 +288,85 @@
 	            case 1:
 	                if (section && section.spacing) {
 						if (section.spacing.ptsm || section.spacing.ptmd || section.spacing.pt) {
-							styleString += 'padding-top: ' + (section.spacing.ptsm || section.spacing.ptmd || section.spacing.pt) + 'px;';
+							_style = (section.spacing.ptsm || section.spacing.ptmd || section.spacing.pt);
+							if(_style.indexOf('%') > 0){
+								styleString += 'padding-top: ' + _style + ';';	
+							}
+							else{
+								styleString += 'padding-top: ' + _style + 'px;';
+							}
 						}
 
 						if (section.spacing.pbsm || section.spacing.pbmd || section.spacing.pb) {
-							styleString += 'padding-bottom: ' + (section.spacing.pbsm || section.spacing.pbmd || section.spacing.pb) + 'px;';
+							_style = (section.spacing.pbsm || section.spacing.pbmd || section.spacing.pb);
+							if(_style.indexOf('%') > 0){
+								styleString += 'padding-bottom: ' + _style + ';';	
+							}
+							else{
+								styleString += 'padding-bottom: ' + _style + 'px;';
+							}
 						}
 
 						if (section.spacing.plsm || section.spacing.plmd || section.spacing.pl) {
-							styleString += 'padding-left: ' + (section.spacing.plsm || section.spacing.plmd || section.spacing.pl) + 'px;';
+							_style = (section.spacing.plsm || section.spacing.plmd || section.spacing.pl);
+							if(_style.indexOf('%') > 0){
+								styleString += 'padding-left: ' + _style + ';';	
+							}
+							else{
+								styleString += 'padding-left: ' + _style + 'px;';
+							}
 						}
 
 						if (section.spacing.prsm || section.spacing.prmd || section.spacing.pr) {
-							styleString += 'padding-right: ' + (section.spacing.prsm || section.spacing.prmd || section.spacing.pr) + 'px;';
+							_style = (section.spacing.prsm || section.spacing.prmd || section.spacing.pr);
+							if(_style.indexOf('%') > 0){
+								styleString += 'padding-right: ' + _style + ';';	
+							}
+							else{
+								styleString += 'padding-right: ' + _style + 'px;';
+							}
 						}
 
 						if (section.spacing.mtsm || section.spacing.mtmd || section.spacing.mt) {
-							styleString += 'margin-top: ' + (section.spacing.mtsm || section.spacing.mtmd || section.spacing.mt) + 'px;';
+							_style = (section.spacing.mtsm || section.spacing.mtmd || section.spacing.mt);
+							if(_style.indexOf('%') > 0){
+								styleString += 'margin-top: ' + _style + ';';	
+							}
+							else{
+								styleString += 'padding-top: ' + _style + 'px;';
+							}
 						}
 
 						if (section.spacing.mbsm || section.spacing.mbmd || section.spacing.mb) {
-							styleString += 'margin-bottom: ' + (section.spacing.mbsm || section.spacing.mbmd || section.spacing.mb) + 'px;';
+							_style = (section.spacing.mbsm || section.spacing.mbmd || section.spacing.mb);
+							if(_style.indexOf('%') > 0){
+								styleString += 'margin-bottom: ' + _style + ';';	
+							}
+							else{
+								styleString += 'margin-bottom: ' + _style + 'px;';
+							}
 						}
 
 						if (section.spacing.mlsm || section.spacing.mlmd || section.spacing.ml) {
 							var _ml = section.spacing.mlsm || section.spacing.mlmd || section.spacing.ml;
-							styleString += _ml == 'auto' ? 'margin-left: ' + _ml + ';float: none;' : 'margin-left: ' + _ml + 'px;';
+							if(_ml.indexOf('%') > 0){
+								_style = "";
+							}
+							else{
+								_style = "px";
+							}
+							styleString += _ml == 'auto' ? 'margin-left: ' + _ml + ';float: none;' : 'margin-left: ' + _ml + _style + ';';
 						}
 
 						if (section.spacing.mrsm || section.spacing.mrmd || section.spacing.mr) {
 							var _mr = section.spacing.mrsm || section.spacing.mrmd || section.spacing.mr;
-							styleString += (_mr == 'auto') ? 'margin-right: ' + _mr + ';float: none;' : 'margin-right: ' + _mr + 'px;';
+							if(_mr.indexOf('%') > 0){
+								_style = "";
+							}
+							else{
+								_style = "px";
+							}
+							styleString += (_mr == 'auto') ? 'margin-right: ' + _mr + ';float: none;' : 'margin-right: ' + _mr + _style + ';';
 						}
 
 						if (section.spacing.mwsm || section.spacing.mwmd || section.spacing.mw) {
@@ -288,37 +385,85 @@
 	            case 2:
 	                if (section && section.spacing) {
 						if (section.spacing.ptmd || section.spacing.pt) {
-							styleString += 'padding-top: ' + (section.spacing.ptmd || section.spacing.pt) + 'px;';
+							_style = (section.spacing.ptmd || section.spacing.pt);
+							if(_style.indexOf('%') > 0){
+								styleString += 'padding-top: ' + _style + ';';	
+							}
+							else{
+								styleString += 'padding-top: ' + _style + 'px;';
+							}
 						}
 
 						if (section.spacing.pbmd || section.spacing.pb) {
-							styleString += 'padding-bottom: ' + (section.spacing.pbmd || section.spacing.pb) + 'px;';
+							_style = (section.spacing.pbmd || section.spacing.pb);
+							if(_style.indexOf('%') > 0){
+								styleString += 'padding-bottom: ' + _style + ';';	
+							}
+							else{
+								styleString += 'padding-top: ' + _style + 'px;';
+							}
 						}
 
 						if (section.spacing.plmd || section.spacing.pl) {
-							styleString += 'padding-left: ' + (section.spacing.plmd || section.spacing.pl) + 'px;';
+							_style = (section.spacing.plmd || section.spacing.pl);
+							if(_style.indexOf('%') > 0){
+								styleString += 'padding-left: ' + _style + ';';	
+							}
+							else{
+								styleString += 'padding-left: ' + _style + 'px;';
+							}
 						}
 
 						if (section.spacing.prmd || section.spacing.pr) {
-							styleString += 'padding-right: ' + (section.spacing.prmd || section.spacing.pr) + 'px;';
+							_style = (section.spacing.prmd || section.spacing.pr);
+							if(_style.indexOf('%') > 0){
+								styleString += 'padding-right: ' + _style + ';';	
+							}
+							else{
+								styleString += 'padding-right: ' + _style + 'px;';
+							}
 						}
 
 						if (section.spacing.mtmd || section.spacing.mt) {
-							styleString += 'margin-top: ' + (section.spacing.mtmd || section.spacing.mt) + 'px;';
+							_style = (section.spacing.mtmd || section.spacing.mt);
+							if(_style.indexOf('%') > 0){
+								styleString += 'margin-top: ' + _style + ';';	
+							}
+							else{
+								styleString += 'margin-top: ' + _style + 'px;';
+							}
 						}
 
 						if (section.spacing.mbmd || section.spacing.mb) {
-							styleString += 'margin-bottom: ' + (section.spacing.mbmd || section.spacing.mb) + 'px;';
+							_style = (section.spacing.mbmd || section.spacing.mb);
+							if(_style.indexOf('%') > 0){
+								styleString += 'margin-bottom: ' + _style + ';';	
+							}
+							else{
+								styleString += 'margin-bottom: ' + _style + 'px;';
+							}
 						}
 
-						if (section.spacing.mlxs || section.spacing.mlsm || section.spacing.mlmd || section.spacing.ml) {
+						if (section.spacing.mlmd || section.spacing.ml) {
 							var _ml = section.spacing.mlmd || section.spacing.ml;
-							styleString += _ml == 'auto' ? 'margin-left: ' + _ml + ';float: none;' : 'margin-left: ' + _ml + 'px;';
+							if(_ml.indexOf('%') > 0){
+								_style = "";
+							}
+							else{
+								_style = "px";
+							}
+							styleString += _ml == 'auto' ? 'margin-left: ' + _ml + ';float: none;' : 'margin-left: ' + _ml + _style + ';';
 						}
 
 						if (section.spacing.mrmd || section.spacing.mr) {
 							var _mr = section.spacing.mrmd || section.spacing.mr;
-							styleString += (_mr == 'auto') ? 'margin-right: ' + _mr + ';float: none;' : 'margin-right: ' + _mr + 'px;';
+							if(_mr.indexOf('%') > 0){
+								_style = "";
+							}
+							else{
+								_style = "px";
+							}
+							styleString += (_mr == 'auto') ? 'margin-right: ' + _mr + ';float: none;' : 'margin-right: ' + _mr + _style + ';';
 						}
 
 						if (section.spacing.mwmd || section.spacing.mw) {
@@ -337,38 +482,27 @@
 	            default:
 	            	if (section && section.spacing) {
 						if (section.spacing.pt) {
-
 							styleString += (section.spacing.pt.toString().indexOf('%') > 0) ? 'padding-top: ' + section.spacing.pt + ';' : 'padding-top: ' + section.spacing.pt + 'px;';
 						}
 
 						if (section.spacing.pb) {
-
 							styleString += (section.spacing.pb.toString().indexOf('%') > 0) ? 'padding-bottom: ' + section.spacing.pb + ';' : 'padding-bottom: ' + section.spacing.pb + 'px;';
-
 						}
 
 						if (section.spacing.pl) {
-
 							styleString += (section.spacing.pl.toString().indexOf('%') > 0) ? 'padding-left: ' + section.spacing.pl + ';' : 'padding-left: ' + section.spacing.pl + 'px;';
-
 						}
 
 						if (section.spacing.pr) {
-
 							styleString += (section.spacing.pr.toString().indexOf('%') > 0) ? 'padding-right: ' + section.spacing.pr + ';' : 'padding-right: ' + section.spacing.pr + 'px;';
-
 						}
 
 						if (section.spacing.mt) {
-
 							styleString += (section.spacing.mt.toString().indexOf('%') > 0) ? 'margin-top: ' + section.spacing.mt + ';' : 'margin-top: ' + section.spacing.mt + 'px;';
-
 						}
 
 						if (section.spacing.mb) {
-
 							styleString += (section.spacing.mb.toString().indexOf('%') > 0) ? 'margin-bottom: ' + section.spacing.mb + ';' : 'margin-bottom: ' + section.spacing.mb + 'px;';
-
 						}
 
 						if (section.spacing.ml) {
