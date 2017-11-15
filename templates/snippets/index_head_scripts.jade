@@ -70,7 +70,7 @@ if (typeof account.website.theme !== 'undefined' && typeof account.website.theme
             font-family: !{account.website.themeOverrides.defaultFontStack};
         }
 
-        .ssb-theme-#{account.website.theme.handle} .ssb-section-layout .ssb-component .element-wrap{
+        .ssb-theme-#{account.website.theme.handle} .ssb-section-layout .ssb-component .element-wrap, .ssb-theme-#{account.website.theme.handle} .ssb-section-layout .ssb-component .footer-container .powered-by{
             font-size: #{account.website.themeOverrides.styles.fontSize}px;
             font-family: #{account.website.themeOverrides.styles.fontFamily};
             letter-spacing: #{account.website.themeOverrides.styles.letterSpacing}px;

@@ -2,7 +2,7 @@
     <div class="title">
         <div elem ng-model="component.title"></div>
     </div>
-    <div id="px-ele-{{vm.component._id}}" class="{{component.bg.img.parallax?'parallax':''}}" parallax-background parallax-ratio="0.4" ng-attr-style="'background': url({{component.bg.img.url}}) no-repeat fixed; 'background-color':{{component.bg.color}}">
+    <div id="px-ele-{{vm.component._id}}" class="{{component.bg.img.parallax?'parallax':''}}" parallax-background parallax-ratio="0.4" ng-attr-style="background: url('{{component.bg.img.url}}'') no-repeat fixed; background-color:{{component.bg.color}}">
         <div class="panel-group" id="accordion" ng-repeat="element in component.panels">
             <div class="panel pane-default">
                 <div class="panel-heading">

@@ -1,4 +1,4 @@
-<div class="row padding-10" ng-if="component.components[0]" ng-init="defaultSpacing = !component.spacing.default">
+<div class="row padding-10 padding-bottom-0" ng-if="component.components[0]" ng-init="defaultSpacing = !component.spacing.default">
     <div class="form-group">
         <label>Default vertical spacing<span tooltip-placement="top" tooltip-append-to-body="true" tooltip="Use the default vertical space of 50px between components. Turn off to reset vertical space to 0px.">
                   <i class="fa fa-info-circle" />
@@ -6,6 +6,13 @@
         <switch ng-model="defaultSpacing" ng-change="vm.uiState.setDefaultSpacing(component, defaultSpacing)" class="pull-right"></switch>
     </div>
 </div>
+
+<div class="row padding-10 padding-top-0" ng-class="{'padding-top-10 padding-bottom-0': !component.components[0]}">
+    <div class="form-group">
+        <a ng-click="vm.uiState.resetDefaultSpacing(component)" class="btn btn-link padding-left-0">Reset to default spacing</a>
+    </div>
+</div>
+
 <tabset class="tabbable size-and-padding-tab row padding-left-5 padding-right-5" ng-if="component.components[0]">
     <tab heading="Large Desktop">
         <div class="row padding-10">

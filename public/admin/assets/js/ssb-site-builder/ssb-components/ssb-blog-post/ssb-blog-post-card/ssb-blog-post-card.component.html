@@ -7,7 +7,7 @@
 
     <div ng-if="vm.post" class="ssb-media">
 
-        <div ng-if="vm.post.featured_image && vm.compactView" class="ssb-media-left blog-post-image-container" style="background-image: url('{{vm.post.featured_image}}');" >
+        <div ng-if="vm.post.featured_image && vm.compactView" class="ssb-media-left blog-post-image-container" ng-attr-style="background-image: url('{{vm.post.featured_image}}');" >
         </div>
 
         <div ng-if="vm.post.featured_image && !vm.compactView" class="ssb-media-left">
