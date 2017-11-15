@@ -1278,11 +1278,11 @@ _.extend(view.prototype, BaseView.prototype, {
 
                 pageEvent.set('accountId', accountId);
                 analyticsManager.storePageEvent(pageEvent, function(err){});
+                app.render('404.html', {}, function(err, html){
                     if(err) {
                         self.log.error('Error during render:', err);
                     }
                     self.resp.send(html);
-                    self.cleanUp();
                 });
             }                
         });
