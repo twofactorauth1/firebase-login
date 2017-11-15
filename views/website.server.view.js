@@ -993,7 +993,6 @@ _.extend(view.prototype, BaseView.prototype, {
             },
             function checkFor404(webpageData, page, cb) {
                 var pageHandle = handle || 'index';
-                
                 if(page) {
                    cb(null, webpageData, page);
                 } else {
@@ -1235,7 +1234,57 @@ _.extend(view.prototype, BaseView.prototype, {
             }
 
         ], function done(err){
-            
+            if(err) {
+                self.log.error('Error during rendering:', err);
+                //can we get a session id here?
+                var sessionCookie = $$.u.cookies.getCookie(self.req, 'session_cookie');
+                var sessionId = $$.u.idutils.generateUUID();
+                if(sessionCookie) {
+                    try {
+                        sessionCookie = JSON.parse(sessionCookie);
+                        sessionId = sessionCookie.id;
+                    } catch(e){
+
+                    }
+
+                }
+                var pageProperties = {
+                    url: {
+                        source: self.req.protocol + '://' + self.req.host + '/404',
+                        protocol: self.req.protocol,
+                        domain: self.req.host,
+                        port: '',
+                        path: '/404',
+                        anchor: ''
+                    },
+                    requestedUrl:{
+                        source: self.req.protocol + '://' + self.req.host + self.req.url,
+                        protocol: self.req.protocol,
+                        domain: self.req.host,
+                        port: '',
+                        path: self.req.path,
+                        anchor: ''
+                    },
+                    pageActions: [],
+                    start_time: new Date().getTime(),
+                    end_time: 0,
+                    session_id: sessionId,
+                    entrance: false
+                };
+
+                var pageEvent = new $$.m.PageEvent(pageProperties);
+                pageEvent.set('server_time', new Date().getTime());
+                pageEvent.set('server_time_dt', new Date());
+
+                pageEvent.set('accountId', accountId);
+                analyticsManager.storePageEvent(pageEvent, function(err){});
+                    if(err) {
+                        self.log.error('Error during render:', err);
+                    }
+                    self.resp.send(html);
+                    self.cleanUp();
+                });
+            }                
         });
     },
 
