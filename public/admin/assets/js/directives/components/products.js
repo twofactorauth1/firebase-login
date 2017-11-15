@@ -269,6 +269,13 @@ app.directive('productsComponent', ['ProductService', '$location', '$timeout', '
         return styleString;
       }
 
+      scope.truncateImageUrl = function(url){
+          if(url)
+          {
+              return url.replace(/^https?\:/i, "");
+          }
+      }
+
       scope.productSortOrderOptions = [
           {
               label: "Most Recent",
