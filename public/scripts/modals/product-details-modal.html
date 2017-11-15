@@ -10,7 +10,7 @@
             <div class="product-img">
                 <div ng-if="selectedProduct.is_image" class="img-wrap">
                                 
-                    <img ng-if="isImage(selectedProduct.icon)" ng-src="{{selectedProduct.icon}}" class="img-responsive">
+                    <img ng-if="isImage(selectedProduct.icon)" ng-src="{{::truncateImageUrl(selectedProduct.icon)}}" class="img-responsive">
                     <img ng-if="!isImage(selectedProduct.icon)" class="img-responsive" src="/images/default-media.png"/>
                 </div>
                 <div ng-if="!selectedProduct.is_image && selectedProduct.icon" class="img-wrap icon">

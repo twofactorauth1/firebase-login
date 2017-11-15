@@ -35,7 +35,7 @@
                         <div ng-if="product.is_image || product.icon" class="product-img">
                             <div ng-if="product.is_image" class="img-wrap">
                                 <div class="product-img" ng-if="isImage(product.icon)">
-                                    <img ng-src="{{::product.icon}}" class="img-responsive" err-src="/images/default-media.png"/>
+                                    <img ng-src="{{::truncateImageUrl(product.icon)}}" class="img-responsive" err-src="/images/default-media.png"/>
                                 </div>
                                 <div class="product-img" ng-if="!isImage(product.icon)">
                                     <img class="img-responsive" src="/images/default-media.png"/>
