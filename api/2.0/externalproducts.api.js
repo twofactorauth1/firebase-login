@@ -27,7 +27,7 @@ _.extend(api.prototype, baseApi.prototype, {
     initialize: function () {
 
         app.get(this.url(''), this.isAuthAndSubscribedApi.bind(this), this.listExternalProducts.bind(this));
-
+        app.get(this.url('load'), this.isAuthAndSubscribedApi.bind(this), this.loadExternalProducts.bind(this));
     },
 
     listExternalProducts: function(req, resp) {
@@ -41,6 +41,19 @@ _.extend(api.prototype, baseApi.prototype, {
             self.sendResultOrError(resp, err, value, 'Error listing external products');
         });
 
+    },
+
+    loadExternalProducts: function(req, resp) {
+        var self = this;
+        var accountId = parseInt(self.accountId(req));
+        var userId = self.userId(req);
+        self.log.debug(accountId, userId, '>> loadExternalProducts');
+
+        manager.loadExternalProducts(function(err, value){
+            manager.runExternalProductsJob();
+            self.log.debug(accountId, userId, '<< loadExternalProducts');
+            self.sendResultOrError(resp, err, {numberLoaded:value}, 'Error loading external products');
+        });
     }
 
 });
