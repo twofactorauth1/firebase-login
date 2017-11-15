@@ -77,6 +77,13 @@ if (typeof account.website.theme !== 'undefined' && typeof account.website.theme
             font-weight: #{account.website.themeOverrides.styles.fontWeight};
         }
 
+        .ssb-theme-#{account.website.theme.handle} .ssb-section-layout .ssb-component .element-wrap .ssb-element-button{
+            font-size: #{account.website.themeOverrides.styles.fontSize}px;
+            font-family: #{account.website.themeOverrides.styles.fontFamily};
+            letter-spacing: #{account.website.themeOverrides.styles.letterSpacing}px;
+            font-weight: #{account.website.themeOverrides.styles.fontWeight};
+        }
+
         .ssb-theme-#{account.website.theme.handle} .ssb-navigation a {
             color: #{account.website.themeOverrides.styles.primaryTextColor};
         }
