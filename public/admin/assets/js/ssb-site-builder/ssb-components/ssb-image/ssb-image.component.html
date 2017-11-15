@@ -5,7 +5,7 @@
 	<div id="px-ele-{{vm.component._id}}" class="nav-header-div" ng-if="(vm.component.version == 2 && vm.component.parallax )" ng-class="{parallax:vm.component.parallax}"
 	     {{vm.component.parallax ? parallax-background  : ""}}
 	     ng-attr-parallax-ratio="{{vm.component.parallax ? '0.4' : '1'}}"
-	     style='
+	     ng-attr-style='
 	        background: url("{{vm.component.src}}");
 	        background-size: cover;
 	        background-repeat: no-repeat;'> 		
