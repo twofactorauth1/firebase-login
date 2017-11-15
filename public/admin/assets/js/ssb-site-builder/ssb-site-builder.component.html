@@ -1,5 +1,5 @@
 <link ng-if="vm.state.permissions.html" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.12.0/codemirror.min.css">
-<style ng-repeat="font in vm.state.customFonts">    
+<style ng-repeat="font in vm.state.customFonts">
     @font-face {
       font-family: "{{font.name}}";
       src: url("https:{{font.url}}");
@@ -33,7 +33,12 @@
     letter-spacing: {{vm.state.website.themeOverrides.styles.letterSpacing}}px;
     font-weight: {{vm.state.website.themeOverrides.styles.fontWeight}};
 }
-
+.ssb-theme-{{vm.state.website.theme.handle}} .ssb-section-layout .ssb-component .element-wrap .ssb-element-button{
+    font-size: {{vm.state.website.themeOverrides.styles.fontSize}}px !important;
+    font-family: {{vm.state.website.themeOverrides.styles.fontFamily}};
+    letter-spacing: {{vm.state.website.themeOverrides.styles.letterSpacing}}px;
+    font-weight: {{vm.state.website.themeOverrides.styles.fontWeight}};
+}
 .ssb-theme-{{vm.state.website.theme.handle}} .ssb-navigation a {
     color: {{vm.state.website.themeOverrides.styles.primaryTextColor}};
 }
