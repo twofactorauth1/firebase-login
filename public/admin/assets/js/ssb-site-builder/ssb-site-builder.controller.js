@@ -43,6 +43,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
     vm.savePost = savePost;
     vm.updateColumnLayout = updateColumnLayout;
     vm.setDefaultSpacing = setDefaultSpacing;
+    vm.resetDefaultSpacing = resetDefaultSpacing;
     vm.updatetestimonialWidth = updatetestimonialWidth;
     vm.onBorderChange = onBorderChange;
     vm.isNavHero = isNavHero;
@@ -169,6 +170,8 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
         updateColumnLayout: vm.updateColumnLayout,
 
         setDefaultSpacing: vm.setDefaultSpacing,
+
+        resetDefaultSpacing: vm.resetDefaultSpacing,
 
         updatetestimonialWidth:vm.updatetestimonialWidth,
 
@@ -1418,6 +1421,52 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
         }
         section.spacing.default = value ? false : true;
     }
+
+
+    function resetDefaultSpacing(section){
+        if(section.spacing){
+            section.spacing.mt = "";
+            section.spacing.ml = "";
+            section.spacing.mb = "";
+            section.spacing.mr = "";
+
+            section.spacing.mtxs = "";
+            section.spacing.mlxs = "";
+            section.spacing.mbxs = "";
+            section.spacing.mrxs = "";
+
+            section.spacing.mtsm = "";
+            section.spacing.mlsm = "";
+            section.spacing.mbsm = "";
+            section.spacing.mrsm = "";
+
+            section.spacing.mtmd = "";
+            section.spacing.mlmd = "";
+            section.spacing.mbmd = "";
+            section.spacing.mrmd = "";
+
+            section.spacing.pt = "";
+            section.spacing.pl = "";
+            section.spacing.pb = "";
+            section.spacing.pr = "";
+
+            section.spacing.ptxs = "";
+            section.spacing.plxs = "";
+            section.spacing.pbxs = "";
+            section.spacing.prxs = "";
+
+            section.spacing.ptsm = "";
+            section.spacing.plsm = "";
+            section.spacing.pbsm = "";
+            section.spacing.prsm = "";
+
+            section.spacing.ptmd = "";
+            section.spacing.plmd = "";
+            section.spacing.pbmd = "";
+            section.spacing.prmd = "";
+        }
+    }
+
     function updatetestimonialWidth(section){
 
         if(section.components && section.components.length>0 &&
