@@ -203,7 +203,7 @@ function virtualHostSession(req, res, next) {
     var hostSession = null;// can't cache this for now... bummer.
     if (!hostSession) {
         //console.log('No hostSession for ' + host);
-        if(host.replace(':3000', '').endsWith('gorvlvr.com')) {
+        if(host && host.replace(':3000', '').endsWith('gorvlvr.com')) {
             //console.log('using .gorvlvr.com');
             var sess = {
                 store: mongoStore,
@@ -215,7 +215,7 @@ function virtualHostSession(req, res, next) {
                 key: 'gorvlvr_connect.sid'
             };
             hostSession = mwCache[host] = express.session(sess);
-        } else if(host.replace(':3000', '').endsWith('videoautoresponder.com')){
+        } else if(host && host.replace(':3000', '').endsWith('videoautoresponder.com')){
             var sess = {
                 store: mongoStore,
                 secret: 'mys3cr3t',
@@ -226,7 +226,7 @@ function virtualHostSession(req, res, next) {
                 key: 'videoautoresponder_connect.sid'
             };
             hostSession = mwCache[host] = express.session(sess);
-        } else if(host.replace(':3000', '').endsWith('securematics.com')){
+        } else if(host && host.replace(':3000', '').endsWith('securematics.com')){
             var sess = {
                 store: mongoStore,
                 secret: 'mys3cr3t',
@@ -237,7 +237,7 @@ function virtualHostSession(req, res, next) {
                 key: 'securematics_connect.sid'
             };
             hostSession = mwCache[host] = express.session(sess);
-        } else if(host.replace(':3000', '').endsWith('techevent.us')){
+        } else if(host && host.replace(':3000', '').endsWith('techevent.us')){
             var sess = {
                 store: mongoStore,
                 secret: 'mys3cr3t',
@@ -248,7 +248,7 @@ function virtualHostSession(req, res, next) {
                 key: 'techevent_connect.sid'
             };
             hostSession = mwCache[host] = express.session(sess);
-        } else if(host.replace(':3000', '').endsWith('leadsource.cc')){
+        } else if(host && host.replace(':3000', '').endsWith('leadsource.cc')){
             var sess = {
                 store: mongoStore,
                 secret: 'mys3cr3t',
