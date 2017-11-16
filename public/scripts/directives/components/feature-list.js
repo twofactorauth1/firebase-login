@@ -12,12 +12,8 @@ app.directive('featureListComponent', [function () {
 				var styleString = ' ',
 					color;
 				if (isActive && !component.hideActiveFeautureUnderline) {
-					if($(".list-features-" + component._id + " li.active .features-tabs-heading").text().trim()){
-						color = $(".list-features-" + component._id + " li.active .features-tabs-heading span").css("color");
-					}
-					else{
-						color = $(".list-features-" + component._id + " li.active .fr-view span:not('.fr-marker'):not('.fr-placeholder'):not(:empty):last").css("color");					
-					}
+					
+					color = $(".list-features-" + component._id + " li.active .fr-view span:not('.fr-marker'):not('.fr-placeholder'):not(:empty):last").css("color");					
 					
 					if (!color) {
 						color = $(".list-features-" + component._id + " li.active").css("color");
