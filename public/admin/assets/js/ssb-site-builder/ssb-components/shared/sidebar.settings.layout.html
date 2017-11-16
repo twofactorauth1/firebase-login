@@ -1,6 +1,6 @@
 <div class="row padding-10 padding-bottom-0" ng-if="component.components[0]" ng-init="defaultSpacing = !component.spacing.default">
     <div class="form-group">
-        <label>Default vertical spacing<span tooltip-placement="top" tooltip-append-to-body="true" tooltip="Use the default vertical space of 50px between components. Turn off to reset vertical space to 0px.">
+        <label>Default vertical spacing<span tooltip-placement="top" tooltip-append-to-body="true" tooltip="Use the default vertical space of 50px between components. Turn off to set vertical space to 0px.">
                   <i class="fa fa-info-circle" />
              </span></label>
         <switch ng-model="defaultSpacing" ng-change="vm.uiState.setDefaultSpacing(component, defaultSpacing)" class="pull-right"></switch>
@@ -9,7 +9,7 @@
 
 <div class="row padding-10 padding-top-0" ng-class="{'padding-top-10 padding-bottom-0': !component.components[0]}">
     <div class="form-group">
-        <a ng-click="vm.uiState.resetDefaultSpacing(component)" class="btn btn-link padding-left-0">Reset to default spacing</a>
+        <a ng-click="vm.uiState.resetDefaultSpacing(component)">Reset to default spacing<span tooltip-placement="top" tooltip-append-to-body="true" tooltip="Resets any overrides that have been applied (below)."></a>
     </div>
 </div>
 
@@ -28,7 +28,7 @@
                 </ui-select>
             </div>
         </div>
-        
+
         <div class="row padding-10" ng-class="{'disabled': component.disableTextSpacing && component.type === 'ssb-element-text'}">
             <div class="padding-15 margin-bottom-0 partition-light-primary">
                 <label class="text-white lead">Outer Spacing</label>
@@ -100,7 +100,7 @@
                     </ui-select-choices>
                 </ui-select>
             </div>
-        </div>        
+        </div>
         <div class="row padding-10" ng-class="{'disabled': component.disableTextSpacing && component.type === 'ssb-element-text'}">
             <div class="padding-15 margin-bottom-0 partition-light-primary">
                 <label class="text-white lead">Outer Spacing</label>
@@ -173,7 +173,7 @@
                 </ui-select>
             </div>
         </div>
-        
+
         <div class="row padding-10" ng-class="{'disabled': component.disableTextSpacing && component.type === 'ssb-element-text'}">
             <div class="padding-15 margin-bottom-0 partition-light-primary">
                 <label class="text-white lead">Outer Spacing</label>
@@ -246,7 +246,7 @@
                 </ui-select>
             </div>
         </div>
-        
+
         <div class="row padding-10" ng-class="{'disabled': component.disableTextSpacing && component.type === 'ssb-element-text'}">
             <div class="padding-15 margin-bottom-0 partition-light-primary">
                 <label class="text-white lead">Outer Spacing</label>
@@ -319,9 +319,9 @@
                         <small ng-bind-html="res | highlight: $select.search"></small>
                     </ui-select-choices>
                 </ui-select>
-            </div>        
+            </div>
         </div>
-    
+
         <div class="row padding-10" ng-class="{'disabled': component.disableTextSpacing && component.type === 'ssb-element-text'}">
             <div class="padding-15 margin-bottom-0 partition-light-primary">
                 <label class="text-white lead">Outer Spacing</label>
@@ -392,9 +392,9 @@
                         <small ng-bind-html="res | highlight: $select.search"></small>
                     </ui-select-choices>
                 </ui-select>
-            </div>        
+            </div>
         </div>
-    
+
         <div class="row padding-10" ng-class="{'disabled': component.disableTextSpacing && component.type === 'ssb-element-text'}">
             <div class="padding-15 margin-bottom-0 partition-light-primary">
                 <label class="text-white lead">Outer Spacing</label>
@@ -465,9 +465,9 @@
                         <small ng-bind-html="res | highlight: $select.search"></small>
                     </ui-select-choices>
                 </ui-select>
-            </div>        
+            </div>
         </div>
-    
+
         <div class="row padding-10" ng-class="{'disabled': component.disableTextSpacing && component.type === 'ssb-element-text'}">
             <div class="padding-15 margin-bottom-0 partition-light-primary">
                 <label class="text-white lead">Outer Spacing</label>
@@ -538,9 +538,9 @@
                         <small ng-bind-html="res | highlight: $select.search"></small>
                     </ui-select-choices>
                 </ui-select>
-            </div>        
+            </div>
         </div>
-    
+
         <div class="row padding-10" ng-class="{'disabled': component.disableTextSpacing && component.type === 'ssb-element-text'}">
             <div class="padding-15 margin-bottom-0 partition-light-primary">
                 <label class="text-white lead">Outer Spacing</label>
@@ -631,7 +631,7 @@
 
         </div>
     </div>
-    
+
     <div class="row padding-10" ng-class="{'disabled': component.disableTextSpacing && component.type === 'ssb-element-text'}">
         <div class="padding-15 margin-bottom-0 partition-light-primary">
             <label class="text-white lead">Outer Spacing</label>
