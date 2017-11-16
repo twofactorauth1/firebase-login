@@ -17,31 +17,31 @@
                     <form name="simpleForm" ng-submit="createUser(simpleForm)">
                         <div class="input-fields {{nthRow}}">
                             <!-- FIRST -->
-                            <div ng-attr-style="{{fieldStyle(component.formSettings)}}" class="form-group {{fieldClass()}}"  ng-if="fieldShow('first')" ng-class="{ 'has-error' : simpleForm.first.$invalid && !simpleForm.first.$pristine }">
+                            <div ng-attr-style="{{fieldStyle(component.formSettings)}}" class="form-group {{fieldClass()}} input-field-container"  ng-if="fieldShow('first')" ng-class="{ 'has-error' : simpleForm.first.$invalid && !simpleForm.first.$pristine }">
                                 <input ng-attr-style="{{inputStyle(component.formSettings)}}" type="text" name="first" ng-model="user.first" class="form-control" placeholder="First" required>
                                 <p ng-show="simpleForm.first.$invalid && !simpleForm.first.$pristine" class="help-block">Enter a valid first name.</p>
                             </div>
 
                             <!-- LAST -->
-                            <div ng-attr-style="{{fieldStyle(component.formSettings)}}" class="form-group {{fieldClass()}}"  ng-if="fieldShow('last')" ng-class="{ 'has-error' : simpleForm.last.$invalid && !simpleForm.last.$pristine }">
+                            <div ng-attr-style="{{fieldStyle(component.formSettings)}}" class="form-group {{fieldClass()}} input-field-container"  ng-if="fieldShow('last')" ng-class="{ 'has-error' : simpleForm.last.$invalid && !simpleForm.last.$pristine }">
                                 <input ng-attr-style="{{inputStyle(component.formSettings)}}" type="text" name="last" ng-model="user.last" class="form-control" placeholder="Last" required>
                                 <p ng-show="simpleForm.last.$invalid && !simpleForm.last.$pristine" class="help-block">Enter a valid last name.</p>
                             </div>
 
                             <!-- EXTENSION -->
-                            <div ng-attr-style="{{fieldStyle(component.formSettings)}}" class="form-group {{fieldClass()}}" ng-if="fieldShow('extension')" ng-class="{ 'has-error' : simpleForm.phone.$invalid && !simpleForm.extension.$pristine }">
+                            <div ng-attr-style="{{fieldStyle(component.formSettings)}}" class="form-group {{fieldClass()}} input-field-container" ng-if="fieldShow('extension')" ng-class="{ 'has-error' : simpleForm.phone.$invalid && !simpleForm.extension.$pristine }">
                                 <input ng-attr-style="{{inputStyle(component.formSettings)}}" type="text" name="extension" ng-model="user.extension" ng-pattern="formValidations.extension" class="form-control" placeholder="Extension">
                                 <p ng-show="simpleForm.extension.$invalid && !simpleForm.extension.$pristine" class="help-block">Enter a valid extension.</p>
                             </div>
 
                             <!-- PHONE -->
-                            <div ng-attr-style="{{fieldStyle(component.formSettings)}}" class="form-group {{fieldClass()}}" ng-if="fieldShow('phone')" ng-class="{ 'has-error' : simpleForm.phone.$invalid && !simpleForm.phone.$pristine }">
+                            <div ng-attr-style="{{fieldStyle(component.formSettings)}}" class="form-group {{fieldClass()}} input-field-container" ng-if="fieldShow('phone')" ng-class="{ 'has-error' : simpleForm.phone.$invalid && !simpleForm.phone.$pristine }">
                                 <input ng-attr-style="{{inputStyle(component.formSettings)}}" type="text" name="phone" ng-model="user.phone" class="form-control" required ind-international-tel-number form="simpleForm" placeholder="Phone">
                                 <p ng-show="simpleForm.phone.$invalid && !simpleForm.phone.$pristine" class="help-block">Enter a valid phone number.</p>
                             </div>
 
                             <!-- EMAIL -->
-                            <div ng-attr-style="{{fieldStyle(component.formSettings)}}" class="form-group {{fieldClass()}}"  ng-class="{ 'has-error' : userExists || simpleForm.email.$invalid && !simpleForm.email.$pristine }">
+                            <div ng-attr-style="{{fieldStyle(component.formSettings)}}" class="form-group {{fieldClass()}} input-field-container"  ng-class="{ 'has-error' : userExists || simpleForm.email.$invalid && !simpleForm.email.$pristine }">
                                 <input ng-attr-style="{{inputStyle(component.formSettings)}}" type="email" name="email" ng-model="user.email" class="form-control" ng-pattern="formValidations.email" ng-model-options="{ debounce: 800 }" placeholder="Email" ng-change="clearValidations()" required>
                                 <p ng-if="simpleForm.email.$invalid && !simpleForm.email.$pristine && !userExists" class="help-block">Enter a valid email.</p>
                                 <p ng-if="userExists" class="help-block">Email already exists.</p>
@@ -167,49 +167,49 @@
     font-size: 14px !important;
 }
 
-.simple-form-v1 .simple-form-{{component._id}} .input-fields.nth-row2 div:nth-child(2n) {
+.simple-form-v1 .simple-form-{{component._id}} .input-fields.nth-row2 div.input-field-container:nth-child(2n) {
   padding-left: {{component.formSettings.spacing.pr/2}}px !important;
 }
 
-.simple-form-v1 .simple-form-{{component._id}} .input-fields.nth-row2 div:nth-child(2n+1) {
+.simple-form-v1 .simple-form-{{component._id}} .input-fields.nth-row2 div.input-field-container:nth-child(2n+1) {
   padding-right: {{component.formSettings.spacing.pr/2}}px !important;
 }
 
-.simple-form-v1 .simple-form-{{component._id}} .input-fields.nth-row3 div:nth-child(3n) {
+.simple-form-v1 .simple-form-{{component._id}} .input-fields.nth-row3 div.input-field-container:nth-child(3n) {
   padding-left: {{component.formSettings.spacing.pr/2}}px !important;
 }
 
-.simple-form-v1 .simple-form-{{component._id}} .input-fields.nth-row3 div:nth-child(3n+1) {
+.simple-form-v1 .simple-form-{{component._id}} .input-fields.nth-row3 div.input-field-container:nth-child(3n+1) {
   padding-right: {{component.formSettings.spacing.pr/2}}px !important;
 }
 
-.simple-form-v1 .simple-form-{{component._id}} .input-fields.nth-row3 div:not(:nth-child(3n)), .input-fields.nth-row3 div:not(:nth-child(3n+1)) {
+.simple-form-v1 .simple-form-{{component._id}} .input-fields.nth-row3 div.input-field-container:not(:nth-child(3n)), .input-fields.nth-row3 div.input-field-container:not(:nth-child(3n+1)) {
     padding-left: {{component.formSettings.spacing.pr/2}}px !important;
     padding-right: {{component.formSettings.spacing.pr/2}}px !important;
 }
 
-.simple-form-v1 .simple-form-{{component._id}} .input-fields.nth-row4 div:nth-child(4n) {
+.simple-form-v1 .simple-form-{{component._id}} .input-fields.nth-row4 div.input-field-container:nth-child(4n) {
   padding-left: {{component.formSettings.spacing.pr/2}}px !important;
 }
 
-.simple-form-v1 .simple-form-{{component._id}} .input-fields.nth-row4 div:nth-child(4n+1) {
+.simple-form-v1 .simple-form-{{component._id}} .input-fields.nth-row4 div.input-field-container:nth-child(4n+1) {
   padding-right: {{component.formSettings.spacing.pr/2}}px !important;
 }
 
-.simple-form-v1 .simple-form-{{component._id}} .input-fields.nth-row4 div:not(:nth-child(4n)), .input-fields.nth-row4 div:not(:nth-child(4n+1)) {
+.simple-form-v1 .simple-form-{{component._id}} .input-fields.nth-row4 div.input-field-container:not(:nth-child(4n)), .input-fields.nth-row4 div.input-field-container:not(:nth-child(4n+1)) {
     padding-left: {{component.formSettings.spacing.pr/2}}px !important;
     padding-right: {{component.formSettings.spacing.pr/2}}px !important;
 }
 
-.simple-form-v1 .simple-form-{{component._id}} .input-fields.nth-row5 div:nth-child(5n) {
+.simple-form-v1 .simple-form-{{component._id}} .input-fields.nth-row5 div.input-field-container:nth-child(5n) {
   padding-left: {{component.formSettings.spacing.pr/2}}px !important;
 }
 
-.simple-form-v1 .simple-form-{{component._id}} .input-fields.nth-row5 div:nth-child(5n+1) {
+.simple-form-v1 .simple-form-{{component._id}} .input-fields.nth-row5 div.input-field-container:nth-child(5n+1) {
   padding-right: {{component.formSettings.spacing.pr/2}}px !important;
 }
 
-.simple-form-v1 .simple-form-{{component._id}} .input-fields.nth-row5 div:not(:nth-child(5n)), .input-fields.nth-row5 div:not(:nth-child(5n+1)) {
+.simple-form-v1 .simple-form-{{component._id}} .input-fields.nth-row5 div.input-field-container:not(:nth-child(5n)), .input-fields.nth-row5 div.input-field-container:not(:nth-child(5n+1)) {
     padding-left: {{component.formSettings.spacing.pr/2}}px !important;
     padding-right: {{component.formSettings.spacing.pr/2}}px !important;
 }
