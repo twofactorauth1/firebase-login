@@ -110,7 +110,8 @@ app.directive('featureListComponent', ["$window", "$timeout", function ($window,
 
 			function listStyles(component, isActive) {
 
-				var styleString = ' ';
+				var styleString = ' ',
+					color;
 				if (isActive && !component.hideActiveFeautureUnderline) {
 					if($(".list-features-" + component._id + " li.active .features-tabs-heading").text().trim()){
 						color = $(".list-features-" + component._id + " li.active .features-tabs-heading").css("color");
