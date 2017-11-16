@@ -1,0 +1,234 @@
+<!-- start: SEARCH FORM -->
+<div class="search-form hidden">
+	<a class="s-open" href="#">
+		<i class="ti-search"></i>
+	</a>
+	<form class="navbar-form" role="search">
+		<a class="s-remove" href="#" ng-toggle-class="search-open" target=".navbar-form">
+			<i class="ti-close"></i>
+		</a>
+		<div class="form-group">
+			<input type="text" class="form-control" placeholder="{{ 'sidebar.search.PLACEHOLDER' | translate }}">
+			<button class="btn search-button" type="submit">
+				<i class="ti-search"></i>
+			</button>
+		</div>
+	</form>
+</div>
+<!-- end: SEARCH FORM -->
+<!-- start: MAIN NAVIGATION MENU -->
+<ul class="main-navigation-menu">
+	<li ui-sref-active="active">
+		<a ui-sref="app.dohy">
+			<div class="item-content">
+				<div class="item-media">
+					<i class="ti-home"></i>
+                    <span ng-if="showDashboardNotificationIcon" class="fa fa-exclamation-circle dashboard-update-icon"></span>
+				</div>
+				<div class="item-inner">
+					<span class="title" translate="sidebar.nav.dashboard.MAIN"> Dashboard</span>
+				</div>
+			</div>
+		</a>
+	</li>
+	<li ng-class="{'active open':$state.includes('app.website')}">
+		<a href="javascript:void(0)">
+			<div class="item-content">
+				<div class="item-media">
+					<i class="ti-desktop"></i>
+				</div>
+				<div class="item-inner">
+					<span class="title" translate="sidebar.nav.website.MAIN"> Website </span><i class="icon-desktop"></i>
+				</div>
+			</div>
+		</a>
+		<ul class="sub-menu">
+            <li ui-sref-active="active" ng-if="account.showhide.ssbSiteBuilder">
+                <a ui-sref="app.website.ssbSiteBuilder.pages">
+                    <span class="title"> Site Builder </span>
+                </a>
+            </li>
+            <li ui-sref-active="active" ng-if="!account.showhide.ssbSiteBuilder || account.showhide.legacyPages">
+                <a ui-sref="app.website.pages">
+                    <span class="title" translate="sidebar.nav.website.PAGES"> Pages </span>
+                </a>
+            </li>
+            <li ui-sref-active="active" ng-if="account.showhide.blog && !account.showhide.ssbBlog">
+                <a ui-sref="app.website.posts">
+                    <span class="title" translate="sidebar.nav.website.POSTS"> Blog Posts </span>
+                </a>
+            </li>
+			<li ui-sref-active="active">
+				<a ui-sref="app.website.analytics">
+					<span class="title" translate="sidebar.nav.website.ANALYTICS"> Analytics </span>
+				</a>
+			</li>
+			<!-- <li ui-sref-active="active">
+				<a ui-sref="app.website.templates">
+					<span class="title" translate="sidebar.nav.website.TEMPLATES"> Templates </span>
+				</a>
+			</li> -->
+		</ul>
+	</li>
+	<li ng-class="{'active open':$state.includes('app.contacts')}">
+		<a href="javascript:void(0)">
+			<div class="item-content">
+				<div class="item-media">
+					<i class="ti-user"></i>
+				</div>
+				<div class="item-inner">
+					<span class="title" translate="sidebar.nav.contacts.MAIN"> Contacts </span>
+				</div>
+			</div>
+		</a>
+		<ul class="sub-menu">
+			<li ui-sref-active="active">
+				<a ui-sref="app.contacts">
+					<span class="title" translate="sidebar.nav.contacts.MANAGE"> Manage </span>
+				</a>
+			</li>
+		</ul>
+	</li>
+    <li ng-class="{'active open':$state.includes('app.customers')}" ng-if="account.isOrgAdmin == true">
+        <a href="javascript:void(0)">
+            <div class="item-content">
+                <div class="item-media">
+                    <i class="ti-panel"></i>
+                </div>
+                <div class="item-inner">
+                    <span class="title" translate="sidebar.nav.customers.MAIN"> Platform </span>
+                </div>
+            </div>
+        </a>
+        <ul class="sub-menu">
+            
+            <li ui-sref-active="active">
+                <a ui-sref="app.customers">
+                    <span class="title" translate="sidebar.nav.customers.MANAGE"> Customers </span>
+                </a>
+            </li>
+
+            <li ui-sref-active="active">
+                <a ui-sref="app.customeranalytics">
+                    <span class="title" translate="sidebar.nav.customers.ANALYTICS"> Analytics </span>
+                </a>
+            </li>
+            
+            <li ui-sref-active="active" ng-class="{'active': $state.includes('app.singlebroadcastmessage' || $state.includes('app.singlebroadcastmessage'))}">
+                <a ui-sref="app.broadcastmessage">
+                    <span class="title" translate="sidebar.nav.customers.BROADCAST"> Broadcast Message </span>
+                </a>
+            </li>
+        </ul>
+    </li>
+	<li ng-class="{'active open':$state.includes('app.products', 'app.orders')}">
+		<a href="javascript:void(0)">
+			<div class="item-content">
+				<div class="item-media">
+					<i class="ti-shopping-cart"></i>
+				</div>
+				<div class="item-inner">
+					<span class="title" translate="sidebar.nav.commerce.MAIN"> Commerce </span><i class="icon-desktop"></i>
+				</div>
+			</div>
+		</a>
+		<ul class="sub-menu">
+			<li ui-sref-active="active">
+				<a ui-sref="app.commerce.products">
+					<span class="title" translate="sidebar.nav.commerce.PRODUCTS"> Products </span>
+				</a>
+			</li>
+			<li ui-sref-active="active" ng-show="label">
+				<a ui-sref="app.commerce.orders">
+					<span class="title"><indigeweb-transaction-label plural=true capitalize=true ></indigeweb-transaction-label></span>
+				</a>
+			</li>
+		</ul>
+	</li>
+    <li ng-class="{'active open':$state.includes('app.emails')}">
+        <a href="javascript:void(0)">
+            <div class="item-content">
+                <div class="item-media">
+                    <i class="ti-email"></i>
+                </div>
+                <div class="item-inner">
+                    <span class="title" translate="sidebar.nav.emails.MAIN"> Emails </span>
+                </div>
+            </div>
+        </a>
+        <ul class="sub-menu">
+            <li ui-sref-active="active">
+                <a ui-sref="app.emails">
+                    <span class="title" translate="sidebar.nav.emails.MANAGE"> Manage </span>
+                </a>
+            </li>
+        </ul>
+    </li>
+	<li ng-class="{'active open':$state.includes('app.marketing')}">
+		<a href="javascript:void(0)">
+			<div class="item-content">
+				<div class="item-media">
+					<i class="ti-announcement"></i>
+				</div>
+				<div class="item-inner">
+					<span class="title" translate="sidebar.nav.marketing.MAIN"> Marketing </span><i class="icon-desktop"></i>
+				</div>
+			</div>
+		</a>
+		<ul class="sub-menu">
+			<li ui-sref-active="active">
+				<a ui-sref="app.marketing.campaigns">
+					<span class="title" translate="sidebar.nav.marketing.CAMPAIGNS"> Campaigns </span>
+				</a>
+			</li>
+		</ul>
+	</li>
+	<li ng-class="{'active open':$state.includes('app.support')}">
+		<a href="javascript:void(0)">
+			<div class="item-content">
+				<div class="item-media">
+					<i class="ti-info-alt"></i>
+				</div>
+				<div class="item-inner">
+					<span class="title" translate="sidebar.nav.support.MAIN"> Support </span><i class="icon-desktop"></i>
+				</div>
+			</div>
+		</a>
+		<ul class="sub-menu" ng-if="!account.oem">
+			<li ui-sref-active="active">
+				<a ui-sref="app.support.helptopics">
+					<span class="title" translate="sidebar.nav.support.HELPTOPICS"> Help Topics </span>
+				</a>
+			</li>
+			<li ui-sref-active="active" ng-if="account._id == 6">
+				<a ui-sref="app.support.managetopics">
+					<span class="title" translate="sidebar.nav.support.MANAGETOPICS"> Manage Topics</span>
+				</a>
+			</li>
+		</ul>
+		<ul class="sub-menu" ng-if="account.oem">
+			<li ui-sref-active="active">
+				<a onclick="Intercom('showNewMessage', 'I need some additional assistance.');">
+					<span class="title"> Help</span>
+				</a>
+			</li>
+		</ul>
+	</li>
+</ul>
+<div class="wrapper ng-scope" ng-if="account.billing.plan==='NO_PLAN_ARGUMENT'">
+    <!--accountConstant.plan_types.TRIAL-->
+    <a class="button-o" href="#/account/billing" style="text-overflow: initial!important;">
+        <i class="ti-alarm-clock" ng-if="!app.layout.isSidebarClosed"></i>
+        <span>{{::account.trialDaysRemaining}} </span>
+        <span translate="sidebar.heading.TRIAL_REMAINING" ng-if="!app.layout.isSidebarClosed"></span>
+    </a>
+</div>
+<!-- end: MAIN NAVIGATION MENU -->
+<!-- start: DOCUMENTATION BUTTON -->
+<!-- <div class="wrapper">
+	<a ui-sref="app.documentation" class="button-o">
+		<i class="ti-help"></i>
+		<span translate="sidebar.heading.DOCUMENTATION">Documentation</span>
+	</a>
+</div> -->
+<!-- end: DOCUMENTATION BUTTON -->
