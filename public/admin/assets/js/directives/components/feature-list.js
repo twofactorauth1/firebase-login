@@ -113,7 +113,11 @@ app.directive('featureListComponent', ["$window", "$timeout", function ($window,
 				var styleString = ' ',
 					color;
 				if (isActive && !component.hideActiveFeautureUnderline) {
-					color = $(".list-features-" + component._id + " li.active .fr-view span:not('.fr-marker'):not('.fr-placeholder'):not(:empty):last").css("color");
+					if($(".list-features-" + component._id + " li.active .features-tabs-heading :not('.fr-marker'):not('.fr-placeholder'):not(:empty):last").text()){
+						color = $(".list-features-" + component._id + " li.active .features-tabs-heading :not('.fr-marker'):not('.fr-placeholder'):not(:empty):last").css("color")
+					}
+					else
+						color = $(".list-features-" + component._id + " li.active .fr-view span:not('.fr-marker'):not('.fr-placeholder'):not(:empty):last").css("color");
 					
 					if (!color) {
 						color = $(".list-features-" + component._id + " li.active").css("color");
