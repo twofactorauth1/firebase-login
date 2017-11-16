@@ -87,6 +87,88 @@ var manager = {
 
                 });
         }
+    },
+
+    externalProductSearch: function(accountId, userId, term, fieldSearch, skip, limit, sortBy, sortDir, fn) {
+        var self = this;
+        self.log.debug(accountId, userId, '>> externalProductSearch');
+        var regex = new RegExp('\.*'+term+'\.*', 'i');
+        var intTerm = parseInt(term);
+        var query = {};
+        var orQuery = [
+            {clientid:intTerm},
+            {productid:intTerm},
+            {productnumber:regex},
+            {categoryid:intTerm},
+            {subcategoryid:intTerm},
+            {vendor:regex},
+            {productitle:regex},
+            {productshortdescription:regex},
+            {productdescription:regex},
+            {produtvideo:regex},
+            {inactive:regex},
+            {categorytitle:regex},
+            {imageid:intTerm},
+            {imagepath:regex},
+            {imagemega:regex},
+            {imageorder:intTerm},
+            {industryid:regex},
+            {tagid:regex}
+        ];
+        if(fieldSearch){
+            var fieldSearchArr = [];
+            var intFields = ['clientid', 'productid', 'categoryid', 'subcategoryid', 'imageid'];
+            for(var i=0; i <= Object.keys(fieldSearch).length - 1; i++){
+                var key = Object.keys(fieldSearch)[i];
+                var value = fieldSearch[key];
+                self.log.debug('value:', value);
+                if(value){
+                    if (_.contains(intFields, key)) {
+                        var obj = {};
+                        obj[key] = parseInt(value);
+                        fieldSearchArr.push(obj);
+                    } else {
+                        var obj = {};
+                        obj[key] = new RegExp(value, 'i');
+                        fieldSearchArr.push(obj);
+                    }
+
+                }
+            }
+            if(fieldSearchArr.length){
+                query["$and"] = fieldSearchArr;
+            }
+            if(term){
+                query["$or"] = orQuery;
+            }
+        } else {
+            query = {
+                $or: orQuery
+            };
+        }
+        dao.findWithFieldsLimitOrderAndTotal(query, skip, limit, sortBy, null, $$.m.ExternalProduct, sortDir, function(err, list){
+            if(err) {
+                self.log.error(accountId, userId, 'Error searching external products:', err);
+                fn(err);
+            } else {
+                self.log.debug(accountId, userId, '<< externalProductSearch');
+                fn(null, list);
+            }
+        });
+    },
+
+    getExternalProduct: function(accountId, userId, productId, fn) {
+        var self = this;
+        self.log.debug(accountId, userId, '>> getExternalProduct', productId);
+        dao.getById(productId, $$.m.ExternalProduct, function(err, value){
+            if(err) {
+                self.log.error(accountId, userId, 'Error getting product:', err);
+                fn(err);
+            } else {
+                self.log.debug('<< getExternalProduct');
+                fn(null, value);
+            }
+        });
     }
 };
 $$.u = $$.u || {};
