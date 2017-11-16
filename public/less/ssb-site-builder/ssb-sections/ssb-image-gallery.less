@@ -59,6 +59,11 @@
         .image-50-details{
             width: 50%;
             height: 396px ;
+            .ssb-media-query-small-only({
+                .word-break{
+                    word-break: break-all;
+                }
+            })
         }
         .image-50-details .ssb-element-text{
             height: 396px ;
@@ -68,11 +73,6 @@
             width: 100%;
             height: 100%;
             max-width: 100%;
-            .ssb-media-query-small-only({
-                .word-break{
-                    word-break: break-all;
-                }
-            }
             &.mouse-off{
                 display: block;
             }
