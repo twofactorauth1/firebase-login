@@ -11,7 +11,7 @@
             <div class="img-row col-sm-12 col-xs-12 image-wrap {{isEditing ? 'editing' : ''}}" ng-repeat="image in component.images track by $index">
 
                     <div class="img-responsive img-gallery-{{$index}} image-gallery center" data-index="{{$index}}" alt="{{image.label}}" ng-attr-style="background-image: url({{image.url}})">
-                         <div ng-if="component.halfOverlay" elem ng-model="image.details" class="image-50-details"></div> 
+                         <div ng-if="component.halfOverlay" elem ng-model="image.details" class="image-50-details pull-{{component.halfOverlayPosition}}"></div> 
                     </div>
                     <div ng-if="isEditing" class="link-single-image center"  ng-click="addImageFromMedia(component._id, $index, true)" >
                         <button class="ng-scope btn-link-single-image" tooltip-placement="top" tooltip-append-to-body="true"  tooltip-append-to-body="true" tooltip="Change this image."><i class='fa fa-link'></i></button>
