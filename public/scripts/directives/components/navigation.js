@@ -32,28 +32,18 @@ app.directive('navigationComponent', ['websiteService', 'accountService', '$time
 			accountService(function (err, account) {
 				$scope.account = account;
 			});
-			var args = {},
-				pageList = {};
+			var args = {};
 			$scope.$emit('getCurrentPage', args);
 			$scope.currentpage = args.currentpage;
 			// Special case for blogs
 			if ($scope.currentpage && ($scope.currentpage.handle === 'blog-list' || $scope.currentpage.handle === 'blog-post')) {
 				$scope.currentpage.handle = 'blog';
-			}			
-			if (window.indigenous && window.indigenous.precache && window.indigenous.precache.siteData && window.indigenous.precache.siteData.pages) {
-				pageList = window.indigenous.precache.siteData.pages;
-			}
-
+			}		
+			
 			$scope.checkIfReloadPage = function (link) {
 				if (link && link.data) {
 					if (link.data === 'blog') {
 						return true;
-					} else {
-						if (pageList && pageList[link.data]) {
-							if (pageList[link.data].isBlogCopy) {
-								return true;
-							}
-						}
 					}
 				}
 				return false;
