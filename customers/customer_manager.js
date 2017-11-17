@@ -504,7 +504,6 @@ module.exports = {
         });
     },
 
-
     updateCustomerShowHide: function(accountId, userId, customerId, customerDetails, fn) {
         var self = this;
         self.log.debug(accountId, userId, '>> updateCustomerShowHide');
