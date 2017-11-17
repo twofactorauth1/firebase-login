@@ -35,7 +35,6 @@ _.extend(api.prototype, baseApi.prototype, {
         app.post(this.url('customer/:id/templateAccount'), this.isAuthAndSubscribedApi.bind(this), this.updateCustomerTemplateAccount.bind(this));
         app.post(this.url('customer/:id/refreshTemplateImage'), this.isAuthAndSubscribedApi.bind(this), this.refreshTemplateImage.bind(this));
         app.post(this.url('customer/:id/oem'), this.isAuthAndSubscribedApi.bind(this), this.updateCustomerOEM.bind(this));
-        app.post(this.url('customer/:id/customCssEnabled'), this.isAuthAndSubscribedApi.bind(this), this.updateCustomerCssEnabled.bind(this));
         app.post(this.url('customer/:id/insights'), this.isAuthAndSubscribedApi.bind(this), this.updateCustomerInsights.bind(this));
         app.post(this.url('customer/:id/showhide'), this.isAuthAndSubscribedApi.bind(this), this.updateCustomerShowHide.bind(this));
         //app.delete(this.url(':type/:key'), this.isAuthAndSubscribedApi.bind(this), this.deleteComponentData.bind(this));
@@ -313,34 +312,6 @@ _.extend(api.prototype, baseApi.prototype, {
                     manager.updateCustomerOEM(accountId, userId, customerId, oem, function(err, updatedCustomer){
                         self.log.debug(accountId, userId, '<< updateCustomerOEM');
                         self.sendResultOrError(resp, err, updatedCustomer, 'Error updating insights');
-                    });
-                } else {
-                    self.wrapError(resp, 400, 'Unsupported Method', 'This method is unsupported');
-                }
-            });
-        }
-    },
-
-
-    updateCustomerCssEnabled: function(req, resp) {
-        var self = this;
-        var accountId = parseInt(self.accountId(req));
-        var userId = self.userId(req);
-        self.log.debug(accountId, userId, '>> updateCustomerCssEnabled');
-        var customerId = parseInt(req.params.id);
-        var customCss = req.body.customCss;
-        if(accountId === appConfig.mainAccountID) {
-            manager.updateCustomerCssEnabled(accountId, userId, customerId, customCss, function(err, updatedCustomer){
-                self.log.debug(accountId, userId, '<< updateCustomerCssEnabled');
-                self.sendResultOrError(resp, err, updatedCustomer, 'Error updating customer');
-            });
-        } else {
-            self.isOrgAdmin(accountId, userId, req, function(err, val) {
-                if (val === true) {
-                    var orgDomain = urlUtils.getSubdomainFromRequest(req).orgDomain;
-                    manager.updateCustomerCssEnabled(accountId, userId, customerId, customCss, function(err, updatedCustomer){
-                        self.log.debug(accountId, userId, '<< updateCustomerCssEnabled');
-                        self.sendResultOrError(resp, err, updatedCustomer, 'Error updating customer');
                     });
                 } else {
                     self.wrapError(resp, 400, 'Unsupported Method', 'This method is unsupported');

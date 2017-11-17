@@ -281,28 +281,6 @@
             });
         };
 
-        $scope.updateCustomCssEnabled = function(customCss) {
-            var text = customCss ? "Set this customer to enable custom css" : "Unset this customer to enable custom css";
-            SweetAlert.swal({
-                title: "Are you sure?",
-                text: text,
-                type: "warning",
-                showCancelButton: true,
-                confirmButtonColor: "#DD6B55",
-                confirmButtonText: "Yes",
-                cancelButtonText: "No",
-                noActionButtonText: 'Cancel',
-                closeOnConfirm: true,
-                closeOnCancel: true
-            }, function (isConfirm) {
-                if (isConfirm) {
-                    updateCustomCssEnabled(customCss);
-                } else {
-                    $scope.customer.customCssEnabled = !customCssEnabled;
-                }
-            });
-        };
-
 		$scope.updateCustomerTemplateAccount = function (isTemplateAccount) {
 			var text = isTemplateAccount ? "Set this customer as template account" : "Unset this customer as template account";
 			SweetAlert.swal({
@@ -349,6 +327,17 @@
 
 		$scope.updateCustomerHTML = function (isEnabled) {
 			$scope.customer.showhide.editHTML = isEnabled;
+			customerService.updateCustomerShowHide($scope.customer, function (err, customer) {
+				if (err) {
+					toaster.pop('warning', err.message);
+				} else {
+					toaster.pop('success', 'Edit HTML updated.');
+				}
+			});
+		};
+
+		$scope.updateCustomCssEnabled = function (isEnabled) {
+			$scope.customer.showhide.customCss = isEnabled;
 			customerService.updateCustomerShowHide($scope.customer, function (err, customer) {
 				if (err) {
 					toaster.pop('warning', err.message);

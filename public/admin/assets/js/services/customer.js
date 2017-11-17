@@ -264,24 +264,6 @@
         };
 
 
-        this.updateCustomCssEnabled = function(customer, customCss, fn) {
-            var id = customer._id;
-
-            var apiUrl = [baseUrl, 'customer', id, 'customCssEnabled'].join('/');
-            var body = {
-                customCss:customCss
-            };
-            var cache = this.getCache();
-            $http.post(apiUrl, body).success(function(data){
-                if(cache) {
-                    cache.get(id).oem = data.oem;
-                }
-                fn(null, data);
-            }).error(function(err){
-                fn(err);
-            });
-        };
-
         this.updateCustomerReceiveInsights = function(customer, receiveInsights, fn) {
             var id = customer._id;
 
