@@ -28,7 +28,7 @@
 		vm.player = {};
 		vm.sectionInitDelayDone = false;
 		vm.setFixedPosition = setFixedPosition;
-
+		vm.firstVisibleElement=false
 
 		$scope.$watch('vm.section.bg.video.id', function (_id) {
 			if (_id && vm.section.bg.video.show) {
@@ -1112,18 +1112,21 @@
 			}, 0);
 			var _isVerticalNav = false;
 			var elementIsFirstPosition = vm.index === 0;
-
-
+			if(!vm.firstVisibleElement && vm.showSection(vm.section)){
+				vm.firstVisibleElement=true;
+				elementIsFirstPosition=true;
+			}
 			if (!vm.uiState && vm.section && vm.section.fixedLeftNavigation && elementIsFirstPosition && vm.showSection(vm.section)) {
 				_isVerticalNav = true;
 				var isBlogPage = angular.element(".ssb-layout__header_2-col_footer").length;
 				if (!isBlogPage) {
+					var sectionLength=angular.element(".ssb-page-section").length;
 					if (!angular.element(".ssb-wrap-left-fixed-left-nav").length) {
-						angular.element(".ssb-page-section:first").addClass("ssb-wrap-left-fixed-left-nav");
-						angular.element(".ssb-page-section").slice(1).wrapAll("<div class='ssb-wrap-fixed-right-nav' />");
+						angular.element(".ssb-page-section:eq("+(sectionLength-1)+")").addClass("ssb-wrap-left-fixed-left-nav");
+						angular.element(".ssb-page-section").slice(sectionLength).wrapAll("<div class='ssb-wrap-fixed-right-nav' />");
 						$timeout(function () {
 							if (!angular.element(".ssb-wrap-fixed-right-nav").length)
-								angular.element(".ssb-page-section").slice(1).wrapAll("<div class='ssb-wrap-fixed-right-nav' />");
+								angular.element(".ssb-page-section").slice(sectionLength).wrapAll("<div class='ssb-wrap-fixed-right-nav' />");
 						}, 0);
 
 					}
