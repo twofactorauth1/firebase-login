@@ -1,0 +1,25 @@
+<!-- toaster directive -->
+<toaster-container toaster-options="{'position-class': 'toast-top-right', 'close-button':true}"></toaster-container>
+<!-- / toaster directive -->
+<!-- sidebar -->
+<div class="sidebar app-aside" id="sidebar" toggleable parent-active-class="app-slide-off" ng-hide="hideSidebar">
+	<div perfect-scrollbar wheel-propagation="false" suppress-scroll-x="true" class="sidebar-container">
+		<div data-ng-include=" 'assets/var/am/views/partials/sidebar.html' "></div>
+	</div>
+</div>
+<!-- / sidebar -->
+<div pclass="app-content" ng-class="{loading: loading}">
+	<!-- top navbar -->
+	<header data-ng-include=" 'assets/views/partials/top-navbar.html' " class="navbar navbar-default navbar-static-top" id="topnav" ng-hide="hideSidebar"></header>
+	<!-- / top navbar -->
+	<!-- main content -->
+	<div
+        data-ng-include=" 'assets/views/partials/main-content.html' "
+        class="main-content"
+        ng-class="{'margin-left-0': hideSidebar, 'ssb-site-builder-container': $state.current.name === 'app.website.ssbSiteBuilder.editor', 'dohy-dashboard-container': $state.current.name === 'app.dohy', 'ssb-site-builder-container email-builder-container': $state.current.name === 'app.emailEditor' }">
+    </div>
+	<!-- / main content -->
+</div>
+<!-- footer -->
+<footer data-ng-include=" 'assets/views/partials/footer.html' " ng-hide="hideSidebar"></footer>
+<!-- / footer -->

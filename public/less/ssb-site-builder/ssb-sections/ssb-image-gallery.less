@@ -57,13 +57,16 @@
             }
         }
         .image-50-details{
+            @media (max-width: 991px) {
+               width: 100%;
+            }
             width: 50%;
-            height: 396px ;
+            height: 396px;
             .ssb-media-query-small-only({
                 .word-break{
                     word-break: break-all;
                 }
-            })
+            })            
         }
         .image-50-details .ssb-element-text{
             height: 396px ;

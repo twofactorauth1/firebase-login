@@ -156,7 +156,7 @@
                     <form>
                         <div class="col-sm-6 col-xs-12">
                             <div class="form-group margin-bottom-10">
-                                <p class="margin-top-10">Your gorvlvr.com subdomain is <span class="text-bold">{{originalAccount.subdomain}}.gorvlvr.com</span>
+                                <p class="margin-top-10">Your amrvlvr.com subdomain is <span class="text-bold">{{originalAccount.subdomain}}.amrvlvr.com</span>
                                     <span class="cl-effect-1">
                                         <a class="text-dark" ng-click="modifysub.show=true" ng-hide="modifysub.show">Modify</a>
                                         <a class="text-dark" ng-click="revertSubdomain()" ng-show="modifysub.show">Cancel</a>
@@ -205,15 +205,15 @@
                                     <span class="help-block">A favicon (pronounced “fave-icon”) is a small, iconic image that represents your website. Favicons are most often found in the address bar of your web browser, but they can also be used in lists of bookmarks in web browsers.</span>
                                     <div class="favicon-image">
                                         <p class="pagetitle text-adjust">{{website.title}}</p>
-                                        <p class="pageurl"><span ng-if="!account.domain">http://{{account.subdomain}}.gorvlvr.com</span><span ng-if="account.domain">http://{{account.domain}}</span></p>
+                                        <p class="pageurl"><span ng-if="!account.domain">http://{{account.subdomain}}.amrvlvr.com</span><span ng-if="account.domain">http://{{account.domain}}</span></p>
 
-                                        <img class="top-favicon" ng-if="website.settings.favicon" ng-src="{{ website.settings.favicon }}" err-src="assets/var/rvlvr/images/rvlvr-logo.png">
+                                        <img class="top-favicon" ng-if="website.settings.favicon" ng-src="{{ website.settings.favicon }}" err-src="assets/var/am/images/favicon.png">
 
-                                        <img class="top-favicon default-rvlvr-logo" ng-if="!website.settings.favicon" src="assets/var/rvlvr/images/rvlvr-logo.png">
+                                        <img class="top-favicon default-rvlvr-logo" ng-if="!website.settings.favicon" src="assets/var/am/images/favicon.png">
 
-                                        <img class="bottom-favicon" ng-if="website.settings.favicon" ng-src="{{ website.settings.favicon }}" err-src="assets/var/rvlvr/images/rvlvr-logo.png">
+                                        <img class="bottom-favicon" ng-if="website.settings.favicon" ng-src="{{ website.settings.favicon }}" err-src="assets/var/am/images/favicon.png">
 
-                                        <img class="bottom-favicon default-rvlvr-logo" ng-if="!website.settings.favicon" src="assets/var/rvlvr/images/rvlvr-logo.png">
+                                        <img class="bottom-favicon default-rvlvr-logo" ng-if="!website.settings.favicon" src="assets/var/am/images/favicon.png">
                                     </div>
                                     <div class="user-image-buttons-edit">
                                         <span class="btn btn-primary" ng-click="openMediaModal()"><i class="fa fa-pencil"></i> Edit</span>
