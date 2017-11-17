@@ -504,6 +504,29 @@ module.exports = {
         });
     },
 
+
+    updateCustomerCssEnabled: function(accountId, userId, customerId, customCss, fn) {
+        var self = this;
+        self.log.debug(accountId, userId, '>> updateCustomerCssEnabled');
+        accountDao.getAccountByID(customerId, function(err, account){
+            if(account) {
+                account.set('customCssEnabled', customCss);
+                accountDao.saveOrUpdate(account, function(err, savedCustomer){
+                    if(err) {
+                        self.log.error("Error saving account:", err);
+                        return fn(err);
+                    } else {
+                        self.log.debug(accountId, userId, '<< updateCustomerCssEnabled');
+                        fn(null, savedCustomer);
+                    }
+                });
+            } else {
+                self.log.error('Account not found');
+                return fn('account not found');
+            }
+        });
+    },
+
     updateCustomerShowHide: function(accountId, userId, customerId, customerDetails, fn) {
         var self = this;
         self.log.debug(accountId, userId, '>> updateCustomerShowHide');
