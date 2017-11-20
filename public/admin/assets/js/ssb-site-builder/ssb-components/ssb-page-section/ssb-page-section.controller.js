@@ -1181,10 +1181,10 @@
 			}, 0);
 			var _isVerticalNav = false;
 			var elementIsFirstPosition = vm.index === 0;
-			if(!vm.firstVisibleElement && vm.showSection(vm.section)){
+			/*if(!vm.firstVisibleElement && vm.showSection(vm.section)){
 				vm.firstVisibleElement=true;
 				elementIsFirstPosition=true;
-			}
+			}*/
 			if (!vm.uiState && vm.section && vm.section.fixedLeftNavigation && elementIsFirstPosition && vm.showSection(vm.section)) {
 				_isVerticalNav = true;
 				var isBlogPage = angular.element(".ssb-layout__header_2-col_footer").length;
