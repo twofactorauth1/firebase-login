@@ -146,6 +146,20 @@
                         </div>
                     </div>
                 </tab>
+                <tab ng-if='vm.parentVm.state.website.resources.toggles.customCss'>
+                    <tab-heading>
+                        Page Custom Css
+                    </tab-heading>
+
+                    <div>
+                        <div class="mb10"></div>
+                        <div class='form-group' ng-if='vm.parentVm.state.website.resources.toggles.customCss'>
+                          <label>Custom Css</label>
+                          <span tooltip-placement="bottom" tooltip="Add css snippets for your page"><i class="fa fa-info-circle" /></span>
+                          <textarea class='form-control' ng-model='vm.parentVm.state.website.resources.customCss[vm.page.handle === "blog-list" ? "blog": vm.page.handle].original'></textarea>
+                        </div>
+                    </div>
+                </tab>
 
             </tabset>
             <div class="clearfix"></div>

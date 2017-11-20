@@ -59,14 +59,13 @@
                             <div class="container-fluid container-fullw bg-white padding-top-15 padding-bottom-15">
                                 <div class='row'>
                                     <div class="col-xs-4">
-                                        <div class='form-group flex'>
+                                        <div class='form-group flex' ng-if="vm.uiState.dataLoaded && vm.state.campaign.status.toLowerCase() === 'draft'">
                                             <input
                                                 class="form-control inline"
                                                 type="text"
                                                 placeholder="Untitled Campaign"
                                                 ng-model="vm.state.campaign.name"
-                                                ng-if="vm.uiState.dataLoaded && vm.state.campaign.status.toLowerCase() === 'draft'"/>
-
+                                                />
                                         </div>
                                     </div>
                                     <div class="col-xs-8 campaign-btn-container" >

@@ -1,0 +1,499 @@
+<div ng-controller="SettingsCtrl" class="sitesettings">
+    <div class="modal-header">
+        <h3 class="modal-title"><i class="ti-settings"></i> {{viewTitle}}</h3>
+    </div>
+    <div class="modal-body bg-white no-padding" stop-event="touchend">
+        <div ng-show="settingsView == 'all'" class="padding-10 padding-top-20">
+            <div class="col-sm-3">
+                <div class="panel panel-transparent margin-bottom-0">
+                    <div class="panel-heading padding-bottom-0 padding-top-0" style="min-height: inherit">
+                        <div class="panel-title text-azure text-large">
+                            <i class="ti-desktop"></i> Website
+                        </div>
+                        <hr class="margin-top-5 margin-bottom-5">
+                    </div>
+                    <div class="panel-body padding-top-0 padding-bottom-0">
+                        <ul class="list-unstyled cl-effect-1" style="line-height:25px">
+                            <li>
+                                <a class="text-dark" ng-click="viewSettings('website', 'SEO')">SEO</a>
+                            </li>
+                            <li>
+                                <a class="text-dark" ng-click="viewSettings('website', 'Domain')">Domain</a>
+                            </li>
+                            <li>
+                                <a class="text-dark" ng-click="viewSettings('website', 'Blog')">Blog</a>
+                            </li>
+                            <li ng-if='account.showhide.userScripts'>
+                                <a class="text-dark" ng-click="viewSettings('website', 'Scripts')">Scripts</a>
+                            </li>
+                            <li ng-if='account.showhide.customCss'>
+                                <a class="text-dark" ng-click="viewSettings('website', 'Custom Css')">Custom Css</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <!-- <div class="col-sm-3">
+                <div class="panel panel-transparent margin-bottom-0">
+                    <div class="panel-heading padding-bottom-0 padding-top-0" style="min-height: inherit">
+                        <div class="panel-title text-azure text-large">
+                            <i class="ti-user"></i> Customers
+                        </div>
+                        <hr class="margin-top-5 margin-bottom-5">
+                    </div>
+                    <div class="panel-body padding-top-0 padding-bottom-0">
+                        <ul class="list-unstyled cl-effect-1" style="line-height:25px">
+                            <li>
+                                <a class="text-dark" ng-click="viewSettings('customers', 'Membership')">Membership</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div> -->
+            <div class="col-sm-3">
+                <div class="panel panel-transparent margin-bottom-0">
+                    <div class="panel-heading padding-bottom-0 padding-top-0" style="min-height: inherit">
+                        <div class="panel-title text-azure text-large">
+                            <i class="ti-shopping-cart"></i> Commerce
+                        </div>
+                        <hr class="margin-top-5 margin-bottom-5">
+                    </div>
+                    <div class="panel-body padding-top-0 padding-bottom-0">
+                        <ul class="list-unstyled cl-effect-1" style="line-height:25px">
+                            <li>
+                                <a class="text-dark" ng-click="viewSettings('commerce', 'Taxes')">Taxes</a>
+                            </li>
+
+                            <li>
+                                <a class="text-dark" ng-click="viewSettings('commerce', 'PayPal')">PayPal</a>
+                            </li>
+
+                            <li>
+                                <a class="text-dark" ng-click="viewSettings('commerce', 'Checkout')">Checkout</a>
+                            </li>
+
+                            <li>
+                                <a class="text-dark" ng-click="viewSettings('commerce', 'Shipping Charges')">Shipping Charges</a>
+                            </li>
+
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <div class="panel panel-transparent margin-bottom-0">
+                    <div class="panel-heading padding-bottom-0 padding-top-0" style="min-height: inherit">
+                        <div class="panel-title text-azure text-large">
+                            <i class="ti-panel"></i> Account
+                        </div>
+                        <hr class="margin-top-5 margin-bottom-5">
+                    </div>
+                    <div class="panel-body padding-top-0 padding-bottom-0">
+                        <ul class="list-unstyled cl-effect-1" style="line-height:25px">
+                            <li>
+                                <a class="text-dark" ng-click="navigateTo('app.account.profilebusiness', $event)">Business Profile</a>
+                            </li>
+                            <li>
+                                <a class="text-dark" ng-click="navigateTo('app.account.billing', $event)">Billing</a>
+                            </li>
+                            <li>
+                                <a class="text-dark" ng-click="navigateTo('app.account.integrations', $event)">Integrations</a>
+                            </li>
+                            <li>
+                                <a class="text-dark" ng-click="navigateTo('app.account.users', $event)">Users</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <div class="panel panel-transparent margin-bottom-0">
+                    <div class="panel-heading padding-bottom-0 padding-top-0" style="min-height: inherit">
+                        <div class="panel-title text-azure text-large">
+                            <i class="ti-email"></i> Emails
+                        </div>
+                        <hr class="margin-top-5 margin-bottom-5">
+                    </div>
+                    <div class="panel-body padding-top-0 padding-bottom-0">
+                        <ul class="list-unstyled cl-effect-1" style="line-height:25px">
+                            <li>
+                                <a class="text-dark" ng-click="viewSettings('emails', 'Notifications')">Notifications</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+        <div ng-show="settingsView == 'website'" class="modal-overflow-content">
+            <tabset class="tabbable tabs-left margin-bottom-0">
+                <tab heading="SEO">
+                    <form>
+                        <div class="col-sm-6 col-xs-12">
+                            <div class="form-group">
+                                <label>Default Title</label>
+                                <span tooltip-placement="right" tooltip="Title will appear in search engine results, browser tab and bookmarks."><i class="fa fa-info-circle" /></span>
+                                <input type="text" class="form-control" ng-model="website.title" />
+                            </div>
+                            <div class="form-group">
+                                <label>Default Description</label>
+                                <span tooltip-placement="right" tooltip="Description will appear in search engine results."><i class="fa fa-info-circle" /></span>
+                                <textarea type="text" class="form-control" ng-model="website.seo.description"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label>Default Keywords</label>
+                                <span tooltip-placement="right" tooltip="Use a comma to separate keywords for search engine indexing."><i class="fa fa-info-circle" /></span>
+                                <tags-input min-length="1" ng-model="website.seo.keywords"></tags-input>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-xs-12">
+                            <span class="help-block">SEO or Search Engine Optimization increases the chances of the right audience finding your site based on keywords and content. The information you provide here will serve as default data for search engine optimization if the same fields are not overridden at the page level. Ideally, each page should have its own informative title, description and matching keywords. </span>
+                        </div>
+                    </form>
+                    <div class="clearfix"></div>
+                </tab>
+                <tab heading="Domain">
+                    <form>
+                        <div class="col-sm-6 col-xs-12">
+                            <div class="form-group margin-bottom-10">
+                                <p class="margin-top-10">Your amrvlvr.com subdomain is <span class="text-bold">{{originalAccount.subdomain}}.amrvlvr.com</span>
+                                    <span class="cl-effect-1">
+                                        <a class="text-dark" ng-click="modifysub.show=true" ng-hide="modifysub.show">Modify</a>
+                                        <a class="text-dark" ng-click="revertSubdomain()" ng-show="modifysub.show">Cancel</a>
+                                    </span>
+                                </p>
+                                <div ng-if="modifysub.show">
+                                    <span class="input-icon input-icon-right" ng-class="{'has-error': domainError}">
+                                        <input class="form-control" type="text" ng-model="account.subdomain" ng-change="checkDomainExists(account)" ng-model-options="{ debounce: 800 }" />
+                                        <span ng-if="checkingSubdomain"><i class="fa fa-spinner fa-spin"></i></span>
+                                    <span ng-if="hasCheckedSubdomain && domainError && !checkingSubdomain"><i class="fa fa-times text-danger"></i></span>
+                                    <span ng-if="hasCheckedSubdomain && !domainError && !checkingSubdomain"><i class="fa fa-check text-success"></i></span>
+                                    </span>
+                                    <span class="help-block" ng-hide="hasCheckedSubdomain && !domainError && !checkingSubdomain || domainError"><i class="ti-info-alt text-primary"></i> Enter the new desired subdomain and we will check to see if its avaliable.</span>
+                                    <span class="help-block text-success" ng-if="hasCheckedSubdomain && !domainError && !checkingSubdomain"><i class="ti-info-alt text-primary"></i> Save the settings for this to take effect.</span>
+                                    <span class="help-block text-success" ng-if="checkingSubdomain"><i class="ti-info-alt text-primary"></i> Save the settings for this to take effect.</span>
+                                    <span class="error-block text-danger" ng-show="domainError">Domain already taken, please choose another one.</span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <span class="help-block"><a class="text-dark" href="#" ng-click="cancel($event);" onclick="Intercom('showNewMessage', 'Support for Custom Domain:')">Chat with us about your custom domain</a></span>
+                            </div>
+                            <div class="form-group">
+                                <!-- <label>Footer Link</label> -->
+                                <!-- <span id="helpBlock" class="help-block">Remove the Indigenous Logo from the footer component.</span> -->
+                                <span id="helpBlock" class="help-block">Custom Footer Link</span>
+                                <label class="radio-inline">
+                                    <input type="radio" name="footerLink" id="footerLink1" ng-value="false" ng-model="website.settings.footerlink"> Yes
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="footerLink" id="footerLink2" ng-value="true" ng-model="website.settings.footerlink"> No
+                                </label>
+                            </div>
+                            <div class="form-group" ng-if="!website.settings.footerlink">
+                                <label>Link Text</label>
+                                <input type="text" class="form-control" ng-model="website.settings.footerLinkText" />
+                            </div>
+                            <div class="form-group" ng-if="!website.settings.footerlink">
+                                <label>Link URL</label>
+                                <input type="text" class="form-control" ng-model="website.settings.footerLinkURL" />
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-xs-12">
+                            <div class="form-group">
+                                <label>Favicon</label>
+                                <div>
+                                    <span class="help-block">A favicon (pronounced “fave-icon”) is a small, iconic image that represents your website. Favicons are most often found in the address bar of your web browser, but they can also be used in lists of bookmarks in web browsers.</span>
+                                    <div class="favicon-image">
+                                        <p class="pagetitle text-adjust">{{website.title}}</p>
+                                        <p class="pageurl"><span ng-if="!account.domain">http://{{account.subdomain}}.amrvlvr.com</span><span ng-if="account.domain">http://{{account.domain}}</span></p>
+
+                                        <img class="top-favicon" ng-if="website.settings.favicon" ng-src="{{ website.settings.favicon }}" err-src="assets/var/am/images/favicon.png">
+
+                                        <img class="top-favicon default-rvlvr-logo" ng-if="!website.settings.favicon" src="assets/var/am/images/favicon.png">
+
+                                        <img class="bottom-favicon" ng-if="website.settings.favicon" ng-src="{{ website.settings.favicon }}" err-src="assets/var/am/images/favicon.png">
+
+                                        <img class="bottom-favicon default-rvlvr-logo" ng-if="!website.settings.favicon" src="assets/var/am/images/favicon.png">
+                                    </div>
+                                    <div class="user-image-buttons-edit">
+                                        <span class="btn btn-primary" ng-click="openMediaModal()"><i class="fa fa-pencil"></i> Edit</span>
+                                        <span class="btn btn-danger" ng-if="website.settings.favicon" ng-click="removeFavicon()"><i class="fa fa-times"></i> Delete</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Meta Tags</label>
+                                <span class="help-block">Meta tags can be used to customize search engine behavior or verify control of a particular website.</span>
+                                <div ng-repeat="meta in website.metatags track by $index">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label class="control-label">
+                                                    Tag Name
+                                                </label>
+                                                <input type="text" placeholder="Name" class="form-control" ng-model="website.metatags[$index].name">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <div class="form-group">
+                                                <label class="control-label">
+                                                    Tag Value
+                                                </label>
+                                                <input type="text" placeholder="Value" class="form-control" ng-model="website.metatags[$index].value">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div ng-if="showAddMeta($index)" class="btn btn-wide btn-o btn-primary pull-right" ng-click="accountAddMetaFn()">Add another tag</div>
+                                        <div ng-if="!showAddMeta($index)" class="btn btn-wide btn-o btn-warning pull-right" ng-click="removeMeta($index)">Remove tag</div>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                </div>
+                                <div ng-if="!website.metatags" class="btn btn-wide btn-o btn-primary pull-right" ng-click="accountAddMetaFn()">Add Meta Tag</div>
+                            </div>
+                        </div>
+                    </form>
+                    <div class="clearfix"></div>
+                </tab>
+                <tab heading="Blog">
+                    <form class="col-sm-6 form-horizontal">
+                        <div class="form-group">
+                            <label>Enable Blog</label>
+                            <span tooltip-placement="bottom" tooltip="Enable the blog for your website"><i class="fa fa-info-circle" /></span>
+                            <switch ng-model="account.showhide.blog" ng-change="toggleEnableBlog(account.showhide.blog)" class="pull-right"></switch>
+                        </div>
+                        <div class="clearfix"></div>
+                    </form>
+                    <div class="clearfix"></div>
+                    <form class="col-sm-6 form-horizontal">
+                        <div class="form-group">
+                            <label>Enable Social Sharing</label>
+                            <span tooltip-placement="bottom" tooltip="Enable the blog sharing for your website"><i class="fa fa-info-circle" /></span>
+                            <switch ng-model="account.showhide.blogSocialSharing" class="pull-right"></switch>
+                        </div>
+                        <div class="clearfix"></div>
+                    </form>
+                    <div class="clearfix"></div>
+                    <form class="col-sm-6 form-horizontal">
+                        <div class="form-group">
+                            <label>Blog template max width</label>
+                            <span tooltip-placement="bottom" tooltip="Set max width of blog template"><i class="fa fa-info-circle" /></span>
+
+                            <select ng-model="website.settings.defaultBlogTemplateWidth" class="form-control" ng-options="option.value as option.label for option in blogListResolutionOptions">
+                            <option value="">--Select--</option>
+                            </select>
+
+                        </div>
+                        <div class="clearfix"></div>
+                    </form>
+                    <div class="clearfix"></div>
+                    <form class="col-sm-6 form-horizontal">
+
+                            <div class="form-group ssb-spectrum-color-picker-small">
+                                <div class="ssb-spectrum-color-picker-background-container">
+                                    <spectrum-colorpicker class="ssb-spectrum-color-picker-background" format="'rgb'" options="spectrum.options" ng-model="website.settings.defaultBlogTemplateBgColor"></spectrum-colorpicker>
+                                    <i class="fa fa-eyedropper" />
+                                </div>
+                                <label>Blog template background color</label>
+                                    <span tooltip-placement="top" tooltip="Set background color  of blog template"><i class="fa fa-info-circle" /></span>
+                            </div>
+                        <div class="clearfix"></div>
+                    </form>
+                    <div class="clearfix"></div>
+                </tab>
+                <tab heading="Scripts" ng-if='account.showhide.userScripts'>
+                      <form class="col-sm-6 form-horizontal">
+                          <div class="form-group">
+                              <label>Enable Scripts</label>
+                              <span tooltip-placement="bottom" tooltip="Enable third party scripts your website"><i class="fa fa-info-circle" /></span>
+                              <switch ng-model="website.resources.toggles.userScripts" class="pull-right"></switch>
+                          </div>
+                          <div class='form-group' ng-if='website.resources.toggles.userScripts'>
+                            <label>Global Scripts</label>
+                            <span tooltip-placement="bottom" tooltip="Add script snippets for your website globally"><i class="fa fa-info-circle" /></span>
+                            <textarea class='form-control' ng-model='website.resources.userScripts.global.original'></textarea>
+                          </div>
+                          <div class="clearfix"></div>
+                      </form>
+                      <div class="clearfix"></div>
+                </tab>
+                <tab heading="Custom Css" ng-if='account.showhide.customCss'>
+                      <form class="col-sm-6 form-horizontal">
+                          <div class="form-group">
+                              <label>Enable Custom Css</label>
+                              <span tooltip-placement="bottom" tooltip="Enable custom css to your website"><i class="fa fa-info-circle" /></span>
+                              <switch ng-model="website.resources.toggles.customCss" class="pull-right"></switch>
+                          </div>
+                          <div class='form-group' ng-if='website.resources.toggles.customCss'>
+                            <label>Global Css</label>
+                            <span tooltip-placement="bottom" tooltip="Add custom css snippets for your website globally"><i class="fa fa-info-circle" /></span>
+                            <textarea class='form-control' ng-model='website.resources.customCss.global.original'></textarea>
+                          </div>
+                          <div class="clearfix"></div>
+                      </form>
+                      <div class="clearfix"></div>
+                </tab>
+            </tabset>
+        </div>
+        <!-- <div ng-show="settingsView == 'customers'">
+        </div> -->
+        <div ng-show="settingsView == 'commerce'">
+            <tabset class="tabbable tabs-left margin-bottom-0">
+                <tab heading="Taxes">
+                    <form class="col-sm-7 form-horizontal">
+                        <div class="form-group">
+                            <label>Enable Taxes</label>
+                            <span tooltip-placement="bottom" tooltip="Enable taxes for your products."><i class="fa fa-info-circle" /></span>
+                            <switch ng-model="account.commerceSettings.taxes" class="pull-right"></switch>
+                        </div>
+                        <div class="clearfix"></div>
+                        <div ng-if="account.commerceSettings.taxes">
+                            <div class="form-group">
+                                <label>Calculate Tax Based On:</label>
+                                <select ng-model="account.commerceSettings.taxbased" class="form-control" ng-options="calc.value as calc.name for calc in calculateTaxOptions">
+                                    <option value="">-- choose --</option>
+                                </select>
+                            </div>
+                            <div ng-if="account.commerceSettings.taxbased !== 'business_location'" class="form-group">
+                                <label>Sales are Taxable Only in (States) [States should be entered in format like (NY, WA, CA, AL, etc.)]:</label>
+                                <span class="visible-xs" tooltip="Unless specified otherwise, all locations are assumed to be taxable. Please add states in format like (NY, WA, CA, AL, etc.)"><i class="fa fa-info-circle" /></span>
+                                <span class="hidden-xs" tooltip-placement="top" tooltip="Unless specified otherwise, all locations are assumed to be taxable. Please add states in format like (NY, WA, CA, AL, etc.)"><i class="fa fa-info-circle" /></span>
+                                <tags-input min-length="2" placeholder="State(s)" ng-model="account.commerceSettings.taxnexus"></tags-input>
+                            </div>
+                        </div>
+                    </form>
+                    <div class="clearfix"></div>
+                </tab>
+
+                <tab heading="PayPal">
+                    <form class="col-sm-6 form-horizontal">
+                        <div class="form-group">
+                            <label>Enable PayPal payments</label>
+                            <switch ng-model="account.commerceSettings.paypal" class="pull-right"></switch>
+                        </div>
+                        <div class="form-group" ng-if='account.commerceSettings.paypal'>
+                            <label>PayPal account email address</label>
+                            <input type="text" placeholder="Email" class="pull-right" ng-model="account.commerceSettings.paypalAddress">
+                        </div>
+                        <div class="clearfix"></div>
+                    </form>
+                    <div class="clearfix"></div>
+                </tab>
+
+                <tab heading="Checkout">
+                    <form class="col-sm-6 form-horizontal">
+                        <div class="form-group settings-redirect-pages">
+                            <label>Landing Page</label>
+                            <div ng-if="allPages">
+                                <ui-select ng-model="account.commerceSettings.checkout.redirectUrl" theme="bootstrap">
+                                    <ui-select-match placeholder="Select a page">
+                                        <small ng-bind-html="$select.selected.title"></small>
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="page.handle as page in allPages | filter: $select.search track by $index">
+                                        <small ng-bind-html="page.title | highlight: $select.search"></small>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                            <div ng-if="!allPages">
+                                <h4><span class="fa fa-spinner fa-spin"></span> Loading Pages...</h4>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Redirect Timeout in seconds </label>
+                            <select ng-model="account.commerceSettings.checkout.redirectTimeout" class="form-control" ng-options="opt.data as opt.label for opt in redirectTimeoutOptions">
+                                    <option value="">-- choose --</option>
+                                </select>
+                        </div>
+                        <div class="clearfix"></div>
+                    </form>
+                    <div class="clearfix"></div>
+                </tab>
+
+
+                <tab heading="Shipping Charges">
+                    <form class="col-sm-6 form-horizontal">
+                        <div class="form-group">
+                            <label>Enable Shipping Charges</label>
+                            <span tooltip-placement="bottom" tooltip="Enable Shipping Charges"><i class="fa fa-info-circle" /></span>
+                            <switch ng-model="account.commerceSettings.shipping.enabled" class="pull-right" ng-change="setDefaultShipping(account.commerceSettings.shipping)"></switch>
+                        </div>
+                        <div class="form-group" ng-if="account.commerceSettings.shipping.enabled">
+                            <div class="block">
+                                <label>Calculate Shipping Charges based on:</label>
+                                <span tooltip-placement="right" tooltip="Calculate Shipping Charges"><i class="fa fa-info-circle" /></span>
+                            </div>
+
+                            <label class="radio-inline">
+                                <input type="radio" id="perItem" value="item" name="shippingCharges" ng-model="account.commerceSettings.shipping.chargeType"> Item
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" id="perOrder" value="order" name="shippingCharges" ng-model="account.commerceSettings.shipping.chargeType"> Order
+                            </label>
+                        </div>
+                        <div class="form-group" ng-if="account.commerceSettings.shipping.enabled">
+                            <label>Per(item/order) Charge</label>
+                            <span tooltip-placement="bottom" tooltip="Per(item/order) Charge"><i class="fa fa-info-circle" /></span>
+                            <div class="input-group">
+                                <span class="input-group-addon">$</span>
+                                <input type="text" name="shipping_charge" class="form-control" ng-model="account.commerceSettings.shipping.charge" ng-currency max="9999999999" min="0" currency-symbol=""/>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                    </form>
+                    <div class="clearfix"></div>
+                </tab>
+
+            </tabset>
+        </div>
+        <div ng-show="settingsView == 'emails'">
+            <tabset class="tabbable tabs-left margin-bottom-0">
+                <tab heading="Notifications">
+                    <form class="col-sm-6 form-horizontal">
+                        <div class="form-group">
+                            <label>Send Me Notifications For:</label>
+                            <div class="checkbox clip-check check-primary">
+                                <input type="checkbox" id="allNewContacts" ng-click="clearNoNotifications()" ng-model="account.email_preferences.new_contacts">
+                                <label for="allNewContacts">
+                                    New contacts that sign up on your website
+                                </label>
+                            </div>
+                            <div class="checkbox clip-check check-primary">
+                                <input type="checkbox" id="allNewOrders" ng-click="clearNoNotifications()" ng-model="account.email_preferences.new_orders">
+                                <label for="allNewOrders">
+                                    New orders created by an online sale
+                                </label>
+                            </div>
+                            <div class="checkbox clip-check check-primary">
+                                <input type="checkbox" id="helpfulTips" ng-click="clearNoNotifications()" ng-model="account.email_preferences.helpful_tips">
+                                <label for="helpfulTips">
+                                    Helpful tips and insights from indigenous
+                                </label>
+                            </div>
+                            <div class="checkbox clip-check check-primary">
+                                <input type="checkbox" id="noNotifications" ng-click="clearAllNotifications()" ng-model="account.email_preferences.no_notifications">
+                                <label for="noNotifications">
+                                    Don't send any notifications
+                                </label>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                    </form>
+                    <div class="clearfix"></div>
+                </tab>
+            </tabset>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+    <div class="modal-footer">
+        <div ng-if="settingsView != 'all'">
+            <button class="btn btn-primary pull-left" ng-click="viewSettings('all')">Show All</button>
+        </div>
+        <div class="pull-right">
+            <button class="btn btn-primary" ng-click="cancel($event)">Close</button>
+        </div>
+        <div ng-if="settingsView != 'all'" class="pull-right margin-right-5">
+            <button class="btn btn-primary" ng-click="saveSettings()">Save </button>
+        </div>
+    </div>
+</div>

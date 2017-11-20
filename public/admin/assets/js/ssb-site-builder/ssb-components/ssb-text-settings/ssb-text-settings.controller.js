@@ -769,13 +769,39 @@
 					styleString += 'border-style: ' + component.border.style + ';';
 					styleString += 'border-radius: ' + component.border.radius + '%;';
 				}
-
+				applyTickerStyle(component);
 				return styleString;
 
 			} else {
 
 				return '';
 
+			}
+		}
+
+		function applyTickerSpeedClass(component){
+			var element = vm.element.parent(".ticker");
+			var classString = 'ticker ticker-speed-' + component.tickerSpeed;
+			element.attr("class", classString);
+		}
+
+		function applyTickerStyle(component){
+			if(vm.element && component){
+				if(component.allowTicker){
+					if(!vm.element.parent().hasClass("ticker")){
+						vm.element.wrapAll('<div id="tickerwrap" class="tickerwrap"></div>');
+						vm.element.wrapAll('<div id="ticker" class="ticker"></div>');
+					}
+					if(component.tickerSpeed)
+						applyTickerSpeedClass(component);
+				}
+				else{
+					if(vm.element.parent().hasClass("ticker")){
+						vm.element.unwrap();
+						vm.element.unwrap();
+					}
+				}
+				
 			}
 		}
 

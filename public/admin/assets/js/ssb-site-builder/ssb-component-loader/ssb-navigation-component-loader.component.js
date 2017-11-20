@@ -15,11 +15,7 @@
 				var SsbPageSectionService = {};
 				if ($injector.has("SsbPageSectionService")) {
 					SsbPageSectionService = $injector.get("SsbPageSectionService");
-				}
-				var pageList;
-				if (window.indigenous && window.indigenous.precache && window.indigenous.precache.siteData && window.indigenous.precache.siteData.pages) {
-					pageList = window.indigenous.precache.siteData.pages;
-				}
+				}				
 				$scope.toggleNavClass = function (ele) {
 					var li = $(ele.target).parents("li");
 					if (li) {
@@ -48,12 +44,6 @@
 					if (link && link.data) {
 						if (link.data === 'blog') {
 							return true;
-						} else {
-							if (pageList && pageList[link.data]) {
-								if (pageList[link.data].isBlogCopy) {
-									return true;
-								}
-							}
 						}
 					}
 					return false;

@@ -263,6 +263,7 @@
             });
         };
 
+
         this.updateCustomerReceiveInsights = function(customer, receiveInsights, fn) {
             var id = customer._id;
 

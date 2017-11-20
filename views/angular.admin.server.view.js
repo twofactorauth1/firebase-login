@@ -115,6 +115,9 @@ _.extend(view.prototype, BaseView.prototype, {
                             } else if(data.account.orgId && data.account.orgId === 5){
                                 logger.debug('Rendering leadsource admin');
                                 self.resp.render('var/leadsource/admin', data);
+                            } else if(data.account.orgId && data.account.orgId === 6){
+                                logger.debug('Rendering AMRVLVR admin');
+                                self.resp.render('var/am/admin', data);
                             } else {
                                 self.resp.render('admin', data);
                             }

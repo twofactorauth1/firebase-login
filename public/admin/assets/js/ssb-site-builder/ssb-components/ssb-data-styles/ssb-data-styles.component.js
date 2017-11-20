@@ -5,9 +5,9 @@
 	"use strict";
 	app.directive('ssbDataStyles', ssbDataStyles);
 
-	ssbDataStyles.$inject = ['$timeout', '$location', '$compile'];
+	ssbDataStyles.$inject = ['$timeout', '$location', '$compile', 'SsbPageSectionService'];
 	/* @ngInject */
-	function ssbDataStyles($timeout, $location, $compile) {
+	function ssbDataStyles($timeout, $location, $compile, SsbPageSectionService) {
 		return {
 			restrict: 'A',
 			link: function (scope) {
@@ -108,28 +108,18 @@
 											if (!addSmoothScroll) {
 												addSmoothScroll =
 													element.attr("href").indexOf(window.location.href) > -1;
-
 											}
 											if (addSmoothScroll) {
 												element.attr("du-smooth-scroll", '');
-												if (element.hasClass("ssb-theme-btn")) {
-													var elementBg = element.css("background-color"),
-														elementTxtcolor = element.css("color"),
-														elementBorder = element.css("border"),
-														elementPadding = element.css("padding"),
-														elementMargin = element.css("margin")
-													$compile(element)(scope);
-													// Need to rest the text and background color
-													$timeout(function () {
-														element.css("background-color", elementBg);
-														element.css("color", elementTxtcolor);
-														element.css("border", elementBorder);
-														element.css("padding", elementPadding);
-														element.css("margin", elementMargin);
-													}, 0);
-												} else {
-													$compile(element)(scope);
-												}
+												scope.$watchCollection(function () {
+													return SsbPageSectionService.offset;
+												}, function (offset) {
+													if(offset && offset > 0){
+														element.attr("offset", offset);
+														compileElement(element);
+													}
+												});
+												compileElement(element);
 											}
 										}
 									});
@@ -138,6 +128,27 @@
 							}
 						});
 					});
+				}
+
+				function compileElement(element){
+					if (element.hasClass("ssb-theme-btn")) {
+						var elementBg = element.css("background-color"),
+							elementTxtcolor = element.css("color"),
+							elementBorder = element.css("border"),
+							elementPadding = element.css("padding"),
+							elementMargin = element.css("margin")
+						$compile(element)(scope);
+						// Need to rest the text and background color
+						$timeout(function () {
+							element.css("background-color", elementBg);
+							element.css("color", elementTxtcolor);
+							element.css("border", elementBorder);
+							element.css("padding", elementPadding);
+							element.css("margin", elementMargin);
+						}, 0);
+					} else {
+						$compile(element)(scope);
+					}
 				}
 
 			}

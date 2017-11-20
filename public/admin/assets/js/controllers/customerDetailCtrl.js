@@ -336,6 +336,17 @@
 			});
 		};
 
+		$scope.updateCustomCssEnabled = function (isEnabled) {
+			$scope.customer.showhide.customCss = isEnabled;
+			customerService.updateCustomerShowHide($scope.customer, function (err, customer) {
+				if (err) {
+					toaster.pop('warning', err.message);
+				} else {
+					toaster.pop('success', 'Edit HTML updated.');
+				}
+			});
+		};
+
 		$scope.saveTemplateAccount = function () {
 			updateCustomerDetails(false);
 		};
@@ -377,6 +388,16 @@
                     toaster.pop('warning', err.message);
                 } else {
                     toaster.pop('success', 'Account oem updated.');
+                }
+            });
+        }
+
+        function updateCustomCssEnabled(customCss) {
+            customerService.updateCustomCssEnabled($scope.customer, customCss, function(err, customer){
+                if (err) {
+                    toaster.pop('warning', err.message);
+                } else {
+                    toaster.pop('success', 'Account custom css enabled updated.');
                 }
             });
         }

@@ -146,6 +146,7 @@
                                                         </div>
                                                     </td>
                                                 </tr>
+                                                
                                             </tbody>
                                         </table>
                                         <table class="table table-condensed">
@@ -168,6 +169,14 @@
                                                     <td>
                                                         <div ng-show="customer">
                                                             <switch ng-model="customer.showhide.editHTML" ng-change="updateCustomerHTML(customer.showhide.editHTML)" class="pull-right margin-bottom-10"></switch>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Enable Custom Css:</td>
+                                                    <td>
+                                                        <div ng-show="customer">
+                                                            <switch ng-model="customer.showhide.customCss" ng-change="updateCustomCssEnabled(customer.showhide.customCss)" class="pull-right margin-bottom-10"></switch>
                                                         </div>
                                                     </td>
                                                 </tr>
