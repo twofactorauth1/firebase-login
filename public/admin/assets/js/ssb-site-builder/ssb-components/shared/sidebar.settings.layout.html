@@ -18,17 +18,10 @@
         <div class="row padding-10">
             <div class="form-group" ng-hide="component.disableTextSpacing && component.type === 'ssb-element-text'">
                 <label>Max Width</label>
-                <ui-select on-select="vm.uiState.updatetestimonialWidth(component);vm.resizeWindow()" ng-model-options="{ debounce: 500 }" ng-model="component.spacing.mw" theme="bootstrap" ng-disabled="component.spacing.usePage">
-                    <ui-select-match placeholder="Select a Resolution">
-                        <small ng-bind-html="$select.selected"></small>
-                    </ui-select-match>
-                    <ui-select-choices repeat="res in [320, 360, 480, 720, 768, 960, 1024, 1280, 1360, 1366, 1440, 1600, 1680, 1920, '100%'] | filter: $select.search track by $index">
-                        <small ng-bind-html="res | highlight: $select.search"></small>
-                    </ui-select-choices>
-                </ui-select>
+                <input type="text" ng-model-options="{ debounce: 500 }" ng-model="component.spacing.mw"  min="-0" max="5000" >
             </div>
         </div>
-        
+
         <div class="row padding-10" ng-class="{'disabled': component.disableTextSpacing && component.type === 'ssb-element-text'}">
             <div class="padding-15 margin-bottom-0 partition-light-primary">
                 <label class="text-white lead">Outer Spacing</label>
@@ -100,7 +93,7 @@
                     </ui-select-choices>
                 </ui-select>
             </div>
-        </div>        
+        </div>
         <div class="row padding-10" ng-class="{'disabled': component.disableTextSpacing && component.type === 'ssb-element-text'}">
             <div class="padding-15 margin-bottom-0 partition-light-primary">
                 <label class="text-white lead">Outer Spacing</label>
@@ -173,7 +166,7 @@
                 </ui-select>
             </div>
         </div>
-        
+
         <div class="row padding-10" ng-class="{'disabled': component.disableTextSpacing && component.type === 'ssb-element-text'}">
             <div class="padding-15 margin-bottom-0 partition-light-primary">
                 <label class="text-white lead">Outer Spacing</label>
@@ -246,7 +239,7 @@
                 </ui-select>
             </div>
         </div>
-        
+
         <div class="row padding-10" ng-class="{'disabled': component.disableTextSpacing && component.type === 'ssb-element-text'}">
             <div class="padding-15 margin-bottom-0 partition-light-primary">
                 <label class="text-white lead">Outer Spacing</label>
@@ -311,17 +304,10 @@
         <div class="row padding-10">
             <div class="form-group" ng-hide="component.disableTextSpacing && component.type === 'ssb-element-text'">
                 <label>Max Width</label>
-                <ui-select on-select="vm.uiState.updatetestimonialWidth(component);vm.resizeWindow()" ng-model-options="{ debounce: 500 }" ng-model="component.spacing.mw" theme="bootstrap" ng-disabled="component.spacing.usePage">
-                    <ui-select-match placeholder="Select a Resolution">
-                        <small ng-bind-html="$select.selected"></small>
-                    </ui-select-match>
-                    <ui-select-choices repeat="res in [320, 360, 480, 720, 768, 960, 1024, 1280, 1360, 1366, 1440, 1600, 1680, 1920, '100%'] | filter: $select.search track by $index">
-                        <small ng-bind-html="res | highlight: $select.search"></small>
-                    </ui-select-choices>
-                </ui-select>
-            </div>        
+                <input type="text"  ng-model-options="{ debounce: 500 }" ng-model="component.spacing.mw"  min="0" max="5000" >
+            </div>
         </div>
-    
+
         <div class="row padding-10" ng-class="{'disabled': component.disableTextSpacing && component.type === 'ssb-element-text'}">
             <div class="padding-15 margin-bottom-0 partition-light-primary">
                 <label class="text-white lead">Outer Spacing</label>
@@ -392,9 +378,9 @@
                         <small ng-bind-html="res | highlight: $select.search"></small>
                     </ui-select-choices>
                 </ui-select>
-            </div>        
+            </div>
         </div>
-    
+
         <div class="row padding-10" ng-class="{'disabled': component.disableTextSpacing && component.type === 'ssb-element-text'}">
             <div class="padding-15 margin-bottom-0 partition-light-primary">
                 <label class="text-white lead">Outer Spacing</label>
@@ -465,9 +451,9 @@
                         <small ng-bind-html="res | highlight: $select.search"></small>
                     </ui-select-choices>
                 </ui-select>
-            </div>        
+            </div>
         </div>
-    
+
         <div class="row padding-10" ng-class="{'disabled': component.disableTextSpacing && component.type === 'ssb-element-text'}">
             <div class="padding-15 margin-bottom-0 partition-light-primary">
                 <label class="text-white lead">Outer Spacing</label>
@@ -538,9 +524,9 @@
                         <small ng-bind-html="res | highlight: $select.search"></small>
                     </ui-select-choices>
                 </ui-select>
-            </div>        
+            </div>
         </div>
-    
+
         <div class="row padding-10" ng-class="{'disabled': component.disableTextSpacing && component.type === 'ssb-element-text'}">
             <div class="padding-15 margin-bottom-0 partition-light-primary">
                 <label class="text-white lead">Outer Spacing</label>
@@ -606,14 +592,7 @@
     <div class="row padding-10">
         <div class="form-group" ng-hide="component.disableTextSpacing && component.type === 'ssb-element-text'">
             <label>Max Width</label>
-            <ui-select on-select="vm.uiState.updatetestimonialWidth(component);vm.resizeWindow()" ng-model-options="{ debounce: 500 }" ng-model="component.spacing.mw" theme="bootstrap" ng-disabled="component.spacing.usePage">
-                <ui-select-match placeholder="Select a Resolution">
-                    <small ng-bind-html="$select.selected"></small>
-                </ui-select-match>
-                <ui-select-choices repeat="res in [320, 360, 480, 720, 768, 960, 1024, 1280, 1360, 1366, 1440, 1600, 1680, 1920, '100%'] | filter: $select.search track by $index">
-                    <small ng-bind-html="res | highlight: $select.search"></small>
-                </ui-select-choices>
-            </ui-select>
+            <input type="text" ng-model-options="{ debounce: 500 }" ng-model="component.spacing.mw"  min="0" max="5000" >
         </div>
         <div class="form-group" ng-if="(component.components[0].type === 'testimonials' && component.components[0].version == 2)">
             <label>
@@ -631,7 +610,7 @@
 
         </div>
     </div>
-    
+
     <div class="row padding-10" ng-class="{'disabled': component.disableTextSpacing && component.type === 'ssb-element-text'}">
         <div class="padding-15 margin-bottom-0 partition-light-primary">
             <label class="text-white lead">Outer Spacing</label>
