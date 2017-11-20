@@ -518,14 +518,14 @@
 						}
 
 						if (section.spacing.mw) {
-
+                            section.spacing.mw = section.spacing.mw.toString();
 							if(section.spacing.mw == '100%' || section.spacing.mw == 'auto') {
                               styleString +=   'max-width: ' + section.spacing.mw + ';' ;
                             }
                             else{
-                                if(section.spacing.mw.indexOf("%") === -1){
+                                if(section.spacing.mw && section.spacing.mw !== "" && section.spacing.mw.indexOf("%") === -1){
                                    var isPx = "";
-                                   (section.spacing.mw && section.spacing.mw.toLowerCase().indexOf('px') === -1) ? isPx="px" : isPx = "";
+                                   (section.spacing.mw.toLowerCase().indexOf('px') === -1) ? isPx="px" : isPx = "";
                                    styleString +=  'max-width: ' + section.spacing.mw + isPx +';margin-left:auto!important;margin-right:auto!important;';
                                 }
                                 else
