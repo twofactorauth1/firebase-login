@@ -38,9 +38,7 @@ angular.module('angular-parallax', [
 		},
 		link: function ($scope, elem) {
 
-			elem.addClass('opacity-0');
-			var initialRun = true,
-				pos = function (obj) {
+			var pos = function (obj) {
 					//curLeft = 0, not used
 					var curTop = 0;
 					if (obj.offsetParent) {
