@@ -431,6 +431,15 @@
                 }
             }
         }
+        .ssb-media-query-small-only({
+            .ssb-component.ssb-social-link{ 
+                width: 80% !important;
+                float: left;
+            } 
+            .navbar-collapse{
+                width: 100%!important;
+            }
+        });
     }
 
     /*
@@ -450,6 +459,22 @@
             padding-left: 10px !important;
             padding-right: 10px !important;
         }
+        .ssb-media-query-small-only({
+            .ssb-component.ssb-social-link{ 
+                width: 80% !important;
+                float: left;
+                position: absolute;
+                top: 0px;
+            } 
+            .navbar-collapse{
+                width: 100%!important;
+            }
+            .ssb-component.ssb-navigation{
+                float: unset;
+                width: unset;
+                min-height: 75px !important;
+            }
+        });
     }
 
     /*
@@ -479,11 +504,17 @@
             width:50%;
         }
         .ssb-media-query-small-only({
-            .ssb-component.ssb-navigation{
-                width:100%;
+            .ssb-component.ssb-social-link{ 
+                width: 80% !important;
+                float: left;
+            } 
+            .navbar-collapse{
+                width: 100%!important;
             }
-            .ssb-component.ssb-social-link{
-                width:100%;
+            .ssb-component.ssb-navigation{
+                float: unset;
+                width: unset;
+                min-height: 75px !important;
             }
         });
 
@@ -515,11 +546,19 @@
             width:50%;
         }
         .ssb-media-query-small-only({
-            .ssb-component.ssb-navigation{
-                width:100%;
+            .ssb-component.ssb-social-link{ 
+                width: 80% !important;
+                float: left;
+                position: absolute;
+                top: 0px;
+            } 
+            .navbar-collapse{
+                width: 100%!important;
             }
-            .ssb-component.ssb-social-link{
-                width:100%;
+            .ssb-component.ssb-navigation{
+                float: unset;
+                width: unset;
+                min-height: 75px !important;
             }
         });
     }
