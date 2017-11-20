@@ -274,9 +274,26 @@
 
 						if (section.spacing.mwxs || section.spacing.mwsm || section.spacing.mwmd || section.spacing.mw) {
 							var _mw = section.spacing.mwxs || section.spacing.mwsm || section.spacing.mwmd || section.spacing.mw;
-							styleString += (_mw == '100%') ?
-								'max-width: ' + _mw + ';' :
-								'max-width: ' + _mw + 'px;margin-left:auto!important;margin-right:auto!important;';
+                                _mw = _mw.toString();
+                            if(_mw == '100%' || _mw == 'auto') {
+                              styleString +=   'max-width: ' + _mw + ';' ;
+                            }
+                            else{
+                                if(_mw && _mw !== "" && _mw.indexOf("%") === -1){
+                                   var isPx = "";
+                                   (_mw.toLowerCase().indexOf('px') === -1) ? isPx="px" : isPx = "";
+                                   styleString +=  'max-width: ' + _mw + isPx +';margin-left:auto!important;margin-right:auto!important;';
+                                }
+                                else
+                                {
+                                   styleString +=  'max-width: ' + _mw + ';margin-left:auto!important;margin-right:auto!important;';
+                                }
+
+                           }
+
+							// styleString += (_mw == '100%') ?
+							// 	'max-width: ' + _mw + ';' :
+							// 	'max-width: ' + _mw + 'px;margin-left:auto!important;margin-right:auto!important;';
 						}
 
 						if (section.spacing.lineHeight) {
@@ -371,9 +388,26 @@
 
 						if (section.spacing.mwsm || section.spacing.mwmd || section.spacing.mw) {
 							var _mw = section.spacing.mwsm || section.spacing.mwmd || section.spacing.mw;
-							styleString += (_mw == '100%') ?
-								'max-width: ' + _mw + ';' :
-								'max-width: ' + _mw + 'px;margin-left:auto!important;margin-right:auto!important;';
+                                _mw = _mw.toString();
+                            if(_mw == '100%' || _mw == 'auto') {
+                              styleString +=   'max-width: ' + _mw + ';' ;
+                            }
+                            else{
+                                if(_mw && _mw !== "" && _mw.indexOf("%") === -1){
+                                   var isPx = "";
+                                   (_mw.toLowerCase().indexOf('px') === -1) ? isPx="px" : isPx = "";
+                                   styleString +=  'max-width: ' + _mw + isPx +';margin-left:auto!important;margin-right:auto!important;';
+                                }
+                                else
+                                {
+                                   styleString +=  'max-width: ' + _mw + ';margin-left:auto!important;margin-right:auto!important;';
+                                }
+
+                           }
+
+							// styleString += (_mw == '100%') ?
+							// 	'max-width: ' + _mw + ';' :
+							// 	'max-width: ' + _mw + 'px;margin-left:auto!important;margin-right:auto!important;';
 						}
 
 						if (section.spacing.lineHeight) {
@@ -869,9 +903,30 @@
 					}
 
 					if (component.spacing.mw) {
-						styleString += (component.spacing.mw == '100%') ?
-							'max-width: ' + component.spacing.mw + ';' :
-							'max-width: ' + component.spacing.mw + 'px;margin:0 auto!important;';
+
+                      component.spacing.mw = component.spacing.mw.toString();
+                            if(component.spacing.mw == '100%' || component.spacing.mw == 'auto') {
+                              styleString +=   'max-width: ' + component.spacing.mw + ';' ;
+                            }
+                            else{
+                                if(component.spacing.mw && component.spacing.mw !== "" && component.spacing.mw.indexOf("%") === -1){
+                                   var isPx = "";
+                                   (component.spacing.mw.toLowerCase().indexOf('px') === -1) ? isPx="px" : isPx = "";
+                                   styleString +=  'max-width: ' + component.spacing.mw + isPx +';margin-left:auto!important;margin-right:auto!important;';
+                                }
+                                else
+                                {
+                                   styleString +=  'max-width: ' + component.spacing.mw + ';margin-left:auto!important;margin-right:auto!important;';
+                                }
+
+                           }
+
+
+
+
+						// styleString += (component.spacing.mw == '100%') ?
+						// 	'max-width: ' + component.spacing.mw + ';' :
+						// 	'max-width: ' + component.spacing.mw + 'px;margin:0 auto!important;';
 					}
 
 					if (component.spacing.lineHeight) {
