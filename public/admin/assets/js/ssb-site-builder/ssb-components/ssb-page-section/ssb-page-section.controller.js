@@ -192,17 +192,17 @@
 						if (section.spacing.ptxs || section.spacing.ptsm || section.spacing.ptmd || section.spacing.pt) {
 							_style = (section.spacing.ptxs || section.spacing.ptsm || section.spacing.ptmd || section.spacing.pt);
 							if(_style.indexOf('%') > 0){
-								styleString += 'padding-top: ' + _style + ';';	
+								styleString += 'padding-top: ' + _style + ';';
 							}
 							else{
 								styleString += 'padding-top: ' + _style + 'px;';
-							}							
+							}
 						}
 
 						if (section.spacing.pbxs || section.spacing.pbsm || section.spacing.pbmd || section.spacing.pb) {
 							_style = (section.spacing.pbxs || section.spacing.pbsm || section.spacing.pbmd || section.spacing.pb);
 							if(_style.indexOf('%') > 0){
-								styleString += 'padding-bottom: ' + _style + ';';	
+								styleString += 'padding-bottom: ' + _style + ';';
 							}
 							else{
 								styleString += 'padding-bottom: ' + _style + 'px;';
@@ -212,7 +212,7 @@
 						if (section.spacing.plxs || section.spacing.plsm || section.spacing.plmd || section.spacing.pl) {
 							_style = (section.spacing.plxs || section.spacing.plsm || section.spacing.plmd || section.spacing.pl);
 							if(_style.indexOf('%') > 0){
-								styleString += 'padding-left: ' + _style + ';';	
+								styleString += 'padding-left: ' + _style + ';';
 							}
 							else{
 								styleString += 'padding-left: ' + _style + 'px;';
@@ -222,7 +222,7 @@
 						if (section.spacing.prxs || section.spacing.prsm || section.spacing.prmd || section.spacing.pr) {
 							_style = (section.spacing.prxs || section.spacing.prsm || section.spacing.prmd || section.spacing.pr);
 							if(_style.indexOf('%') > 0){
-								styleString += 'padding-right: ' + _style + ';';	
+								styleString += 'padding-right: ' + _style + ';';
 							}
 							else{
 								styleString += 'padding-right: ' + _style + 'px;';
@@ -232,7 +232,7 @@
 						if (section.spacing.mtxs || section.spacing.mtsm || section.spacing.mtmd || section.spacing.mt) {
 							_style = (section.spacing.mtxs || section.spacing.mtsm || section.spacing.mtmd || section.spacing.mt);
 							if(_style.indexOf('%') > 0){
-								styleString += 'margin-top: ' + _style + ';';	
+								styleString += 'margin-top: ' + _style + ';';
 							}
 							else{
 								styleString += 'margin-top: ' + _style + 'px;';
@@ -242,14 +242,14 @@
 						if (section.spacing.mbxs || section.spacing.mbsm || section.spacing.mbmd || section.spacing.mb) {
 							_style = (section.spacing.mbxs || section.spacing.mbsm || section.spacing.mbmd || section.spacing.mb);
 							if(_style.indexOf('%') > 0){
-								styleString += 'margin-bottom: ' + _style + ';';	
+								styleString += 'margin-bottom: ' + _style + ';';
 							}
 							else{
 								styleString += 'margin-bottom: ' + _style + 'px;';
 							}
 						}
 
-						
+
 						if (section.spacing.mlxs || section.spacing.mlsm || section.spacing.mlmd || section.spacing.ml) {
 							var _ml = section.spacing.mlxs || section.spacing.mlsm || section.spacing.mlmd || section.spacing.ml;
 							if(_ml.indexOf('%') > 0){
@@ -290,7 +290,7 @@
 						if (section.spacing.ptsm || section.spacing.ptmd || section.spacing.pt) {
 							_style = (section.spacing.ptsm || section.spacing.ptmd || section.spacing.pt);
 							if(_style.indexOf('%') > 0){
-								styleString += 'padding-top: ' + _style + ';';	
+								styleString += 'padding-top: ' + _style + ';';
 							}
 							else{
 								styleString += 'padding-top: ' + _style + 'px;';
@@ -300,7 +300,7 @@
 						if (section.spacing.pbsm || section.spacing.pbmd || section.spacing.pb) {
 							_style = (section.spacing.pbsm || section.spacing.pbmd || section.spacing.pb);
 							if(_style.indexOf('%') > 0){
-								styleString += 'padding-bottom: ' + _style + ';';	
+								styleString += 'padding-bottom: ' + _style + ';';
 							}
 							else{
 								styleString += 'padding-bottom: ' + _style + 'px;';
@@ -310,7 +310,7 @@
 						if (section.spacing.plsm || section.spacing.plmd || section.spacing.pl) {
 							_style = (section.spacing.plsm || section.spacing.plmd || section.spacing.pl);
 							if(_style.indexOf('%') > 0){
-								styleString += 'padding-left: ' + _style + ';';	
+								styleString += 'padding-left: ' + _style + ';';
 							}
 							else{
 								styleString += 'padding-left: ' + _style + 'px;';
@@ -320,7 +320,7 @@
 						if (section.spacing.prsm || section.spacing.prmd || section.spacing.pr) {
 							_style = (section.spacing.prsm || section.spacing.prmd || section.spacing.pr);
 							if(_style.indexOf('%') > 0){
-								styleString += 'padding-right: ' + _style + ';';	
+								styleString += 'padding-right: ' + _style + ';';
 							}
 							else{
 								styleString += 'padding-right: ' + _style + 'px;';
@@ -330,7 +330,7 @@
 						if (section.spacing.mtsm || section.spacing.mtmd || section.spacing.mt) {
 							_style = (section.spacing.mtsm || section.spacing.mtmd || section.spacing.mt);
 							if(_style.indexOf('%') > 0){
-								styleString += 'margin-top: ' + _style + ';';	
+								styleString += 'margin-top: ' + _style + ';';
 							}
 							else{
 								styleString += 'padding-top: ' + _style + 'px;';
@@ -340,7 +340,7 @@
 						if (section.spacing.mbsm || section.spacing.mbmd || section.spacing.mb) {
 							_style = (section.spacing.mbsm || section.spacing.mbmd || section.spacing.mb);
 							if(_style.indexOf('%') > 0){
-								styleString += 'margin-bottom: ' + _style + ';';	
+								styleString += 'margin-bottom: ' + _style + ';';
 							}
 							else{
 								styleString += 'margin-bottom: ' + _style + 'px;';
@@ -387,7 +387,7 @@
 						if (section.spacing.ptmd || section.spacing.pt) {
 							_style = (section.spacing.ptmd || section.spacing.pt);
 							if(_style.indexOf('%') > 0){
-								styleString += 'padding-top: ' + _style + ';';	
+								styleString += 'padding-top: ' + _style + ';';
 							}
 							else{
 								styleString += 'padding-top: ' + _style + 'px;';
@@ -397,7 +397,7 @@
 						if (section.spacing.pbmd || section.spacing.pb) {
 							_style = (section.spacing.pbmd || section.spacing.pb);
 							if(_style.indexOf('%') > 0){
-								styleString += 'padding-bottom: ' + _style + ';';	
+								styleString += 'padding-bottom: ' + _style + ';';
 							}
 							else{
 								styleString += 'padding-top: ' + _style + 'px;';
@@ -407,7 +407,7 @@
 						if (section.spacing.plmd || section.spacing.pl) {
 							_style = (section.spacing.plmd || section.spacing.pl);
 							if(_style.indexOf('%') > 0){
-								styleString += 'padding-left: ' + _style + ';';	
+								styleString += 'padding-left: ' + _style + ';';
 							}
 							else{
 								styleString += 'padding-left: ' + _style + 'px;';
@@ -417,7 +417,7 @@
 						if (section.spacing.prmd || section.spacing.pr) {
 							_style = (section.spacing.prmd || section.spacing.pr);
 							if(_style.indexOf('%') > 0){
-								styleString += 'padding-right: ' + _style + ';';	
+								styleString += 'padding-right: ' + _style + ';';
 							}
 							else{
 								styleString += 'padding-right: ' + _style + 'px;';
@@ -427,7 +427,7 @@
 						if (section.spacing.mtmd || section.spacing.mt) {
 							_style = (section.spacing.mtmd || section.spacing.mt);
 							if(_style.indexOf('%') > 0){
-								styleString += 'margin-top: ' + _style + ';';	
+								styleString += 'margin-top: ' + _style + ';';
 							}
 							else{
 								styleString += 'margin-top: ' + _style + 'px;';
@@ -437,7 +437,7 @@
 						if (section.spacing.mbmd || section.spacing.mb) {
 							_style = (section.spacing.mbmd || section.spacing.mb);
 							if(_style.indexOf('%') > 0){
-								styleString += 'margin-bottom: ' + _style + ';';	
+								styleString += 'margin-bottom: ' + _style + ';';
 							}
 							else{
 								styleString += 'margin-bottom: ' + _style + 'px;';
@@ -518,9 +518,23 @@
 						}
 
 						if (section.spacing.mw) {
-							styleString += (section.spacing.mw == '100%') ?
-								'max-width: ' + section.spacing.mw + ';' :
-								'max-width: ' + section.spacing.mw + 'px;margin-left:auto!important;margin-right:auto!important;';
+
+							if(section.spacing.mw == '100%' || section.spacing.mw == 'auto') {
+                              styleString +=   'max-width: ' + section.spacing.mw + ';' ;
+                            }
+                            else{
+                                if(section.spacing.mw.indexOf("%") === -1){
+                                   var isPx = "";
+                                   (section.spacing.mw && section.spacing.mw.toLowerCase().indexOf('px') === -1) ? isPx="px" : isPx = "";
+                                   styleString +=  'max-width: ' + section.spacing.mw + isPx +';margin-left:auto!important;margin-right:auto!important;';
+                                }
+                                else
+                                {
+                                   styleString +=  'max-width: ' + section.spacing.mw + ';margin-left:auto!important;margin-right:auto!important;';
+                                }
+
+                           }
+
 						}
 
 						if (section.spacing.lineHeight) {
@@ -609,7 +623,7 @@
 					var windowWidth = angular.element($window).width();
 					if(sectionElement.hasClass("ssb-page-section-layout-nav-hero-v4") && windowWidth < 768)
 						sectionElement.find(".flex-container-absolute-column").css("min-height", sectionElementTextHeight);
-					
+
 				}
 			}
 		}
@@ -989,7 +1003,7 @@
 						//new StickyState(vm.element[0]);
 					}, 1000);
 				}
-				
+
 			}
 			vm.elementLoaded = true;
 		}
@@ -1154,7 +1168,7 @@
 				);
 			}
 
-			if (!vm.uiState && vm.section && vm.section.layoutModifiers && vm.section.layoutModifiers.fixed) {				
+			if (!vm.uiState && vm.section && vm.section.layoutModifiers && vm.section.layoutModifiers.fixed) {
 				$timeout(function () {
 					vm.setFixedPosition(_isVerticalNav);
 				}, 0);
