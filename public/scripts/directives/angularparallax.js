@@ -84,14 +84,6 @@ angular.module('angular-parallax', [
 						elem.css('background-position', calcValX + " " + calcValY + "px");
 						elem.css('background-attachment', "inherit");
 					}
-
-					if (initialRun) {
-						$timeout(function () {
-							elem.removeClass('opacity-0');
-						}, 0);
-						initialRun = false;
-					}
-
 				};
 			// set our initial position - fixes webkit background render bug
 			$(document).ready(function () {
