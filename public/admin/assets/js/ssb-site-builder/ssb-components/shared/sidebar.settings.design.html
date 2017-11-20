@@ -1141,10 +1141,29 @@
         </div>
     </div>
 </div>
-<div ng-if="component.type =='ssb-element-text'" class="form-group  margin-bottom-20">
-    <label for="">
-        Allow ticker
-        <span tooltip-placement="top" tooltip-append-to-body="true" tooltip="Allow text component to be turned into a ticker."><i class="fa fa-info-circle" /></span>
-    </label>
-    <switch ng-model="component.allowTicker" class="pull-right"></switch>
+<div ng-if="component.type =='ssb-element-text'">
+    <h4 class="ssb-sidebar-sub-heading-separator">Ticker Settings</h4>
+
+    <div class="row padding-10">
+
+        <div class="form-group">
+            <label for="bg_blur">
+                Allow ticker
+                <span tooltip-placement="top" tooltip-append-to-body="true" tooltip="Allow text component to be turned into a ticker."><i class="fa fa-info-circle" /></span>
+            </label>
+            <switch ng-model="component.allowTicker" class="pull-right"></switch>
+        </div>
+        <div class="form-group">
+            <label for="txt_size">
+                Ticker speed
+               <span tooltip-placement="top" tooltip-append-to-body="true" tooltip="Animation speed of ticker"><i class="fa fa-info-circle" /></span>
+            </label>
+            <div class="col-xs-7 pull-right">
+                <input type="text" ng-model="component.tickerSpeed" min="1" max="50" touchspin>
+            </div>
+
+        </div>
+    
+
+    </div>
 </div>

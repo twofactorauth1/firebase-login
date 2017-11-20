@@ -32,3 +32,14 @@
   -webkit-animation-duration: 20s;
   animation-duration: 20s;
 }
+
+
+.generate-ticker-speed-classes(50);
+
+.generate-ticker-speed-classes(@n, @i: 1) when (@i =< @n) {
+  .ticker-speed-@{i} {
+    -webkit-animation-duration: @i * 1s;
+  	animation-duration: @i * 1s!important;
+  }
+  .generate-ticker-speed-classes(@n, (@i + 1));
+}
