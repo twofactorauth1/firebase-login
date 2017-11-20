@@ -262,6 +262,7 @@
 				formBuilderCampaignTags,
 				first_name = "",
 				last_name = "";
+                middle_name = "";
 			sessionId = ipCookie("session_cookie") ? ipCookie("session_cookie").id : null;
 
 			if (vm.component.skipWelcomeEmail) {
@@ -283,11 +284,15 @@
 
 
 			if (vm.formBuilder.name) {
-				var name_arr = vm.formBuilder.name.split(/ (.+)?/);
+				var name_arr = vm.formBuilder.name.split(' ');
 				first_name = name_arr[0];
-				if (name_arr.length > 1) {
+				if (name_arr.length === 2) {
 					last_name = name_arr[1];
 				}
+                if (name_arr.length > 2) {
+                    middle_name = name_arr[1];
+                    last_name = name_arr.splice(2, name_arr.length).join(' ');
+                }
 			}
 
 			var customFields = _.filter(vm.component.contactInfo, function (x) {
@@ -321,6 +326,7 @@
 				sessionId: sessionId,
 				first: first_name,
 				last: last_name,
+                middle : middle_name,
 				details: [
 					{
 						emails: [],
