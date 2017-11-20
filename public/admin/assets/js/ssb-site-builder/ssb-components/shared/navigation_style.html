@@ -89,6 +89,6 @@
     .navigation-v{{component.version}}.nav-header-{{component._id}} .navbar-default ul.nav-sub-menu>li:hover>div>a{
         background-color: {{component.subnavigation.hoverbg}} !important;
         color: {{component.subnavigation.hover}} !important;  
-        border-color: {{component.nav.hover || component.nav.txtcolor || defalultHover}} !important;
+        border-color: {{component.subnavigation.hover || component.nav.hover || component.nav.txtcolor || defalultHover}} !important;
     }
 </style>
