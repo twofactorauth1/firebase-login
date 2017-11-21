@@ -220,8 +220,8 @@ _.extend(view.prototype, BaseView.prototype, {
                     if(value.website.resources.customCss.global && value.website.resources.customCss.global.original){
                         customCss.push(value.website.resources.customCss.global.original);
                     }
-                    if(pageHolder[handle] && pageHolder[handle].handle && value.website.resources.customCss[pageHolder[handle].handle] && value.website.resources.customCss[pageHolder[handle].handle].original){
-                        customCss.push(value.website.resources.customCss[pageHolder[handle].handle].original);
+                    if(page.get('handle') && value.website.resources.customCss[page.get('handle')] && value.website.resources.customCss[page.get('handle')].original){
+                        customCss.push(value.website.resources.customCss[page.get('handle')].original);
                     }
                 
                     if(customCss.length){
