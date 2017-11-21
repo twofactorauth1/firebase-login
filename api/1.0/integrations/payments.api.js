@@ -184,15 +184,25 @@ _.extend(api.prototype, baseApi.prototype, {
                         var customerId = account.get('billing').stripeCustomerId;
 
                         paymentsManager.listChargesForAccount(account, created, endingBefore, limit, startingAfter, userId, function(err, charges){
-                            var totalrevenue = 0;
-                            _.each(charges.data, function(charge){
-                                totalrevenue+= (charge.amount - charge.amount_refunded);
-                            });
-                            totalrevenue = totalrevenue / 100;
+                            if(err) {
+                                self.log.error(accountId, userId, 'Error getting charges:', err);
+                                return self.wrapError(resp, 500, 'Error listing revenue', 'There was an error listing revenue.');
+                            } else if(!charges) {
+                                charges = {totalrevenue:0};
+                                self.log.debug(accountId, userId, '<< listChargesForAccount');
+                                return self.sendResultOrError(resp, err, charges, "Error listing revenue");
+                            } else {
+                                var totalrevenue = 0;
+                                _.each(charges.data, function(charge){
+                                    totalrevenue+= (charge.amount - charge.amount_refunded);
+                                });
+                                totalrevenue = totalrevenue / 100;
 
-                            charges.totalrevenue=totalrevenue;
-                            self.log.debug(accountId, userId, '<< listChargesForAccount');
-                            return self.sendResultOrError(resp, err, charges, "Error listing revenue");
+                                charges.totalrevenue=totalrevenue;
+                                self.log.debug(accountId, userId, '<< listChargesForAccount');
+                                return self.sendResultOrError(resp, err, charges, "Error listing revenue");
+                            }
+
                         });
                     }   
                 });
