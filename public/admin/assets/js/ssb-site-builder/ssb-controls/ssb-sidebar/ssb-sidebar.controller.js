@@ -1101,9 +1101,9 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
     }
 
     function closeSectionPanel() {
-        vm.uiState.activeElement = {};
+       // vm.uiState.activeElement = {};
         vm.uiState.showSectionPanel = false;
-        vm.uiState.openSidebarSectionPanel = { name: '', id: '' };
+       /// vm.uiState.openSidebarSectionPanel = { name: '', id: '' };
     }
 
     function initializeMapSlider(){
