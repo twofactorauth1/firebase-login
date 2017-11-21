@@ -843,15 +843,14 @@
 
 		function applyTickerStyle(component){
 			if(vm.element && component){
-				if(component.allowTicker){
+				if(component.allowTicker && !vm.element.hasClass("ssb-active-component")){
 					if(!vm.element.parent().hasClass("ticker")){
 						vm.element.wrapAll('<div id="tickerwrap" class="tickerwrap"></div>');
 						vm.element.wrapAll('<div id="ticker" class="ticker"></div>');
 					}
 					if(component.tickerSpeed)
 						applyTickerSpeedClass(component);
-				}
-				else{
+				}else{
 					if(vm.element.parent().hasClass("ticker")){
 						vm.element.unwrap();
 						vm.element.unwrap();
