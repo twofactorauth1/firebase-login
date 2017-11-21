@@ -37,8 +37,14 @@ angular.module('angular-parallax', [
 			parallaxXPosition: '@'
 		},
 		link: function ($scope, elem) {
-
-			var pos = function (obj) {
+			if(elem.hasClass("no-bg-opacity")){
+				// No opacity required;
+			}
+			else{
+				elem.addClass('opacity-0');
+			}
+			var initialRun = true,
+				pos = function (obj) {
 					//curLeft = 0, not used
 					var curTop = 0;
 					if (obj.offsetParent) {
@@ -82,6 +88,14 @@ angular.module('angular-parallax', [
 						elem.css('background-position', calcValX + " " + calcValY + "px");
 						elem.css('background-attachment', "inherit");
 					}
+
+					if (initialRun) {
+						$timeout(function () {
+							elem.removeClass('opacity-0');
+						}, 0);
+						initialRun = false;
+					}
+
 				};
 			// set our initial position - fixes webkit background render bug
 			$(document).ready(function () {
