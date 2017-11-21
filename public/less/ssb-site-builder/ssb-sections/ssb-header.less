@@ -228,10 +228,21 @@
     }
     @media screen and (min-width: 767px)
     {
-      .ssb-page-section-layout-header-v4 .navbar-header {
+
+      .ssb-page-section-layout-header-v4 .navbar-header,.ssb-page-section-layout-header-v7 .navbar-header{
             width: 25%;
             float: left;
         }
+       .ssb-page-section-layout-header-v4 .navbar-header .logo-1,.ssb-page-section-layout-header-v7 .navbar-header .logo-1{
+           width:100%;
+       }
+    }
+    @media screen and (max-width: 767px)
+    {
+       .ssb-page-section-layout-header-v4 .navbar-header .logo-1,.ssb-page-section-layout-header-v7 .navbar-header .logo-1{
+           width:100%;
+       }
+
     }
     .ssb-page-section-layout-header-v4 .navbar-header .fr-view img.fr-dib.fr-fir{
        margin-right : 0;
