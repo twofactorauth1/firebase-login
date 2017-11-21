@@ -2,7 +2,7 @@
 	<div ng-if="!(vm.component.version == 2 && vm.component.parallax )" class="ssb-image-component-container">
 		<img class="img-responsive" ng-src="{{vm.component.src}}" alt="{{(vm.component.src) ? vm.component.alttext : ''}}"/>
 	</div>
-	<div id="px-ele-{{vm.component._id}}" class="nav-header-div" ng-if="(vm.component.version == 2 && vm.component.parallax )" ng-class="{parallax:vm.component.parallax}"
+	<div id="px-ele-{{vm.component._id}}" class="nav-header-div no-bg-opacity" ng-if="(vm.component.version == 2 && vm.component.parallax )" ng-class="{parallax:vm.component.parallax}"
 	     {{vm.component.parallax ? parallax-background  : ""}}
 	     ng-attr-parallax-ratio="{{vm.component.parallax ? '0.4' : '1'}}"
 	     ng-attr-style='
