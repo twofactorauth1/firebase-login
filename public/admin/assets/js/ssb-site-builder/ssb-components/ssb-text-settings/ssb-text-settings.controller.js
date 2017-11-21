@@ -18,7 +18,7 @@
 		vm.element = null;
 		vm.elementId = null;
 		vm.parentTextElement = null;
-		vm.showHideClass = showHideClass;		
+		vm.showHideClass = showHideClass;
 		vm.parentTextElementModelAttribute = null;
 		vm.parentTextElementClassNameAttribute = null;
 		vm.parentComponent = null;
@@ -346,7 +346,7 @@
 			var windowWidth = angular.element($window).width();
 			if(windowWidth < 768){
 				_layout = 0
-			}      
+			}
 			else if(windowWidth >= 768 && windowWidth < 992){
 				_layout = 1;
 			}
@@ -371,7 +371,7 @@
 							if (component.spacing.ptxs || component.spacing.ptsm || component.spacing.ptmd || component.spacing.pt) {
 								_style = (component.spacing.ptxs || component.spacing.ptsm || component.spacing.ptmd || component.spacing.pt);
 								if(_style.indexOf('%') > 0){
-									styleString += 'padding-top: ' + _style + ';';	
+									styleString += 'padding-top: ' + _style + ';';
 								}
 								else{
 									styleString += 'padding-top: ' + _style + 'px;';
@@ -381,7 +381,7 @@
 							if (component.spacing.pbxs || component.spacing.pbsm || component.spacing.pbmd || component.spacing.pb) {
 								_style = (component.spacing.pbxs || component.spacing.pbsm || component.spacing.pbmd || component.spacing.pb);
 								if(_style.indexOf('%') > 0){
-									styleString += 'padding-bottom: ' + _style + ';';	
+									styleString += 'padding-bottom: ' + _style + ';';
 								}
 								else{
 									styleString += 'padding-bottom: ' + _style + 'px;';
@@ -391,7 +391,7 @@
 							if (component.spacing.plxs || component.spacing.plsm || component.spacing.plmd || component.spacing.pl) {
 								_style = (component.spacing.plxs || component.spacing.plsm || component.spacing.plmd || component.spacing.pl);
 								if(_style.indexOf('%') > 0){
-									styleString += 'padding-left: ' + _style + ';';	
+									styleString += 'padding-left: ' + _style + ';';
 								}
 								else{
 									styleString += 'padding-left: ' + _style + 'px;';
@@ -401,7 +401,7 @@
 							if (component.spacing.prxs || component.spacing.prsm || component.spacing.prmd || component.spacing.pr) {
 								_style = (component.spacing.prxs || component.spacing.prsm || component.spacing.prmd || component.spacing.pr);
 								if(_style.indexOf('%') > 0){
-									styleString += 'padding-right: ' + _style + ';';	
+									styleString += 'padding-right: ' + _style + ';';
 								}
 								else{
 									styleString += 'padding-right: ' + _style + 'px;';
@@ -411,7 +411,7 @@
 							if (component.spacing.mtxs || component.spacing.mtsm || component.spacing.mtmd || component.spacing.mt) {
 								_style = (component.spacing.mtxs || component.spacing.mtsm || component.spacing.mtmd || component.spacing.mt);
 								if(_style.indexOf('%') > 0){
-									styleString += 'margin-top: ' + _style + ';';	
+									styleString += 'margin-top: ' + _style + ';';
 								}
 								else{
 									styleString += 'margin-top: ' + _style + 'px;';
@@ -421,7 +421,7 @@
 							if (component.spacing.mbxs || component.spacing.mbsm || component.spacing.mbmd || component.spacing.mb) {
 								_style = (component.spacing.mbxs || component.spacing.mbsm || component.spacing.mbmd || component.spacing.mb);
 								if(_style.indexOf('%') > 0){
-									styleString += 'margin-bottom: ' + _style + ';';	
+									styleString += 'margin-bottom: ' + _style + ';';
 								}
 								else{
 									styleString += 'margin-bottom: ' + _style + 'px;';
@@ -452,9 +452,23 @@
 
 							if (component.spacing.mwxs || component.spacing.mwsm || component.spacing.mwmd || component.spacing.mw) {
 								var _mw = component.spacing.mwxs || component.spacing.mwsm || component.spacing.mwmd || component.spacing.mw;
-								styleString += (_mw == '100%') ?
-									'max-width: ' + _mw + ';' :
-									'max-width: ' + _mw + 'px;margin-left:auto!important;margin-right:auto!important;';
+								_mw = _mw.toString();
+                                if(_mw == '100%' || _mw == 'auto') {
+                                  styleString +=   'max-width: ' + _mw + ';' ;
+                                }
+                                else{
+                                    if(_mw && _mw !== "" && _mw.indexOf("%") === -1){
+                                       var isPx = "";
+                                       (_mw.toLowerCase().indexOf('px') === -1) ? isPx="px" : isPx = "";
+                                       styleString +=  'max-width: ' + _mw + isPx +';margin-left:auto!important;margin-right:auto!important;';
+                                    }
+                                    else
+                                    {
+                                       styleString +=  'max-width: ' + _mw + ';margin-left:auto!important;margin-right:auto!important;';
+                                    }
+
+                               }
+
 							}
 
 							if (component.spacing.lineHeight) {
@@ -468,7 +482,7 @@
 							if (component.spacing.ptsm || component.spacing.ptmd || component.spacing.pt) {
 								_style = (component.spacing.ptsm || component.spacing.ptmd || component.spacing.pt);
 								if(_style.indexOf('%') > 0){
-									styleString += 'padding-top: ' + _style + ';';	
+									styleString += 'padding-top: ' + _style + ';';
 								}
 								else{
 									styleString += 'padding-top: ' + _style + 'px;';
@@ -478,7 +492,7 @@
 							if (component.spacing.pbsm || component.spacing.pbmd || component.spacing.pb) {
 								_style = (component.spacing.pbsm || component.spacing.pbmd || component.spacing.pb);
 								if(_style.indexOf('%') > 0){
-									styleString += 'padding-bottom: ' + _style + ';';	
+									styleString += 'padding-bottom: ' + _style + ';';
 								}
 								else{
 									styleString += 'padding-bottom: ' + _style + 'px;';
@@ -488,7 +502,7 @@
 							if (component.spacing.plsm || component.spacing.plmd || component.spacing.pl) {
 								_style = (component.spacing.plsm || component.spacing.plmd || component.spacing.pl);
 								if(_style.indexOf('%') > 0){
-									styleString += 'padding-left: ' + _style + ';';	
+									styleString += 'padding-left: ' + _style + ';';
 								}
 								else{
 									styleString += 'padding-left: ' + _style + 'px;';
@@ -498,7 +512,7 @@
 							if (component.spacing.prsm || component.spacing.prmd || component.spacing.pr) {
 								_style = (component.spacing.prsm || component.spacing.prmd || component.spacing.pr);
 								if(_style.indexOf('%') > 0){
-									styleString += 'padding-right: ' + _style + ';';	
+									styleString += 'padding-right: ' + _style + ';';
 								}
 								else{
 									styleString += 'padding-right: ' + _style + 'px;';
@@ -508,7 +522,7 @@
 							if (component.spacing.mtsm || component.spacing.mtmd || component.spacing.mt) {
 								_style = (component.spacing.mtsm || component.spacing.mtmd || component.spacing.mt);
 								if(_style.indexOf('%') > 0){
-									styleString += 'margin-top: ' + _style + ';';	
+									styleString += 'margin-top: ' + _style + ';';
 								}
 								else{
 									styleString += 'margin-top: ' + _style + 'px;';
@@ -518,7 +532,7 @@
 							if (component.spacing.mbsm || component.spacing.mbmd || component.spacing.mb) {
 								_style = (component.spacing.mbsm || component.spacing.mbmd || component.spacing.mb);
 								if(_style.indexOf('%') > 0){
-									styleString += 'margin-bottom: ' + _style + ';';	
+									styleString += 'margin-bottom: ' + _style + ';';
 								}
 								else{
 									styleString += 'margin-bottom: ' + _style + 'px;';
@@ -549,9 +563,22 @@
 
 							if (component.spacing.mwsm || component.spacing.mwmd || component.spacing.mw) {
 								var _mw = component.spacing.mwsm || component.spacing.mwmd || component.spacing.mw;
-								styleString += (_mw == '100%') ?
-									'max-width: ' + _mw + ';' :
-									'max-width: ' + _mw + 'px;margin-left:auto!important;margin-right:auto!important;';
+                                _mw = _mw.toString();
+                                if(_mw == '100%' || _mw == 'auto') {
+                                  styleString +=   'max-width: ' + _mw + ';' ;
+                                }
+                                else{
+                                    if(_mw && _mw !== "" && _mw.indexOf("%") === -1){
+                                       var isPx = "";
+                                       (_mw.toLowerCase().indexOf('px') === -1) ? isPx="px" : isPx = "";
+                                       styleString +=  'max-width: ' + _mw + isPx +';margin-left:auto!important;margin-right:auto!important;';
+                                    }
+                                    else
+                                    {
+                                       styleString +=  'max-width: ' + _mw + ';margin-left:auto!important;margin-right:auto!important;';
+                                    }
+
+                               }
 							}
 
 							if (component.spacing.lineHeight) {
@@ -565,7 +592,7 @@
 							if (component.spacing.ptmd || component.spacing.pt) {
 								_style = (component.spacing.ptmd || component.spacing.pt);
 								if(_style.indexOf('%') > 0){
-									styleString += 'padding-top: ' + _style + ';';	
+									styleString += 'padding-top: ' + _style + ';';
 								}
 								else{
 									styleString += 'padding-top: ' + _style + 'px;';
@@ -575,7 +602,7 @@
 							if (component.spacing.pbmd || component.spacing.pb) {
 								_style = (component.spacing.pbmd || component.spacing.pb);
 								if(_style.indexOf('%') > 0){
-									styleString += 'padding-bottom: ' + _style + ';';	
+									styleString += 'padding-bottom: ' + _style + ';';
 								}
 								else{
 									styleString += 'padding-bottom: ' + _style + 'px;';
@@ -585,7 +612,7 @@
 							if (component.spacing.plmd || component.spacing.pl) {
 								_style = (component.spacing.plmd || component.spacing.pl);
 								if(_style.indexOf('%') > 0){
-									styleString += 'padding-left: ' + _style + ';';	
+									styleString += 'padding-left: ' + _style + ';';
 								}
 								else{
 									styleString += 'padding-left: ' + _style + 'px;';
@@ -595,7 +622,7 @@
 							if (component.spacing.prmd || component.spacing.pr) {
 								_style = (component.spacing.prmd || component.spacing.pr);
 								if(_style.indexOf('%') > 0){
-									styleString += 'padding-right: ' + _style + ';';	
+									styleString += 'padding-right: ' + _style + ';';
 								}
 								else{
 									styleString += 'padding-right: ' + _style + 'px;';
@@ -605,7 +632,7 @@
 							if (component.spacing.mtmd || component.spacing.mt) {
 								_style = (component.spacing.mtmd || component.spacing.mt);
 								if(_style.indexOf('%') > 0){
-									styleString += 'margin-top: ' + _style + ';';	
+									styleString += 'margin-top: ' + _style + ';';
 								}
 								else{
 									styleString += 'margin-top: ' + _style + 'px;';
@@ -615,7 +642,7 @@
 							if (component.spacing.mbmd || component.spacing.mb) {
 								_style = (component.spacing.mbmd || component.spacing.mb);
 								if(_style.indexOf('%') > 0){
-									styleString += 'margin-bottom: ' + _style + ';';	
+									styleString += 'margin-bottom: ' + _style + ';';
 								}
 								else{
 									styleString += 'margin-bottom: ' + _style + 'px;';
@@ -644,10 +671,24 @@
 							}
 
 							if (component.spacing.mwmd || component.spacing.mw) {
-								var _mw = component.spacing.mwmd || component.spacing.mw;
-								styleString += (_mw == '100%') ?
-									'max-width: ' + _mw + ';' :
-									'max-width: ' + _mw + 'px;margin-left:auto!important;margin-right:auto!important;';
+                               //apply max-width base on the px or %
+                                 var _mw = component.spacing.mwmd || component.spacing.mw;
+                                 _mw = _mw.toString();
+                                if(_mw == '100%' || _mw == 'auto') {
+                                  styleString +=   'max-width: ' + _mw + ';' ;
+                                }
+                                else{
+                                    if(_mw && _mw !== "" && _mw.indexOf("%") === -1){
+                                       var isPx = "";
+                                       (_mw.toLowerCase().indexOf('px') === -1) ? isPx="px" : isPx = "";
+                                       styleString +=  'max-width: ' + _mw + isPx +';margin-left:auto!important;margin-right:auto!important;';
+                                    }
+                                    else
+                                    {
+                                       styleString +=  'max-width: ' + _mw + ';margin-left:auto!important;margin-right:auto!important;';
+                                    }
+
+                               }
 							}
 
 							if (component.spacing.lineHeight) {
@@ -655,7 +696,7 @@
 							}
 
 						}
-		                break;      
+		                break;
 		            default:
 		            	if (component && component.spacing) {
 							if (component.spacing.pt) {
@@ -732,9 +773,24 @@
 							}
 
 							if (component.spacing.mw) {
-								styleString += (component.spacing.mw == '100%') ?
-									'max-width: ' + component.spacing.mw + ';' :
-									'max-width: ' + component.spacing.mw + 'px;margin-left:auto!important;margin-right:auto!important;';
+
+                               //apply max-width base on the px or %
+                               component.spacing.mw = component.spacing.mw.toString();
+                                if(component.spacing.mw == '100%' || component.spacing.mw == 'auto') {
+                                  styleString +=   'max-width: ' + component.spacing.mw + ';' ;
+                                }
+                                else{
+                                    if(component.spacing.mw && component.spacing.mw !== "" && component.spacing.mw.indexOf("%") === -1){
+                                       var isPx = "";
+                                       (component.spacing.mw.toLowerCase().indexOf('px') === -1) ? isPx="px" : isPx = "";
+                                       styleString +=  'max-width: ' + component.spacing.mw + isPx +';margin-left:auto!important;margin-right:auto!important;';
+                                    }
+                                    else
+                                    {
+                                       styleString +=  'max-width: ' + component.spacing.mw + ';margin-left:auto!important;margin-right:auto!important;';
+                                    }
+
+                               }
 							}
 
 							if (component.spacing.lineHeight) {
@@ -801,7 +857,7 @@
 						vm.element.unwrap();
 					}
 				}
-				
+
 			}
 		}
 
