@@ -211,6 +211,28 @@ _.extend(view.prototype, BaseView.prototype, {
                 else{
                     value.website.resources.userScripts.global = {};
                 }
+                value.website.resources.customCss = value.website.resources.customCss || {};
+
+                if(value.website.resources.toggles && value.website.resources.toggles.customCss){
+                    value.website.resources.customCss.global = value.website.resources.customCss.global || {};
+                }
+                else{
+                    value.website.resources.customCss = {};
+                }
+
+                var customCss = [];
+
+                if(value.website.resources.customCss.global && value.website.resources.customCss.global.original){
+                    customCss.push(value.website.resources.customCss.global.original);
+                }
+                if(pageHolder[handle] && pageHolder[handle].handle && value.website.resources.customCss[pageHolder[handle].handle] && value.website.resources.customCss[pageHolder[handle].handle].original){
+                    customCss.push(value.website.resources.customCss[pageHolder[handle].handle].original);
+                }
+
+                data.customCss = "";
+                if(customCss.length){
+                    data.customCss = customCss.join('\n\n');
+                }
 
                 if(pageHolder[handle]) {
                     data.title = pageHolder[handle].title || value.website.title;
@@ -489,6 +511,29 @@ _.extend(view.prototype, BaseView.prototype, {
                 }
                 else{
                     value.website.resources.userScripts.global = {};
+                }
+
+                value.website.resources.customCss = value.website.resources.customCss || {};
+
+                if(value.website.resources.toggles && value.website.resources.toggles.customCss){
+                    value.website.resources.customCss.global = value.website.resources.customCss.global || {};
+                }
+                else{
+                    value.website.resources.customCss = {};
+                }
+
+                var customCss = [];
+
+                if(value.website.resources.customCss.global && value.website.resources.customCss.global.original){
+                    customCss.push(value.website.resources.customCss.global.original);
+                }
+                if(pageHolder[handle] && pageHolder[handle].handle && value.website.resources.customCss[pageHolder[handle].handle] && value.website.resources.customCss[pageHolder[handle].handle].original){
+                    customCss.push(value.website.resources.customCss[pageHolder[handle].handle].original);
+                }
+
+                data.customCss = "";
+                if(customCss.length){
+                    data.customCss = customCss.join('\n\n');
                 }
 
                 if(pageHolder[handle]) {
@@ -811,6 +856,29 @@ _.extend(view.prototype, BaseView.prototype, {
                     value.website.resources.userScripts.global = {};
                 }
 
+                value.website.resources.customCss = value.website.resources.customCss || {};
+
+                if(value.website.resources.toggles && value.website.resources.toggles.customCss){
+                    value.website.resources.customCss.global = value.website.resources.customCss.global || {};
+                }
+                else{
+                    value.website.resources.customCss = {};
+                }
+
+                var customCss = [];
+
+                if(value.website.resources.customCss.global && value.website.resources.customCss.global.original){
+                    customCss.push(value.website.resources.customCss.global.original);
+                }
+                if(pageHolder[handle] && pageHolder[handle].handle && value.website.resources.customCss[pageHolder[handle].handle] && value.website.resources.customCss[pageHolder[handle].handle].original){
+                    customCss.push(value.website.resources.customCss[pageHolder[handle].handle].original);
+                }
+
+                data.customCss = "";
+                if(customCss.length){
+                    data.customCss = customCss.join('\n\n');
+                }
+
                 if(pageHolder[handle]) {
                     data.title = pageHolder[handle].title || value.website.title;
                 } else {
@@ -1129,6 +1197,28 @@ _.extend(view.prototype, BaseView.prototype, {
                 else{
                     value.website.resources.userScripts.global = {};
                 }
+                value.website.resources.customCss = value.website.resources.customCss || {};
+
+                if(value.website.resources.toggles && value.website.resources.toggles.customCss){
+                    value.website.resources.customCss.global = value.website.resources.customCss.global || {};
+                }
+                else{
+                    value.website.resources.customCss = {};
+                }
+
+                var customCss = [];
+
+                if(value.website.resources.customCss.global && value.website.resources.customCss.global.original){
+                    customCss.push(value.website.resources.customCss.global.original);
+                }
+                if(pageHolder[handle] && pageHolder[handle].handle && value.website.resources.customCss[pageHolder[handle].handle] && value.website.resources.customCss[pageHolder[handle].handle].original){
+                    customCss.push(value.website.resources.customCss[pageHolder[handle].handle].original);
+                }
+
+                data.customCss = "";
+                if(customCss.length){
+                    data.customCss = customCss.join('\n\n');
+                }
 
                 if(pageHolder[handle]) {
                     data.title = pageHolder[handle].title || value.website.title;
@@ -1432,6 +1522,28 @@ _.extend(view.prototype, BaseView.prototype, {
                 }
                 else{
                     value.website.resources.userScripts.global = {};
+                }
+                value.website.resources.customCss = value.website.resources.customCss || {};
+
+                if(value.website.resources.toggles && value.website.resources.toggles.customCss){
+                    value.website.resources.customCss.global = value.website.resources.customCss.global || {};
+                }
+                else{
+                    value.website.resources.customCss = {};
+                }
+
+                var customCss = [];
+
+                if(value.website.resources.customCss.global && value.website.resources.customCss.global.original){
+                    customCss.push(value.website.resources.customCss.global.original);
+                }
+                if(pageHolder[handle] && pageHolder[handle].handle && value.website.resources.customCss[pageHolder[handle].handle] && value.website.resources.customCss[pageHolder[handle].handle].original){
+                    customCss.push(value.website.resources.customCss[pageHolder[handle].handle].original);
+                }
+
+                data.customCss = "";
+                if(customCss.length){
+                    data.customCss = customCss.join('\n\n');
                 }
 
                 if(pageHolder[handle]) {
