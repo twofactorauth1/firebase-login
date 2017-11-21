@@ -294,7 +294,7 @@
 					styleString += 'margin-top: ' + component.spacing.mt + 'px;';
 				}
 				if (component.spacing.mb) {
-					styleString += 'margin-bottom: ' + component.spacing.mb + 'px;';
+					styleString += 'margin-bottom: ' + component.spacing.mb + 'pspacing.mwx;';
 				}
 				if (component.spacing.ml) {
 					styleString += component.spacing.ml == 'auto' ? 'margin-left: ' + component.spacing.ml + ';float: none;' : 'margin-left: ' + component.spacing.ml + 'px;';
@@ -304,9 +304,25 @@
 				}
 
 				if (component.spacing.mw) {
-					styleString += (component.spacing.mw === '100%') ?
-						'max-width: ' + component.spacing.mw + ';' :
-						'max-width: ' + component.spacing.mw + 'px;margin:0 auto!important;';
+
+                      //apply max-width base on the px or %
+                       component.spacing.mw = component.spacing.mw.toString();
+                        if(component.spacing.mw == '100%' || component.spacing.mw == 'auto') {
+                          styleString +=   'max-width: ' + component.spacing.mw + ';' ;
+                        }
+                        else{
+                            if(component.spacing.mw && component.spacing.mw !== "" && component.spacing.mw.indexOf("%") === -1){
+                               var isPx = "";
+                               (component.spacing.mw.toLowerCase().indexOf('px') === -1) ? isPx="px" : isPx = "";
+                               styleString +=  'max-width: ' + component.spacing.mw + isPx +';margin-left:auto!important;margin-right:auto!important;';
+                            }
+                            else
+                            {
+                               styleString +=  'max-width: ' + component.spacing.mw + ';margin-left:auto!important;margin-right:auto!important;';
+                            }
+
+                       }
+
 				}
 
 				if (component.spacing.lineHeight) {
