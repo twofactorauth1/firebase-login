@@ -78,6 +78,7 @@ mainApp.controller('PreviewCtrl', ['$scope', '$rootScope', 'previewPagesService'
                     $rootScope.title = $scope.page.title;
                     $rootScope.pageHandle = $scope.page.handle;
                     $scope.sections = data.sections;
+                    $window.indigenous.firstVisibleElement=false;
                     checkIntercom(data);
                     angular.element(document).ready(function () {
                         $document.scrollTop(0);

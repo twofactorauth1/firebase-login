@@ -86,7 +86,7 @@ mainApp.controller('CacheCtrl', ['$scope', '$rootScope', 'embeddedSiteDataServic
 			$rootScope.title = $scope.page.title;
 			$rootScope.pageHandle = $scope.page.handle;
 			$scope.sections = data.sections;
-
+			$window.indigenous.firstVisibleElement=false;
 			_.each(data.sections, function (section, index1) {
 				if (section) {
 					if(section.layout== "nav-hero" && firstheroNavId==undefined){
