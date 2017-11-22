@@ -985,7 +985,7 @@ app.constant('JS_REQUIRES', {
       "../js/libs_misc/froala-wysiwyg-editor/js/plugins/tableCellColors.min.js",
       "../js/libs/froala-wysiwyg-editor/js/plugins/emoticons.min.js",
       "../js/libs/froala-wysiwyg-editor/js/plugins/entities.min.js",
-      "../js/libs/froala-wysiwyg-editor/js/plugins/font_family.min.js",
+      "../js/libs_misc/froala-wysiwyg-editor/js/plugins/font_family.js",
       "../js/libs/froala-wysiwyg-editor/js/plugins/font_size.min.js",
       "../js/libs_misc/froala-wysiwyg-editor/js/plugins/image-manager.js",
       "../js/libs_misc/froala-wysiwyg-editor/js/plugins/font_weight.js",

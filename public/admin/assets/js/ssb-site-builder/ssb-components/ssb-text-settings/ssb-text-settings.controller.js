@@ -826,6 +826,7 @@
 					styleString += 'border-radius: ' + component.border.radius + '%;';
 				}
 				applyTickerStyle(component);
+				applyVerticalAlignmentSetting(component)
 				return styleString;
 
 			} else {
@@ -834,7 +835,11 @@
 
 			}
 		}
-
+		function applyVerticalAlignmentSetting(component){
+			if(vm.element && component){
+				vm.elementData.isGrid = vm.element.children(".admin_grid_view").length > 0;
+			}
+		}
 		function applyTickerSpeedClass(component){
 			var element = vm.element.parent(".ticker");
 			var classString = 'ticker ticker-speed-' + component.tickerSpeed;
