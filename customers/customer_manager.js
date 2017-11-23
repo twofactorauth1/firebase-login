@@ -654,10 +654,6 @@ module.exports = {
     _download: function(uri, file, callback){
         var self = this;
         var options = {
-            screenSize: {
-                width: 1280,
-                height: 768
-            },
             shotSize: {
                 width: 'window',
                 height: 'all'
