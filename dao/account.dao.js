@@ -325,6 +325,7 @@ var dao = {
     getPreviewData: function (idAry, fn) {
         var self = this;
         var data = [];
+        idAry = _.uniq(idAry);
         async.each(idAry, function (_id, callback) {
             self.getById(_id, function (err, val) {
                 if (err) {
@@ -357,6 +358,7 @@ var dao = {
             if(err || !organization) {
                 fn(err || 'No organization found');
             } else {
+                idAry = _.uniq(idAry);
                 var orgId = organization.id();
                 async.each(idAry, function(id, callback){
                     var query = {_id:id, orgId:orgId};
