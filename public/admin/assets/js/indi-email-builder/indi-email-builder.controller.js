@@ -292,7 +292,7 @@
                 };
 
                 _modal.resolve.showInsert = function() {
-                    return true;
+                    return vm.uiState.editor!=undefined;
                 };
 
                 _modal.resolve.insertMedia = function() {
