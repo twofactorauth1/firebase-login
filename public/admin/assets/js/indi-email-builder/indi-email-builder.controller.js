@@ -349,7 +349,7 @@
                 };
 
                 _modal.resolve.showInsert = function() {
-                    return true;
+                    return vm.uiState.editor!=undefined;
                 };
 
                 _modal.resolve.insertMedia = function() {
@@ -840,7 +840,8 @@
         function isEmptyStyleAdded(diff1, diff2) {
             if(diff1 &&
                     diff2 &&
-                    angular.isDefined(diff1) && angular.isDefined(diff2))
+                    angular.isDefined(diff1) && angular.isDefined(diff2)
+                    && diff1.replace && diff2.replace)
                 {
                     var compareString1 = diff1.replace(/ style=''/g, "");
                     var compareString2 = diff2.replace(/ style=''/g, "");

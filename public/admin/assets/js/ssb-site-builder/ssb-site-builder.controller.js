@@ -2,9 +2,9 @@
 
 app.controller('SiteBuilderController', ssbSiteBuilderController);
 
-ssbSiteBuilderController.$inject = ['$scope', '$rootScope', '$attrs', '$filter', 'SimpleSiteBuilderService', 'SimpleSiteBuilderBlogService', '$state', '$stateParams', '$modal', 'SweetAlert', '$window', '$timeout', '$location', 'toaster','UtilService'];
+ssbSiteBuilderController.$inject = ['$scope', '$rootScope', '$attrs', '$filter', 'SimpleSiteBuilderService', 'SimpleSiteBuilderBlogService', '$state', '$stateParams', '$modal', 'SweetAlert', '$window', '$timeout', '$location', 'toaster','UtilService', '$sce'];
 /* @ngInject */
-function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSiteBuilderService, SimpleSiteBuilderBlogService, $state, $stateParams, $modal, SweetAlert, $window, $timeout, $location, toaster,UtilService) {
+function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSiteBuilderService, SimpleSiteBuilderBlogService, $state, $stateParams, $modal, SweetAlert, $window, $timeout, $location, toaster,UtilService, $sce) {
      
     console.info('site-builder directive init...');
 
@@ -355,8 +355,8 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
             website.themeOverrides.styles.primarySliderActiveDotColor = '#000';
         if(website && website.themeOverrides && website.themeOverrides.styles && !angular.isDefined(website.themeOverrides.styles.primarySliderDotColorOpacity))
             website.themeOverrides.styles.primarySliderDotColorOpacity = 0.4;
-        vm.state.website = website;
-        
+        vm.state.website = website;    
+        setCustomCss();
         vm.state.originalWebsite = null;
         $timeout(function() {
             vm.state.originalWebsite = angular.copy(website);
@@ -367,6 +367,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
         $rootScope.$broadcast('$destroyFroalaInstances');
         vm.state.pendingPageChanges = false;
         vm.state.page = page;
+        setCustomCss();
         vm.state.originalPage = null;
         vm.uiState.isBlogPage = vm.isBlogPage(vm.state.page);
         vm.uiState.isBlogCopy = vm.isBlogCopy(vm.state.page);
@@ -460,6 +461,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
 
     var unbindAccountWatcher = $scope.$watch(function() { return SimpleSiteBuilderService.account }, function(account) {
         vm.state.account = account;
+        setCustomCss();
         vm.uiState.hideSocialShare = false;
             if(account && account.showhide && account.showhide.blogSocialSharing === false){
                 vm.uiState.hideSocialShare = true;
@@ -1555,6 +1557,26 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
         return _showSection;
     }
     
+    function setCustomCss(){
+        var css = "";
+        if(vm.state && vm.state.page && vm.state.account && vm.state.website){
+            var customCss = [];
+
+            if(vm.state.account.showhide && vm.state.account.showhide.customCss && vm.state.website.resources && vm.state.website.resources.customCss){
+                if(vm.state.website.resources.customCss.global && vm.state.website.resources.customCss.global.original){
+                    customCss.push(vm.state.website.resources.customCss.global.original);
+                }
+            
+                if(vm.state.page && vm.state.page.handle && vm.state.website.resources.customCss[vm.state.page.handle] && vm.state.website.resources.customCss[vm.state.page.handle].original){
+                    customCss.push(vm.state.website.resources.customCss[vm.state.page.handle].original);
+                }
+            }
+            if(customCss.length){
+                css = $sce.trustAsHtml(customCss.join('\n\n'));
+            }
+        }
+        vm.state.customCss = css;
+    }
 
     function init(element) {
 

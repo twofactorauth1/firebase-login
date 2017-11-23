@@ -132,7 +132,7 @@
                         </div>
                     </div>
                 </tab>
-                <tab ng-if='vm.parentVm.state.website.resources.toggles.userScripts'>
+                <tab ng-if='vm.parentVm.state.website.resources.toggles.userScripts && vm.parentVm.state.account.showhide.userScripts'>
                     <tab-heading>
                         Page Scripts
                     </tab-heading>
@@ -146,7 +146,7 @@
                         </div>
                     </div>
                 </tab>
-                <tab ng-if='vm.parentVm.state.website.resources.toggles.customCss'>
+                <tab ng-if='vm.parentVm.state.website.resources.toggles.customCss && vm.parentVm.state.account.showhide.customCss'>
                     <tab-heading>
                         Page Custom Css
                     </tab-heading>
@@ -156,7 +156,7 @@
                         <div class='form-group' ng-if='vm.parentVm.state.website.resources.toggles.customCss'>
                           <label>Custom Css</label>
                           <span tooltip-placement="bottom" tooltip="Add css snippets for your page"><i class="fa fa-info-circle" /></span>
-                          <textarea class='form-control' ng-model='vm.parentVm.state.website.resources.customCss[vm.page.handle === "blog-list" ? "blog": vm.page.handle].original'></textarea>
+                          <textarea class='form-control' ng-model='vm.parentVm.state.website.resources.customCss[vm.page.handle].original'></textarea>
                         </div>
                     </div>
                 </tab>
