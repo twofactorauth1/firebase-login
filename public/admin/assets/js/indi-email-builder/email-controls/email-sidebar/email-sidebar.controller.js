@@ -28,6 +28,7 @@ function ssbEmailBuilderSidebarController($scope, $attrs, $filter, $document, $t
     vm.togglePageSectionAccordion = togglePageSectionAccordion;
     vm.setActiveComponent = setActiveComponent;
     vm.setActiveSection = setActiveSection;
+    vm.getSectionTitle = getSectionTitle;
     vm.getPlatformSections = getPlatformSections;
     vm.getPlatformComponents = getPlatformComponents;
     vm.addSectionToPage = addSectionToPage;
@@ -275,6 +276,7 @@ function ssbEmailBuilderSidebarController($scope, $attrs, $filter, $document, $t
     }
 
     function editSectionName(id) {
+        console.log('this is id ----------',id);
       $timeout(function () {
         angular.element(document.getElementById(id)).click();
       },0);
@@ -518,13 +520,37 @@ function ssbEmailBuilderSidebarController($scope, $attrs, $filter, $document, $t
   		SimpleSiteBuilderService.setActiveComponent(index);
     }
 
+    function getSectionTitle(type){
+        var email_titles = {
+                "email-header" : "Header",
+                "email-1-col"  : "Content 1",
+                "email-2-col"  : "Content 2",
+                "email-3-col"  : "Content 3",
+                "email-footer"  : "Footer",
+                "email-social"  : "Social links",
+        };
+        return email_titles[type] || 'Section';
+     }
+
     function setActiveSection(index) {
       vm.uiState.showSectionPanel = false;
         $timeout(function() {
           SimpleSiteBuilderService.setActiveSection(index);
-          if (vm.state.page.sections[index].visibility) {
+          if (vm.state.email.components[index].visibility) {
+             vm.uiState.activeSectionIndex = index
+             console.log('herere1', vm.uiState.activeSectionIndex);
+            vm.uiState.navigation.sectionPanel.reset();
+            var section = vm.state.email.components[index];
+            console.log('-------------',section);
+            var name = $filter('cleanType')(section.type || section.name).toLowerCase().trim().replace(' ', '-');
+            vm.uiState.navigation.sectionPanel.loadPanel({ id: section._id, name: name, componentId: section._id });
             vm.uiState.showSectionPanel = true;
             vm.scrollToActiveSection();
+          }
+          else{
+
+            vm.uiState.activeSectionIndex = index;
+            console.log('herere', vm.uiState.activeSectionIndex);
           }
         })
     }
@@ -532,7 +558,7 @@ function ssbEmailBuilderSidebarController($scope, $attrs, $filter, $document, $t
     function addBackground(sectionIndex, componentIndex) {
         vm.openMediaModal('media-modal', 'MediaModalCtrl', null, 'lg');
 
-        vm.insertMediaCallback = function(asset) { 
+        vm.insertMediaCallback = function(asset) {
             if(vm.state.page){
                 if (componentIndex !== undefined && componentIndex !== null) {
                     vm.state.page.sections[vm.uiState.activeSectionIndex].components[vm.uiState.activeComponentIndex].bg.img.url = asset.url;
@@ -540,10 +566,10 @@ function ssbEmailBuilderSidebarController($scope, $attrs, $filter, $document, $t
                     vm.uiState.activeElement.bg.img.url = asset.url;
                 } else {
                     vm.state.page.sections[vm.uiState.activeSectionIndex].bg.img.url = asset.url;
-                }    
+                }
             }else{
                 vm.state.email.components[vm.uiState.activeComponentIndex].bg.img.url = asset.url;
-            }        
+            }
         }
 
         SimpleSiteBuilderService.setActiveSection(sectionIndex);
@@ -1004,7 +1030,7 @@ function ssbEmailBuilderSidebarController($scope, $attrs, $filter, $document, $t
     function init(element) {
 
         vm.element = element;
-
+        console.log(vm.uiState,'vm.state.page.sections-----------', vm.state);
         setupSectionContent();
         ContactService.getContacts(function(customers){
             ContactService.getAllContactTags(customers,function(tags){
