@@ -92,10 +92,10 @@ function ssbEmailBuilderTopbarController($scope, $rootScope, $timeout, $attrs, $
         if (vm.state.email.title && vm.state.email.subject && vm.state.email.fromName && vm.state.email.fromEmail) {
             return true;
         } else {
-            return false;   
+            return false;
         }
     }
-    
+
     function init(element) {
     	vm.element = element;
         if (!vm.state.email) {
