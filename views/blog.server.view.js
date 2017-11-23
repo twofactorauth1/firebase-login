@@ -160,7 +160,7 @@ _.extend(view.prototype, BaseView.prototype, {
                 value.website.resources.userScripts = value.website.resources.userScripts || {};
                 value.website.resources.userScripts.global = value.website.resources.userScripts.global || {};
 
-                if(value.website.resources.toggles && value.website.resources.toggles.userScripts){
+                if(value.showhide && value.showhide.userScripts && value.website.resources.toggles && value.website.resources.toggles.userScripts){
                     value.website.resources.userScripts.global = value.website.resources.userScripts.global || {};
                 }
                 else{
@@ -504,7 +504,7 @@ _.extend(view.prototype, BaseView.prototype, {
                 value.website.resources = value.website.resources || {};
                 value.website.resources.userScripts = value.website.resources.userScripts || {};
                 value.website.resources.userScripts.global = value.website.resources.userScripts.global || {};
-                if(value.website.resources.toggles && value.website.resources.toggles.userScripts){
+                if(value.showhide && value.showhide.userScripts && value.website.resources.toggles && value.website.resources.toggles.userScripts){
                     value.website.resources.userScripts.global = value.website.resources.userScripts.global || {};
                 }
                 else{
