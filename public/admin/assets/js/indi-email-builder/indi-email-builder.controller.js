@@ -41,7 +41,6 @@
             delete: deleteFn,
             duplicateEmail: duplicateEmailFn,
             updateEmailCache: updateEmailCache,
-            toggleSection:toggleSectionVisiblity,
             componentTypes: [{
                     title: 'Header',
                     type: 'email-header',
@@ -173,62 +172,6 @@
             $rootScope.app.layout.isSidebarClosed = vm.uiState.isSidebarClosed;
         });
 
-        function toggleSectionVisiblity(section, global, hide){
-        if (global) {
-            if(section.global === false) {
-                SweetAlert.swal({
-                    title: "Are you sure?",
-                    text: "Turning off this setting will remove the section from all pages except for this one.",
-                    type: "warning",
-                    showCancelButton: true,
-                    confirmButtonColor: "#DD6B55",
-                    confirmButtonText: "Remove from other pages",
-                    cancelButtonText: "Cancel",
-                    closeOnConfirm: true,
-                    closeOnCancel: true
-                },
-                function (isConfirm) {
-                    //Cancel
-                    if (!isConfirm) {
-                        section.global = true;
-                    }
-                });
-            }
-        } else if(section.global) {
-                if(!section.hiddenOnPages){
-                    section.hiddenOnPages = {}
-                }
-                if(section.visibility === false)
-                {
-                    section.hiddenOnPages[vm.state.page.handle] = true;
-                    hideAllControls();
-                }
-                else{
-                    delete section.hiddenOnPages[vm.state.page.handle];
-                }
-            }
-            else if(section.visibility === false){
-                hideAllControls();
-            }
-        }
-
-        function hideAllControls() {
-
-        //hide editable-title's and borders
-        angular.element('.ssb-edit-wrap, .editable-title, .editable-cover, [data-edit]', '.ssb-main').removeClass('ssb-on');
-
-        //hide all edit-controls
-        angular.element('.ssb-main').find('.ssb-active-edit-control').removeClass('ssb-active-edit-control');
-        angular.element('.ssb-main').find('.ssb-on').removeClass('ssb-on');
-
-        //components
-        angular.element('.ssb-main').find('.ssb-active-component').removeClass('ssb-active-component');
-
-        //btns
-        angular.element('.ssb-main').find('.ssb-theme-btn-active-element').removeClass('ssb-theme-btn-active-element');
-        angular.element('.ssb-main').find('.ssb-edit-control-component-btn').removeClass('on');
-
-    }
         $scope.$on('email.move.component', function(event, args) {
             vm.moveComponentFn(args.component, args.direction);
         });
@@ -295,9 +238,9 @@
                     console.log("Email changed");
                     if (vm.uiState && vm.uiState.selectedEmail) {
                         vm.uiState.selectedEmail = vm.state.email;
-                    }
+                    } 
                 }, 0);
-
+                
             } else {
                 vm.state.pendingEmailChanges = false;
             }
@@ -623,7 +566,7 @@
         // }
 
         function sendOneTimeEmailFn(address) {
-
+            
             vm.uiState.dataLoaded = false;
             if(vm.state.email.components && vm.state.email.components.length > 0)
             {
@@ -631,19 +574,19 @@
 
                     var current_component = vm.state.email.components[i];
                     if(current_component.spacing) {
-
+                     
                       for(var m in current_component.spacing){
-                        var current_spacing = String(current_component.spacing[m]);
+                        var current_spacing = String(current_component.spacing[m]);                      
                         if(current_spacing && current_spacing.indexOf("%") === -1 && current_spacing !== 'auto' && /^\d+$/.test(current_spacing)){
                           vm.state.email.components[i].spacing[m] = current_spacing+"px";
-
+                         
                         }
                       }
-
+                      
                     }
               }
             }
-
+            
             EmailBuilderService.sendOneTimeEmail(address, vm.state.email).then(function() {
                 vm.uiState.dataLoaded = true;
                 vm.uiState.closeModal();
@@ -706,7 +649,7 @@
                 },
                 "contactTags": []
             };
-
+            
 
             EmailCampaignService.createCampaign(campaign).then(function(res) {
                 vm.uiState.closeModal();

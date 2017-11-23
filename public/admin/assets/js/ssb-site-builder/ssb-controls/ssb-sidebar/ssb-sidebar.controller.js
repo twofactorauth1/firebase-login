@@ -64,7 +64,7 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
     vm.closeSectionPanel = closeSectionPanel;
     vm.initializeMapSlider = initializeMapSlider;
     vm.addCustomField = addRemoveCustomField;
-
+   
     vm.checkDuplicateField = checkDuplicateField;
     vm.showSection = showSection;
 
@@ -263,7 +263,7 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
     }
 
     function addSectionToPage(section, version, replaceAtIndex, oldSection, copyAtIndex) {
-        vm.uiState.showSectionPanel = false;
+        vm.uiState.showSectionPanel = false;   
         return (
             SimpleSiteBuilderService.addSectionToPage(section, version, replaceAtIndex, vm.state.page.sections[vm.uiState.activeSectionIndex], copyAtIndex).then(function() {
                 vm.scrollToActiveSection();
@@ -276,14 +276,14 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
     function addSectionToPageToIndex(section) {
 
         var el = angular.element(".ssb-page-section.ssb-active-edit-control");
-
+        
         var insertAtIndex = undefined;
         if(el.length){
             var index = el.attr("clicked-index");
             index = parseInt(index);
             insertAtIndex = index + 1;
         }
-
+        
         vm.uiState.showSectionPanel = false;
         return (
             SimpleSiteBuilderService.addSectionToPageToIndex(section, insertAtIndex).then(function() {
@@ -1114,7 +1114,7 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
     }
 
     function addRemoveCustomField(type, index){
-        if(type){
+        if(type){  
             var cleanType = type.replace(/[^\w\s]/gi, '').replace(/ /g, '');
             var newInfo = {
                 name: cleanType,
@@ -1131,7 +1131,7 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
         else{
             vm.state.page.sections[vm.uiState.activeSectionIndex].components[vm.uiState.activeComponentIndex].contactInfo.splice(index, 1);
         }
-
+        
     }
 
     function checkDuplicateField(_type){
@@ -1163,7 +1163,7 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
     function init(element) {
 
         vm.element = element;
-        console.log('vm.state.page.sections---------',vm.state.page.sections);
+
         setupSectionContent();
         ContactService.getContacts(function(customers){
             ContactService.getAllContactTags(customers,function(tags){
