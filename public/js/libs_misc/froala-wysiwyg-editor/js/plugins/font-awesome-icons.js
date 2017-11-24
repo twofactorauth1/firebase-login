@@ -125,7 +125,8 @@
                 }
             }), b.events.on("keyup", function() {
                 for (var c = b.$el.get(0).querySelectorAll(".fr-fontAwesomeIcon"), d = 0; d < c.length; d++) "undefined" != typeof c[d].textContent && 0 === c[d].textContent.replace(/\u200B/gi, "").length && a(c[d]).remove()
-            }), b.events.on('commands.before', function(cmd, param1, param2) {
+            }), b.events.on('commands.before', function(cmd, param1, param2) { 
+                debugger
                 if (cmd == 'fontSize') {
                     selectedFontSize = param1;
                 }
