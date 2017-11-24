@@ -148,7 +148,7 @@
                         <label for="link-page" class="block">
                             Select Page
                         </label>
-                        <div ng-if="allPages">
+                        <div ng-if="allPages" class="redirect-to-page-select">
                             <ui-select ng-model="component.redirectUrl" theme="bootstrap">
                                 <ui-select-match placeholder="Select a page">
                                     <small ng-bind-html="$select.selected.title"></small>

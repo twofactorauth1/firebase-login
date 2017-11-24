@@ -1562,7 +1562,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
         if(vm.state && vm.state.page && vm.state.account && vm.state.website){
             var customCss = [];
 
-            if(vm.state.account.showhide && vm.state.account.showhide.customCss && vm.state.website.resources && vm.state.website.resources.customCss){
+            if(vm.state.account.showhide && vm.state.account.showhide.customCss && vm.state.website.resources && vm.state.website.resources.customCss && vm.state.website.resources.toggles && vm.state.website.resources.toggles.customCss){
                 if(vm.state.website.resources.customCss.global && vm.state.website.resources.customCss.global.original){
                     customCss.push(vm.state.website.resources.customCss.global.original);
                 }

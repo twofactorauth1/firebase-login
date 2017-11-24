@@ -141,21 +141,25 @@
 <div class="row padding-left-10 padding-right-10">
     <div class="form-group">
         <label for="bg_hide" class="margin-bottom-0">
-        Wide-Mobile Mode
-        <span tooltip-placement="top" tooltip-append-to-body="true" tooltip="Switch to mobile navigation (drop-down) at 1024px (instead of 767px)">
-            <i class="fa fa-info-circle" />
-        </span>
-    </label>
-        <switch ng-model="component.navigation.wideMobileMode" class="pull-right"></switch>
+            Wide-Mobile Mode
+            <span tooltip-placement="top" tooltip-append-to-body="true" tooltip="Switch to mobile navigation (drop-down) at 1024px (instead of 767px)">
+                <i class="fa fa-info-circle" />
+            </span>
+        </label>
+        <div class="inline" ng-class="{'disabled': vm.state.page.sections[vm.uiState.activeSectionIndex].fixedLeftNavigation}">
+            <switch ng-model="component.navigation.wideMobileMode" class="pull-right"></switch>
+        </div>
     </div>
     <div class="form-group">
         <label for="bg_hide" class="margin-bottom-0">
-    Always-Mobile Mode
-    <span tooltip-placement="top" tooltip-append-to-body="true" tooltip="Always show navigation as drop-down">
-        <i class="fa fa-info-circle" />
-    </span>
-</label>
-        <switch ng-model="component.navigation.alwaysmobileMode" class="pull-right"></switch>
+            Always-Mobile Mode
+            <span tooltip-placement="top" tooltip-append-to-body="true" tooltip="Always show navigation as drop-down">
+                <i class="fa fa-info-circle" />
+            </span>
+        </label>
+        <div class="inline" ng-class="{'disabled': vm.state.page.sections[vm.uiState.activeSectionIndex].fixedLeftNavigation}">
+            <switch  ng-model="component.navigation.alwaysmobileMode" class="pull-right"></switch>
+        </div>
     </div>
 </div>
 <!--- SUBNAV settings -->

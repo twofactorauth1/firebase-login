@@ -1896,7 +1896,7 @@ debugger
                 ssbService.compiledElements[componentId] = ssbService.compiledElements[componentId] || {};
                 ssbService.compiledElements[componentId][editorId] = {};
             }
-
+            editor.$el.find('.fr-deletable').remove();
             editor.$el.find('.ssb-theme-btn').each(function() {
                 var btn = $(this);
                 var btnHTML;
