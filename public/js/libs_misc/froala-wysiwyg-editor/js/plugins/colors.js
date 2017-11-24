@@ -1,474 +1,444 @@
-! function (a) {
-    "function" == typeof define && define.amd ? define(["jquery"], a) : "object" == typeof module && module.exports ? module.exports = function (b, c) {
-        return void 0 === c && (c = "undefined" != typeof window ? require("jquery") : require("jquery")(b)), a(c), c
-    } : a(jQuery)
-}(function (a) {
+! function(o) {
+    "function" == typeof define && define.amd ? define(["jquery"], o) : "object" == typeof module && module.exports ? module.exports = function(t, e) {
+        return void 0 === e && (e = "undefined" != typeof window ? require("jquery") : require("jquery")(t)), o(e), e
+    } : o(jQuery)
+}(function(o) {
     "use strict";
-    a.extend(a.FE.POPUP_TEMPLATES, {
+    o.extend(o.FE.POPUP_TEMPLATES, {
         "colors.picker": "[_BUTTONS_][_TEXT_COLORS_][_BACKGROUND_COLORS_]"
-    }), a.extend(a.FE.DEFAULTS, {
-        colorsText: ["#61BD6D", "#1ABC9C", "#54ACD2", "#2C82C9", "#9365B8", "#475577", "#CCCCCC", "#41A85F", "#00A885", "#3D8EB9", "#2969B0", "#553982", "#28324E", "#000000", "#F7DA64", "#FBA026", "#EB6B56", "#E25041", "#A38F84", "#EFEFEF", "#FFFFFF", "#FAC51C", "#F37934", "#D14841", "#B8312F", "#7C706B", "#D1D5D8", "REMOVE"]
-        , colorsBackground: ["#61BD6D", "#1ABC9C", "#54ACD2", "#2C82C9", "#9365B8", "#475577", "#CCCCCC", "#41A85F", "#00A885", "#3D8EB9", "#2969B0", "#553982", "#28324E", "#000000", "#F7DA64", "#FBA026", "#EB6B56", "#E25041", "#A38F84", "#EFEFEF", "#FFFFFF", "#FAC51C", "#F37934", "#D14841", "#B8312F", "#7C706B", "#D1D5D8", "REMOVE"]
-        , colorsStep: 7
-        , colorsDefaultTab: "text"
-        , colorsButtons: ["colorsBack", "|", "-"]
-        , defaultColors: {
+    }), o.extend(o.FE.DEFAULTS, {
+        colorsText: ["#61BD6D", "#1ABC9C", "#54ACD2", "#2C82C9", "#9365B8", "#475577", "#CCCCCC", "#41A85F", "#00A885", "#3D8EB9", "#2969B0", "#553982", "#28324E", "#000000", "#F7DA64", "#FBA026", "#EB6B56", "#E25041", "#A38F84", "#EFEFEF", "#FFFFFF", "#FAC51C", "#F37934", "#D14841", "#B8312F", "#7C706B", "#D1D5D8", "REMOVE"],
+        colorsBackground: ["#61BD6D", "#1ABC9C", "#54ACD2", "#2C82C9", "#9365B8", "#475577", "#CCCCCC", "#41A85F", "#00A885", "#3D8EB9", "#2969B0", "#553982", "#28324E", "#000000", "#F7DA64", "#FBA026", "#EB6B56", "#E25041", "#A38F84", "#EFEFEF", "#FFFFFF", "#FAC51C", "#F37934", "#D14841", "#B8312F", "#7C706B", "#D1D5D8", "REMOVE"],
+        colorsStep: 7,
+        colorsDefaultTab: "text",
+        colorsButtons: ["colorsBack", "|", "-"],
+        defaultColors: {
             background: {
-                init: !1
-                , color: ""
+                init: !1,
+                color: ""
+            },
+            text: {
+                init: !1,
+                color: ""
             }
-            , text: {
-                init: !1
-                , color: ""
-            }
+        },
+        isIE: document.documentMode || /Edge/.test(navigator.userAgent),
+        isButton: !1,
+        selectedElement: {
+            color: "",
+            bg: ""
         }
-        , isIE: document.documentMode || /Edge/.test(navigator.userAgent)
-        , isButton: !1
-        , selectedElement: {
-            color: ""
-            , bg: ""
-        }
-    }), a.FE.PLUGINS.colors = function (a) {
-        function b() {
-            var b = a.$tb.find('.fr-command[data-cmd="color"]');
-            a.opts.selectedElement.bg = "", a.opts.selectedElement.color = "";
-            var c = a.popups.get("colors.picker");
-            if (c || (c = d()), !c.hasClass("fr-active")) {
-                a.popups.setContainer("colors.picker", a.$tb), g(c.find(".fr-selected-tab").attr("data-param1"));
-                var e = b.offset().left + b.outerWidth() / 2
-                    , f = b.offset().top + (a.opts.toolbarBottom ? 10 : b.outerHeight() - 10);
-                a.popups.show("colors.picker", e, f, b.outerHeight()), a.opts.isIE ? ($(".fr-popup").find(".sp-input").hide(), $(".fr-popup").find(".sp-palette-toggle").hide(), $(".fr-popup").find(".sp-picker-container").hide()) : $(".sp-input").show(), h()
-            }
-        }
-
-        function c() {
-            a.opts.selectedElement.bg = "", a.opts.selectedElement.color = "", a.popups.hide("colors.picker")
-        }
-
-        function d() {
-            var b = '<div class="fr-buttons fr-colors-buttons">';
-            a.opts.toolbarInline && a.opts.colorsButtons.length > 0 && (b += a.button.buildList(a.opts.colorsButtons)), b += e() + "</div>";
-            var c = {
-                    buttons: b
-                    , text_colors: f("text")
-                    , background_colors: f("background")
-                }
-                , d = a.popups.create("colors.picker", c);
-            return d
+    }), o.FE.PLUGINS.colors = function(o) {
+        function t() {
+            o.opts.selectedElement.bg = "", o.opts.selectedElement.color = "", o.popups.hide("colors.picker")
         }
 
         function e() {
-            var b = '<div class="fr-colors-tabs">';
-            return b += '<span class="fr-colors-tab ' + ("background" == a.opts.colorsDefaultTab ? "" : "fr-selected-tab ") + 'fr-command" data-param1="text" data-cmd="colorChangeSet" title="' + a.language.translate("Text") + '">' + a.language.translate("Text") + "</span>", b += '<span class="fr-colors-tab ' + ("background" == a.opts.colorsDefaultTab ? "fr-selected-tab " : "") + 'fr-command" data-param1="background" data-cmd="colorChangeSet" title="' + a.language.translate("Background") + '">' + a.language.translate("Background") + "</span>", b + "</div>"
+            var t = '<div class="fr-buttons fr-colors-buttons">';
+            o.opts.toolbarInline && o.opts.colorsButtons.length > 0 && (t += o.button.buildList(o.opts.colorsButtons));
+            var e = {
+                buttons: t += s() + "</div>",
+                text_colors: r("text"),
+                background_colors: r("background")
+            };
+            return o.popups.create("colors.picker", e)
         }
 
-        function f(b) {
-            var c = "text" == b ? a.opts.colorsText : a.opts.colorsBackground
-                , d = "text" == b ? "clearTextColor" : "clearBackgroundColor"
-                , e = "text" == b ? "textColorSpectrum" : "bgColorSpectrum"
-                , f = "text" == b ? "toggleTextSpectrum" : "toggleBgSpectrum"
-                , g = "text" == b ? "chooseTextColor" : "chooseBGColor"
-                , h = '<div class="sp-container sp-light sp-alpha-enabled sp-clear-enabled sp-initial-disabled fr-color-set fr-' + b + "-color" + (a.opts.colorsDefaultTab == b || "text" != a.opts.colorsDefaultTab && "background" != a.opts.colorsDefaultTab && "text" == b ? " fr-selected-set" : "") + '">';
-            h += '<div class="color-inner-row">';
-            for (var i = 0; i < c.length; i++) 0 !== i && i % a.opts.colorsStep === 0 && (h += "<br>"), h += "REMOVE" != c[i] ? '<span class="fr-command fr-select-color" style="background: ' + c[i] + ';" data-cmd="' + b + 'Color" data-param1="' + c[i] + '"></span>' : a.opts.isIE ? '<span class="fr-command fr-select-color" data-cmd="' + b + 'Color" data-param1="REMOVE" title="' + a.language.translate("Clear Formatting") + '"><i class="fa fa-eraser"></i></span>' : '<span style="visibility: hidden;" class="fr-command fr-select-color" data-cmd="' + b + 'Color" data-param1="REMOVE" title="' + a.language.translate("Clear Formatting") + '"><i class="fa fa-eraser"></i></span>';
-            return h += '<div class="sp-palette-button-container sp-cf"><button type="button" class="sp-palette-toggle fr-command" data-cmd="' + f + '">less</button></div>', h += "</div>", h += '<div class="sp-picker-container"><div class="sp-top sp-cf"><div class="sp-fill"></div><div class="sp-top-inner"><div class="sp-color fr-command" data-cmd="' + e + '" style="background-color: rgb(255, 0, 0);"><div class="sp-sat"><div class="sp-val"><div class="sp-dragger" style="display: none;"></div></div></div></div><div class="sp-clear sp-clear-display fr-command" data-cmd="' + d + '" title="Clear Color Selection"></div><div class="sp-hue"><div class="sp-slider" style="display: none;"></div></div></div><div class="sp-alpha"><div class="sp-alpha-inner"><div class="sp-alpha-handle" style="display: none;"></div></div></div></div><div class="sp-input-container sp-cf"><input style="display:none;" class="sp-input" type="text" spellcheck="false" placeholder=""></div><div class="sp-initial sp-thumb sp-cf"></div><div class="sp-button-container sp-cf"><a class="sp-cancel fr-command" data-cmd="cancelAndCloseColor" href="javascript:void(0)">cancel</a><button type="button" class="sp-choose fr-command" data-cmd="' + g + '">choose</button></div></div>', h += "</div>"
+        function s() {
+            var t = '<div class="fr-colors-tabs">';
+            return t += '<span class="fr-colors-tab ' + ("background" == o.opts.colorsDefaultTab ? "" : "fr-selected-tab ") + 'fr-command" data-param1="text" data-cmd="colorChangeSet" title="' + o.language.translate("Text") + '">' + o.language.translate("Text") + "</span>", (t += '<span class="fr-colors-tab ' + ("background" == o.opts.colorsDefaultTab ? "fr-selected-tab " : "") + 'fr-command" data-param1="background" data-cmd="colorChangeSet" title="' + o.language.translate("Background") + '">' + o.language.translate("Background") + "</span>") + "</div>"
         }
 
-        function g(b) {
-            var c = a.popups.get("colors.picker")
-                , d = $(a.selection.element())
-                , e = $(a.selection.element())
-                , f = d.hasClass("ssb-theme-btn");
-            f ? a.opts.button = d : (f = d.parent().hasClass("ssb-theme-btn"), f && (a.opts.button = d.parent())), a.opts.isButton = f;
-            var h, g = "";
-            for ("background" == b ? (h = "background-color", g = a.opts.selectedElement.bg || d.css(h)) : (h = "color", g = a.opts.selectedElement.color || d.css(h)), a.opts.isButton && (g = a.opts.button.css(h)), c.find(".fr-" + b + "-color .fr-select-color").removeClass("fr-selected-color"), a.opts.isButton && (g = a.opts.button.css(h), setTimeout(function () {
-                    p(h, g)
-                }, 0)); d.get(0) != a.$el.get(0) && !a.opts.selectedElement.color && !a.opts.isButton;) {
-                if ("transparent" != d.css("color") && "rgba(0, 0, 0, 0)" != d.css("color")) {
-                    a.opts.selectedElement.color = d.css("color");
-                    var i = "";
-                    i = "background" == b ? a.opts.selectedElement.bg : a.opts.selectedElement.color, c.find(".fr-" + b + '-color .fr-select-color[data-param1="' + a.helpers.RGBToHex(i) + '"]').addClass("fr-selected-color");
+        function r(t) {
+            var e = "text" == t ? o.opts.colorsText : o.opts.colorsBackground,
+                s = "text" == t ? "clearTextColor" : "clearBackgroundColor",
+                r = "text" == t ? "textColorSpectrum" : "bgColorSpectrum",
+                c = "text" == t ? "toggleTextSpectrum" : "toggleBgSpectrum",
+                n = "text" == t ? "chooseTextColor" : "chooseBGColor",
+                l = '<div class="sp-container sp-light sp-alpha-enabled sp-clear-enabled sp-initial-disabled fr-color-set fr-' + t + "-color" + (o.opts.colorsDefaultTab == t || "text" != o.opts.colorsDefaultTab && "background" != o.opts.colorsDefaultTab && "text" == t ? " fr-selected-set" : "") + '">';
+            l += '<div class="color-inner-row">';
+            for (var a = 0; a < e.length; a++) 0 !== a && a % o.opts.colorsStep == 0 && (l += "<br>"), l += "REMOVE" != e[a] ? '<span class="fr-command fr-select-color" style="background: ' + e[a] + ';" data-cmd="' + t + 'Color" data-param1="' + e[a] + '"></span>' : o.opts.isIE ? '<span class="fr-command fr-select-color" data-cmd="' + t + 'Color" data-param1="REMOVE" title="' + o.language.translate("Clear Formatting") + '"><i class="fa fa-eraser"></i></span>' : '<span style="visibility: hidden;" class="fr-command fr-select-color" data-cmd="' + t + 'Color" data-param1="REMOVE" title="' + o.language.translate("Clear Formatting") + '"><i class="fa fa-eraser"></i></span>';
+            return l += '<div class="sp-palette-button-container sp-cf"><button type="button" class="sp-palette-toggle fr-command" data-cmd="' + c + '">less</button></div>', l += "</div>", l += '<div class="sp-picker-container"><div class="sp-top sp-cf"><div class="sp-fill"></div><div class="sp-top-inner"><div class="sp-color fr-command" data-cmd="' + r + '" style="background-color: rgb(255, 0, 0);"><div class="sp-sat"><div class="sp-val"><div class="sp-dragger" style="display: none;"></div></div></div></div><div class="sp-clear sp-clear-display fr-command" data-cmd="' + s + '" title="Clear Color Selection"></div><div class="sp-hue"><div class="sp-slider" style="display: none;"></div></div></div><div class="sp-alpha"><div class="sp-alpha-inner"><div class="sp-alpha-handle" style="display: none;"></div></div></div></div><div class="sp-input-container sp-cf"><input style="display:none;" class="sp-input" type="text" spellcheck="false" placeholder=""></div><div class="sp-initial sp-thumb sp-cf"></div><div class="sp-button-container sp-cf"><a class="sp-cancel fr-command" data-cmd="cancelAndCloseColor" href="javascript:void(0)">cancel</a><button type="button" class="sp-choose fr-command" data-cmd="' + n + '">choose</button></div></div>', l += "</div>"
+        }
+
+        function c(t) {
+            var e = o.popups.get("colors.picker"),
+                s = $(o.selection.element()),
+                r = $(o.selection.element()),
+                c = s.hasClass("ssb-theme-btn");
+            c ? o.opts.button = s : (c = s.parent().hasClass("ssb-theme-btn")) && (o.opts.button = s.parent()), o.opts.isButton = c;
+            var n, l = "";
+            for ("background" == t ? (n = "background-color", l = o.opts.selectedElement.bg || s.css(n)) : (n = "color", l = o.opts.selectedElement.color || s.css(n)), o.opts.isButton && (l = o.opts.button.css(n)), e.find(".fr-" + t + "-color .fr-select-color").removeClass("fr-selected-color"), o.opts.isButton && (l = o.opts.button.css(n), setTimeout(function() {
+                    d(n, l)
+                }, 0)); s.get(0) != o.$el.get(0) && !o.opts.selectedElement.color && !o.opts.isButton;) {
+                if ("transparent" != s.css("color") && "rgba(0, 0, 0, 0)" != s.css("color")) {
+                    o.opts.selectedElement.color = s.css("color");
+                    a = "";
+                    a = "background" == t ? o.opts.selectedElement.bg : o.opts.selectedElement.color, e.find(".fr-" + t + '-color .fr-select-color[data-param1="' + o.helpers.RGBToHex(a) + '"]').addClass("fr-selected-color");
                     break
                 }
-                d = d.parent()
+                s = s.parent()
             }
-            for (var d = e; d.get(0) != a.$el.get(0) && !a.opts.selectedElement.bg && !a.opts.isButton;) {
-                if ("transparent" != d.css("background-color") && "rgba(0, 0, 0, 0)" != d.css("background-color")) {
-                    a.opts.selectedElement.bg = d.css("background-color");
-                    var i = "";
-                    i = "background" == b ? a.opts.selectedElement.bg : a.opts.selectedElement.color, c.find(".fr-" + b + '-color .fr-select-color[data-param1="' + a.helpers.RGBToHex(i) + '"]').addClass("fr-selected-color");
+            for (s = r; s.get(0) != o.$el.get(0) && !o.opts.selectedElement.bg && !o.opts.isButton;) {
+                if ("transparent" != s.css("background-color") && "rgba(0, 0, 0, 0)" != s.css("background-color")) {
+                    o.opts.selectedElement.bg = s.css("background-color");
+                    a = "";
+                    a = "background" == t ? o.opts.selectedElement.bg : o.opts.selectedElement.color, e.find(".fr-" + t + '-color .fr-select-color[data-param1="' + o.helpers.RGBToHex(a) + '"]').addClass("fr-selected-color");
                     break
                 }
-                d = d.parent()
+                s = s.parent()
             }
-            if (!a.opts.isButton) {
-                var i = "";
-                i = "background" == b ? a.opts.selectedElement.bg : a.opts.selectedElement.color, setTimeout(function () {
-                    p(h, i)
+            if (!o.opts.isButton) {
+                var a = "";
+                a = "background" == t ? o.opts.selectedElement.bg : o.opts.selectedElement.color, setTimeout(function() {
+                    d(n, a)
                 }, 0)
             }
         }
 
-        function h() {
-            var b = $(a.selection.element());
-            if (a.opts.isButton) a.opts.defaultColors.background.color = a.opts.button.css("background-color"), a.opts.defaultColors.text.color = a.opts.button.css("color");
+        function n() {
+            var t = $(o.selection.element());
+            if (o.opts.isButton) o.opts.defaultColors.background.color = o.opts.button.css("background-color"), o.opts.defaultColors.text.color = o.opts.button.css("color");
             else {
-                for (; b.get(0) != a.$el.get(0) && ("transparent" == b.css("background-color") || "rgba(0, 0, 0, 0)" == b.css("background-color"));) b = b.parent();
-                a.opts.defaultColors.text.color = b.css("color"), a.opts.defaultColors.background.color = b.css("background-color")
+                for (; t.get(0) != o.$el.get(0) && ("transparent" == t.css("background-color") || "rgba(0, 0, 0, 0)" == t.css("background-color"));) t = t.parent();
+                o.opts.defaultColors.text.color = t.css("color"), o.opts.defaultColors.background.color = t.css("background-color")
             }
         }
 
-        function i(a, b) {
-            a.hasClass("fr-selected-tab") || (a.siblings().removeClass("fr-selected-tab"), a.addClass("fr-selected-tab"), a.parents(".fr-popup").find(".fr-color-set").removeClass("fr-selected-set"), a.parents(".fr-popup").find(".fr-color-set.fr-" + b + "-color").addClass("fr-selected-set"), g(b))
-        }
-
-        function j(b, c) {
-            var d = a.popups.get("colors.picker");
-            if ("REMOVE" != b) {
-                d.find("input.sp-input").val(b);
-                var e = a.helpers.RGBToHex(b);
-                e || a.helpers.RGBToHex("#" + b) && (e = a.helpers.RGBToHex("#" + b), b = "#" + b), a.opts.isButton ? a.opts.button.css("background-color", b) : ($(a.$el).find("span") && $(a.$el).find("span").length && $(a.$el).find("span").removeClass("ssb-bg-color-inline-block"), a.format.applyStyle("background-color", b), $(a.$el).find("span").filter(function () {
-                    var a = $(this).css("background-color");
-                    return "transparent" != a && "rgba(0, 0, 0, 0)" != a
-                }).addClass("ssb-bg-color-inline-block")), a.opts.isButton && a.events.trigger("bgColorChange", [b]), a.opts.selectedElement.bg = b, $(".fr-command.fr-select-color[data-cmd='backgroundColor']").removeClass("fr-selected-color"), $(".fr-command.fr-select-color[data-cmd='backgroundColor'][data-param1='" + e + "']").addClass("fr-selected-color")
-            }
-            else d.find("input.sp-input").val(""), a.opts.isButton ? a.opts.button.css("background-color", "") : a.opts.isIE ? $(a.selection.element()).css("background-color", "") : a.format.removeStyle("background-color"), $(".fr-command.fr-select-color[data-cmd='backgroundColor']").removeClass("fr-selected-color"), a.opts.isButton && a.events.trigger("bgColorChange", []), setTimeout(function () {
-                a.events.trigger("contentChanged")
+        function l(t, e) {
+            var s = o.popups.get("colors.picker");
+            if ("REMOVE" != t) {
+                s.find("input.sp-input").val(t);
+                var r = o.helpers.RGBToHex(t);
+                r || o.helpers.RGBToHex("#" + t) && (r = o.helpers.RGBToHex("#" + t), t = "#" + t), o.opts.isButton ? o.opts.button.css("background-color", t) : ($(o.$el).find("span") && $(o.$el).find("span").length && $(o.$el).find("span").removeClass("ssb-bg-color-inline-block"), o.format.applyStyle("background-color", t), $(o.$el).find("span").filter(function() {
+                    var o = $(this).css("background-color");
+                    return "transparent" != o && "rgba(0, 0, 0, 0)" != o
+                }).addClass("ssb-bg-color-inline-block")), o.opts.isButton && o.events.trigger("bgColorChange", [t]), o.opts.selectedElement.bg = t, $(".fr-command.fr-select-color[data-cmd='backgroundColor']").removeClass("fr-selected-color"), $(".fr-command.fr-select-color[data-cmd='backgroundColor'][data-param1='" + r + "']").addClass("fr-selected-color")
+            } else s.find("input.sp-input").val(""), o.opts.isButton ? o.opts.button.css("background-color", "") : o.opts.isIE ? $(o.selection.element()).css("background-color", "") : o.format.removeStyle("background-color"), $(".fr-command.fr-select-color[data-cmd='backgroundColor']").removeClass("fr-selected-color"), o.opts.isButton && o.events.trigger("bgColorChange", []), setTimeout(function() {
+                o.events.trigger("contentChanged")
             });
-            c && p("background-color", b)
+            e && d("background-color", t)
         }
 
-        function k(b, c) {
-            var d = a.popups.get("colors.picker");
-            if ("REMOVE" != b) {
-                d.find("input.sp-input").val(b);
-                var e = a.helpers.RGBToHex(b);
-                e || a.helpers.RGBToHex("#" + b) && (e = a.helpers.RGBToHex("#" + b), b = "#" + b), a.opts.isButton ? $(a.selection.element()).css("color", b) : a.format.applyStyle("color", b), a.opts.selectedElement.color = b, a.opts.isButton && a.events.trigger("txtColorChange", [b]), setTimeout(function () {}), $(".fr-command.fr-select-color[data-cmd='textColor']").removeClass("fr-selected-color"), $(".fr-command.fr-select-color[data-cmd='textColor'][data-param1='" + e + "']").addClass("fr-selected-color")
-            }
-            else a.opts.isButton ? a.opts.button.css("color", "") : a.opts.isIE ? $(a.selection.element()).css("color", "") : a.format.removeStyle("color"), $(".fr-command.fr-select-color[data-cmd='textColor']").removeClass("fr-selected-color"), a.opts.isButton && a.events.trigger("bgColorChange", []), d.find("input.sp-input").val(""), setTimeout(function () {
-                a.events.trigger("contentChanged")
+        function a(t, e) {
+            var s = o.popups.get("colors.picker");
+            if ("REMOVE" != t) {
+                s.find("input.sp-input").val(t);
+                var r = o.helpers.RGBToHex(t);
+                r || o.helpers.RGBToHex("#" + t) && (r = o.helpers.RGBToHex("#" + t), t = "#" + t), o.opts.isButton ? $(o.selection.element()).css("color", t) : o.format.applyStyle("color", t), o.opts.selectedElement.color = t, o.opts.isButton && o.events.trigger("txtColorChange", [t]), setTimeout(function() {}), $(".fr-command.fr-select-color[data-cmd='textColor']").removeClass("fr-selected-color"), $(".fr-command.fr-select-color[data-cmd='textColor'][data-param1='" + r + "']").addClass("fr-selected-color")
+            } else o.opts.isButton ? o.opts.button.css("color", "") : o.opts.isIE ? $(o.selection.element()).css("color", "") : o.format.removeStyle("color"), $(".fr-command.fr-select-color[data-cmd='textColor']").removeClass("fr-selected-color"), o.opts.isButton && o.events.trigger("bgColorChange", []), s.find("input.sp-input").val(""), setTimeout(function() {
+                o.events.trigger("contentChanged")
             });
-            c && p("color", b)
+            e && d("color", t)
         }
 
-        function l(b, c) {
-            var d = a.popups.get("colors.picker");
-            d.find("input.sp-input").val(""), "text" === b ? (a.opts.selectedElement.bg = "", $(".fr-command.fr-select-color[data-cmd='textColor']").removeClass("fr-selected-color"), a.opts.isButton ? a.opts.button.css("color", "") : a.format.removeStyle("color"), a.opts.isButton && a.events.trigger("txtColorChange", []), setTimeout(function () {
-                a.events.trigger("contentChanged"), m()
-            })) : ($(".fr-command.fr-select-color[data-cmd='backgroundColor']").removeClass("fr-selected-color"), a.opts.selectedElement.color = "", a.opts.isButton ? a.opts.button.css("background-color", "") : a.format.removeStyle("background-color"), a.opts.isButton && a.events.trigger("bgColorChange", []), setTimeout(function () {
-                a.events.trigger("contentChanged"), m()
-            }))
+        function i(e) {
+            e && (l(o.opts.defaultColors.background.color || "REMOVE"), a(o.opts.defaultColors.text.color || "REMOVE")), t()
         }
 
-        function m(b) {
-            b && (j(a.opts.defaultColors.background.color || "REMOVE"), k(a.opts.defaultColors.text.color || "REMOVE")), c()
-        }
-
-        function n(b) {
-            var d = a.popups.get("colors.picker")
-                , e = "text" === b ? d.find(".fr-color-set.sp-container.fr-text-color") : d.find(".fr-color-set.sp-container.fr-background-color")
-                , f = e.find(".sp-input")
-                , g = f.val();
-            a.selection.restore(), "text" === b ? k(g || "REMOVE") : j(g || "REMOVE"), c()
-        }
-
-        function o(b) {
-            var c = a.popups.get("colors.picker")
-                , d = "text" === b ? c.find(".fr-color-set.sp-container.fr-text-color") : $(".fr-color-set.sp-container.fr-background-color")
-                , e = d.find(".sp-picker-container")
-                , f = d.find(".sp-palette-toggle");
-            e.toggle();
-            var g = e.is(":visible");
-            g ? (f.text("less"), d.removeClass("no-spectrum")) : (f.text("more"), d.addClass("no-spectrum"))
-        }
-
-        function p(b, c) {
-            function H() {
-                (o <= 0 || n <= 0 || t <= 0) && K(), B = !0, e.addClass(y), z = null
+        function d(t, e) {
+            function s() {
+                (0 >= B || 0 >= x || 0 >= $) && n(), w = !0, m.addClass(D), A = null
             }
 
-            function I() {
-                B = !1, e.removeClass(y)
+            function r() {
+                w = !1, m.removeClass(D)
             }
 
-            function J() {
-                L(b)
+            function c() {
+                i(t)
             }
 
-            function K() {
-                O()
+            function n() {
+                f()
             }
 
-            function L(b, c) {
-                if (O(), !A) {
-                    var d = tinycolor.fromRatio({
-                        h: C
-                        , s: 1
-                        , v: 1
+            function i(t, e) {
+                if (f(), !M) {
+                    var s = tinycolor.fromRatio({
+                        h: O,
+                        s: 1,
+                        v: 1
                     });
-                    i.css("background-color", d.toHexString());
-                    var e = M();
-                    if (e) {
-                        var f = e.toHexString()
-                            , g = e.toRgbString();
-                        c || ("color" === b ? k(g) : j(g));
-                        var h = e.toRgb();
-                        h.a = 0;
-                        var l = tinycolor(h).toRgbString()
-                            , m = "linear-gradient(left, " + l + ", " + f + ")";
-                        a.opts.isIE ? x.css("filter", tinycolor(l).toFilter({
+                    v.css("background-color", s.toHexString());
+                    var r = d();
+                    if (r) {
+                        var c = r.toHexString(),
+                            n = r.toRgbString();
+                        e || ("color" === t ? a(n) : l(n));
+                        var i = r.toRgb();
+                        i.a = 0;
+                        var p = tinycolor(i).toRgbString(),
+                            u = "linear-gradient(left, " + p + ", " + c + ")";
+                        o.opts.isIE ? S.css("filter", tinycolor(p).toFilter({
                             gradientType: 1
-                        }, f)) : (x.css("background", "-webkit-" + m), x.css("background", "-moz-" + m), x.css("background", "-ms-" + m), x.css("background", "linear-gradient(to right, " + l + ", " + f + ")"))
+                        }, c)) : (S.css("background", "-webkit-" + u), S.css("background", "-moz-" + u), S.css("background", "-ms-" + u), S.css("background", "linear-gradient(to right, " + p + ", " + c + ")"))
                     }
                 }
             }
 
-            function M(a) {
+            function d(o) {
                 return tinycolor.fromRatio({
-                    h: C
-                    , s: D
-                    , v: E
-                    , a: Math.round(100 * F) / 100
+                    h: O,
+                    s: P,
+                    v: H,
+                    a: Math.round(100 * V) / 100
                 }, {
                     format: "rgb"
                 })
             }
 
-            function N(a, c) {
-                if (tinycolor.equals(a, M())) return void L(b, c);
-                var d, e;
-                a ? (A = !1, d = tinycolor(a), e = d.toHsv(), C = e.h % 360 / 360, D = e.s, E = e.v, F = e.a) : A = !0, L(b, c)
-            }
-
-            function O() {
-                var a = D
-                    , b = E;
-                if (A) h.hide(), g.hide(), f.hide();
+            function f() {
+                var o = P,
+                    t = H;
+                if (M) C.hide(), h.hide(), b.hide();
                 else {
-                    h.show(), g.show(), f.show();
-                    var c = a * n
-                        , d = o - b * o;
-                    c = Math.max(-p, Math.min(n - p, c - p)), d = Math.max(-p, Math.min(o - p, d - p)), f.css({
-                        top: d + "px"
-                        , left: c + "px"
+                    C.show(), h.show(), b.show();
+                    var e = o * x,
+                        s = B - t * B;
+                    e = Math.max(-F, Math.min(x - F, e - F)), s = Math.max(-F, Math.min(B - F, s - F)), b.css({
+                        top: s + "px",
+                        left: e + "px"
                     });
-                    var e = F * v;
+                    var r = V * T;
+                    C.css({
+                        left: r - R / 2 + "px"
+                    });
+                    var c = O * $;
                     h.css({
-                        left: e - w / 2 + "px"
-                    });
-                    var i = C * t;
-                    g.css({
-                        top: i - u + "px"
+                        top: c - y + "px"
                     })
                 }
             }
-            var d = a.popups.get("colors.picker");
-            d.find("input:focus").blur();
-            var e = "color" === b ? d.find(".fr-color-set.sp-container.fr-text-color") : d.find(".fr-color-set.sp-container.fr-background-color")
-                , f = e.find(".sp-dragger")
-                , g = e.find(".sp-slider")
-                , h = e.find(".sp-alpha-handle")
-                , i = e.find(".sp-color")
-                , l = e.find(".sp-hue")
-                , m = e.find(".sp-alpha")
-                , n = i.width()
-                , o = i.height()
-                , p = f.height()
-                , t = (l.width(), l.height())
-                , u = g.height()
-                , v = m.width()
-                , w = h.width()
-                , x = e.find(".sp-alpha-inner")
-                , y = "sp-dragging"
-                , z = null
-                , A = !0
-                , B = !1
-                , C = 0
-                , D = 0
-                , E = 0
-                , F = 1
-                , G = e.find(".sp-input");
-            r(G, b), s(m, function (a, b, c) {
-                F = a / v, A = !1, c.shiftKey && (F = Math.round(10 * F) / 10), J()
-            }, H, I), s(l, function (a, b) {
-                C = parseFloat(b / t), A = !1, J()
-            }, H, I), s(i, function (a, b, c) {
-                D = parseFloat(a / n), E = parseFloat((o - b) / o), A = !1, J()
-            }, H, I), c ? (N(c, !0), J()) : (A = !0, J())
-        }
-
-        function q() {
-            var b = a.link.get();
-            b ? a.link.back() : (a.popups.hide("colors.picker"), a.toolbar.showInline())
-        }
-
-        function r(b, d) {
-            $(b).off("keypress").on("keypress", function (e) {
-                if (13 == e.which) {
-                    var f = $(b).val();
-                    a.selection.restore(), "color" === d ? k(f, !0) : j(f, !0), c()
+            var g = o.popups.get("colors.picker");
+            g.find("input:focus").blur();
+            var m = "color" === t ? g.find(".fr-color-set.sp-container.fr-text-color") : g.find(".fr-color-set.sp-container.fr-background-color"),
+                b = m.find(".sp-dragger"),
+                h = m.find(".sp-slider"),
+                C = m.find(".sp-alpha-handle"),
+                v = m.find(".sp-color"),
+                k = m.find(".sp-hue"),
+                E = m.find(".sp-alpha"),
+                x = v.width(),
+                B = v.height(),
+                F = b.height(),
+                $ = (k.width(), k.height()),
+                y = h.height(),
+                T = E.width(),
+                R = C.width(),
+                S = m.find(".sp-alpha-inner"),
+                D = "sp-dragging",
+                A = null,
+                M = !0,
+                w = !1,
+                O = 0,
+                P = 0,
+                H = 0,
+                V = 1,
+                G = o;
+            p(m.find(".sp-input"), t), u(E, function(o, t, e) {
+                V = o / T, M = !1, e.shiftKey && (V = Math.round(10 * V) / 10), c(), setTimeout(function() {
+                    G.events.trigger("contentChanged")
+                })
+            }, s, r), u(k, function(o, t) {
+                O = parseFloat(t / $), M = !1, c(), setTimeout(function() {
+                    G.events.trigger("contentChanged")
+                })
+            }, s, r), u(v, function(o, t, e) {
+                P = parseFloat(o / x), H = parseFloat((B - t) / B), M = !1, c(), setTimeout(function() {
+                    G.events.trigger("contentChanged")
+                })
+            }, s, r), e ? (function(o, e) {
+                if (tinycolor.equals(o, d())) i(t, e);
+                else {
+                    var s, r;
+                    o ? (M = !1, s = tinycolor(o), r = s.toHsv(), O = r.h % 360 / 360, P = r.s, H = r.v, V = r.a) : M = !0, i(t, e)
                 }
-            }), $(b).off("focus").on("focus", function (b) {
-                a.selection.save()
+            }(e, !0), c()) : (M = !0, c())
+        }
+
+        function p(e, s) {
+            $(e).off("keypress").on("keypress", function(r) {
+                if (13 == r.which) {
+                    var c = $(e).val();
+                    o.selection.restore(), "color" === s ? a(c, !0) : l(c, !0), t()
+                }
+            }), $(e).off("focus").on("focus", function(t) {
+                o.selection.save()
             })
         }
 
-        function s(b, c, d, e) {
-            function m(a) {
-                a.stopPropagation && a.stopPropagation(), a.preventDefault && a.preventDefault(), a.returnValue = !1
+        function u(t, e, s, r) {
+            function c(o) {
+                o.stopPropagation && o.stopPropagation(), o.preventDefault && o.preventDefault(), o.returnValue = !1
             }
 
-            function n(d) {
-                if (a.events.disableBlur(), g) {
-                    if (a.opts.isIE && f.documentMode < 9 && !d.button) return p();
-                    var e = d.originalEvent && d.originalEvent.touches && d.originalEvent.touches[0]
-                        , l = e && e.pageX || d.pageX
-                        , n = e && e.pageY || d.pageY
-                        , o = Math.max(0, Math.min(l - h.left, j))
-                        , q = Math.max(0, Math.min(n - h.top, i));
-                    k && m(d), c.apply(b, [o, q, d])
+            function n(s) {
+                if (o.events.disableBlur(), i) {
+                    if (o.opts.isIE && a.documentMode < 9 && !s.button) return l();
+                    var r = s.originalEvent && s.originalEvent.touches && s.originalEvent.touches[0],
+                        n = r && r.pageX || s.pageX,
+                        g = r && r.pageY || s.pageY,
+                        m = Math.max(0, Math.min(n - d.left, u)),
+                        b = Math.max(0, Math.min(g - d.top, p));
+                    f && c(s), e.apply(t, [m, b, s])
                 }
             }
 
-            function o(c) {
-                var e = c.which ? 3 == c.which : 2 == c.button;
-                if (!e && !g && d.apply(b, arguments) !== !1) {
-                    g = !0, i = $(b).height(), j = $(b).width(), h = $(b).offset(), $(f).bind(l), $(f.body).addClass("sp-dragging"), n(c);
-                    var k = a.popups.get("colors.picker");
-                    k.find("input").addClass("disabled"), m(c)
-                }
+            function l() {
+                i && (o.popups.get("colors.picker").find("input").removeClass("disabled"), $(a).unbind(g), $(a.body).removeClass("sp-dragging"), setTimeout(function() {
+                    r.apply(t, arguments)
+                }, 0)), i = !1
             }
-
-            function p() {
-                if (g) {
-                    var c = a.popups.get("colors.picker");
-                    c.find("input").removeClass("disabled"), $(f).unbind(l), $(f.body).removeClass("sp-dragging"), setTimeout(function () {
-                        e.apply(b, arguments)
-                    }, 0)
-                }
-                g = !1
-            }
-            c = c || function () {}, d = d || function () {}, e = e || function () {};
-            var f = document
-                , g = !1
-                , h = {}
-                , i = 0
-                , j = 0
-                , k = "ontouchstart" in window
-                , l = {};
-            l.selectstart = m, l.dragstart = m, l["touchmove mousemove"] = n, l["touchend mouseup"] = p, $(b).off("touchstart mousedown").on("touchstart mousedown", o), $(b).off("touchend mouseup mouseleave").on("touchend mouseup", p), $(f).bind("click", p)
+            e = e || function() {}, s = s || function() {}, r = r || function() {};
+            var a = document,
+                i = !1,
+                d = {},
+                p = 0,
+                u = 0,
+                f = "ontouchstart" in window,
+                g = {};
+            g.selectstart = c, g.dragstart = c, g["touchmove mousemove"] = n, g["touchend mouseup"] = l, $(t).off("touchstart mousedown").on("touchstart mousedown", function(e) {
+                (e.which ? 3 == e.which : 2 == e.button) || i || !1 === s.apply(t, arguments) || (i = !0, p = $(t).height(), u = $(t).width(), d = $(t).offset(), $(a).bind(g), $(a.body).addClass("sp-dragging"), n(e), o.popups.get("colors.picker").find("input").addClass("disabled"), c(e))
+            }), $(t).off("touchend mouseup mouseleave").on("touchend mouseup", l), $(a).bind("click", l)
         }
         return {
-            showColorsPopup: b
-            , hideColorsPopup: c
-            , changeSet: i
-            , background: j
-            , text: k
-            , back: q
-            , removeColor: l
-            , chooseColorPicker: n
-            , closeColorPicker: m
-            , initializeSpectrum: p
-            , toggleSpectrum: o
-        }
-    }, a.FE.DefineIcon("colors", {
-        NAME: "tint"
-    }), a.FE.RegisterCommand("color", {
-        title: "Colors"
-        , undo: !1
-        , focus: !0
-        , refreshOnCallback: !1
-        , popup: !0
-        , callback: function () {
-            this.popups.isVisible("colors.picker") ? (this.$el.find(".fr-marker") && (this.events.disableBlur(), this.selection.restore()), this.popups.hide("colors.picker")) : this.colors.showColorsPopup()
-        }
-        , plugin: "colors"
-    }), a.FE.RegisterCommand("textColor", {
-        undo: !0
-        , callback: function (a, b) {
-            this.events.disableBlur(), this.selection.restore(), this.colors.text(b, !0);
-            var selection = $(this.selection.element());
-            if(selection[0].tagName!="A"){
-                selection.find('a.btn').css("color",b);
+            showColorsPopup: function() {
+                var t = o.$tb.find('.fr-command[data-cmd="color"]');
+                o.opts.selectedElement.bg = "", o.opts.selectedElement.color = "";
+                var s = o.popups.get("colors.picker");
+                if (s || (s = e()), !s.hasClass("fr-active")) {
+                    o.popups.setContainer("colors.picker", o.$tb), c(s.find(".fr-selected-tab").attr("data-param1"));
+                    var r = t.offset().left + t.outerWidth() / 2,
+                        l = t.offset().top + (o.opts.toolbarBottom ? 10 : t.outerHeight() - 10);
+                    o.popups.show("colors.picker", r, l, t.outerHeight()), o.opts.isIE ? ($(".fr-popup").find(".sp-input").hide(), $(".fr-popup").find(".sp-palette-toggle").hide(), $(".fr-popup").find(".sp-picker-container").hide()) : $(".sp-input").show(), n()
+                }
+            },
+            hideColorsPopup: t,
+            changeSet: function(o, t) {
+                o.hasClass("fr-selected-tab") || (o.siblings().removeClass("fr-selected-tab"), o.addClass("fr-selected-tab"), o.parents(".fr-popup").find(".fr-color-set").removeClass("fr-selected-set"), o.parents(".fr-popup").find(".fr-color-set.fr-" + t + "-color").addClass("fr-selected-set"), c(t))
+            },
+            background: l,
+            text: a,
+            back: function() {
+                o.link.get() ? o.link.back() : (o.popups.hide("colors.picker"), o.toolbar.showInline())
+            },
+            removeColor: function(t, e) {
+                o.popups.get("colors.picker").find("input.sp-input").val(""), "text" === t ? (o.opts.selectedElement.bg = "", $(".fr-command.fr-select-color[data-cmd='textColor']").removeClass("fr-selected-color"), o.opts.isButton ? o.opts.button.css("color", "") : o.format.removeStyle("color"), o.opts.isButton && o.events.trigger("txtColorChange", []), setTimeout(function() {
+                    o.events.trigger("contentChanged"), i()
+                })) : ($(".fr-command.fr-select-color[data-cmd='backgroundColor']").removeClass("fr-selected-color"), o.opts.selectedElement.color = "", o.opts.isButton ? o.opts.button.css("background-color", "") : o.format.removeStyle("background-color"), o.opts.isButton && o.events.trigger("bgColorChange", []), setTimeout(function() {
+                    o.events.trigger("contentChanged"), i()
+                }))
+            },
+            chooseColorPicker: function(e) {
+                var s = o.popups.get("colors.picker"),
+                    r = ("text" === e ? s.find(".fr-color-set.sp-container.fr-text-color") : s.find(".fr-color-set.sp-container.fr-background-color")).find(".sp-input").val();
+                o.selection.restore(), "text" === e ? a(r || "REMOVE") : l(r || "REMOVE"), t()
+            },
+            closeColorPicker: i,
+            initializeSpectrum: d,
+            toggleSpectrum: function(t) {
+                var e = o.popups.get("colors.picker"),
+                    s = "text" === t ? e.find(".fr-color-set.sp-container.fr-text-color") : $(".fr-color-set.sp-container.fr-background-color"),
+                    r = s.find(".sp-picker-container"),
+                    c = s.find(".sp-palette-toggle");
+                r.toggle(), r.is(":visible") ? (c.text("less"), s.removeClass("no-spectrum")) : (c.text("more"), s.addClass("no-spectrum"))
             }
         }
-    }), a.FE.RegisterCommand("backgroundColor", {
-        undo: !0
-        , callback: function (a, b) {
-            this.events.disableBlur(), this.selection.restore(), this.colors.background(b, !0)
+    }, o.FE.DefineIcon("colors", {
+        NAME: "tint"
+    }), o.FE.RegisterCommand("color", {
+        title: "Colors",
+        undo: !1,
+        focus: !0,
+        refreshOnCallback: !1,
+        popup: !0,
+        callback: function() {
+            this.popups.isVisible("colors.picker") ? (this.$el.find(".fr-marker") && (this.events.disableBlur(), this.selection.restore()), this.popups.hide("colors.picker")) : this.colors.showColorsPopup()
+        },
+        plugin: "colors"
+    }), o.FE.RegisterCommand("textColor", {
+        undo: !0,
+        callback: function(o, t) {
+            this.events.disableBlur(), this.selection.restore(), this.colors.text(t, !0);
+            var e = $(this.selection.element());
+            "A" != e[0].tagName ? e.find("a.btn").css("color", t) : e.is("span") ? e.find("span").css("color", t) : (this.format.apply("span"), e.find("span").css("color", t))
         }
-    }), a.FE.RegisterCommand("colorChangeSet", {
-        undo: !1
-        , focus: !1
-        , callback: function (a, b) {
-            var c = this.popups.get("colors.picker").find('.fr-command[data-cmd="' + a + '"][data-param1="' + b + '"]');
-            this.colors.changeSet(c, b)
+    }), o.FE.RegisterCommand("backgroundColor", {
+        undo: !0,
+        callback: function(o, t) {
+            this.events.disableBlur(), this.selection.restore(), this.colors.background(t, !0)
         }
-    }), a.FE.RegisterCommand("clearTextColor", {
-        undo: !1
-        , focus: !1
-        , callback: function (a, b) {
-            this.popups.get("colors.picker").find('.fr-command[data-cmd="' + a + '"][data-param1="' + b + '"]');
-            this.colors.removeColor("text", b)
+    }), o.FE.RegisterCommand("colorChangeSet", {
+        undo: !1,
+        focus: !1,
+        callback: function(o, t) {
+            var e = this.popups.get("colors.picker").find('.fr-command[data-cmd="' + o + '"][data-param1="' + t + '"]');
+            this.colors.changeSet(e, t)
         }
-    }), a.FE.RegisterCommand("clearBackgroundColor", {
-        undo: !1
-        , focus: !1
-        , callback: function (a, b) {
-            this.popups.get("colors.picker").find('.fr-command[data-cmd="' + a + '"][data-param1="' + b + '"]');
-            this.colors.removeColor("background", b)
+    }), o.FE.RegisterCommand("clearTextColor", {
+        undo: !1,
+        focus: !1,
+        callback: function(o, t) {
+            this.popups.get("colors.picker").find('.fr-command[data-cmd="' + o + '"][data-param1="' + t + '"]'), this.colors.removeColor("text", t)
         }
-    }), a.FE.RegisterCommand("chooseTextColor", {
-        undo: !1
-        , focus: !1
-        , callback: function (a, b) {
+    }), o.FE.RegisterCommand("clearBackgroundColor", {
+        undo: !1,
+        focus: !1,
+        callback: function(o, t) {
+            this.popups.get("colors.picker").find('.fr-command[data-cmd="' + o + '"][data-param1="' + t + '"]'), this.colors.removeColor("background", t)
+        }
+    }), o.FE.RegisterCommand("chooseTextColor", {
+        undo: !1,
+        focus: !1,
+        callback: function(o, t) {
             this.colors.chooseColorPicker("text")
         }
-    }), a.FE.RegisterCommand("chooseBGColor", {
-        undo: !1
-        , focus: !1
-        , callback: function (a, b) {
+    }), o.FE.RegisterCommand("chooseBGColor", {
+        undo: !1,
+        focus: !1,
+        callback: function(o, t) {
             this.colors.chooseColorPicker("background")
         }
-    }), a.FE.RegisterCommand("cancelAndCloseColor", {
-        undo: !1
-        , focus: !1
-        , callback: function (a, b) {
+    }), o.FE.RegisterCommand("cancelAndCloseColor", {
+        undo: !1,
+        focus: !1,
+        callback: function(o, t) {
             this.colors.closeColorPicker(!0)
         }
-    }), a.FE.RegisterCommand("textColorSpectrum", {
-        undo: !0
-        , focus: !1
-        , callback: function (a) {
+    }), o.FE.RegisterCommand("textColorSpectrum", {
+        undo: !0,
+        focus: !1,
+        callback: function(o) {
             this.colors.initializeSpectrum("text", !0)
         }
-    }), a.FE.RegisterCommand("bgColorSpectrum", {
-        undo: !0
-        , focus: !1
-        , callback: function (a) {
+    }), o.FE.RegisterCommand("bgColorSpectrum", {
+        undo: !0,
+        focus: !1,
+        callback: function(o) {
             this.colors.initializeSpectrum("background", !0)
         }
-    }), a.FE.RegisterCommand("toggleTextSpectrum", {
-        undo: !1
-        , focus: !1
-        , callback: function (a) {
+    }), o.FE.RegisterCommand("toggleTextSpectrum", {
+        undo: !1,
+        focus: !1,
+        callback: function(o) {
             this.colors.toggleSpectrum("text")
         }
-    }), a.FE.RegisterCommand("toggleBgSpectrum", {
-        undo: !1
-        , focus: !1
-        , callback: function (a) {
+    }), o.FE.RegisterCommand("toggleBgSpectrum", {
+        undo: !1,
+        focus: !1,
+        callback: function(o) {
             this.colors.toggleSpectrum("background")
         }
-    }), a.FE.DefineIcon("colorsBack", {
+    }), o.FE.DefineIcon("colorsBack", {
         NAME: "arrow-left"
-    }), a.FE.RegisterCommand("colorsBack", {
-        title: "Back"
-        , undo: !1
-        , focus: !1
-        , back: !0
-        , refreshAfterCallback: !1
-        , callback: function () {
+    }), o.FE.RegisterCommand("colorsBack", {
+        title: "Back",
+        undo: !1,
+        focus: !1,
+        back: !0,
+        refreshAfterCallback: !1,
+        callback: function() {
             this.colors.back()
         }
     })
