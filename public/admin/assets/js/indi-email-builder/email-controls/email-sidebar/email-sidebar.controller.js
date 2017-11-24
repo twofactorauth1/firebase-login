@@ -4,11 +4,11 @@
  * this allows us to use sortable + accordion
  */
 app.config(['$provide', function ($provide){
-	$provide.decorator('accordionDirective', function($delegate) {
-		var directive = $delegate[0];
-		directive.replace = true;
-		return $delegate;
-	});
+    $provide.decorator('accordionDirective', function($delegate) {
+        var directive = $delegate[0];
+        directive.replace = true;
+        return $delegate;
+    });
 }]);
 
 app.controller('EmailBuilderSidebarController', ssbEmailBuilderSidebarController);
@@ -28,6 +28,7 @@ function ssbEmailBuilderSidebarController($scope, $attrs, $filter, $document, $t
     vm.togglePageSectionAccordion = togglePageSectionAccordion;
     vm.setActiveComponent = setActiveComponent;
     vm.setActiveSection = setActiveSection;
+    vm.getSectionTitle = getSectionTitle;
     vm.getPlatformSections = getPlatformSections;
     vm.getPlatformComponents = getPlatformComponents;
     vm.addSectionToPage = addSectionToPage;
@@ -70,23 +71,23 @@ function ssbEmailBuilderSidebarController($scope, $attrs, $filter, $document, $t
 
 
     vm.sortableOptions = {
-    	handle: '.ssb-sidebar-move-handle',
-		onSort: function (evt) {
-			console.log(evt);
+        handle: '.ssb-sidebar-move-handle',
+        onSort: function (evt) {
+            console.log(evt);
             vm.setActiveSection(evt.newIndex);
-		},
-		onStart: function (evt) {
-			vm.dragging = true;
-		},
-		onEnd: function (evt) {
-			vm.dragging = false;
-		}
+        },
+        onStart: function (evt) {
+            vm.dragging = true;
+        },
+        onEnd: function (evt) {
+            vm.dragging = false;
+        }
     };
 
     //TODO: move into config services
     vm.spectrum = {
-  	  options: SimpleSiteBuilderService.getSpectrumColorOptions()
-  	};
+      options: SimpleSiteBuilderService.getSpectrumColorOptions()
+    };
 
     //TODO: move into config services
     vm.social_links = [{
@@ -233,12 +234,12 @@ function ssbEmailBuilderSidebarController($scope, $attrs, $filter, $document, $t
         container.src = null;
     }
 
-  	function getPlatformSections() {
+    function getPlatformSections() {
         // alert('used!')
-  		// SimpleSiteBuilderService.getPlatformSections().then(function(data) {
+        // SimpleSiteBuilderService.getPlatformSections().then(function(data) {
     //     vm.platformSections = data;
       // });
-  	}
+    }
 
     function getPlatformComponents() {
       SimpleSiteBuilderService.getPlatformComponents();
@@ -246,11 +247,11 @@ function ssbEmailBuilderSidebarController($scope, $attrs, $filter, $document, $t
 
     //TODO: handle versions
     function addComponentToSection(component, sectionIndex) {
-    	return (
-    		SimpleSiteBuilderService.getComponent(component, 1).then(function(response) {
-    			vm.state.page.sections[sectionIndex].components.push(response.data);
-    		})
-    	)
+        return (
+            SimpleSiteBuilderService.getComponent(component, 1).then(function(response) {
+                vm.state.page.sections[sectionIndex].components.push(response.data);
+            })
+        )
     }
 
     function addSectionToPage(section, version, replaceAtIndex, oldSection, copyAtIndex) {
@@ -275,6 +276,7 @@ function ssbEmailBuilderSidebarController($scope, $attrs, $filter, $document, $t
     }
 
     function editSectionName(id) {
+        console.log('this is id ----------',id);
       $timeout(function () {
         angular.element(document.getElementById(id)).click();
       },0);
@@ -412,17 +414,17 @@ function ssbEmailBuilderSidebarController($scope, $attrs, $filter, $document, $t
       });
     }
 
-  	function saveWebsite() {
-  		vm.state.pendingWebsiteChanges = false;
-  		return (
-  			SimpleSiteBuilderService.saveWebsite(vm.state.website).then(function(response){
-  				console.log('website saved');
-  			})
-  		)
-  	}
+    function saveWebsite() {
+        vm.state.pendingWebsiteChanges = false;
+        return (
+            SimpleSiteBuilderService.saveWebsite(vm.state.website).then(function(response){
+                console.log('website saved');
+            })
+        )
+    }
 
     //TODO: refactor, this function exists in multiple controllers :)
-  	function savePage() {
+    function savePage() {
         vm.state.saveLoading = true;
         var isLegacyPage = !vm.state.page.ssb;
         console.log(isLegacyPage);
@@ -500,31 +502,55 @@ function ssbEmailBuilderSidebarController($scope, $attrs, $filter, $document, $t
 
     }
 
-  	function cancelPendingEdits() {
+    function cancelPendingEdits() {
       vm.state.pendingPageChanges = false;
       vm.state.pendingWebsiteChanges = false;
       SimpleSiteBuilderService.website = angular.copy(vm.state.originalWebsite);
       SimpleSiteBuilderService.page = angular.copy(vm.state.originalPage);
     }
 
-  	function togglePageSectionAccordion(index) {
-  		if (vm.uiState.accordion.sections[index].isOpen) {
-  			SimpleSiteBuilderService.setActiveSection(index);
-  		}
+    function togglePageSectionAccordion(index) {
+        if (vm.uiState.accordion.sections[index].isOpen) {
+            SimpleSiteBuilderService.setActiveSection(index);
+        }
     }
 
     function setActiveComponent(index) {
-  		//TODO: this fires on all clicks anywhere within the component panel... so all settings, etc.
-  		SimpleSiteBuilderService.setActiveComponent(index);
+        //TODO: this fires on all clicks anywhere within the component panel... so all settings, etc.
+        SimpleSiteBuilderService.setActiveComponent(index);
     }
+
+    function getSectionTitle(type){
+        var email_titles = {
+                "email-header" : "Header",
+                "email-1-col"  : "Content 1",
+                "email-2-col"  : "Content 2",
+                "email-3-col"  : "Content 3",
+                "email-footer"  : "Footer",
+                "email-social"  : "Social links",
+        };
+        return email_titles[type] || 'Section';
+     }
 
     function setActiveSection(index) {
       vm.uiState.showSectionPanel = false;
         $timeout(function() {
           SimpleSiteBuilderService.setActiveSection(index);
-          if (vm.state.page.sections[index].visibility) {
+          if (vm.state.email.components[index].visibility) {
+             vm.uiState.activeSectionIndex = index
+             console.log('herere1', vm.uiState.activeSectionIndex);
+            vm.uiState.navigation.sectionPanel.reset();
+            var section = vm.state.email.components[index];
+            console.log('-------------',section);
+            var name = $filter('cleanType')(section.type || section.name).toLowerCase().trim().replace(' ', '-');
+            vm.uiState.navigation.sectionPanel.loadPanel({ id: section._id, name: name, componentId: section._id });
             vm.uiState.showSectionPanel = true;
             vm.scrollToActiveSection();
+          }
+          else{
+
+            vm.uiState.activeSectionIndex = index;
+            console.log('herere', vm.uiState.activeSectionIndex);
           }
         })
     }
@@ -532,7 +558,7 @@ function ssbEmailBuilderSidebarController($scope, $attrs, $filter, $document, $t
     function addBackground(sectionIndex, componentIndex) {
         vm.openMediaModal('media-modal', 'MediaModalCtrl', null, 'lg');
 
-        vm.insertMediaCallback = function(asset) { 
+        vm.insertMediaCallback = function(asset) {
             if(vm.state.page){
                 if (componentIndex !== undefined && componentIndex !== null) {
                     vm.state.page.sections[vm.uiState.activeSectionIndex].components[vm.uiState.activeComponentIndex].bg.img.url = asset.url;
@@ -540,10 +566,10 @@ function ssbEmailBuilderSidebarController($scope, $attrs, $filter, $document, $t
                     vm.uiState.activeElement.bg.img.url = asset.url;
                 } else {
                     vm.state.page.sections[vm.uiState.activeSectionIndex].bg.img.url = asset.url;
-                }    
+                }
             }else{
                 vm.state.email.components[vm.uiState.activeComponentIndex].bg.img.url = asset.url;
-            }        
+            }
         }
 
         SimpleSiteBuilderService.setActiveSection(sectionIndex);
@@ -666,16 +692,16 @@ function ssbEmailBuilderSidebarController($scope, $attrs, $filter, $document, $t
     }
 
     function checkForDuplicatePage(pageHandle) {
-  		SimpleSiteBuilderService.checkForDuplicatePage(pageHandle).then(function(dup) {
-  			vm.uiState.duplicateUrl = dup;
-  		})
+        SimpleSiteBuilderService.checkForDuplicatePage(pageHandle).then(function(dup) {
+            vm.uiState.duplicateUrl = dup;
+        })
     }
 
     function addToMainMenu(id) {
-  		console.log('add page to main menu: ' + id);
-  		// SimpleSiteBuilderService.checkForDuplicatePage(pageHandle).then(function(dup) {
-  		// 	vm.uiState.duplicateUrl = dup;
-  		// })
+        console.log('add page to main menu: ' + id);
+        // SimpleSiteBuilderService.checkForDuplicatePage(pageHandle).then(function(dup) {
+        //  vm.uiState.duplicateUrl = dup;
+        // })
     }
 
     function createPage(template) {
@@ -1004,7 +1030,7 @@ function ssbEmailBuilderSidebarController($scope, $attrs, $filter, $document, $t
     function init(element) {
 
         vm.element = element;
-
+        console.log(vm.uiState,'vm.state.page.sections-----------', vm.state);
         setupSectionContent();
         ContactService.getContacts(function(customers){
             ContactService.getAllContactTags(customers,function(tags){
@@ -1012,15 +1038,15 @@ function ssbEmailBuilderSidebarController($scope, $attrs, $filter, $document, $t
             });
         })
 
-		vm.donationProductTags = [];
-		ProductService.getProducts(function(products) {
-			products.forEach(function(product, index) {
-				if (product.type === 'DONATION' && product.status.toLowerCase() === 'active') {
-					vm.donationProductTags.push({data: product._id, label: product.name});
-				}
+        vm.donationProductTags = [];
+        ProductService.getProducts(function(products) {
+            products.forEach(function(product, index) {
+                if (product.type === 'DONATION' && product.status.toLowerCase() === 'active') {
+                    vm.donationProductTags.push({data: product._id, label: product.name});
+                }
 
-			});
-		});
+            });
+        });
     }
 }
 
