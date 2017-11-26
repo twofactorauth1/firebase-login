@@ -515,39 +515,35 @@
 	            default:
 	            	if (section && section.spacing) {
 						if (section.spacing.pt) {
-							styleString += (section.spacing.pt.toString().indexOf('%') > 0) ? 'padding-top: ' + section.spacing.pt + ';' : 'padding-top: ' + section.spacing.pt + 'px;';
+							styleString +=  'padding-top: ' + applyStyle(section.spacing.pt) + ';';
 						}
 
 						if (section.spacing.pb) {
-							styleString += (section.spacing.pb.toString().indexOf('%') > 0) ? 'padding-bottom: ' + section.spacing.pb + ';' : 'padding-bottom: ' + section.spacing.pb + 'px;';
+							styleString +=  'padding-bottom: ' + applyStyle(section.spacing.pb) + ';';
 						}
 
 						if (section.spacing.pl) {
-							styleString += (section.spacing.pl.toString().indexOf('%') > 0) ? 'padding-left: ' + section.spacing.pl + ';' : 'padding-left: ' + section.spacing.pl + 'px;';
+							styleString +=  'padding-left: ' + applyStyle(section.spacing.pl) + ';';
 						}
 
 						if (section.spacing.pr) {
-							styleString += (section.spacing.pr.toString().indexOf('%') > 0) ? 'padding-right: ' + section.spacing.pr + ';' : 'padding-right: ' + section.spacing.pr + 'px;';
+							styleString +=  'padding-right: ' + applyStyle(section.spacing.pr)+ ';' ;
 						}
 
 						if (section.spacing.mt) {
-							styleString += (section.spacing.mt.toString().indexOf('%') > 0) ? 'margin-top: ' + section.spacing.mt + ';' : 'margin-top: ' + section.spacing.mt + 'px;';
+							styleString += 'margin-top: ' + applyStyle(section.spacing.mt) + ';';
 						}
 
 						if (section.spacing.mb) {
-							styleString += (section.spacing.mb.toString().indexOf('%') > 0) ? 'margin-bottom: ' + section.spacing.mb + ';' : 'margin-bottom: ' + section.spacing.mb + 'px;';
+							styleString +=  'margin-bottom: ' + applyStyle(section.spacing.mb)+ ';' ;
 						}
 
-						if (section.spacing.ml) {
-							var type;
-							(section.spacing.ml.indexOf("%") > -1) ? type = "" : type = "px";
-							styleString += section.spacing.ml == 'auto' ? 'margin-left: ' + section.spacing.ml + ';float: none;' : 'margin-left: ' + section.spacing.ml + type +';';
+						if (section.spacing.ml) { 
+							styleString += 'margin-left: ' +applyStyle(section.spacing.ml)  + ';float: none;' ;
 						}
 
-						if (section.spacing.mr) {
-							var spacing_type;
-							(section.spacing.mr.indexOf("%") > -1) ? spacing_type = "" : spacing_type = "px";
-							styleString += (section.spacing.mr == 'auto') ? 'margin-right: ' + section.spacing.mr + ';float: none;' : 'margin-right: ' + section.spacing.mr + spacing_type + ';';
+						if (section.spacing.mr) { 
+							styleString += 'margin-right: ' + applyStyle(section.spacing.mr) + ';float: none;' ;
 						}
 
 						if (section.spacing.mw) {
@@ -630,7 +626,14 @@
 
 			return styleString;
 		}
-
+		function applyStyle(value){
+			value=""+value;
+			value=value.toLowerCase(); 
+			 if(!( value==='auto' || value.indexOf("%") > -1 || value.indexOf("px")>-1)){ 
+				value +="px";
+			}
+			return value;
+		}
 
 		function resizeSliderImagesToFullHeight(section) {
 			if (section) {
@@ -886,7 +889,9 @@
 					}
 
 					if (component.spacing.mt) {
+						debugger
 						styleString += 'margin-top: ' + component.spacing.mt + 'px;';
+						
 					}
 
 					if (component.spacing.mb) {
