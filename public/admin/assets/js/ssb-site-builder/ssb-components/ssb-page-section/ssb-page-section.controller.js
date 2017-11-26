@@ -190,62 +190,31 @@
 	                if (section && section.spacing) {
 						if (section.spacing.ptxs || section.spacing.ptsm || section.spacing.ptmd || section.spacing.pt) {
 							_style = (section.spacing.ptxs || section.spacing.ptsm || section.spacing.ptmd || section.spacing.pt);
-							if(_style.indexOf('%') > 0){
-								styleString += 'padding-top: ' + _style + ';';
-							}
-							else{
-								styleString += 'padding-top: ' + _style + 'px;';
-							}
+							styleString += 'padding-top: ' +applyStyle( _style )+ ';';
 						}
 
 						if (section.spacing.pbxs || section.spacing.pbsm || section.spacing.pbmd || section.spacing.pb) {
 							_style = (section.spacing.pbxs || section.spacing.pbsm || section.spacing.pbmd || section.spacing.pb);
-							if(_style.indexOf('%') > 0){
-								styleString += 'padding-bottom: ' + _style + ';';
-							}
-							else{
-								styleString += 'padding-bottom: ' + _style + 'px;';
-							}
+							styleString += 'padding-bottom: ' + applyStyle(_style) + ';';
 						}
 
 						if (section.spacing.plxs || section.spacing.plsm || section.spacing.plmd || section.spacing.pl) {
 							_style = (section.spacing.plxs || section.spacing.plsm || section.spacing.plmd || section.spacing.pl);
-							if(_style.indexOf('%') > 0){
-								styleString += 'padding-left: ' + _style + ';';
-							}
-							else{
-								styleString += 'padding-left: ' + _style + 'px;';
-							}
-						}
-
+							styleString += 'padding-left: ' + applyStyle(_style)  + ';';
+						} 
 						if (section.spacing.prxs || section.spacing.prsm || section.spacing.prmd || section.spacing.pr) {
 							_style = (section.spacing.prxs || section.spacing.prsm || section.spacing.prmd || section.spacing.pr);
-							if(_style.indexOf('%') > 0){
-								styleString += 'padding-right: ' + _style + ';';
-							}
-							else{
-								styleString += 'padding-right: ' + _style + 'px;';
-							}
+							styleString += 'padding-right: ' + applyStyle(_style)  + ';';
 						}
 
 						if (section.spacing.mtxs || section.spacing.mtsm || section.spacing.mtmd || section.spacing.mt) {
 							_style = (section.spacing.mtxs || section.spacing.mtsm || section.spacing.mtmd || section.spacing.mt);
-							if(_style.indexOf('%') > 0){
-								styleString += 'margin-top: ' + _style + ';';
-							}
-							else{
-								styleString += 'margin-top: ' + _style + 'px;';
-							}
+							styleString += 'margin-top: ' + applyStyle(_style)  + ';';
 						}
 
 						if (section.spacing.mbxs || section.spacing.mbsm || section.spacing.mbmd || section.spacing.mb) {
 							_style = (section.spacing.mbxs || section.spacing.mbsm || section.spacing.mbmd || section.spacing.mb);
-							if(_style.indexOf('%') > 0){
-								styleString += 'margin-bottom: ' + _style + ';';
-							}
-							else{
-								styleString += 'margin-bottom: ' + _style + 'px;';
-							}
+							styleString += 'margin-bottom: ' + applyStyle(_style)  + ';';
 						}
 
 
@@ -305,62 +274,32 @@
 	                if (section && section.spacing) {
 						if (section.spacing.ptsm || section.spacing.ptmd || section.spacing.pt) {
 							_style = (section.spacing.ptsm || section.spacing.ptmd || section.spacing.pt);
-							if(_style.indexOf('%') > 0){
-								styleString += 'padding-top: ' + _style + ';';
-							}
-							else{
-								styleString += 'padding-top: ' + _style + 'px;';
-							}
+							 styleString += 'padding-top: ' + applyStyle(_style)  + ';';
 						}
 
 						if (section.spacing.pbsm || section.spacing.pbmd || section.spacing.pb) {
 							_style = (section.spacing.pbsm || section.spacing.pbmd || section.spacing.pb);
-							if(_style.indexOf('%') > 0){
-								styleString += 'padding-bottom: ' + _style + ';';
-							}
-							else{
-								styleString += 'padding-bottom: ' + _style + 'px;';
-							}
+							styleString += 'padding-bottom: ' + applyStyle(_style)  + ';';
 						}
 
 						if (section.spacing.plsm || section.spacing.plmd || section.spacing.pl) {
 							_style = (section.spacing.plsm || section.spacing.plmd || section.spacing.pl);
-							if(_style.indexOf('%') > 0){
-								styleString += 'padding-left: ' + _style + ';';
-							}
-							else{
-								styleString += 'padding-left: ' + _style + 'px;';
-							}
+							styleString += 'padding-left: ' + applyStyle(_style)  + ';';
 						}
 
 						if (section.spacing.prsm || section.spacing.prmd || section.spacing.pr) {
-							_style = (section.spacing.prsm || section.spacing.prmd || section.spacing.pr);
-							if(_style.indexOf('%') > 0){
-								styleString += 'padding-right: ' + _style + ';';
-							}
-							else{
-								styleString += 'padding-right: ' + _style + 'px;';
-							}
+							_style = (section.spacing.prsm || section.spacing.prmd || section.spacing.pr); 
+							styleString += 'padding-right: ' + applyStyle(_style)  + ';';
 						}
 
 						if (section.spacing.mtsm || section.spacing.mtmd || section.spacing.mt) {
-							_style = (section.spacing.mtsm || section.spacing.mtmd || section.spacing.mt);
-							if(_style.indexOf('%') > 0){
-								styleString += 'margin-top: ' + _style + ';';
-							}
-							else{
-								styleString += 'padding-top: ' + _style + 'px;';
-							}
+							_style = (section.spacing.mtsm || section.spacing.mtmd || section.spacing.mt); 
+							styleString += 'margin-top: ' + applyStyle(_style)  + ';';
 						}
 
 						if (section.spacing.mbsm || section.spacing.mbmd || section.spacing.mb) {
 							_style = (section.spacing.mbsm || section.spacing.mbmd || section.spacing.mb);
-							if(_style.indexOf('%') > 0){
-								styleString += 'margin-bottom: ' + _style + ';';
-							}
-							else{
-								styleString += 'margin-bottom: ' + _style + 'px;';
-							}
+							styleString += 'margin-bottom: ' + applyStyle(_style)  + ';';
 						}
 
 						if (section.spacing.mlsm || section.spacing.mlmd || section.spacing.ml) {
@@ -418,63 +357,33 @@
 	            case 2:
 	                if (section && section.spacing) {
 						if (section.spacing.ptmd || section.spacing.pt) {
-							_style = (section.spacing.ptmd || section.spacing.pt);
-							if(_style.indexOf('%') > 0){
-								styleString += 'padding-top: ' + _style + ';';
-							}
-							else{
-								styleString += 'padding-top: ' + _style + 'px;';
-							}
+							_style = (section.spacing.ptmd || section.spacing.pt); 
+							styleString += 'padding-top: ' + applyStyle(_style)  + ';';
 						}
 
 						if (section.spacing.pbmd || section.spacing.pb) {
 							_style = (section.spacing.pbmd || section.spacing.pb);
-							if(_style.indexOf('%') > 0){
-								styleString += 'padding-bottom: ' + _style + ';';
-							}
-							else{
-								styleString += 'padding-top: ' + _style + 'px;';
-							}
+							styleString += 'padding-bottom: ' + applyStyle(_style)  + ';';
 						}
 
 						if (section.spacing.plmd || section.spacing.pl) {
 							_style = (section.spacing.plmd || section.spacing.pl);
-							if(_style.indexOf('%') > 0){
-								styleString += 'padding-left: ' + _style + ';';
-							}
-							else{
-								styleString += 'padding-left: ' + _style + 'px;';
-							}
+							styleString += 'padding-left: ' + applyStyle(_style)  + ';';
 						}
 
 						if (section.spacing.prmd || section.spacing.pr) {
 							_style = (section.spacing.prmd || section.spacing.pr);
-							if(_style.indexOf('%') > 0){
-								styleString += 'padding-right: ' + _style + ';';
-							}
-							else{
-								styleString += 'padding-right: ' + _style + 'px;';
-							}
+							styleString += 'padding-right: ' + applyStyle(_style)  + ';';
 						}
 
 						if (section.spacing.mtmd || section.spacing.mt) {
 							_style = (section.spacing.mtmd || section.spacing.mt);
-							if(_style.indexOf('%') > 0){
-								styleString += 'margin-top: ' + _style + ';';
-							}
-							else{
-								styleString += 'margin-top: ' + _style + 'px;';
-							}
+							styleString += 'margin-top: ' + applyStyle(_style)  + ';';
 						}
 
 						if (section.spacing.mbmd || section.spacing.mb) {
-							_style = (section.spacing.mbmd || section.spacing.mb);
-							if(_style.indexOf('%') > 0){
-								styleString += 'margin-bottom: ' + _style + ';';
-							}
-							else{
-								styleString += 'margin-bottom: ' + _style + 'px;';
-							}
+							_style = (section.spacing.mbmd || section.spacing.mb); 
+								styleString += 'margin-bottom: ' + applyStyle(_style)  + ';';
 						}
 
 						if (section.spacing.mlmd || section.spacing.ml) {
