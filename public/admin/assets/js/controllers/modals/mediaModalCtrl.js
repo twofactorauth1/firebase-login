@@ -271,6 +271,7 @@ app.controller('MediaModalCtrl', ['$scope', '$rootScope', 'mediaManagerConstant'
   $scope.showType = "all";
   if(insertMedia && insertMedia.name === 'insertVideoMedia'){
     $scope.showType = "video";
+    $scope.pagingParams.filterType= "video";
   }
   $scope.editingImage = false;
   $scope.selectModel = {
@@ -303,8 +304,7 @@ app.controller('MediaModalCtrl', ['$scope', '$rootScope', 'mediaManagerConstant'
   $scope.getFileType = function(mime, value){
     if(value && value.type === 'fonts'){
       return "fonts"
-    }
-    else if(mime.match('audio.*'))
+    }else if(mime.match('audio.*'))
       return "audio"
     else if(mime.match('video.*'))
       return "video"
