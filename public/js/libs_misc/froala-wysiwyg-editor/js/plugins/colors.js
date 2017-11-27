@@ -273,7 +273,7 @@
       if(editor.opts.isButton) {        
         color = editor.opts.button.css(color_type);
         setTimeout(function() {
-            initializeSpectrum(color_type, color, true);
+            initializeSpectrum(color_type, color, false);
         }, 0)
       }
 
