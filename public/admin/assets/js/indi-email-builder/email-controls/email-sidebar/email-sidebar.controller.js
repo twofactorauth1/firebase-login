@@ -17,7 +17,7 @@ ssbEmailBuilderSidebarController.$inject = ['$scope', '$attrs', '$filter', '$doc
 /* @ngInject */
 function ssbEmailBuilderSidebarController($scope, $attrs, $filter, $document, $timeout, SimpleSiteBuilderService, $modal, editableOptions, $location, SweetAlert, ContactService, toaster, ProductService) {
 
-    console.info('email-build sidebar directive init...')
+    console.info('email-build sidebar directive init...',$scope.$parent)
 
     var vm = this;
 
@@ -27,7 +27,7 @@ function ssbEmailBuilderSidebarController($scope, $attrs, $filter, $document, $t
     vm.cancelPendingEdits = cancelPendingEdits;
     vm.togglePageSectionAccordion = togglePageSectionAccordion;
     vm.setActiveComponent = setActiveComponent;
-    vm.setActiveSection = setActiveSection;
+    vm.setActive = setActive;
     vm.getSectionTitle = getSectionTitle;
     vm.getPlatformSections = getPlatformSections;
     vm.getPlatformComponents = getPlatformComponents;
@@ -56,6 +56,7 @@ function ssbEmailBuilderSidebarController($scope, $attrs, $filter, $document, $t
     vm.deletePage = deletePage;
     vm.duplicatePage = duplicatePage;
     vm.hideFromMenu = hideFromMenu;
+    vm.setActiveComponentSidebar = setActiveComponentSidebar;
     vm.showPageOnMenu = showPageOnMenu;
     vm.moveSection = moveSection;
     vm.duplicateSection = duplicateSection;
@@ -302,6 +303,7 @@ function ssbEmailBuilderSidebarController($scope, $attrs, $filter, $document, $t
                     section.visibility = false;
                     vm.uiState.activeSectionIndex = undefined;
                     vm.uiState.activeComponentIndex = undefined;
+                    vm.uiState.showSectionPanel = false;
                     vm.uiState.toggleSection(section);
                 }
             });
@@ -333,6 +335,7 @@ function ssbEmailBuilderSidebarController($scope, $attrs, $filter, $document, $t
 
     }
 
+
     function duplicateSection(section, index) {
 
         var insertAtIndex = (index > 0) ? (index + 1) : index;
@@ -348,7 +351,7 @@ function ssbEmailBuilderSidebarController($scope, $attrs, $filter, $document, $t
     }
 
     function removeSectionFromPage(index) {
-        if(vm.state.page.sections[index].global){
+        if(vm.state.email.components[index].global){
             SweetAlert.swal({
                 title: "Are you sure?",
                 text: "You are removing a global section. Changes made to global sections on this page will be reflected on all other pages. Consider removing from this page only.",
@@ -369,8 +372,8 @@ function ssbEmailBuilderSidebarController($scope, $attrs, $filter, $document, $t
                 }
                 //Hide on this page
                 else if(angular.isDefined(isConfirm) && isConfirm === false){
-                    vm.state.page.sections[index].visibility = false;
-                    vm.uiState.toggleSection(vm.state.page.sections[index]);
+                    vm.state.email.components[index].visibility = false;
+                    vm.uiState.toggleSection(vm.state.email.components[index]);
                 }
             });
         }
@@ -408,8 +411,10 @@ function ssbEmailBuilderSidebarController($scope, $attrs, $filter, $document, $t
       },
       function (isConfirm) {
         if (isConfirm) {
-          vm.state.page.sections[vm.uiState.activeSectionIndex].components.splice(index, 1);
+          console.log(vm.state.email.components[vm.uiState.activeComponentIndex]);
+          vm.state.email.components.splice(index, 1);
           vm.uiState.activeComponentIndex = undefined;
+          vm.uiState.showSectionPanel = false;
         }
       });
     }
@@ -521,6 +526,7 @@ function ssbEmailBuilderSidebarController($scope, $attrs, $filter, $document, $t
     }
 
     function getSectionTitle(type){
+        console.log('this is the types',type);
         var email_titles = {
                 "email-header" : "Header",
                 "email-1-col"  : "Content 1",
@@ -528,11 +534,54 @@ function ssbEmailBuilderSidebarController($scope, $attrs, $filter, $document, $t
                 "email-3-col"  : "Content 3",
                 "email-footer"  : "Footer",
                 "email-social"  : "Social links",
+                "email-hr"  : "Email Header",
         };
-        return email_titles[type] || 'Section';
-     }
+        return email_titles[type] || type;
+     };
 
-    function setActiveSection(index) {
+ function setActive(componentIndex, compiled) {
+     console.log(componentIndex, compiled,'000000000000000000');
+        vm.uiState.showSectionPanel = true;
+        vm.uiState.navigation.sectionPanel.reset();
+        vm.uiState.activeComponentIndex = undefined;
+
+        if (compiled || (componentIndex === null && sectionIndex === null)) {
+            setActiveElement();
+        } else if (componentIndex !== undefined) {
+            setActiveComponentSidebar(componentIndex);
+            vm.uiState.activeComponentIndex = componentIndex;
+        } else {
+            vm.uiState.navigation.sectionPanel.reset();
+            vm.uiState.showSectionPanel = false;
+            vm.uiState.activeComponentIndex = null;
+            vm.uiState.showSectionPanel = true;
+        }
+
+    }
+  function setActiveComponentSidebar(componentIndex) {
+
+        var component = vm.state.email.components[componentIndex];
+        var name = $filter('cleanType')(component.type).toLowerCase().trim().replace(' ', '-');
+        var sectionPanelLoadConfig = {
+            name: name,
+            id: component._id,
+            componentId: component._id
+        };
+
+        $timeout(function() {
+
+            vm.uiState.activeComponentIndex = componentIndex;
+
+            vm.uiState.navigation.sectionPanel.loadPanel(sectionPanelLoadConfig);
+
+            if (componentIndex !== undefined) {
+                vm.uiState.showSectionPanel = true;
+            }
+
+        });
+
+    }
+ function setActiveSection(index) {
       vm.uiState.showSectionPanel = false;
         $timeout(function() {
           SimpleSiteBuilderService.setActiveSection(index);
@@ -548,7 +597,6 @@ function ssbEmailBuilderSidebarController($scope, $attrs, $filter, $document, $t
             vm.scrollToActiveSection();
           }
           else{
-
             vm.uiState.activeSectionIndex = index;
             console.log('herere', vm.uiState.activeSectionIndex);
           }

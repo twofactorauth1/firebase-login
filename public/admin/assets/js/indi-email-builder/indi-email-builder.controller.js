@@ -174,42 +174,42 @@
         });
 
         function toggleSectionVisiblity(section, global, hide){
-        if (global) {
-            if(section.global === false) {
-                SweetAlert.swal({
-                    title: "Are you sure?",
-                    text: "Turning off this setting will remove the section from all pages except for this one.",
-                    type: "warning",
-                    showCancelButton: true,
-                    confirmButtonColor: "#DD6B55",
-                    confirmButtonText: "Remove from other pages",
-                    cancelButtonText: "Cancel",
-                    closeOnConfirm: true,
-                    closeOnCancel: true
-                },
-                function (isConfirm) {
-                    //Cancel
-                    if (!isConfirm) {
-                        section.global = true;
-                    }
-                });
-            }
-        } else if(section.global) {
-                if(!section.hiddenOnPages){
-                    section.hiddenOnPages = {}
-                }
-                if(section.visibility === false)
-                {
-                    section.hiddenOnPages[vm.state.page.handle] = true;
-                    hideAllControls();
-                }
-                else{
-                    delete section.hiddenOnPages[vm.state.page.handle];
-                }
-            }
-            else if(section.visibility === false){
-                hideAllControls();
-            }
+                    if (global) {
+                        if(section.global === false) {
+                            SweetAlert.swal({
+                                title: "Are you sure?",
+                                text: "Turning off this setting will remove the section from all pages except for this one.",
+                                type: "warning",
+                                showCancelButton: true,
+                                confirmButtonColor: "#DD6B55",
+                                confirmButtonText: "Remove from other pages",
+                                cancelButtonText: "Cancel",
+                                closeOnConfirm: true,
+                                closeOnCancel: true
+                            },
+                            function (isConfirm) {
+                                //Cancel
+                                if (!isConfirm) {
+                                    section.global = true;
+                                }
+                            });
+                        }
+                    } else if(section.global) {
+                            if(!section.hiddenOnPages){
+                                section.hiddenOnPages = {}
+                            }
+                            if(section.visibility === false)
+                            {
+                                section.hiddenOnPages[vm.state.page.handle] = true;
+                                hideAllControls();
+                            }
+                            else{
+                                delete section.hiddenOnPages[vm.state.page.handle];
+                            }
+                        }
+                        else if(section.visibility === false){
+                            hideAllControls();
+                        }
         }
 
         function hideAllControls() {
