@@ -273,7 +273,7 @@
       if(editor.opts.isButton) {        
         color = editor.opts.button.css(color_type);
         setTimeout(function() {
-            initializeSpectrum(color_type, color);
+            initializeSpectrum(color_type, color, true);
         }, 0)
       }
 
@@ -344,7 +344,7 @@
            colorVal = editor.opts.selectedElement.color;
         }
           setTimeout(function() {
-              initializeSpectrum(color_type, colorVal);
+              initializeSpectrum(color_type, colorVal, true);
           }, 0)
         }
       }
@@ -394,8 +394,10 @@
     /*
      * Change background color.
      */
-    function background (val, init) {
+    function background (val, init, initSpectrum) {
       var $popup = editor.popups.get('colors.picker');
+      if(initSpectrum)
+        return;
       // Set background  color.
       if (val != 'REMOVE') {
         $popup.find('input.sp-input').val(val);
@@ -454,7 +456,7 @@
 
       if(init){
         //editor.opts.defaultColors.background.init = false;
-        initializeSpectrum("background-color", val);
+        initializeSpectrum("background-color", val, false);
       }
 
 
@@ -465,8 +467,10 @@
     /*
      * Change text color.
      */
-    function text (val, init) {
+    function text (val, init, initSpectrum) {
       var $popup = editor.popups.get('colors.picker');
+      if(initSpectrum)
+        return;
       // Set text color.
       if (val != 'REMOVE') {
         $popup.find('input.sp-input').val(val);
@@ -519,7 +523,7 @@
       }
       if(init){
             //editor.opts.defaultColors.text.init = false;
-            initializeSpectrum("color", val);
+            initializeSpectrum("color", val, false);
         }
     }
 
@@ -612,7 +616,7 @@
     /*
      * init Spectrum.
      */
-    function initializeSpectrum(val, current_color) {
+    function initializeSpectrum(val, current_color, initSpectrum) {
         var popup = editor.popups.get('colors.picker');
         popup.find('input:focus').blur();
         var container = val === 'color' ? popup.find(".fr-color-set.sp-container.fr-text-color") : popup.find(".fr-color-set.sp-container.fr-background-color"),
@@ -698,15 +702,15 @@
             //boundElement.trigger('dragstop.spectrum', [ get() ]);
         }
 
-        function move() {
-            updateUI(val);
+        function move(initSpectrum) {
+            updateUI(val, false, initSpectrum);
         }
 
         function reflow() {
             updateHelperLocations();
         }
 
-        function updateUI(val, update) {
+        function updateUI(val, update, initSpectrum) {
 
             updateHelperLocations();
 
@@ -730,9 +734,9 @@
                     realRgb = realColor.toRgbString();
                     if(!update){
                         if(val === 'color')
-                            text(realRgb);
+                            text(realRgb, false, initSpectrum);
                         else
-                            background(realRgb);
+                            background(realRgb, false, initSpectrum);
                     }
 
                 // Update the replaced elements background color (with actual selected color)
@@ -766,11 +770,11 @@
             }, { format: 'rgb' });
         }
 
-        function set(color, update) {
+        function set(color, update, initSpectrum) {
             if (tinycolor.equals(color, get())) {
                 // Update UI just in case a validation error needs
                 // to be cleared.
-                updateUI(val, update);
+                updateUI(val, update, initSpectrum);
                 return;
             }
 
@@ -787,7 +791,7 @@
                 currentValue = newHsv.v;
                 currentAlpha = newHsv.a;
             }
-            updateUI(val, update);
+            updateUI(val, update, initSpectrum);
         }
 
         function updateHelperLocations() {
@@ -836,13 +840,13 @@
         }
 
         if(current_color){
-            set(current_color, true);
-            move();
+            set(current_color, true, initSpectrum);
+            move(initSpectrum);
         }
         else
         {
             isEmpty = true;
-            move();
+            move(initSpectrum);
         }
         //textInput.show();
     }
@@ -1104,7 +1108,7 @@
     undo: !0,
     focus: false,
     callback: function (cmd) {
-      this.colors.initializeSpectrum("text", true);
+      this.colors.initializeSpectrum("text", true, false);
     }
   });
 
@@ -1113,7 +1117,7 @@
     undo: !0,
     focus: false,
     callback: function (cmd) {
-      this.colors.initializeSpectrum("background", true);
+      this.colors.initializeSpectrum("background", true, false);
     }
   });
 
