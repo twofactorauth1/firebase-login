@@ -396,7 +396,7 @@
      */
     function background (val, init, initSpectrum) {
       var $popup = editor.popups.get('colors.picker');
-      if(initSpectrum)
+      if(initSpectrum && !init)
         return;
       // Set background  color.
       if (val != 'REMOVE') {
@@ -469,7 +469,7 @@
      */
     function text (val, init, initSpectrum) {
       var $popup = editor.popups.get('colors.picker');
-      if(initSpectrum)
+      if(initSpectrum && !init)
         return;
       // Set text color.
       if (val != 'REMOVE') {
