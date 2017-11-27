@@ -124,7 +124,7 @@
                                 <spectrum-colorpicker class="ssb-spectrum-color-picker-text" format="'rgb'" options="vm.spectrum.options" ng-model="vm.page.styles.bodyBackgroundColor"></spectrum-colorpicker>
                                 <label for="colorpicker">Body Background Color <span tooltip-placement="right" tooltip="Override the default body/page background color for your Page."><i class="fa fa-info-circle" /></span></label>
                             </div>
-    
+
                             <div class="form-group ssb-spectrum-color-picker-small">
                                 <spectrum-colorpicker class="ssb-spectrum-color-picker-text" format="'rgb'" options="vm.spectrum.options" ng-model="vm.page.styles.headerBackgroundColor"></spectrum-colorpicker>
                                 <label for="colorpicker">Header Background Color <span tooltip-placement="right" tooltip="Override the default header background color for your Page."><i class="fa fa-info-circle" /></span></label>
@@ -148,14 +148,14 @@
                 </tab>
                 <tab ng-if='vm.parentVm.state.website.resources.toggles.customCss && vm.parentVm.state.account.showhide.customCss'>
                     <tab-heading>
-                        Page Custom Css
+                        Page CSS
                     </tab-heading>
 
                     <div>
                         <div class="mb10"></div>
                         <div class='form-group' ng-if='vm.parentVm.state.website.resources.toggles.customCss'>
-                          <label>Custom Css</label>
-                          <span tooltip-placement="bottom" tooltip="Add css snippets for your page"><i class="fa fa-info-circle" /></span>
+                          <label>Custom CSS</label>
+                          <span tooltip-placement="bottom" tooltip="Add CSS snippets for your page"><i class="fa fa-info-circle" /></span>
                           <textarea class='form-control' ng-model='vm.parentVm.state.website.resources.customCss[vm.page.handle].original'></textarea>
                         </div>
                     </div>

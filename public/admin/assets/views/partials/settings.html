@@ -27,7 +27,7 @@
                                 <a class="text-dark" ng-click="viewSettings('website', 'Scripts')">Scripts</a>
                             </li>
                             <li ng-if='account.showhide.customCss'>
-                                <a class="text-dark" ng-click="viewSettings('website', 'Custom Css')">Custom Css</a>
+                                <a class="text-dark" ng-click="viewSettings('website', 'Custom CSS')">Custom CSS</a>
                             </li>
                         </ul>
                     </div>
@@ -334,16 +334,16 @@
                       </form>
                       <div class="clearfix"></div>
                 </tab>
-                <tab heading="Custom Css" ng-if='account.showhide.customCss'>
+                <tab heading="Custom CSS" ng-if='account.showhide.customCss'>
                       <form class="col-sm-6 form-horizontal">
                           <div class="form-group">
-                              <label>Enable Custom Css</label>
-                              <span tooltip-placement="bottom" tooltip="Enable custom css to your website"><i class="fa fa-info-circle" /></span>
+                              <label>Enable Custom CSS</label>
+                              <span tooltip-placement="bottom" tooltip="Enable custom CSS to your website"><i class="fa fa-info-circle" /></span>
                               <switch ng-model="website.resources.toggles.customCss" class="pull-right"></switch>
                           </div>
                           <div class='form-group' ng-if='website.resources.toggles.customCss'>
-                            <label>Global Css</label>
-                            <span tooltip-placement="bottom" tooltip="Add custom css snippets for your website globally"><i class="fa fa-info-circle" /></span>
+                            <label>Global CSS</label>
+                            <span tooltip-placement="bottom" tooltip="Add custom CSS snippets for your website"><i class="fa fa-info-circle" /></span>
                             <textarea class='form-control' ng-model='website.resources.customCss.global.original'></textarea>
                           </div>
                           <div class="clearfix"></div>
