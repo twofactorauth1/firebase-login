@@ -798,7 +798,6 @@
 					}
 
 					if (component.spacing.mt) {
-						debugger
 						styleString += 'margin-top: ' + component.spacing.mt + 'px;';
 						
 					}
