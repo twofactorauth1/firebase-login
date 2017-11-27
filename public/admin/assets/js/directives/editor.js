@@ -100,6 +100,23 @@ app.directive("elem", function ($rootScope, $timeout, $compile, SimpleSiteBuilde
 			}, 500);
 
 
+			function destroyShared(editor) {
+				editor.shared.count = 1;
+				// Deleting shared instances
+				if (editor.shared) {
+					editor.shared.count = 1;
+					delete editor.shared.$tb;
+					delete editor.shared.popup_buttons;
+					delete editor.shared.popups;
+					delete editor.shared.$image_resizer;
+					delete editor.shared.$img_overlay;
+					delete editor.shared.$line_breaker;
+					delete editor.shared.exit_flag;
+					delete editor.shared.vid_exit_flag;
+				}
+			}
+
+
 			function checkIfPageEditor(attrs) {
 				if (attrs.ssbBlogEditor || attrs.broadcastMessageEditor || attrs.helpTopics || attrs.ssbEmailEditor) {
 					return false;
@@ -108,6 +125,16 @@ app.directive("elem", function ($rootScope, $timeout, $compile, SimpleSiteBuilde
 				}
 
 			}
+
+			$rootScope.$on('$destroyFroalaInstances', function () {
+				var elem = angular.element(element[0].querySelector('.editable'))[0];
+				//$(elem).froalaEditor($.FroalaEditor.build());
+				if ($(elem).data('froala.editor')) {
+					var editor = $(elem).data('froala.editor');
+					destroyShared(editor);
+				}
+			});
+
 
 			var elem = angular.element(element[0].querySelector('.editable'))[0],
 				componentId = $(elem).closest('[component]').attr('id');
@@ -161,7 +188,9 @@ app.directive("elem", function ($rootScope, $timeout, $compile, SimpleSiteBuilde
 					$timeout(function () {
 
 						$(elem).on('froalaEditor.initialized', function (e, editor) {
-								
+								if (blogPostEditor || helpTopicsEditor || attrs.broadcastMessageEditor) {
+									destroyShared(editor);
+								}
 								//topbar positioning
 								$('.fr-toolbar.fr-inline.fr-desktop:first').addClass('ssb-froala-first-editor');
 
