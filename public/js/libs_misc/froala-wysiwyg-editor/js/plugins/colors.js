@@ -412,10 +412,7 @@
         if(editor.opts.isButton)
             editor.opts.button.css('background-color', val);        
         else{
-          if(initSpectrum && !init){
-            // do not apply color
-          }         
-          else{
+          
             if($(editor.$el).find("span") && $(editor.$el).find("span").length)
                 $(editor.$el).find("span").removeClass("ssb-bg-color-inline-block");
               editor.format.applyStyle('background-color', val);              
@@ -423,7 +420,7 @@
                  var color = $(this).css('background-color');          
                 return color != 'transparent' && color != 'rgba(0, 0, 0, 0)';
               }).addClass("ssb-bg-color-inline-block");
-          }
+          
             
         }
         
@@ -488,11 +485,7 @@
         if(editor.opts.isButton)
             $(editor.selection.element()).css('color', val);
         else
-          if(initSpectrum && !init){
-            // do not apply color
-          }         
-          else
-              editor.format.applyStyle('color', val);
+          editor.format.applyStyle('color', val);
 
 
         editor.opts.selectedElement.color = val;
