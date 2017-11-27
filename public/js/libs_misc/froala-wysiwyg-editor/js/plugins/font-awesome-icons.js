@@ -138,7 +138,6 @@
                 console.log('awesome icon plugin : command.before>>', isAwesomeIcon, selectedColor, selectedFontSize);
 
                 if (isAwesomeIcon) {
-                    debugger;
                     if (selectedFontSize && selectedColor) {
                         selectedFontSize=selectedFontSize.toLowerCase().replace("px","");
                         $(getSelectionParentElement()).parents('.fr-fontAwesomeIcon').detach();
