@@ -326,7 +326,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
      */
     $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams, options) {
         // vm.checkStateNavigation(event, toState, toParams, fromState, fromParams, options);
-        $rootScope.$broadcast('$destroyFroalaInstances');
+        //$rootScope.$broadcast('$destroyFroalaInstances');
         $rootScope.app.layout.isMinimalAdminChrome = false;
         //$rootScope.app.layout.isSidebarClosed = vm.uiState.isSidebarClosed;
     });
@@ -364,7 +364,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
     });
 
     var unbindPageServiceWatcher = $scope.$watch(function() { return SimpleSiteBuilderService.page; }, function(page){
-        $rootScope.$broadcast('$destroyFroalaInstances');
+        //$rootScope.$broadcast('$destroyFroalaInstances');
         vm.state.pendingPageChanges = false;
         vm.state.page = page;
         setCustomCss();
