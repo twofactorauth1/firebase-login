@@ -190,62 +190,31 @@
 	                if (section && section.spacing) {
 						if (section.spacing.ptxs || section.spacing.ptsm || section.spacing.ptmd || section.spacing.pt) {
 							_style = (section.spacing.ptxs || section.spacing.ptsm || section.spacing.ptmd || section.spacing.pt);
-							if(_style.indexOf('%') > 0){
-								styleString += 'padding-top: ' + _style + ';';
-							}
-							else{
-								styleString += 'padding-top: ' + _style + 'px;';
-							}
+							styleString += 'padding-top: ' +applyStyle( _style )+ ';';
 						}
 
 						if (section.spacing.pbxs || section.spacing.pbsm || section.spacing.pbmd || section.spacing.pb) {
 							_style = (section.spacing.pbxs || section.spacing.pbsm || section.spacing.pbmd || section.spacing.pb);
-							if(_style.indexOf('%') > 0){
-								styleString += 'padding-bottom: ' + _style + ';';
-							}
-							else{
-								styleString += 'padding-bottom: ' + _style + 'px;';
-							}
+							styleString += 'padding-bottom: ' + applyStyle(_style) + ';';
 						}
 
 						if (section.spacing.plxs || section.spacing.plsm || section.spacing.plmd || section.spacing.pl) {
 							_style = (section.spacing.plxs || section.spacing.plsm || section.spacing.plmd || section.spacing.pl);
-							if(_style.indexOf('%') > 0){
-								styleString += 'padding-left: ' + _style + ';';
-							}
-							else{
-								styleString += 'padding-left: ' + _style + 'px;';
-							}
-						}
-
+							styleString += 'padding-left: ' + applyStyle(_style)  + ';';
+						} 
 						if (section.spacing.prxs || section.spacing.prsm || section.spacing.prmd || section.spacing.pr) {
 							_style = (section.spacing.prxs || section.spacing.prsm || section.spacing.prmd || section.spacing.pr);
-							if(_style.indexOf('%') > 0){
-								styleString += 'padding-right: ' + _style + ';';
-							}
-							else{
-								styleString += 'padding-right: ' + _style + 'px;';
-							}
+							styleString += 'padding-right: ' + applyStyle(_style)  + ';';
 						}
 
 						if (section.spacing.mtxs || section.spacing.mtsm || section.spacing.mtmd || section.spacing.mt) {
 							_style = (section.spacing.mtxs || section.spacing.mtsm || section.spacing.mtmd || section.spacing.mt);
-							if(_style.indexOf('%') > 0){
-								styleString += 'margin-top: ' + _style + ';';
-							}
-							else{
-								styleString += 'margin-top: ' + _style + 'px;';
-							}
+							styleString += 'margin-top: ' + applyStyle(_style)  + ';';
 						}
 
 						if (section.spacing.mbxs || section.spacing.mbsm || section.spacing.mbmd || section.spacing.mb) {
 							_style = (section.spacing.mbxs || section.spacing.mbsm || section.spacing.mbmd || section.spacing.mb);
-							if(_style.indexOf('%') > 0){
-								styleString += 'margin-bottom: ' + _style + ';';
-							}
-							else{
-								styleString += 'margin-bottom: ' + _style + 'px;';
-							}
+							styleString += 'margin-bottom: ' + applyStyle(_style)  + ';';
 						}
 
 
@@ -305,62 +274,32 @@
 	                if (section && section.spacing) {
 						if (section.spacing.ptsm || section.spacing.ptmd || section.spacing.pt) {
 							_style = (section.spacing.ptsm || section.spacing.ptmd || section.spacing.pt);
-							if(_style.indexOf('%') > 0){
-								styleString += 'padding-top: ' + _style + ';';
-							}
-							else{
-								styleString += 'padding-top: ' + _style + 'px;';
-							}
+							 styleString += 'padding-top: ' + applyStyle(_style)  + ';';
 						}
 
 						if (section.spacing.pbsm || section.spacing.pbmd || section.spacing.pb) {
 							_style = (section.spacing.pbsm || section.spacing.pbmd || section.spacing.pb);
-							if(_style.indexOf('%') > 0){
-								styleString += 'padding-bottom: ' + _style + ';';
-							}
-							else{
-								styleString += 'padding-bottom: ' + _style + 'px;';
-							}
+							styleString += 'padding-bottom: ' + applyStyle(_style)  + ';';
 						}
 
 						if (section.spacing.plsm || section.spacing.plmd || section.spacing.pl) {
 							_style = (section.spacing.plsm || section.spacing.plmd || section.spacing.pl);
-							if(_style.indexOf('%') > 0){
-								styleString += 'padding-left: ' + _style + ';';
-							}
-							else{
-								styleString += 'padding-left: ' + _style + 'px;';
-							}
+							styleString += 'padding-left: ' + applyStyle(_style)  + ';';
 						}
 
 						if (section.spacing.prsm || section.spacing.prmd || section.spacing.pr) {
-							_style = (section.spacing.prsm || section.spacing.prmd || section.spacing.pr);
-							if(_style.indexOf('%') > 0){
-								styleString += 'padding-right: ' + _style + ';';
-							}
-							else{
-								styleString += 'padding-right: ' + _style + 'px;';
-							}
+							_style = (section.spacing.prsm || section.spacing.prmd || section.spacing.pr); 
+							styleString += 'padding-right: ' + applyStyle(_style)  + ';';
 						}
 
 						if (section.spacing.mtsm || section.spacing.mtmd || section.spacing.mt) {
-							_style = (section.spacing.mtsm || section.spacing.mtmd || section.spacing.mt);
-							if(_style.indexOf('%') > 0){
-								styleString += 'margin-top: ' + _style + ';';
-							}
-							else{
-								styleString += 'padding-top: ' + _style + 'px;';
-							}
+							_style = (section.spacing.mtsm || section.spacing.mtmd || section.spacing.mt); 
+							styleString += 'margin-top: ' + applyStyle(_style)  + ';';
 						}
 
 						if (section.spacing.mbsm || section.spacing.mbmd || section.spacing.mb) {
 							_style = (section.spacing.mbsm || section.spacing.mbmd || section.spacing.mb);
-							if(_style.indexOf('%') > 0){
-								styleString += 'margin-bottom: ' + _style + ';';
-							}
-							else{
-								styleString += 'margin-bottom: ' + _style + 'px;';
-							}
+							styleString += 'margin-bottom: ' + applyStyle(_style)  + ';';
 						}
 
 						if (section.spacing.mlsm || section.spacing.mlmd || section.spacing.ml) {
@@ -418,63 +357,33 @@
 	            case 2:
 	                if (section && section.spacing) {
 						if (section.spacing.ptmd || section.spacing.pt) {
-							_style = (section.spacing.ptmd || section.spacing.pt);
-							if(_style.indexOf('%') > 0){
-								styleString += 'padding-top: ' + _style + ';';
-							}
-							else{
-								styleString += 'padding-top: ' + _style + 'px;';
-							}
+							_style = (section.spacing.ptmd || section.spacing.pt); 
+							styleString += 'padding-top: ' + applyStyle(_style)  + ';';
 						}
 
 						if (section.spacing.pbmd || section.spacing.pb) {
 							_style = (section.spacing.pbmd || section.spacing.pb);
-							if(_style.indexOf('%') > 0){
-								styleString += 'padding-bottom: ' + _style + ';';
-							}
-							else{
-								styleString += 'padding-top: ' + _style + 'px;';
-							}
+							styleString += 'padding-bottom: ' + applyStyle(_style)  + ';';
 						}
 
 						if (section.spacing.plmd || section.spacing.pl) {
 							_style = (section.spacing.plmd || section.spacing.pl);
-							if(_style.indexOf('%') > 0){
-								styleString += 'padding-left: ' + _style + ';';
-							}
-							else{
-								styleString += 'padding-left: ' + _style + 'px;';
-							}
+							styleString += 'padding-left: ' + applyStyle(_style)  + ';';
 						}
 
 						if (section.spacing.prmd || section.spacing.pr) {
 							_style = (section.spacing.prmd || section.spacing.pr);
-							if(_style.indexOf('%') > 0){
-								styleString += 'padding-right: ' + _style + ';';
-							}
-							else{
-								styleString += 'padding-right: ' + _style + 'px;';
-							}
+							styleString += 'padding-right: ' + applyStyle(_style)  + ';';
 						}
 
 						if (section.spacing.mtmd || section.spacing.mt) {
 							_style = (section.spacing.mtmd || section.spacing.mt);
-							if(_style.indexOf('%') > 0){
-								styleString += 'margin-top: ' + _style + ';';
-							}
-							else{
-								styleString += 'margin-top: ' + _style + 'px;';
-							}
+							styleString += 'margin-top: ' + applyStyle(_style)  + ';';
 						}
 
 						if (section.spacing.mbmd || section.spacing.mb) {
-							_style = (section.spacing.mbmd || section.spacing.mb);
-							if(_style.indexOf('%') > 0){
-								styleString += 'margin-bottom: ' + _style + ';';
-							}
-							else{
-								styleString += 'margin-bottom: ' + _style + 'px;';
-							}
+							_style = (section.spacing.mbmd || section.spacing.mb); 
+								styleString += 'margin-bottom: ' + applyStyle(_style)  + ';';
 						}
 
 						if (section.spacing.mlmd || section.spacing.ml) {
@@ -515,39 +424,35 @@
 	            default:
 	            	if (section && section.spacing) {
 						if (section.spacing.pt) {
-							styleString += (section.spacing.pt.toString().indexOf('%') > 0) ? 'padding-top: ' + section.spacing.pt + ';' : 'padding-top: ' + section.spacing.pt + 'px;';
+							styleString +=  'padding-top: ' + applyStyle(section.spacing.pt) + ';';
 						}
 
 						if (section.spacing.pb) {
-							styleString += (section.spacing.pb.toString().indexOf('%') > 0) ? 'padding-bottom: ' + section.spacing.pb + ';' : 'padding-bottom: ' + section.spacing.pb + 'px;';
+							styleString +=  'padding-bottom: ' + applyStyle(section.spacing.pb) + ';';
 						}
 
 						if (section.spacing.pl) {
-							styleString += (section.spacing.pl.toString().indexOf('%') > 0) ? 'padding-left: ' + section.spacing.pl + ';' : 'padding-left: ' + section.spacing.pl + 'px;';
+							styleString +=  'padding-left: ' + applyStyle(section.spacing.pl) + ';';
 						}
 
 						if (section.spacing.pr) {
-							styleString += (section.spacing.pr.toString().indexOf('%') > 0) ? 'padding-right: ' + section.spacing.pr + ';' : 'padding-right: ' + section.spacing.pr + 'px;';
+							styleString +=  'padding-right: ' + applyStyle(section.spacing.pr)+ ';' ;
 						}
 
 						if (section.spacing.mt) {
-							styleString += (section.spacing.mt.toString().indexOf('%') > 0) ? 'margin-top: ' + section.spacing.mt + ';' : 'margin-top: ' + section.spacing.mt + 'px;';
+							styleString += 'margin-top: ' + applyStyle(section.spacing.mt) + ';';
 						}
 
 						if (section.spacing.mb) {
-							styleString += (section.spacing.mb.toString().indexOf('%') > 0) ? 'margin-bottom: ' + section.spacing.mb + ';' : 'margin-bottom: ' + section.spacing.mb + 'px;';
+							styleString +=  'margin-bottom: ' + applyStyle(section.spacing.mb)+ ';' ;
 						}
 
-						if (section.spacing.ml) {
-							var type;
-							(section.spacing.ml.indexOf("%") > -1) ? type = "" : type = "px";
-							styleString += section.spacing.ml == 'auto' ? 'margin-left: ' + section.spacing.ml + ';float: none;' : 'margin-left: ' + section.spacing.ml + type +';';
+						if (section.spacing.ml) { 
+							styleString += 'margin-left: ' +applyStyle(section.spacing.ml)  + ';float: none;' ;
 						}
 
-						if (section.spacing.mr) {
-							var spacing_type;
-							(section.spacing.mr.indexOf("%") > -1) ? spacing_type = "" : spacing_type = "px";
-							styleString += (section.spacing.mr == 'auto') ? 'margin-right: ' + section.spacing.mr + ';float: none;' : 'margin-right: ' + section.spacing.mr + spacing_type + ';';
+						if (section.spacing.mr) { 
+							styleString += 'margin-right: ' + applyStyle(section.spacing.mr) + ';float: none;' ;
 						}
 
 						if (section.spacing.mw) {
@@ -630,7 +535,14 @@
 
 			return styleString;
 		}
-
+		function applyStyle(value){
+			value=""+value;
+			value=value.toLowerCase(); 
+			 if(!( value==='auto' || value.indexOf("%") > -1 || value.indexOf("px")>-1)){ 
+				value +="px";
+			}
+			return value;
+		}
 
 		function resizeSliderImagesToFullHeight(section) {
 			if (section) {
@@ -654,9 +566,14 @@
 					}
 					sectionElement.find(".single-testimonial .component-slider-image img").css("min-height", sectionElementTextHeight);
 					var windowWidth = angular.element($window).width();
-					if(sectionElement.hasClass("ssb-page-section-layout-nav-hero-v4") && windowWidth < 768)
+					if(sectionElement.hasClass("ssb-page-section-layout-nav-hero-v4") && windowWidth < 768){
 						sectionElement.find(".flex-container-absolute-column").css("min-height", sectionElementTextHeight);
-
+					}
+					if((sectionElement.hasClass("ssb-section-amm") && windowWidth>768 ) ||
+					   (sectionElement.hasClass("ssb-section-wmm") && windowWidth>768 && windowWidth<1025 )
+					){
+						sectionElement.find("ul.slick-dots").css('top',(sectionElementTextHeight-80)+'px')
+					}
 				}
 			}
 		}
@@ -887,6 +804,7 @@
 
 					if (component.spacing.mt) {
 						styleString += 'margin-top: ' + component.spacing.mt + 'px;';
+						
 					}
 
 					if (component.spacing.mb) {

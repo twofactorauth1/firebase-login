@@ -139,9 +139,11 @@
 
                 if (isAwesomeIcon) {
                     if (selectedFontSize && selectedColor) {
+                        selectedFontSize=selectedFontSize.toLowerCase().replace("px","");
                         $(getSelectionParentElement()).parents('.fr-fontAwesomeIcon').detach();
                         b.html.insert('<span class="fr-fontAwesomeIcon fr-emoticon">' + "<span style='color:" + selectedColor + "; font-size: " + selectedFontSize + "px' class='fa fa-" + selectedIcon + "'>&nbsp;</span>" + "</span>" + a.FroalaEditor.MARKERS, true);
                     } else if (selectedFontSize) {
+                        selectedFontSize=selectedFontSize.toLowerCase().replace("px","")
                         $(getSelectionParentElement()).parents('.fr-fontAwesomeIcon').detach();
                         b.html.insert('<span class="fr-fontAwesomeIcon fr-emoticon">' + "<span style='font-size: " + selectedFontSize + "px' class='fa fa-" + selectedIcon + "'>&nbsp;</span>" + "</span>" + a.FroalaEditor.MARKERS, true);
                     } else if (selectedColor) {

@@ -550,7 +550,7 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
         SimpleSiteBuilderService.setActiveComponent(index);
     }
 
-    function setActiveSection(index) {
+    function setActiveSection(index) { 
         vm.uiState.showSectionPanel = false;
         $timeout(function() {
           SimpleSiteBuilderService.setActiveSection(index);
@@ -560,6 +560,7 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
             var name = $filter('cleanType')(section.title || section.name).toLowerCase().trim().replace(' ', '-') + ' Section';
             vm.uiState.navigation.sectionPanel.loadPanel({ id: '', name: name });
             vm.uiState.showSectionPanel = true;
+            vm.uiState.activeSectionIndex=index;
             vm.scrollToActiveSection();
           }
           else{

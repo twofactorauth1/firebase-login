@@ -168,9 +168,28 @@ function ssbEditWrap($rootScope, $compile, $timeout, SimpleSiteBuilderService,Ut
                 }
 
                 function handleSectionOrComponentMouseLeave(e) {
+                    var isElement = element.hasClass('ssb-element');
+                    var isImage = element.hasClass('ssb-img');
+                    if(isImage || isElement){
+                        var componentScope = element.closest('.ssb-component').scope();
+                        if (componentScope) {
+                            if(componentScope.vm && componentScope.vm.uiState.activeElement)
+                                if(componentScope.vm.uiState.activeElement.type ==='ssb-element-text'){
+                                    $timeout(function() {
+                                        componentScope.ssbElement = { title: 'Text Element', type: 'Text Element' };
+                                    }, 0);                                    
+                                }
+                                else if(componentScope.vm.uiState.activeElement.type ==='ssb-element-image'){
+                                    $timeout(function() {
+                                        componentScope.ssbElement = { title: 'Image Overlay', type: 'Image Overlay'};
+                                    }, 0);
+                                }
+                        }
+                    }
                     element.removeClass('ssb-on');
                     element.find('.editable-title:first').removeClass('ssb-on');
                     element.find('.editable-cover:first').removeClass('ssb-on');
+                    
                 }
 
                 function handleComponentPartialAreaMouseLeave(e) {

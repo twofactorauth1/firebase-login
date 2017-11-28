@@ -403,6 +403,10 @@
                 }
 
                 move();
+                setTimeout(function(){
+                  editor.events.trigger("contentChanged");
+                //editor.selection.save();
+                })
         }, dragStart, dragStop);
 
         draggable(slider, function (dragX, dragY) {
@@ -410,6 +414,10 @@
             currentHue = parseFloat(dragY / slideHeight);
             isEmpty = false;
             move();
+            setTimeout(function(){
+              editor.events.trigger("contentChanged");
+            //editor.selection.save();
+            })
         }, dragStart, dragStop);
 
         draggable(dragger, function (dragX, dragY, e) {
@@ -421,6 +429,10 @@
             isEmpty = false;
 
             move();
+            setTimeout(function(){
+              editor.events.trigger("contentChanged");
+            //editor.selection.save();
+            })
         }, dragStart, dragStop);
 
         function dragStart() {
