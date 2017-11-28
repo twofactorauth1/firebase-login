@@ -378,7 +378,7 @@ app.directive("elem", function ($rootScope, $timeout, $compile, SimpleSiteBuilde
 								}
 
 							}).on('froalaEditor.focus', function (e, editor) {
-								editor.selection.save();
+								//editor.selection.save();
 								if (checkIfPageEditor(attrs)) {
 									UtilService.flyoverhideonclick();
 								}
