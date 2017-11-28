@@ -167,8 +167,15 @@ _.extend(view.prototype, BaseView.prototype, {
                     if(value.website.resources.userScripts.global.sanitized){
                         userScripts.push(value.website.resources.userScripts.global.sanitized);
                     }
-                    if(pageHolder[handle] && pageHolder[handle].handle && value.website.resources.userScripts[pageHolder[handle].handle] && value.website.resources.userScripts[pageHolder[handle].handle].sanitized){
-                        userScripts.push(value.website.resources.userScripts[pageHolder[handle].handle].sanitized);
+                    var _handle = "";
+                    if(pageHolder[handle] && pageHolder[handle].handle){
+                        _handle = pageHolder[handle].handle;
+                        if(_handle == 'blog-list'){
+                            _handle = 'blog';
+                        }
+                    }
+                    if(_handle && value.website.resources.userScripts[_handle] && value.website.resources.userScripts[_handle].sanitized){
+                        userScripts.push(value.website.resources.userScripts[_handle].sanitized);
                     }
                 
                     if(userScripts.length){
@@ -521,8 +528,15 @@ _.extend(view.prototype, BaseView.prototype, {
                     if(value.website.resources.userScripts.global.sanitized){
                         userScripts.push(value.website.resources.userScripts.global.sanitized);
                     }
-                    if(pageHolder[handle] && pageHolder[handle].handle && value.website.resources.userScripts[pageHolder[handle].handle] && value.website.resources.userScripts[pageHolder[handle].handle].sanitized){
-                        userScripts.push(value.website.resources.userScripts[pageHolder[handle].handle].sanitized);
+                    var _handle = "";
+                    if(pageHolder[handle] && pageHolder[handle].handle){
+                        _handle = pageHolder[handle].handle;
+                        if(_handle == 'blog-list'){
+                            _handle = 'blog';
+                        }
+                    }
+                    if(_handle && value.website.resources.userScripts[_handle] && value.website.resources.userScripts[_handle].sanitized){
+                        userScripts.push(value.website.resources.userScripts[_handle].sanitized);
                     }
                 
                     if(userScripts.length){
@@ -786,8 +800,15 @@ _.extend(view.prototype, BaseView.prototype, {
                     if(value.website.resources.userScripts.global.sanitized){
                         userScripts.push(value.website.resources.userScripts.global.sanitized);
                     }
-                    if(pageHolder[handle] && pageHolder[handle].handle && value.website.resources.userScripts[pageHolder[handle].handle] && value.website.resources.userScripts[pageHolder[handle].handle].sanitized){
-                        userScripts.push(value.website.resources.userScripts[pageHolder[handle].handle].sanitized);
+                    var _handle = "";
+                    if(pageHolder[handle] && pageHolder[handle].handle){
+                        _handle = pageHolder[handle].handle;
+                        if(_handle == 'blog-list'){
+                            _handle = 'blog';
+                        }
+                    }
+                    if(_handle && value.website.resources.userScripts[_handle] && value.website.resources.userScripts[_handle].sanitized){
+                        userScripts.push(value.website.resources.userScripts[_handle].sanitized);
                     }
                 
                     if(userScripts.length){
