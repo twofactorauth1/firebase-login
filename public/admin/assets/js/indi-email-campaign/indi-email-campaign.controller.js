@@ -56,7 +56,7 @@
         vm.state.recipients = [];
         vm.state.recipientsToRemove = [];
         vm.state.originalRecipients = [];
-        
+
         vm.uiState.selectedContacts = {
             individuals: [],
             newEmails: []
@@ -500,6 +500,7 @@
             });
             if (contact) {
                 existingContactIndex = _.indexOf(vm.state.recipients, contact);
+                vm.state.campaign.contacts.splice(existingContactIndex, 1);
             }
 
             if (existingContactIndex > -1) {
@@ -519,9 +520,9 @@
                 if (!tempTags.length)
                     tempTags.push('No Tag');
                 var tagExists = _.intersection(tempTags, tags);
-                if (tagExists.length === 0) {
+                //if (tagExists.length === 0) {
                     vm.state.recipients.splice(existingContactIndex, 1);
-                }
+               // }
 
             }
             // clear search text
@@ -610,7 +611,7 @@
 
         function loadSavedTagsFn() {
             vm.uiState.dataLoaded = false;
-            _.each(vm.state.campaign.contactTags, function (tag) {  
+            _.each(vm.state.campaign.contactTags, function (tag) {
                 if (tag && tag === 'No Tag')
                     vm.toggleSelectionFn(tag);
                 else{
@@ -627,11 +628,11 @@
                         vm.toggleSelectionFn(tag.matchingTag);
                 }
             });
-            
+
             $timeout(function() {
                vm.state.originalRecipients = angular.copy(vm.state.recipients);
             }, 0);
-            vm.uiState.dataLoaded = true; 
+            vm.uiState.dataLoaded = true;
         }
 
         function checkIfDirtyFn() {
@@ -900,7 +901,7 @@
                         if(campaign.emailSettings) {
                             var sendAt = campaign.emailSettings.sendAt;
                             //sendAtDateISOString = moment.utc(campaign.emailSettings.sendAt).subtract('months', 1).toISOString();
-                            var _dateString = sendAt.month + "/" + sendAt.day + "/" + sendAt.year + " " + sendAt.hour + ":" + sendAt.minute;                                                                                    
+                            var _dateString = sendAt.month + "/" + sendAt.day + "/" + sendAt.year + " " + sendAt.hour + ":" + sendAt.minute;
                             sendAtDateISOString =  moment.utc(_dateString).toISOString();
                         }
 
@@ -931,7 +932,7 @@
                                     vm.loadSavedTagsFn();
                                 });
                             } else {
-                                vm.loadSavedTagsFn();                                
+                                vm.loadSavedTagsFn();
                                 vm.uiState.contactLimitExceeded = true;
                             }
                         })

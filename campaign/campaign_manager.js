@@ -122,13 +122,13 @@ module.exports = {
                     name: new RegExp('^'+ title +'$', "i")
                 }
             }
-            
+
             campaignDao.exists(query, $$.m.Campaign, function(err, value){
             if(err) {
                 self.log.error('Error getting campaign:', err);
                 return fn(err, null);
             } else {
-                    return fn(null, value);  
+                    return fn(null, value);
                 }
         });
     },
@@ -780,7 +780,7 @@ module.exports = {
                                 });
 
                                 campaignDao.batchUpdate(contacts, $$.m.Contact, function(err, updatedContacts){
-                                    
+
                                 });
                             }
                         });
@@ -825,6 +825,7 @@ module.exports = {
                                                 return fn(err, null);
                                             }
                                             app.render('emails/base_email_v2', emailMessageManager.contentTransformations(email.toJSON()), function(err, html) {
+                                                 console.log('--------------------------base------email ');
                                                 if (err) {
                                                     self.log.error('error rendering html: ' + err);
                                                     self.log.warn('email will not be sent.');
@@ -1470,15 +1471,23 @@ module.exports = {
         self.log.debug('>> cancelRunningCampaign');
         var query = {
             accountId: accountId,
+            _id: campaignId,
+            contactId: {$in : [contactId]}
+        };
+        var query_flow = {
+            accountId: accountId,
             campaignId: campaignId,
             contactId: contactId
         };
+
         campaignDao.exists(query, $$.m.Campaign, function(err, value){
+
             if(err) {
                 self.log.error('Error getting campaign:', err);
                 return fn(err, null);
             } else if(value === true) {
-               campaignDao.removeByQuery(query, $$.m.CampaignFlow, function(err, value){
+               campaignDao.removeByQuery(query_flow, $$.m.CampaignFlow, function(err, value){
+
                     if(err) {
                         self.log.error('Error deleting campaign flow: ' + err);
                         return fn(err, null);
