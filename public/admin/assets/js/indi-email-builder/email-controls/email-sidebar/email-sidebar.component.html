@@ -12,7 +12,9 @@
             <li ng-click="vm.uiState.openSidebarPanel = 'settings'" class="nav-tab" ng-class="{ 'nav-tab-is-active': vm.uiState.openSidebarPanel === 'settings' }">
                 <div><div class="ti-files display-ib"></div>Settings</div>
             </li>
-
+            <li ng-click="vm.uiState.openSidebarPanel = 'content'" class="nav-tab" ng-class="{ 'nav-tab-is-active': vm.uiState.openSidebarPanel === 'content' }">
+                <div><div class="ti-pencil-alt display-ib"></div>Content</div>
+            </li>
             <!-- <li ng-click="vm.uiState.openSidebarPanel = 'design'" class="nav-tab" ng-class="{ 'nav-tab-is-active': vm.uiState.openSidebarPanel === 'design' }">
                 <div><div class="ti-brush display-ib"></div>Design</div>
             </li> -->
@@ -154,10 +156,66 @@
         </div>
     </div>
 
-    <!-- <div ng-if="vm.uiState.openSidebarPanel === 'content'" class="site-editor-group site-editor-group-content editor-group tab-content">
+    <div ng-if="vm.uiState.openSidebarPanel === 'content'" class="site-editor-group site-editor-group-content editor-group tab-content">
         <div class="tab-pane" ng-class="{ 'active': vm.uiState.openSidebarPanel === 'content' }">
+         <section class="ssb-sidebar-panel-inner-container">
+                <header class="ssb-sidebar-panel-header">
+                    <h4 class="ssb-sidebar-sub-heading">
+                        <span>Page Sections ({{vm.state.email.components.length || 0}})</span>
+                    </h4>
+
+                    <div class="close-panel ti-close"  ng-click="vm.uiState.openSidebarPanel = ''"></div>
+                </header>
+
+                 <button ng-click="vm.uiState.openSidebarPanel = 'add'" class="btn btn-primary">Add Section</button>
+
+                <ul ng-if="vm.state.email.components" class="ssb-sidebar-page-sections-list list-unstyled" ng-sortable="vm.sortableOptions" ng-model="vm.state.email.components">
+                    <li ng-repeat="section in vm.state.email.components track by $index" class="ssb-page-section-settings-item" ng-class="{'ssb-sidebar-move-handle': !vm.uiState.isBlogPage}">
+                        <div ng-hide="vm.uiState.isBlogPage" class="ssb-sidebar-item-icon ti-move display-ib"></div>
+                        <div
+                            ng-hide="vm.uiState.componentTypes[vm.uiState.activeComponentIndex].isEdit "
+                            class="ssb-sidebar-item-icon ssb-sidebar-item-icon-offset-1 ti-close display-ib"
+                            ng-if="vm.uiState.activeComponentIndex === $index" ng-click="vm.removeComponentFromSection(vm.uiState.activeComponentIndex)"
+                            tooltip-placement="left"
+                            tooltip="Remove section">
+                        </div>
+                        <div
+                            ng-hide="vm.uiState.componentTypes[vm.uiState.activeComponentIndex].isEdit"
+                            class="ssb-sidebar-item-icon ssb-sidebar-item-icon-offset-2 ti-pencil display-ib"
+                            ng-if="vm.uiState.activeComponentIndex === $index"
+                            ng-click="vm.uiState.accordion.sections[vm.uiState.activeComponentIndex].isEdit = true; vm.editSectionName('editable_{{section._id}}')"
+                            tooltip-placement="left"
+                            tooltip="Rename section">
+                        </div>
+                        <div
+                            ng-hide="vm.uiState.componentTypes[vm.uiState.activeComponentIndex].isEdit"
+                            class="ssb-sidebar-item-icon ssb-sidebar-item-icon-offset-3 display-ib ti-eye"
+                            ng-if="vm.uiState.activeComponentIndex === $index"
+                            ng-click="vm.hideSectionFromPage(section, vm.uiState.activeComponentIndex)"
+                            tooltip-placement="left"
+                            tooltip="Show/hide section">
+                        </div>
+
+                        <div class="accordion panel-group">
+                            <div class="ssb-sidebar-sortable-item panel panel-default" ng-click="vm.setActive($index)" ng-class="{ 'ssb-sidebar-section-open': vm.uiState.activeComponentIndex === $index }">
+                                <div class="panel-heading">
+                                    <h4 class="panel-title">
+                                        <a href="javascript:void(0)" class="accordion-toggle">
+                                        <span ng-class="{ 'hidden-faded': !vm.showSection(section) }" ng-if="!vm.uiState.accordion.sections[vm.uiState.activeComponentIndex].isEdit">{{ vm.getSectionTitle(section.type) }}</span>
+                                        <span onhide="vm.uiState.accordion.sections[vm.uiState.activeComponentIndex].isEdit=false" id="editable_{{section._id}}" ng-if="vm.uiState.accordion.sections[vm.uiState.activeComponentIndex].isEdit" editable-text="section.type">{{ vm.getSectionTitle(section.type) }}</span>
+                                        </a>
+                                    </h4>
+                                </div>
+                            </div>
+                        </div>
+
+                    </li>
+                </ul>
+
+
+         </section>
         </div>
-    </div> -->
+    </div>
 
     <!-- <div ng-if="vm.uiState.openSidebarPanel === 'design'" class="site-editor-group site-editor-group-design editor-group tab-content">
         <div class="tab-pane" ng-class="{ 'active': vm.uiState.openSidebarPanel === 'design' }">
