@@ -412,7 +412,7 @@
         if(editor.opts.isButton)
             editor.opts.button.css('background-color', val);
         else if(initSpectrum)
-          editor.format.applyStyle(' ', '');            
+          editor.format.removeStyle(' ');          
         else{          
             if($(editor.$el).find("span") && $(editor.$el).find("span").length)
                 $(editor.$el).find("span").removeClass("ssb-bg-color-inline-block");
@@ -486,7 +486,7 @@
         }
         
         else if(initSpectrum)
-          editor.format.applyStyle(' ', '');
+          editor.format.removeStyle(' ');
         else
           editor.format.applyStyle('color', val);
 
