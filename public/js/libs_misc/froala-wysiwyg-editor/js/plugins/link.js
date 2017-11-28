@@ -77,9 +77,10 @@
 
       if (!$current_image && editor.$wp) {
         var c_el = editor.selection.ranges(0).commonAncestorContainer;
-        if (c_el && (c_el.contains && c_el.contains(editor.el) || !editor.el.contains(c_el) || editor.el == c_el)) c_el = null;
-        if (c_el && c_el.tagName === 'A') return c_el;
 
+        if (c_el && (c_el.contains && c_el.contains(editor.el) || !editor.el.contains(c_el) || editor.el == c_el)) c_el = null;
+
+        if (c_el && c_el.tagName === 'A') return c_el;
         var s_el = editor.selection.element();
         var e_el = editor.selection.endElement();
 
@@ -92,19 +93,29 @@
         }
 
         if (e_el && (e_el.contains && e_el.contains(editor.el) || !editor.el.contains(e_el) || editor.el == e_el)) e_el = null;
+
         if (s_el && (s_el.contains && s_el.contains(editor.el) || !editor.el.contains(s_el) || editor.el == s_el)) s_el = null;
 
         if (e_el && e_el == s_el && e_el.tagName == 'A') {
+
+          // We do not clicking at the end / input of links because in IE the selection is changing shortly after mouseup.
+          // https://jsfiddle.net/jredzam3/
+          if ((editor.browser.msie || editor.helpers.isMobile()) && (editor.selection.info(s_el).atEnd || editor.selection.info(s_el).atStart)) {
+            return null;
+          }
+
           return s_el;
         }
 
         return null;
       }
       else if (editor.el.tagName == 'A') {
+
         return editor.el;
       }
       else {
         if ($current_image && $current_image.get(0).parentNode && $current_image.get(0).parentNode.tagName == 'A') {
+
           return $current_image.get(0).parentNode;
         }
       }
@@ -112,8 +123,8 @@
 
     function allSelected () {
       var $current_image = editor.image ? editor.image.get() : null;
-
       var selectedLinks = [];
+
       if ($current_image) {
         if ($current_image.get(0).parentNode.tagName == 'A') {
           selectedLinks.push($current_image.get(0).parentNode);
@@ -127,8 +138,10 @@
 
         if (editor.win.getSelection) {
           var sel = editor.win.getSelection();
+
           if (sel.getRangeAt && sel.rangeCount) {
             linkRange = editor.doc.createRange();
+
             for (var r = 0; r < sel.rangeCount; ++r) {
               range = sel.getRangeAt(r);
               containerEl = range.commonAncestorContainer;
@@ -139,28 +152,37 @@
 
               if (containerEl && containerEl.nodeName.toLowerCase() == 'a') {
                 selectedLinks.push(containerEl);
-              } else {
+              }
+              else {
                 links = containerEl.getElementsByTagName('a');
+
                 for (var i = 0; i < links.length; ++i) {
                   linkRange.selectNodeContents(links[i]);
+
                   if (linkRange.compareBoundaryPoints(range.END_TO_START, range) < 1 && linkRange.compareBoundaryPoints(range.START_TO_END, range) > -1) {
                     selectedLinks.push(links[i]);
                   }
                 }
               }
             }
+
             // linkRange.detach();
           }
-        } else if (editor.doc.selection && editor.doc.selection.type != 'Control') {
+        }
+        else if (editor.doc.selection && editor.doc.selection.type != 'Control') {
           range = editor.doc.selection.createRange();
           containerEl = range.parentElement();
+
           if (containerEl.nodeName.toLowerCase() == 'a') {
             selectedLinks.push(containerEl);
-          } else {
+          }
+          else {
             links = containerEl.getElementsByTagName('a');
             linkRange = editor.doc.body.createTextRange();
+
             for (var j = 0; j < links.length; ++j) {
               linkRange.moveToElementText(links[j]);
+
               if (linkRange.compareEndPoints('StartToEnd', range) > -1 && linkRange.compareEndPoints('EndToStart', range) < 1) {
                 selectedLinks.push(links[j]);
               }
@@ -1057,8 +1079,7 @@
     focus: false,
     callback: function (cmd, val) {
       var $popup = this.popups.get('link.insert');
-      $popup.find('input[name="target"].fr-link-attr[type="checkbox"]').prop('checked', false);
-      
+      $popup.find('input[name="target"].fr-link-attr[type="checkbox"]').prop('checked', false);      
     }
   })
 
