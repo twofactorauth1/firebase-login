@@ -467,19 +467,6 @@ _.extend(router.prototype, BaseRouter.prototype, {
         }
     },
 
-    /*
-    serveCachedPage: function(req, resp) {
-        var self = this;
-        var accountId = self.unAuthAccountId(req);
-        var pageName = req.params.page;
-        if(pageName.indexOf('.html') === -1) {
-            pageName +=".html";
-        }
-        pagecacheManager.getLocalCachedPageForTesting(accountId, pageName, resp);
-        //pagecacheManager.getCachedPage(accountId, pageName, resp);
-    },
-    */
-
     optimizedSignup: function(req, resp) {
         var self = this;
         var accountId = self.unAuthAccountId(req) || appConfig.mainAccountID;
