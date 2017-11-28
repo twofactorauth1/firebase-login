@@ -160,11 +160,21 @@ _.extend(view.prototype, BaseView.prototype, {
                 value.website.resources.userScripts = value.website.resources.userScripts || {};
                 value.website.resources.userScripts.global = value.website.resources.userScripts.global || {};
 
+                data.userScripts = "";
                 if(value.showhide && value.showhide.userScripts && value.website.resources.toggles && value.website.resources.toggles.userScripts){
                     value.website.resources.userScripts.global = value.website.resources.userScripts.global || {};
-                }
-                else{
-                    value.website.resources.userScripts.global = {};
+                    var userScripts = [];
+                    if(value.website.resources.userScripts.global.sanitized){
+                        userScripts.push(value.website.resources.userScripts.global.sanitized);
+                    }
+                    if(pageHolder[handle] && pageHolder[handle].handle && value.website.resources.userScripts[pageHolder[handle].handle] && value.website.resources.userScripts[pageHolder[handle].handle].sanitized){
+                        userScripts.push(value.website.resources.userScripts[pageHolder[handle].handle].sanitized);
+                    }
+                
+                    if(userScripts.length){
+                        data.userScripts = userScripts.join('\n\n');
+                    }
+
                 }
                 
                 data.customCss = "";
@@ -504,11 +514,21 @@ _.extend(view.prototype, BaseView.prototype, {
                 value.website.resources = value.website.resources || {};
                 value.website.resources.userScripts = value.website.resources.userScripts || {};
                 value.website.resources.userScripts.global = value.website.resources.userScripts.global || {};
+                data.userScripts = "";
                 if(value.showhide && value.showhide.userScripts && value.website.resources.toggles && value.website.resources.toggles.userScripts){
                     value.website.resources.userScripts.global = value.website.resources.userScripts.global || {};
-                }
-                else{
-                    value.website.resources.userScripts.global = {};
+                    var userScripts = [];
+                    if(value.website.resources.userScripts.global.sanitized){
+                        userScripts.push(value.website.resources.userScripts.global.sanitized);
+                    }
+                    if(pageHolder[handle] && pageHolder[handle].handle && value.website.resources.userScripts[pageHolder[handle].handle] && value.website.resources.userScripts[pageHolder[handle].handle].sanitized){
+                        userScripts.push(value.website.resources.userScripts[pageHolder[handle].handle].sanitized);
+                    }
+                
+                    if(userScripts.length){
+                        data.userScripts = userScripts.join('\n\n');
+                    }
+
                 }
                 data.customCss = "";
                 value.website.resources.customCss = value.website.resources.customCss || {};
@@ -759,11 +779,21 @@ _.extend(view.prototype, BaseView.prototype, {
                 value.website.resources.userScripts = value.website.resources.userScripts || {};
                 value.website.resources.userScripts.global = value.website.resources.userScripts.global || {};
                 
-                if(value.website.resources.toggles && value.website.resources.toggles.userScripts){
+                data.userScripts = "";
+                if(value.showhide && value.showhide.userScripts && value.website.resources.toggles && value.website.resources.toggles.userScripts){
                     value.website.resources.userScripts.global = value.website.resources.userScripts.global || {};
-                }
-                else{
-                    value.website.resources.userScripts.global = {};
+                    var userScripts = [];
+                    if(value.website.resources.userScripts.global.sanitized){
+                        userScripts.push(value.website.resources.userScripts.global.sanitized);
+                    }
+                    if(pageHolder[handle] && pageHolder[handle].handle && value.website.resources.userScripts[pageHolder[handle].handle] && value.website.resources.userScripts[pageHolder[handle].handle].sanitized){
+                        userScripts.push(value.website.resources.userScripts[pageHolder[handle].handle].sanitized);
+                    }
+                
+                    if(userScripts.length){
+                        data.userScripts = userScripts.join('\n\n');
+                    }
+
                 }
                 data.customCss = "";
                 value.website.resources.customCss = value.website.resources.customCss || {};
