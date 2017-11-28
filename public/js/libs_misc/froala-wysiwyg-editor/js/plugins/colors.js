@@ -410,9 +410,10 @@
         }
 
         if(editor.opts.isButton)
-            editor.opts.button.css('background-color', val);        
-        else{
-          
+            editor.opts.button.css('background-color', val);
+        else if(initSpectrum)
+          editor.format.applyStyle(' ', '');            
+        else{          
             if($(editor.$el).find("span") && $(editor.$el).find("span").length)
                 $(editor.$el).find("span").removeClass("ssb-bg-color-inline-block");
               editor.format.applyStyle('background-color', val);              
@@ -420,8 +421,6 @@
                  var color = $(this).css('background-color');          
                 return color != 'transparent' && color != 'rgba(0, 0, 0, 0)';
               }).addClass("ssb-bg-color-inline-block");
-          
-            
         }
         
         if(editor.opts.isButton)
@@ -482,11 +481,14 @@
           }
         }
 
-        if(editor.opts.isButton)
+        if(editor.opts.isButton){
             $(editor.selection.element()).css('color', val);
+        }
+        
+        else if(initSpectrum)
+          editor.format.applyStyle(' ', '');
         else
           editor.format.applyStyle('color', val);
-
 
         editor.opts.selectedElement.color = val;
 
