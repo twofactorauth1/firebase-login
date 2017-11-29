@@ -427,7 +427,7 @@ module.exports = {
                     function done(err){
                         if(err) {
                             self.log.error("Error building template:", err);
-                            resp.send("<p>Error</p>");
+                            resp.send("");
 
                         } else {
                             resp.send(html);
