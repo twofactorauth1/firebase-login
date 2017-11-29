@@ -234,12 +234,6 @@ if website
         window.indigenous.precache = window.indigenous.precache || {};
         window.indigenous.precache.siteData = window.indigenous.precache.siteData || {};
         window.indigenous.precache.siteData.linkList = !{JSON.stringify(website.linkLists)};
-
-if customFonts
-    script(type="text/javascript").
-        window.indigenous = window.indigenous || {};
-        window.indigenous.precache = window.indigenous.precache || {};
-        window.indigenous.precache.siteData = window.indigenous.precache.siteData || {};
-        window.indigenous.precache.siteData.customFonts = !{JSON.stringify(customFonts)};
-
+        
+| !{customFonts}
 | !{customCss}

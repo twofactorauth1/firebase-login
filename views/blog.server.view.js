@@ -49,7 +49,7 @@ _.extend(view.prototype, BaseView.prototype, {
             },
             function getCustomFonts(webpageData, page, cb){
                 assetManager.findByFontType(accountId, null, null, function(err, fonts){                
-                    data.customFonts = fonts;
+                    data.customFonts = self._renderCustomFonts(fonts);
                     cb(err, webpageData, page);
                 });
             },
@@ -179,7 +179,7 @@ _.extend(view.prototype, BaseView.prototype, {
                     }
                 
                     if(userScripts.length){
-                        data.userScripts = userScripts.join('\n\n');
+                        data.userScripts = userScripts.join('\n');
                     }
 
                 }
@@ -198,7 +198,7 @@ _.extend(view.prototype, BaseView.prototype, {
                     }
                 
                     if(customCss.length){
-                        data.customCss = customCss.join('\n\n');
+                        data.customCss = customCss.join('\n');
                     }
                 }
 
@@ -540,7 +540,7 @@ _.extend(view.prototype, BaseView.prototype, {
                     }
                 
                     if(userScripts.length){
-                        data.userScripts = userScripts.join('\n\n');
+                        data.userScripts = userScripts.join('\n');
                     }
 
                 }
@@ -558,7 +558,7 @@ _.extend(view.prototype, BaseView.prototype, {
                     }
                 
                     if(customCss.length){
-                        data.customCss = customCss.join('\n\n');
+                        data.customCss = customCss.join('\n');
                     }
                 }
                 if(pageHolder[handle]) {
@@ -691,7 +691,7 @@ _.extend(view.prototype, BaseView.prototype, {
             },
             function getCustomFonts(webpageData, page, cb){
                 assetManager.findByFontType(accountId, null, null, function(err, fonts){                
-                    data.customFonts = fonts;
+                    data.customFonts = self._renderCustomFonts(fonts);
                     cb(err, webpageData, page);
                 });
             },
@@ -812,7 +812,7 @@ _.extend(view.prototype, BaseView.prototype, {
                     }
                 
                     if(userScripts.length){
-                        data.userScripts = userScripts.join('\n\n');
+                        data.userScripts = userScripts.join('\n');
                     }
 
                 }
@@ -830,7 +830,7 @@ _.extend(view.prototype, BaseView.prototype, {
                     }
                 
                     if(customCss.length){
-                        data.customCss = customCss.join('\n\n');
+                        data.customCss = customCss.join('\n');
                     }
                 }
                 if(pageHolder[handle]) {
@@ -952,6 +952,23 @@ _.extend(view.prototype, BaseView.prototype, {
             self.cleanUp();
             self = data = value = null;
         });
+    },
+
+    _renderCustomFonts: function(fonts){
+        var _styleFonts = "";
+        if(fonts && fonts.length){
+            _styleFonts = "<style>";
+           _.each(fonts, function(font){
+
+                var _family = font.get("filename").substring(0, font.get("filename").indexOf('.')).replace(/ /g, "_");
+                _styleFonts += '@font-face { ' +
+                    'font-family: "' + _family + '"; ' +                
+                    'src: url("https:' + font.get("url") + '"); ' +
+                '} \n'
+            })
+            _styleFonts += '</style>';
+        }
+        return _styleFonts;        
     }
 });
 
