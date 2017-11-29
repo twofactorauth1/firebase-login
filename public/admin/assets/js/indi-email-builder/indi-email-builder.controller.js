@@ -749,7 +749,7 @@
          * TODO: consolidate usages (ssb-site-builder.controller.js)
          */
         function pageChanged(originalEmail, currentEmail) {
-
+            console.log(angular.equals(originalEmail, currentEmail),'-----difff---------',vm.state.pendingEmailChanges);
             if (!angular.equals(originalEmail, currentEmail) && !vm.state.pendingEmailChanges) {
                 var originalEmail = JSON.parse(angular.toJson(originalEmail));
                 var currentEmail = JSON.parse(angular.toJson(currentEmail));
@@ -798,7 +798,7 @@
                 }
 
             }
-            else if(angular.equals(originalEmail, currentEmail)  === true && vm.state.pendingEmailChanges === true){
+            else if(angular.equals(originalEmail, currentEmail)  === true && vm.state.pendingEmailChanges === true || angular.equals(originalEmail, currentEmail)  === true && vm.state.pendingEmailChanges === false){
                 return angular.equals(originalEmail, currentEmail)
             }
              else {
