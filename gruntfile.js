@@ -201,7 +201,7 @@ module.exports = function(grunt) {
             },
             css: {
                 src: [
-                    
+
                     'public/js/libs/bootstrap/dist/css/bootstrap.min.css',
                     'public/js/libs/bootstrap-social/bootstrap-social.css',
                     'public/js/libs/jqcloud2/dist/jqcloud.min.css',
@@ -451,6 +451,22 @@ module.exports = function(grunt) {
                     ]
                 }
             },
+            renameEmailComponent: {
+                options: {
+                    questions: [
+                        {
+                            config: 'dorenameEmailComponent.db', // arbitray name or config for any other grunt task
+                            type: 'list', // list, checkbox, confirm, input, password
+                            message: 'Which db you want this operation ? ', // Question to ask the user, function needs to return a string,
+                            default: true, // default value if nothing is entered
+                            choices: [
+                                { name: 'Test database', value: 'test' },
+                                { name: 'Production database', value: 'prod', checked:true }
+                                ]
+                        },
+                    ]
+                }
+            },
             enableSiteBuilderOnLegacyAccount: {
                 options: {
                     questions: [
@@ -618,6 +634,16 @@ module.exports = function(grunt) {
 
     });
 
+    grunt.registerTask('dorenameEmailComponent', 'A task to copy an page with its sections to an account from one db to another', function(){
+        var done = this.async();
+        var database = grunt.config('dorenameEmailComponent.db');
+
+            dbcopyutil.copyEmailComponentName(database, done);
+
+
+    });
+
+
 
 
     grunt.registerTask('doEnableSiteBuilderOnLegacyAccount', 'A task to enable SB on an account and update pages to be SB-compatible.', function(){
@@ -638,7 +664,7 @@ module.exports = function(grunt) {
 
         dbcopyutil.updateEmailCollection(done);
     });
-    
+
     grunt.registerTask('updateFooterYearText', 'A task to update footer year text', function(){
         var done = this.async();
 
@@ -655,6 +681,8 @@ module.exports = function(grunt) {
     grunt.registerTask('copyAccount',  ['prompt:copyAccount', 'doCopyAccount']);
 
     grunt.registerTask('copyPage',  ['prompt:copyPage', 'doCopyPage']);
+
+    grunt.registerTask('renameEmailComponent',  ['prompt:renameEmailComponent', 'dorenameEmailComponent']);
 
     grunt.registerTask('enableSiteBuilderOnLegacyAccount',  ['prompt:enableSiteBuilderOnLegacyAccount', 'doEnableSiteBuilderOnLegacyAccount']);
 

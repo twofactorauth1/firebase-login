@@ -88,7 +88,6 @@ var copyutil = {
          var self = this;
         self._copyAccountWithUpdatedStripeIDs(accountId, mongoConfig.TEST_MONGODB_CONNECT, mongoConfig.PROD_MONGODB_CONNECT, false, true, cb);
     },
-
     copyAccountFromTestToTest : function(accountId, cb) {
         var self = this;
         self._copyAccountWithUpdatedStripeIDs(accountId, mongoConfig.TEST_MONGODB_CONNECT, mongoConfig.TEST_MONGODB_CONNECT, true, null, cb);
@@ -196,7 +195,7 @@ var copyutil = {
                         cb();
                     });
                 }
-                else if(section.filter == 'products & services' && section.type !== 'products'){                    
+                else if(section.filter == 'products & services' && section.type !== 'products'){
                     section.orgConfig = [
                         {
                             "orgId" : 5,
@@ -425,7 +424,84 @@ var copyutil = {
             fn();
         });
     },
+    copyEmailComponentName : function( dbtype, fn) {
+            var srcMongo;
+            if(dbtype === 'test'){
+                srcMongo = mongoskin.db(mongoConfig.TEST_MONGODB_CONNECT, {safe: true});
+                console.log('updating test database emails...');
+            }else{
+                srcMongo = mongoskin.db(mongoConfig.TEST_MONGODB_CONNECT, {safe: true});
+                console.log('updating production database emails...');
+            }
 
+            var email = srcMongo.collection('emails');
+            var accounts = srcMongo.collection('accounts');
+
+            //get all the accounts
+            accounts.find({_id:2816}).toArray(function(err, _accounts){
+                    if (err) {
+                        console.log('Error getting _page: ' + err);
+                        return fn(err);
+                    }
+
+                async.eachSeries(_accounts, function(account, account_callback){
+                    console.log('updating emails of account : ',account._id);
+                    //find all the emails of current account
+                    email.find({'accountId':account._id}).toArray(function(err, emails){
+                        if (err) {console.log(emails.length);
+                            console.log('Error getting _page: ' + err);
+                            return fn(err);
+                        }
+
+                        console.log('total emails to be updated : ',emails.length);
+                        if(emails.length > 0){
+
+                            async.eachSeries(emails, function(_email, callback){
+
+                                var componets_data = _email.components;
+                                if(componets_data.length > 0){
+                                    var cp=_.map(componets_data, function(com, key){
+                                        com.display_name = com.type;
+                                        return com;
+                                    });
+
+                                     _email.components = cp;
+                                     email.update({_id : _email._id}, _email, function(err, savedSection){
+                                        if(err) {
+                                            console.log('Error saving section:' + err);
+                                            callback(err);
+                                        } else {
+                                            console.log('data upated for email ',_email._id);
+                                            callback(null);
+                                        }
+
+                                    });
+
+                                 }
+                                else{
+                                       callback(null);
+                                }
+
+
+                            }, function done(err,result){
+
+                               account_callback();
+                            });
+
+                        }
+                        else{
+
+                             account_callback();
+                        }
+                     });
+
+                     }, function done(err,result){
+                               fn();
+                     });
+                   });
+            console.log('updating emails....');
+
+    },
     _copyPage: function(srcPageId, destAccountId, srcDBUrl, destDBUrl, fn) {
         var srcMongo = mongoskin.db(srcDBUrl, {safe: true});
         var destMongo = mongoskin.db(destDBUrl, {safe: true});
@@ -445,7 +521,7 @@ var copyutil = {
                     if(pageToSave){
                         var sectionIdsArray=_.map(pageToSave.sections, function(section, key){ return section._id; });
                         cb(null,sectionIdsArray);
-                    }else{  
+                    }else{
                         console.log("Page not found with this id: "+srcPageId);
                         cb("Page not found with this id.");
                     }
@@ -741,7 +817,7 @@ var copyutil = {
                    }
                 });
             },
-            function(newAccountId, cb) { 
+            function(newAccountId, cb) {
                 console.log('saving privileges with accountId:' + newAccountId);
                 var privilegesCollection = destMongo.collection('privileges');
                 privilegeToSave.accountId = newAccountId;
@@ -951,7 +1027,7 @@ var copyutil = {
                             }else{
                                 cb();
                             }
-                        }); 
+                        });
                     }
                 });
             }
@@ -1072,7 +1148,7 @@ var copyutil = {
             });
         });
     },
-    
+
     updateFooterTextYear :function(oldYear, newYear, fn) {
         var srcURL = mongoConfig.TEST_MONGODB_CONNECT;
         //var srcURL = mongoConfig.PROD_MONGODB_CONNECT
@@ -1108,7 +1184,7 @@ var copyutil = {
 
         sections.find({'components.type':'thumbnail-slider', accountId: {$ne:0},  latest: {$ne:false}}).toArray(function(err, sectionArry){
             async.each(sectionArry, function(section, cb){
-                if(section.components && section.components.length && section.components[0].type == 'thumbnail-slider' && section.components[0].thumbnailCollection){                    
+                if(section.components && section.components.length && section.components[0].type == 'thumbnail-slider' && section.components[0].thumbnailCollection){
                     _.each(section.components[0].thumbnailCollection, function(image){
                         if(!image.img){
                             image.img = "<img src=\"" + image.url + "\">";
@@ -1128,7 +1204,7 @@ var copyutil = {
         });
     },
 
-    
+
     _updateBlogPages :function(fn) {
 
         var srcURL = mongoConfig.PROD_MONGODB_CONNECT,
@@ -1585,7 +1661,7 @@ var copyutil = {
                                 if(section[0].globalHeader !== true){
                                     section[0].global = false;
                                 }
-                                
+
                                 sectionsCollection.save(sectionData, function(err, savedSection){
                                     return _cb(err);
                                 });
