@@ -101,8 +101,7 @@ app.directive('featureListComponent', [function () {
 				view.animate( { scrollLeft: '-=100' }, 400);
 				if(view.scrollLeft()<1){ 
 					scope.scroll.element.left = false ;
-				}
-				//view.stop(false,true).animate({left:currentPosition},{ duration: 400});
+				} 
 			}
 			scope.moveRight = function (){
 				scope.scroll.started=1;
@@ -115,7 +114,7 @@ app.directive('featureListComponent', [function () {
 			}  
 			scope.$watch(function(){
 				var view = $(".list-features-"+scope.component._id);
-				if(view.length && window.innerWidth<=768){   
+				if(view.length && window.innerWidth<426){   
 					return  (view.width() - view[0].scrollWidth) < 0;
 				}
 				return false;
