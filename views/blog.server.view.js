@@ -972,6 +972,21 @@ _.extend(view.prototype, BaseView.prototype, {
             _styleFonts += '</style>';
         }
         return _styleFonts;        
+    },
+
+    _loadExternalScripts: function(page, preview){
+        var _types = _.uniq(_.pluck(_.flatten(_.pluck(page.get("sections"), 'components')), 'type'))
+        var scriptList = [];
+        var externalScripts = "";
+        _types.forEach(function (c) {
+            for (var k in externalScriptLookup.EXTERNAL_SCRIPT_LOOKUP) {
+                if ((externalScriptLookup.EXTERNAL_SCRIPT_LOOKUP[k].indexOf(c) > -1) && (scriptList.indexOf(k) === -1)) {
+                    scriptList.push(k);
+                    externalScripts += '\n' + k;
+                }
+            }
+        });
+        return externalScripts;
     }
 });
 
