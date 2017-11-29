@@ -243,7 +243,7 @@ _.extend(view.prototype, BaseView.prototype, {
                         data.customCss = customCss.join('\n');
                     }
                 }
-                data.externalScripts = self._loadExternalScripts(page);
+                data.externalScripts = self._loadExternalScripts(page, true);
 
                 if(pageHolder[handle]) {
                     data.title = pageHolder[handle].title || value.website.title;
@@ -1394,10 +1394,20 @@ _.extend(view.prototype, BaseView.prototype, {
         return _styleFonts;        
     },
 
-    _loadExternalScripts: function(page){
+    _loadExternalScripts: function(page, preview){
+        var _types = [];
+        if(preview){
+            _.each(page.get("sections"), function(section){
+                _types.push(_.uniq(_.pluck(section.get("components"), "type")));
+            })
+            _types = _.uniq(_.flatten(_types));
+        }
+        else{
+            _types =  _.uniq(_.pluck(_.flatten(_.pluck(page.get("sections"), 'components')), 'type'))
+        }
         var scriptList = [];
         var externalScripts = "";
-        _.uniq(_.pluck(_.flatten(_.pluck(page.get("sections"), 'components')), 'type')).forEach(function (c) {
+        _types.forEach(function (c) {
             for (var k in externalScriptLookup.EXTERNAL_SCRIPT_LOOKUP) {
                 if ((externalScriptLookup.EXTERNAL_SCRIPT_LOOKUP[k].indexOf(c) > -1) && (scriptList.indexOf(k) === -1)) {
                     scriptList.push(k);
