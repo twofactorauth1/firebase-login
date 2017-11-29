@@ -179,17 +179,17 @@
                             tooltip-placement="left"
                             tooltip="Remove section">
                         </div>
-                        <div
+                       <!--  <div
                             ng-hide="vm.uiState.componentTypes[vm.uiState.activeComponentIndex].isEdit"
                             class="ssb-sidebar-item-icon ssb-sidebar-item-icon-offset-2 ti-pencil display-ib"
                             ng-if="vm.uiState.activeComponentIndex === $index"
                             ng-click="vm.uiState.accordion.sections[vm.uiState.activeComponentIndex].isEdit = true; vm.editSectionName('editable_{{section._id}}')"
                             tooltip-placement="left"
                             tooltip="Rename section">
-                        </div>
+                        </div> -->
                         <div
                             ng-hide="vm.uiState.componentTypes[vm.uiState.activeComponentIndex].isEdit"
-                            class="ssb-sidebar-item-icon ssb-sidebar-item-icon-offset-3 display-ib ti-eye"
+                            class="ssb-sidebar-item-icon ssb-sidebar-item-icon-offset-2 display-ib ti-eye"
                             ng-if="vm.uiState.activeComponentIndex === $index"
                             ng-click="vm.hideSectionFromPage(section, vm.uiState.activeComponentIndex)"
                             tooltip-placement="left"

@@ -60,8 +60,7 @@ mainApp.controller('PreviewCtrl', ['$scope', '$rootScope', 'previewPagesService'
             'usePage': false
         };
 
-        previewPagesService($scope.websiteId, function (err, data) {
-            $scope.$emit('external.scripts.page.data', {page: data});
+        previewPagesService($scope.websiteId, function (err, data) {            
             console.log('previewPagesService ', data);
             if (err) {
                 console.warn('no page found', $location.$$path);

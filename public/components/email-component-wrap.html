@@ -1,10 +1,10 @@
 <table class="device-width" align="center" width="680" cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse;">
     <tr>
-        <td 
-            id="{{component.anchor || component._id}}" 
+        <td
+            id="{{component.anchor || component._id}}"
             ng-style="{'color': component.txtcolor || primaryTextColor}"
             class="component-wrap"
-            ng-if="component.visibility" 
+            ng-if="component.visibility"
             ng-class="{'editing': isEditing}"
             data-ng-include data-src="'/components/'+component.type+'_v'+component.version+'.html'">
         </td>

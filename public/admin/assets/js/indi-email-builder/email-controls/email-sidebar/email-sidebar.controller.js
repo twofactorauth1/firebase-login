@@ -533,7 +533,7 @@ function ssbEmailBuilderSidebarController($scope, $attrs, $filter, $document, $t
                 "email-3-col"  : "Content 3",
                 "email-footer"  : "Footer",
                 "email-social"  : "Social links",
-                "email-hr"  : "Email Header",
+                "email-hr"  : "Horizontal Rule",
         };
         return email_titles[type] || type;
      };

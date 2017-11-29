@@ -28,7 +28,7 @@
     }
 
     function setActive(componentIndex, compiled) {
-        console.log(componentIndex, compiled,'000000000000000000');
+
         vm.uiState.showSectionPanel = false;
         vm.uiState.navigation.sectionPanel.reset();
         vm.uiState.activeComponentIndex = undefined;

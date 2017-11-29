@@ -14,7 +14,9 @@ script.
     var firstScriptTag = document.getElementsByTagName('script')[0];
     firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
-| !{website.resources.userScripts.global.sanitized}
+| !{userScripts}
+| !{externalScripts}
+
 
 // - Google Analytics
 script.
@@ -32,7 +34,3 @@ script(type="text/javascript").
 
 script(src="https://cdn.trackjs.com/releases/current/tracker.js")
 // - End TrackJS
-
-external-scripts(class="external-scripts")
-custom-fonts(class="custom-fonts")
-user-scripts(class="user-scripts" handle="#{currentPageHandle}")
