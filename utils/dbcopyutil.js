@@ -430,24 +430,12 @@ var copyutil = {
                 srcMongo = mongoskin.db(mongoConfig.TEST_MONGODB_CONNECT, {safe: true});
                 console.log('updating test database emails...');
             }else{
-                srcMongo = mongoskin.db(mongoConfig.TEST_MONGODB_CONNECT, {safe: true});
+                srcMongo = mongoskin.db(mongoConfig.PROD_MONGODB_CONNECT, {safe: true});
                 console.log('updating production database emails...');
             }
 
             var email = srcMongo.collection('emails');
-            var accounts = srcMongo.collection('accounts');
-
-            //get all the accounts
-            accounts.find({_id:2816}).toArray(function(err, _accounts){
-                    if (err) {
-                        console.log('Error getting _page: ' + err);
-                        return fn(err);
-                    }
-
-                async.eachSeries(_accounts, function(account, account_callback){
-                    console.log('updating emails of account : ',account._id);
-                    //find all the emails of current account
-                    email.find({'accountId':account._id}).toArray(function(err, emails){
+            email.find().toArray(function(err, emails){
                         if (err) {console.log(emails.length);
                             console.log('Error getting _page: ' + err);
                             return fn(err);
@@ -459,14 +447,15 @@ var copyutil = {
                             async.eachSeries(emails, function(_email, callback){
 
                                 var componets_data = _email.components;
-                                if(componets_data.length > 0){
+
+                                if(componets_data && componets_data.length > 0){
                                     var cp=_.map(componets_data, function(com, key){
                                         com.display_name = com.type;
                                         return com;
                                     });
 
-                                     _email.components = cp;
-                                     email.update({_id : _email._id}, _email, function(err, savedSection){
+                                    _email.components = cp;
+                                    email.update({_id : _email._id}, _email, function(err, savedSection){
                                         if(err) {
                                             console.log('Error saving section:' + err);
                                             callback(err);
@@ -477,15 +466,13 @@ var copyutil = {
 
                                     });
 
-                                 }
+                                }
                                 else{
                                        callback(null);
                                 }
 
-
                             }, function done(err,result){
-
-                               account_callback();
+                               fn();
                             });
 
                         }
@@ -495,10 +482,8 @@ var copyutil = {
                         }
                      });
 
-                     }, function done(err,result){
-                               fn();
-                     });
-                   });
+
+
             console.log('updating emails....');
 
     },
