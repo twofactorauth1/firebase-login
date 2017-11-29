@@ -183,7 +183,6 @@ script(src="scripts/controllers/notFoundCtrl.js")
 script(src="scripts/directives/angularparallax.js")
 script(src="scripts/directives/last.js")
 script(src="scripts/directives/carousel.js")
-script(src="scripts/directives/externalScripts.js")
 script(src="scripts/directives/indi-accordion.js")
 
 script(src="scripts/filters/offset.js")
@@ -197,6 +196,4 @@ script.
     firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
 | !{userScripts}
-
-
-external-scripts(class="external-scripts")
+| !{externalScripts}

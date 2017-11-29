@@ -14,6 +14,7 @@ var ssbManager = require('../ssb/ssb_manager');
 var analyticsManager = require('../analytics/analytics_manager');
 var assetManager = require('../assets/asset_manager');
 var cookies = require('../utils/cookieutil');
+var externalScriptLookup = require('../configs/externalscriptlookup.config');
 
 var view = function (req, resp, options) {
     this.init.apply(this, arguments);
@@ -242,6 +243,7 @@ _.extend(view.prototype, BaseView.prototype, {
                         data.customCss = customCss.join('\n');
                     }
                 }
+                data.externalScripts = self._loadExternalScripts(page);
 
                 if(pageHolder[handle]) {
                     data.title = pageHolder[handle].title || value.website.title;
@@ -541,6 +543,8 @@ _.extend(view.prototype, BaseView.prototype, {
                     }
                 }
 
+                data.externalScripts = self._loadExternalScripts(page);
+
                 if(pageHolder[handle]) {
                     data.title = pageHolder[handle].title || value.website.title;
                 } else {
@@ -604,7 +608,7 @@ _.extend(view.prototype, BaseView.prototype, {
                     //TODO: need to handle NO fonts.
                     data.account.fonts = _.intersection(googleFamilies, usedFamilies).join('|');
                     self.log.debug('data.account.fonts:', data.account.fonts);
-                }
+                }                
 
                 var blogUrlParts = [];
                 if (self.req.params.length && self.req.params[0]!=undefined) {
@@ -892,6 +896,8 @@ _.extend(view.prototype, BaseView.prototype, {
                         data.customCss = customCss.join('\n');
                     }
                 }
+
+                data.externalScripts = self._loadExternalScripts(page);
 
                 if(pageHolder[handle]) {
                     data.title = pageHolder[handle].title || value.website.title;
@@ -1230,6 +1236,8 @@ _.extend(view.prototype, BaseView.prototype, {
                     }
                 }
 
+                data.externalScripts = self._loadExternalScripts(page);
+
                 if(pageHolder[handle]) {
                     data.title = pageHolder[handle].title || value.website.title;
                 } else {
@@ -1384,6 +1392,20 @@ _.extend(view.prototype, BaseView.prototype, {
             _styleFonts += '</style>';
         }
         return _styleFonts;        
+    },
+
+    _loadExternalScripts: function(page){
+        var scriptList = [];
+        var externalScripts = "";
+        _.uniq(_.pluck(_.flatten(_.pluck(page.get("sections"), 'components')), 'type')).forEach(function (c) {
+            for (var k in externalScriptLookup.EXTERNAL_SCRIPT_LOOKUP) {
+                if ((externalScriptLookup.EXTERNAL_SCRIPT_LOOKUP[k].indexOf(c) > -1) && (scriptList.indexOf(k) === -1)) {
+                    scriptList.push(k);
+                    externalScripts += '\n' + k;
+                }
+            }
+        });
+        return externalScripts;
     }
 });
 

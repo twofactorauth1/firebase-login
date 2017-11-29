@@ -14,6 +14,7 @@ var ngParser = require('../utils/ngparser');
 var jsonldbuilder = require('../utils/jsonldbuilder');
 var assetManager = require('../assets/asset_manager');
 var cookies = require('../utils/cookieutil');
+var externalScriptLookup = require('../configs/externalscriptlookup.config');
 var _req;
 
 var view = function (req, resp, options) {
@@ -201,7 +202,7 @@ _.extend(view.prototype, BaseView.prototype, {
                         data.customCss = customCss.join('\n');
                     }
                 }
-
+                data.externalScripts = self._loadExternalScripts(page);
                 if(pageHolder[handle]) {
                     data.title = pageHolder[handle].title || value.website.title;
                 } else {
@@ -561,6 +562,7 @@ _.extend(view.prototype, BaseView.prototype, {
                         data.customCss = customCss.join('\n');
                     }
                 }
+                data.externalScripts = self._loadExternalScripts(page);
                 if(pageHolder[handle]) {
                     data.title = pageHolder[handle].title || value.website.title;
                 } else {
@@ -833,6 +835,7 @@ _.extend(view.prototype, BaseView.prototype, {
                         data.customCss = customCss.join('\n');
                     }
                 }
+                data.externalScripts = self._loadExternalScripts(page);
                 if(pageHolder[handle]) {
                     data.title = pageHolder[handle].title || value.website.title;
                 } else {
