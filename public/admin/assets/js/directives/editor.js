@@ -256,13 +256,12 @@ app.directive("elem", function ($rootScope, $timeout, $compile, SimpleSiteBuilde
                                 //wrap current element with div for list
                                 if(cmd==="formatOL" || cmd === "formatUL"){
                                    editor.format.apply('span');
-                                }
-
+                                }else if(cmd=="html"){
+									$(element).find("textarea.fr-code").removeAttr('style');
+								}else if(cmd === "fontFamily" || cmd === "fontWeight"){
                                 //wrap element with span before applying changes.
-                                if(cmd === "fontFamily" || cmd === "fontWeight"){
                                        editor.format.apply('span', { class: 'custom-span' });
-                                }
-								if (cmd === 'videoInsertEmbed') {
+                                } else if (cmd === 'videoInsertEmbed') {
 									if ($.FE)
 										$.FE.VIDEO_EMBED_REGEX = froalaConfig.VIDEO_EMBED_REGEX;
 								}
