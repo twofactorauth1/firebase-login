@@ -417,8 +417,8 @@
 
                 WebsiteService.getComponent(addedType, addedType.version || 1, function(newComponent) {
                     //add custom type
-                    if(newComponent.type_custom === undefined){
-                         newComponent.type_custom = newComponent.type;
+                    if(newComponent.display_name === undefined){
+                         newComponent.display_name = newComponent.type;
                     }
 
                     if (newComponent) {
@@ -950,17 +950,8 @@
                     }
 
                     vm.state.email = res.data;
-                    //check if custom email type is in component or not, if not then bind
 
-                    if(vm.state.email && vm.state.email.components && vm.state.email.components.length > 0){
-                          var component_length = vm.state.email.components.length;
-                          for(var m = 0; m < component_length; m++){
-                             var current_component = vm.state.email.components[m];
-                             if(current_component.type_custom === undefined){
-                                vm.state.email.components[m].type_custom = vm.state.email.components[m].type;
-                             }
-                          }
-                    }
+
                     vm.state.originalEmail = angular.copy(res.data);
                     $timeout(function() {
                         vm.uiState.dataLoaded = true;
