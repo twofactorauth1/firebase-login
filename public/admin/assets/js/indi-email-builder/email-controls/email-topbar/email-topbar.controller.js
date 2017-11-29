@@ -30,16 +30,6 @@ function ssbEmailBuilderTopbarController($scope, $rootScope, $timeout, $attrs, $
 
         //reset section panel
         vm.uiState.navigation.sectionPanel.reset();
-        //upate email componet type if type is custom named
-        if(vm.state.email && vm.state.email.components && vm.state.email.components.length > 0){
-              var component_length = vm.state.email.components.length;
-              for(var m = 0; m < component_length; m++){
-                 var current_component = vm.state.email.components[m];
-                 if(current_component.type_custom === undefined){
-                    vm.state.email.components[m].type_custom = vm.state.email.components[m].type;
-                 }
-              }
-        }
 
         promise = saveWebsite().then(function(){
             return (

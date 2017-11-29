@@ -31,7 +31,7 @@
 
                                 _.each(data, function(emailStats){
                                     var scopeEmail = _.find($scope.emails, function(email){return emailStats._id == email._id});
-                                    
+
                                     if(scopeEmail) {
                                         scopeEmail.stats = emailStats;
                                     }
@@ -106,6 +106,7 @@
                 "components": [
                     {
                         "type": "email-header",
+                        "display_name": "email-header",
                         "version": 1,
                         "txtcolor": "#888888",
                         "logo": $scope.account.business.logo ? ('<h2><img src="' + $scope.account.business.logo + '" /></h2>') : '<h2>Logo Here</h2>',
@@ -127,6 +128,7 @@
                     },
                     {
                         "type": "email-1-col",
+                        "display_name": "email-1-col",
                         "version": 1,
                         "txtcolor": "#888888",
                         // "logo": "<h2>Logo Here</h2>",
@@ -148,6 +150,7 @@
                     },
                     {
                         "type": "email-2-col",
+                        "display_name": "email-2-col",
                         "version": 1,
                         "txtcolor": "#888888",
                         "title": '<h2 style="text-align:center;color:#58585b;">Two Column Layout Section</h2>',
@@ -169,6 +172,7 @@
                     },
                     {
                         "type": "email-3-col",
+                        "display_name": "email-3-col",
                         "version": 1,
                         "txtcolor": "#888888",
                         "title": '<h2 style="text-align:center;color:#58585b;">Three Column Layout Section</h2>',
@@ -191,6 +195,7 @@
                     },
                     {
                         "type": "email-footer",
+                        "display_name": "email-footer",
                         "version": 1,
                         "txtcolor": "#888888",
                         // "logo": "<h2>Logo Here</h2>",
