@@ -49,7 +49,7 @@ _.extend(view.prototype, BaseView.prototype, {
             },
             function getCustomFonts(webpageData, page, cb){
                 assetManager.findByFontType(accountId, null, null, function(err, fonts){                
-                    data.customFonts = fonts;
+                    data.customFonts = self._renderCustomFonts(fonts);
                     cb(err, webpageData, page);
                 });
             },
@@ -160,11 +160,28 @@ _.extend(view.prototype, BaseView.prototype, {
                 value.website.resources.userScripts = value.website.resources.userScripts || {};
                 value.website.resources.userScripts.global = value.website.resources.userScripts.global || {};
 
+                data.userScripts = "";
                 if(value.showhide && value.showhide.userScripts && value.website.resources.toggles && value.website.resources.toggles.userScripts){
                     value.website.resources.userScripts.global = value.website.resources.userScripts.global || {};
-                }
-                else{
-                    value.website.resources.userScripts.global = {};
+                    var userScripts = [];
+                    if(value.website.resources.userScripts.global.sanitized){
+                        userScripts.push(value.website.resources.userScripts.global.sanitized);
+                    }
+                    var _handle = "";
+                    if(pageHolder[handle] && pageHolder[handle].handle){
+                        _handle = pageHolder[handle].handle;
+                        if(_handle == 'blog-list'){
+                            _handle = 'blog';
+                        }
+                    }
+                    if(_handle && value.website.resources.userScripts[_handle] && value.website.resources.userScripts[_handle].sanitized){
+                        userScripts.push(value.website.resources.userScripts[_handle].sanitized);
+                    }
+                
+                    if(userScripts.length){
+                        data.userScripts = userScripts.join('\n');
+                    }
+
                 }
                 
                 data.customCss = "";
@@ -181,7 +198,7 @@ _.extend(view.prototype, BaseView.prototype, {
                     }
                 
                     if(customCss.length){
-                        data.customCss = customCss.join('\n\n');
+                        data.customCss = customCss.join('\n');
                     }
                 }
 
@@ -504,11 +521,28 @@ _.extend(view.prototype, BaseView.prototype, {
                 value.website.resources = value.website.resources || {};
                 value.website.resources.userScripts = value.website.resources.userScripts || {};
                 value.website.resources.userScripts.global = value.website.resources.userScripts.global || {};
+                data.userScripts = "";
                 if(value.showhide && value.showhide.userScripts && value.website.resources.toggles && value.website.resources.toggles.userScripts){
                     value.website.resources.userScripts.global = value.website.resources.userScripts.global || {};
-                }
-                else{
-                    value.website.resources.userScripts.global = {};
+                    var userScripts = [];
+                    if(value.website.resources.userScripts.global.sanitized){
+                        userScripts.push(value.website.resources.userScripts.global.sanitized);
+                    }
+                    var _handle = "";
+                    if(pageHolder[handle] && pageHolder[handle].handle){
+                        _handle = pageHolder[handle].handle;
+                        if(_handle == 'blog-list'){
+                            _handle = 'blog';
+                        }
+                    }
+                    if(_handle && value.website.resources.userScripts[_handle] && value.website.resources.userScripts[_handle].sanitized){
+                        userScripts.push(value.website.resources.userScripts[_handle].sanitized);
+                    }
+                
+                    if(userScripts.length){
+                        data.userScripts = userScripts.join('\n');
+                    }
+
                 }
                 data.customCss = "";
                 value.website.resources.customCss = value.website.resources.customCss || {};
@@ -524,7 +558,7 @@ _.extend(view.prototype, BaseView.prototype, {
                     }
                 
                     if(customCss.length){
-                        data.customCss = customCss.join('\n\n');
+                        data.customCss = customCss.join('\n');
                     }
                 }
                 if(pageHolder[handle]) {
@@ -657,7 +691,7 @@ _.extend(view.prototype, BaseView.prototype, {
             },
             function getCustomFonts(webpageData, page, cb){
                 assetManager.findByFontType(accountId, null, null, function(err, fonts){                
-                    data.customFonts = fonts;
+                    data.customFonts = self._renderCustomFonts(fonts);
                     cb(err, webpageData, page);
                 });
             },
@@ -759,11 +793,28 @@ _.extend(view.prototype, BaseView.prototype, {
                 value.website.resources.userScripts = value.website.resources.userScripts || {};
                 value.website.resources.userScripts.global = value.website.resources.userScripts.global || {};
                 
-                if(value.website.resources.toggles && value.website.resources.toggles.userScripts){
+                data.userScripts = "";
+                if(value.showhide && value.showhide.userScripts && value.website.resources.toggles && value.website.resources.toggles.userScripts){
                     value.website.resources.userScripts.global = value.website.resources.userScripts.global || {};
-                }
-                else{
-                    value.website.resources.userScripts.global = {};
+                    var userScripts = [];
+                    if(value.website.resources.userScripts.global.sanitized){
+                        userScripts.push(value.website.resources.userScripts.global.sanitized);
+                    }
+                    var _handle = "";
+                    if(pageHolder[handle] && pageHolder[handle].handle){
+                        _handle = pageHolder[handle].handle;
+                        if(_handle == 'blog-list'){
+                            _handle = 'blog';
+                        }
+                    }
+                    if(_handle && value.website.resources.userScripts[_handle] && value.website.resources.userScripts[_handle].sanitized){
+                        userScripts.push(value.website.resources.userScripts[_handle].sanitized);
+                    }
+                
+                    if(userScripts.length){
+                        data.userScripts = userScripts.join('\n');
+                    }
+
                 }
                 data.customCss = "";
                 value.website.resources.customCss = value.website.resources.customCss || {};
@@ -779,7 +830,7 @@ _.extend(view.prototype, BaseView.prototype, {
                     }
                 
                     if(customCss.length){
-                        data.customCss = customCss.join('\n\n');
+                        data.customCss = customCss.join('\n');
                     }
                 }
                 if(pageHolder[handle]) {
@@ -901,6 +952,23 @@ _.extend(view.prototype, BaseView.prototype, {
             self.cleanUp();
             self = data = value = null;
         });
+    },
+
+    _renderCustomFonts: function(fonts){
+        var _styleFonts = "";
+        if(fonts && fonts.length){
+            _styleFonts = "<style>";
+           _.each(fonts, function(font){
+
+                var _family = font.get("filename").substring(0, font.get("filename").indexOf('.')).replace(/ /g, "_");
+                _styleFonts += '@font-face { ' +
+                    'font-family: "' + _family + '"; ' +                
+                    'src: url("https:' + font.get("url") + '"); ' +
+                '} \n'
+            })
+            _styleFonts += '</style>';
+        }
+        return _styleFonts;        
     }
 });
 
