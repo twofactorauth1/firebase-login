@@ -31,18 +31,16 @@ block content
                   a(href="/reauth/#{val.id}")
                     div(class="account-logo")
                       if val.logo
-                        img(src="#{val.logo}")
-                    if val.domain
-                      span=val.domain
-                    if !val.domain && val.orgId != 1 && val.orgId != 4 && val.orgId !=5 && val.orgId !=6
+                        img(src="#{val.logo}")                    
+                    if val.orgId != 1 && val.orgId != 4 && val.orgId !=5 && val.orgId !=6
                       span=val.subdomain+ domainPrefix + '.indigenous.io'
-                    if !val.domain && val.subdomain && val.orgId == 1
+                    if val.subdomain && val.orgId == 1
                       span=val.subdomain+ domainPrefix + '.gorvlvr.com'
-                    if !val.domain && val.subdomain && val.orgId == 4
+                    if val.subdomain && val.orgId == 4
                       span=val.subdomain+ domainPrefix + '.techevent.us'
-                    if !val.domain && val.subdomain && val.orgId == 5
+                    if val.subdomain && val.orgId == 5
                       span=val.subdomain + domainPrefix + '.leadsource.cc'
-                    if !val.domain && val.subdomain && val.orgId == 6
+                    if val.subdomain && val.orgId == 6
                       span=val.subdomain + domainPrefix + '.amrvlvr.com'
                     i.fa.fa-chevron-right.pull-right
                   div.clearfix
