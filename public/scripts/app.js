@@ -62,7 +62,7 @@ var mainApp = angular
                 controller: 'CacheCtrl as cacheCtrl'
                 */
                 template: function (urlattr) {
-                    var s = '<ssb-page-styles></ssb-page-styles><div class="main-include" ssb-data-styles data-ng-include="';
+                    var s = '<div class="main-include" ssb-data-styles data-ng-include="';
                     if (window.indigenous.defaultBlog === 1) {
                         s += " '/template/blog-list";
                     } else {
@@ -88,7 +88,7 @@ var mainApp = angular
                     if (window.indigenous.ssbBlog === true) {
                         blogPageName = 'blog-list';
                     }
-                    s = '<ssb-page-styles></ssb-page-styles><div class="main-include" ssb-data-styles  data-ng-include="';
+                    s = '<div class="main-include" ssb-data-styles  data-ng-include="';
                     s += " '/template/" + blogPageName;
                     if (urlattr.cachebuster) {
                         s += '?cachebuster=' + urlattr.cachebuster;
@@ -123,7 +123,7 @@ var mainApp = angular
                         authorPageName = 'blog-list';
                     }
 
-					s = '<ssb-page-styles></ssb-page-styles><div class="main-include" ssb-data-styles  data-ng-include="';
+					s = '<div class="main-include" ssb-data-styles  data-ng-include="';
                     s += " '/template/" + authorPageName;
                     if (urlattr.cachebuster) {
                         s += '?cachebuster=' + urlattr.cachebuster;
@@ -141,7 +141,7 @@ var mainApp = angular
                         tagPageName = 'blog-list';
                     }
 
-                    s = '<ssb-page-styles></ssb-page-styles><div class="main-include" ssb-data-styles data-ng-include="';
+                    s = '<div class="main-include" ssb-data-styles data-ng-include="';
                     s += " '/template/" + tagPageName;
 					if (urlattr.cachebuster) {
 						s += '?cachebuster=' + urlattr.cachebuster;
@@ -158,7 +158,7 @@ var mainApp = angular
                     if (window.indigenous.ssbBlog === true) {
                         categoryPageName = 'blog-list';
                     }
-					s = '<ssb-page-styles></ssb-page-styles><div class="main-include" ssb-data-styles data-ng-include="';
+					s = '<div class="main-include" ssb-data-styles data-ng-include="';
                     s += " '/template/" + categoryPageName;
 					if (urlattr.cachebuster) {
 						s += '?cachebuster=' + urlattr.cachebuster;
@@ -189,7 +189,7 @@ var mainApp = angular
             })
             .when('/:name', {
                 template: function (urlattr) {
-                    var s = '<ssb-page-styles></ssb-page-styles><div class="main-include" ssb-data-styles  data-ng-include="';
+                    var s = '<div class="main-include" ssb-data-styles  data-ng-include="';
                     s += " '/template/" + urlattr.name.toLowerCase().trim();
                     if (urlattr.cachebuster) {
                         s += '?cachebuster=' + urlattr.cachebuster;
@@ -217,7 +217,7 @@ var mainApp = angular
             })
             .when('/:name/:name_1', {
                 template: function (urlattr) {
-                    var s = '<ssb-page-styles></ssb-page-styles><div class="main-include" ssb-data-styles data-ng-include="';
+                    var s = '<div class="main-include" ssb-data-styles data-ng-include="';
                     s += " '/template/" + urlattr.name.toLowerCase() + '/' + urlattr.name_1.toLowerCase();
                     if (urlattr.cachebuster) {
                         s += '?cachebuster=' + urlattr.cachebuster;
@@ -234,7 +234,7 @@ var mainApp = angular
 					if (window.location.pathname.length > 1) {
 						urlattr.name = window.location.pathname.substr(1);
 					}
-                    var s = '<ssb-page-styles></ssb-page-styles><div class="main-include" ssb-data-styles  data-ng-include="';
+                    var s = '<div class="main-include" ssb-data-styles  data-ng-include="';
                     s += " '/template/" + encodeURIComponent(urlattr.name.toLowerCase().trim());
                     if (urlattr.cachebuster) {
                         s += '?cachebuster=' + urlattr.cachebuster;

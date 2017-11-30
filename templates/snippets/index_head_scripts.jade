@@ -195,7 +195,18 @@ if (typeof account.website.theme !== 'undefined' && typeof account.website.theme
             }
         }
 
-
+if pageStyles
+    style.
+        .ssb-theme-#{account.website.theme.handle} {
+            background-color: #{pageStyles.bodyBackgroundColor}!important;
+        }
+        .ssb-theme-#{account.website.theme.handle} .ssb-section-layout {
+            background-color: #{pageStyles.bodyBackgroundColor}!important; 
+        }
+        .ssb-theme-#{account.website.theme.handle} .ssb-page-section-layout-header {
+            background-color: #{pageStyles.headerBackgroundColor}!important; 
+        }
+    
 if pages
     script(type="text/javascript").
         window.indigenous = window.indigenous || {};
@@ -219,14 +230,12 @@ if posts
         window.indigenous.precache.siteData = window.indigenous.precache.siteData || {};
         window.indigenous.precache.siteData.posts = !{JSON.stringify(posts)};
 
-
 if post
     script(type="text/javascript").
         window.indigenous = window.indigenous || {};
         window.indigenous.precache = window.indigenous.precache || {};
         window.indigenous.precache.siteData = window.indigenous.precache.siteData || {};
         window.indigenous.precache.siteData.post = !{JSON.stringify(post)};
-
 
 if website
     script(type="text/javascript").
