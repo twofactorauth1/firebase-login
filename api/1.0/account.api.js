@@ -501,8 +501,8 @@ _.extend(api.prototype, baseApi.prototype, {
        
         var component = {};
         component.script = script;
-        var fromEmail = notificationConfig.FROM_EMAIL;
-        var fromName =  notificationConfig.WELCOME_FROM_NAME;
+        var fromEmail = notificationConfig.ACTIVATE_ACCOUNT_FROM_EMAIL;
+        var fromName =  notificationConfig.ACTIVATE_ACCOUNT_FROM_Name;
         var emailSubject = notificationConfig.ACTIVATE_ACCOUNT_EMAIL_SUBJECT;
         accountDao.getAccountByID(accountId, function(err, account){
             if(account && account.get('business') && account.get('business').name) {
