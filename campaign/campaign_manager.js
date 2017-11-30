@@ -122,13 +122,13 @@ module.exports = {
                     name: new RegExp('^'+ title +'$', "i")
                 }
             }
-            
+
             campaignDao.exists(query, $$.m.Campaign, function(err, value){
             if(err) {
                 self.log.error('Error getting campaign:', err);
                 return fn(err, null);
             } else {
-                    return fn(null, value);  
+                    return fn(null, value);
                 }
         });
     },
@@ -701,6 +701,7 @@ module.exports = {
                 self.log.warn(accountId, userId, 'Attempted to activate a campaign that was already activated');
                 return fn('Attempted to activate a campaign that was already activated');
             } else {
+
                 if(campaign.get('_v') === '0.1') {
                     campaign.set('status', $$.m.Campaign.status.RUNNING);
                     campaignDao.saveOrUpdate(campaign, function(err, updatedCampaign){
@@ -743,14 +744,16 @@ module.exports = {
                 var contactsArray = campaign.get('contacts');
                 var campaignType = campaign.get("type");
                 var contactTags = campaign.get('contactTagData') || [];
-                contactDao.getContactsByTagArray(accountId, userId, contactTags, function(err, contacts){
-                    if(contacts) {
-                        _.each(contacts, function(contact){
-                            if(!_.contains(contacts, contact.id())) {
-                                contactsArray.push(contact.id());
-                            }
-                        });
-                    }
+                // contactDao.getContactsByTagArray(accountId, userId, contactTags, function(err, contacts){
+
+                    // if(contacts) {
+                    //     _.each(contacts, function(contact){
+                    //         if(!_.contains(contacts, contact.id())) {
+                    //             contactsArray.push(contact.id());
+                    //         }
+                    //     });
+                    // }
+
                     //uniqueify contacts
                     contactsArray = _.uniq(contactsArray);
                     campaign.set('contacts', contactsArray || []);
@@ -780,7 +783,7 @@ module.exports = {
                                 });
 
                                 campaignDao.batchUpdate(contacts, $$.m.Contact, function(err, updatedContacts){
-                                    
+
                                 });
                             }
                         });
@@ -864,7 +867,7 @@ module.exports = {
                         }
 
                     });
-                });
+                // });
             });
 
 
