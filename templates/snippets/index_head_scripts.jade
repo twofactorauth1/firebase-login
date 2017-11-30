@@ -211,8 +211,7 @@ if pages
     script(type="text/javascript").
         window.indigenous = window.indigenous || {};
         window.indigenous.precache = window.indigenous.precache || {};
-        window.indigenous.precache.siteData = window.indigenous.precache.siteData || {};
-        window.indigenous.precache.siteData.themeHandle = "#{account.website.theme.handle}";
+        window.indigenous.precache.siteData = window.indigenous.precache.siteData || {};        
         window.indigenous.precache.siteData.pages = !{JSON.stringify(pages)};
 
 if page
@@ -220,7 +219,6 @@ if page
         window.indigenous = window.indigenous || {};
         window.indigenous.precache = window.indigenous.precache || {};
         window.indigenous.precache.siteData = window.indigenous.precache.siteData || {};
-        window.indigenous.precache.siteData.themeHandle = "#{account.website.theme.handle}";
         window.indigenous.precache.siteData.page = !{JSON.stringify(page)};
 
 if posts
