@@ -167,55 +167,7 @@ mainApp.controller('CacheCtrl', ['$scope', '$rootScope', 'embeddedSiteDataServic
 					});
 				}, 0);
 			});
-
-			/**
-			 *   temp support SB global header style on blog pages
-			 *   TODO: remove when blogs are converted
-			 */
-			try {
-
-				if (!indigenous.ssbBlog && $location.path().toLowerCase().indexOf('blog') !== -1) {
-
-					_(indigenous.precache.siteData.pages).chain().each(function (value, key) {
-
-						if (key === 'index' && value.ssb) {
-
-							console.log('index found');
-							console.log('index is ssb: ' + value.ssb);
-
-							var globalHeader = _(value.sections).chain().findWhere({
-								'global': true,
-								'version': 5,
-								type: 'ssb-page-section',
-								title: 'Header'
-							}).value();
-
-							if (globalHeader !== undefined) {
-								var styles = '.ssb-main .navigation-v2 .navbar {' +
-									'min-height: 0!important;' +
-									'}' +
-									'.ssb-main .navigation-v2 .navbar .navbar-header {' +
-									'display: none!important;' +
-									'}';
-
-								$('head').append('<style type="text/css">' + styles + '</style>');
-							}
-
-
-						}
-
-					}).value();
-
-				}
-
-			} catch (e) {
-				console.error(e);
-			}
-
 		}
 	});
-
-
-
 
 }]);
