@@ -811,7 +811,7 @@ module.exports = {
     },
 
     listActivateAccountPage: function(accountId, websiteId, fn) {
-        
+
         var _page = new $$.m.ssb.Page({
             "handle" : "activate/setup",
             "title" : "activate setup",
@@ -1187,6 +1187,24 @@ module.exports = {
                             sectionJSON.push(section.toJSON());
                         });
                         page.set('sections', sectionJSON);
+                        cb(null, page);
+                    }
+                });
+            },
+            function cdnify(page, cb) {
+                accountDao.getAccountByID(accountId, function(err, account){
+                    if(account && account.get('useCDN')) {
+                        self.log.debug(accountId, userId, 'Running CDN step');
+                        var stringPage = page;
+                        if(_.isObject(stringPage)){
+                            stringPage = JSON.stringify(stringPage);
+                        }
+                        stringPage = stringPage.replace(new RegExp('s3.amazonaws.com/indigenous-digital-assets', 'g'), 'cdn-assets.indigenous.io');
+                        page = new $$.m.ssb.Page(JSON.parse(stringPage));
+                        self.log.warn('page is now:', page);
+                        cb(null, page);
+                    } else {
+                        self.log.debug(accountId, userId, 'Skipping CDN step');
                         cb(null, page);
                     }
                 });
@@ -4303,17 +4321,17 @@ module.exports = {
                 var prefix = protocol + '://' + host + '/';
                 var entryAry = [];
                 var expandBlogPosts = false;
-                _.each(pages, function(page){      
+                _.each(pages, function(page){
 
                     if(!page.get('hideFromVisitors') && page.get('showinseo') !== false) {//TODO: check these props
                         var entry = '<url><loc>' + prefix;
                         if(page.get('handle') === 'index') {
 
                             entry+= '</loc>';
-                        } else if(page.get('handle') === 'blog-list'){                         
+                        } else if(page.get('handle') === 'blog-list'){
                             expandBlogPosts = true;
                             entry += 'blog</loc>';
-                        } else {                          
+                        } else {
                             entry+= page.get('handle') + '</loc>';
                         }
 
@@ -4331,13 +4349,13 @@ module.exports = {
                     self.getPublishedPosts(accountId, null, null, function(err, posts){
                         if(posts && posts.length > 0) {
                             _.each(posts, function(post){
-                                dates_arr.push(moment(post.get('modified').date).unix());                                  
+                                dates_arr.push(moment(post.get('modified').date).unix());
                                 var entry = '<url><loc>' + prefix + 'blog/' + post.get('post_url') + '</loc>';
                                 entry += '<lastmod>' + moment(post.get('modified').date).format('YYYY-MM-DD') + '</lastmod></url>';
                                 entryAry.push(entry);
                             });
                         }
-                         
+
                         var latest_date_parsed = "";
                         if(dates_arr.length > 0){
                           var latest_date = Math.max.apply(Math, dates_arr);
@@ -4345,7 +4363,7 @@ module.exports = {
                         }
 
 
-                        async.mapSeries(entryAry,function(url_entry,callback_final){ 
+                        async.mapSeries(entryAry,function(url_entry,callback_final){
                                   var url_entry_arr = url_entry.split('//');
                                   var url_parse_arr = url_entry_arr[1].split('/');
                                   if(url_parse_arr[1].slice(0, -1) === "blog")
@@ -4356,10 +4374,10 @@ module.exports = {
                                   {
                                     callback_final(null,url_entry);
                                   }
-                                 
-                                  
+
+
                         }, function(err,response_final){
-                                     
+
                                       var xmlString = '<?xml version="1.0" encoding="utf-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">';
                                       _.each(response_final, function(entry){
                                           xmlString += entry;
@@ -4367,8 +4385,8 @@ module.exports = {
                                       xmlString += '</urlset>';
                                       self.log.debug(accountId, userId, '<< generateSiteMap');
                                       return fn(null, xmlString);
-                                      });                         
-                        
+                                      });
+
                     });
                 } else {
                     var xmlString = '<?xml version="1.0" encoding="utf-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">';
