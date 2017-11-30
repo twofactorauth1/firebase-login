@@ -4457,9 +4457,15 @@ module.exports = {
                 });
             },
             function(page, componentAry, fontMap, componentMap, cb) {
+                pageCacheManager.getS3TemplateContent(accountId, handle, function(err, value){
+                    cb(null, page, componentAry, fontMap, componentMap, value);
+                });
+            },
+            function(page, componentAry, fontMap, componentMap, template, cb) {
                 var manifest = {
                     fonts:fontMap,
-                    components:componentMap
+                    components:componentMap,
+                    template:template
                 };
                 cb(null, manifest, page);
             }
