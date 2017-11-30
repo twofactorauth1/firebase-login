@@ -203,6 +203,7 @@ _.extend(view.prototype, BaseView.prototype, {
                     }
                 }
                 data.externalScripts = self._loadExternalScripts(page);
+                data.pageStyles = self._getPageStyles(page);
                 if(pageHolder[handle]) {
                     data.title = pageHolder[handle].title || value.website.title;
                 } else {
@@ -563,6 +564,7 @@ _.extend(view.prototype, BaseView.prototype, {
                     }
                 }
                 data.externalScripts = self._loadExternalScripts(page);
+                data.pageStyles = self._getPageStyles(page);
                 if(pageHolder[handle]) {
                     data.title = pageHolder[handle].title || value.website.title;
                 } else {
@@ -836,6 +838,7 @@ _.extend(view.prototype, BaseView.prototype, {
                     }
                 }
                 data.externalScripts = self._loadExternalScripts(page);
+                data.pageStyles = self._getPageStyles(page);
                 if(pageHolder[handle]) {
                     data.title = pageHolder[handle].title || value.website.title;
                 } else {
@@ -987,6 +990,10 @@ _.extend(view.prototype, BaseView.prototype, {
             }
         });
         return externalScripts;
+    },
+
+    _getPageStyles: function(page){
+        return page.get("styles");
     }
 });
 
