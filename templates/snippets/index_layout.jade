@@ -67,13 +67,7 @@ html(class="no-js", lang="en" ng-app="mainApp" ng-controller="MainCtrl as main",
                 script(type="text/javascript").
                     if(window.location.protocol != 'https:') {
                       location.href = location.href.replace("http://", "https://");
-                    }
-            if components
-                script(type="text/javascript").
-                    var components = !{components};
-                    window.indigenous = window.indigenous || {};
-                    window.indigenous.precache = window.indigenous.precache || {};
-                    window.indigenous.precache.pages = {components:components};
+                    }            
             if account.showhide.ssbBlog
                 script(type="text/javascript").
                     window.indigenous.ssbBlog = #{account.showhide.ssbBlog};

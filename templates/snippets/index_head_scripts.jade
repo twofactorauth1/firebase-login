@@ -206,13 +206,6 @@ if pageStyles
         .ssb-theme-#{account.website.theme.handle} .ssb-page-section-layout-header {
             background-color: #{pageStyles.headerBackgroundColor}!important; 
         }
-    
-if pages
-    script(type="text/javascript").
-        window.indigenous = window.indigenous || {};
-        window.indigenous.precache = window.indigenous.precache || {};
-        window.indigenous.precache.siteData = window.indigenous.precache.siteData || {};        
-        window.indigenous.precache.siteData.pages = !{JSON.stringify(pages)};
 
 if page
     script(type="text/javascript").
