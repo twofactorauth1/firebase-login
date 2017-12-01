@@ -20,8 +20,11 @@
 
         vm.init = init;
         vm.componentStyleFn = componentStyleFn;
-
-
+        vm.isPx = isPx;
+        function isPx(value){
+            value = value.toString();
+           return (value.indexOf('px') === -1) ? 'px;' : ';';
+        }
         function componentStyleFn(component) {
 
             var styleString = ' ';
@@ -39,12 +42,13 @@
             }
 
             if (component && component.spacing) {
+
                 if (component.spacing.pt) {
 
                     if (component.spacing.pt.indexOf("%") > -1) {
                         styleString += 'padding-top: ' + component.spacing.pt + ';';
                     } else {
-                        styleString += 'padding-top: ' + component.spacing.pt + 'px;';
+                        styleString += 'padding-top: ' + component.spacing.pt + vm.isPx(component.spacing.pt);
                     }
 
                 }
@@ -53,7 +57,7 @@
                     if (component.spacing.pb.indexOf("%") > -1) {
                         styleString += 'padding-bottom: ' + component.spacing.pb + ';';
                     } else {
-                        styleString += 'padding-bottom: ' + component.spacing.pb + 'px;';
+                        styleString += 'padding-bottom: ' + component.spacing.pb + vm.isPx(component.spacing.pb);
                     }
 
                 }
@@ -62,7 +66,7 @@
                     if (component.spacing.pl.indexOf("%") > -1) {
                         styleString += 'padding-left: ' + component.spacing.pl + ';';
                     } else {
-                        styleString += 'padding-left: ' + component.spacing.pl + 'px;';
+                        styleString += 'padding-left: ' + component.spacing.pl +  vm.isPx(component.spacing.pl);
                     }
 
                 }
@@ -71,7 +75,7 @@
                     if (component.spacing.pr.indexOf("%") > -1) {
                         styleString += 'padding-right: ' + component.spacing.pr + ';';
                     } else {
-                        styleString += 'padding-right: ' + component.spacing.pr + 'px;';
+                        styleString += 'padding-right: ' + component.spacing.pr +  vm.isPx(component.spacing.pr);
                     }
 
                 }
@@ -81,7 +85,7 @@
                     if (component.spacing.mt.indexOf("%") > -1) {
                         styleString += 'margin-top: ' + component.spacing.mt + ';';
                     } else {
-                        styleString += 'margin-top: ' + component.spacing.mt + 'px;';
+                        styleString += 'margin-top: ' + component.spacing.mt +  vm.isPx(component.spacing.mt);
                     }
                 }
 
@@ -90,21 +94,17 @@
                     if (component.spacing.mb.indexOf("%") > -1) {
                         styleString += 'margin-bottom: ' + component.spacing.mb + ';';
                     } else {
-                        styleString += 'margin-bottom: ' + component.spacing.mb + 'px;';
+                        styleString += 'margin-bottom: ' + component.spacing.mb + vm.isPx(component.spacing.mb);
                     }
 
                 }
 
                 if (component.spacing.ml) {
-                    var type;
-                    (component.spacing.ml.indexOf("%") > -1) ? type = "": type = "px";
-                    styleString += component.spacing.ml == 'auto' ? 'margin-left: ' + component.spacing.ml + ';' : 'margin-left: ' + component.spacing.ml + type + ';';
+                    styleString += component.spacing.ml == 'auto' ? 'margin-left: ' + component.spacing.ml + ';' : 'margin-left: ' + component.spacing.ml + vm.isPx(component.spacing.ml);
                 }
 
                 if (component.spacing.mr) {
-                    var spacing_type;
-                    (component.spacing.mr.indexOf("%") > -1) ? spacing_type = "": spacing_type = "px";
-                    styleString += (component.spacing.mr == 'auto') ? 'margin-right: ' + component.spacing.mr + ';' : 'margin-right: ' + component.spacing.mr + spacing_type + ';';
+                    styleString += (component.spacing.mr == 'auto') ? 'margin-right: ' + component.spacing.mr + ';' : 'margin-right: ' + component.spacing.mr + vm.isPx(component.spacing.mr);
                 }
 
                 //adding margin auto only if both margin left is auto and margin right is auto
@@ -122,14 +122,20 @@
                           styleString +=   'max-width: ' + component.spacing.mw + ';' ;
                         }
                         else{
+
+                            var margin_custom = "";
+                            if(component.spacing.ml === "auto" && component.spacing.mr === "auto"){
+                                 var margin_custom = "margin-left:auto!important;margin-right:auto!important;";
+                            }
+
                             if(component.spacing.mw && component.spacing.mw !== "" && component.spacing.mw.indexOf("%") === -1){
                                var isPx = "";
                                (component.spacing.mw.toLowerCase().indexOf('px') === -1) ? isPx="px" : isPx = "";
-                               styleString +=  'max-width: ' + component.spacing.mw + isPx +';margin-left:auto!important;margin-right:auto!important;';
+                               styleString +=  'max-width: ' + component.spacing.mw + isPx +';' + margin_custom;
                             }
                             else
                             {
-                               styleString +=  'max-width: ' + component.spacing.mw + ';margin-left:auto!important;margin-right:auto!important;';
+                               styleString +=  'max-width: ' + component.spacing.mw + ';' + margin_custom;
                             }
 
                        }
