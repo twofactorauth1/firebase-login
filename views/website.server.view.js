@@ -464,7 +464,7 @@ _.extend(view.prototype, BaseView.prototype, {
             },
             function getPageTemplate(webpageData, page, cb) {
                 var pageTemplate = {'id':'template.html'};
-                if(page.get('manifest').template) {
+                if(page.get('manifest') && page.get('manifest').template) {
                     pageTemplate.data = page.get('manifest').template;
                     data.templateIncludes.push(pageTemplate);
                     cb(null, webpageData, page);
