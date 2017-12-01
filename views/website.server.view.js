@@ -652,15 +652,24 @@ _.extend(view.prototype, BaseView.prototype, {
                         });
                     });
                 } else {
+                    //self.log.debug('before resp:', self.resp);
                     app.render('index', data, function (err, html) {
                         if (err) {
                             self.log.error('Error during render: ' + err);
                         }
-
+                        //self.log.debug('after resp:', self.resp);
                         self.resp.send(html);
-                        self.cleanUp();
+                        //self.cleanUp();
                         self.log.debug('<< renderWebsitePage');
-                        self = data = value = null;
+                        if(!page.get('manifest')) {
+                            var websiteId = value.website._id;
+                            ssbManager.buildPageManifest(accountId, null, websiteId, handle, function(err, value){
+                                self.log.debug('built manifest:', value);
+                                page.set('manifest', value);
+                                ssbManager._savePublishedPage(page, function(err, value){});
+                            });
+                        }
+                        //self = data = value = null;
                     });
                 }
             }
