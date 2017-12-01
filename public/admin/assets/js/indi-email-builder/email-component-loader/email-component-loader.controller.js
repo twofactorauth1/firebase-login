@@ -107,13 +107,9 @@
                     styleString += (component.spacing.mr == 'auto') ? 'margin-right: ' + component.spacing.mr + ';' : 'margin-right: ' + component.spacing.mr + vm.isPx(component.spacing.mr);
                 }
 
-                //adding margin auto only if both margin left is auto and margin right is auto
-                if (component.spacing.mr ==="auto" && component.spacing.ml === "auto") {
-                  styleString += "float:none;";
-                }
-                else{
-                  styleString += "float:left;";
-                }
+
+                styleString += "float:left;";
+
                 if (component.spacing.mw) {
 
                        //apply max-width base on the px or %
