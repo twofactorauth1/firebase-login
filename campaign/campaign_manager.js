@@ -122,13 +122,13 @@ module.exports = {
                     name: new RegExp('^'+ title +'$', "i")
                 }
             }
-
+            
             campaignDao.exists(query, $$.m.Campaign, function(err, value){
             if(err) {
                 self.log.error('Error getting campaign:', err);
                 return fn(err, null);
             } else {
-                    return fn(null, value);
+                    return fn(null, value);  
                 }
         });
     },
@@ -783,7 +783,7 @@ module.exports = {
                                 });
 
                                 campaignDao.batchUpdate(contacts, $$.m.Contact, function(err, updatedContacts){
-
+                                    
                                 });
                             }
                         });
