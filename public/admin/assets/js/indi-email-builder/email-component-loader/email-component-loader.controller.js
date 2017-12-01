@@ -21,9 +21,21 @@
         vm.init = init;
         vm.componentStyleFn = componentStyleFn;
         vm.isPx = isPx;
+        vm.isPxorPercent = isPxorPercent;
         function isPx(value){
             value = value.toString();
            return (value.indexOf('px') === -1) ? 'px;' : ';';
+        }
+
+        function isPxorPercent(value){
+            value = value.toString();
+            if(value.indexOf("%") > -1){
+                return ';';
+            }
+            else{
+                return (value.indexOf('px') === -1) ? 'px;' : ';';
+            }
+
         }
         function componentStyleFn(component) {
 
@@ -100,11 +112,11 @@
                 }
 
                 if (component.spacing.ml) {
-                    styleString += component.spacing.ml == 'auto' ? 'margin-left: ' + component.spacing.ml + ';' : 'margin-left: ' + component.spacing.ml + vm.isPx(component.spacing.ml);
+                    styleString += component.spacing.ml == 'auto' ? 'margin-left: ' + component.spacing.ml + ';' : 'margin-left: ' + component.spacing.ml + vm.isPxorPercent(component.spacing.ml);
                 }
 
                 if (component.spacing.mr) {
-                    styleString += (component.spacing.mr == 'auto') ? 'margin-right: ' + component.spacing.mr + ';' : 'margin-right: ' + component.spacing.mr + vm.isPx(component.spacing.mr);
+                    styleString += (component.spacing.mr == 'auto') ? 'margin-right: ' + component.spacing.mr + ';' : 'margin-right: ' + component.spacing.mr + vm.isPxorPercent(component.spacing.mr);
                 }
 
 
