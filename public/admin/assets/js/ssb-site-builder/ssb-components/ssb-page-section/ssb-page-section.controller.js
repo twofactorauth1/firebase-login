@@ -26,7 +26,7 @@
 		vm.setupVideoBackground = setupVideoBackground;
 		vm.playerObject = {};
 		vm.player = {};
-		vm.sectionInitDelayDone = false;
+		//vm.sectionInitDelayDone = false;
 		vm.setFixedPosition = setFixedPosition; 
 
 		$scope.$watch('vm.section.bg.video.id', function (_id) {
@@ -1093,9 +1093,9 @@
 		function init(element) {
 			vm.element = element;
 
-			$timeout(function () {
-				vm.sectionInitDelayDone = true;
-			}, 0);
+			// $timeout(function () {
+			// 	vm.sectionInitDelayDone = true;
+			// }, 0);
 			var _isVerticalNav = false;
 			var elementIsFirstPosition = vm.index === 0; 
 			if(!$window.indigenous.firstVisibleElement && vm.showSection(vm.section)){

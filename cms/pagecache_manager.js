@@ -331,6 +331,31 @@ module.exports = {
         );
     },
 
+    getS3TemplateContent: function(accountId, pageName, fn) {
+        var self = this;
+        self.log.debug(accountId, null, '>> getS3TemplateContent');
+        var environmentName = 'prod';
+        if(appConfig.nonProduction === true) {
+            environmentName = 'test';
+        }
+        var path = environmentName + '/acct_' + accountId + '/' + pageName;
+
+        var chunks = [];
+
+        s3Client.get(path).on('response', function(res){
+
+            res.setEncoding('utf8');
+            res.on('data', function(chunk){
+
+                var string = '<div class="main-include">' + chunk + '</div>';
+                self.log.debug(accountId, null, '<< getS3TemplateContent');
+                fn(null, string);
+            });
+        }).end();
+
+
+    },
+
     getOrCreateS3Template: function(accountId, pageName, update, resp) {
         var self = this;
         self.log.debug(accountId, null, '>> getOrCreateS3Template(' + accountId + ',' + pageName + ',' + update + ')');

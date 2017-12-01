@@ -220,7 +220,7 @@ _.extend(view.prototype, BaseView.prototype, {
                     if(_handle && value.website.resources.userScripts[_handle] && value.website.resources.userScripts[_handle].sanitized){
                         userScripts.push(value.website.resources.userScripts[_handle].sanitized);
                     }
-                
+
                     if(userScripts.length){
                         data.userScripts = userScripts.join('\n');
                     }
@@ -238,7 +238,7 @@ _.extend(view.prototype, BaseView.prototype, {
                     if(page.get('handle') && value.website.resources.customCss[page.get('handle')] && value.website.resources.customCss[page.get('handle')].original){
                         customCss.push(value.website.resources.customCss[page.get('handle')].original);
                     }
-                
+
                     if(customCss.length){
                         data.customCss = customCss.join('\n');
                     }
@@ -372,7 +372,7 @@ _.extend(view.prototype, BaseView.prototype, {
             },
             function checkFor404(webpageData, page, cb) {
                 var pageHandle = handle || 'index';
-                
+
                 if(page) {
                    cb(null, webpageData, page);
                 } else {
@@ -414,7 +414,7 @@ _.extend(view.prototype, BaseView.prototype, {
                     fs.readFile('public/components/component-wrap.html', 'utf8', function(err, html){
                         data.templateIncludes[0].data = html;
                         var components = [];
-                        
+
                         _.each(page.get('sections'), function(section){
                             if(section) {
                                 //self.log.debug('Page ' + page.get('handle'));
@@ -422,7 +422,7 @@ _.extend(view.prototype, BaseView.prototype, {
                                 components = components.concat(section.components);
                             }
                         });
-                        
+
                         //self.log.debug('components:', components);
                         var map = {};
                         async.eachSeries(components, function(component, _cb){
@@ -462,9 +462,26 @@ _.extend(view.prototype, BaseView.prototype, {
                     cb(null, webpageData, page);
                 });
             },
+            function getPageTemplate(webpageData, page, cb) {
+                var pageTemplate = {'id':'template.html'};
+                if(page.get('manifest').template) {
+                    pageTemplate.data = page.get('manifest').template;
+                    data.templateIncludes.push(pageTemplate);
+                    cb(null, webpageData, page);
+                } else {
+                    //TODO:
+                    var pageCacheManager = require('../cms/pagecache_manager');
+                    var pageHandle = handle || 'index';
+                    pageCacheManager.getS3TemplateContent(accountId, pageHandle, function(err, templateData){
+                        pageTemplate.data = templateData;
+                        data.templateIncludes.push(pageTemplate);
+                        cb(null, webpageData, page);
+                    });
+                }
+            },
             function getBlogPosts(webpageData, page, cb) {
                 var pageHandle = handle || 'index';
-                
+
                 var componentTypes = _.pluck(_.flatten(_.pluck(page.get("sections"), "components")), "type");
 
                 var _blogComponents = _.contains(componentTypes, "ssb-blog-post-list") || _.contains(componentTypes, "ssb-recent-post")
@@ -482,7 +499,7 @@ _.extend(view.prototype, BaseView.prototype, {
             },
             function getCustomFonts(webpageData, page, cb){
                 assetManager.findByFontType(accountId, null, null, function(err, fonts){
-                    data.customFonts = self._renderCustomFonts(fonts);                    
+                    data.customFonts = self._renderCustomFonts(fonts);
                     cb(null, webpageData, page);
                 });
             },
@@ -519,7 +536,7 @@ _.extend(view.prototype, BaseView.prototype, {
                     if(_handle && value.website.resources.userScripts[_handle] && value.website.resources.userScripts[_handle].sanitized){
                         userScripts.push(value.website.resources.userScripts[_handle].sanitized);
                     }
-                
+
                     if(userScripts.length){
                         data.userScripts = userScripts.join('\n');
                     }
@@ -537,7 +554,7 @@ _.extend(view.prototype, BaseView.prototype, {
                     if(pageHolder[handle] && pageHolder[handle].handle && value.website.resources.customCss[pageHolder[handle].handle] && value.website.resources.customCss[pageHolder[handle].handle].original){
                         customCss.push(value.website.resources.customCss[pageHolder[handle].handle].original);
                     }
-                
+
                     if(customCss.length){
                         data.customCss = customCss.join('\n');
                     }
@@ -608,7 +625,7 @@ _.extend(view.prototype, BaseView.prototype, {
                     //TODO: need to handle NO fonts.
                     data.account.fonts = _.intersection(googleFamilies, usedFamilies).join('|');
                     self.log.debug('data.account.fonts:', data.account.fonts);
-                }                
+                }
 
                 var blogUrlParts = [];
                 if (self.req.params.length && self.req.params[0]!=undefined) {
@@ -768,7 +785,7 @@ _.extend(view.prototype, BaseView.prototype, {
                     fs.readFile('public/components/component-wrap.html', 'utf8', function(err, html){
                         data.templateIncludes[0].data = html;
                         var components = [];
-                        
+
                         _.each(page.get('sections'), function(section){
                             if(section) {
                                 //self.log.debug('Page ' + page.get('handle'));
@@ -776,7 +793,7 @@ _.extend(view.prototype, BaseView.prototype, {
                                 components = components.concat(section.components);
                             }
                         });
-                        
+
                         //self.log.debug('components:', components);
                         var map = {};
                         async.eachSeries(components, function(component, _cb){
@@ -818,7 +835,7 @@ _.extend(view.prototype, BaseView.prototype, {
             },
             function getBlogPosts(webpageData, page, cb) {
                 var pageHandle = handle || 'index';
-                
+
                 var componentTypes = _.pluck(_.flatten(_.pluck(page.get("sections"), "components")), "type");
 
                 var _blogComponents = _.contains(componentTypes, "ssb-blog-post-list") || _.contains(componentTypes, "ssb-recent-post")
@@ -836,7 +853,7 @@ _.extend(view.prototype, BaseView.prototype, {
             },
             function getCustomFonts(webpageData, page, cb){
                 assetManager.findByFontType(accountId, null, null, function(err, fonts){
-                    data.customFonts = self._renderCustomFonts(fonts);                    
+                    data.customFonts = self._renderCustomFonts(fonts);
                     cb(null, webpageData, page);
                 });
             },
@@ -873,7 +890,7 @@ _.extend(view.prototype, BaseView.prototype, {
                     if(_handle && value.website.resources.userScripts[_handle] && value.website.resources.userScripts[_handle].sanitized){
                         userScripts.push(value.website.resources.userScripts[_handle].sanitized);
                     }
-                
+
                     if(userScripts.length){
                         data.userScripts = userScripts.join('\n');
                     }
@@ -891,7 +908,7 @@ _.extend(view.prototype, BaseView.prototype, {
                     if(pageHolder[handle] && pageHolder[handle].handle && value.website.resources.customCss[pageHolder[handle].handle] && value.website.resources.customCss[pageHolder[handle].handle].original){
                         customCss.push(value.website.resources.customCss[pageHolder[handle].handle].original);
                     }
-                
+
                     if(customCss.length){
                         data.customCss = customCss.join('\n');
                     }
@@ -1054,7 +1071,7 @@ _.extend(view.prototype, BaseView.prototype, {
                     }
                     self.resp.send(html);
                 });
-            }                
+            }
         });
     },
 
@@ -1136,7 +1153,7 @@ _.extend(view.prototype, BaseView.prototype, {
                     fs.readFile('public/components/component-wrap.html', 'utf8', function(err, html){
                         data.templateIncludes[0].data = html;
                         var components = [];
-                       
+
                         _.each(page.get('sections'), function(section){
                             if(section) {
                                 //self.log.debug('Page ' + page.get('handle'));
@@ -1179,14 +1196,14 @@ _.extend(view.prototype, BaseView.prototype, {
 
             function(value, page, cb) {
                 var pageHolder = {};
-                
+
                 pageHolder[page.get('handle')] = page.toJSON('frontend');
-                
+
 
                 data.page = page;
                 data.account = value;
                 data.originalAccountBusiness = originalAccount.get('business');
-                
+
                 data.canonicalUrl = pageHolder[handle].canonicalUrl || null;
                 data.account.website.themeOverrides = data.account.website.themeOverrides ||{};
                 data.account.website.themeOverrides.styles = data.account.website.themeOverrides.styles || {};
@@ -1213,7 +1230,7 @@ _.extend(view.prototype, BaseView.prototype, {
                     if(_handle && value.website.resources.userScripts[_handle] && value.website.resources.userScripts[_handle].sanitized){
                         userScripts.push(value.website.resources.userScripts[_handle].sanitized);
                     }
-                
+
                     if(userScripts.length){
                         data.userScripts = userScripts.join('\n');
                     }
@@ -1231,7 +1248,7 @@ _.extend(view.prototype, BaseView.prototype, {
                     if(pageHolder[handle] && pageHolder[handle].handle && value.website.resources.customCss[pageHolder[handle].handle] && value.website.resources.customCss[pageHolder[handle].handle].original){
                         customCss.push(value.website.resources.customCss[pageHolder[handle].handle].original);
                     }
-                
+
                     if(customCss.length){
                         data.customCss = customCss.join('\n');
                     }
@@ -1386,13 +1403,13 @@ _.extend(view.prototype, BaseView.prototype, {
 
                 var _family = font.get("filename").substring(0, font.get("filename").indexOf('.')).replace(/ /g, "_");
                 _styleFonts += '@font-face { ' +
-                    'font-family: "' + _family + '"; ' +                
+                    'font-family: "' + _family + '"; ' +
                     'src: url("https:' + font.get("url") + '"); ' +
                 '} \n'
             })
             _styleFonts += '</style>';
         }
-        return _styleFonts;        
+        return _styleFonts;
     },
 
     _loadExternalScripts: function(page, preview){
