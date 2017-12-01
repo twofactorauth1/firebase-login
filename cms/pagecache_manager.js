@@ -347,7 +347,7 @@ module.exports = {
             res.setEncoding('utf8');
             res.on('data', function(chunk){
 
-                var string = '<div class="main-include">' + chunk + '</div>';
+                var string = '<div class="main-include" ssb-data-styles>' + chunk + '</div>';
                 self.log.debug(accountId, null, '<< getS3TemplateContent');
                 fn(null, string);
             });
