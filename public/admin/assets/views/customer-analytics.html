@@ -30,134 +30,137 @@
     <div class="row">
         <div class="col-sm-12">
             <div class="panel panel-white margin-top-15 dashboard-live-widget-container analytics-live-widget-container" id="liveTraffic" ng-class="{'load1 csspinner': !livePlatformTrafficConfig.options}">
-                <tabset class="tabbable tabs-left margin-bottom-0">
-                    <tab>
-                        <tab-heading>
-                            <i class="ti-bar-chart"></i>
-                        </tab-heading>
-
-                        <div>
-                            <div class="" id="v_overview">
-                                <div class="panel-heading border-light live-overview-container">
-                                    <h4 class="panel-title text-primary"><span class="text-bold">Live</span> Visitors (per minute, prior hour)</h4>
-                                </div>
-                                <div class="panel-body" style="position: relative" >
-                                    <div class="height-215 col-sm-8" ng-if="livePlatformTrafficConfig">
-                                        <highchart config="livePlatformTrafficConfig" id="live-platform-traffic-chart"></highchart>
-                                    </div>
-                                    <div class="height-215 col-sm-4">
-                                        <div id="live-platform-visitor-locations"></div>
-                                    </div>
-
-                                </div>
-
-                                <div class="panel-footer border-light">
-
-                                </div>
-                            </div>
+                <div class="" id="v_overview">
+                    <div class="panel-heading border-light live-overview-container">
+                        <h4 class="panel-title text-primary"><span class="text-bold">Live</span> Visitors (per minute, prior hour)</h4>
+                    </div>
+                    <div class="panel-body" style="position: relative" >
+                        <div class="height-215 col-sm-8" ng-if="livePlatformTrafficConfig">
+                            <highchart config="livePlatformTrafficConfig" id="live-platform-traffic-chart"></highchart>
                         </div>
-
-                    </tab> 
-                </tabset>
+                        <div class="height-215 col-sm-4">
+                            <div id="live-platform-visitor-locations"></div>
+                        </div>
+                    </div>
+                    <div class="panel-footer border-light"></div>
+                </div>      
             </div>
         </div>
     </div>
     <div class="clearfix"></div>
+    <style>
+        .page-events>li{
+            position: relative;
+        }
+        .page-events>li:after {
+            content: "";
+            display: block;
+            position: absolute;
+            top: 0;
+            left: -5px;
+            width: 10px;
+            height: 10px;
+            border-radius: 6px;
+            background:#47b2d1;
+            border: 1px solid #47b2d1;
+        }
+        .page-events>li:last-child:after { 
+            background:#04e261;
+            border: 1px solid #04e261;
+        }
+    </style>
     <div class="row">
-            <div class="col-sm-12">
-                <div class="panel panel-white margin-top-15 dashboard-live-widget-container analytics-live-widget-container" id="liveTrafficData" ng-class="{'load1 csspinner': !livePlatformTrafficConfig.options}">
-                   
-                <tabset class="tabbable tabs-left margin-bottom-0"> 
-                        <tab>
-                            <tab-heading>
-                                <i class="ti-user"></i>
-                            </tab-heading>
-                            <div class="panel-heading border-light live-overview-container">
-                                <h4 class="panel-title text-primary"><strong>Live</strong> Visitors Details</h4>
-                            </div>
-                            <div class="panel-body" style="position: relative" >
-                                <div class="live-visitor-details" ng-if="liveVisitorDetails.length">
-                                    <!-- Live visitor details- -->
-    
-                                    <div class="col-sm-5 visitor-left-pane">
-                                        <ul class="">
-                                            <li ng-class="{'active-visitor-detail': selectedVisitorIndex === $index}" ng-repeat="visitorDetail in liveVisitorDetails track by $index"  ng-click ="setActiveVisitorIndex($index)" class="cursor-pointer">
-                                                <div class="col-xs-3 visitor-address">{{visitorDetail.fingerprint}}</div>
-                                                <div class="col-xs-3 ">{{visitorDetail.subdomain}}</div>
-                                                <div class="col-xs-6 visitor-timestamp">{{convertUtcToLocal(visitorDetail.server_time)}}</div>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <div class="col-sm-7 visitor-right-pane">
-                                        <ul>
-                                            <li>
-                                                <div class="col-xs-4"><strong>IP Address</strong></div>
-                                                <div class="col-xs-8">{{activeVisitorDetail.ip_address}}</div>
-                                            </li>
-                                            <li ng-if="activeVisitorDetail.maxmind.continent">
-                                                <div class="col-xs-4"><strong>Continent</strong></div>
-                                                <div class="col-xs-8">{{activeVisitorDetail.maxmind.continent}}</div>
-                                            </li>
-                                            <li ng-if="activeVisitorDetail.maxmind.country">
-                                                <div class="col-xs-4"><strong>Country</strong></div>
-                                                <div class="col-xs-8">{{activeVisitorDetail.maxmind.country}}</div>
-                                            </li>
-                                            <li ng-if="activeVisitorDetail.maxmind.province">
-                                                <div class="col-xs-4"><strong>State</strong></div>
-                                                <div class="col-xs-8">{{activeVisitorDetail.maxmind.province}}</div>
-                                            </li>
-                                            <li ng-if="activeVisitorDetail.maxmind.city">
-                                                <div class="col-xs-4"><strong>City</strong></div>
-                                                <div class="col-xs-8">{{activeVisitorDetail.maxmind.city}}</div>
-                                            </li>
-                                            <li ng-if="activeVisitorDetail.maxmind.postal_code">
-                                                <div class="col-xs-4"><strong>Postal Code</strong></div>
-                                                <div class="col-xs-8">{{activeVisitorDetail.maxmind.postal_code}}</div>
-                                            </li>
-                                            <li>
-                                                <div class="col-xs-4"><strong>Browser</strong></div>
-                                                <div class="col-xs-8">{{activeVisitorDetail.user_agent.browser.name}} {{activeVisitorDetail.user_agent.browser.version}}</div>
-                                            </li>
-                                            <li>
-                                                <div class="col-xs-4"><strong>OS Details</strong></div>
-                                                <div class="col-xs-8">{{activeVisitorDetail.user_agent.os.name}} {{activeVisitorDetail.user_agent.os.version}}</div>
-                                            </li>
-                                        </ul>
-                                        <hr>
-                                        <ul class="page-events">
-                                            <li ng-repeat="pageEvent in activeVisitorDetail.pageEvents">
-                                                    <div ng-switch on="pageEvent.activityType">
-                                                        <div ng-switch-when="CONTACT_FORM">
-                                                            <p>
-                                                                <span class="label label-default">CONTACT FORM</span> was submitted with the data:
-                                                                <ul class="form-values">
-                                                                    <li ng-repeat="(k,v) in pageEvent.extraFields">
-                                                                        <b>{{k | formatText}}</b>: {{v}}
-                                                                    </li>
-                                                                </ul>
-                                                            </p> 
-                                                        </div>
-                                                        <div ng-switch-when="PAGE_VIEW">
-                                                            <p>
-                                                                <span class="label label-default">PAGE VIEW</span> 
-                                                                <ul class="form-values">
-                                                                    <li >
-                                                                        <span class="text-adjust inline-block" tooltip-placement="top" tooltip="{{pageEvent.pageRequested}}">{{pageEvent.pageRequested}}</span>
-                                                                    </li>
-                                                                </ul>
-                                                            </p> 
-                                                        </div>
-                                                    </div> 
-                                            </li>
-                                        </ul>
-                                    </div>
+        <div class="col-sm-12">
+            <div class="panel panel-white margin-top-15 dashboard-live-widget-container analytics-live-widget-container" id="liveTrafficData" ng-class="{'load1 csspinner': !livePlatformTrafficConfig.options}">
+                <div class="panel-heading border-light live-overview-container">
+                    <h4 class="panel-title text-primary"><strong>Live</strong> Visitors Details</h4>
+                </div>
+                <div class="panel-body" style="position: relative" >
+                    <div class="live-visitor-details" ng-if="liveVisitorDetails.length">
+                            <!-- Live visitor details- -->
+                        <div class="col-sm-7 visitor-left-pane">
+                            <ul class="active-ul">
+                                <li ng-class="{'active-visitor-detail': selectedVisitorIndex === $index}" ng-repeat="visitorDetail in liveVisitorDetails track by $index"  ng-click ="setActiveVisitorIndex($index)" class="cursor-pointer main-li">
+                                    <div class="col-xs-6 visitor-address">{{visitorDetail.email||visitorDetail.fingerprint}}</div>
+                                    <div class="col-xs-3 ">{{visitorDetail.subdomain}}</div>
+                                    <div class="col-xs-3 visitor-timestamp">{{convertUtcToLocal(visitorDetail.server_time)}}</div>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-sm-5 visitor-right-pane">
+                                <div class="col-xs-12"> 
+                                    <p><strong>Name: </strong> {{activeVisitorDetail.name}} </p>
+                                    <p><strong>Email: </strong> {{activeVisitorDetail.email}} </p>
+                                    <p><strong>Email: </strong> {{activeVisitorDetail.fingerprint}} </p>
+                                    
                                 </div>
-                                <h3 ng-if="!liveVisitorDetails.length" class="center margin-top-30">
-                                    No details found
-                                </h3>
-                            </div>
-                        </tab>
-                    </tabset>
+                            <ul class="adv-info"> 
+                                <li>
+                                    <div class="col-xs-6"><strong>IP Address</strong></div>
+                                    <div class="col-xs-6">{{activeVisitorDetail.ip_address}}</div>
+                                </li>
+                                <li >
+                                    <div class="col-xs-6"><strong>Continent</strong></div>
+                                    <div class="col-xs-6">{{activeVisitorDetail.maxmind.continent}}</div>
+                                </li>
+                                <li >
+                                    <div class="col-xs-6"><strong>Country</strong></div>
+                                    <div class="col-xs-6">{{activeVisitorDetail.maxmind.country}}</div>
+                                </li>
+                                <li >
+                                    <div class="col-xs-6"><strong>State</strong></div>
+                                    <div class="col-xs-6">{{activeVisitorDetail.maxmind.province}}</div>
+                                </li>
+                                <li >
+                                    <div class="col-xs-6"><strong>City</strong></div>
+                                    <div class="col-xs-6">{{activeVisitorDetail.maxmind.city}}</div>
+                                </li>
+                                <li >
+                                    <div class="col-xs-6"><strong>Postal Code</strong></div>
+                                    <div class="col-xs-6">{{activeVisitorDetail.maxmind.postal_code}}</div>
+                                </li>
+                                <li>
+                                    <div class="col-xs-6"><strong>Browser</strong></div>
+                                    <div class="col-xs-6">{{activeVisitorDetail.user_agent.browser.name}} {{activeVisitorDetail.user_agent.browser.version}}</div>
+                                </li>
+                                <li>
+                                    <div class="col-xs-6"><strong>OS Details</strong></div>
+                                    <div class="col-xs-6">{{activeVisitorDetail.user_agent.os.name}} {{activeVisitorDetail.user_agent.os.version}}</div>
+                                </li>
+                            </ul>
+                            <hr>
+                            <ul class="page-events">
+                                <li ng-repeat="pageEvent in activeVisitorDetail.pageEvents">
+                                    <div ng-switch on="pageEvent.activityType">
+                                        <div ng-switch-when="CONTACT_FORM">
+                                            <p>
+                                                <span class="label label-default">CONTACT FORM</span> was submitted with the data:
+                                                <ul class="form-values">
+                                                    <li ng-repeat="(k,v) in pageEvent.extraFields">
+                                                        <b>{{k | formatText}}</b>: {{v}}
+                                                    </li>
+                                                </ul>
+                                            </p> 
+                                        </div>
+                                        <div ng-switch-when="PAGE_VIEW">
+                                            <p> 
+                                                <span style="padding-left:10px;">{{pageEvent.pageTime | date:'h:mm a'}}</span>
+                                                <ul class="form-values">
+                                                    <li >
+                                                        <strong style="overflow: hidden;display:inline-block;">Visted:</strong><span style="width:90%;" class="text-adjust inline-block" tooltip-placement="top" tooltip="{{pageEvent.pageRequested}}">{{pageEvent.pageRequested}}</span>
+                                                    </li>
+                                                </ul>
+                                            </p> 
+                                        </div>
+                                    </div> 
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <h3 ng-if="!liveVisitorDetails.length" class="center margin-top-30">
+                        No details found
+                    </h3>
+                </div> 
             </div>
         </div>
     </div>
