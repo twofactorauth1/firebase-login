@@ -282,7 +282,7 @@ _.extend(api.prototype, baseApi.prototype, {
         if(q.name){
             pageEvent.set('name', q.name);
         }
-        
+
 
         analyticsManager.storePageEvent(pageEvent, function(err){
             if(err) {
@@ -298,9 +298,10 @@ _.extend(api.prototype, baseApi.prototype, {
             session_id: q.sid,
             entrance: q.en
         };
+        var url = {};
         if(q.fe) {
             var obj = tldtools.extract(q.fe);
-            var url = {
+            url = {
                 source: q.fe,
                 protocol: obj.url_tokens.protocol.replace(':', ''),
                 domain: obj.domain + '.' + obj.tld,
@@ -311,6 +312,9 @@ _.extend(api.prototype, baseApi.prototype, {
         }
         body.url = url;
         var pingEvent = new $$.m.PingEvent(req.body);
+        pingEvent.set('session_id', q.sid);
+        pingEvent.set('entrance', q.en);
+        pingEvent.set('url', url);
         var dateTime = new Date().getTime();
         pingEvent.set('server_time', dateTime);
         pingEvent.set('ping_time', dateTime);
