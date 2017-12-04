@@ -50,19 +50,9 @@ var mainApp = angular
         $routeProvider
             .when('/', {
                 /*
-                templateUrl: '../views/cache.html',
-                controller: 'CacheCtrl as cacheCtrl'
-                */
-                /*
-                 templateUrl: '../views/main.html',
-                 controller: 'LayoutCtrl as layout'
-                */
-                /*
-                templateUrl: '/template/index',
-                controller: 'CacheCtrl as cacheCtrl'
-                */
                 templateUrl:'template.html',
-                /*
+                */
+
                 template: function (urlattr) {
                     var s = '<div class="main-include" ssb-data-styles data-ng-include="';
                     if (window.indigenous.defaultBlog === 1) {
@@ -77,7 +67,7 @@ var mainApp = angular
                     s += ' "></div>';
                     return s;
                 },
-                */
+
                 controller: 'CacheCtrl as cacheCtrl',
                 reloadOnSearch: false
             })
@@ -191,8 +181,10 @@ var mainApp = angular
                 controller: 'CacheCtrl as cacheCtrl'
             })
             .when('/:name', {
-                templateUrl:'template.html',
                 /*
+                templateUrl:'template.html',
+                */
+                
                 template: function (urlattr) {
                     var s = '<div class="main-include" ssb-data-styles  data-ng-include="';
                     s += " '/template/" + urlattr.name.toLowerCase().trim();
@@ -203,7 +195,7 @@ var mainApp = angular
                     s += ' "></div>';
                     return s;
                 },
-                */
+
                 controller: 'CacheCtrl as cacheCtrl',
                 reloadOnSearch: false
             })
