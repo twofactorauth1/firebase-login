@@ -110,6 +110,23 @@ _.extend(view.prototype, BaseView.prototype, {
                     cb(null, webpageData, page);
                 });
             },
+            function getPageTemplate(webpageData, page, cb) {
+                var pageTemplate = {'id':'template.html'};
+                if(page.get('manifest') && page.get('manifest').template) {
+                    pageTemplate.data = page.get('manifest').template;
+                    data.templateIncludes.push(pageTemplate);
+                    cb(null, webpageData, page);
+                } else {
+                    //TODO:
+                    var pageCacheManager = require('../cms/pagecache_manager');
+                    var pageHandle = handle || 'index';
+                    pageCacheManager.getS3TemplateContent(accountId, pageHandle, function(err, templateData){
+                        pageTemplate.data = templateData;
+                        data.templateIncludes.push(pageTemplate);
+                        cb(null, webpageData, page);
+                    });
+                }
+            },
 
             function getBlogPosts(webpageData, page, cb) {
                 ssbManager.getPublishedPosts(accountId, null, null, function(err, posts){                
