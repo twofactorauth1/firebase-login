@@ -4486,6 +4486,10 @@ module.exports = {
             fn(err, result);
         });
 
+    },
+
+    _savePublishedPage : function(page, fn){
+        pageDao.savePublishedPage(page, fn);
     }
 
 };
