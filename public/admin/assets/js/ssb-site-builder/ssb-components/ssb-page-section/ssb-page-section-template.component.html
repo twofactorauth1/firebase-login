@@ -1,0 +1,99 @@
+<div>
+    <section
+        ng-show="vm.showSection"
+        id="section_{{vm.section._id}}"
+        class="ssb-check-fixed ssb-section-layout ssb-section-section ssb-section-type-{{vm.section.components[0].type}} {{vm.myclass}}"
+        style="{{vm.mystyle}}"
+        ng-attr-style="{{vm.sectionStyle(vm.section)}}">
+        <style>
+        #section_{{vm.section._id}} > .bg-overlay {
+        background: {{vm.section.bg.img.overlaycolor || 'transparent'}}!important;
+        opacity: {{vm.section.bg.img.overlayopacity === 0 ? vm.section.bg.img.overlayopacity : vm.section.bg.img.overlayopacity/100 || 1}};
+        }
+        #section_{{vm.section._id}} {
+        opacity: {{vm.section.bg.opacity === 0 ? 0 : vm.section.bg.opacity || 1}};
+        }
+        </style>
+
+        <div
+        ng-if="vm.section.bg && !(vm.section.bg.img.show && vm.section.bg.img && vm.section.bg.img.parallax)"
+        class="bg {{vm.sectionBGClass}}"
+        ng-attr-style="{{vm.sectionBGStyle}}">
+        </div>
+
+        <div id="px-ele-{{vm.section._id}}"
+        ng-if="vm.section.bg.img && vm.section.bg.img.url && vm.section.bg.img.show && vm.section.bg.img.parallax"
+        {{vm.section.bg.img.parallax ? parallax-background : ""}}
+        class="bg {{vm.sectionBGClass}} opacity-0"
+        ng-attr-parallax-ratio="{{vm.section.bg.img.parallax ? '0.4' : '1'}}"
+        ng-attr-style='
+        background: url("{{vm.section.bg.img.url}}") repeat-y;
+        background-size: cover;'>
+        </div>
+
+        <div
+        ng-show="vm.section.bg.video.show && vm.section.bg.video.urlProcessed"
+        class="bg bg-video {{vm.sectionBGClass}}">
+            <div id="section_video_{{vm.section._id}}"></div>
+        </div>
+
+        <div ng-if="((vm.section.components[0] && vm.section.components[0].src) || (vm.section.bg.img.show && vm.section.bg.img.url) || vm.section.bg.video.show && vm.section.bg.video.url) && vm.section.bg.img.overlay" class="bg bg-overlay"></div>
+
+        
+        <ng-include src=" '/admin/assets/js/ssb-site-builder/ssb-components/ssb-' + vm.section.layout + '/ssb-' + vm.section.layout + '.layout.v' + vm.section.version + '.html' " ng-if="vm.section.components.length && vm.section.layoutModifiers.custom"></ng-include>
+        
+
+
+        <ssb-component-loader
+            ng-if="vm.section.components.length && !vm.section.layoutModifiers.custom"
+            ng-repeat="component in vm.section.components"
+            component-class="vm.componentClass(component, $index)"
+            component-style="vm.componentStyle(component, $index)"
+            component="component"
+            website="vm.state.website"
+            state="vm.state"
+            ui-state="vm.uiState"
+            component-control="vm.uiState.componentControl"
+            component-media="vm.uiState.componentMedia"
+            section-index="vm.index"
+            component-index="$index"
+            show-component="vm.showSection"
+            >
+        </ssb-component-loader>
+    </section>
+    <div id="blueimp-gallery" class="blueimp-gallery">
+        <!-- The container for the modal slides -->
+        <div class="slides">
+
+        </div>
+        <!-- Controls for the borderless lightbox -->
+
+        <a class="prev">‹</a>
+        <a class="next">›</a>
+        <a class="close">×</a>
+        <a class="play-pause"></a>
+        <ol class="indicator"></ol>
+        <!-- The modal dialog, which will be used to wrap the lightbox content -->
+        <div class="modal fade">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title"></h4>
+                    </div>
+                    <div class="modal-body next"></div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn ssb-theme-btn btn-default pull-left prev">
+                            <i class="glyphicon glyphicon-chevron-left"></i> Previous
+                        </button>
+                        <button type="button" class="btn ssb-theme-btn btn-primary next">
+                            Next
+                            <i class="glyphicon glyphicon-chevron-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

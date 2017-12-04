@@ -353,7 +353,6 @@ module.exports = {
             });
         }).end();
 
-
     },
 
     getOrCreateS3Template: function(accountId, pageName, update, resp) {
@@ -619,6 +618,264 @@ module.exports = {
         }
 
         return html;
+    },
 
+    getTemplateFromDb: function(accountId, pageName, fn) {
+        var self = this;
+        //self.log.debug(accountId, null, '>> getOrCreateS3Template(' + accountId + ',' + pageName + ',' + update + ')');
+        self.log.debug('building');
+                var html = '';
+                async.waterfall([
+                        function getWebpageData(cb) {
+                            cmsDao.getDataForWebpage(accountId, 'index', function (err, value) {
+                                if(err) {
+                                    self.log.error('Error getting data for website:', err);
+                                    cb(err);
+                                } else {
+                                    cb(null, value);
+                                }
+                            });
+                        },
+                        function getPage(webpageData, cb) {
+                            pageDao.getPublishedPageForWebsite(webpageData.website._id, pageName, accountId, function(err, page){
+                                if(err) {
+                                    self.log.error('Error getting latest page for website:', err);
+                                    cb(err);
+                                } else {
+                                    cb(null, webpageData, page);
+                                }
+                            });
+                        },
+                        function getFallbackPageIfNeeded(webpageData, page, cb) {
+                            if(page) {
+                                cb(null, webpageData, page);
+                            } else {
+                                self.log.debug('Looking for coming-soon page');
+                                cmsDao.getLatestPageForWebsite(webpageData.website._id, 'coming-soon', accountId, function(err, page){
+                                    if(err) {
+                                        self.log.error('Error getting coming-soon page:', err);
+                                        cb(err);
+                                    } else {
+                                        cb(null, webpageData, page);
+                                    }
+                                });
+                            }
+                        },
+                        function readComponents(webpageData, page, cb) {
+                            if(page) {
+                                self.log.debug('got page:', page);
+                                if(page.get('sections') != null && page.get('sections').length > 0) {
+                                    html = self.buildPageTemplateMarkup(page);
+                                } else {
+                                    _.each(page.get('components'), function(component, index){
+                                        var divName = self.getDirectiveNameDivByType(component.type);
+                                        html = html + divName + ' component="components_' + index + '"></div>';
+                                    });
+                                }
+
+                                cb(null);
+                            } else {
+                                cb('Could not find page with handle ' + pageName);
+                            }
+
+                        },
+                        function writeTemplate(cb) {
+                            cb();
+                        }],
+                    function done(err){
+                        if(err) {
+                            self.log.error("Error building template:", err);
+                            fn('error', '');
+
+                        } else {
+                            var string = '<div class="main-include" ssb-data-styles>' + html + '</div>';
+                            fn(null, string);
+                        }
+                    }
+                );
+    },
+
+    buildPageTemplateMarkup: function(page) {
+        var self = this;
+        var html = '';
+        var layout = page.get('layout');
+        var handle = page.get('handle');
+        _.each(page.get('sections'), function(section, index){            
+            html = html + '<ssb-page-section-template section="sections_' + index + '" index="' + index + '" class="ssb-page-section" ' +
+                   'pre-section-class="' + self.buildSectionClass(section) + '" pre-section-style="' + self.buildSectionStyles(section) + '" ' +
+                   'show-section="' + self._showSection(section) + '" section-bg-class="' + self.buildSectionBGClass(section) + '" section-bg-style="' + self.buildSectionBGStyle(section) + '" ></ssb-page-section-template>';
+        });
+        console.log(html);
+        return html;
+    },
+
+    buildSectionStyles: function(section){
+        var self = this;
+        var styleString = ' ';            
+
+        if (section && section.txtcolor) {
+            styleString += 'color: ' + section.txtcolor + ';';
+        }
+
+        if (section && section.border && section.border.show && section.border.color) {
+            styleString += 'border-color: ' + section.border.color + ';';
+            styleString += 'border-width: ' + section.border.width + 'px;';
+            styleString += 'border-style: ' + section.border.style + ';';
+            styleString += 'border-radius: ' + section.border.radius + '%;';
+        } 
+
+        return "\'" + styleString + "\'";
+    },
+
+    buildSectionClass: function(section, index) {
+        var self = this;
+        var classString = 'container-fluid ';
+        if (section) {
+            var title = section.title || section.name,
+                version = section.version;
+            if (title) {
+                classString += ' ssb-page-section-' + self._slugifyText(title);
+                if (version) {
+                    classString += ' ssb-page-section-' + self._slugifyText(title); + '-v' + version;
+                }
+            }
+
+            if (section.layout) {
+                classString += ' ssb-page-section-layout-' + section.layout;
+                if (version) {
+                    classString += ' ssb-page-section-layout-' + section.layout + '-v' + version;
+                }
+            }
+
+            if (section.layoutModifiers) {
+                if (section.layoutModifiers.fixed) {
+                    classString += ' ssb-page-section-layout-' + section.layout + '-fixed';
+                    
+                    if (!section.fixedLeftNavigation || (section.fixedLeftNavigation && index > 0)) {
+                        classString += ' ssb-fixed sticky fixedsection';
+                    }
+                    if (index === 0 && !section.fixedLeftNavigation) {
+                        classString += ' ssb-fixed-first-element';
+                    }
+                }
+                if (section.layoutModifiers.grid && section.layoutModifiers.grid.isActive) {
+                    classString += ' ssb-page-section-layout-' + section.layout + '-grid';
+                    if (section.layoutModifiers.grid.height && section.layoutModifiers.grid.height < 0) {
+                        section.layoutModifiers.grid.height = 350;
+                    }
+                }
+                if (section.layoutModifiers.columns && section.layoutModifiers.columns.columnsNum != 'undefined') {
+                    var _col = section.layoutModifiers.columns.columnsNum || 1;
+                    classString += ' ssb-text-column-layout ssb-text-column-' + _col;
+                }
+            }
+
+            if (self._sectionHasFooter(section)) {
+                classString += ' ssb-page-section-layout-overflow-visible';
+            }
+
+            if (self._sectionHasLegacyUnderNavSetting(section)) {
+                classString += ' ssb-page-section-layout-legacy-undernav';
+            }
+
+            if (section.bg && section.bg.img && section.bg.img.blur) {
+                classString += ' ssb-page-section-layout-blur-image';
+            }
+
+            if (section.bg && section.bg.img && section.bg.img.overlay) {
+                classString += ' section-background-overlay';
+            }
+
+            if (section.spacing && section.spacing.default) {
+                classString += " no-component-vertical-space";
+            }
+
+            if (section.title && (section.title.toLowerCase() === "nav + hero" || section.title.toLowerCase() === "hero")) {
+                if (section.bg && section.bg.img && section.bg.img.show === false) {
+                    classString += " hide-hero-bg-image";
+                }
+            }
+
+            if (section.filter) {
+                classString += " ssb-section-filter-" + section.filter.replace(/[^0-9a-z]/gi, '-');
+            }
+            if (section.hideOnlyMobile) {
+                classString += " ssb-section-o-desktop";
+            }
+            if (section.showOnlyMobile) {
+                classString += " ssb-section-o-moblie";
+            }
+
+        }
+        return "\'" + classString + "\'";
+    },
+
+    buildSectionBGClass: function(section){
+        var classString = ' ';
+        if (section && section.bg && section.bg.img) {
+            if (section.bg.img.blur) {
+                classString += ' blur-image';
+            }
+            if (section.bg.img.parallax) {
+                classString += ' parallax';
+            }
+        }
+        return "\'" + classString + "\'";
+    },
+
+    buildSectionBGStyle: function(section) {
+        var styleString = ' ';
+        if (section && section.bg) {
+            if (section.bg.color) {
+                styleString += 'background-color: ' + section.bg.color + ';';
+            }
+            if (section.bg.img && section.bg.img.show && section.bg.img.url && section.bg.img.url !== '') {
+                styleString += 'background-image: url("' + section.bg.img.url + '")';
+            }
+        }
+        return "\'" + styleString + "\'";
+    }
+
+    buildSectionBackgroundUrl:function (section) {
+        var styleString = ' ';
+        if (section && section.bg && section.bg.img && section.bg.img.url) {
+            styleString = "background: url(" + section.bg.img.url + ") repeat-y";
+        }
+        return "\'" + styleString + "\'";
+    },
+
+    _showSection: function (section, handle) {
+        var _showSection = false;
+        if (section) {
+            _showSection = section.visibility !== false;
+            if (section.global && section.hiddenOnPages) {                
+                _showSection = !section.hiddenOnPages[handle];
+                section.visibility = _showSection;
+            }
+        }
+        return _showSection;
+    };
+
+    _slugifyText: function(s){
+        s = s.replace(/[^\w\s-]/g, "").trim().toLowerCase();
+        return s.replace(/[-\s]+/g, "-");
+    },
+
+    _sectionHasFooter: function(section) {
+        return _.findWhere(section.components, {
+            type: 'footer'
+        });
+    },
+
+    _sectionHasLegacyUnderNavSetting: function(section) {
+        var isUnderNav = false;
+        var masthead = _.findWhere(section.components, {
+            type: 'masthead'
+        });
+
+        if (masthead && masthead.bg && masthead.bg.img && masthead.bg.img.undernav) {
+            isUnderNav = true;
+        }
+        return isUnderNav;
     }
 };
