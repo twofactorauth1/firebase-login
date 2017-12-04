@@ -28,7 +28,28 @@
 			endDate: moment().format()
 		};
 		$scope.Math = Math;
-
+		function updateLiveDetailObject(liveVisitorDetails){
+			$scope.liveVisitorDetails=[];
+			_.each(liveVisitorDetails, function(detail){  
+				var server_time=new Date(detail.server_time);
+				_.each(detail.pageEvents, function(evn){
+					if(evn.activityType== 'CONTACT_FORM'){ 
+						_.map(evn.extraFields, function (value, key) {
+							if(key.toLowerCase()=='name'){
+								detail.name=value
+							}else if(key.toLowerCase()=='email'){
+								detail.email=value
+							}
+						});
+					} 
+				  }); 
+				  var difference = new Date().getTime()-server_time.getTime() ;
+				  var sec=Math.round((difference / 1000) % 60) 
+				  detail.resultInMinutes = Math.round(difference / 60000)+(sec<10?":0"+sec:":"+sec);
+				  
+				  $scope.liveVisitorDetails.push(detail);
+			});
+		}
 		var dateSwitch = false,
 			localTimezoneOffset = 0;
 		//highchar datetime behaving diffent on differnetbrowser so nee to set this check, may be a bugb in highcart
@@ -163,7 +184,8 @@
 
         $scope.platformTrafficDetails = function() {
             ChartAnalyticsService.getPlatformTrafficDetails(function (liveVisitorDetails) {
-                $scope.liveVisitorDetails = liveVisitorDetails;
+				updateLiveDetailObject(liveVisitorDetails);
+				
                 if(liveVisitorDetails && liveVisitorDetails.length){
                     $scope.setActiveVisitorIndex(0, true);
                 }
@@ -214,6 +236,7 @@
 
         $scope.updatePlatformTrafficDetails = function() {
             ChartAnalyticsService.getPlatformTrafficDetails(function (liveVisitorDetails) {
+				updateLiveDetailObject(liveVisitorDetails);
                 $scope.liveVisitorDetails = liveVisitorDetails;
                 if(liveVisitorDetails && liveVisitorDetails.length){
                     $scope.setActiveVisitorIndex(0, true);
