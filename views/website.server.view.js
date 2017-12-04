@@ -1203,12 +1203,20 @@ _.extend(view.prototype, BaseView.prototype, {
 
             },
 
+            function getPageTemplate(webpageData, page, cb) {
+                var pageCacheManager = require('../cms/pagecache_manager');
+                var pageTemplate = {'id':'template.html'};
+                pageCacheManager.getActivatePageSectionHtml(page, function(err, templateData){
+                    pageTemplate.data = templateData;
+                    data.templateIncludes.push(pageTemplate);
+                    cb(null, webpageData, page);
+                });
+            },
+
             function(value, page, cb) {
                 var pageHolder = {};
 
                 pageHolder[page.get('handle')] = page.toJSON('frontend');
-
-
                 data.page = page;
                 data.account = value;
                 data.originalAccountBusiness = originalAccount.get('business');

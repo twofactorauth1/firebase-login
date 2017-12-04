@@ -347,13 +347,24 @@ module.exports = {
             res.setEncoding('utf8');
             res.on('data', function(chunk){
 
-                var string = '<div class="main-include" ssb-data-styles>' + chunk + '</div>';
+                var string = self.buildRenderTemplateHtml(chunk);
                 self.log.debug(accountId, null, '<< getS3TemplateContent');
                 fn(null, string);
             });
         }).end();
 
 
+    },
+
+
+    getActivatePageSectionHtml: function(page, fn){
+        var self = this;
+        var html = "";
+        if(page.get('sections') != null && page.get('sections').length > 0) {
+            html = self.buildTemplateMarkup(page);
+        }
+        var string = self.buildRenderTemplateHtml(html);
+        fn(null, string);
     },
 
     getOrCreateS3Template: function(accountId, pageName, update, resp) {
@@ -620,5 +631,9 @@ module.exports = {
 
         return html;
 
+    },
+
+    buildRenderTemplateHtml: function(html){
+        return '<div class="main-include" ssb-data-styles>' + html + '</div>';
     }
 };
