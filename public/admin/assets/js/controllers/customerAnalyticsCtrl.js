@@ -31,6 +31,7 @@
 		function updateLiveDetailObject(liveVisitorDetails){
 			$scope.liveVisitorDetails=[];
 			_.each(liveVisitorDetails, function(detail){  
+				var server_time=new Date(detail.server_time);
 				_.each(detail.pageEvents, function(evn){
 					if(evn.activityType== 'CONTACT_FORM'){ 
 						_.map(evn.extraFields, function (value, key) {
@@ -40,8 +41,12 @@
 								detail.email=value
 							}
 						});
-					}
+					} 
 				  }); 
+				  var difference = new Date().getTime()-server_time.getTime() ;
+				  var sec=Math.round((difference / 1000) % 60) 
+				  detail.resultInMinutes = Math.round(difference / 60000)+(sec<10?":0"+sec:":"+sec);
+				  
 				  $scope.liveVisitorDetails.push(detail);
 			});
 		}
