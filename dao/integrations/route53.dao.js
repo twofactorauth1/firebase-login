@@ -15,7 +15,7 @@ var Route53 = require('nice-route53');
 
 var testELB = 'dualstack.indigeweb-test-686685960.us-west-1.elb.amazonaws.com.';
 var testZone = 'Z368ELLRRE2KJ0';
-var prodELB = 'dualstack.awseb-e-5-awsebloa-in3ormrduuju-210822443.us-west-1.elb.amazonaws.com.';
+var prodELB = 'dualstack.awseb-e-5-AWSEBLoa-158ZYBXNNO0RT-827664530.us-west-1.elb.amazonaws.com.';
 var prodZone = 'Z368ELLRRE2KJ0';
 
 var r53 = new Route53({

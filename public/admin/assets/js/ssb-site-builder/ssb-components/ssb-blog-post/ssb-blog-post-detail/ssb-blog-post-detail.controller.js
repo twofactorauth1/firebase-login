@@ -44,9 +44,9 @@
 		function init(element) {
 			vm.element = element;
 			vm.showSocialShareif = (window.indigenous && window.indigenous.blogSocialSharing);
-			if ($injector.has("AccountService")) {
-				var accountService = $injector.get("AccountService");
-				accountService.getAccount(function (account) {
+			if ($injector.has("accountService")) {
+				var accountService = $injector.get("accountService");
+				accountService(function (err, account) {
 					if (account && account.showhide && account.showhide.blogSocialSharing !== false) {
 						vm.showSocialShare = true;
 					}

@@ -2,8 +2,8 @@
     <section
         ng-show="vm.showSection"
         id="section_{{vm.section._id}}"
-        class="ssb-check-fixed ssb-section-layout ssb-section-section ssb-section-type-{{vm.section.components[0].type}} {{vm.myclass}}"
-        style="{{vm.mystyle}}"
+        class="ssb-check-fixed ssb-section-layout ssb-section-section ssb-section-type-{{vm.section.components[0].type}} {{vm.preSectionClass}}"
+        style="{{vm.preSectionStyle}}"
         ng-attr-style="{{vm.sectionStyle(vm.section)}}">
         <style>
         #section_{{vm.section._id}} > .bg-overlay {
@@ -40,9 +40,7 @@
         <div ng-if="((vm.section.components[0] && vm.section.components[0].src) || (vm.section.bg.img.show && vm.section.bg.img.url) || vm.section.bg.video.show && vm.section.bg.video.url) && vm.section.bg.img.overlay" class="bg bg-overlay"></div>
 
         
-        <ng-include src=" '/admin/assets/js/ssb-site-builder/ssb-components/ssb-' + vm.section.layout + '/ssb-' + vm.section.layout + '.layout.v' + vm.section.version + '.html' " ng-if="vm.section.components.length && vm.section.layoutModifiers.custom"></ng-include>
-        
-
+        <div data-ng-include data-src=" '/admin/assets/js/ssb-site-builder/ssb-components/ssb-' + vm.section.layout + '/ssb-' + vm.section.layout + '.layout.v' + vm.section.version + '.html' " ng-if="vm.section.components.length && vm.section.layoutModifiers.custom"></div>
 
         <ssb-component-loader
             ng-if="vm.section.components.length && !vm.section.layoutModifiers.custom"
