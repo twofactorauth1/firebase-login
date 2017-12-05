@@ -36,7 +36,7 @@
 					if(evn.activityType== 'CONTACT_FORM'){ 
 						_.map(evn.extraFields, function (value, key) {
 							if(key.toLowerCase()=='name'){
-								detail.name=value
+								detail.name=value +" "+(evn.extraFields.last?evn.extraFields.last:"");
 							}else if(key.toLowerCase()=='email'){
 								detail.email=value
 							}
