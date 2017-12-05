@@ -122,13 +122,13 @@ module.exports = {
                     name: new RegExp('^'+ title +'$', "i")
                 }
             }
-
+            
             campaignDao.exists(query, $$.m.Campaign, function(err, value){
             if(err) {
                 self.log.error('Error getting campaign:', err);
                 return fn(err, null);
             } else {
-                    return fn(null, value);
+                    return fn(null, value);  
                 }
         });
     },
@@ -744,13 +744,13 @@ module.exports = {
                 var campaignType = campaign.get("type");
                 var contactTags = campaign.get('contactTagData') || [];
                 contactDao.getContactsByTagArray(accountId, userId, contactTags, function(err, contacts){
-                   /* if(contacts) {
+                    if(contacts) {
                         _.each(contacts, function(contact){
                             if(!_.contains(contacts, contact.id())) {
                                 contactsArray.push(contact.id());
                             }
                         });
-                    }*/
+                    }
                     //uniqueify contacts
                     contactsArray = _.uniq(contactsArray);
                     campaign.set('contacts', contactsArray || []);
@@ -780,7 +780,7 @@ module.exports = {
                                 });
 
                                 campaignDao.batchUpdate(contacts, $$.m.Contact, function(err, updatedContacts){
-
+                                    
                                 });
                             }
                         });
@@ -1469,21 +1469,16 @@ module.exports = {
         var self = this;
         self.log.debug('>> cancelRunningCampaign');
         var query = {
-             accountId: accountId,
-             _id: campaignId,
-             contactId: {$in : [contactId]}
-         };
-         var query_flow = {
-              accountId: accountId,
-              campaignId: campaignId,
-              contactId: contactId
-          };
+            accountId: accountId,
+            campaignId: campaignId,
+            contactId: contactId
+        };
         campaignDao.exists(query, $$.m.Campaign, function(err, value){
             if(err) {
                 self.log.error('Error getting campaign:', err);
                 return fn(err, null);
             } else if(value === true) {
-               campaignDao.removeByQuery(query_flow, $$.m.CampaignFlow, function(err, value){
+               campaignDao.removeByQuery(query, $$.m.CampaignFlow, function(err, value){
                     if(err) {
                         self.log.error('Error deleting campaign flow: ' + err);
                         return fn(err, null);
