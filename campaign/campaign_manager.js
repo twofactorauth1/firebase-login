@@ -744,13 +744,13 @@ module.exports = {
                 var campaignType = campaign.get("type");
                 var contactTags = campaign.get('contactTagData') || [];
                 contactDao.getContactsByTagArray(accountId, userId, contactTags, function(err, contacts){
-                   /* if(contacts) {
+                    if(contacts) {
                         _.each(contacts, function(contact){
                             if(!_.contains(contacts, contact.id())) {
                                 contactsArray.push(contact.id());
                             }
                         });
-                    }*/
+                    }
                     //uniqueify contacts
                     contactsArray = _.uniq(contactsArray);
                     campaign.set('contacts', contactsArray || []);
@@ -1471,11 +1471,6 @@ module.exports = {
         self.log.debug('>> cancelRunningCampaign');
         var query = {
             accountId: accountId,
-            _id: campaignId,
-            contactId: {$in : [contactId]}
-        };
-        var query_flow = {
-            accountId: accountId,
             campaignId: campaignId,
             contactId: contactId
         };
@@ -1486,7 +1481,7 @@ module.exports = {
                 self.log.error('Error getting campaign:', err);
                 return fn(err, null);
             } else if(value === true) {
-               campaignDao.removeByQuery(query_flow, $$.m.CampaignFlow, function(err, value){
+               campaignDao.removeByQuery(query, $$.m.CampaignFlow, function(err, value){
                     if(err) {
                         self.log.error('Error deleting campaign flow: ' + err);
                         return fn(err, null);
