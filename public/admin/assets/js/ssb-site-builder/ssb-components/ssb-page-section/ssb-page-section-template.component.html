@@ -2,9 +2,8 @@
     <section
         ng-show="vm.displaySection"
         id="section_{{vm.section._id}}"
-        class="ssb-check-fixed ssb-section-layout ssb-section-section ssb-section-type-{{vm.section.components[0].type}} {{vm.section.sectionClass}}"
-        style="{{vm.section.sectionStyle}}"
-        ng-attr-style="{{vm.sectionStyle}}">
+        class="ssb-check-fixed ssb-section-layout ssb-section-section ssb-section-type-{{vm.section.components[0].type}} {{vm.section.sectionClass}}"        
+        ng-attr-style="{{vm.section.sectionStyle}} {{vm.sectionStyle}}">
         <style>
         #section_{{vm.section._id}} > .bg-overlay {
         background: {{vm.section.bg.img.overlaycolor || 'transparent'}}!important;

@@ -648,7 +648,7 @@ module.exports = {
 
         _.each(page.get('sections'), function(section, index){
             section.sectionClass = self.buildSectionClass(section);
-            section.sectionStyle = self.buildSectionClass(section);
+            section.sectionStyle = self.buildSectionStyles(section);
             section.sectionBGClass = self.buildSectionBGClass(section);
             section.sectionBGStyle = self.buildSectionBGStyle(section)
         });
