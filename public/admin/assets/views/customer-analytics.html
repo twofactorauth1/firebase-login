@@ -43,11 +43,11 @@
                         </div>
                     </div>
                     <div class="panel-footer border-light"></div>
-                </div>      
+                </div>
             </div>
         </div>
     </div>
-    <div class="clearfix"></div> 
+    <div class="clearfix"></div>
     <div class="row">
         <div class="col-sm-12">
             <div class="panel panel-white margin-top-15 dashboard-live-widget-container analytics-live-widget-container" id="liveTrafficData" ng-class="{'load1 csspinner': !livePlatformTrafficConfig.options}">
@@ -61,20 +61,20 @@
                             <ul class="active-ul">
                                 <li ng-class="{'active-visitor-detail': selectedVisitorIndex === $index}" ng-repeat="visitorDetail in liveVisitorDetails track by $index"  ng-click ="setActiveVisitorIndex($index)" class="cursor-pointer main-li">
                                     <div class="col-xs-6 visitor-address">{{visitorDetail.email||visitorDetail.fingerprint}}</div>
-                                    <div class="col-xs-2 ">{{visitorDetail.subdomain}}</div>
+                                    <div class="col-xs-2 visitor-account">{{visitorDetail.subdomain}}</div>
                                     <div class="col-xs-4 visitor-timestamp">{{convertUtcToLocal(visitorDetail.server_time)}}</div>
                                 </li>
                             </ul>
                         </div>
-                        <div class="col-sm-6 visitor-right-pane"> 
+                        <div class="col-sm-6 visitor-right-pane">
                             <div class="col-xs-2"><img  src="/admin/assets/images/default-user.png" style="width: 39px;
                                 height: 40px;border-radius: 60%;" class="ng-isolate-scope" ></div>
-                            <div class="col-xs-10"> 
+                            <div class="col-xs-10">
                                 <p><strong>Name: </strong> {{activeVisitorDetail.name}} </p>
                                 <p><strong>Email: </strong> {{activeVisitorDetail.email}} </p>
-                                <p><strong>ID: </strong> {{activeVisitorDetail.fingerprint}} </p>  
-                            </div> 
-                            <ul class="adv-info">  
+                                <p><strong>ID: </strong> {{activeVisitorDetail.fingerprint}} </p>
+                            </div>
+                            <ul class="adv-info">
                                 <li>
                                     <div class="col-xs-5"><strong>IP Address</strong></div>
                                     <div class="col-xs-7">{{activeVisitorDetail.ip_address}}</div>
@@ -119,27 +119,27 @@
                                         <div ng-switch-when="CONTACT_FORM">
                                             <p>
                                                 <span style="padding-left:10px;">{{pageEvent.pageTime | date:'h:mm a'}}</span>
-                                                    <ul class="form-values"> 
+                                                    <ul class="form-values">
                                                         <li >
                                                             <strong style="overflow: hidden;display:inline-block;">Submitted :</strong><span style="width:80%;" >Form was submitted with the data</span>
-                                                        </li>      
+                                                        </li>
                                                         <li ng-repeat="(k,v) in pageEvent.extraFields">
                                                             <b>{{k | formatText}}</b>: {{v}}
                                                         </li>
                                                 </ul>
-                                            </p> 
+                                            </p>
                                         </div>
                                         <div ng-switch-when="PAGE_VIEW">
-                                            <p> 
+                                            <p>
                                                 <span style="padding-left:10px;">{{pageEvent.pageTime | date:'h:mm a'}}</span>
                                                 <ul class="form-values">
                                                     <li >
                                                         <strong style="overflow: hidden;display:inline-block;">Visted:</strong><span style="width:80%;" class="text-adjust inline-block" tooltip-placement="top" tooltip="{{pageEvent.pageRequested}}">{{pageEvent.pageRequested}}</span>
                                                     </li>
                                                 </ul>
-                                            </p> 
+                                            </p>
                                         </div>
-                                    </div> 
+                                    </div>
                                 </li>
                             </ul>
                         </div>
@@ -147,7 +147,7 @@
                     <h3 ng-if="!liveVisitorDetails.length" class="center margin-top-30">
                         No details found
                     </h3>
-                </div> 
+                </div>
             </div>
         </div>
     </div>
