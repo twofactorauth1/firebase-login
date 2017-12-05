@@ -645,12 +645,15 @@ module.exports = {
 
     buildPageStyles: function(page, fn){
         var self = this;
-
         _.each(page.get('sections'), function(section, index){
             section.sectionClass = self.buildSectionClass(section);
             section.sectionStyle = self.buildSectionStyles(section);
             section.sectionBGClass = self.buildSectionBGClass(section);
-            section.sectionBGStyle = self.buildSectionBGStyle(section)
+            section.sectionBGStyle = self.buildSectionBGStyle(section);
+            _.each(section.components, function(component, idx){
+                component.componentClass = self.buildComponentClass(section, component, idx);
+                component.componentStyle = self.buildComponentStyles(component);
+            })
         });
 
         fn(null, page);
@@ -710,7 +713,7 @@ module.exports = {
                         section.layoutModifiers.grid.height = 350;
                     }
                 }
-                if (section.layoutModifiers.columns && section.layoutModifiers.columns.columnsNum != "undefined") {
+                if (section.layoutModifiers.columns && section.layoutModifiers.columns.columnsNum !== undefined) {
                     var _col = section.layoutModifiers.columns.columnsNum || 1;
                     classString += " ssb-text-column-layout ssb-text-column-" + _col;
                 }
@@ -791,6 +794,259 @@ module.exports = {
         return styleString;
     },
 
+    // Component related styles and classes
+
+    buildComponentClass: function(section, component, index) {
+        var self = this;
+        var classString = "container-fluid ";
+        if (section.layout === "2-col") {
+            classString += " col-md-6 ";
+        } else if (section.layout === "2-col-right") {
+            classString += " col-md-6 ";
+            if (index > 1) {
+                classString += " ssb-col-md-float-right";
+            }
+        } else if (section.layout === "3-col") {
+            classString += " col-md-4 ";
+        }else if (section.layout === "4-col") {
+            classString += " col-md-3";
+        }
+        if (index !== undefined) {
+            classString += " ssb-component-index-" + index + " ";
+        }
+        if (component.slider && component.slider.sliderDotShape) {
+            classString += " square-dot";
+        }
+        if (component.hideOnlyMobile) {
+            classString += " ssb-component-o-desktop";
+        }
+        if (component.showOnlyMobile) {
+            classString += " ssb-component-o-moblie";
+        }
+        if (section.layoutModifiers && section.layoutModifiers.columns) {
+            var fixedColumn;
+            if (section.layoutModifiers.columns.columnsNum !== undefined) {
+                var rowsCount = (section.layoutModifiers.columns.rowsNum ? parseInt(section.layoutModifiers.columns.rowsNum) : 1),
+                    firstColIndexes = self._getColumnIndexes(rowsCount, section.layoutModifiers.columns.columnsNum, true),
+                    lastColIndexes = self._getColumnIndexes(rowsCount, section.layoutModifiers.columns.columnsNum, false),
+                    _lastCoulmnFullWidth = false,
+                    actualColumnsToIgnore = [],
+                    colCount,
+                    newColCount,
+                    colClass,
+                    totalCoulmns,
+                    actualColumnsIndexes;
+                if (section.layoutModifiers.columns.ignoreColumns && section.layoutModifiers.columns.ignoreColumns.length) {
+                    var ignoreColumns = section.layoutModifiers.columns.ignoreColumns;
+                    _.each(ignoreColumns, function (val) {
+                        if (val === "last") {
+                            actualColumnsToIgnore.push(section.components.length - 1);
+                            _lastCoulmnFullWidth = true;
+                        } else {
+                            actualColumnsToIgnore.push(val - 1);
+                        }
+                    });
+                }
+                fixedColumn = actualColumnsToIgnore.indexOf(index) > -1 ? true : false;
+
+                colCount = parseInt(section.layoutModifiers.columns.columnsNum) || 1;
+                rowsCount = section.layoutModifiers.columns.rowsNum ? parseInt(section.layoutModifiers.columns.rowsNum) : 1;
+                newColCount = colCount * rowsCount;
+                colClass = " col-xs-12 col-sm-" + Math.floor(12 / colCount);
+                if (!fixedColumn) {
+                    classString += colClass;
+                    if (colCount == 5) {
+                        classString += " col-xs-15 col-md-15";
+                    }
+                }
+                totalCoulmns = newColCount;
+                actualColumnsIndexes = [];
+                for (var i = 0; i <= section.components.length - 1; i++) {
+                    actualColumnsIndexes.push(i);
+                }
+                if (actualColumnsToIgnore.length) {
+                    totalCoulmns = totalCoulmns + actualColumnsToIgnore.length;
+                    actualColumnsIndexes = _.difference(actualColumnsIndexes, actualColumnsToIgnore);
+                }
+
+                if (index !== undefined && index >= totalCoulmns && !fixedColumn) {
+                    classString += " ssb-col-hide";
+                }
+
+
+                if (section.layoutModifiers.columns.columnsSpacing && !fixedColumn) {
+                    if (parseInt(section.layoutModifiers.columns.columnsNum) > 1) {
+
+                        if (actualColumnsIndexes.indexOf(index) == 0) {
+                            classString += " ssb-component-layout-columns-spacing-first-column-" + section.layoutModifiers.columns.columnsSpacing + " ";
+                        } else if (actualColumnsIndexes.indexOf(index) == section.layoutModifiers.columns.columnsNum - 1) {
+                            classString += " ssb-component-layout-columns-spacing-last-column-" + section.layoutModifiers.columns.columnsSpacing + " ";
+                        } else if (_.contains(lastColIndexes, actualColumnsIndexes.indexOf(index))) {
+                            classString += " ssb-component-layout-columns-spacing-last-column-" + section.layoutModifiers.columns.columnsSpacing + " ";
+                        } else if (_.contains(firstColIndexes, actualColumnsIndexes.indexOf(index))) {
+                            classString += " ssb-component-layout-columns-spacing-first-column-" + section.layoutModifiers.columns.columnsSpacing + " ";
+                        } else {
+                            classString += " ssb-component-layout-columns-spacing-" + section.layoutModifiers.columns.columnsSpacing + " ";
+                        }
+                    }
+
+                }
+
+                if (section.layoutModifiers.columns.rowsSpacing && !fixedColumn) {
+                    if (parseInt(section.layoutModifiers.columns.columnsNum) > 1) {
+                        if (actualColumnsIndexes.indexOf(index) > section.layoutModifiers.columns.columnsNum - 1) {
+                            classString += " ssb-component-layout-rows-spacing-" + section.layoutModifiers.columns.rowsSpacing + " ";
+                        }
+                        if (actualColumnsIndexes.indexOf(index) > 0) {
+                            classString += " ssb-component-layout-rows-mobile-spacing-" + section.layoutModifiers.columns.rowsSpacing + " ";
+                        }
+                    }
+                }
+
+                if (!fixedColumn) {
+                    if (parseInt(section.layoutModifiers.columns.columnsNum) > 1) {
+                        if (_.contains(firstColIndexes, actualColumnsIndexes.indexOf(index))) {
+                            classString += " ssb-clear-left ";
+                        }
+                    }
+                }
+
+                if (index === section.components.length - 1 && _lastCoulmnFullWidth) {
+                    classString += " ssb-text-last-column-full-width";
+                }
+            }
+        }
+        if (component.layoutModifiers) {
+            if (component.layoutModifiers.columns) {
+                if (component.layoutModifiers.columnsNum) {
+                    classString += " ssb-component-layout-columns-" + component.layoutModifiers.columnsNum + " ";
+                }
+                if (component.layoutModifiers.columnsSpacing) {
+                    classString += " ssb-component-layout-columns-spacing-" + component.layoutModifiers.columnsSpacing + " ";
+                }
+            }
+        }
+        if (component.slider && component.slider.stretchImage) {
+            classString += " ssb-component-stretch-image";
+        }
+        if(component.navigation){
+            if(component.navigation.wideMobileMode){                    
+                classString += " ssb-component-wmm";
+            }
+            else if(component.navigation.alwaysmobileMode){
+                classString += " ssb-component-amm";
+            }
+        }
+        return classString;
+    },
+
+    buildComponentStyles: function(component){
+        var styleString = " ";
+
+        if (component.type.indexOf("ssb-") === 0 && component.type != "ssb-form-builder" && component.type != "ssb-rss-feed" && component.type != "ssb-form-donate") {
+
+            if (component.spacing) {
+                if (component.spacing.pt) {
+                    styleString += "padding-top: " + component.spacing.pt + "px;";
+                }
+
+                if (component.spacing.pb) {
+                    styleString += "padding-bottom: " + component.spacing.pb + "px;";
+                }
+
+                if (component.spacing.pl) {
+                    styleString += "padding-left: " + component.spacing.pl + "px;";
+                }
+
+                if (component.spacing.pr) {
+                    styleString += "padding-right: " + component.spacing.pr + "px;";
+                }
+
+                if (component.spacing.mt) {
+                    styleString += "margin-top: " + component.spacing.mt + "px;";
+                    
+                }
+
+                if (component.spacing.mb) {
+                    styleString += "margin-bottom: " + component.spacing.mb + "px;";
+                }
+
+                if (component.spacing.ml) {
+                    styleString += component.spacing.ml == "auto" ? "margin-left: " + component.spacing.ml + ";float: none;" : "margin-left: " + component.spacing.ml + "px;";
+                }
+
+                if (component.spacing.mr) {
+                    styleString += (component.spacing.mr == "auto") ? "margin-right: " + component.spacing.mr + ";float: none;" : "margin-right: " + component.spacing.mr + "px;";
+                }
+
+                if (component.spacing.mw) {
+                    component.spacing.mw = component.spacing.mw.toString();
+                    if(component.spacing.mw == "100%" || component.spacing.mw == "auto") {
+                      styleString +=   "max-width: " + component.spacing.mw + ";" ;
+                    }
+                    else{
+                        if(component.spacing.mw && component.spacing.mw !== "" && component.spacing.mw.indexOf("%") === -1){
+                           var isPx = "";
+                           (component.spacing.mw.toLowerCase().indexOf("px") === -1) ? isPx="px" : isPx = "";
+                           styleString +=  "max-width: " + component.spacing.mw + isPx +";margin-left:auto!important;margin-right:auto!important;";
+                        }
+                        else
+                        {
+                           styleString +=  "max-width: " + component.spacing.mw + ";margin-left:auto!important;margin-right:auto!important;";
+                        }
+                    }
+                }
+
+                if (component.spacing.lineHeight) {
+                    styleString += "line-height: " + component.spacing.lineHeight;
+                }
+            }
+
+            if (component.txtcolor && vm.section && vm.section.txtcolor) {
+                styleString += "color: " + component.txtcolor + ";";
+            }
+
+            if (component.visibility === false && component.type != "ssb-rss-feed") {
+                styleString += "display: none!important;";
+            }
+
+            if (component.bg) {
+                if (component.bg.color) {
+                    styleString += "background-color: " + component.bg.color + ";";
+                }
+
+                if (component.bg.img && component.bg.img.show && component.bg.img.url !== "") {
+                    styleString += "background-image: url(" + component.bg.img.url + ")";
+                }
+            }
+
+            if (component.src) {
+                if (component.src && component.src !== "") {
+                    styleString += "background-image: url(" + component.src + ")";
+                }
+            }
+
+        }
+
+        if (component.layoutModifiers) {
+            if (component.layoutModifiers.columns) {
+                if (component.layoutModifiers.columnsMaxHeight) {
+                    styleString += " max-height: " + component.layoutModifiers.columnsMaxHeight + "px";
+                }
+            }
+        }
+
+        if (component.border && component.border.show && component.border.color && component.visibility !== false) {
+            styleString += " border-color: " + component.border.color + ";";
+            styleString += " border-width: " + component.border.width + "px;";
+            styleString += " border-style: " + component.border.style + ";";
+            styleString += " border-radius: " + component.border.radius + "%;";
+        }
+
+
+        return styleString;
+    },
+
     _showSection: function (section, handle) {
         var _showSection = false;
         if (section) {
@@ -824,6 +1080,18 @@ module.exports = {
             isUnderNav = true;
         }
         return isUnderNav;
+    },
+
+    _getColumnIndexes: function(rowsNum, colNum, first) {
+        var indexes = [];
+        for (var index = 0; index <= rowsNum; index++) {
+            if (first)
+                indexes.push(index * parseInt(colNum));
+            else {
+                indexes.push((index * parseInt(colNum)) + parseInt(colNum) - 1);
+            }
+        }
+        return indexes;
     },
 
     buildRenderTemplateHtml: function(html){

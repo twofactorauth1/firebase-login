@@ -26,8 +26,8 @@
 			link: function (scope, element, attrs, ctrl) {
 				var newEl, compiled, template = '<div ' + ctrl.component.type + '-component ' +
 					'id="component_' + ctrl.component._id + '" component="vm.component" ' +
-					'class="ssb-component ssb-{{vm.component.type}} {{vm.componentClass(vm.component)}}" ' +
-					'ng-attr-style="{{vm.componentStyle(vm.component)}}"  ng-if="vm.showComponent">' +
+					'class="ssb-component ssb-{{vm.component.type}} {{vm.component.componentClass}} {{vm.componentClass(vm.component)}}" ' +
+					'ng-attr-style="{{vm.component.componentStyle}}"  ng-if="vm.showComponent">' +
 					'</div>';
 				//if edit mode
 				if (ctrl.uiState) {

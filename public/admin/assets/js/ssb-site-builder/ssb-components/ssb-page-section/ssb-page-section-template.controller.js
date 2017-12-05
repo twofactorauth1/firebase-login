@@ -16,7 +16,6 @@
 		vm.sectionClass = sectionClass;		
 		vm.sectionStyle = sectionStyle;
 		vm.componentClass = componentClass;
-		vm.componentStyle = componentStyle;
 		vm.setupVideoBackground = setupVideoBackground;
 		vm.playerObject = {};
 		vm.player = {};
@@ -411,130 +410,27 @@
 			}
 		}	
 
-		function componentClass(component, index) {
-			var classString = 'container-fluid ';
-			if (vm.section.layout === '2-col') {
-				classString += ' col-md-6 ';
-			} else if (vm.section.layout === '2-col-right') {
-				classString += ' col-md-6 ';
-				if (index > 1) {
-					classString += ' ssb-col-md-float-right';
-				}
-			} else if (vm.section.layout === '3-col') {
-				classString += ' col-md-4 ';
-			}else if (vm.section.layout === '4-col') {
-				classString += ' col-md-3';
-			}
-
-			if (index !== undefined) {
-				classString += ' ssb-component-index-' + index + ' ';
-			}
-			if (component.slider && component.slider.sliderDotShape) {
-				classString += ' square-dot ';
-			}
-			if (component.hideOnlyMobile) {
-				classString += " ssb-component-o-desktop";
-			}
-			if (component.showOnlyMobile) {
-				classString += " ssb-component-o-moblie";
-			}
-			if (vm.section.layoutModifiers && vm.section.layoutModifiers.columns) {
+		function componentClass(component, index) {			
+			if (vm.section && vm.section.layoutModifiers && vm.section.layoutModifiers.columns) {
 				var fixedColumn;
-				if (angular.isDefined(vm.section.layoutModifiers.columns.columnsNum)) {
-					var rowsCount = (vm.section.layoutModifiers.columns.rowsNum ? parseInt(vm.section.layoutModifiers.columns.rowsNum) : 1),
-						firstColIndexes = getColumnIndexes(rowsCount, vm.section.layoutModifiers.columns.columnsNum, true),
-						lastColIndexes = getColumnIndexes(rowsCount, vm.section.layoutModifiers.columns.columnsNum, false),
-						_lastCoulmnFullWidth = false,
-						actualColumnsToIgnore = [],
-						colCount,
-						newColCount,
-						colClass,
-						totalCoulmns,
-						actualColumnsIndexes;
+				if (angular.isDefined(vm.section.layoutModifiers.columns.columnsNum)) {					
+						var actualColumnsToIgnore = [];
 					if (vm.section.layoutModifiers.columns.ignoreColumns && vm.section.layoutModifiers.columns.ignoreColumns.length) {
 						var ignoreColumns = vm.section.layoutModifiers.columns.ignoreColumns;
 						_.each(ignoreColumns, function (val) {
 							if (val === 'last') {
 								actualColumnsToIgnore.push(vm.section.components.length - 1);
-								_lastCoulmnFullWidth = true;
 							} else {
 								actualColumnsToIgnore.push(val - 1);
 							}
 						});
 					}
 					fixedColumn = actualColumnsToIgnore.indexOf(index) > -1 ? true : false;
-
-					colCount = parseInt(vm.section.layoutModifiers.columns.columnsNum) || 1;
-					rowsCount = vm.section.layoutModifiers.columns.rowsNum ? parseInt(vm.section.layoutModifiers.columns.rowsNum) : 1;
-					newColCount = colCount * rowsCount;
-					colClass = " col-xs-12 col-sm-" + Math.floor(12 / colCount);
-					if (!fixedColumn) {
-						classString += colClass;
-						if (colCount == 5) {
-							classString += " col-xs-15 col-md-15";
-						}
-					}
-					totalCoulmns = newColCount;
-					actualColumnsIndexes = [];
-					for (var i = 0; i <= vm.section.components.length - 1; i++) {
-						actualColumnsIndexes.push(i);
-					}
-					if (actualColumnsToIgnore.length) {
-						totalCoulmns = totalCoulmns + actualColumnsToIgnore.length;
-						actualColumnsIndexes = _.difference(actualColumnsIndexes, actualColumnsToIgnore);
-					}
-
-					if (index !== undefined && index >= totalCoulmns && !fixedColumn) {
-						classString += " ssb-col-hide";
-					}
-
-
-					if (vm.section.layoutModifiers.columns.columnsSpacing && !fixedColumn) {
-						if (parseInt(vm.section.layoutModifiers.columns.columnsNum) > 1) {
-
-							if (actualColumnsIndexes.indexOf(index) == 0) {
-								classString += ' ssb-component-layout-columns-spacing-first-column-' + vm.section.layoutModifiers.columns.columnsSpacing + ' ';
-							} else if (actualColumnsIndexes.indexOf(index) == vm.section.layoutModifiers.columns.columnsNum - 1) {
-								classString += ' ssb-component-layout-columns-spacing-last-column-' + vm.section.layoutModifiers.columns.columnsSpacing + ' ';
-							} else if (_.contains(lastColIndexes, actualColumnsIndexes.indexOf(index))) {
-								classString += ' ssb-component-layout-columns-spacing-last-column-' + vm.section.layoutModifiers.columns.columnsSpacing + ' ';
-							} else if (_.contains(firstColIndexes, actualColumnsIndexes.indexOf(index))) {
-								classString += ' ssb-component-layout-columns-spacing-first-column-' + vm.section.layoutModifiers.columns.columnsSpacing + ' ';
-							} else {
-								classString += ' ssb-component-layout-columns-spacing-' + vm.section.layoutModifiers.columns.columnsSpacing + ' ';
-							}
-						}
-
-					}
-
-					if (vm.section.layoutModifiers.columns.rowsSpacing && !fixedColumn) {
-						if (parseInt(vm.section.layoutModifiers.columns.columnsNum) > 1) {
-							if (actualColumnsIndexes.indexOf(index) > vm.section.layoutModifiers.columns.columnsNum - 1) {
-								classString += ' ssb-component-layout-rows-spacing-' + vm.section.layoutModifiers.columns.rowsSpacing + ' ';
-							}
-							if (actualColumnsIndexes.indexOf(index) > 0) {
-								classString += ' ssb-component-layout-rows-mobile-spacing-' + vm.section.layoutModifiers.columns.rowsSpacing + ' ';
-							}
-						}
-					}
-
-					if (!fixedColumn) {
-						if (parseInt(vm.section.layoutModifiers.columns.columnsNum) > 1) {
-							if (_.contains(firstColIndexes, actualColumnsIndexes.indexOf(index))) {
-								classString += " ssb-clear-left ";
-							}
-						}
-					}
-
-					if (index === vm.section.components.length - 1 && _lastCoulmnFullWidth) {
-						classString += " ssb-text-last-column-full-width";
-					}
 				}
 
 				if (!fixedColumn && parseInt(vm.section.layoutModifiers.columns.columnsNum) > 1) {
 					var element = angular.element(".inner-component-style." + component.type + "" + component._id);
 					if (vm.section.columnBorder && vm.section.columnBorder.show && vm.section.columnBorder.color) {
-
 						if (element) {
 							element.css({
 								'border-color': vm.section.columnBorder.color,
@@ -552,172 +448,6 @@
 					}
 				}
 			}
-			if (component.layoutModifiers) {
-				if (component.layoutModifiers.columns) {
-					if (component.layoutModifiers.columnsNum) {
-						classString += ' ssb-component-layout-columns-' + component.layoutModifiers.columnsNum + ' ';
-					}
-					if (component.layoutModifiers.columnsSpacing) {
-						classString += ' ssb-component-layout-columns-spacing-' + component.layoutModifiers.columnsSpacing + ' ';
-					}
-				}
-			}
-			if (component.slider && component.slider.stretchImage) {
-				classString += ' ssb-component-stretch-image';
-			}
-			if(component.navigation){
-				if(component.navigation.wideMobileMode && component.navigation.alwaysmobileMode ){
-					if(component.navigation.lmma=='wmm'){
-						component.navigation.lmma="amm";
-						component.navigation.wideMobileMode=false;
-						classString += ' ssb-component-amm';
-					}else{
-						component.navigation.lmma="wmm"
-						component.navigation.alwaysmobileMode=false
-						classString += ' ssb-component-wmm';
-					}
-				}else{
-					if(component.navigation.wideMobileMode){
-						component.navigation.lmma="wmm"
-						component.navigation.alwaysmobileMode=false
-						classString += ' ssb-component-wmm';
-					}
-					if(component.navigation.alwaysmobileMode){
-						component.navigation.lmma="amm";
-						component.navigation.wideMobileMode=false;
-						classString += ' ssb-component-amm';
-					}
-				}
-			}
-			return classString;
-		}
-
-		function componentStyle(component) {
-			var styleString = ' ';
-
-			if (component.type.indexOf('ssb-') === 0 && component.type != "ssb-form-builder" && component.type != 'ssb-rss-feed' && component.type != 'ssb-form-donate') {
-
-				if (component.spacing) {
-					if (component.spacing.pt) {
-						styleString += 'padding-top: ' + component.spacing.pt + 'px;';
-					}
-
-					if (component.spacing.pb) {
-						styleString += 'padding-bottom: ' + component.spacing.pb + 'px;';
-					}
-
-					if (component.spacing.pl) {
-						styleString += 'padding-left: ' + component.spacing.pl + 'px;';
-					}
-
-					if (component.spacing.pr) {
-						styleString += 'padding-right: ' + component.spacing.pr + 'px;';
-					}
-
-					if (component.spacing.mt) {
-						styleString += 'margin-top: ' + component.spacing.mt + 'px;';
-						
-					}
-
-					if (component.spacing.mb) {
-						styleString += 'margin-bottom: ' + component.spacing.mb + 'px;';
-					}
-
-					if (component.spacing.ml) {
-						styleString += component.spacing.ml == 'auto' ? 'margin-left: ' + component.spacing.ml + ';float: none;' : 'margin-left: ' + component.spacing.ml + 'px;';
-					}
-
-					if (component.spacing.mr) {
-						styleString += (component.spacing.mr == 'auto') ? 'margin-right: ' + component.spacing.mr + ';float: none;' : 'margin-right: ' + component.spacing.mr + 'px;';
-					}
-
-					if (component.spacing.mw) {
-
-                      component.spacing.mw = component.spacing.mw.toString();
-                            if(component.spacing.mw == '100%' || component.spacing.mw == 'auto') {
-                              styleString +=   'max-width: ' + component.spacing.mw + ';' ;
-                            }
-                            else{
-                                if(component.spacing.mw && component.spacing.mw !== "" && component.spacing.mw.indexOf("%") === -1){
-                                   var isPx = "";
-                                   (component.spacing.mw.toLowerCase().indexOf('px') === -1) ? isPx="px" : isPx = "";
-                                   styleString +=  'max-width: ' + component.spacing.mw + isPx +';margin-left:auto!important;margin-right:auto!important;';
-                                }
-                                else
-                                {
-                                   styleString +=  'max-width: ' + component.spacing.mw + ';margin-left:auto!important;margin-right:auto!important;';
-                                }
-
-                           }
-
-
-
-
-						// styleString += (component.spacing.mw == '100%') ?
-						// 	'max-width: ' + component.spacing.mw + ';' :
-						// 	'max-width: ' + component.spacing.mw + 'px;margin:0 auto!important;';
-					}
-
-					if (component.spacing.lineHeight) {
-						styleString += 'line-height: ' + component.spacing.lineHeight;
-					}
-				}
-
-				if (component.txtcolor && vm.section && vm.section.txtcolor) {
-					styleString += 'color: ' + component.txtcolor + ';';
-				}
-
-				if (component.visibility === false && component.type != 'ssb-rss-feed') {
-					styleString += 'display: none!important;';
-				}
-
-				if (component.bg) {
-					if (component.bg.color) {
-						styleString += 'background-color: ' + component.bg.color + ';';
-					}
-
-					if (component.bg.img && component.bg.img.show && component.bg.img.url !== '') {
-						styleString += 'background-image: url("' + component.bg.img.url + '");';
-					}
-				}
-
-				if (component.src) {
-					if (component.src && component.src !== '') {
-						styleString += 'background-image: url("' + component.src + '");';
-					}
-				}
-
-			}
-
-			if (component.layoutModifiers) {
-				if (component.layoutModifiers.columns) {
-					if (component.layoutModifiers.columnsMaxHeight) {
-						styleString += ' max-height: ' + component.layoutModifiers.columnsMaxHeight + 'px';
-					}
-				}
-			}
-
-			if (component.border && component.border.show && component.border.color && component.visibility !== false) {
-				styleString += 'border-color: ' + component.border.color + ';';
-				styleString += 'border-width: ' + component.border.width + 'px;';
-				styleString += 'border-style: ' + component.border.style + ';';
-				styleString += 'border-radius: ' + component.border.radius + '%;';
-			}
-
-
-			return styleString;
-		}
-
-		function getColumnIndexes(rowsNum, colNum, first) {
-			var indexes = [];
-			for (var index = 0; index <= rowsNum; index++) {
-				if (first)
-					indexes.push(index * parseInt(colNum));
-				else {
-					indexes.push((index * parseInt(colNum)) + parseInt(colNum) - 1);
-				}
-			}
-			return indexes;
 		}
 
 		/**

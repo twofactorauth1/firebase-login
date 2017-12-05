@@ -45,15 +45,7 @@
             ng-if="vm.section.components.length && !vm.section.layoutModifiers.custom"
             ng-repeat="component in vm.section.components"
             component-class="vm.componentClass(component, $index)"
-            component-style="vm.componentStyle(component, $index)"
-            component="component"
-            website="vm.state.website"
-            state="vm.state"
-            ui-state="vm.uiState"
-            component-control="vm.uiState.componentControl"
-            component-media="vm.uiState.componentMedia"
-            section-index="vm.index"
-            component-index="$index"
+            component="component"            
             show-component="vm.displaySection"
             >
         </ssb-component-loader>
