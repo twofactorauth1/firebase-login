@@ -355,7 +355,7 @@ module.exports = {
 
     },
 
-    getActivatePageSectionHtml: function(page, fn){
+    buildTemplateFromPage: function(page, fn){
         var self = this;
         var html = "";
         if(page.get('sections') != null && page.get('sections').length > 0) {
@@ -636,12 +636,24 @@ module.exports = {
         var layout = page.get('layout');
         var handle = page.get('handle');
         _.each(page.get('sections'), function(section, index){            
-            html = html + '<ssb-page-section-template section="sections_' + index + '" index="' + index + '" class="ssb-page-section" ' +
-                   'pre-section-class="' + self.buildSectionClass(section) + '" pre-section-style="' + self.buildSectionStyles(section) + '" ' +
-                   'show-section="' + self._showSection(section) + '" section-bg-class="' + self.buildSectionBGClass(section) + '" section-bg-style="' + self.buildSectionBGStyle(section) + '" ></ssb-page-section-template>';
+            html = html + '<ssb-page-section-template section="sections_' + index + '" index="' + index + '" class="ssb-page-section" ' +                   
+                   'show-section="' + self._showSection(section) + '" ></ssb-page-section-template>';
         });
         console.log(html);
         return html;
+    },
+
+    buildPageStyles: function(page, fn){
+        var self = this;
+
+        _.each(page.get('sections'), function(section, index){
+            section.sectionClass = self.buildSectionClass(section);
+            section.sectionStyle = self.buildSectionClass(section);
+            section.sectionBGClass = self.buildSectionBGClass(section);
+            section.sectionBGStyle = self.buildSectionBGStyle(section)
+        });
+
+        fn(null, page);
     },
 
     buildSectionStyles: function(section){
@@ -658,7 +670,7 @@ module.exports = {
             styleString += "border-style: " + section.border.style + ";";
             styleString += "border-radius: " + section.border.radius + "%;"; 
         }
-        return "\'" + styleString + "\'";
+        return styleString;
     },
 
     buildSectionClass: function(section, index) {
@@ -741,7 +753,7 @@ module.exports = {
             }
 
         }
-        return "\'" + classString + "\'";
+        return classString;
     },
 
     buildSectionBGClass: function(section){
@@ -754,7 +766,7 @@ module.exports = {
                 classString += " parallax";
             }
         }
-        return "\'" + classString + "\'";
+        return classString;
     },
 
     buildSectionBGStyle: function(section) {
@@ -767,7 +779,7 @@ module.exports = {
                 styleString += "background-image: url(" + section.bg.img.url + ")";
             }
         }
-        return "\'" + styleString + "\'";
+        return styleString;
     },
 
     _showSection: function (section, handle) {

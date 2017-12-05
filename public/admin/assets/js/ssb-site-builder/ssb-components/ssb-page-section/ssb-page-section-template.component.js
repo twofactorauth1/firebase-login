@@ -12,10 +12,6 @@
 			scope: {
 				section: '=',
 				index: '=',
-				preSectionClass: '=',
-				preSectionStyle: '=',
-				sectionBGClass: '=sectionBgClass',
-				sectionBGStyle: '=sectionBgStyle',
 				displaySection: '=showSection'
 			},
 			templateUrl: function (element, attrs) {

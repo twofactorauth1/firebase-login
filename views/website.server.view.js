@@ -15,7 +15,7 @@ var analyticsManager = require('../analytics/analytics_manager');
 var assetManager = require('../assets/asset_manager');
 var cookies = require('../utils/cookieutil');
 var externalScriptLookup = require('../configs/externalscriptlookup.config');
-
+var pageCacheManager = require('../cms/pagecache_manager');
 var view = function (req, resp, options) {
     this.init.apply(this, arguments);
 };
@@ -469,15 +469,20 @@ _.extend(view.prototype, BaseView.prototype, {
                 //     data.templateIncludes.push(pageTemplate);
                 //     cb(null, webpageData, page);
                 // } else {
-                    //TODO:
-                    var pageCacheManager = require('../cms/pagecache_manager');
+                    //TODO:                    
                     var pageHandle = handle || 'index';
-                    pageCacheManager.getActivatePageSectionHtml(page, function(err, templateData){
+                    pageCacheManager.buildTemplateFromPage(page, function(err, templateData){
                         pageTemplate.data = templateData;
                         data.templateIncludes.push(pageTemplate);
                         cb(null, webpageData, page);
                     });
                 //}
+            },
+            function buildPageStyles(webpageData, page, cb){
+                pageCacheManager.buildPageStyles(page, function(err, updatedPage){
+                    page = updatedPage;
+                    cb(null, webpageData, page);
+                });
             },
             function getBlogPosts(webpageData, page, cb) {
                 var pageHandle = handle || 'index';
@@ -503,7 +508,6 @@ _.extend(view.prototype, BaseView.prototype, {
                     cb(null, webpageData, page);
                 });
             },
-
             function(value, page, cb) {
                 var pageHolder = {};
                 pageHolder[page.get('handle')] = page.toJSON('frontend');
@@ -849,9 +853,9 @@ _.extend(view.prototype, BaseView.prototype, {
             },
 
             function getPageTemplate(webpageData, page, cb) {
-                var pageCacheManager = require('../cms/pagecache_manager');
+                //var pageCacheManager = require('../cms/pagecache_manager');
                 var pageTemplate = {'id':'template.html'};
-                pageCacheManager.getActivatePageSectionHtml(page, function(err, templateData){
+                pageCacheManager.buildTemplateFromPage(page, function(err, templateData){
                     pageTemplate.data = templateData;
                     data.templateIncludes.push(pageTemplate);
                     cb(null, webpageData, page);
