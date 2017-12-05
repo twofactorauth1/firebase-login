@@ -469,9 +469,8 @@ _.extend(view.prototype, BaseView.prototype, {
                 //     data.templateIncludes.push(pageTemplate);
                 //     cb(null, webpageData, page);
                 // } else {
-                    //TODO:                    
-                    var pageHandle = handle || 'index';
-                    pageCacheManager.buildTemplateFromPage(page, function(err, templateData){
+                    //TODO:
+                    pageCacheManager.buildTemplateFromPage(page, true, function(err, templateData){
                         pageTemplate.data = templateData;
                         data.templateIncludes.push(pageTemplate);
                         cb(null, webpageData, page);
@@ -855,7 +854,7 @@ _.extend(view.prototype, BaseView.prototype, {
             function getPageTemplate(webpageData, page, cb) {
                 //var pageCacheManager = require('../cms/pagecache_manager');
                 var pageTemplate = {'id':'template.html'};
-                pageCacheManager.buildTemplateFromPage(page, function(err, templateData){
+                pageCacheManager.buildTemplateFromPage(page, true, function(err, templateData){
                     pageTemplate.data = templateData;
                     data.templateIncludes.push(pageTemplate);
                     cb(null, webpageData, page);

@@ -15,6 +15,7 @@ var jsonldbuilder = require('../utils/jsonldbuilder');
 var assetManager = require('../assets/asset_manager');
 var cookies = require('../utils/cookieutil');
 var externalScriptLookup = require('../configs/externalscriptlookup.config');
+var pageCacheManager = require('../cms/pagecache_manager');
 var _req;
 
 var view = function (req, resp, options) {
@@ -112,20 +113,15 @@ _.extend(view.prototype, BaseView.prototype, {
             },
             function getPageTemplate(webpageData, page, cb) {
                 var pageTemplate = {'id':'template.html'};
-                if(page.get('manifest') && page.get('manifest').template) {
-                    pageTemplate.data = page.get('manifest').template;
-                    data.templateIncludes.push(pageTemplate);
+                pageTemplate.data = "";
+                data.templateIncludes.push(pageTemplate);
+                cb(null, webpageData, page);
+            },
+            function buildPageStyles(webpageData, page, cb){
+                pageCacheManager.buildPageStyles(page, function(err, updatedPage){
+                    page = updatedPage;
                     cb(null, webpageData, page);
-                } else {
-                    //TODO:
-                    var pageCacheManager = require('../cms/pagecache_manager');
-                    var pageHandle = handle || 'index';
-                    pageCacheManager.getS3TemplateContent(accountId, pageHandle, function(err, templateData){
-                        pageTemplate.data = templateData;
-                        data.templateIncludes.push(pageTemplate);
-                        cb(null, webpageData, page);
-                    });
-                }
+                });
             },
 
             function getBlogPosts(webpageData, page, cb) {
@@ -672,7 +668,7 @@ _.extend(view.prototype, BaseView.prototype, {
                         cb(null, value);
                     }
                 });
-            },            
+            },
             function getPublishedPage(webpageData, cb) {
                 ssbManager.getPublishedPage(accountId, webpageData.website._id, handle, function(err, page){
                     if(page) {
@@ -782,23 +778,20 @@ _.extend(view.prototype, BaseView.prototype, {
 
             function addBlogTemplate(webpageData, page, post, cb) {
                 //assuming single column layout
-                var sections = page.get('sections');
-                var templateSectionArray = [];
-                var blogPostIndex = 0;
-
-                _.each(sections, function(section, index) {
-                    templateSectionArray.push('<ssb-page-section section="sections_' + index + '" index="' + index + '" class="ssb-page-section"></ssb-page-section>');
+                pageCacheManager.buildTemplateFromPage(page, false, function(err, templateData){
+                    data.templateIncludes.push({
+                        id: 'blogpost.html',
+                        data: templateData
+                    });
+                    cb(null, webpageData, page, post);
                 });
-
-                data.templateIncludes.push({
-                    id: 'blogpost.html',
-                    data: templateSectionArray.join('')
-                });
-
-                cb(null, webpageData, page, post);
-
             },
-
+            function buildPageStyles(webpageData, page, post, cb){
+                pageCacheManager.buildPageStyles(page, function(err, updatedPage){
+                    page = updatedPage;
+                    cb(null, webpageData, page, post);
+                });
+            },
             function prepareForRender(value, page, post, cb) {
                 var pageHolder = {};
                 pageHolder[page.get('handle')] = page.toJSON('frontend');

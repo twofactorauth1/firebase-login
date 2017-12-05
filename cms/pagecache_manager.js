@@ -355,13 +355,19 @@ module.exports = {
 
     },
 
-    buildTemplateFromPage: function(page, fn){
+    buildTemplateFromPage: function(page, wrapHtml, fn){
         var self = this;
         var html = "";
+        var string = "";
         if(page.get('sections') != null && page.get('sections').length > 0) {
             html = self.buildPageTemplateMarkup(page);
         }
-        var string = self.buildRenderTemplateHtml(html);
+        if(wrapHtml){
+            string = self.buildRenderTemplateHtml(html);
+        }
+        else{
+           string = html; 
+        }
         fn(null, string);
     },
 
@@ -633,13 +639,10 @@ module.exports = {
     buildPageTemplateMarkup: function(page) {
         var self = this;
         var html = '';
-        var layout = page.get('layout');
-        var handle = page.get('handle');
         _.each(page.get('sections'), function(section, index){            
             html = html + '<ssb-page-section-template section="sections_' + index + '" index="' + index + '" class="ssb-page-section" ' +                   
                    'show-section="' + self._showSection(section) + '" ></ssb-page-section-template>';
         });
-        console.log(html);
         return html;
     },
 
