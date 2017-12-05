@@ -76,7 +76,7 @@ main(){
 	    # do the dev only
 	    mv templates/snippets/index_body_scripts_minimized_cdn.jade templates/snippets/index_body_scripts.jade
         mv templates/snippets/admin_body_scripts_minimized.jade templates/snippets/admin_body_scripts.jade
-        mv templates/snippers/index_head_styles_cdn.jade templates/snippets/index_head_styles_cdn.jade
+        mv templates/snippets/index_head_styles_cdn.jade templates/snippets/index_head_styles_cdn.jade
 	else
 	    # do the regular
 	    mv templates/snippets/index_body_scripts_minimized.jade templates/snippets/index_body_scripts.jade
