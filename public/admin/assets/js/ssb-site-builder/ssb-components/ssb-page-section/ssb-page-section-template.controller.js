@@ -40,6 +40,8 @@
 						classString += ' ssb-page-section-layout-video-bg';
 					}
 				}
+				setUpFroalaVideoSize(section);
+				resizeSliderImagesToFullHeight(section);
 			}
 			return classString;
 		}
@@ -363,9 +365,6 @@
 
 					}
         	}
-			setUpFroalaVideoSize(section);
-			resizeSliderImagesToFullHeight(section);
-
 			return styleString;
 		}
 
@@ -410,8 +409,7 @@
 					}
 				}
 			}
-		}
-	
+		}	
 
 		function componentClass(component, index) {
 			var classString = 'container-fluid ';
@@ -903,8 +901,17 @@
 					vm.setFixedPosition(_isVerticalNav);
 				}, 0);
 			}
+			if(vm.section){
+				vm.sectionStyle = sectionStyle(vm.section);
+			}
 
-		}
+		};
+
+		angular.element($window).bind('resize', function () {
+			if(vm.section){
+				vm.sectionStyle = sectionStyle(vm.section);
+			}
+		});
 
 	}
 
