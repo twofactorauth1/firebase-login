@@ -12,7 +12,7 @@
         component-media="vm.uiState.componentMedia"
         section-index="vm.index"
         component-index="0"
-        show-component="vm.showSection(vm.section)">
+        show-component="vm.displaySection || vm.showSection(vm.section)">
     </ssb-component-loader>
 
 </div>
@@ -31,7 +31,7 @@
         component-media="vm.uiState.componentMedia"
         section-index="vm.index"
         component-index="1"
-        show-component="vm.showSection(vm.section)">
+        show-component="vm.displaySection || vm.showSection(vm.section)">
     </ssb-component-loader>
 
 </div>
@@ -50,7 +50,7 @@
         component-media="vm.uiState.componentMedia"
         section-index="vm.index"
         component-index="2"
-        show-component="vm.showSection(vm.section)">
+        show-component="vm.displaySection || vm.showSection(vm.section)">
     </ssb-component-loader>
 
 </div>

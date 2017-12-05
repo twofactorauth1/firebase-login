@@ -856,11 +856,11 @@
 
 			var _isVerticalNav = false;
 			var elementIsFirstPosition = vm.index === 0; 
-			if(!$window.indigenous.firstVisibleElement && vm.showSection){
+			if(!$window.indigenous.firstVisibleElement && vm.displaySection){
 				$window.indigenous.firstVisibleElement=true;
 				elementIsFirstPosition=true;
 			}
-			if (vm.section && vm.section.fixedLeftNavigation && elementIsFirstPosition && vm.showSection) {
+			if (vm.section && vm.section.fixedLeftNavigation && elementIsFirstPosition && vm.displaySection) {
 				_isVerticalNav = true;
 				var isBlogPage = angular.element(".ssb-layout__header_2-col_footer").length;
 				if (!isBlogPage) {

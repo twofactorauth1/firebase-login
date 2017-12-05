@@ -1,6 +1,6 @@
 <div>
     <section
-        ng-show="vm.showSection"
+        ng-show="vm.displaySection"
         id="section_{{vm.section._id}}"
         class="ssb-check-fixed ssb-section-layout ssb-section-section ssb-section-type-{{vm.section.components[0].type}} {{vm.preSectionClass}}"
         style="{{vm.preSectionStyle}}"
@@ -55,7 +55,7 @@
             component-media="vm.uiState.componentMedia"
             section-index="vm.index"
             component-index="$index"
-            show-component="vm.showSection"
+            show-component="vm.displaySection"
             >
         </ssb-component-loader>
     </section>
