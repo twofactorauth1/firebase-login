@@ -112,10 +112,10 @@ _.extend(view.prototype, BaseView.prototype, {
                 });
             },
             function getPageTemplate(webpageData, page, cb) {
-                var pageTemplate = {'id':'template.html'};
-                pageTemplate.data = "";
-                data.templateIncludes.push(pageTemplate);
-                cb(null, webpageData, page);
+                data.templateIncludes.push({
+                    id: 'template.html',
+                    data: ""
+                });
             },
             function buildPageStyles(webpageData, page, cb){
                 pageCacheManager.buildPageStyles(page, function(err, updatedPage){
@@ -783,6 +783,11 @@ _.extend(view.prototype, BaseView.prototype, {
                         id: 'blogpost.html',
                         data: templateData
                     });
+                    data.templateIncludes.push({
+                        id: 'template.html',
+                        data: ""
+                    });
+
                     cb(null, webpageData, page, post);
                 });
             },
