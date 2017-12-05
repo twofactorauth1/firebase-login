@@ -861,6 +861,13 @@ _.extend(view.prototype, BaseView.prototype, {
                 });
             },
 
+            function buildPageStyles(webpageData, page, cb){
+                pageCacheManager.buildPageStyles(page, function(err, updatedPage){
+                    page = updatedPage;
+                    cb(null, webpageData, page);
+                });
+            },
+
             function(value, page, cb) {
                 var pageHolder = {};
 
