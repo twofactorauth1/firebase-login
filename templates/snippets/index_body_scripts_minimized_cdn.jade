@@ -1,0 +1,36 @@
+<!--[if lt IE 9]>
+script(src="../js/libs/es5-shim/es5-shim.js")
+script(src="../js/libs/json3/lib/json3.min.js")
+<![endif]-->
+
+
+script(src="http://d2cwrhu7f3xluz.cloudfront.net/js/indigenous.js")
+script(src="http://d2cwrhu7f3xluz.cloudfront.net/js/ng-indigenous.js")
+
+
+script.
+    var tag = document.createElement('script');
+    tag.src = "https://www.youtube.com/iframe_api";
+    var firstScriptTag = document.getElementsByTagName('script')[0];
+    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+| !{userScripts}
+| !{externalScripts}
+
+
+// - Google Analytics
+script.
+    window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+    ga('create', 'UA-48234806-2', 'auto', 'platform');
+    ga('platform.send', 'pageview');
+script(async src='https://www.google-analytics.com/analytics.js')
+// - End Google Anlytics
+
+// - TrackJS
+script(type="text/javascript").
+    window._trackJs = {  // Just ensure the global variable is initialized before the tracker script loads.
+        token: '8ff8967db42447d4a9967c5fc68938ef'
+    };
+
+script(src="https://cdn.trackjs.com/releases/current/tracker.js")
+// - End TrackJS

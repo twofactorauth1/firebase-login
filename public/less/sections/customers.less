@@ -87,10 +87,18 @@
     margin-left: -15px;
     margin-top: -15px;
     .visitor-left-pane{
-      max-height: 290px;
+      max-height: 400px;
       overflow: auto;
       border-right: solid 1px #EFEFF4;
       padding-right:0;
+      ul.active-ul{
+        li.main-li{
+            div{
+              padding-left: 5px;
+              padding-right: 5px;
+        }
+      }
+    }
       ul{
         list-style: none;
         margin: 0;
@@ -115,16 +123,57 @@
     .visitor-right-pane{
       padding-top: 10px;
       line-height: 1.6em;
+      .adv-info{
+        font-size: 12px;
+          &>li div{
+            padding-right: 0px;
+            padding-left: 5px;
+          }
+        }
       ul{
         list-style: none;
         margin: 0;
         padding: 0;
         li{
-          display:inline-block;
-          width:100%;
+            display:inline-block;
+            width:48%;
         }
-        ul.page-events{
-          padding: 5px;
+        @media screen and (max-width: 767px) {
+            li{
+                display:inline-block;
+                width:100%;
+            }
+        }
+    }
+    ul.page-events{
+        padding: 5px;
+        max-height: 200px;
+        overflow-y: scroll;
+        li{
+            display:inline-block;
+            width:100%;
+            padding-left: 10px;
+        }
+        &>li{
+            border-left: 1px solid #47b2d1;
+            position: relative;
+            &:after {
+                content: "";
+                display: block;
+                position: absolute;
+                top: 0;
+                left: -5px;
+                width: 10px;
+                height: 10px;
+                border-radius: 6px;
+                background:#47b2d1;
+            }
+            &:last-child{
+                border-left:none;
+                &:after {
+                    background:#04e261;
+                }
+            }
         }
       }
       .page-event-tooltip .tooltip-inner{
@@ -134,6 +183,10 @@
     }
     .visitor-address{
       font-weight: bold;
+      padding-top: 10px;
+      padding-bottom: 10px;
+    }
+    .visitor-account{
       padding-top: 10px;
       padding-bottom: 10px;
     }
