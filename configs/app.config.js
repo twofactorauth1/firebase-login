@@ -17,7 +17,7 @@ var environments = {
  */
 var XDHosts = [];
 
-var DEFAULT_XDHOSTS = ['http://localhost:3001', 'pipeshift.com', 's3.amazonaws.com'];
+var DEFAULT_XDHOSTS = ['http://localhost:3001', 'pipeshift.com', 's3.amazonaws.com', 'http://test.indigenous.io', 'https://indigenous.io'];
 
 if (process.env.XDHOSTS == null) {
     XDHosts = DEFAULT_XDHOSTS;
