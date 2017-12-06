@@ -99,96 +99,100 @@ mainApp.service('analyticsService', ['$http', '$location', 'ipCookie', function 
 		}
 
 		//get browser fingerprint
-		fingerprint = new Fingerprint().get();
-		timezone = jstz.determine();
+        fingerprint = new Fingerprint2();
+		var self = this;
+        fingerprint.get(function(result, components) {
+            timezone = jstz.determine();
 
-		//all the properties of the session
-		sessionProperties = {
-			session_id: ipCookie("session_cookie").id,
-			permanent_tracker: ipCookie("permanent_cookie").id,
-			user_agent: {
-				browser: parser.getBrowser(),
-				engine: parser.getEngine(),
-				os: parser.getOS(),
-				device: device
-			},
-			ip_address: "${keen.ip}",
-			fingerprint: fingerprint.toString(),
-			session_start: start,
-			session_length: 0,
-			timezone: timezone.name(),
-			new_visitor: new_visitor,
-			entrance: parsedEntranceUrl.attr("path"),
-			fullEntrance: $location.absUrl()
-		};
+            //all the properties of the session
+            sessionProperties = {
+                session_id: ipCookie("session_cookie").id,
+                permanent_tracker: ipCookie("permanent_cookie").id,
+                user_agent: {
+                    browser: parser.getBrowser(),
+                    engine: parser.getEngine(),
+                    os: parser.getOS(),
+                    device: device
+                },
+                ip_address: "${keen.ip}",
+                fingerprint: result,
+                session_start: start,
+                session_length: 0,
+                timezone: timezone.name(),
+                new_visitor: new_visitor,
+                entrance: parsedEntranceUrl.attr("path"),
+                fullEntrance: $location.absUrl()
+            };
 
-		console.log('sessionProperties ', sessionProperties);
+            console.log('sessionProperties ', sessionProperties);
 
-		if ($location.search().utm_source) {
-			hasUtm = true;
-			campaign.utm_source = $location.search().utm_source;
-		}
+            if ($location.search().utm_source) {
+                hasUtm = true;
+                campaign.utm_source = $location.search().utm_source;
+            }
 
-		if ($location.search().utm_medium) {
-			hasUtm = true;
-			campaign.utm_medium = $location.search().utm_medium;
-		}
+            if ($location.search().utm_medium) {
+                hasUtm = true;
+                campaign.utm_medium = $location.search().utm_medium;
+            }
 
-		if ($location.search().utm_campaign) {
-			hasUtm = true;
-			campaign.utm_campaign = $location.search().utm_campaign;
-		}
+            if ($location.search().utm_campaign) {
+                hasUtm = true;
+                campaign.utm_campaign = $location.search().utm_campaign;
+            }
 
-		if ($location.search().utm_term) {
-			hasUtm = true;
-			campaign.utm_term = $location.search().utm_term;
-		}
+            if ($location.search().utm_term) {
+                hasUtm = true;
+                campaign.utm_term = $location.search().utm_term;
+            }
 
-		if ($location.search().utm_content) {
-			hasUtm = true;
-			campaign.utm_content = $location.search().utm_content;
-		}
+            if ($location.search().utm_content) {
+                hasUtm = true;
+                campaign.utm_content = $location.search().utm_content;
+            }
 
-		if (hasUtm) {
-			sessionProperties.campaign = campaign;
-		}
+            if (hasUtm) {
+                sessionProperties.campaign = campaign;
+            }
 
-		/*
-		//If you know that the user is currently logged in, add information about the user.
-		sessionProperties["user"] = {
-		    id: "",
-		    signupDate: ""
-		    etc: ".."
-		};
-		*/
+            /*
+            //If you know that the user is currently logged in, add information about the user.
+            sessionProperties["user"] = {
+                id: "",
+                signupDate: ""
+                etc: ".."
+            };
+            */
 
-		//TODO: determine if the user is logged into any social sites
+            //TODO: determine if the user is logged into any social sites
 
 
-		if (referrer !== undefined) {
-			parsedReferrer = $.url(referrer);
+            if (referrer !== undefined) {
+                parsedReferrer = $.url(referrer);
 
-			referrerObject = {
-				source: parsedReferrer.attr("source"),
-				protocol: parsedReferrer.attr("protocol"),
-				domain: parsedReferrer.attr("host"),
-				port: parsedReferrer.attr("port"),
-				path: parsedReferrer.attr("path"),
-				anchor: parsedReferrer.attr("anchor")
-			};
-		}
+                referrerObject = {
+                    source: parsedReferrer.attr("source"),
+                    protocol: parsedReferrer.attr("protocol"),
+                    domain: parsedReferrer.attr("host"),
+                    port: parsedReferrer.attr("port"),
+                    path: parsedReferrer.attr("path"),
+                    anchor: parsedReferrer.attr("anchor")
+                };
+            }
 
-		sessionProperties.referrer = referrerObject;
-		sessionProperties.source_type = this.getSourceType(parsedReferrer.attr("host"));
+            sessionProperties.referrer = referrerObject;
+            sessionProperties.source_type = self.getSourceType(parsedReferrer.attr("host"));
 
-		//api/1.0/analytics/session/{sessionId}/sessionStart
-		apiUrl = baseUrl + ['analytics', 'session', ipCookie("session_cookie").id, 'sessionStart'].join('/');
-		console.log('session start campaign >>> ', sessionProperties.campaign);
-		console.log('session start fullEntrance >>> ', sessionProperties.fullEntrance);
-		$http.post(apiUrl, sessionProperties)
-			.success(function (data) {
-				fn(data);
-			});
+            //api/1.0/analytics/session/{sessionId}/sessionStart
+            apiUrl = baseUrl + ['analytics', 'session', ipCookie("session_cookie").id, 'sessionStart'].join('/');
+            console.log('session start campaign >>> ', sessionProperties.campaign);
+            console.log('session start fullEntrance >>> ', sessionProperties.fullEntrance);
+            $http.post(apiUrl, sessionProperties)
+                .success(function (data) {
+                    fn(data);
+                });
+        });
+
 	};
 
 	this.getSourceType = function (host) {
