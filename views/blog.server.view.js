@@ -15,6 +15,7 @@ var jsonldbuilder = require('../utils/jsonldbuilder');
 var assetManager = require('../assets/asset_manager');
 var cookies = require('../utils/cookieutil');
 var externalScriptLookup = require('../configs/externalscriptlookup.config');
+var pageCacheManager = require('../cms/pagecache_manager');
 var _req;
 
 var view = function (req, resp, options) {
@@ -29,6 +30,7 @@ _.extend(view.prototype, BaseView.prototype, {
 
     renderBlogPage: function(accountId, twoColBlog) {
         var self = this;
+        var styleCached = true;
         self.log.debug(accountId, null, '>> renderBlogPage');
         var data = {ssbBlog:true};
         var handle = 'blog-list';
@@ -67,6 +69,9 @@ _.extend(view.prototype, BaseView.prototype, {
                         var components = [];
                         _.each(page.get('sections'), function(section){
                             if(section) {
+                                if(!section.sectionClass){
+                                    styleCached = false;
+                                }
                                 components = components.concat(section.components);
                             }
                         });
@@ -116,6 +121,16 @@ _.extend(view.prototype, BaseView.prototype, {
                     data: ""
                 });
                 cb(null, webpageData, page);
+            },
+            function buildPageStyles(webpageData, page, cb){
+                if(styleCached){
+                    cb(null, webpageData, page);
+                }
+                else{
+                    pageCacheManager.buildPageStyles(page, function(err, updatedPage){                        
+                        cb(null, webpageData, updatedPage);
+                    });
+                }                
             },
 
             function getBlogPosts(webpageData, page, cb) {
@@ -648,6 +663,7 @@ _.extend(view.prototype, BaseView.prototype, {
 
     renderBlogPost: function(accountId, postName) {
         var self = this;
+        var styleCached = true;
         self.log.debug(accountId, null, '>> renderBlogPost');
         var data = {ssbBlog:true};
         var handle = 'blog-post';
@@ -662,7 +678,7 @@ _.extend(view.prototype, BaseView.prototype, {
                         cb(null, value);
                     }
                 });
-            },            
+            },
             function getPublishedPage(webpageData, cb) {
                 ssbManager.getPublishedPage(accountId, webpageData.website._id, handle, function(err, page){
                     if(page) {
@@ -716,6 +732,9 @@ _.extend(view.prototype, BaseView.prototype, {
                         var components = [];
                         _.each(page.get('sections'), function(section){
                             if(section) {
+                                if(!section.sectionClass){
+                                    styleCached = false;
+                                }
                                 components = components.concat(section.components);
                             }
                         });
@@ -772,28 +791,29 @@ _.extend(view.prototype, BaseView.prototype, {
 
             function addBlogTemplate(webpageData, page, post, cb) {
                 //assuming single column layout
-                var sections = page.get('sections');
-                var templateSectionArray = [];
-                var blogPostIndex = 0;
+                pageCacheManager.buildTemplateFromPage(page, false, function(err, templateData){
+                    data.templateIncludes.push({
+                        id: 'blogpost.html',
+                        data: templateData
+                    });
+                    data.templateIncludes.push({
+                        id: 'template.html',
+                        data: ""
+                    });
 
-                _.each(sections, function(section, index) {
-                    templateSectionArray.push('<ssb-page-section section="sections_' + index + '" index="' + index + '" class="ssb-page-section"></ssb-page-section>');
+                    cb(null, webpageData, page, post);
                 });
-
-                data.templateIncludes.push({
-                    id: 'blogpost.html',
-                    data: templateSectionArray.join('')
-                });
-
-                data.templateIncludes.push({
-                    id: 'template.html',
-                    data: ""
-                });
-
-                cb(null, webpageData, page, post);
-
             },
-
+            function buildPageStyles(webpageData, page, post, cb){
+                if(styleCached){
+                    cb(null, webpageData, page, post);
+                }
+                else{
+                    pageCacheManager.buildPageStyles(page, function(err, updatedPage){                        
+                        cb(null, webpageData, updatedPage, post);
+                    });
+                }                
+            },
             function prepareForRender(value, page, post, cb) {
                 var pageHolder = {};
                 pageHolder[page.get('handle')] = page.toJSON('frontend');
