@@ -30,8 +30,11 @@
 		$scope.Math = Math;
 		function updateLiveDetailObject(liveVisitorDetails){
 			$scope.liveVisitorDetails=[];
-			_.each(liveVisitorDetails, function(detail){  
-				var server_time=new Date(detail.server_time);
+			_.each(liveVisitorDetails, function(detail){ 
+				var server_time =new Date(); 
+				if( detail.pageEvents.length>0){
+					server_time =moment(detail.pageEvents[0].pageTime)._d; 
+				} 
 				_.each(detail.pageEvents, function(evn){
 					if(evn.activityType== 'CONTACT_FORM'){ 
 						_.map(evn.extraFields, function (value, key) {
