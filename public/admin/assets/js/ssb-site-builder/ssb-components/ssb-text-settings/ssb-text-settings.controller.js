@@ -333,7 +333,6 @@
 			} else {
 				return '';
 			}
-
 		}
 		function screenLayout(){
 			var _layout = 3;
@@ -820,7 +819,7 @@
 					styleString += 'border-radius: ' + component.border.radius + '%;';
 				}
 				applyTickerStyle(component);
-				applyVerticalAlignmentSetting(component)
+				applyVerticalAlignmentSetting(component);
 				return styleString;
 
 			} else {
@@ -903,10 +902,22 @@
 
 				applyStyles();
 			}
+
+			if(!$attrs.isEdit){
+				//$timeout(function() {
+					vm.elementStyleVar = elementStyle(false);
+					vm.showHideClassVar = showHideClass();
+					vm.verticalAlignmentVar = verticalAlignment();
+				//}, 100);
+				
+			}
 		}
 
 		angular.element($window).bind('resize', function () {			
 			vm.screenLayout = screenLayout();
+			if (!$attrs.isEdit){
+				vm.elementStyleVar = elementStyle(false);
+			}
 		});
 
 	}
