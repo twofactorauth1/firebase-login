@@ -10,7 +10,7 @@
 	</style>
 	<div class="component-wrap component_wrap_{{vm.component._id}}"
      ng-if="vm.component.visibility"
-     ng-class="{'editing': isEditing,        
+     ng-class="{'editing': isEditing,
         'ssb-edit-wrap': vm.component.type !== 'navigation' && vm.component.type !== 'social-link'}">
     	<span ng-if="$parent.ssbEditor" class="editable-title">{{vm.component.type}}</span>
     	<span ng-if="$parent.ssbEditor" class="editable-cover"></span>
@@ -21,7 +21,7 @@
 	                 ng-style="{'background': vm.component.bg.color,
 	                    'color':vm.component.txtcolor||primaryTextColor}">
 	                <div ng-class="{'component-inner': vm.component.type != 'footer' || vm.component.type != 'navigation'}">
-	                    <div class="container inner-page"                         
+	                    <div class="container inner-page"
 	                         ng-style="{'padding-top': vm.component.spacing.pt + 'px',
 	                            'padding-bottom': vm.component.spacing.pb + 'px',
 	                            'padding-left': vm.component.spacing.pl + 'px',
@@ -30,7 +30,7 @@
 	                            'margin-bottom': vm.component.spacing.mb + 'px',
 	                            'margin-left': vm.component.spacing.ml == 'auto' ? vm.component.spacing.ml: vm.component.spacing.ml + 'px',
 	                            'margin-right': vm.component.spacing.mr == 'auto' ? vm.component.spacing.mr : vm.component.spacing.mr + 'px',
-	                            'max-width': vm.component.spacing.mw == '100%' ? vm.component.spacing.mw : vm.component.spacing.mw  + 'px'}">
+	                            'max-width': vm.component.spacing.mw == '100%' ||  vm.component.spacing.mw.toString().indexOf('%') !== -1 ? vm.component.spacing.mw : vm.component.spacing.mw  + 'px'}">
 	                        <div ng-if="vm.component.version==0 || vm.component.version==1" data-ng-include
 	         					data-src="'/admin/assets/js/ssb-site-builder/ssb-components/'+vm.component.type+'/'+vm.component.type+'.component.html'"></div>
                             <div ng-if="!(vm.component.version==0 || vm.component.version==1)" data-ng-include
@@ -44,7 +44,7 @@
 	                        <div ng-if="vm.component.bg.color"
 	                             class="bg"
 	                             ng-style="{'background': vm.component.bg.color}"></div>
-	                        
+
 	                        <div id="px-ele-{{vm.component._id}}" ng-if="vm.component.bg.img.show"
 	                             class="bg"
 	                             ng-class="{parallax:vm.component.bg.img.parallax,
@@ -70,7 +70,7 @@
 	                                'margin-bottom': vm.component.spacing.mb + 'px',
 	                                'margin-left': vm.component.spacing.ml == 'auto' ? vm.component.spacing.ml: vm.component.spacing.ml + 'px',
 	                                'margin-right': vm.component.spacing.mr == 'auto' ? vm.component.spacing.mr : vm.component.spacing.mr + 'px',
-	                                'max-width': vm.component.spacing.mw == '100%' ? vm.component.spacing.mw : vm.component.spacing.mw  + 'px'}"
+	                                'max-width': vm.component.spacing.mw == '100%'||  vm.component.spacing.mw.toString().indexOf('%') !== -1 ? vm.component.spacing.mw : vm.component.spacing.mw  + 'px'}"
 	                             >
 	                            <div ng-if="vm.component.version==0 || vm.component.version==1" data-ng-include
 	         					data-src="'/admin/assets/js/ssb-site-builder/ssb-components/'+vm.component.type+'/'+vm.component.type+'.component.html'"></div>
