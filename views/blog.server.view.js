@@ -116,6 +116,7 @@ _.extend(view.prototype, BaseView.prototype, {
                     id: 'template.html',
                     data: ""
                 });
+                cb(null, webpageData, page);
             },
             function buildPageStyles(webpageData, page, cb){
                 if(page.get("sections") && page.get("sections")[0] && page.get("sections")[0].sectionClass){
