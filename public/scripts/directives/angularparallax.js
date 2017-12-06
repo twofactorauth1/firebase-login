@@ -36,13 +36,7 @@ angular.module('angular-parallax', [
 			parallaxVerticalOffset: '@',
 			parallaxXPosition: '@'
 		},
-		link: function ($scope, elem) {
-			if(elem.hasClass("no-bg-opacity")){
-				// No opacity required;
-			}
-			else{
-				elem.addClass('opacity-0');
-			}
+		link: function ($scope, elem) {			
 			var initialRun = true,
 				pos = function (obj) {
 					//curLeft = 0, not used
@@ -76,10 +70,7 @@ angular.module('angular-parallax', [
 							iOS = (navigator.userAgent.match(/(iPad|iPhone|iPod)/g) ? true : false);
 						if (win_width < 750 || iOS) {
 							$scope.parallaxRatio = 0.02;
-						}
-						/*if (initialRun && $window.pageYOffset === 0) {
-							// yoffset = 10;
-						}*/
+						}						
 						calcValY = (pos(elem[0]) - $window.pageYOffset) * ($scope.parallaxRatio ? $scope.parallaxRatio : 1.1);
 						calcValY = calcValY - yoffset;
 						elem.css('background-position', calcValX + " " + calcValY + "px");
@@ -89,10 +80,7 @@ angular.module('angular-parallax', [
 						elem.css('background-attachment', "inherit");
 					}
 
-					if (initialRun) {
-						$timeout(function () {
-							elem.removeClass('opacity-0');
-						}, 0);
+					if (initialRun) {						
 						initialRun = false;
 					}
 

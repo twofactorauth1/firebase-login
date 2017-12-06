@@ -23,7 +23,7 @@
         <div id="px-ele-{{vm.section._id}}"
         ng-if="vm.section.bg.img && vm.section.bg.img.url && vm.section.bg.img.show && vm.section.bg.img.parallax"
         {{vm.section.bg.img.parallax ? parallax-background : ""}}
-        class="bg {{vm.section.sectionBGClass}} opacity-0"
+        class="bg {{vm.section.sectionBGClass}}"
         ng-attr-parallax-ratio="{{vm.section.bg.img.parallax ? '0.4' : '1'}}"
         ng-attr-style='
         background: url("{{vm.section.bg.img.url}}") repeat-y;
