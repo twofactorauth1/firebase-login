@@ -350,7 +350,8 @@ _.extend(view.prototype, BaseView.prototype, {
     },
     renderWebsitePage: function (accountId, handle) {
         var data = {},
-            self = this;
+            self = this,
+            styleCached = true;
         self.log.debug('>> renderWebsitePage', handle);
         handle = handle.trim();
         async.waterfall([
@@ -417,8 +418,9 @@ _.extend(view.prototype, BaseView.prototype, {
 
                         _.each(page.get('sections'), function(section){
                             if(section) {
-                                //self.log.debug('Page ' + page.get('handle'));
-                                //self.log.debug(' has components:', section.components);
+                                if(!section.sectionClass){
+                                    styleCached = false;
+                                }
                                 components = components.concat(section.components);
                             }
                         });
@@ -478,7 +480,7 @@ _.extend(view.prototype, BaseView.prototype, {
                 //}
             },
             function buildPageStyles(webpageData, page, cb){
-                if(page.get("sections") && page.get("sections")[0] && page.get("sections")[0].sectionClass){
+                if(styleCached){
                     cb(null, webpageData, page);
                 }
                 else{
@@ -738,7 +740,8 @@ _.extend(view.prototype, BaseView.prototype, {
 
     renderActivateSetupPage: function (originalAccount, accountId, handle) {
         var data = {},
-            self = this;
+            self = this,
+            styleCached = true;
         self.log.debug('>> renderActivateSetupPage', handle);
         async.waterfall([
             function getWebpageData(cb) {
@@ -817,8 +820,9 @@ _.extend(view.prototype, BaseView.prototype, {
 
                         _.each(page.get('sections'), function(section){
                             if(section) {
-                                //self.log.debug('Page ' + page.get('handle'));
-                                //self.log.debug(' has components:', section.components);
+                                if(!section.sectionClass){
+                                    styleCached = false;
+                                }
                                 components = components.concat(section.components);
                             }
                         });
@@ -866,7 +870,7 @@ _.extend(view.prototype, BaseView.prototype, {
             },
 
             function buildPageStyles(webpageData, page, cb){
-                if(page.get("sections") && page.get("sections")[0] && page.get("sections")[0].sectionClass){
+                if(styleCached){
                     cb(null, webpageData, page);
                 }
                 else{

@@ -30,6 +30,7 @@ _.extend(view.prototype, BaseView.prototype, {
 
     renderBlogPage: function(accountId, twoColBlog) {
         var self = this;
+        var styleCached = true;
         self.log.debug(accountId, null, '>> renderBlogPage');
         var data = {ssbBlog:true};
         var handle = 'blog-list';
@@ -68,6 +69,9 @@ _.extend(view.prototype, BaseView.prototype, {
                         var components = [];
                         _.each(page.get('sections'), function(section){
                             if(section) {
+                                if(!section.sectionClass){
+                                    styleCached = false;
+                                }
                                 components = components.concat(section.components);
                             }
                         });
@@ -119,7 +123,7 @@ _.extend(view.prototype, BaseView.prototype, {
                 cb(null, webpageData, page);
             },
             function buildPageStyles(webpageData, page, cb){
-                if(page.get("sections") && page.get("sections")[0] && page.get("sections")[0].sectionClass){
+                if(styleCached){
                     cb(null, webpageData, page);
                 }
                 else{
@@ -659,6 +663,7 @@ _.extend(view.prototype, BaseView.prototype, {
 
     renderBlogPost: function(accountId, postName) {
         var self = this;
+        var styleCached = true;
         self.log.debug(accountId, null, '>> renderBlogPost');
         var data = {ssbBlog:true};
         var handle = 'blog-post';
@@ -727,6 +732,9 @@ _.extend(view.prototype, BaseView.prototype, {
                         var components = [];
                         _.each(page.get('sections'), function(section){
                             if(section) {
+                                if(!section.sectionClass){
+                                    styleCached = false;
+                                }
                                 components = components.concat(section.components);
                             }
                         });
@@ -797,7 +805,7 @@ _.extend(view.prototype, BaseView.prototype, {
                 });
             },
             function buildPageStyles(webpageData, page, post, cb){
-                if(page.get("sections") && page.get("sections")[0] && page.get("sections")[0].sectionClass){
+                if(styleCached){
                     cb(null, webpageData, page, post);
                 }
                 else{
