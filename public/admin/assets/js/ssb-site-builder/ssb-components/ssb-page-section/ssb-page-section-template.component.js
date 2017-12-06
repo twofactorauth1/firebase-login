@@ -11,8 +11,7 @@
 			bindToController: true,
 			scope: {
 				section: '=',
-				index: '=',
-				displaySection: '=showSection'
+				index: '='
 			},
 			templateUrl: function (element, attrs) {
 				return '/admin/assets/js/ssb-site-builder/ssb-components/ssb-page-section/ssb-page-section-template.component.html';				

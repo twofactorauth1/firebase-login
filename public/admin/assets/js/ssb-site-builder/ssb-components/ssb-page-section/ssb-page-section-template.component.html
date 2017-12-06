@@ -1,6 +1,6 @@
 <div>
     <section
-        ng-show="vm.displaySection"
+        ng-show="vm.section.showSection"
         id="section_{{vm.section._id}}"
         class="ssb-check-fixed ssb-section-layout ssb-section-section ssb-section-type-{{vm.section.components[0].type}} {{vm.section.sectionClass}}"        
         ng-attr-style="{{vm.section.sectionStyle}} {{vm.sectionStyle}}">
@@ -46,7 +46,7 @@
             ng-repeat="component in vm.section.components"
             component-class="vm.componentClass(component, $index)"
             component="component"            
-            show-component="vm.displaySection"
+            show-component="vm.section.showSection"
             >
         </ssb-component-loader>
     </section>
@@ -85,4 +85,3 @@
         </div>
     </div>
 </div>
-

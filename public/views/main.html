@@ -13,12 +13,12 @@
 
     </div>
 
-    <ssb-page-section
+    <ssb-page-section-template
         ng-if="section.ssb===undefined"
         section="section"
         index="$index"
-        class="ssb-page-section">
-    </ssb-page-section>
+        class="ssb-page-section-template">
+    </ssb-page-section-template>
 
 </div>
 
@@ -31,43 +31,43 @@
 
         <div class="ssb-page-layout-row-header ssb-page-layout-row">
             <div class="col-xs-12">
-                <ssb-page-section
+                <ssb-page-section-template
                     ng-repeat="sectionIndex in page.layoutModifiers['header']"
                     section="page.sections[sectionIndex]"
                     index="$index"
-                    class="ssb-page-section">
-                </ssb-page-section>
+                    class="ssb-page-section-template">
+                </ssb-page-section-template>
             </div>
         </div>
 
         <div class="ssb-page-layout-row-2-col ssb-page-layout-row">
             <div class="col-xs-12 col-md-8">
-                <ssb-page-section
+                <ssb-page-section-template
                     ng-repeat="sectionIndex in page.layoutModifiers['2-col-1']"
                     section="page.sections[sectionIndex]"
                     index="$index"
-                    class="ssb-page-section">
-                </ssb-page-section>
+                    class="ssb-page-section-template">
+                </ssb-page-section-template>
             </div>
 
             <div class="col-xs-12 col-md-4">
-                <ssb-page-section
+                <ssb-page-section-template
                     ng-repeat="sectionIndex in page.layoutModifiers['2-col-2']"
                     section="page.sections[sectionIndex]"
                     index="$index"
-                    class="ssb-page-section">
-                </ssb-page-section>
+                    class="ssb-page-section-template">
+                </ssb-page-section-template>
             </div>
         </div>
 
         <div class="ssb-page-layout-row-footer ssb-page-layout-row">
             <div class="col-xs-12">
-                <ssb-page-section
+                <ssb-page-section-template
                     ng-repeat="sectionIndex in page.layoutModifiers['footer']"
                     section="page.sections[sectionIndex]"
                     index="$index"
-                    class="ssb-page-section">
-                </ssb-page-section>
+                    class="ssb-page-section-template">
+                </ssb-page-section-template>
             </div>
         </div>
 

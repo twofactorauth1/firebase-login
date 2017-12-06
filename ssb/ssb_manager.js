@@ -947,11 +947,16 @@ module.exports = {
             } else {
                 var sections = page.get('sections') || [];
                 sectionDao.dereferenceSections(sections, function(err, sectionAry){
-                    page.set('sections', _.compact(sectionAry));
+                    var _sections = [];
+                    _.each(_.compact(sectionAry), function(section){                        
+                        _sections.push(section.toJSON());
+                    })
+                    page.set('sections', _sections);
                     self.log.debug(accountId, null,'<< getPage');
-                    return fn(null, page);
+                    pageCacheManager.buildPageStyles(page, function(err, updatedPage){
+                        return fn(null, updatedPage);
+                    })
                 });
-
             }
         });
     },

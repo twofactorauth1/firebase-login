@@ -640,8 +640,7 @@ module.exports = {
         var self = this;
         var html = '';
         _.each(page.get('sections'), function(section, index){            
-            html = html + '<ssb-page-section-template section="sections_' + index + '" index="' + index + '" class="ssb-page-section" ' +                   
-                   'show-section="' + self._showSection(section) + '" ></ssb-page-section-template>';
+            html = html + '<ssb-page-section-template section="sections_' + index + '" index="' + index + '" class="ssb-page-section"></ssb-page-section-template>';
         });
         return html;
     },
@@ -653,6 +652,7 @@ module.exports = {
             section.sectionStyle = self.buildSectionStyles(section);
             section.sectionBGClass = self.buildSectionBGClass(section);
             section.sectionBGStyle = self.buildSectionBGStyle(section);
+            section.showSection = self._showSection(section);
             _.each(section.components, function(component, idx){
                 component.componentClass = self.buildComponentClass(section, component, idx);
                 component.componentStyle = self.buildComponentStyles(component);
