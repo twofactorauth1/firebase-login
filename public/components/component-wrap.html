@@ -40,7 +40,7 @@
                             'margin-bottom': component.spacing.mb + 'px',
                             'margin-left': component.spacing.ml == 'auto' ? component.spacing.ml: component.spacing.ml + 'px',
                             'margin-right': component.spacing.mr == 'auto' ? component.spacing.mr : component.spacing.mr + 'px',
-                            'max-width': component.spacing.mw == '100%' ? component.spacing.mw : component.spacing.mw  + 'px'}">
+                            'max-width': component.spacing.mw == '100%' ||  component.spacing.mw.toString().indexOf('%') !== -1 ? component.spacing.mw : component.spacing.mw  + 'px'}">
                         <div data-ng-include
                              data-src="'/components/'+component.type+'_v'+component.version+'.html'"></div>
                     </div>
@@ -60,7 +60,7 @@
                             'margin-bottom': component.spacing.mb + 'px',
                             'margin-left': component.spacing.ml == 'auto' ? component.spacing.ml: component.spacing.ml + 'px',
                             'margin-right': component.spacing.mr == 'auto' ? component.spacing.mr : component.spacing.mr + 'px',
-                            'max-width': component.spacing.mw == '100%' ? component.spacing.mw : component.spacing.mw  + 'px'}">
+                            'max-width': component.spacing.mw == '100%' ||  component.spacing.mw.toString().indexOf('%') !== -1 ? component.spacing.mw : component.spacing.mw  + 'px'}">
                         <div data-ng-include
                              data-src="'/components/'+component.type+'_v'+component.version+'.html'"></div>
                     </div>
