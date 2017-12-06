@@ -23,6 +23,7 @@
               if(selection.is('span')){
                   selection.removeAttr('class');
                   selection.attr('class', 'fontWeight_'+val);
+
               }else if(selection.parent('span').hasClass() &&  selection.parent('span').attr('class').indexOf('fontWeight_') > -1){
                   selection.parent('span').removeAttr('class');
                   selection.parent('span').attr('class', 'fontWeight_'+val);
@@ -35,6 +36,10 @@
               if(selection.is('span') && $(selection[0], "span [class*='fontWeight_']")) {
                   $(selection[0], "span [class*='fontWeight_']").removeAttr('class');
                   selection.attr('class', 'fontWeight_'+val);
+
+                  this.format.apply('span', {
+                      class:'fontWeight_'+val
+                  });
               }else if (this.format.is('span', {class: 'fontWeight_' + val})) {
                   this.format.remove('span', {
                       class: 'fontWeight_' + val
