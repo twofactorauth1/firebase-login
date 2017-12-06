@@ -118,10 +118,14 @@ _.extend(view.prototype, BaseView.prototype, {
                 });
             },
             function buildPageStyles(webpageData, page, cb){
-                pageCacheManager.buildPageStyles(page, function(err, updatedPage){
-                    page = updatedPage;
+                if(page.get("sections") && page.get("sections")[0] && page.get("sections")[0].sectionClass){
                     cb(null, webpageData, page);
-                });
+                }
+                else{
+                    pageCacheManager.buildPageStyles(page, function(err, updatedPage){                        
+                        cb(null, webpageData, updatedPage);
+                    });
+                }                
             },
 
             function getBlogPosts(webpageData, page, cb) {
@@ -792,10 +796,14 @@ _.extend(view.prototype, BaseView.prototype, {
                 });
             },
             function buildPageStyles(webpageData, page, post, cb){
-                pageCacheManager.buildPageStyles(page, function(err, updatedPage){
-                    page = updatedPage;
+                if(page.get("sections") && page.get("sections")[0] && page.get("sections")[0].sectionClass){
                     cb(null, webpageData, page, post);
-                });
+                }
+                else{
+                    pageCacheManager.buildPageStyles(page, function(err, updatedPage){                        
+                        cb(null, webpageData, updatedPage, post);
+                    });
+                }                
             },
             function prepareForRender(value, page, post, cb) {
                 var pageHolder = {};

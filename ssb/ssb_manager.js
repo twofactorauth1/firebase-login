@@ -1226,6 +1226,11 @@ module.exports = {
                     }
                 });
             },
+            function buildPageStyles(page, cb){
+                pageCacheManager.buildPageStyles(page, function(err, updatedPage){                    
+                    cb(null, updatedPage);
+                });
+            },
             function savePublishedPage(page, cb) {
                 page.set('published', {date:new Date(), by: userId});
                 pageDao.savePublishedPage(page, function(err, publishedPage){

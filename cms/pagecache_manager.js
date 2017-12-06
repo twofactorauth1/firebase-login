@@ -181,7 +181,7 @@ module.exports = {
                 if(page) {
                     pageName = page.get('handle');
                     if(page.get('sections') != null && page.get('sections').length > 0) {
-                        html = self.buildPageTemplateMarkup(page);
+                        html = self.buildTemplateMarkup(page);
                     } else {
                         _.each(page.get('components'), function(component, index){
                             var divName = self.getDirectiveNameDivByType(component.type);
