@@ -147,7 +147,7 @@
             td,th{
                 border-left: 1px solid #efeeef;
                 border-right: 1px solid #efeeef;
-                padding: 2px 0px 1px 4px; 
+                padding: 4px 0px 4px 4px;
                 &:last-child{
                     border-right : none; 
                 }
@@ -182,10 +182,18 @@
     }
     .visitor-right-pane{ 
       line-height: 1.6em;
-      border-left: 1px solid #efeeef;
+      border-left: 1px solid #efeeef;  
       .main-info,.full-info{
         background-color: #efeeef;
         padding-top: 7px;
+        .image-outer{
+            padding: 0px 0px 0px 5px;
+            img.logo{
+                width: 80px;
+                height: 80px;
+                border-radius: 60%
+              }
+         }
       }
       .adv-info{
         font-size: 12px;
@@ -262,4 +270,19 @@
     }
 
   }
+  #dahs-live{ 
+      background: white;
+    h4{
+        font-weight: 300;
+        font-size: 24px;
+    }
+    .analytics-live-widget-container{
+        border: none;
+    } 
+    .visitor-left-pane table tr{ 
+        th:nth-child(2),td:nth-child(2){
+            display: none;
+        }
+    }
+}
 
