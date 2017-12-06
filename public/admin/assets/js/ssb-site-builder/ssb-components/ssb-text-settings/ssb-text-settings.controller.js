@@ -56,6 +56,7 @@
 		};
 		vm.showHide = showHide;
 		vm.verticalAlignment = verticalAlignment;
+		vm.screenLayout = screenLayout();
 		function verticalAlignment(){
 			if (vm && vm.elementData) {
 				if(vm.elementData.vertical_align){
@@ -325,19 +326,12 @@
 		function elementClass() {
 			if (vm.elementData && vm.elementData.type) {
 				var classObj = {};
-
 				classObj['ssb-element'] = true;
-
 				classObj[vm.elementData.type] = true;
-
 				// classObj['ssb-hide-during-load'] = !buildDataObjFromHTMLDone;
-
 				return classObj;
-
 			} else {
-
 				return '';
-
 			}
 
 		}
@@ -363,7 +357,7 @@
 				var styleString = ' ',
 					component = vm.elementData;
 
-				var _layout = screenLayout();
+				var _layout = vm.screenLayout;
 				var _style = "";
 				switch (_layout) {
 		            case 0:
@@ -845,7 +839,6 @@
 			var classString = 'ticker ticker-speed-' + component.tickerSpeed;
 			element.attr("class", classString);
 		}
-
 		function applyTickerStyle(component){
 			if(vm.element && component){
 				if(component.allowTicker && !vm.element.hasClass("ssb-active-component")){
@@ -864,7 +857,6 @@
 
 			}
 		}
-
 		function init(element) {
 
 			console.info('ssb-text-settings directive init...');
@@ -911,8 +903,11 @@
 
 				applyStyles();
 			}
-
 		}
+
+		angular.element($window).bind('resize', function () {			
+			vm.screenLayout = screenLayout();
+		});
 
 	}
 
