@@ -209,149 +209,151 @@
             if ($injector.has("ipCookie"))
                 ipCookie = $injector.get("ipCookie");
 
-            var fingerprint = new Fingerprint().get();
-            var sessionId = ipCookie("session_cookie") ? ipCookie("session_cookie").id : null;
+           // var fingerprint = new Fingerprint2().get();
+            new Fingerprint2().get(function(fingerprint, components){
+                var sessionId = ipCookie("session_cookie") ? ipCookie("session_cookie").id : null;
 
-            var skipWelcomeEmail;
+                var skipWelcomeEmail;
 
-            if (vm.component.skipWelcomeEmail) {
-                skipWelcomeEmail = true;
-            }
-
-            var _campaignId;
-
-            var sendEmailId = vm.component.sendEmail === "true";
-
-            if (!vm.component.campaignId || sendEmailId) {
-                vm.component.campaignId = '';
-            } else {
-                _campaignId = vm.component.campaignId;
-            }
-
-            var _campaignTags = [];
-            if (vm._campaignObj && angular.isDefined(vm._campaignObj.searchTags) && vm._campaignObj.searchTags.tags.length) {
-              _campaignTags = _.uniq(_.pluck(vm._campaignObj.searchTags.tags, 'data'));
-            }
-
-            var first_name = "";
-            var last_name = "";
-
-            if (vm.formBuilder.name) {
-                var name_arr = vm.formBuilder.name.split(/ (.+)?/);
-                first_name = name_arr[0];
-                if (name_arr.length > 1) {
-                    last_name = name_arr[1];
+                if (vm.component.skipWelcomeEmail) {
+                    skipWelcomeEmail = true;
                 }
-            } else {
-                if (vm.formBuilder.FirstName) {
-                    first_name = vm.formBuilder.FirstName;
+
+                var _campaignId;
+
+                var sendEmailId = vm.component.sendEmail === "true";
+
+                if (!vm.component.campaignId || sendEmailId) {
+                    vm.component.campaignId = '';
+                } else {
+                    _campaignId = vm.component.campaignId;
                 }
-                if (vm.formBuilder.LastName) {
-                    last_name = vm.formBuilder.LastName;
+
+                var _campaignTags = [];
+                if (vm._campaignObj && angular.isDefined(vm._campaignObj.searchTags) && vm._campaignObj.searchTags.tags.length) {
+                _campaignTags = _.uniq(_.pluck(vm._campaignObj.searchTags.tags, 'data'));
                 }
-            }
 
-            var formatted = {
-                fingerprint: fingerprint,
-                sessionId: sessionId,
-                first: first_name,
-                last: last_name,
-                details: [{
-                    emails: [],
-                    phones: [],
-                    addresses: []
-                }],
-                campaignId: _campaignId,
-                campaignTags: _campaignTags,
-                emailId: vm.component.emailId,
-                sendEmail: vm.component.sendEmail,
-                skipWelcomeEmail: skipWelcomeEmail,
-                fromEmail: vm.component.fromEmail,
-                fromName: vm.component.fromName,
-                contact_type: vm.component.tags,
-                uniqueEmail: vm.component.uniqueEmail || false,
-                activity: {
-                    activityType: 'CONTACT_FORM',
-                    note: vm.formBuilder.Message || "Contact form data.",
-                    sessionId: ipCookie("session_cookie") ? ipCookie("session_cookie").id: null,
-                    contact: vm.formBuilder
+                var first_name = "";
+                var last_name = "";
+
+                if (vm.formBuilder.name) {
+                    var name_arr = vm.formBuilder.name.split(/ (.+)?/);
+                    first_name = name_arr[0];
+                    if (name_arr.length > 1) {
+                        last_name = name_arr[1];
+                    }
+                } else {
+                    if (vm.formBuilder.FirstName) {
+                        first_name = vm.formBuilder.FirstName;
+                    }
+                    if (vm.formBuilder.LastName) {
+                        last_name = vm.formBuilder.LastName;
+                    }
                 }
-            };
-            if (vm.formBuilder.email)
-                formatted.details[0].emails.push({
-                    email: vm.formBuilder.email
-                });
-            if (vm.formBuilder.phone) {
-                formatted.details[0].phones.push({
-                    number: vm.formBuilder.phone,
-                    type: 'm'
-                });
-            }
 
-            if (vm.formBuilder.address || vm.formBuilder.city || vm.formBuilder.state || vm.formBuilder.zip || vm.formBuilder.country) {
-                formatted.details[0].addresses.push({
-                    address: vm.formBuilder.address,
-                    city: vm.formBuilder.city,
-                    state: vm.formBuilder.state,
-                    country: vm.formBuilder.country,
-                    zip: vm.formBuilder.zip
-                });
-            }
+                var formatted = {
+                    fingerprint: fingerprint,
+                    sessionId: sessionId,
+                    first: first_name,
+                    last: last_name,
+                    details: [{
+                        emails: [],
+                        phones: [],
+                        addresses: []
+                    }],
+                    campaignId: _campaignId,
+                    campaignTags: _campaignTags,
+                    emailId: vm.component.emailId,
+                    sendEmail: vm.component.sendEmail,
+                    skipWelcomeEmail: skipWelcomeEmail,
+                    fromEmail: vm.component.fromEmail,
+                    fromName: vm.component.fromName,
+                    contact_type: vm.component.tags,
+                    uniqueEmail: vm.component.uniqueEmail || false,
+                    activity: {
+                        activityType: 'CONTACT_FORM',
+                        note: vm.formBuilder.Message || "Contact form data.",
+                        sessionId: ipCookie("session_cookie") ? ipCookie("session_cookie").id: null,
+                        contact: vm.formBuilder
+                    }
+                };
+                if (vm.formBuilder.email)
+                    formatted.details[0].emails.push({
+                        email: vm.formBuilder.email
+                    });
+                if (vm.formBuilder.phone) {
+                    formatted.details[0].phones.push({
+                        number: vm.formBuilder.phone,
+                        type: 'm'
+                    });
+                }
 
-            //create contact
-            userService.addContact(formatted, function (data, err) {
-                if (err && err.code === 409) {
-                    vm.userExists = true;
-                } else if (err && err.code !== 409) {
-                    vm.formError = true;
-                    $timeout(function () {
-                        vm.formError = false;
-                    }, 5000);
-                } else if (data) {
-                    var name = vm.formBuilder.name;
+                if (vm.formBuilder.address || vm.formBuilder.city || vm.formBuilder.state || vm.formBuilder.zip || vm.formBuilder.country) {
+                    formatted.details[0].addresses.push({
+                        address: vm.formBuilder.address,
+                        city: vm.formBuilder.city,
+                        state: vm.formBuilder.state,
+                        country: vm.formBuilder.country,
+                        zip: vm.formBuilder.zip
+                    });
+                }
 
-                    // This variant of the FB Tracking pixel is going away in late 2016
-                    // Ref: https://www.facebook.com/business/help/373979379354234
-                    if (vm.component.facebookConversionCode) {
-                        var _fbq = window._fbq || (window._fbq = []);
-                        if (!_fbq.loaded) {
-                            var fbds = document.createElement('script');
-                            fbds.async = true;
-                            fbds.src = '//connect.facebook.net/en_US/fbds.js';
-                            var s = document.getElementsByTagName('script')[0];
-                            s.parentNode.insertBefore(fbds, s);
-                            _fbq.loaded = true;
+                //create contact
+                userService.addContact(formatted, function (data, err) {
+                    if (err && err.code === 409) {
+                        vm.userExists = true;
+                    } else if (err && err.code !== 409) {
+                        vm.formError = true;
+                        $timeout(function () {
+                            vm.formError = false;
+                        }, 5000);
+                    } else if (data) {
+                        var name = vm.formBuilder.name;
+
+                        // This variant of the FB Tracking pixel is going away in late 2016
+                        // Ref: https://www.facebook.com/business/help/373979379354234
+                        if (vm.component.facebookConversionCode) {
+                            var _fbq = window._fbq || (window._fbq = []);
+                            if (!_fbq.loaded) {
+                                var fbds = document.createElement('script');
+                                fbds.async = true;
+                                fbds.src = '//connect.facebook.net/en_US/fbds.js';
+                                var s = document.getElementsByTagName('script')[0];
+                                s.parentNode.insertBefore(fbds, s);
+                                _fbq.loaded = true;
+                            }
+                            window._fbq = window._fbq || [];
+                            window._fbq.push(['track', vm.component.facebookConversionCode, {
+                                'value': '0.00',
+                                'currency': 'USD'
+                            }]);
                         }
-                        window._fbq = window._fbq || [];
-                        window._fbq.push(['track', vm.component.facebookConversionCode, {
-                            'value': '0.00',
-                            'currency': 'USD'
-                        }]);
-                    }
 
 
 
-                    vm.formSuccess = true;
-                    vm.formBuilder = {};
-                    $('#donation-card-details').find("input[type=text]").val("");
-                    form.$setPristine(true);
+                        vm.formSuccess = true;
+                        vm.formBuilder = {};
+                        $('#donation-card-details').find("input[type=text]").val("");
+                        form.$setPristine(true);
 
-                    $timeout(function () {
-                        vm.formSuccess = false;
-                    }, 3000);
-                    if (!vm.component.redirect) {
-                         $timeout(function () {
-                             if (vm.component.redirectType === 'page') {
-                                window.location.pathname = vm.component.redirectUrl;
-                            }
-                            if (vm.component.redirectType === 'external') {
-                                window.location.href = vm.component.redirectUrl;
-                            }
-                        }, 2000);
+                        $timeout(function () {
+                            vm.formSuccess = false;
+                        }, 3000);
+                        if (!vm.component.redirect) {
+                            $timeout(function () {
+                                if (vm.component.redirectType === 'page') {
+                                    window.location.pathname = vm.component.redirectUrl;
+                                }
+                                if (vm.component.redirectType === 'external') {
+                                    window.location.href = vm.component.redirectUrl;
+                                }
+                            }, 2000);
+
+                        }
 
                     }
-
-                }
+                });
             });
         };
 
@@ -363,187 +365,189 @@
             if ($injector.has("ipCookie")) {
                 ipCookie = $injector.get("ipCookie");
             }
-
-            var fingerprint = new Fingerprint().get();
-            var sessionId = ipCookie("session_cookie") ? ipCookie("session_cookie").id : null;
-
-            var skipWelcomeEmail;
-
-            if (vm.component.skipWelcomeEmail) {
-                skipWelcomeEmail = true;
-            }
-
-            var _campaignId;
-            if (!vm.component.campaignId) {
-                vm.component.campaignId = '';
-            } else {
-                _campaignId = vm.component.campaignId;
-            }
-
-            var first_name = "";
-            var last_name = "";
-
-            if (vm.formBuilder.name) {
-                var name_arr = vm.formBuilder.name.split(/ (.+)?/);
-                first_name = name_arr[0];
-                if (name_arr.length > 1) {
-                    last_name = name_arr[1];
+            new Fingerprint2().get(function(fingerprint, components){
+                var sessionId = ipCookie("session_cookie") ? ipCookie("session_cookie").id : null;
+                
+                var skipWelcomeEmail;
+    
+                if (vm.component.skipWelcomeEmail) {
+                    skipWelcomeEmail = true;
                 }
-            } else {
-                if (vm.formBuilder.FirstName) {
-                    first_name = vm.formBuilder.FirstName;
+    
+                var _campaignId;
+                if (!vm.component.campaignId) {
+                    vm.component.campaignId = '';
+                } else {
+                    _campaignId = vm.component.campaignId;
                 }
-                if (vm.formBuilder.LastName) {
-                    last_name = vm.formBuilder.LastName;
+    
+                var first_name = "";
+                var last_name = "";
+    
+                if (vm.formBuilder.name) {
+                    var name_arr = vm.formBuilder.name.split(/ (.+)?/);
+                    first_name = name_arr[0];
+                    if (name_arr.length > 1) {
+                        last_name = name_arr[1];
+                    }
+                } else {
+                    if (vm.formBuilder.FirstName) {
+                        first_name = vm.formBuilder.FirstName;
+                    }
+                    if (vm.formBuilder.LastName) {
+                        last_name = vm.formBuilder.LastName;
+                    }
                 }
-            }
-
-            var customFields = _.filter(vm.component.contactInfo, function (x) {
-                return x.custom == true;
-            });
-
-            var extra = [];
-
-            customFields.forEach(function (c, i) {
-                extra.push({
-                    name: c.name,
-                    label: c.label,
-                    value: c.name ? vm.formBuilder[c.name] || vm.formBuilder[c.name.toLowerCase()] : null
+    
+                var customFields = _.filter(vm.component.contactInfo, function (x) {
+                    return x.custom == true;
                 });
-            });
-
-
-            if(vm.product.tags){
-                vm.product.tags = _.map(vm.product.tags, function(tag){return tag.toLowerCase()});
-            }
-
-            if(vm.component.tags){
-                vm.component.tags = _.map(vm.component.tags, function(tag){return tag.toLowerCase()});
-            }
-
-            var formatted = {
-                fingerprint: fingerprint,
-                sessionId: sessionId,
-                first: first_name,
-                last: last_name,
-                details: [{
-                    emails: [],
-                    phones: [],
-                    addresses: []
-                }],
-                campaignId: _campaignId,
-                emailId: vm.component.emailId,
-                sendEmail: vm.component.sendEmail,
-                skipWelcomeEmail: skipWelcomeEmail,
-                fromEmail: vm.component.fromEmail,
-                fromName: vm.component.fromName,
-                contact_type: vm.component.contact_type,
-                tags: vm.product.tags ? _.uniq(_.flatten([vm.product.tags, vm.component.tags])) : _.uniq(vm.component.tags),
-                uniqueEmail: vm.component.uniqueEmail || false,
-                activity: {
-                    activityType: 'DONATE_FORM',
-                    note: vm.formBuilder.Message || "Donate form data.",
-                    sessionId: ipCookie("session_cookie") ? ipCookie("session_cookie").id : null,
-                    contact: vm.formBuilder
-                },
-                extra: extra
-            };
-
-            if (vm.formBuilder.email)
-                formatted.details[0].emails.push({
-                    email: vm.formBuilder.email
+    
+                var extra = [];
+    
+                customFields.forEach(function (c, i) {
+                    extra.push({
+                        name: c.name,
+                        label: c.label,
+                        value: c.name ? vm.formBuilder[c.name] || vm.formBuilder[c.name.toLowerCase()] : null
+                    });
                 });
-            if (vm.formBuilder.phone) {
-                formatted.details[0].phones.push({
-                    number: vm.formBuilder.phone,
-                    type: 'm'
-                });
-            }
-
-            if (vm.formBuilder.address || vm.formBuilder.city || vm.formBuilder.state || vm.formBuilder.zip || vm.formBuilder.country) {
-                formatted.details[0].addresses.push({
-                    address: vm.formBuilder.address,
-                    city: vm.formBuilder.city,
-                    state: vm.formBuilder.state,
-                    country: vm.formBuilder.country,
-                    zip: vm.formBuilder.zip
-                });
-            }
-
-            var url = $location.absUrl().split('?')[0];
-            var _donationAmount = vm.formBuilder.amount;
-            var order = {
-                //"customer_id": customer._id,
-                "cancelUrl": url + '?state=2&comp=donation',
-                "returnUrl": url + '?state=5&comp=donation&amount='+_donationAmount,
-                "isAnonymous": vm.isAnonymous,
-                "customer": formatted,
-                "session_id": null,
-                "status": "pending_payment",
-                "cart_discount": 0,
-                "total_discount": 0,
-                "total_shipping": 0,
-                "total_tax": 0,
-                "shipping_tax": 0,
-                "cart_tax": 0,
-                "currency": "usd",
-                "line_items": [], // { "product_id": 31, "quantity": 1, "variation_id": 7, "subtotal": "20.00", "tax_class": null, "sku": "", "total": "20.00", "name": "Product Name", "total_tax": "0.00" }
-                "total_line_items_quantity": 1,
-                "payment_details": {
-                    "method_title": 'Credit Card Payment', //Check Payment, Credit Card Payment
-                    "method_id": 'cc', //check, cc
-                    "card_token": null, //Stripe card token if applicable
-                    "charge_description": null, //description of charge if applicable
-                    "statement_description": null, //22char string for cc statement if applicable
-                    "paid": true
-                },
-                "shipping_methods": "",
-                "shipping_address": {
-                    "first_name": formatted.first,
-                    "last_name": formatted.last,
-                    "phone": vm.formBuilder.phone || '',
-                    "city": formatted.details[0].addresses.length ? formatted.details[0].addresses[0].city : '',
-                    "country": "US",
-                    "address_1": formatted.details[0].addresses.length ? formatted.details[0].addresses[0].address : '',
-                    "company": "",
-                    "postcode": formatted.details[0].addresses.length ? formatted.details[0].addresses[0].zip : '',
-                    "email": formatted.details[0].emails.length ? formatted.details[0].emails[0].email : '',
-                    "address_2": formatted.details[0].addresses.length ? formatted.details[0].addresses[0].address2 : '',
-                    "state": formatted.details[0].addresses.length ? formatted.details[0].addresses[0].state : ''
-                },
-                "billing_address": {
-                    "first_name": formatted.first,
-                    "last_name": formatted.last,
-                    "phone": vm.formBuilder.phone || '',
-                    "city": formatted.details[0].addresses.length ? formatted.details[0].addresses[0].city : '',
-                    "country": "US",
-                    "address_1": formatted.details[0].addresses.length ? formatted.details[0].addresses[0].address : '',
-                    "company": "",
-                    "postcode": formatted.details[0].addresses.length ? formatted.details[0].addresses[0].zip : '',
-                    "email": formatted.details[0].emails.length ? formatted.details[0].emails[0].email : '',
-                    "address_2": formatted.details[0].addresses.length ? formatted.details[0].addresses[0].address2 : '',
-                    "state": formatted.details[0].addresses.length ? formatted.details[0].addresses[0].state : ''
-                },
-                "notes": []
-            };
-
-            var totalAmount = parseFloat(vm.formBuilder.amount);
-            var _item = {
-                "product_id": vm.product._id,
-                "quantity": 1,
-                "sale_price": totalAmount,
-                "regular_price": totalAmount,
-                "variation_id": '',
-                "tax_class": null,
-                "sku": "",
-                "total": totalAmount,
-                "name": vm.product.name,
-                "total_tax": "0.00",
-                "type": vm.product.type
-            };
-            order.line_items.push(_item);
-
-            return order;
+    
+    
+                if(vm.product.tags){
+                    vm.product.tags = _.map(vm.product.tags, function(tag){return tag.toLowerCase()});
+                }
+    
+                if(vm.component.tags){
+                    vm.component.tags = _.map(vm.component.tags, function(tag){return tag.toLowerCase()});
+                }
+    
+                var formatted = {
+                    fingerprint: fingerprint,
+                    sessionId: sessionId,
+                    first: first_name,
+                    last: last_name,
+                    details: [{
+                        emails: [],
+                        phones: [],
+                        addresses: []
+                    }],
+                    campaignId: _campaignId,
+                    emailId: vm.component.emailId,
+                    sendEmail: vm.component.sendEmail,
+                    skipWelcomeEmail: skipWelcomeEmail,
+                    fromEmail: vm.component.fromEmail,
+                    fromName: vm.component.fromName,
+                    contact_type: vm.component.contact_type,
+                    tags: vm.product.tags ? _.uniq(_.flatten([vm.product.tags, vm.component.tags])) : _.uniq(vm.component.tags),
+                    uniqueEmail: vm.component.uniqueEmail || false,
+                    activity: {
+                        activityType: 'DONATE_FORM',
+                        note: vm.formBuilder.Message || "Donate form data.",
+                        sessionId: ipCookie("session_cookie") ? ipCookie("session_cookie").id : null,
+                        contact: vm.formBuilder
+                    },
+                    extra: extra
+                };
+    
+                if (vm.formBuilder.email)
+                    formatted.details[0].emails.push({
+                        email: vm.formBuilder.email
+                    });
+                if (vm.formBuilder.phone) {
+                    formatted.details[0].phones.push({
+                        number: vm.formBuilder.phone,
+                        type: 'm'
+                    });
+                }
+    
+                if (vm.formBuilder.address || vm.formBuilder.city || vm.formBuilder.state || vm.formBuilder.zip || vm.formBuilder.country) {
+                    formatted.details[0].addresses.push({
+                        address: vm.formBuilder.address,
+                        city: vm.formBuilder.city,
+                        state: vm.formBuilder.state,
+                        country: vm.formBuilder.country,
+                        zip: vm.formBuilder.zip
+                    });
+                }
+    
+                var url = $location.absUrl().split('?')[0];
+                var _donationAmount = vm.formBuilder.amount;
+                var order = {
+                    //"customer_id": customer._id,
+                    "cancelUrl": url + '?state=2&comp=donation',
+                    "returnUrl": url + '?state=5&comp=donation&amount='+_donationAmount,
+                    "isAnonymous": vm.isAnonymous,
+                    "customer": formatted,
+                    "session_id": null,
+                    "status": "pending_payment",
+                    "cart_discount": 0,
+                    "total_discount": 0,
+                    "total_shipping": 0,
+                    "total_tax": 0,
+                    "shipping_tax": 0,
+                    "cart_tax": 0,
+                    "currency": "usd",
+                    "line_items": [], // { "product_id": 31, "quantity": 1, "variation_id": 7, "subtotal": "20.00", "tax_class": null, "sku": "", "total": "20.00", "name": "Product Name", "total_tax": "0.00" }
+                    "total_line_items_quantity": 1,
+                    "payment_details": {
+                        "method_title": 'Credit Card Payment', //Check Payment, Credit Card Payment
+                        "method_id": 'cc', //check, cc
+                        "card_token": null, //Stripe card token if applicable
+                        "charge_description": null, //description of charge if applicable
+                        "statement_description": null, //22char string for cc statement if applicable
+                        "paid": true
+                    },
+                    "shipping_methods": "",
+                    "shipping_address": {
+                        "first_name": formatted.first,
+                        "last_name": formatted.last,
+                        "phone": vm.formBuilder.phone || '',
+                        "city": formatted.details[0].addresses.length ? formatted.details[0].addresses[0].city : '',
+                        "country": "US",
+                        "address_1": formatted.details[0].addresses.length ? formatted.details[0].addresses[0].address : '',
+                        "company": "",
+                        "postcode": formatted.details[0].addresses.length ? formatted.details[0].addresses[0].zip : '',
+                        "email": formatted.details[0].emails.length ? formatted.details[0].emails[0].email : '',
+                        "address_2": formatted.details[0].addresses.length ? formatted.details[0].addresses[0].address2 : '',
+                        "state": formatted.details[0].addresses.length ? formatted.details[0].addresses[0].state : ''
+                    },
+                    "billing_address": {
+                        "first_name": formatted.first,
+                        "last_name": formatted.last,
+                        "phone": vm.formBuilder.phone || '',
+                        "city": formatted.details[0].addresses.length ? formatted.details[0].addresses[0].city : '',
+                        "country": "US",
+                        "address_1": formatted.details[0].addresses.length ? formatted.details[0].addresses[0].address : '',
+                        "company": "",
+                        "postcode": formatted.details[0].addresses.length ? formatted.details[0].addresses[0].zip : '',
+                        "email": formatted.details[0].emails.length ? formatted.details[0].emails[0].email : '',
+                        "address_2": formatted.details[0].addresses.length ? formatted.details[0].addresses[0].address2 : '',
+                        "state": formatted.details[0].addresses.length ? formatted.details[0].addresses[0].state : ''
+                    },
+                    "notes": []
+                };
+    
+                var totalAmount = parseFloat(vm.formBuilder.amount);
+                var _item = {
+                    "product_id": vm.product._id,
+                    "quantity": 1,
+                    "sale_price": totalAmount,
+                    "regular_price": totalAmount,
+                    "variation_id": '',
+                    "tax_class": null,
+                    "sku": "",
+                    "total": totalAmount,
+                    "name": vm.product.name,
+                    "total_tax": "0.00",
+                    "type": vm.product.type
+                };
+                order.line_items.push(_item);
+                
+                return order;
+            })
+            //var fingerprint = new Fingerprint2().get();
+            
         }
 
         function paypalPayment() {

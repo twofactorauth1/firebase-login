@@ -309,7 +309,6 @@ mainApp.service('analyticsService', ['$http', '$location', 'ipCookie', function 
             isMobile,
             permanent_cookie = ipCookie("permanent_cookie"),
             new_visitor = true,
-            fingerprint,
             timezone,
             campaign = {},
             hasUtm = false,
@@ -317,144 +316,147 @@ mainApp.service('analyticsService', ['$http', '$location', 'ipCookie', function 
             parsedReferrer,
             referrerObject = null,
             apiUrl;
-        if(!queryParams) {
+        
+            new Fingerprint2().get(function(fingerprint, components){
+                if(!queryParams) {
 
 
-            sessionExpireTime.setMinutes(sessionExpireTime.getMinutes() + 30);
+                    sessionExpireTime.setMinutes(sessionExpireTime.getMinutes() + 30);
 
-            //If it is undefined, set a new one.
-            if (!session_cookie || !session_cookie.id) {
-                entrance = true;
-                ipCookie("session_cookie", {
-                    id: Math.uuid()
-                }, {
-                    expires: sessionExpireTime,
-                    path: "/" //Makes this cookie readable from all pages
-                });
-            } else {
-                //If it does exist, delete it and set a new one with new expiration time
-                ipCookie.remove("session_cookie", {
-                    path: "/"
-                });
-                ipCookie("session_cookie", session_cookie, {
-                    expires: sessionExpireTime,
-                    path: "/"
-                });
-            }
-            //If it is undefined, set a new one.
-            if (permanent_cookie === undefined) {
-                ipCookie("permanent_cookie", {
-                    id: Math.uuid()
-                }, {
-                    expires: 3650, //10 year expiration date
-                    path: "/" //Makes this cookie readable from all pages
-                });
-            } else {
-                new_visitor = false;
-            }
+                    //If it is undefined, set a new one.
+                    if (!session_cookie || !session_cookie.id) {
+                        entrance = true;
+                        ipCookie("session_cookie", {
+                            id: Math.uuid()
+                        }, {
+                            expires: sessionExpireTime,
+                            path: "/" //Makes this cookie readable from all pages
+                        });
+                    } else {
+                        //If it does exist, delete it and set a new one with new expiration time
+                        ipCookie.remove("session_cookie", {
+                            path: "/"
+                        });
+                        ipCookie("session_cookie", session_cookie, {
+                            expires: sessionExpireTime,
+                            path: "/"
+                        });
+                    }
+                    //If it is undefined, set a new one.
+                    if (permanent_cookie === undefined) {
+                        ipCookie("permanent_cookie", {
+                            id: Math.uuid()
+                        }, {
+                            expires: 3650, //10 year expiration date
+                            path: "/" //Makes this cookie readable from all pages
+                        });
+                    } else {
+                        new_visitor = false;
+                    }
 
-            //determine if the device is mobile or not
-            isMobile = {
-                Android: function () {
-                    return navigator.userAgent.match(/Android/i);
-                },
-                BlackBerry: function () {
-                    return navigator.userAgent.match(/BlackBerry/i);
-                },
-                iOS: function () {
-                    return navigator.userAgent.match(/iPhone|iPad|iPod/i);
-                },
-                Opera: function () {
-                    return navigator.userAgent.match(/Opera Mini/i);
-                },
-                Windows: function () {
-                    return navigator.userAgent.match(/IEMobile/i) || navigator.userAgent.match(/WPDesktop/i);
-                },
-                any: function () {
-                    return (isMobile.Android() || isMobile.BlackBerry() || isMobile.iOS() || isMobile.Opera() || isMobile.Windows());
+                    //determine if the device is mobile or not
+                    isMobile = {
+                        Android: function () {
+                            return navigator.userAgent.match(/Android/i);
+                        },
+                        BlackBerry: function () {
+                            return navigator.userAgent.match(/BlackBerry/i);
+                        },
+                        iOS: function () {
+                            return navigator.userAgent.match(/iPhone|iPad|iPod/i);
+                        },
+                        Opera: function () {
+                            return navigator.userAgent.match(/Opera Mini/i);
+                        },
+                        Windows: function () {
+                            return navigator.userAgent.match(/IEMobile/i) || navigator.userAgent.match(/WPDesktop/i);
+                        },
+                        any: function () {
+                            return (isMobile.Android() || isMobile.BlackBerry() || isMobile.iOS() || isMobile.Opera() || isMobile.Windows());
+                        }
+                    };
+
+                    if (isMobile.any()) {
+                        device = 'mobile';
+                    } else {
+                        device = 'desktop';
+                    }
+
+                    //get browser fingerprint
+                    fingerprint = new Fingerprint().get();
+                    timezone = jstz.determine();
+
+                    queryParams = {};
+                    queryParams.sid= ipCookie('session_cookie').id;
+                    queryParams.pt=ipCookie('permanent_cookie').id;
+                    queryParams.ev='s';
+                    if(parser.getBrowser()) {
+                        queryParams.uabn=parser.getBrowser().name;
+                        queryParams.uabv=parser.getBrowser().version;
+                        queryParams.uabm=parser.getBrowser().major;
+                    }
+                    if(parser.getEngine()) {
+                        queryParams.uaen=parser.getEngine().name;
+                        queryParams.uaev=parser.getEngine().version;
+                    }
+                    if(parser.getOS()) {
+                        queryParams.uaon=parser.getOS().name;
+                        queryParams.uaov=parser.getOS().version;
+                    }
+                    queryParams.uad=device;
+                    queryParams.f=fingerprint.toString();
+                    queryParams.t=timezone.name();
+                    queryParams.nv=new_visitor;
+                    queryParams.fe=$location.absUrl();
+
+
+                    if ($location.search().utm_source) {
+                        hasUtm = true;
+                        campaign.utm_source = $location.search().utm_source;
+                    }
+
+                    if ($location.search().utm_medium) {
+                        hasUtm = true;
+                        campaign.utm_medium = $location.search().utm_medium;
+                    }
+
+                    if ($location.search().utm_campaign) {
+                        hasUtm = true;
+                        campaign.utm_campaign = $location.search().utm_campaign;
+                    }
+
+                    if ($location.search().utm_term) {
+                        hasUtm = true;
+                        campaign.utm_term = $location.search().utm_term;
+                    }
+
+                    if ($location.search().utm_content) {
+                        hasUtm = true;
+                        campaign.utm_content = $location.search().utm_content;
+                    }
+
+                    if (hasUtm) {
+                        queryParams.utms=campaign.utm_source;
+                        queryParams.utmm=campaign.utm_medium;
+                        queryParams.utmc=campaign.utm_campaign;
+                        queryParams.utmt=campaign.utm_term;
+                        queryParams.utmct=campaign.utm_content;
+                    }
+
+                    if (referrer !== undefined) {
+                        parsedReferrer = $.url(referrer);
+                        queryParams.r=parsedReferrer.attr('source');
+                        queryParams.st=self.getSourceType(parsedReferrer.attr("host"));
+                    }
+                    console.log('queryParams:', queryParams);
                 }
-            };
 
-            if (isMobile.any()) {
-                device = 'mobile';
-            } else {
-                device = 'desktop';
-            }
-
-            //get browser fingerprint
-            fingerprint = new Fingerprint().get();
-            timezone = jstz.determine();
-
-            queryParams = {};
-            queryParams.sid= ipCookie('session_cookie').id;
-            queryParams.pt=ipCookie('permanent_cookie').id;
-            queryParams.ev='s';
-            if(parser.getBrowser()) {
-                queryParams.uabn=parser.getBrowser().name;
-                queryParams.uabv=parser.getBrowser().version;
-                queryParams.uabm=parser.getBrowser().major;
-            }
-            if(parser.getEngine()) {
-                queryParams.uaen=parser.getEngine().name;
-                queryParams.uaev=parser.getEngine().version;
-            }
-            if(parser.getOS()) {
-                queryParams.uaon=parser.getOS().name;
-                queryParams.uaov=parser.getOS().version;
-            }
-            queryParams.uad=device;
-            queryParams.f=fingerprint.toString();
-            queryParams.t=timezone.name();
-            queryParams.nv=new_visitor;
-            queryParams.fe=$location.absUrl();
-
-
-            if ($location.search().utm_source) {
-                hasUtm = true;
-                campaign.utm_source = $location.search().utm_source;
-            }
-
-            if ($location.search().utm_medium) {
-                hasUtm = true;
-                campaign.utm_medium = $location.search().utm_medium;
-            }
-
-            if ($location.search().utm_campaign) {
-                hasUtm = true;
-                campaign.utm_campaign = $location.search().utm_campaign;
-            }
-
-            if ($location.search().utm_term) {
-                hasUtm = true;
-                campaign.utm_term = $location.search().utm_term;
-            }
-
-            if ($location.search().utm_content) {
-                hasUtm = true;
-                campaign.utm_content = $location.search().utm_content;
-            }
-
-            if (hasUtm) {
-                queryParams.utms=campaign.utm_source;
-                queryParams.utmm=campaign.utm_medium;
-                queryParams.utmc=campaign.utm_campaign;
-                queryParams.utmt=campaign.utm_term;
-                queryParams.utmct=campaign.utm_content;
-            }
-
-            if (referrer !== undefined) {
-                parsedReferrer = $.url(referrer);
-                queryParams.r=parsedReferrer.attr('source');
-                queryParams.st=self.getSourceType(parsedReferrer.attr("host"));
-            }
-            console.log('queryParams:', queryParams);
-        }
-
-        //api/2.0/analytics/collect
-        apiUrl = baseUrl2 + 'collect';
-        $http.get(apiUrl, {params:queryParams})
-            .success(function (data) {
-                fn(data);
-            });
+                //api/2.0/analytics/collect
+                apiUrl = baseUrl2 + 'collect';
+                $http.get(apiUrl, {params:queryParams})
+                    .success(function (data) {
+                        fn(data);
+                    });
+        });
     };
 }]);
