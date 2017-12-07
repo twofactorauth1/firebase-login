@@ -15,7 +15,7 @@ var analyticsManager = require('../analytics/analytics_manager');
 var assetManager = require('../assets/asset_manager');
 var cookies = require('../utils/cookieutil');
 var externalScriptLookup = require('../configs/externalscriptlookup.config');
-
+var pageCacheManager = require('../cms/pagecache_manager');
 var view = function (req, resp, options) {
     this.init.apply(this, arguments);
 };
@@ -350,7 +350,8 @@ _.extend(view.prototype, BaseView.prototype, {
     },
     renderWebsitePage: function (accountId, handle) {
         var data = {},
-            self = this;
+            self = this,
+            styleCached = true;
         self.log.debug('>> renderWebsitePage', handle);
         handle = handle.trim();
         async.waterfall([
@@ -417,8 +418,9 @@ _.extend(view.prototype, BaseView.prototype, {
 
                         _.each(page.get('sections'), function(section){
                             if(section) {
-                                //self.log.debug('Page ' + page.get('handle'));
-                                //self.log.debug(' has components:', section.components);
+                                if(!section.sectionClass){
+                                    styleCached = false;
+                                }
                                 components = components.concat(section.components);
                             }
                         });
@@ -453,31 +455,31 @@ _.extend(view.prototype, BaseView.prototype, {
                 } else {
                     cb('Could not find ' + handle);
                 }
-            },
-            function addSSBSection(webpageData, page, cb){
-                var ssbSectionTemplate = {'id':'/admin/assets/js/ssb-site-builder/ssb-components/ssb-page-section/ssb-page-section.component.html'};
-                fs.readFile('public/admin/assets/js/ssb-site-builder/ssb-components/ssb-page-section/ssb-page-section.component.html', 'utf8', function(err, html) {
-                    ssbSectionTemplate.data = html;
-                    data.templateIncludes.push(ssbSectionTemplate);
-                    cb(null, webpageData, page);
-                });
-            },
+            },            
             function getPageTemplate(webpageData, page, cb) {
                 var pageTemplate = {'id':'template.html'};
-                if(page.get('manifest') && page.get('manifest').template) {
-                    pageTemplate.data = page.get('manifest').template;
-                    data.templateIncludes.push(pageTemplate);
-                    cb(null, webpageData, page);
-                } else {
+                // if(page.get('manifest') && page.get('manifest').template) {
+                //     pageTemplate.data = page.get('manifest').template;
+                //     data.templateIncludes.push(pageTemplate);
+                //     cb(null, webpageData, page);
+                // } else {
                     //TODO:
-                    var pageCacheManager = require('../cms/pagecache_manager');
-                    var pageHandle = handle || 'index';
-                    pageCacheManager.getS3TemplateContent(accountId, pageHandle, function(err, templateData){
+                    pageCacheManager.buildTemplateFromPage(page, true, function(err, templateData){
                         pageTemplate.data = templateData;
                         data.templateIncludes.push(pageTemplate);
                         cb(null, webpageData, page);
                     });
+                //}
+            },
+            function buildPageStyles(webpageData, page, cb){
+                if(styleCached){
+                    cb(null, webpageData, page);
                 }
+                else{
+                    pageCacheManager.buildPageStyles(page, function(err, updatedPage){                        
+                        cb(null, webpageData, updatedPage);
+                    });
+                }                
             },
             function getBlogPosts(webpageData, page, cb) {
                 var pageHandle = handle || 'index';
@@ -503,7 +505,6 @@ _.extend(view.prototype, BaseView.prototype, {
                     cb(null, webpageData, page);
                 });
             },
-
             function(value, page, cb) {
                 var pageHolder = {};
                 pageHolder[page.get('handle')] = page.toJSON('frontend');
@@ -731,7 +732,8 @@ _.extend(view.prototype, BaseView.prototype, {
 
     renderActivateSetupPage: function (originalAccount, accountId, handle) {
         var data = {},
-            self = this;
+            self = this,
+            styleCached = true;
         self.log.debug('>> renderActivateSetupPage', handle);
         async.waterfall([
             function getWebpageData(cb) {
@@ -810,8 +812,9 @@ _.extend(view.prototype, BaseView.prototype, {
 
                         _.each(page.get('sections'), function(section){
                             if(section) {
-                                //self.log.debug('Page ' + page.get('handle'));
-                                //self.log.debug(' has components:', section.components);
+                                if(!section.sectionClass){
+                                    styleCached = false;
+                                }
                                 components = components.concat(section.components);
                             }
                         });
@@ -849,13 +852,24 @@ _.extend(view.prototype, BaseView.prototype, {
             },
 
             function getPageTemplate(webpageData, page, cb) {
-                var pageCacheManager = require('../cms/pagecache_manager');
+                //var pageCacheManager = require('../cms/pagecache_manager');
                 var pageTemplate = {'id':'template.html'};
-                pageCacheManager.getActivatePageSectionHtml(page, function(err, templateData){
+                pageCacheManager.buildTemplateFromPage(page, true, function(err, templateData){
                     pageTemplate.data = templateData;
                     data.templateIncludes.push(pageTemplate);
                     cb(null, webpageData, page);
                 });
+            },
+
+            function buildPageStyles(webpageData, page, cb){
+                if(styleCached){
+                    cb(null, webpageData, page);
+                }
+                else{
+                    pageCacheManager.buildPageStyles(page, function(err, updatedPage){                        
+                        cb(null, webpageData, updatedPage);
+                    });
+                }                
             },
 
             function(value, page, cb) {

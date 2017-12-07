@@ -11,7 +11,7 @@
                 config:"="
 			},
             templateUrl: '/admin/assets/views/partials/visitor.html',
-			controller: ['$scope', '$injector', function ($scope, $injector) { 
+			controller: ['$scope', '$injector', function ($scope, $injector) {  
                 $scope.selectedVisitorIndex=0;
                 $scope.convertUtcToLocal = function(_date){
                     if(_date){

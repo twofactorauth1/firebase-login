@@ -10,7 +10,7 @@
     component-media="vm.uiState.componentMedia"
     section-index="vm.index"
     component-index="0"
-    show-component="vm.showSection(vm.section)"
+    show-component="vm.section.showSection || vm.showSection(vm.section)"
     >
 </ssb-component-loader>
 <div ng-class="{'flex-container-relative-column': vm.section.components[0].visibility === false}" class="flex-container-absolute-column ssb-contact-us-social col-sm-6 col-xs-12">
@@ -26,7 +26,7 @@
             component-media="vm.uiState.componentMedia"
             section-index="vm.index"
             component-index="1"
-            show-component="vm.showSection(vm.section)"
+            show-component="vm.section.showSection || vm.showSection(vm.section)"
         >
         </ssb-component-loader>
     </div>
@@ -43,6 +43,6 @@
     component-media="vm.uiState.componentMedia"
     section-index="vm.index"
     component-index="2"
-    show-component="vm.showSection(vm.section)"
+    show-component="vm.section.showSection || vm.showSection(vm.section)"
     >
 </ssb-component-loader>
