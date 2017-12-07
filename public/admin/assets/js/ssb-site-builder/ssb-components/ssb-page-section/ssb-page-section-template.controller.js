@@ -457,7 +457,7 @@
 		function setFixedPosition(_isVerticalNav) {
 			if (!_isVerticalNav) {
 				var elementIsFirstPosition = vm.index === 0;
-				
+				SsbPageSectionService.isSticky = true;
 				if (elementIsFirstPosition) {
 					// Preview page
 					var dup ;
@@ -478,7 +478,7 @@
 					);
 
 				} else {
-					SsbPageSectionService.isSticky = true;
+					
 					$timeout(function () {
 						$(vm.element[0]).sticky({
 							zIndex: 999
