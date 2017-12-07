@@ -129,10 +129,7 @@ mainApp.controller('CacheCtrl', ['$scope', '$rootScope', 'embeddedSiteDataServic
 								}
 								if(SsbPageSectionService.isSticky)
 									waitTime = 2000;
-								// if page is loaded from cache 
-								if(angular.equals(newValue, oldValue)){
-									waitTime = 500;
-								}
+								
 			                	$timeout(function() {
 			                		var element = document.getElementById($location.$$hash);
 									if (!element) {

@@ -253,10 +253,8 @@
 
 			if ($injector.has("ipCookie")) {
 				ipCookie = $injector.get("ipCookie");
-			}
-
-			var fingerprint = new Fingerprint().get(),
-				sendEmailId,
+			} 
+			var	sendEmailId,
 				skipWelcomeEmail,
 				formBuilderCampaignId,
 				formBuilderCampaignTags,
@@ -320,112 +318,113 @@
 					activityFields[key] = value;
 				});
 			}
-
-			formatted = {
-				fingerprint: fingerprint,
-				sessionId: sessionId,
-				first: first_name,
-				last: last_name,
-                middle : middle_name,
-				details: [
-					{
-						emails: [],
-						phones: [],
-						addresses: []
-                    }
-                ],
-				campaignId: formBuilderCampaignId,
-				campaignTags: formBuilderCampaignTags,
-				emailId: vm.component.emailId,
-				sendEmail: vm.component.sendEmail,
-				skipWelcomeEmail: skipWelcomeEmail,
-				fromEmail: vm.component.fromEmail,
-				fromName: vm.component.fromName,
-				contact_type: vm.component.tags,
-				uniqueEmail: vm.component.uniqueEmail || false,
-				activity: {
-					activityType: 'CONTACT_FORM',
-					note: vm.formBuilder.Message || "Contact form data.",
-					sessionId: ipCookie("session_cookie") ? ipCookie("session_cookie").id : null,
-					contact: activityFields
-				},
-				extra: extra
-			};
-
-            //make email lowercase
-           	if (vm.formBuilder.email)
-				formatted.details[0].emails.push({
-					email: (vm.formBuilder.email && vm.formBuilder.email !== "") ? vm.formBuilder.email.toLowerCase() : vm.formBuilder.email
-				});
-			if (vm.formBuilder.phone) {
-				formatted.details[0].phones.push({
-					number: vm.formBuilder.phone,
-					type: 'm'
-				});
-			}
-
-			if (vm.formBuilder.address || vm.formBuilder.city || vm.formBuilder.state || vm.formBuilder.zip || vm.formBuilder.country) {
-				formatted.details[0].addresses.push({
-					address: vm.formBuilder.address,
-					city: vm.formBuilder.city,
-					state: vm.formBuilder.state,
-					country: vm.formBuilder.country,
-					zip: vm.formBuilder.zip,
-					ssb: true
-				});
-			}
-			formatted.optIn = vm.formBuilder._optin;
-			//create contact
-			userService.addContact(formatted, function (data, err) {
-				if (err && err.code === 409) {
-					vm.userExists = true;
-				} else if (err && err.code !== 409) {
-					vm.formError = true;
-					$scope.setinvalid = false;
-					$timeout(function () {
-						vm.formError = false;
-					}, 5000);
-				} else if (data) {
-					//var name = vm.formBuilder.name;
-
-					// This variant of the FB Tracking pixel is going away in late 2016
-					// Ref: https://www.facebook.com/business/help/373979379354234
-					if (vm.component.facebookConversionCode) {
-						var _fbq = window._fbq || (window._fbq = []);
-						if (!_fbq.loaded) {
-							var fbds = document.createElement('script');
-							fbds.async = true;
-							fbds.src = '//connect.facebook.net/en_US/fbds.js';
-							var s = document.getElementsByTagName('script')[0];
-							s.parentNode.insertBefore(fbds, s);
-							_fbq.loaded = true;
+			new Fingerprint2().get(function(fingerprint, components){
+				formatted = {
+					fingerprint: fingerprint,
+					sessionId: sessionId,
+					first: first_name,
+					last: last_name,
+					middle : middle_name,
+					details: [
+						{
+							emails: [],
+							phones: [],
+							addresses: []
 						}
-						window._fbq = window._fbq || [];
-						window._fbq.push(['track', vm.component.facebookConversionCode, {
-							'value': '0.00',
-							'currency': 'USD'
-						}]);
-					}
+					],
+					campaignId: formBuilderCampaignId,
+					campaignTags: formBuilderCampaignTags,
+					emailId: vm.component.emailId,
+					sendEmail: vm.component.sendEmail,
+					skipWelcomeEmail: skipWelcomeEmail,
+					fromEmail: vm.component.fromEmail,
+					fromName: vm.component.fromName,
+					contact_type: vm.component.tags,
+					uniqueEmail: vm.component.uniqueEmail || false,
+					activity: {
+						activityType: 'CONTACT_FORM',
+						note: vm.formBuilder.Message || "Contact form data.",
+						sessionId: ipCookie("session_cookie") ? ipCookie("session_cookie").id : null,
+						contact: activityFields
+					},
+					extra: extra
+				};
 
-
-					vm.formSuccess = true;
-					vm.formBuilder = {};
-					form.$setPristine(true);
-
-					$timeout(function () {
-						vm.formSuccess = false;
-					}, 3000);
-					if (vm.component.redirect) {
-						$timeout(function () {
-							if (vm.component.redirectType === 'page') {
-								window.location.pathname = vm.component.redirectUrl;
-							} else if (vm.component.redirectType === 'external') {
-								window.location.href = vm.component.redirectUrl;
-							}
-						}, 2000);
-					}
-					$scope.setinvalid = false;
+				//make email lowercase
+				if (vm.formBuilder.email)
+					formatted.details[0].emails.push({
+						email: (vm.formBuilder.email && vm.formBuilder.email !== "") ? vm.formBuilder.email.toLowerCase() : vm.formBuilder.email
+					});
+				if (vm.formBuilder.phone) {
+					formatted.details[0].phones.push({
+						number: vm.formBuilder.phone,
+						type: 'm'
+					});
 				}
+
+				if (vm.formBuilder.address || vm.formBuilder.city || vm.formBuilder.state || vm.formBuilder.zip || vm.formBuilder.country) {
+					formatted.details[0].addresses.push({
+						address: vm.formBuilder.address,
+						city: vm.formBuilder.city,
+						state: vm.formBuilder.state,
+						country: vm.formBuilder.country,
+						zip: vm.formBuilder.zip,
+						ssb: true
+					});
+				}
+				formatted.optIn = vm.formBuilder._optin;
+				//create contact
+				userService.addContact(formatted, function (data, err) {
+					if (err && err.code === 409) {
+						vm.userExists = true;
+					} else if (err && err.code !== 409) {
+						vm.formError = true;
+						$scope.setinvalid = false;
+						$timeout(function () {
+							vm.formError = false;
+						}, 5000);
+					} else if (data) {
+						//var name = vm.formBuilder.name;
+
+						// This variant of the FB Tracking pixel is going away in late 2016
+						// Ref: https://www.facebook.com/business/help/373979379354234
+						if (vm.component.facebookConversionCode) {
+							var _fbq = window._fbq || (window._fbq = []);
+							if (!_fbq.loaded) {
+								var fbds = document.createElement('script');
+								fbds.async = true;
+								fbds.src = '//connect.facebook.net/en_US/fbds.js';
+								var s = document.getElementsByTagName('script')[0];
+								s.parentNode.insertBefore(fbds, s);
+								_fbq.loaded = true;
+							}
+							window._fbq = window._fbq || [];
+							window._fbq.push(['track', vm.component.facebookConversionCode, {
+								'value': '0.00',
+								'currency': 'USD'
+							}]);
+						}
+
+
+						vm.formSuccess = true;
+						vm.formBuilder = {};
+						form.$setPristine(true);
+
+						$timeout(function () {
+							vm.formSuccess = false;
+						}, 3000);
+						if (vm.component.redirect) {
+							$timeout(function () {
+								if (vm.component.redirectType === 'page') {
+									window.location.pathname = vm.component.redirectUrl;
+								} else if (vm.component.redirectType === 'external') {
+									window.location.href = vm.component.redirectUrl;
+								}
+							}, 2000);
+						}
+						$scope.setinvalid = false;
+					}
+				});
 			});
 		};
 

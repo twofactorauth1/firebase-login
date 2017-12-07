@@ -46,10 +46,18 @@
 				var title = section.title || section.name,
 					version = section.version;
 				if (title) {
-					classString += ' ssb-page-section-' + $filter('slugify')(title);
-					if (version) {
-						classString += ' ssb-page-section-' + $filter('slugify')(title); + '-v' + version;
+					if(title.indexOf("+") > 0){
+						classString += ' ssb-page-section-' + $filter('slugify')(title.replace(/\+/g,''));
+						if (version) {							
+							classString += ' ssb-page-section-' + $filter('slugify')(title.replace(/\+/g,'')) + '-v' + version;
+						}
 					}
+					else{
+						classString += ' ssb-page-section-' + $filter('slugify')(title);
+						if (version) {
+							classString += ' ssb-page-section-' + $filter('slugify')(title) + '-v' + version;							
+						}
+					}					
 				}
 
 				if (section.layout) {

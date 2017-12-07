@@ -648,7 +648,7 @@ module.exports = {
     buildPageStyles: function(page, fn){
         var self = this;
         _.each(page.get('sections'), function(section, index){
-            section.sectionClass = self.buildSectionClass(section);
+            section.sectionClass = self.buildSectionClass(section, index);
             section.sectionStyle = self.buildSectionStyles(section);
             section.sectionBGClass = self.buildSectionBGClass(section);
             section.sectionBGStyle = self.buildSectionBGStyle(section);
@@ -706,7 +706,7 @@ module.exports = {
                     if (!section.fixedLeftNavigation || (section.fixedLeftNavigation && index > 0)) {
                         classString += " ssb-fixed sticky fixedsection";
                     }
-                    if (index === 0 && !section.fixedLeftNavigation) {
+                    if (index == 0 && !section.fixedLeftNavigation) {
                         classString += " ssb-fixed-first-element";
                     }
                 }

@@ -34,11 +34,10 @@
 
 			if (section) {				
 				if (section.bg && section.bg.video && section.bg.video.show && section.bg.video.urlProcessed) {
-
 					if (!angular.equals(vm.playerObject, {})) {
 						classString += ' ssb-page-section-layout-video-bg';
 					}
-				}
+				}				
 				setUpFroalaVideoSize(section);
 				resizeSliderImagesToFullHeight(section);
 			}
@@ -458,43 +457,28 @@
 		function setFixedPosition(_isVerticalNav) {
 			if (!_isVerticalNav) {
 				var elementIsFirstPosition = vm.index === 0;
-				
+				SsbPageSectionService.isSticky = true;
 				if (elementIsFirstPosition) {
 					// Preview page
 					var dup ;
-					if ($location.$$path.indexOf("/preview/") == 0) {
-						dup = vm.element.clone();
-						dup.addClass('ssb-fixed-clone-element');
-						dup.attr('id', 'clone_of_' + vm.section._id);
-						dup.insertAfter(vm.element);
-						$scope.$watch(
-							function () {
-								return angular.element(".ssb-fixed-first-element").height();
-							},
-							function (value) {
-								if (dup)
-									dup.css("min-height", value + "px");								
-									SsbPageSectionService.setSectionOffset(value);
-							}
-						);
-					} else {
-						dup = vm.element.clone();
-						dup.addClass('ssb-fixed-clone-element');
-						dup.attr('id', 'clone_of_' + vm.section._id);
-						dup.insertAfter(vm.element);
-						
-						$scope.$watch(
-							function () {
-								return angular.element(".ssb-fixed-first-element").height();
-							},
-							function (value) {
-								SsbPageSectionService.setSectionOffset(value);
-							}
-						);
-					}
+					dup = vm.element.clone();
+					dup.addClass('ssb-fixed-clone-element');
+					dup.attr('id', 'clone_of_' + vm.section._id);
+					dup.insertAfter(vm.element);
+					
+					$scope.$watch(
+						function () {
+							return angular.element(".ssb-fixed-first-element").height();
+						},
+						function (value) {
+							if (dup)
+								dup.css("min-height", value + "px");								
+							SsbPageSectionService.setSectionOffset(value);
+						}
+					);
 
 				} else {
-					SsbPageSectionService.isSticky = true;
+					
 					$timeout(function () {
 						$(vm.element[0]).sticky({
 							zIndex: 999
@@ -512,7 +496,6 @@
 						//new StickyState(vm.element[0]);
 					}, 1000);
 				}
-
 			}
 			vm.elementLoaded = true;
 		}

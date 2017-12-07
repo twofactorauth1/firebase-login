@@ -318,8 +318,8 @@ app.directive('simpleFormComponent', ["ipCookie", '$window', '$timeout', 'userSe
 
 				scope.userExists = false;
 				scope.isBusy = true;
-				var fingerprint = new Fingerprint().get(),
-					sessionId = ipCookie("session_cookie") ? ipCookie("session_cookie").id : null,
+				//var fingerprint = new Fingerprint().get(),
+				var	sessionId = ipCookie("session_cookie") ? ipCookie("session_cookie").id : null,
 					skipWelcomeEmail;
 
 				if (scope.component.skipWelcomeEmail) {
@@ -354,106 +354,107 @@ app.directive('simpleFormComponent', ["ipCookie", '$window', '$timeout', 'userSe
 						activityFields[key] = value;
 					});
 				}
-				var formatted = {
-					fingerprint: fingerprint,
-					sessionId: sessionId,
-					first: scope.user.first,
-					last: scope.user.last,
-					details: [
-						{
-							emails: [],
-							phones: []
-						}],
-					campaignId: _campaignId,
-					campaignTags: _campaignTags,
-					emailId: scope.component.emailId,
-					sendEmail: scope.component.sendEmail,
-					skipWelcomeEmail: skipWelcomeEmail,
-					fromEmail: scope.component.fromEmail,
-					fromName: scope.component.fromName,
-					contact_type: scope.component.tags,
-					uniqueEmail: scope.component.uniqueEmail || false,
-					activity: {
-						activityType: 'CONTACT_FORM',
-						note: scope.user.message || "Contact form data.",
-						sessionId: ipCookie("session_cookie") ? ipCookie("session_cookie").id : null,
-						contact: activityFields
-					}
-				};
-				formatted.details[0].emails.push({
-                    email: (scope.user.email && scope.user.email !== "") ?scope.user.email.toLowerCase() :scope.user.email
-
-				});
-				if (scope.user.phone || scope.user.extension) {
-					formatted.details[0].phones.push({
-						number: scope.user.phone,
-						extension: scope.user.extension,
-						type: 'm'
+				new Fingerprint2().get(function(fingerprint, components){ 
+					var formatted = {
+						fingerprint: fingerprint,
+						sessionId: sessionId,
+						first: scope.user.first,
+						last: scope.user.last,
+						details: [
+							{
+								emails: [],
+								phones: []
+							}],
+						campaignId: _campaignId,
+						campaignTags: _campaignTags,
+						emailId: scope.component.emailId,
+						sendEmail: scope.component.sendEmail,
+						skipWelcomeEmail: skipWelcomeEmail,
+						fromEmail: scope.component.fromEmail,
+						fromName: scope.component.fromName,
+						contact_type: scope.component.tags,
+						uniqueEmail: scope.component.uniqueEmail || false,
+						activity: {
+							activityType: 'CONTACT_FORM',
+							note: scope.user.message || "Contact form data.",
+							sessionId: ipCookie("session_cookie") ? ipCookie("session_cookie").id : null,
+							contact: activityFields
+						}
+					};
+					formatted.details[0].emails.push({
+						email: (scope.user.email && scope.user.email !== "") ?scope.user.email.toLowerCase() :scope.user.email
+	
 					});
-				}
-
-				if (extra.length) {
-					formatted.extra = extra;
-				}
-				if (scope.user._optin) {
-					formatted.optIn = scope.user._optin;
-				}
-				//create contact
-				userService.addContact(formatted, function (data, err) {
-					scope.isBusy = false;
-					if (err && err.code === 409) {
-						scope.userExists = true;
-					} else if (err && err.code !== 409) {
-						scope.formError = true;
-						$timeout(function () {
-							scope.formError = false;
-						}, 5000);
-					} else if (data) {
-						// This variant of the FB Tracking pixel is going away in late 2016
-						// Ref: https://www.facebook.com/business/help/373979379354234
-						if (scope.component.facebookConversionCode) {
-							var _fbq = window._fbq || (window._fbq = []);
-							if (!_fbq.loaded) {
-								var fbds = document.createElement('script');
-								fbds.async = true;
-								fbds.src = '//connect.facebook.net/en_US/fbds.js';
-								var s = document.getElementsByTagName('script')[0];
-								s.parentNode.insertBefore(fbds, s);
-								_fbq.loaded = true;
-							}
-							window._fbq = window._fbq || [];
-							window._fbq.push(['track', scope.component.facebookConversionCode, {
-								'value': '0.00',
-								'currency': 'USD'
-							}]);
-						}
-
-						if (!scope.component.redirect) {
-							scope.formSuccess = true;
-							scope.user = {};
-							simpleForm.$setPristine(true);
-
-							$timeout(function () {
-								scope.formSuccess = false;
-							}, 3000);
-						} else {
-							scope.formSuccess = true;
-							scope.user = {};
-							simpleForm.$setPristine(true);
-
-							$timeout(function () {
-								scope.formSuccess = false;
-							}, 3000);
-							if (scope.component.redirectType === 'page') {
-								window.location.pathname = scope.component.redirectUrl;
-							}
-							if (scope.component.redirectType === 'external') {
-								window.location.href = scope.component.redirectUrl;
-							}
-						}
-
+					if (scope.user.phone || scope.user.extension) {
+						formatted.details[0].phones.push({
+							number: scope.user.phone,
+							extension: scope.user.extension,
+							type: 'm'
+						});
 					}
-				});
+					if (extra.length) {
+						formatted.extra = extra;
+					}
+					if (scope.user._optin) {
+						formatted.optIn = scope.user._optin;
+					}
+					//create contact
+					userService.addContact(formatted, function (data, err) {
+						scope.isBusy = false;
+						if (err && err.code === 409) {
+							scope.userExists = true;
+						} else if (err && err.code !== 409) {
+							scope.formError = true;
+							$timeout(function () {
+								scope.formError = false;
+							}, 5000);
+						} else if (data) {
+							// This variant of the FB Tracking pixel is going away in late 2016
+							// Ref: https://www.facebook.com/business/help/373979379354234
+							if (scope.component.facebookConversionCode) {
+								var _fbq = window._fbq || (window._fbq = []);
+								if (!_fbq.loaded) {
+									var fbds = document.createElement('script');
+									fbds.async = true;
+									fbds.src = '//connect.facebook.net/en_US/fbds.js';
+									var s = document.getElementsByTagName('script')[0];
+									s.parentNode.insertBefore(fbds, s);
+									_fbq.loaded = true;
+								}
+								window._fbq = window._fbq || [];
+								window._fbq.push(['track', scope.component.facebookConversionCode, {
+									'value': '0.00',
+									'currency': 'USD'
+								}]);
+							}
+
+							if (!scope.component.redirect) {
+								scope.formSuccess = true;
+								scope.user = {};
+								simpleForm.$setPristine(true);
+
+								$timeout(function () {
+									scope.formSuccess = false;
+								}, 3000);
+							} else {
+								scope.formSuccess = true;
+								scope.user = {};
+								simpleForm.$setPristine(true);
+
+								$timeout(function () {
+									scope.formSuccess = false;
+								}, 3000);
+								if (scope.component.redirectType === 'page') {
+									window.location.pathname = scope.component.redirectUrl;
+								}
+								if (scope.component.redirectType === 'external') {
+									window.location.href = scope.component.redirectUrl;
+								}
+							}
+
+						}
+					});  
+				});  
 			};
 		}
 	};
