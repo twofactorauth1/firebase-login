@@ -142,7 +142,7 @@
                         <div class='form-group' ng-if='vm.parentVm.state.website.resources.toggles.userScripts'>
                           <label>Scripts</label>
                           <span tooltip-placement="bottom" tooltip="Add script snippets for your page"><i class="fa fa-info-circle" /></span>
-                          <textarea class='form-control' ng-model='vm.parentVm.state.website.resources.userScripts[vm.page.handle === "blog-list" ? "blog": vm.page.handle].original'></textarea>
+                          <textarea class='form-control text-area-control-large' ng-model='vm.parentVm.state.website.resources.userScripts[vm.page.handle === "blog-list" ? "blog": vm.page.handle].original'></textarea>
                         </div>
                     </div>
                 </tab>
@@ -156,7 +156,7 @@
                         <div class='form-group' ng-if='vm.parentVm.state.website.resources.toggles.customCss'>
                           <label>Custom CSS</label>
                           <span tooltip-placement="bottom" tooltip="Add CSS snippets for your page"><i class="fa fa-info-circle" /></span>
-                          <textarea class='form-control' ng-model='vm.parentVm.state.website.resources.customCss[vm.page.handle].original'></textarea>
+                          <textarea class='form-control text-area-control-large' ng-model='vm.parentVm.state.website.resources.customCss[vm.page.handle].original'></textarea>
                         </div>
                     </div>
                 </tab>
