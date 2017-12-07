@@ -416,7 +416,7 @@ _.extend(view.prototype, BaseView.prototype, {
                         var components = [];
 
                         _.each(page.get('sections'), function(section){
-                            if(section) {                                
+                            if(section) {
                                 components = components.concat(section.components);
                             }
                         });
@@ -451,7 +451,7 @@ _.extend(view.prototype, BaseView.prototype, {
                 } else {
                     cb('Could not find ' + handle);
                 }
-            },            
+            },
             function getPageTemplate(webpageData, page, cb) {
                 var pageTemplate = {'id':'template.html'};
                 // if(page.get('manifest') && page.get('manifest').template) {
@@ -467,10 +467,10 @@ _.extend(view.prototype, BaseView.prototype, {
                     });
                 //}
             },
-            function buildPageStyles(webpageData, page, cb){                
-                pageCacheManager.buildPageStyles(page, function(err, updatedPage){                        
+            function buildPageStyles(webpageData, page, cb){
+                pageCacheManager.buildPageStyles(page, function(err, updatedPage){
                     cb(null, webpageData, updatedPage);
-                });         
+                });
             },
             function getBlogPosts(webpageData, page, cb) {
                 var pageHandle = handle || 'index';
@@ -616,6 +616,9 @@ _.extend(view.prototype, BaseView.prototype, {
                     self.log.debug('usedFamilies:', usedFamilies);
                     //TODO: need to handle NO fonts.
                     data.account.fonts = _.intersection(googleFamilies, usedFamilies).join('|');
+                    if(data.account.fonts === '') {
+                        data.account.fonts = 'NA';
+                    }
                     self.log.debug('data.account.fonts:', data.account.fonts);
                 }
 
@@ -801,7 +804,7 @@ _.extend(view.prototype, BaseView.prototype, {
                         var components = [];
 
                         _.each(page.get('sections'), function(section){
-                            if(section) {                                
+                            if(section) {
                                 components = components.concat(section.components);
                             }
                         });
@@ -848,10 +851,10 @@ _.extend(view.prototype, BaseView.prototype, {
                 });
             },
 
-            function buildPageStyles(webpageData, page, cb){                
-                pageCacheManager.buildPageStyles(page, function(err, updatedPage){                        
+            function buildPageStyles(webpageData, page, cb){
+                pageCacheManager.buildPageStyles(page, function(err, updatedPage){
                     cb(null, webpageData, updatedPage);
-                });         
+                });
             },
 
             function(value, page, cb) {

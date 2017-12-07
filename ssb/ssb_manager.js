@@ -948,7 +948,7 @@ module.exports = {
                 var sections = page.get('sections') || [];
                 sectionDao.dereferenceSections(sections, function(err, sectionAry){
                     var _sections = [];
-                    _.each(_.compact(sectionAry), function(section){                        
+                    _.each(_.compact(sectionAry), function(section){
                         _sections.push(section.toJSON());
                     })
                     page.set('sections', _sections);
@@ -1227,7 +1227,7 @@ module.exports = {
                 });
             },
             function buildPageStyles(page, cb){
-                pageCacheManager.buildPageStyles(page, function(err, updatedPage){                    
+                pageCacheManager.buildPageStyles(page, function(err, updatedPage){
                     cb(null, updatedPage);
                 });
             },
@@ -4441,14 +4441,14 @@ module.exports = {
                             if(_.isObject(value)){
                                 value = JSON.stringify(value);
                             }
-                            var fontRegexp = /font-family: ([a-zA-Z\s,\'\-]+)[^;]*/g;
+                            var fontRegexp = /font-family: ([a-zA-Z\s,\'\-\"\\]+)[^;]*/g;
                             var font = fontRegexp.exec(value);
                             if(font && font.length > 1) {
                                 for(var i=1; i<font.length; i+=3) {
                                     //console.log('matched:', font[i]);
                                     var fontAry = font[i].split(',');
                                     _.each(fontAry, function(splitFont){
-                                        splitFont = splitFont.trim().replace('\'', '').replace('\'', '');
+                                        splitFont = splitFont.trim().replace('\'', '').replace('\'', '').replace('"', '').replace('"','');
                                         fontMap[splitFont] = splitFont;
                                     });
                                 }

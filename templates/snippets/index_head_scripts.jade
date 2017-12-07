@@ -10,27 +10,42 @@ script(type="text/javascript").
     var families = window.indigenous.fonts
     if(families.length === 1 && families[0] === '') {
         families = defaultFamilies;
+        WebFontConfig = {
+            google: {
+                families: families
+            }
+        };
+    } else if(families.length === 1 && families[0] === 'NA') {
+        WebFontConfig = {
+            google: {
+                families: []
+            }
+        };
+    } else {
+        WebFontConfig = {
+            google: {
+                families: families
+            }
+        };
     }
-    WebFontConfig = {
-        google: {
-            families: families
-        }
-    };
+
     if(#{"'"+account.website.settings.font_family+"'"}!='undefined' &&
             #{"'"+account.website.settings.font_family_2+"'"} !='undefined'){
         WebFontConfig.google.families.push(#{"'"+account.website.settings.font_family+"'"})
         WebFontConfig.google.families.push(#{"'"+account.website.settings.font_family_2+"'"})
     }
+    if(WebFontConfig.google.families.length > 0) {
+        (function () {
+            var wf = document.createElement('script');
+            wf.src = ('https:' == document.location.protocol ? 'https' : 'http') +
+                '://ajax.googleapis.com/ajax/libs/webfont/1.5.18/webfont.js';
+            wf.type = 'text/javascript';
+            wf.async = 'true';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(wf, s);
+        })();
+    }
 
-    (function() {
-        var wf = document.createElement('script');
-        wf.src = ('https:' == document.location.protocol ? 'https' : 'http') +
-            '://ajax.googleapis.com/ajax/libs/webfont/1.5.18/webfont.js';
-        wf.type = 'text/javascript';
-        wf.async = 'true';
-        var s = document.getElementsByTagName('script')[0];
-        s.parentNode.insertBefore(wf, s);
-    })();
 
 
 
