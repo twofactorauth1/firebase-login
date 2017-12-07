@@ -88,9 +88,8 @@ main(){
 	# copy the minimized jade file
 	if [ "$1" = "develop" ]; then
 	    # do the dev only
-	    mv templates/snippets/index_body_scripts_minimized_cdn.jade templates/snippets/index_body_scripts.jade
+	    mv templates/snippets/index_body_scripts_minimized.jade templates/snippets/index_body_scripts.jade
         mv templates/snippets/admin_body_scripts_minimized.jade templates/snippets/admin_body_scripts.jade
-        mv templates/snippets/index_head_styles_cdn.jade templates/snippets/index_head_styles.jade
 	elif [ "$1" = "frontEndRewrite" ]; then
 	    # do the dev only
     	mv templates/snippets/index_body_scripts_minimized_cdn.jade templates/snippets/index_body_scripts.jade
