@@ -30,7 +30,6 @@ _.extend(view.prototype, BaseView.prototype, {
 
     renderBlogPage: function(accountId, twoColBlog) {
         var self = this;
-        var styleCached = true;
         self.log.debug(accountId, null, '>> renderBlogPage');
         var data = {ssbBlog:true};
         var handle = 'blog-list';
@@ -68,10 +67,7 @@ _.extend(view.prototype, BaseView.prototype, {
                         data.templateIncludes[0].data = html;
                         var components = [];
                         _.each(page.get('sections'), function(section){
-                            if(section) {
-                                if(!section.sectionClass){
-                                    styleCached = false;
-                                }
+                            if(section) {                                
                                 components = components.concat(section.components);
                             }
                         });
@@ -113,15 +109,10 @@ _.extend(view.prototype, BaseView.prototype, {
                 });
                 cb(null, webpageData, page);
             },
-            function buildPageStyles(webpageData, page, cb){
-                if(styleCached){
-                    cb(null, webpageData, page);
-                }
-                else{
-                    pageCacheManager.buildPageStyles(page, function(err, updatedPage){                        
-                        cb(null, webpageData, updatedPage);
-                    });
-                }                
+            function buildPageStyles(webpageData, page, cb){                
+                pageCacheManager.buildPageStyles(page, function(err, updatedPage){                        
+                    cb(null, webpageData, updatedPage);
+                });         
             },
 
             function getBlogPosts(webpageData, page, cb) {
@@ -645,7 +636,6 @@ _.extend(view.prototype, BaseView.prototype, {
 
     renderBlogPost: function(accountId, postName) {
         var self = this;
-        var styleCached = true;
         self.log.debug(accountId, null, '>> renderBlogPost');
         var data = {ssbBlog:true};
         var handle = 'blog-post';
@@ -713,10 +703,7 @@ _.extend(view.prototype, BaseView.prototype, {
                         data.templateIncludes[0].data = html;
                         var components = [];
                         _.each(page.get('sections'), function(section){
-                            if(section) {
-                                if(!section.sectionClass){
-                                    styleCached = false;
-                                }
+                            if(section) {                                
                                 components = components.concat(section.components);
                             }
                         });
@@ -777,15 +764,10 @@ _.extend(view.prototype, BaseView.prototype, {
                     cb(null, webpageData, page, post);
                 });
             },
-            function buildPageStyles(webpageData, page, post, cb){
-                if(styleCached){
-                    cb(null, webpageData, page, post);
-                }
-                else{
-                    pageCacheManager.buildPageStyles(page, function(err, updatedPage){                        
-                        cb(null, webpageData, updatedPage, post);
-                    });
-                }                
+            function buildPageStyles(webpageData, page, post, cb){                
+                pageCacheManager.buildPageStyles(page, function(err, updatedPage){                        
+                    cb(null, webpageData, updatedPage, post);
+                });         
             },
             function prepareForRender(value, page, post, cb) {
                 var pageHolder = {};

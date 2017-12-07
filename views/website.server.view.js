@@ -350,8 +350,7 @@ _.extend(view.prototype, BaseView.prototype, {
     },
     renderWebsitePage: function (accountId, handle) {
         var data = {},
-            self = this,
-            styleCached = true;
+            self = this;
         self.log.debug('>> renderWebsitePage', handle);
         handle = handle.trim();
         async.waterfall([
@@ -417,10 +416,7 @@ _.extend(view.prototype, BaseView.prototype, {
                         var components = [];
 
                         _.each(page.get('sections'), function(section){
-                            if(section) {
-                                if(!section.sectionClass){
-                                    styleCached = false;
-                                }
+                            if(section) {                                
                                 components = components.concat(section.components);
                             }
                         });
@@ -471,15 +467,10 @@ _.extend(view.prototype, BaseView.prototype, {
                     });
                 //}
             },
-            function buildPageStyles(webpageData, page, cb){
-                if(styleCached){
-                    cb(null, webpageData, page);
-                }
-                else{
-                    pageCacheManager.buildPageStyles(page, function(err, updatedPage){                        
-                        cb(null, webpageData, updatedPage);
-                    });
-                }                
+            function buildPageStyles(webpageData, page, cb){                
+                pageCacheManager.buildPageStyles(page, function(err, updatedPage){                        
+                    cb(null, webpageData, updatedPage);
+                });         
             },
             function getBlogPosts(webpageData, page, cb) {
                 var pageHandle = handle || 'index';
@@ -732,8 +723,7 @@ _.extend(view.prototype, BaseView.prototype, {
 
     renderActivateSetupPage: function (originalAccount, accountId, handle) {
         var data = {},
-            self = this,
-            styleCached = true;
+            self = this;
         self.log.debug('>> renderActivateSetupPage', handle);
         async.waterfall([
             function getWebpageData(cb) {
@@ -811,10 +801,7 @@ _.extend(view.prototype, BaseView.prototype, {
                         var components = [];
 
                         _.each(page.get('sections'), function(section){
-                            if(section) {
-                                if(!section.sectionClass){
-                                    styleCached = false;
-                                }
+                            if(section) {                                
                                 components = components.concat(section.components);
                             }
                         });
@@ -861,15 +848,10 @@ _.extend(view.prototype, BaseView.prototype, {
                 });
             },
 
-            function buildPageStyles(webpageData, page, cb){
-                if(styleCached){
-                    cb(null, webpageData, page);
-                }
-                else{
-                    pageCacheManager.buildPageStyles(page, function(err, updatedPage){                        
-                        cb(null, webpageData, updatedPage);
-                    });
-                }                
+            function buildPageStyles(webpageData, page, cb){                
+                pageCacheManager.buildPageStyles(page, function(err, updatedPage){                        
+                    cb(null, webpageData, updatedPage);
+                });         
             },
 
             function(value, page, cb) {
