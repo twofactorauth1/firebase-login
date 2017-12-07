@@ -39,6 +39,18 @@
 						classString += ' ssb-page-section-layout-video-bg';
 					}
 				}
+				if (section.layoutModifiers) {
+					if (section.layoutModifiers.fixed) {
+						if (vm.elementLoaded) {
+							if (!section.fixedLeftNavigation || (section.fixedLeftNavigation && vm.index > 0)) {
+								classString += ' ssb-fixed sticky fixedsection';
+							}
+							if (vm.index === 0 && !section.fixedLeftNavigation) {
+								classString += ' ssb-fixed-first-element';
+							}
+						}
+					}
+				}
 				setUpFroalaVideoSize(section);
 				resizeSliderImagesToFullHeight(section);
 			}
