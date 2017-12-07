@@ -455,15 +455,7 @@ _.extend(view.prototype, BaseView.prototype, {
                 } else {
                     cb('Could not find ' + handle);
                 }
-            },
-            function addSSBSection(webpageData, page, cb){
-                var ssbSectionTemplate = {'id':'/admin/assets/js/ssb-site-builder/ssb-components/ssb-page-section/ssb-page-section.component.html'};
-                fs.readFile('public/admin/assets/js/ssb-site-builder/ssb-components/ssb-page-section/ssb-page-section.component.html', 'utf8', function(err, html) {
-                    ssbSectionTemplate.data = html;
-                    data.templateIncludes.push(ssbSectionTemplate);
-                    cb(null, webpageData, page);
-                });
-            },
+            },            
             function getPageTemplate(webpageData, page, cb) {
                 var pageTemplate = {'id':'template.html'};
                 // if(page.get('manifest') && page.get('manifest').template) {

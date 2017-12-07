@@ -106,15 +106,6 @@ _.extend(view.prototype, BaseView.prototype, {
                 }
 
             },
-
-            function addSSBSection(webpageData, page, cb){
-                var ssbSectionTemplate = {'id':'/admin/assets/js/ssb-site-builder/ssb-components/ssb-page-section/ssb-page-section.component.html'};
-                fs.readFile('public/admin/assets/js/ssb-site-builder/ssb-components/ssb-page-section/ssb-page-section.component.html', 'utf8', function(err, html) {
-                    ssbSectionTemplate.data = '<div class="blog-list-section">'+html+'</div>';
-                    data.templateIncludes.push(ssbSectionTemplate);
-                    cb(null, webpageData, page);
-                });
-            },
             function getPageTemplate(webpageData, page, cb) {
                 data.templateIncludes.push({
                     id: 'template.html',
@@ -374,16 +365,7 @@ _.extend(view.prototype, BaseView.prototype, {
                 }
 
             },
-
-            function addSSBSection(webpageData, allPages, page, cb){
-                var ssbSectionTemplate = {'id':'/admin/assets/js/ssb-site-builder/ssb-components/ssb-page-section/ssb-page-section.component.html'};
-                fs.readFile('public/admin/assets/js/ssb-site-builder/ssb-components/ssb-page-section/ssb-page-section.component.html', 'utf8', function(err, html) {
-                    ssbSectionTemplate.data = "";
-                    data.templateIncludes.push(ssbSectionTemplate);
-                    cb(null, webpageData, allPages, page);
-                });
-            },
-
+            
             function getBlogPosts(webpageData, allPages, page, cb) {
 
                 ssbManager.getPublishedPosts(accountId, null, null, function(err, posts){
@@ -768,15 +750,6 @@ _.extend(view.prototype, BaseView.prototype, {
                     cb('Could not find ' + handle);
                 }
 
-            },
-
-            function addSSBSection(webpageData, page, cb){
-                var ssbSectionTemplate = {'id':'/admin/assets/js/ssb-site-builder/ssb-components/ssb-page-section/ssb-page-section.component.html'};
-                fs.readFile('public/admin/assets/js/ssb-site-builder/ssb-components/ssb-page-section/ssb-page-section.component.html', 'utf8', function(err, html) {
-                    ssbSectionTemplate.data = html;
-                    data.templateIncludes.push(ssbSectionTemplate);
-                    cb(null, webpageData, page);
-                });
             },
 
             function getBlogPost(webpageData, page, cb) {
