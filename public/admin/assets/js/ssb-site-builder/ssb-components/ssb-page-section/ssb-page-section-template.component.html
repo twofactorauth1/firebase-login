@@ -2,7 +2,7 @@
     <section
         ng-if="vm.section.showSection"
         id="section_{{vm.section._id}}"
-        class="ssb-check-fixed ssb-section-layout ssb-section-section ssb-section-type-{{vm.section.components[0].type}} {{vm.section.sectionClass}}"        
+        class="ssb-check-fixed ssb-section-layout ssb-section-section ssb-section-type-{{vm.section.components[0].type}} {{vm.section.sectionClass}} {{vm.sectionClass(vm.section)}}"        
         ng-attr-style="{{vm.section.sectionStyle}} {{vm.sectionStyle}}">
         <style>
         #section_{{vm.section._id}} > .bg-overlay {
