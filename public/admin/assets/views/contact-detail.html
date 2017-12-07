@@ -270,7 +270,7 @@
                                 </div>
                                 <div class="col-md-6">
                                     <div class="col-xs-12">
-                                        <button type="button" ng-disabled="saveLoading || form.$invalid" ng-click="contactSaveFn()" class="btn btn-primary pull-right margin-top-5 margin-bottom-5 margin-left-5" tooltip-placement="bottom" tooltip="Save this contact">
+                                        <button type="button" ng-disabled="saveLoading || isFormValid(form.$error, isPhoneDirty)" ng-click="contactSaveFn()" class="btn btn-primary pull-right margin-top-5 margin-bottom-5 margin-left-5" tooltip-placement="bottom" tooltip="Save this contact">
                     <i class="ti-save"></i><span> Save</span>
                 </button>
                                         <button type="button" ng-click="undoContacts()" class="btn btn-primary pull-right margin-top-5 margin-bottom-5 margin-left-5" tooltip-placement="bottom" tooltip="Undo changes">

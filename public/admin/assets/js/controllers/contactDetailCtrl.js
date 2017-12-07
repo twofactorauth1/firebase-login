@@ -13,7 +13,7 @@
 		$scope.notesEmail = {
 			enable: false
 		};
-
+        $scope.isPhoneDirty = false;
 		$scope.openModal = function (modal) {
 			$scope.modalInstance = $modal.open({
 				templateUrl: modal,
@@ -28,6 +28,26 @@
 		 * -
 		 */
 
+        $scope.isFormValid = function(error, dirty){
+        $scope.validationFailed = false;
+
+         for (var property in error) {
+            if (error.hasOwnProperty(property)) {
+                property = property.toString();
+                if(property.indexOf('phone') === -1){
+                     $scope.validationFailed = true;
+                }
+                else{
+                    if(error[property][0] !== undefined && error[property][0].$dirty && error[property][0].$invalid){
+                       $scope.validationFailed = true;
+                    }
+                }
+
+            }
+        }
+           return $scope.validationFailed;
+
+        };
 		$scope.openMediaModal = function () {
 			$scope.showInsert = true;
 			$scope.modalInstance = $modal.open({
@@ -58,7 +78,9 @@
 		$scope.closeModal = function () {
 			$scope.modalInstance.close();
 		};
-
+        $scope.getPhoneStatus = function(){
+          $scope.isPhoneDirty = true;
+        };
 		$scope.formValidations = formValidations;
 		$scope.orderConstant = orderConstant;
 
