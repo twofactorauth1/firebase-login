@@ -366,7 +366,7 @@ module.exports = {
             string = self.buildRenderTemplateHtml(html);
         }
         else{
-           string = html; 
+           string = html;
         }
         fn(null, string);
     },
@@ -639,7 +639,7 @@ module.exports = {
     buildPageTemplateMarkup: function(page) {
         var self = this;
         var html = '';
-        _.each(page.get('sections'), function(section, index){            
+        _.each(page.get('sections'), function(section, index){
             html = html + '<ssb-page-section-template section="sections_' + index + '" index="' + index + '" class="ssb-page-section"></ssb-page-section-template>';
         });
         return html;
@@ -647,12 +647,13 @@ module.exports = {
 
     buildPageStyles: function(page, fn){
         var self = this;
+        var handle = page.get('handle');
         _.each(page.get('sections'), function(section, index){
             section.sectionClass = self.buildSectionClass(section, index);
             section.sectionStyle = self.buildSectionStyles(section);
             section.sectionBGClass = self.buildSectionBGClass(section);
             section.sectionBGStyle = self.buildSectionBGStyle(section);
-            section.showSection = self._showSection(section);
+            section.showSection = self._showSection(section, handle);
             _.each(section.components, function(component, idx){
                 component.componentClass = self.buildComponentClass(section, component, idx);
                 component.componentStyle = self.buildComponentStyles(component);
@@ -664,7 +665,7 @@ module.exports = {
 
     buildSectionStyles: function(section){
         var self = this;
-        var styleString = " ";            
+        var styleString = " ";
 
         if (section && section.txtcolor) {
             styleString += "color: " + section.txtcolor + ";";
@@ -674,7 +675,7 @@ module.exports = {
             styleString += "border-color: " + section.border.color + ";";
             styleString += "border-width: " + section.border.width + "px;";
             styleString += "border-style: " + section.border.style + ";";
-            styleString += "border-radius: " + section.border.radius + "%;"; 
+            styleString += "border-radius: " + section.border.radius + "%;";
         }
         return styleString;
     },
@@ -702,7 +703,7 @@ module.exports = {
             if (section.layoutModifiers) {
                 if (section.layoutModifiers.fixed) {
                     classString += " ssb-page-section-layout-" + section.layout + "-fixed";
-                    
+
                     if (!section.fixedLeftNavigation || (section.fixedLeftNavigation && index > 0)) {
                         classString += " ssb-fixed sticky fixedsection";
                     }
@@ -933,7 +934,7 @@ module.exports = {
             classString += " ssb-component-stretch-image";
         }
         if(component.navigation){
-            if(component.navigation.wideMobileMode){                    
+            if(component.navigation.wideMobileMode){
                 classString += " ssb-component-wmm";
             }
             else if(component.navigation.alwaysmobileMode){
@@ -967,7 +968,7 @@ module.exports = {
 
                 if (component.spacing.mt) {
                     styleString += "margin-top: " + component.spacing.mt + "px;";
-                    
+
                 }
 
                 if (component.spacing.mb) {
@@ -1054,7 +1055,7 @@ module.exports = {
         var _showSection = false;
         if (section) {
             _showSection = section.visibility !== false;
-            if (section.global && section.hiddenOnPages) {                
+            if (section.global && section.hiddenOnPages) {
                 _showSection = !section.hiddenOnPages[handle];
                 section.visibility = _showSection;
             }
