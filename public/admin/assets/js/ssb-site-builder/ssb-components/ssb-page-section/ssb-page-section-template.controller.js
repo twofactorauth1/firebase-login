@@ -34,23 +34,10 @@
 
 			if (section) {				
 				if (section.bg && section.bg.video && section.bg.video.show && section.bg.video.urlProcessed) {
-
 					if (!angular.equals(vm.playerObject, {})) {
 						classString += ' ssb-page-section-layout-video-bg';
 					}
-				}
-				if (section.layoutModifiers) {
-					if (section.layoutModifiers.fixed) {
-						if (vm.elementLoaded) {
-							if (!section.fixedLeftNavigation || (section.fixedLeftNavigation && vm.index > 0)) {
-								classString += ' ssb-fixed sticky fixedsection';
-							}
-							if (vm.index === 0 && !section.fixedLeftNavigation) {
-								classString += ' ssb-fixed-first-element';
-							}
-						}
-					}
-				}
+				}				
 				setUpFroalaVideoSize(section);
 				resizeSliderImagesToFullHeight(section);
 			}
@@ -474,36 +461,21 @@
 				if (elementIsFirstPosition) {
 					// Preview page
 					var dup ;
-					if ($location.$$path.indexOf("/preview/") == 0) {
-						dup = vm.element.clone();
-						dup.addClass('ssb-fixed-clone-element');
-						dup.attr('id', 'clone_of_' + vm.section._id);
-						dup.insertAfter(vm.element);
-						$scope.$watch(
-							function () {
-								return angular.element(".ssb-fixed-first-element").height();
-							},
-							function (value) {
-								if (dup)
-									dup.css("min-height", value + "px");								
-									SsbPageSectionService.setSectionOffset(value);
-							}
-						);
-					} else {
-						dup = vm.element.clone();
-						dup.addClass('ssb-fixed-clone-element');
-						dup.attr('id', 'clone_of_' + vm.section._id);
-						dup.insertAfter(vm.element);
-						
-						$scope.$watch(
-							function () {
-								return angular.element(".ssb-fixed-first-element").height();
-							},
-							function (value) {
-								SsbPageSectionService.setSectionOffset(value);
-							}
-						);
-					}
+					dup = vm.element.clone();
+					dup.addClass('ssb-fixed-clone-element');
+					dup.attr('id', 'clone_of_' + vm.section._id);
+					dup.insertAfter(vm.element);
+					
+					$scope.$watch(
+						function () {
+							return angular.element(".ssb-fixed-first-element").height();
+						},
+						function (value) {
+							if (dup)
+								dup.css("min-height", value + "px");								
+							SsbPageSectionService.setSectionOffset(value);
+						}
+					);
 
 				} else {
 					SsbPageSectionService.isSticky = true;
@@ -524,7 +496,6 @@
 						//new StickyState(vm.element[0]);
 					}, 1000);
 				}
-
 			}
 			vm.elementLoaded = true;
 		}

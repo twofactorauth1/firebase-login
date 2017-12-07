@@ -701,7 +701,14 @@ module.exports = {
 
             if (section.layoutModifiers) {
                 if (section.layoutModifiers.fixed) {
-                    classString += " ssb-page-section-layout-" + section.layout + "-fixed"; 
+                    classString += " ssb-page-section-layout-" + section.layout + "-fixed";
+                    
+                    if (!section.fixedLeftNavigation || (section.fixedLeftNavigation && index > 0)) {
+                        classString += " ssb-fixed sticky fixedsection";
+                    }
+                    if (index == 0 && !section.fixedLeftNavigation) {
+                        classString += " ssb-fixed-first-element";
+                    }
                 }
                 if (section.layoutModifiers.grid && section.layoutModifiers.grid.isActive) {
                     classString += " ssb-page-section-layout-" + section.layout + "-grid";
