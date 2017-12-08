@@ -83,6 +83,7 @@
     "checklist-model": "0.2.4",
     "components-modernizr": "2.8.3",
     "deep-diff": "^0.3.3",
+    "es5-shim": "^4.5.9",
     "eq.js": "~1.7.1",
     "fast-json-patch": "~0.5.7",
     "fastclick": "1.0.6",
