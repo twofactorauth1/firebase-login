@@ -452,6 +452,47 @@ _.extend(view.prototype, BaseView.prototype, {
                     cb('Could not find ' + handle);
                 }
             },
+            function addCustomTemplates(webpageData, page, cb) {
+                var components = [];
+                _.each(page.get('sections'), function(section){
+                    if(section && section.layoutModifiers && section.layoutModifiers.custom) {
+                        components.push({id: '/admin/assets/js/ssb-site-builder/ssb-components/ssb-' + section.layout + '/ssb-' + section.layout + '.layout.v' + section.version + '.html'})
+                    }
+                });
+                var map = {};
+                if(components.length){
+                    async.eachSeries(components, function(component, _cb){                        
+                        var obj = {};
+                        obj.id = component.id;
+
+                        if(map[obj.id]) {
+                            _cb(null);
+                        } else {
+                            fs.readFile('public' + obj.id, 'utf8', function(err, html){
+                                obj.data = html;
+                                data.templateIncludes.push(obj);
+                                map[obj.id] = obj;
+                                _cb();
+                            });
+                        }
+
+                    }, function done(err){
+                        cb(null, webpageData, page);
+                    });
+                }
+                else{
+                    cb(null, webpageData, page);
+                }
+
+            },
+            function addSSBSection(webpageData, page, cb){
+                var ssbSectionTemplate = {'id':'/admin/assets/js/ssb-site-builder/ssb-components/ssb-page-section/ssb-page-section-template.component.html'};
+                fs.readFile('public/admin/assets/js/ssb-site-builder/ssb-components/ssb-page-section/ssb-page-section-template.component.html', 'utf8', function(err, html) {
+                    ssbSectionTemplate.data = html;
+                    data.templateIncludes.push(ssbSectionTemplate);
+                    cb(null, webpageData, page);
+                });
+            },
             function getPageTemplate(webpageData, page, cb) {
                 var pageTemplate = {'id':'template.html'};
                 // if(page.get('manifest') && page.get('manifest').template) {
