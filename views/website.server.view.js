@@ -421,16 +421,34 @@ _.extend(view.prototype, BaseView.prototype, {
                             }
                         });
 
+                        if(_.contains(_.pluck(components, "type"), 'navigation')){
+                            components.push({
+                                type: 'shared-navigation-component-link'
+                            },
+                            {
+                                type: 'shared-navigation-component-style'
+                            })
+                        }
+
                         //self.log.debug('components:', components);
                         var map = {};
                         async.eachSeries(components, function(component, _cb){
                             if(component) {
                                 var obj = {};
-                                obj.id = '/components/' + component.type + '_v' + component.version + '.html';
-
+                                if(component.type === 'shared-navigation-component-link'){
+                                    obj.id = '/admin/assets/js/ssb-site-builder/ssb-components/shared/link_2.html';
+                                }
+                                else if(component.type === 'shared-navigation-component-style'){
+                                    obj.id = '/admin/assets/js/ssb-site-builder/ssb-components/shared/navigation_style.html';
+                                }
+                                else if(component.type && component.type.indexOf('ssb-') === 0 ){                                    
+                                    obj.id = '/admin/assets/js/ssb-site-builder/ssb-components/' + component.type + '/' + component.type + '.component.html';
+                                }       
+                                else
+                                    obj.id = '/components/' + component.type + '_v' + component.version + '.html';                                
                                 if(map[obj.id]) {
                                     _cb(null);
-                                } else {
+                                } else {                                    
                                     fs.readFile('public' + obj.id, 'utf8', function(err, html){
                                         obj.data = html;
                                         data.templateIncludes.push(obj);
@@ -441,11 +459,9 @@ _.extend(view.prototype, BaseView.prototype, {
                             } else {
                                 _cb();
                             }
-
                         }, function done(err){
                             cb(null, webpageData, page);
                         });
-
 
                     });
                 } else {
@@ -453,17 +469,17 @@ _.extend(view.prototype, BaseView.prototype, {
                 }
             },
             function addCustomTemplates(webpageData, page, cb) {
-                var components = [];
+                var sections = [];
                 _.each(page.get('sections'), function(section){
                     if(section && section.layoutModifiers && section.layoutModifiers.custom) {
-                        components.push({id: '/admin/assets/js/ssb-site-builder/ssb-components/ssb-' + section.layout + '/ssb-' + section.layout + '.layout.v' + section.version + '.html'})
+                        sections.push({id: '/admin/assets/js/ssb-site-builder/ssb-components/ssb-' + section.layout + '/ssb-' + section.layout + '.layout.v' + section.version + '.html'})                        
                     }
                 });
                 var map = {};
-                if(components.length){
-                    async.eachSeries(components, function(component, _cb){                        
+                if(sections.length){
+                    async.eachSeries(sections, function(section, _cb){                        
                         var obj = {};
-                        obj.id = component.id;
+                        obj.id = section.id;
 
                         if(map[obj.id]) {
                             _cb(null);
@@ -483,7 +499,6 @@ _.extend(view.prototype, BaseView.prototype, {
                 else{
                     cb(null, webpageData, page);
                 }
-
             },
             function addSSBSection(webpageData, page, cb){
                 var ssbSectionTemplate = {'id':'/admin/assets/js/ssb-site-builder/ssb-components/ssb-page-section/ssb-page-section-template.component.html'};
