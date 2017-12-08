@@ -4479,6 +4479,12 @@ module.exports = {
                             if(fontUsed)
                                 fontMap[fontUsed] = fontUsed;
                         }
+                        // IMAGE GALLERY OVERLAY 
+                        if(component.imageOverlay && component.imageOverlay.font && component.imageOverlay.font.fontFamily){
+                            fontUsed =  self._getFontNameFromString(component.imageOverlay.font.fontFamily);
+                            if(fontUsed)
+                                fontMap[fontUsed] = fontUsed;
+                        }
                         var obj = {};
                         obj.id = '/components/' + component.type + '_v' + component.version + '.html';
                         _.each(component, function(value){
