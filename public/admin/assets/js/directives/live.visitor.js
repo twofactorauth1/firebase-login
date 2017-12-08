@@ -8,10 +8,15 @@
 			scope: {
 				liveVisitorDetails: "=live",
                 activeVisitorDetail: '=active',
-                config:"="
+                loading:"=",
+               // loading:"="
 			},
             templateUrl: '/admin/assets/views/partials/visitor.html',
 			controller: ['$scope', '$injector', function ($scope, $injector) {  
+                
+               if(! angular.isDefined($scope.loading)){
+                    $scope.loading=true;
+               }
                 $scope.selectedVisitorIndex=0;
                 $scope.convertUtcToLocal = function(_date){
                     if(_date){
