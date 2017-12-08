@@ -208,8 +208,7 @@
 
             if ($injector.has("ipCookie"))
                 ipCookie = $injector.get("ipCookie");
-
-           // var fingerprint = new Fingerprint2().get();
+ 
             new Fingerprint2().get(function(fingerprint, components){
                 var sessionId = ipCookie("session_cookie") ? ipCookie("session_cookie").id : null;
 
@@ -361,192 +360,189 @@
             vm.checkoutModalState = state;
         }
 
-        function _formattedOrder() {
+        function _formattedOrder(fingerprint) {
             if ($injector.has("ipCookie")) {
                 ipCookie = $injector.get("ipCookie");
+            } 
+            var sessionId = ipCookie("session_cookie") ? ipCookie("session_cookie").id : null;
+            
+            var skipWelcomeEmail;
+
+            if (vm.component.skipWelcomeEmail) {
+                skipWelcomeEmail = true;
             }
-            new Fingerprint2().get(function(fingerprint, components){
-                var sessionId = ipCookie("session_cookie") ? ipCookie("session_cookie").id : null;
-                
-                var skipWelcomeEmail;
-    
-                if (vm.component.skipWelcomeEmail) {
-                    skipWelcomeEmail = true;
+
+            var _campaignId;
+            if (!vm.component.campaignId) {
+                vm.component.campaignId = '';
+            } else {
+                _campaignId = vm.component.campaignId;
+            }
+
+            var first_name = "";
+            var last_name = "";
+
+            if (vm.formBuilder.name) {
+                var name_arr = vm.formBuilder.name.split(/ (.+)?/);
+                first_name = name_arr[0];
+                if (name_arr.length > 1) {
+                    last_name = name_arr[1];
                 }
-    
-                var _campaignId;
-                if (!vm.component.campaignId) {
-                    vm.component.campaignId = '';
-                } else {
-                    _campaignId = vm.component.campaignId;
+            } else {
+                if (vm.formBuilder.FirstName) {
+                    first_name = vm.formBuilder.FirstName;
                 }
-    
-                var first_name = "";
-                var last_name = "";
-    
-                if (vm.formBuilder.name) {
-                    var name_arr = vm.formBuilder.name.split(/ (.+)?/);
-                    first_name = name_arr[0];
-                    if (name_arr.length > 1) {
-                        last_name = name_arr[1];
-                    }
-                } else {
-                    if (vm.formBuilder.FirstName) {
-                        first_name = vm.formBuilder.FirstName;
-                    }
-                    if (vm.formBuilder.LastName) {
-                        last_name = vm.formBuilder.LastName;
-                    }
+                if (vm.formBuilder.LastName) {
+                    last_name = vm.formBuilder.LastName;
                 }
-    
-                var customFields = _.filter(vm.component.contactInfo, function (x) {
-                    return x.custom == true;
+            }
+
+            var customFields = _.filter(vm.component.contactInfo, function (x) {
+                return x.custom == true;
+            });
+
+            var extra = [];
+
+            customFields.forEach(function (c, i) {
+                extra.push({
+                    name: c.name,
+                    label: c.label,
+                    value: c.name ? vm.formBuilder[c.name] || vm.formBuilder[c.name.toLowerCase()] : null
                 });
-    
-                var extra = [];
-    
-                customFields.forEach(function (c, i) {
-                    extra.push({
-                        name: c.name,
-                        label: c.label,
-                        value: c.name ? vm.formBuilder[c.name] || vm.formBuilder[c.name.toLowerCase()] : null
-                    });
+            });
+
+
+            if(vm.product.tags){
+                vm.product.tags = _.map(vm.product.tags, function(tag){return tag.toLowerCase()});
+            }
+
+            if(vm.component.tags){
+                vm.component.tags = _.map(vm.component.tags, function(tag){return tag.toLowerCase()});
+            }
+
+            var formatted = {
+                fingerprint: fingerprint,
+                sessionId: sessionId,
+                first: first_name,
+                last: last_name,
+                details: [{
+                    emails: [],
+                    phones: [],
+                    addresses: []
+                }],
+                campaignId: _campaignId,
+                emailId: vm.component.emailId,
+                sendEmail: vm.component.sendEmail,
+                skipWelcomeEmail: skipWelcomeEmail,
+                fromEmail: vm.component.fromEmail,
+                fromName: vm.component.fromName,
+                contact_type: vm.component.contact_type,
+                tags: vm.product.tags ? _.uniq(_.flatten([vm.product.tags, vm.component.tags])) : _.uniq(vm.component.tags),
+                uniqueEmail: vm.component.uniqueEmail || false,
+                activity: {
+                    activityType: 'DONATE_FORM',
+                    note: vm.formBuilder.Message || "Donate form data.",
+                    sessionId: ipCookie("session_cookie") ? ipCookie("session_cookie").id : null,
+                    contact: vm.formBuilder
+                },
+                extra: extra
+            };
+
+            if (vm.formBuilder.email)
+                formatted.details[0].emails.push({
+                    email: vm.formBuilder.email
                 });
-    
-    
-                if(vm.product.tags){
-                    vm.product.tags = _.map(vm.product.tags, function(tag){return tag.toLowerCase()});
-                }
-    
-                if(vm.component.tags){
-                    vm.component.tags = _.map(vm.component.tags, function(tag){return tag.toLowerCase()});
-                }
-    
-                var formatted = {
-                    fingerprint: fingerprint,
-                    sessionId: sessionId,
-                    first: first_name,
-                    last: last_name,
-                    details: [{
-                        emails: [],
-                        phones: [],
-                        addresses: []
-                    }],
-                    campaignId: _campaignId,
-                    emailId: vm.component.emailId,
-                    sendEmail: vm.component.sendEmail,
-                    skipWelcomeEmail: skipWelcomeEmail,
-                    fromEmail: vm.component.fromEmail,
-                    fromName: vm.component.fromName,
-                    contact_type: vm.component.contact_type,
-                    tags: vm.product.tags ? _.uniq(_.flatten([vm.product.tags, vm.component.tags])) : _.uniq(vm.component.tags),
-                    uniqueEmail: vm.component.uniqueEmail || false,
-                    activity: {
-                        activityType: 'DONATE_FORM',
-                        note: vm.formBuilder.Message || "Donate form data.",
-                        sessionId: ipCookie("session_cookie") ? ipCookie("session_cookie").id : null,
-                        contact: vm.formBuilder
-                    },
-                    extra: extra
-                };
-    
-                if (vm.formBuilder.email)
-                    formatted.details[0].emails.push({
-                        email: vm.formBuilder.email
-                    });
-                if (vm.formBuilder.phone) {
-                    formatted.details[0].phones.push({
-                        number: vm.formBuilder.phone,
-                        type: 'm'
-                    });
-                }
-    
-                if (vm.formBuilder.address || vm.formBuilder.city || vm.formBuilder.state || vm.formBuilder.zip || vm.formBuilder.country) {
-                    formatted.details[0].addresses.push({
-                        address: vm.formBuilder.address,
-                        city: vm.formBuilder.city,
-                        state: vm.formBuilder.state,
-                        country: vm.formBuilder.country,
-                        zip: vm.formBuilder.zip
-                    });
-                }
-    
-                var url = $location.absUrl().split('?')[0];
-                var _donationAmount = vm.formBuilder.amount;
-                var order = {
-                    //"customer_id": customer._id,
-                    "cancelUrl": url + '?state=2&comp=donation',
-                    "returnUrl": url + '?state=5&comp=donation&amount='+_donationAmount,
-                    "isAnonymous": vm.isAnonymous,
-                    "customer": formatted,
-                    "session_id": null,
-                    "status": "pending_payment",
-                    "cart_discount": 0,
-                    "total_discount": 0,
-                    "total_shipping": 0,
-                    "total_tax": 0,
-                    "shipping_tax": 0,
-                    "cart_tax": 0,
-                    "currency": "usd",
-                    "line_items": [], // { "product_id": 31, "quantity": 1, "variation_id": 7, "subtotal": "20.00", "tax_class": null, "sku": "", "total": "20.00", "name": "Product Name", "total_tax": "0.00" }
-                    "total_line_items_quantity": 1,
-                    "payment_details": {
-                        "method_title": 'Credit Card Payment', //Check Payment, Credit Card Payment
-                        "method_id": 'cc', //check, cc
-                        "card_token": null, //Stripe card token if applicable
-                        "charge_description": null, //description of charge if applicable
-                        "statement_description": null, //22char string for cc statement if applicable
-                        "paid": true
-                    },
-                    "shipping_methods": "",
-                    "shipping_address": {
-                        "first_name": formatted.first,
-                        "last_name": formatted.last,
-                        "phone": vm.formBuilder.phone || '',
-                        "city": formatted.details[0].addresses.length ? formatted.details[0].addresses[0].city : '',
-                        "country": "US",
-                        "address_1": formatted.details[0].addresses.length ? formatted.details[0].addresses[0].address : '',
-                        "company": "",
-                        "postcode": formatted.details[0].addresses.length ? formatted.details[0].addresses[0].zip : '',
-                        "email": formatted.details[0].emails.length ? formatted.details[0].emails[0].email : '',
-                        "address_2": formatted.details[0].addresses.length ? formatted.details[0].addresses[0].address2 : '',
-                        "state": formatted.details[0].addresses.length ? formatted.details[0].addresses[0].state : ''
-                    },
-                    "billing_address": {
-                        "first_name": formatted.first,
-                        "last_name": formatted.last,
-                        "phone": vm.formBuilder.phone || '',
-                        "city": formatted.details[0].addresses.length ? formatted.details[0].addresses[0].city : '',
-                        "country": "US",
-                        "address_1": formatted.details[0].addresses.length ? formatted.details[0].addresses[0].address : '',
-                        "company": "",
-                        "postcode": formatted.details[0].addresses.length ? formatted.details[0].addresses[0].zip : '',
-                        "email": formatted.details[0].emails.length ? formatted.details[0].emails[0].email : '',
-                        "address_2": formatted.details[0].addresses.length ? formatted.details[0].addresses[0].address2 : '',
-                        "state": formatted.details[0].addresses.length ? formatted.details[0].addresses[0].state : ''
-                    },
-                    "notes": []
-                };
-    
-                var totalAmount = parseFloat(vm.formBuilder.amount);
-                var _item = {
-                    "product_id": vm.product._id,
-                    "quantity": 1,
-                    "sale_price": totalAmount,
-                    "regular_price": totalAmount,
-                    "variation_id": '',
-                    "tax_class": null,
-                    "sku": "",
-                    "total": totalAmount,
-                    "name": vm.product.name,
-                    "total_tax": "0.00",
-                    "type": vm.product.type
-                };
-                order.line_items.push(_item);
-                
-                return order;
-            })
-            //var fingerprint = new Fingerprint2().get();
+            if (vm.formBuilder.phone) {
+                formatted.details[0].phones.push({
+                    number: vm.formBuilder.phone,
+                    type: 'm'
+                });
+            }
+
+            if (vm.formBuilder.address || vm.formBuilder.city || vm.formBuilder.state || vm.formBuilder.zip || vm.formBuilder.country) {
+                formatted.details[0].addresses.push({
+                    address: vm.formBuilder.address,
+                    city: vm.formBuilder.city,
+                    state: vm.formBuilder.state,
+                    country: vm.formBuilder.country,
+                    zip: vm.formBuilder.zip
+                });
+            }
+
+            var url = $location.absUrl().split('?')[0];
+            var _donationAmount = vm.formBuilder.amount;
+            var order = {
+                //"customer_id": customer._id,
+                "cancelUrl": url + '?state=2&comp=donation',
+                "returnUrl": url + '?state=5&comp=donation&amount='+_donationAmount,
+                "isAnonymous": vm.isAnonymous,
+                "customer": formatted,
+                "session_id": null,
+                "status": "pending_payment",
+                "cart_discount": 0,
+                "total_discount": 0,
+                "total_shipping": 0,
+                "total_tax": 0,
+                "shipping_tax": 0,
+                "cart_tax": 0,
+                "currency": "usd",
+                "line_items": [], // { "product_id": 31, "quantity": 1, "variation_id": 7, "subtotal": "20.00", "tax_class": null, "sku": "", "total": "20.00", "name": "Product Name", "total_tax": "0.00" }
+                "total_line_items_quantity": 1,
+                "payment_details": {
+                    "method_title": 'Credit Card Payment', //Check Payment, Credit Card Payment
+                    "method_id": 'cc', //check, cc
+                    "card_token": null, //Stripe card token if applicable
+                    "charge_description": null, //description of charge if applicable
+                    "statement_description": null, //22char string for cc statement if applicable
+                    "paid": true
+                },
+                "shipping_methods": "",
+                "shipping_address": {
+                    "first_name": formatted.first,
+                    "last_name": formatted.last,
+                    "phone": vm.formBuilder.phone || '',
+                    "city": formatted.details[0].addresses.length ? formatted.details[0].addresses[0].city : '',
+                    "country": "US",
+                    "address_1": formatted.details[0].addresses.length ? formatted.details[0].addresses[0].address : '',
+                    "company": "",
+                    "postcode": formatted.details[0].addresses.length ? formatted.details[0].addresses[0].zip : '',
+                    "email": formatted.details[0].emails.length ? formatted.details[0].emails[0].email : '',
+                    "address_2": formatted.details[0].addresses.length ? formatted.details[0].addresses[0].address2 : '',
+                    "state": formatted.details[0].addresses.length ? formatted.details[0].addresses[0].state : ''
+                },
+                "billing_address": {
+                    "first_name": formatted.first,
+                    "last_name": formatted.last,
+                    "phone": vm.formBuilder.phone || '',
+                    "city": formatted.details[0].addresses.length ? formatted.details[0].addresses[0].city : '',
+                    "country": "US",
+                    "address_1": formatted.details[0].addresses.length ? formatted.details[0].addresses[0].address : '',
+                    "company": "",
+                    "postcode": formatted.details[0].addresses.length ? formatted.details[0].addresses[0].zip : '',
+                    "email": formatted.details[0].emails.length ? formatted.details[0].emails[0].email : '',
+                    "address_2": formatted.details[0].addresses.length ? formatted.details[0].addresses[0].address2 : '',
+                    "state": formatted.details[0].addresses.length ? formatted.details[0].addresses[0].state : ''
+                },
+                "notes": []
+            };
+
+            var totalAmount = parseFloat(vm.formBuilder.amount);
+            var _item = {
+                "product_id": vm.product._id,
+                "quantity": 1,
+                "sale_price": totalAmount,
+                "regular_price": totalAmount,
+                "variation_id": '',
+                "tax_class": null,
+                "sku": "",
+                "total": totalAmount,
+                "name": vm.product.name,
+                "total_tax": "0.00",
+                "type": vm.product.type
+            };
+            order.line_items.push(_item);
+            
+            return order; 
             
         }
 
@@ -555,28 +551,30 @@
 
             if ($injector.has('orderService')) {
                 var orderService = $injector.get('orderService');
-                var order = _formattedOrder();
 
-                orderService.createPaypalOrder(order, function (data) {
-                    vm.order = data;
-                    vm.showPaypalLoading = false;
-                    if (data && !data._id) {
-                        var failedOrderMessage = "Error in order processing";
-                        console.log(failedOrderMessage);
-                        if (data.message)
-                            failedOrderMessage = data.message;
-                        vm.checkoutModalState = 5;
-                        //vm.parseFBShare();
-                        vm.failedOrderMessage = failedOrderMessage;
-                        return;
-                    }
-                    console.log('order, ', order);
-                    vm.checkoutModalState = 3;
-                    localStorageService.set(orderCookieKey, data);
-                    vm.paypalKey = data.payment_details.payKey;
-                    vm.checkoutExpType=screen.width<769?'mini':'light';
-                    // vm.formBuilder = {};
-                });
+                new Fingerprint2().get(function(fingerprint, components){
+                    var order = _formattedOrder(fingerprint); 
+                    orderService.createPaypalOrder(order, function (data) {
+                        vm.order = data;
+                        vm.showPaypalLoading = false;
+                        if (data && !data._id) {
+                            var failedOrderMessage = "Error in order processing";
+                            console.log(failedOrderMessage);
+                            if (data.message)
+                                failedOrderMessage = data.message;
+                            vm.checkoutModalState = 5;
+                            //vm.parseFBShare();
+                            vm.failedOrderMessage = failedOrderMessage;
+                            return;
+                        }
+                        console.log('order, ', order);
+                        vm.checkoutModalState = 3;
+                        localStorageService.set(orderCookieKey, data);
+                        vm.paypalKey = data.payment_details.payKey;
+                        vm.checkoutExpType=screen.width<769?'mini':'light';
+                        // vm.formBuilder = {};
+                    });
+                })
             }
         }
 
@@ -757,77 +755,79 @@
                     vm.checkoutModalState = 4;
                     return;
                 }
+                
                 var orderService = $injector.get('orderService');
-                var order = _formattedOrder();
+                new Fingerprint2().get(function(fingerprint, components){
+                    var order = _formattedOrder(fingerprint);
+                    if (order.customer) {
+                        cardInput.name = order.customer.first + ' ' + order.customer.last;
+                        // cardInput.address_line1 = order.customer.details[0].addresses.length ? order.customer.details[0].addresses[0].address : '';
+                        // cardInput.address_city = order.customer.details[0].addresses ? order.customer.details[0].addresses[0].city : '';
+                        // cardInput.address_state = order.customer.details[0].addresses ? order.customer.details[0].addresses[0].state : '';
+                        // if (!vm.isAnonymous) {
+                        //     cardInput.address_zip = order.customer.details[0].addresses ? order.customer.details[0].addresses[0].zip : '';
+                        // }
+                        // cardInput.address_country = order.customer.details[0].addresses ? order.customer.details[0].addresses[0].country : 'US';
+                        // if (order.customer.details[0].addresses.length && order.customer.details[0].addresses[0].address2) {
+                        //     cardInput.address_line2 = order.customer.details[0].addresses[0].address2;
+                        // }
+                    }
 
-                if (order.customer) {
-                    cardInput.name = order.customer.first + ' ' + order.customer.last;
-                    // cardInput.address_line1 = order.customer.details[0].addresses.length ? order.customer.details[0].addresses[0].address : '';
-                    // cardInput.address_city = order.customer.details[0].addresses ? order.customer.details[0].addresses[0].city : '';
-                    // cardInput.address_state = order.customer.details[0].addresses ? order.customer.details[0].addresses[0].state : '';
-                    // if (!vm.isAnonymous) {
-                    //     cardInput.address_zip = order.customer.details[0].addresses ? order.customer.details[0].addresses[0].zip : '';
-                    // }
-                    // cardInput.address_country = order.customer.details[0].addresses ? order.customer.details[0].addresses[0].country : 'US';
-                    // if (order.customer.details[0].addresses.length && order.customer.details[0].addresses[0].address2) {
-                    //     cardInput.address_line2 = order.customer.details[0].addresses[0].address2;
-                    // }
-                }
+                    if ($injector.has('paymentService')) {
+                        var paymentService = $injector.get('paymentService');
+                        paymentService.getStripeCardToken(cardInput, function (token, error) {
+                            if (error) {
+                                switch (error.param) {
+                                    case "number":
+                                        $(".donation-v1 #card_number .error").html(error.message);
+                                        $(".donation-v1 #card_number").addClass('has-error');
+                                        $(".donation-v1 #card_number .glyphicon").addClass('glyphicon-remove');
+                                        break;
+                                    case "exp_month":
+                                        $(".donation-v1 #card_expiry .error").html(error.message);
+                                        $(".donation-v1 #card_expiry").addClass('has-error');
+                                        $(".donation-v1 #card_expiry .glyphicon").addClass('glyphicon-remove');
+                                        break;
+                                    case "exp_year":
+                                        $(".donation-v1 #card_expiry .error").html(error.message);
+                                        $(".donation-v1 #card_expiry").addClass('has-error');
+                                        $(".donation-v1 #card_expiry .glyphicon").addClass('glyphicon-remove');
+                                        break;
+                                    case "cvc":
+                                        $(".donation-v1 #card_cvc .error").html(error.message);
+                                        $(".donation-v1 #card_cvc").addClass('has-error');
+                                        $(".donation-v1 #card_cvc .glyphicon").addClass('glyphicon-remove');
+                                        break;
+                                    case "name":
+                                        $(".donation-v1 #card_name .error").html(error.message);
+                                        $(".donation-v1 #card_name").addClass('has-error');
+                                        $(".donation-v1 #card_name .glyphicon").addClass('glyphicon-remove');
 
-                if ($injector.has('paymentService')) {
-                    var paymentService = $injector.get('paymentService');
-                    paymentService.getStripeCardToken(cardInput, function (token, error) {
-                        if (error) {
-                            switch (error.param) {
-                                case "number":
-                                    $(".donation-v1 #card_number .error").html(error.message);
-                                    $(".donation-v1 #card_number").addClass('has-error');
-                                    $(".donation-v1 #card_number .glyphicon").addClass('glyphicon-remove');
-                                    break;
-                                case "exp_month":
-                                    $(".donation-v1 #card_expiry .error").html(error.message);
-                                    $(".donation-v1 #card_expiry").addClass('has-error');
-                                    $(".donation-v1 #card_expiry .glyphicon").addClass('glyphicon-remove');
-                                    break;
-                                case "exp_year":
-                                    $(".donation-v1 #card_expiry .error").html(error.message);
-                                    $(".donation-v1 #card_expiry").addClass('has-error');
-                                    $(".donation-v1 #card_expiry .glyphicon").addClass('glyphicon-remove');
-                                    break;
-                                case "cvc":
-                                    $(".donation-v1 #card_cvc .error").html(error.message);
-                                    $(".donation-v1 #card_cvc").addClass('has-error');
-                                    $(".donation-v1 #card_cvc .glyphicon").addClass('glyphicon-remove');
-                                    break;
-                                case "name":
-                                    $(".donation-v1 #card_name .error").html(error.message);
-                                    $(".donation-v1 #card_name").addClass('has-error');
-                                    $(".donation-v1 #card_name .glyphicon").addClass('glyphicon-remove');
-
-                            }
-                            vm.checkoutModalState = 4;
-                            return;
-                        }
-
-                        order.payment_details.card_token = token;
-                        orderService.createOrder(order, function (data) {
-                            if (data && !data._id) {
-                                var failedOrderMessage = "Error in order processing";
-                                console.log(failedOrderMessage);
-                                if (data.message)
-                                    failedOrderMessage = data.message;
+                                }
                                 vm.checkoutModalState = 4;
-                                vm.failedOrderMessage = failedOrderMessage;
                                 return;
                             }
-                            console.log('order, ', order);
-                            //vm.parseFBShare();
-                            vm.checkoutModalState = 5;
-                            vm.isAnonymous = false;
-                            // vm.formBuilder = {};
+
+                            order.payment_details.card_token = token;
+                            orderService.createOrder(order, function (data) {
+                                if (data && !data._id) {
+                                    var failedOrderMessage = "Error in order processing";
+                                    console.log(failedOrderMessage);
+                                    if (data.message)
+                                        failedOrderMessage = data.message;
+                                    vm.checkoutModalState = 4;
+                                    vm.failedOrderMessage = failedOrderMessage;
+                                    return;
+                                }
+                                console.log('order, ', order);
+                                //vm.parseFBShare();
+                                vm.checkoutModalState = 5;
+                                vm.isAnonymous = false;
+                                // vm.formBuilder = {};
+                            });
                         });
-                    });
-                }
+                    }
+                });
             }
         }
 
@@ -1041,7 +1041,7 @@
 
         function init(element) {
             vm.element = element;
-
+            
             //vm.parseFBShare();
 
             $(vm.element).find('.modal').on('hidden.bs.modal', function () {
