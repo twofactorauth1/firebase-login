@@ -47,7 +47,7 @@
         vm.workstreamDisplayOrder = _.invert(_.object(_.pairs(DashboardService.workstreamDisplayOrder)));
         vm.analyticDisplayOrder = _.invert(_.object(_.pairs(DashboardService.analyticDisplayOrder)));
         vm.convertUtcToLocal = convertUtcToLocal;
-
+        vm.livedataLoading= true
         $scope.$watch(function() { return DashboardService.state }, function(state) {
 
             state.workstreams = _.sortBy(state.workstreams, function(x) {
@@ -253,6 +253,7 @@
 
 
         $scope.$watch(function() { return DashboardService.liveVisitorDetails;}, function(liveVisitorDetails){            
+            vm.livedataLoading=false
             updateLiveDetailObject(liveVisitorDetails);
             if(liveVisitorDetails && liveVisitorDetails.length){
                 setActiveVisitorIndex(0, true);

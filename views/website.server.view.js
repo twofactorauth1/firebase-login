@@ -421,16 +421,34 @@ _.extend(view.prototype, BaseView.prototype, {
                             }
                         });
 
+                        if(_.contains(_.pluck(components, "type"), 'navigation')){
+                            components.push({
+                                type: 'shared-navigation-component-link'
+                            },
+                            {
+                                type: 'shared-navigation-component-style'
+                            })
+                        }
+
                         //self.log.debug('components:', components);
                         var map = {};
                         async.eachSeries(components, function(component, _cb){
                             if(component) {
                                 var obj = {};
-                                obj.id = '/components/' + component.type + '_v' + component.version + '.html';
-
+                                if(component.type === 'shared-navigation-component-link'){
+                                    obj.id = '/admin/assets/js/ssb-site-builder/ssb-components/shared/link_2.html';
+                                }
+                                else if(component.type === 'shared-navigation-component-style'){
+                                    obj.id = '/admin/assets/js/ssb-site-builder/ssb-components/shared/navigation_style.html';
+                                }
+                                else if(component.type && component.type.indexOf('ssb-') === 0 ){                                    
+                                    obj.id = '/admin/assets/js/ssb-site-builder/ssb-components/' + component.type + '/' + component.type + '.component.html';
+                                }       
+                                else
+                                    obj.id = '/components/' + component.type + '_v' + component.version + '.html';                                
                                 if(map[obj.id]) {
                                     _cb(null);
-                                } else {
+                                } else {                                    
                                     fs.readFile('public' + obj.id, 'utf8', function(err, html){
                                         obj.data = html;
                                         data.templateIncludes.push(obj);
@@ -441,16 +459,54 @@ _.extend(view.prototype, BaseView.prototype, {
                             } else {
                                 _cb();
                             }
-
                         }, function done(err){
                             cb(null, webpageData, page);
                         });
-
 
                     });
                 } else {
                     cb('Could not find ' + handle);
                 }
+            },
+            function addCustomTemplates(webpageData, page, cb) {
+                var sections = [];
+                _.each(page.get('sections'), function(section){
+                    if(section && section.layoutModifiers && section.layoutModifiers.custom) {
+                        sections.push({id: '/admin/assets/js/ssb-site-builder/ssb-components/ssb-' + section.layout + '/ssb-' + section.layout + '.layout.v' + section.version + '.html'})                        
+                    }
+                });
+                var map = {};
+                if(sections.length){
+                    async.eachSeries(sections, function(section, _cb){                        
+                        var obj = {};
+                        obj.id = section.id;
+
+                        if(map[obj.id]) {
+                            _cb(null);
+                        } else {
+                            fs.readFile('public' + obj.id, 'utf8', function(err, html){
+                                obj.data = html;
+                                data.templateIncludes.push(obj);
+                                map[obj.id] = obj;
+                                _cb();
+                            });
+                        }
+
+                    }, function done(err){
+                        cb(null, webpageData, page);
+                    });
+                }
+                else{
+                    cb(null, webpageData, page);
+                }
+            },
+            function addSSBSection(webpageData, page, cb){
+                var ssbSectionTemplate = {'id':'/admin/assets/js/ssb-site-builder/ssb-components/ssb-page-section/ssb-page-section-template.component.html'};
+                fs.readFile('public/admin/assets/js/ssb-site-builder/ssb-components/ssb-page-section/ssb-page-section-template.component.html', 'utf8', function(err, html) {
+                    ssbSectionTemplate.data = html;
+                    data.templateIncludes.push(ssbSectionTemplate);
+                    cb(null, webpageData, page);
+                });
             },
             function getPageTemplate(webpageData, page, cb) {
                 var pageTemplate = {'id':'template.html'};
@@ -605,9 +661,19 @@ _.extend(view.prototype, BaseView.prototype, {
                 if(!data.account.orgId) {
                     data.account.orgId = 0;
                 }
+                var websiteFonts = "";
+                if(value.website && value.website.themeOverrides && value.website.themeOverrides.styles && value.website.themeOverrides.styles.fontFamily){
+                    websiteFonts = value.website.themeOverrides.styles.fontFamily.trim().replace('\'', '').replace('\'', '').replace('"', '').replace('"','').split(",")[0];
+                }
 
-                if(pageHolder[handle] && pageHolder[handle].manifest) {
-                    var fonts = pageHolder[handle].manifest.fonts;
+                if((pageHolder[handle] && pageHolder[handle].manifest) || websiteFonts) {
+                    var fonts = {};
+                    if(pageHolder[handle] && pageHolder[handle].manifest && pageHolder[handle].manifest.fonts){
+                        fonts = pageHolder[handle].manifest.fonts;
+                    }
+                    if(websiteFonts){
+                        fonts.websiteFonts = websiteFonts;
+                    }
                     var usedFamilies = [];
                     var googleFamilies = ['Roboto:200,400,700', 'Roboto Condensed:200,400,700', 'Roboto Slab:200,400,700', 'Oswald:200,400,700', 'Montserrat:200,400,700', 'Droid Serif:200,400,700', 'Open Sans:200,400,700', 'Open Sans Condensed:200,400,700', 'Lato:200,400,700', 'Raleway:200,400,700', 'Quicksand:200,400,700', 'Ubuntu:200,400,700', 'Merriweather:200,400,700', 'Quattrocento:200,400,700', 'Lora:200,400,700', 'Playfair Display:200,400,700', 'Pacifico:200,400,700', 'Satisfy:200,400,700', 'Parisienne:200,400,700', 'Petit Formal Script:200,400,700', 'Indie Flower:200,400,700', 'Shadows Into Light Two:200,400,700', 'Amatic SC:200,400,700', 'Neucha:200,400,700', 'Schoolbell:200,400,700', 'Itim:200,400,700', 'Patrick Hand SC:200,400,700', 'Delius Swash Caps:200,400,700', 'PT Sans:200,400,700', 'Nunito:200,400,700', 'Titillium Web:200,400,700', 'Source Sans Pro:200,400,700', 'Cinzel:200,400,700' ];
                     _.each(fonts, function(fontName){

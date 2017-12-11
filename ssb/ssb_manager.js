@@ -4434,6 +4434,57 @@ module.exports = {
                 var componentMap = {};
                 async.eachSeries(components, function(component, callback){
                     if(component) {
+                        var fontUsed = "";
+                        // SIMPLE FORM, FORM BUILDER, DONATION FORM 
+                        if(component.formSettings && component.formSettings.formFontFamily){
+                            fontUsed =  self._getFontNameFromString(component.formSettings.formFontFamily);
+                            if(fontUsed)
+                                fontMap[fontUsed] = fontUsed;
+                        }
+                        if(component.formSettings && component.formSettings.inputFontFamily){
+                            fontUsed =  self._getFontNameFromString(component.formSettings.inputFontFamily);
+                            if(fontUsed)
+                                fontMap[fontUsed] = fontUsed;
+                        }
+                        // BLOG - TEASER, SSB BLOG POST CATEGORY TAGS ETC, SSB RSS FEED
+                        if(component.settings && component.settings.title && component.settings.title.fontFamily){
+                            fontUsed =  self._getFontNameFromString(component.settings.title.fontFamily);
+                            if(fontUsed)
+                                fontMap[fontUsed] = fontUsed;
+                        }
+                        if(component.settings && component.settings.description && component.settings.description.fontFamily){
+                            fontUsed =  self._getFontNameFromString(component.settings.description.fontFamily);
+                            if(fontUsed)
+                                fontMap[fontUsed] = fontUsed;
+                        }                        
+                        // PRODUCT COMPONENT
+                        if(component.formSettings && component.formSettings.titleFontFamily){
+                            fontUsed =  self._getFontNameFromString(component.formSettings.titleFontFamily);
+                            if(fontUsed)
+                                fontMap[fontUsed] = fontUsed;
+                        }
+                        if(component.formSettings && component.formSettings.priceFontFamily){
+                            fontUsed =  self._getFontNameFromString(component.formSettings.priceFontFamily);
+                            if(fontUsed)
+                                fontMap[fontUsed] = fontUsed;
+                        }
+                        if(component.formSettings && component.formSettings.descriptionFontFamily){
+                            fontUsed =  self._getFontNameFromString(component.formSettings.descriptionFontFamily);
+                            if(fontUsed)
+                                fontMap[fontUsed] = fontUsed;
+                        } 
+                        // NAVIGATION
+                        if(component.nav && component.nav.font && component.nav.font.family){
+                            fontUsed =  self._getFontNameFromString(component.nav.font.family);
+                            if(fontUsed)
+                                fontMap[fontUsed] = fontUsed;
+                        }
+                        // IMAGE GALLERY OVERLAY 
+                        if(component.imageOverlay && component.imageOverlay.font && component.imageOverlay.font.fontFamily){
+                            fontUsed =  self._getFontNameFromString(component.imageOverlay.font.fontFamily);
+                            if(fontUsed)
+                                fontMap[fontUsed] = fontUsed;
+                        }
                         var obj = {};
                         obj.id = '/components/' + component.type + '_v' + component.version + '.html';
                         _.each(component, function(value){
@@ -4500,6 +4551,11 @@ module.exports = {
 
     _savePublishedPage : function(page, fn){
         pageDao.savePublishedPage(page, fn);
+    },
+
+    _getFontNameFromString: function(string){
+        if(string)
+            return string.trim().replace('\'', '').replace('\'', '').replace('"', '').replace('"','').split(",")[0];
     }
 
 };

@@ -16,6 +16,11 @@
             }
         }
     }
+    .ssb-section-type-testimonials .ssb-nav-hero-text-full-wdith .col-xs-6{
+        .ssb-text-settings{
+            word-break: break-all; 
+        }
+    }
     .ssb-page-section-layout-nav-hero {
         .navbar-collapse{
             border-top: none !important;
@@ -170,13 +175,18 @@
             });
         }
         .ssb-media-query-small-only({
-            .navigation-v2 .navbar .navbar-header{
-                float: none;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                .navbar-toggle{
-                    margin-top: 0px;
+            .navigation-v2 .navbar {
+                 .navbar-brand {
+                    width: 60%!important;
+                } 
+                .navbar-header{
+                    float: none;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    .navbar-toggle{
+                        margin-top: 0px;
+                    }
                 }
             }
         });
@@ -489,4 +499,5 @@
     .ssb-nav-hero-text-full-wdith{
         width: 100%
     }
+
 }

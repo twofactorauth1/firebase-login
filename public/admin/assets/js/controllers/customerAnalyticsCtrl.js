@@ -20,6 +20,7 @@
 		$scope.trafficSourcesConfig.loading = true;
 		$scope.newVsReturningConfig.loading = true;
 		$scope.customerOverviewConfig.loading = true;
+		$scope.livedataLoading = true;
 		$scope.displayVisitors = true;
 		$scope.visitors = null;
 
@@ -191,7 +192,8 @@
 				
                 if(liveVisitorDetails && liveVisitorDetails.length){
                     $scope.setActiveVisitorIndex(0, true);
-                }
+				}
+				$scope.livedataLoading=false;
                 $timeout($scope.updatePlatformTrafficDetails, 15000);
             });
         };
@@ -238,12 +240,14 @@
 		};
 
         $scope.updatePlatformTrafficDetails = function() {
+			//$scope.livedataLoading=true;
             ChartAnalyticsService.getPlatformTrafficDetails(function (liveVisitorDetails) {
 				updateLiveDetailObject(liveVisitorDetails);
                 $scope.liveVisitorDetails = liveVisitorDetails;
                 if(liveVisitorDetails && liveVisitorDetails.length){
                     $scope.setActiveVisitorIndex(0, true);
-                }
+				}
+				$scope.livedataLoading=false;
                 $timeout($scope.updatePlatformTrafficDetails, 15000);
             });
         };

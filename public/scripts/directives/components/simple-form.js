@@ -428,7 +428,7 @@ app.directive('simpleFormComponent', ["ipCookie", '$window', '$timeout', 'userSe
 								}]);
 							}
 
-							if (!scope.component.redirect) {
+							if (!scope.component.redirect && !scope.component.redirectUrl) {
 								scope.formSuccess = true;
 								scope.user = {};
 								simpleForm.$setPristine(true);
