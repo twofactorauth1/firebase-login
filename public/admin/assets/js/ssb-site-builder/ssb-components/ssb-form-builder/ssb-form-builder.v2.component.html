@@ -23,7 +23,7 @@
                                         <textarea ng-if="val.name === 'message'" class="form-control input-lg" name="message" rows="5" ng-model="vm.formBuilder[val.name]" ng-attr-style="{{vm.inputStyle(vm.component.formSettings)}}" name="{{val.name}}" ng-required='!val.optional' ng-pattern="vm.addPattern(val)"></textarea>
                                     </div>
                                     <div class="form-group {{vm.fieldClass()}} input-field-container" ng-if="vm.component.optInRequired"  ng-class="{ 'has-error' : (formBuilder._optin.$invalid || formBuilder._optin.$error.$required) && !formBuilder._optin.$pristine }">
-                                        <span class="required">*</span>
+                                        <span class="required req-opt-in">*</span>
                                         <div class="form-checkbox-field">
                                             <input class="optin-checkbox" type="checkbox" ng-model="vm.formBuilder['_optin']"   name="_optin" ng-required='true' ng-change="vm.formFiedlsCHange('_optin')">
                                         </div>
@@ -54,7 +54,7 @@
                                         </div>
                                     </div>
                                     <div class="form-group {{vm.fieldClass()}} input-field-container" ng-if="vm.component.optInRequired"  ng-class="{ 'has-error' : (formBuilder._optin.$invalid || formBuilder._optin.$error.$required) && !formBuilder._optin.$pristine }">
-                                        <span class="required">*</span>
+                                        <span class="required req-opt-in">*</span>
                                         <div class="form-checkbox-field">
                                             <input class="optin-checkbox" type="checkbox" ng-model="vm.formBuilder['_optin']"   name="_optin" ng-required='true' ng-change="vm.formFiedlsCHange('_optin')">
                                         </div>
@@ -83,13 +83,13 @@
                                     </div>
 
                                     <div class="col-sm-6 input-field-container">
-                                        <div ng-attr-style="{{vm.fieldStyle(vm.component.formSettings)}}" class="form-group" ng-if="val.visible && val.name === 'message'" ng-repeat="val in vm.component.contactInfo" ng-class="{ 'has-error' : (formBuilder.{{val.name}}.$invalid || formBuilder.{{val.name}}.$error.$required) && !formBuilder.{{val.name}}.$pristine }">
+                                        <div ng-attr-style="{{vm.fieldStyle(vm.component.formSettings)}}" class="form-group {{vm.fieldClass()}}" ng-if="val.visible && val.name === 'message'" ng-repeat="val in vm.component.contactInfo" ng-class="{ 'has-error' : (formBuilder.{{val.name}}.$invalid || formBuilder.{{val.name}}.$error.$required) && !formBuilder.{{val.name}}.$pristine }">
                                         <span ng-if="!val.optional" class="required">*</span>
                                           <textarea placeholder="{{val.label || val.type}}" class="form-control input-lg" name="message" rows="5" ng-model="vm.formBuilder[val.name]" ng-attr-style="{{vm.inputStyle(vm.component.formSettings)}}" name="{{val.name}}" ng-required='!val.optional' ng-pattern="vm.addPattern(val)"></textarea>
                                         </div>
                                     </div>
                                     <div class="form-group {{vm.fieldClass()}} input-field-container" ng-if="vm.component.optInRequired"  ng-class="{ 'has-error' : (formBuilder._optin.$invalid || formBuilder._optin.$error.$required) && !formBuilder._optin.$pristine }">
-                                        <span class="required">*</span>
+                                        <span class="required req-opt-in">*</span>
                                         <div class="form-checkbox-field">
                                             <input class="optin-checkbox" type="checkbox" ng-model="vm.formBuilder['_optin']"   name="_optin" ng-required='true' ng-change="vm.formFiedlsCHange('_optin')">
                                         </div>
@@ -118,7 +118,7 @@
                                         <textarea ng-if="val.name === 'message'" placeholder="{{val.label || val.type}}" class="form-control input-lg" name="message" rows="5" ng-model="vm.formBuilder[val.name]" ng-attr-style="{{vm.inputStyle(vm.component.formSettings)}}" name="{{val.name}}" ng-required='!val.optional' ng-pattern="vm.addPattern(val)"></textarea>
                                     </div>
                                     <div class="form-group {{vm.fieldClass()}} input-field-container" ng-if="vm.component.optInRequired"  ng-class="{ 'has-error' : (formBuilder._optin.$invalid || formBuilder._optin.$error.$required) && !formBuilder._optin.$pristine }">
-                                        <span class="required">*</span>
+                                        <span class="required req-opt-in">*</span>
                                         <div class="form-checkbox-field">
                                             <input class="optin-checkbox" type="checkbox" ng-model="vm.formBuilder['_optin']"   name="_optin" ng-required='true' ng-change="vm.formFiedlsCHange('_optin')">
                                         </div>
@@ -147,7 +147,7 @@
                                     </div>
                                     <div class="form-group  input-field-container col-sm-12 " ng-if="vm.component.optInRequired"  ng-class="{ 'has-error' : (formBuilder._optin.$invalid || formBuilder._optin.$error.$required) && !formBuilder._optin.$pristine }">
 										<div class="form-checkbox-field">
-                                            <span class="required">*</span>
+                                            <span class="required req-opt-in">*</span>
                                             <input class="optin-checkbox" type="checkbox" ng-model="vm.formBuilder['_optin']"   name="_optin" ng-required='true' ng-change="vm.formFiedlsCHange('_optin')">
                                         </div>
                                         <div class="form-checkbox-label">
