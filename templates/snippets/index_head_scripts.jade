@@ -28,12 +28,13 @@ script(type="text/javascript").
             }
         };
     }
-
-    if(#{"'"+account.website.settings.font_family+"'"}!='undefined' &&
-            #{"'"+account.website.settings.font_family_2+"'"} !='undefined'){
+    var fontFamily1 = #{account.website.settings.font_family | null};
+    var fontFamily2 = #{account.website.settings.font_family_2 | null};
+    if(fontFamily1 && fontFamily2){
         WebFontConfig.google.families.push(#{"'"+account.website.settings.font_family+"'"})
         WebFontConfig.google.families.push(#{"'"+account.website.settings.font_family_2+"'"})
     }
+
     if(WebFontConfig.google.families.length > 0) {
         (function () {
             var wf = document.createElement('script');
@@ -167,7 +168,7 @@ if (typeof account.website.theme !== 'undefined' && typeof account.website.theme
 
             .ssb-theme-#{account.website.theme.handle} .ssb-page-section-layout-header [ssb-text-component] {
                 font-size: #{account.website.themeOverrides.styles.headerSize};
-            } 
+            }
             .ssb-theme-#{account.website.theme.handle} .ssb-theme-heading-text {
                 font-size: #{account.website.themeOverrides.styles.headingSize};
             }
