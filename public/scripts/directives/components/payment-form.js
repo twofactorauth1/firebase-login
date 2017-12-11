@@ -213,77 +213,80 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
 									newUser.plan = scope.newAccount.plan;
 									newUser.anonymousId = window.analytics ? window.analytics.user().anonymousId() : null;
 									newUser.permanent_cookie = ipCookie("permanent_cookie");
-									newUser.fingerprint = new Fingerprint().get();
-									newUser.setupFee = 150000; //1500.00
+                                    new Fingerprint2().get(function(fingerprint, components){
+                                        newUser.fingerprint = fingerprint;
+                                        newUser.setupFee = 150000; //1500.00
 
 
-									UserService.initializeUser(newUser, function (err, data) {
-										if (data && data.accountUrl) {
+                                        UserService.initializeUser(newUser, function (err, data) {
+                                            if (data && data.accountUrl) {
 
 
 
-											console.log('$location ', $location);
-											console.log('data.accountUrl ', data.accountUrl);
-											//we don't want to record purchases in non-prod environments
-											if ($location.host() === 'indigenous.io' || $location.host() === 'www.indigenous.io') {
-												var hash = CryptoJS.HmacSHA256(newUser.email, "vZ7kG_bS_S-jnsNq4M2Vxjsa5mZCxOCJM9nezRUQ");
-												//send data to intercom
-												window.intercomSettings = {
-													name: newUser.username,
-													email: newUser.email,
-													user_hash: hash.toString(CryptoJS.enc.Hex),
-													created_at: Math.floor(Date.now() / 1000),
-													app_id: "b3st2skm"
-												};
-												//send facebook tracking info
-												window._fbq = window._fbq || [];
-												window._fbq.push(['track', '6032779610613', {
-													'value': '0.00',
-													'currency': 'USD'
-												}]);
+                                                console.log('$location ', $location);
+                                                console.log('data.accountUrl ', data.accountUrl);
+                                                //we don't want to record purchases in non-prod environments
+                                                if ($location.host() === 'indigenous.io' || $location.host() === 'www.indigenous.io') {
+                                                    var hash = CryptoJS.HmacSHA256(newUser.email, "vZ7kG_bS_S-jnsNq4M2Vxjsa5mZCxOCJM9nezRUQ");
+                                                    //send data to intercom
+                                                    window.intercomSettings = {
+                                                        name: newUser.username,
+                                                        email: newUser.email,
+                                                        user_hash: hash.toString(CryptoJS.enc.Hex),
+                                                        created_at: Math.floor(Date.now() / 1000),
+                                                        app_id: "b3st2skm"
+                                                    };
+                                                    //send facebook tracking info
+                                                    window._fbq = window._fbq || [];
+                                                    window._fbq.push(['track', '6032779610613', {
+                                                        'value': '0.00',
+                                                        'currency': 'USD'
+                                                    }]);
 
 
-												if (typeof _gaw === "undefined") {
-													var adWordsInjectable =
-														'var google_conversion_id = 941009161;' +
-														'var google_conversion_language = "en";' +
-														'var google_conversion_format = "3";' +
-														'var google_conversion_color = "ffffff";' +
-														'var google_conversion_label = "eRTgCNSRo2EQidLawAM";' +
-														'var google_remarketing_only = false;',
-														gaw_vars = document.createElement('script'),
-														gaw_scr;
-													gaw_vars.type = 'text/javascript';
-													gaw_vars.innerText = adWordsInjectable;
-													document.getElementsByTagName('head')[0].appendChild(gaw_vars);
+                                                    if (typeof _gaw === "undefined") {
+                                                        var adWordsInjectable =
+                                                            'var google_conversion_id = 941009161;' +
+                                                            'var google_conversion_language = "en";' +
+                                                            'var google_conversion_format = "3";' +
+                                                            'var google_conversion_color = "ffffff";' +
+                                                            'var google_conversion_label = "eRTgCNSRo2EQidLawAM";' +
+                                                            'var google_remarketing_only = false;',
+                                                            gaw_vars = document.createElement('script'),
+                                                            gaw_scr;
+                                                        gaw_vars.type = 'text/javascript';
+                                                        gaw_vars.innerText = adWordsInjectable;
+                                                        document.getElementsByTagName('head')[0].appendChild(gaw_vars);
 
-													gaw_scr = document.createElement('script');
-													gaw_scr.onload = function () {
-														redirectFn(data.accountUrl);
-													};
-													gaw_scr.type = 'text/javascript';
-													gaw_scr.src = '//www.googleadservices.com/pagead/conversion.js';
-													document.getElementsByTagName('head')[0].appendChild(gaw_scr);
+                                                        gaw_scr = document.createElement('script');
+                                                        gaw_scr.onload = function () {
+                                                            redirectFn(data.accountUrl);
+                                                        };
+                                                        gaw_scr.type = 'text/javascript';
+                                                        gaw_scr.src = '//www.googleadservices.com/pagead/conversion.js';
+                                                        document.getElementsByTagName('head')[0].appendChild(gaw_scr);
 
-												}
+                                                    }
 
-											} else {
-												redirectFn(data.accountUrl);
-											}
+                                                } else {
+                                                    redirectFn(data.accountUrl);
+                                                }
 
-										} else {
-											scope.isFormValid = false;
-											scope.loading = false;
-											if (err.message === 'card_declined') {
-												showErrorMessage("card_number", 'There was an error charging your card.');
-											} else if (err.message === 'incorrect_cvc') {
-												showErrorMessage("card_cvc", "Your card's security code is incorrect");
-											} else {
-												showErrorMessage("card_number", err.message);
-											}
-											scope.showFooter(true);
-										}
-									});
+                                            } else {
+                                                scope.isFormValid = false;
+                                                scope.loading = false;
+                                                if (err.message === 'card_declined') {
+                                                    showErrorMessage("card_number", 'There was an error charging your card.');
+                                                } else if (err.message === 'incorrect_cvc') {
+                                                    showErrorMessage("card_cvc", "Your card's security code is incorrect");
+                                                } else {
+                                                    showErrorMessage("card_number", err.message);
+                                                }
+                                                scope.showFooter(true);
+                                            }
+                                        });
+                                    });
+
 								}
 
 							});
@@ -420,78 +423,81 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
 									newUser.plan = scope.newAccount.plan;
 									newUser.anonymousId = window.analytics ? window.analytics.user().anonymousId() : null;
 									newUser.permanent_cookie = ipCookie("permanent_cookie");
-									newUser.fingerprint = new Fingerprint().get();
-									newUser.setupFee = 0;
-									if (newAccount.addSignupFee === true) {
-										newUser.setupFee = 150000; //$1500.00
-									}
+                                    new Fingerprint2().get(function(fingerprint, components){
+                                        newUser.fingerprint = fingerprint;
+                                        newUser.setupFee = 0;
+                                        if (newAccount.addSignupFee === true) {
+                                            newUser.setupFee = 150000; //$1500.00
+                                        }
 
-									UserService.initializeUser(newUser, function (err, data) {
-										if (data && data.accountUrl) {
-											console.log('$location ', $location);
-											console.log('data.accountUrl ', data.accountUrl);
-											//we don't want to record purchases in non-prod environments
-											if ($location.host() === 'indigenous.io' || $location.host() === 'www.indigenous.io') {
-												var hash = CryptoJS.HmacSHA256(newUser.email, "vZ7kG_bS_S-jnsNq4M2Vxjsa5mZCxOCJM9nezRUQ");
-												//send data to intercom
-												window.intercomSettings = {
-													name: newUser.username,
-													email: newUser.email,
-													user_hash: hash.toString(CryptoJS.enc.Hex),
-													created_at: Math.floor(Date.now() / 1000),
-													app_id: "b3st2skm"
-												};
-												//send facebook tracking info
-												window._fbq = window._fbq || [];
-												window._fbq.push(['track', '6032779610613', {
-													'value': '0.00',
-													'currency': 'USD'
-												}]);
+                                        UserService.initializeUser(newUser, function (err, data) {
+                                            if (data && data.accountUrl) {
+                                                console.log('$location ', $location);
+                                                console.log('data.accountUrl ', data.accountUrl);
+                                                //we don't want to record purchases in non-prod environments
+                                                if ($location.host() === 'indigenous.io' || $location.host() === 'www.indigenous.io') {
+                                                    var hash = CryptoJS.HmacSHA256(newUser.email, "vZ7kG_bS_S-jnsNq4M2Vxjsa5mZCxOCJM9nezRUQ");
+                                                    //send data to intercom
+                                                    window.intercomSettings = {
+                                                        name: newUser.username,
+                                                        email: newUser.email,
+                                                        user_hash: hash.toString(CryptoJS.enc.Hex),
+                                                        created_at: Math.floor(Date.now() / 1000),
+                                                        app_id: "b3st2skm"
+                                                    };
+                                                    //send facebook tracking info
+                                                    window._fbq = window._fbq || [];
+                                                    window._fbq.push(['track', '6032779610613', {
+                                                        'value': '0.00',
+                                                        'currency': 'USD'
+                                                    }]);
 
 
-												if (typeof _gaw === "undefined") {
-													var adWordsInjectable =
-														'var google_conversion_id = 941009161;' +
-														'var google_conversion_language = "en";' +
-														'var google_conversion_format = "3";' +
-														'var google_conversion_color = "ffffff";' +
-														'var google_conversion_label = "eRTgCNSRo2EQidLawAM";' +
-														'var google_remarketing_only = false;',
-														gaw_vars = document.createElement('script'),
-														gaw_scr;
+                                                    if (typeof _gaw === "undefined") {
+                                                        var adWordsInjectable =
+                                                            'var google_conversion_id = 941009161;' +
+                                                            'var google_conversion_language = "en";' +
+                                                            'var google_conversion_format = "3";' +
+                                                            'var google_conversion_color = "ffffff";' +
+                                                            'var google_conversion_label = "eRTgCNSRo2EQidLawAM";' +
+                                                            'var google_remarketing_only = false;',
+                                                            gaw_vars = document.createElement('script'),
+                                                            gaw_scr;
 
-													gaw_vars.type = 'text/javascript';
-													gaw_vars.innerText = adWordsInjectable;
-													document.getElementsByTagName('head')[0].appendChild(gaw_vars);
+                                                        gaw_vars.type = 'text/javascript';
+                                                        gaw_vars.innerText = adWordsInjectable;
+                                                        document.getElementsByTagName('head')[0].appendChild(gaw_vars);
 
-													gaw_scr = document.createElement('script');
-													gaw_scr.onload = function () {
-														redirectFn(data.accountUrl);
-													};
-													gaw_scr.type = 'text/javascript';
-													gaw_scr.src = '//www.googleadservices.com/pagead/conversion.js';
-													document.getElementsByTagName('head')[0].appendChild(gaw_scr);
+                                                        gaw_scr = document.createElement('script');
+                                                        gaw_scr.onload = function () {
+                                                            redirectFn(data.accountUrl);
+                                                        };
+                                                        gaw_scr.type = 'text/javascript';
+                                                        gaw_scr.src = '//www.googleadservices.com/pagead/conversion.js';
+                                                        document.getElementsByTagName('head')[0].appendChild(gaw_scr);
 
-												}
+                                                    }
 
-											} else {
-												redirectFn(data.accountUrl);
-											}
+                                                } else {
+                                                    redirectFn(data.accountUrl);
+                                                }
 
-										} else {
-											scope.isFormValid = false;
-											scope.buttonDisabled = false;
-											scope.loading = false;
-											if (err.message === 'card_declined') {
-												showErrorMessage("card_number", 'There was an error charging your card.');
-											} else if (err.message === 'incorrect_cvc') {
-												showErrorMessage("card_cvc", "Your card's security code is incorrect");
-											} else {
-												showErrorMessage("card_number", err.message);
-											}
-											scope.showFooter(true);
-										}
-									});
+                                            } else {
+                                                scope.isFormValid = false;
+                                                scope.buttonDisabled = false;
+                                                scope.loading = false;
+                                                if (err.message === 'card_declined') {
+                                                    showErrorMessage("card_number", 'There was an error charging your card.');
+                                                } else if (err.message === 'incorrect_cvc') {
+                                                    showErrorMessage("card_cvc", "Your card's security code is incorrect");
+                                                } else {
+                                                    showErrorMessage("card_number", err.message);
+                                                }
+                                                scope.showFooter(true);
+                                            }
+                                        });
+                                    });
+
 								}
 
 							});
@@ -595,65 +601,67 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
 					};
 					newUser.anonymousId = window.analytics.user().anonymousId();
 					newUser.permanent_cookie = ipCookie("permanent_cookie");
-					newUser.fingerprint = new Fingerprint().get();
+                    new Fingerprint2().get(function(fingerprint, components){
+                        newUser.fingerprint = fingerprint;
+
+                        UserService.initializeUser(newUser, function (err, data) {
+                            if (data && data.accountUrl) {
+                                console.log('$location ', $location);
+                                console.log('data.accountUrl ', data.accountUrl);
+                                //we don't want to record purchases in non-prod environments
+                                if ($location.host() === 'indigenous.io' || $location.host() === 'www.indigenous.io') {
+                                    var hash = CryptoJS.HmacSHA256(newUser.email, "vZ7kG_bS_S-jnsNq4M2Vxjsa5mZCxOCJM9nezRUQ");
+                                    //send data to intercom
+                                    window.intercomSettings = {
+                                        name: newUser.username,
+                                        email: newUser.email,
+                                        user_hash: hash.toString(CryptoJS.enc.Hex),
+                                        created_at: Math.floor(Date.now() / 1000),
+                                        app_id: "b3st2skm"
+                                    };
+                                    //send facebook tracking info
+                                    window._fbq = window._fbq || [];
+                                    window._fbq.push(['track', '6032779610613', {
+                                        'value': '0.00',
+                                        'currency': 'USD'
+                                    }]);
 
 
-					UserService.initializeUser(newUser, function (err, data) {
-						if (data && data.accountUrl) {
-							console.log('$location ', $location);
-							console.log('data.accountUrl ', data.accountUrl);
-							//we don't want to record purchases in non-prod environments
-							if ($location.host() === 'indigenous.io' || $location.host() === 'www.indigenous.io') {
-								var hash = CryptoJS.HmacSHA256(newUser.email, "vZ7kG_bS_S-jnsNq4M2Vxjsa5mZCxOCJM9nezRUQ");
-								//send data to intercom
-								window.intercomSettings = {
-									name: newUser.username,
-									email: newUser.email,
-									user_hash: hash.toString(CryptoJS.enc.Hex),
-									created_at: Math.floor(Date.now() / 1000),
-									app_id: "b3st2skm"
-								};
-								//send facebook tracking info
-								window._fbq = window._fbq || [];
-								window._fbq.push(['track', '6032779610613', {
-									'value': '0.00',
-									'currency': 'USD'
-								}]);
+                                    if (!_gaw.loaded) {
+                                        var adWordsInjectable =
+                                            'var google_conversion_id = 941009161;' +
+                                            'var google_conversion_language = "en";' +
+                                            'var google_conversion_format = "3";' +
+                                            'var google_conversion_color = "ffffff";' +
+                                            'var google_conversion_label = "eRTgCNSRo2EQidLawAM";' +
+                                            'var google_remarketing_only = false;';
 
+                                        var gaw_vars = document.createElement('script');
+                                        gaw_vars.type = 'text/javascript';
+                                        gaw_vars.innerText = adWordsInjectable;
+                                        document.getElementsByTagName('head')[0].appendChild(gaw_vars);
 
-								if (!_gaw.loaded) {
-									var adWordsInjectable =
-										'var google_conversion_id = 941009161;' +
-										'var google_conversion_language = "en";' +
-										'var google_conversion_format = "3";' +
-										'var google_conversion_color = "ffffff";' +
-										'var google_conversion_label = "eRTgCNSRo2EQidLawAM";' +
-										'var google_remarketing_only = false;';
+                                        var gaw_scr = document.createElement('script');
+                                        gaw_scr.type = 'text/javascript';
+                                        gaw_scr.src = '//www.googleadservices.com/pagead/conversion.js';
+                                        document.getElementsByTagName('head')[0].appendChild(gaw_scr);
 
-									var gaw_vars = document.createElement('script');
-									gaw_vars.type = 'text/javascript';
-									gaw_vars.innerText = adWordsInjectable;
-									document.getElementsByTagName('head')[0].appendChild(gaw_vars);
+                                        _gaw.loaded = true;
+                                    }
+                                    //TODO: setTimeout?
+                                    window.location = data.accountUrl;
+                                } else {
+                                    window.location = data.accountUrl;
+                                }
 
-									var gaw_scr = document.createElement('script');
-									gaw_scr.type = 'text/javascript';
-									gaw_scr.src = '//www.googleadservices.com/pagead/conversion.js';
-									document.getElementsByTagName('head')[0].appendChild(gaw_scr);
+                            } else {
+                                scope.isFormValid = false;
 
-									_gaw.loaded = true;
-								}
-								//TODO: setTimeout?
-								window.location = data.accountUrl;
-							} else {
-								window.location = data.accountUrl;
-							}
+                                scope.showFooter(true);
+                            }
+                        });
+                    });
 
-						} else {
-							scope.isFormValid = false;
-
-							scope.showFooter(true);
-						}
-					});
 
 				});
 			};
@@ -756,60 +764,63 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
 								}
 
 								newUser.permanent_cookie = ipCookie("permanent_cookie");
-								newUser.fingerprint = new Fingerprint().get();
+                                new Fingerprint2().get(function(fingerprint, components){
+                                    newUser.fingerprint = fingerprint;
 
-								// Add name
-								var name = $('#card_name #name').val();
-								if (name) {
-									var nameAry = name.split(' ');
-									if (nameAry.length === 3) {
-										newUser.first = nameAry[0];
-										newUser.middle = nameAry[1];
-										newUser.last = nameAry[2];
-									} else if (nameAry.length === 2) {
-										newUser.first = nameAry[0];
-										newUser.last = nameAry[1];
-									} else if (nameAry.length === 1) {
-										newUser.last = nameAry[0];
-									}
-								}
-								UserService.initializeUser(newUser, function (err, data) {
-									if (data && data.accountUrl) {
-										console.log('$location ', $location);
-										if ($location.host() === 'indigenous.io' || $location.host() === 'www.indigenous.io') {
-											/*
-											 * We will now create the intercom user in the admin
-											 * var hash = CryptoJS.HmacSHA256(newUser.email, "vZ7kG_bS_S-jnsNq4M2Vxjsa5mZCxOCJM9nezRUQ");
-											 //send data to intercom
-											 window.intercomSettings = {
-											 name: newUser.username,
-											 email: newUser.email,
-											 user_hash: hash.toString(CryptoJS.enc.Hex),
-											 created_at: Math.floor(Date.now() / 1000),
-											 app_id: "b3st2skm"
-											 };
-											 */
+                                    // Add name
+                                    var name = $('#card_name #name').val();
+                                    if (name) {
+                                        var nameAry = name.split(' ');
+                                        if (nameAry.length === 3) {
+                                            newUser.first = nameAry[0];
+                                            newUser.middle = nameAry[1];
+                                            newUser.last = nameAry[2];
+                                        } else if (nameAry.length === 2) {
+                                            newUser.first = nameAry[0];
+                                            newUser.last = nameAry[1];
+                                        } else if (nameAry.length === 1) {
+                                            newUser.last = nameAry[0];
+                                        }
+                                    }
+                                    UserService.initializeUser(newUser, function (err, data) {
+                                        if (data && data.accountUrl) {
+                                            console.log('$location ', $location);
+                                            if ($location.host() === 'indigenous.io' || $location.host() === 'www.indigenous.io') {
+                                                /*
+                                                 * We will now create the intercom user in the admin
+                                                 * var hash = CryptoJS.HmacSHA256(newUser.email, "vZ7kG_bS_S-jnsNq4M2Vxjsa5mZCxOCJM9nezRUQ");
+                                                 //send data to intercom
+                                                 window.intercomSettings = {
+                                                 name: newUser.username,
+                                                 email: newUser.email,
+                                                 user_hash: hash.toString(CryptoJS.enc.Hex),
+                                                 created_at: Math.floor(Date.now() / 1000),
+                                                 app_id: "b3st2skm"
+                                                 };
+                                                 */
 
-											//send facebook tracking info
-											window._fbq = window._fbq || [];
-											window._fbq.push(['track', '6032779610613', {
-												'value': '0.00',
-												'currency': 'USD'
-											}]);
-											//console.log('sent facebook message');
+                                                //send facebook tracking info
+                                                window._fbq = window._fbq || [];
+                                                window._fbq.push(['track', '6032779610613', {
+                                                    'value': '0.00',
+                                                    'currency': 'USD'
+                                                }]);
+                                                //console.log('sent facebook message');
 
 
-											//TODO: setTimeout?
-											window.location = data.accountUrl;
-										} else {
-											window.location = data.accountUrl;
-										}
-									} else {
-										scope.isFormValid = false;
+                                                //TODO: setTimeout?
+                                                window.location = data.accountUrl;
+                                            } else {
+                                                window.location = data.accountUrl;
+                                            }
+                                        } else {
+                                            scope.isFormValid = false;
 
-										scope.showFooter(true);
-									}
-								});
+                                            scope.showFooter(true);
+                                        }
+                                    });
+                                });
+
 
 							});
 						})
