@@ -428,7 +428,7 @@ app.directive('simpleFormComponent', ["ipCookie", '$window', '$timeout', 'userSe
 								}]);
 							}
 
-							if (!scope.component.redirect && !scope.component.redirectUrl) {
+							if (!scope.component.redirect) {
 								scope.formSuccess = true;
 								scope.user = {};
 								simpleForm.$setPristine(true);
@@ -444,11 +444,13 @@ app.directive('simpleFormComponent', ["ipCookie", '$window', '$timeout', 'userSe
 								$timeout(function () {
 									scope.formSuccess = false;
 								}, 3000);
-								if (scope.component.redirectType === 'page') {
-									window.location.pathname = scope.component.redirectUrl;
-								}
-								if (scope.component.redirectType === 'external') {
-									window.location.href = scope.component.redirectUrl;
+								if(scope.component.redirectUrl){
+									if (scope.component.redirectType === 'page') {
+										window.location.pathname = scope.component.redirectUrl;
+									}
+									if (scope.component.redirectType === 'external') {
+										window.location.href = scope.component.redirectUrl;
+									}
 								}
 							}
 

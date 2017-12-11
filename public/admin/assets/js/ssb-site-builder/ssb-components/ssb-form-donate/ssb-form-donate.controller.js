@@ -862,11 +862,13 @@
             vm.getDonations(vm.product._id);
             if (vm.component.redirect && vm.checkoutModalState == 5) {
                 vm.checkoutModalState = 1;
-                if (vm.component.redirectType === 'page') {
-                    window.location.pathname = vm.component.redirectUrl;
-                }
-                if (vm.component.redirectType === 'external') {
-                    window.location.href = vm.component.redirectUrl;
+                if(vm.component.redirectUrl){
+                    if (vm.component.redirectType === 'page') {
+                        window.location.pathname = vm.component.redirectUrl;
+                    }
+                    if (vm.component.redirectType === 'external') {
+                        window.location.href = vm.component.redirectUrl;
+                    }
                 }
             } else {
                 $('#donation-card-details').find("input[type=text]").val("");
