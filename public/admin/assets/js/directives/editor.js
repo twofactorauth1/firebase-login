@@ -364,6 +364,16 @@ app.directive("elem", function ($rootScope, $timeout, $compile, SimpleSiteBuilde
 										});
 									}
 
+                                    var h5elements = selectionEl.find("h1, h2, h3, h4, h5, h6");
+                                    if (h5elements.length) {
+                                        h5elements.each(function () {
+                                            var element_header = $(this);
+                                                element_header.replaceWith(function () {
+                                                  return $("<span />").append($(this).contents())
+                                                });
+                                        });
+                                    }
+
 								}
 								if (cmd === 'linkStyle' && param1 === 'ssb-theme-btn') {
 									if (editor.selection && editor.selection.element) {
@@ -450,12 +460,12 @@ app.directive("elem", function ($rootScope, $timeout, $compile, SimpleSiteBuilde
 									e.preventDefault();
 									return false;
 								}
-							}							
+							}
 							 else {
 								return true;
 							}
 
-						}, true);					
+						}, true);
 
 					}, 2000);
 				});
