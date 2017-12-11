@@ -1597,6 +1597,12 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
 
         vm.state.permissions = SimpleSiteBuilderService.permissions;
 
+        $("#componentloader").on("keydown", function(e){
+            if(e.which === 27){
+                $(".editable.element-wrap.fr-inline.fr-code-view").removeClass("fr-code-view");
+            }
+        })
+
     }
 
 

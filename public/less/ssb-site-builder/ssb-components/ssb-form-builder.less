@@ -117,8 +117,7 @@
     }
     margin: 10px;
     .form-layout-1{
-         span.required{
-            margin-left: -10px;
+         span.required{            
             margin-top: 5px;
         }
         position: relative;
@@ -162,7 +161,11 @@
     }
     .form-layout-3{
         span.required{
-            margin-left: -10px;
+            right: 20px;
+            &.req-opt-in{
+                right: inherit !important;
+                margin-left: -10px;
+            }
         }
         position: relative;
         button{
@@ -179,8 +182,13 @@
     }
     .form-layout-4{
         span.required{
-            margin-left: -10px;
+            right: 20px;
+            &.req-opt-in{
+                right: inherit !important;
+                margin-left: -10px;
+            }
         }
+        
         position: relative;
         width: 50%;
         margin: auto;
@@ -197,7 +205,11 @@
     }
     .form-layout-custom{
         span.required{
-            margin-left: -10px;
+            right: 20px;
+            &.req-opt-in{
+                right: inherit !important;
+                margin-left: -10px;
+            }
         }
         position: relative;
         margin: auto;
