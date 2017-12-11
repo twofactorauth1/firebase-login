@@ -450,11 +450,12 @@ app.directive("elem", function ($rootScope, $timeout, $compile, SimpleSiteBuilde
 									e.preventDefault();
 									return false;
 								}
-							} else {
+							}							
+							 else {
 								return true;
 							}
 
-						}, true);
+						}, true);					
 
 					}, 2000);
 				});
