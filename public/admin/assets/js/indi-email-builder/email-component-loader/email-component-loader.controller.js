@@ -155,6 +155,10 @@
 
             }
 
+            if(component && component.visibility === false){
+                styleString += ' display: none; ';
+            }
+
             return styleString;
 
         }
