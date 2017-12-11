@@ -339,7 +339,7 @@
                         $timeout(function () {
                             vm.formSuccess = false;
                         }, 3000);
-                        if (!vm.component.redirect) {
+                        if (!vm.component.redirect && vm.component.redirectUrl) {
                             $timeout(function () {
                                 if (vm.component.redirectType === 'page') {
                                     window.location.pathname = vm.component.redirectUrl;
