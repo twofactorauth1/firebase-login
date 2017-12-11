@@ -859,7 +859,7 @@
 					}
 				}
 
-				if (component.txtcolor && vm.section && vm.section.txtcolor) {
+				if (component.txtcolor) {
 					styleString += 'color: ' + component.txtcolor + ';';
 				}
 
