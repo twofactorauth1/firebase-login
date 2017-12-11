@@ -48,7 +48,7 @@
                         }
                         _mw = _mw.toString();
                             if(_mw == '100%' || _mw == 'auto') {
-                               maxWidthStyle =  'max-width: ' + section.spacing.mw + ';' ;
+                               maxWidthStyle =  'max-width: ' + _mw + ';' ;
                             }
                             else{
                                 if(_mw && _mw !== "" && _mw.indexOf("%") === -1){
