@@ -20,7 +20,6 @@
         vm.playerObject = {};
         vm.player = {};
         vm.setFixedPosition = setFixedPosition;
-        vm.getMaxWidth = getMaxWidth;
 
         $scope.$watch('vm.section.bg.video.id', function (_id) {
             if (_id && vm.section.bg.video.show) {

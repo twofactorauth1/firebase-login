@@ -29,6 +29,8 @@
 		//vm.sectionInitDelayDone = false;
 		vm.setFixedPosition = setFixedPosition; 
 
+		vm.screenLayout = screenLayout();
+
 		$scope.$watch('vm.section.bg.video.id', function (_id) {
 			if (_id && vm.section.bg.video.show) {
 				$timeout(function () {
@@ -190,8 +192,7 @@
 
 		function sectionStyle (section) {
 			var styleString = ' ';
-			// Styles basis of screens sizes
-			var _layout = screenLayout();
+			var _layout = vm.screenLayout;
 			var _style = "";
 			switch (_layout) {
 	            case 0:
@@ -1177,6 +1178,10 @@
 			}
 
 		}
+
+		angular.element($window).bind('resize', function () {			
+			vm.screenLayout = screenLayout();			
+		});
 
 	}
 
