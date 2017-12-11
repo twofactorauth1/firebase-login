@@ -639,9 +639,17 @@ module.exports = {
     buildPageTemplateMarkup: function(page) {
         var self = this;
         var html = '';
-        _.each(page.get('sections'), function(section, index){
-            html = html + '<ssb-page-section-template section="sections_' + index + '" index="' + index + '" class="ssb-page-section"></ssb-page-section-template>';
-        });
+        if(page.get("handle") == 'signup'){
+            _.each(page.get('sections'), function(section, index){
+                html = html + '<ssb-page-section section="sections_' + index + '" index="' + index + '" class="ssb-page-section"></ssb-page-section>';
+            });
+        }
+        else{
+            _.each(page.get('sections'), function(section, index){
+                html = html + '<ssb-page-section-template section="sections_' + index + '" index="' + index + '" class="ssb-page-section"></ssb-page-section-template>';
+            });
+        }
+        
         return html;
     },
 
