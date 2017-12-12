@@ -778,11 +778,15 @@ var copyutil = {
                     accountToSave.billing.stripeCustomerId = STRIPE_CUSTOMER_ID;
                     accountToSave.billing.subscriptionId = SUBSCRIPTION_ID;
                     accountToSave.billing.plan = STRIPE_PLAN_ID;
-                    if(accountToSave.credentials['type'=='stripe']) {
-                        var credentials = accountToSave.credentials['type'=='stripe'];
-                        credentials.accessToken = STRIPE_ACCESS_TOKEN;
-                        credentials.refreshToken = STRIPE_REFRESH_TOKEN;
+                    if(accountToSave.credentials) {
+                        _.each(accountToSave.credentials, function(cred){
+                            if(cred.type === 'stripe') {
+                                cred.accessToken = STRIPE_ACCESS_TOKEN;
+                                cred.refreshToken = STRIPE_REFRESH_TOKEN;
+                            }
+                        });
                     }
+                    
                 }
 
 
