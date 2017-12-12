@@ -61,17 +61,20 @@ mainApp.service('userService', ['$http', 'ipCookie', function ($http, ipCookie) 
 
 	this.initializeUser = function (user, fn) {
 		user.session_permanent = ipCookie("permanent_cookie");
-		user.fingerprint = new Fingerprint().get();
-		var apiUrl = baseUrl + ['user', 'initialize'].join('/');
-		$http({
-			url: apiUrl,
-			method: "POST",
-			data: angular.toJson(user)
-		}).success(function (data) {
-			fn(null, data);
-		}).error(function (err) {
-			fn(err, null);
-		});
+        new Fingerprint2().get(function(fingerprint, components){
+            user.fingerprint = fingerprint;
+            var apiUrl = baseUrl + ['user', 'initialize'].join('/');
+            $http({
+                url: apiUrl,
+                method: "POST",
+                data: angular.toJson(user)
+            }).success(function (data) {
+                fn(null, data);
+            }).error(function (err) {
+                fn(err, null);
+            });
+        });
+
 	};
 
 	// TODO: this is poorly named, should be checkDomainAvailable. -jkg
