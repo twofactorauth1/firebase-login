@@ -13,6 +13,7 @@
 		$scope.isAdmin = true;
 		$scope.itemPerPage = 20;
     	$scope.showPages = 10;
+        $scope.analytics = true;
 		$scope.updateUsers = function (typed) {
 			$scope.searchUsers = [];
 			var getUsers = UserService.getUsersForAutocomplete(typed),
@@ -346,7 +347,9 @@
 				}
 			});
 		};
-
+        $scope.updateNewAnalytics = function(isEnabled){
+            console.log('isEnabled',isEnabled   );
+        };
 		$scope.saveTemplateAccount = function () {
 			updateCustomerDetails(false);
 		};
