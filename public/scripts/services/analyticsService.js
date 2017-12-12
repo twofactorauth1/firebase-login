@@ -316,7 +316,7 @@ mainApp.service('analyticsService', ['$http', '$location', 'ipCookie', function 
             parsedReferrer,
             referrerObject = null,
             apiUrl;
-        
+
             new Fingerprint2().get(function(fingerprint, components){
                 if(!queryParams) {
 
@@ -383,7 +383,7 @@ mainApp.service('analyticsService', ['$http', '$location', 'ipCookie', function 
                     }
 
                     //get browser fingerprint
-                    fingerprint = new Fingerprint().get();
+                    //fingerprint = new Fingerprint().get();
                     timezone = jstz.determine();
 
                     queryParams = {};
@@ -404,7 +404,7 @@ mainApp.service('analyticsService', ['$http', '$location', 'ipCookie', function 
                         queryParams.uaov=parser.getOS().version;
                     }
                     queryParams.uad=device;
-                    queryParams.f=fingerprint.toString();
+                    queryParams.f=fingerprint;
                     queryParams.t=timezone.name();
                     queryParams.nv=new_visitor;
                     queryParams.fe=$location.absUrl();

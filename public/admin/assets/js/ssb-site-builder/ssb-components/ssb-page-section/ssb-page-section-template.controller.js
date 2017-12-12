@@ -544,7 +544,7 @@
 
             var _isVerticalNav = false;
             var elementIsFirstPosition = vm.index === 0;
-            if(!$window.indigenous.firstVisibleElement && vm.section.showSection){
+            if(!$window.indigenous.firstVisibleElement && vm.section && vm.section.showSection){
                 $window.indigenous.firstVisibleElement=true;
                 elementIsFirstPosition=true;
             }
