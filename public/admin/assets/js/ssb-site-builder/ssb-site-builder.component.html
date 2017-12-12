@@ -16,7 +16,7 @@
     */
 
 
-.ssb-theme-{{vm.state.website.theme.handle}} {
+.ssb-theme-{{vm.state.website.theme.handle}}, .ssb-theme-{{vm.state.website.theme.handle}} pre {
     color: {{vm.state.website.themeOverrides.styles.primaryTextColor}};
     background-color: {{vm.state.page.styles.bodyBackgroundColor || vm.state.website.themeOverrides.styles.bodyBackgroundColor}};
 }
@@ -136,7 +136,7 @@
 
     .ssb-theme-{{vm.state.website.theme.handle}} .ssb-page-section-layout-header [ssb-text-component] {
         font-size: {{vm.state.website.themeOverrides.styles.headerSize}};
-    } 
+    }
     .ssb-theme-{{vm.state.website.theme.handle}} .ssb-theme-heading-text {
         font-size: {{vm.state.website.themeOverrides.styles.headingSize}};
     }
