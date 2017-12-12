@@ -189,7 +189,7 @@ _.extend(view.prototype, BaseView.prototype, {
                 pageHolder['/preview/' + pageId ] = page.toJSON('frontend');
 
                 data.page = pageHolder;
-
+                data.loadYoutubeLib = true;
                 // self.log.debug('pageHolder:', pageHolder);
                 data.account = value;
 
@@ -246,24 +246,6 @@ _.extend(view.prototype, BaseView.prototype, {
                 }
                 data.externalScripts = self._loadExternalScripts(page, true);
                 var components = [];
-                var video_component_count = 0;
-                        _.each(page.get('sections'), function(section){
-                            if(section && section.attributes && section.attributes.components) {
-                                 var components_all = section.attributes.components;
-                                 _.each(components_all, function(component){
-                                     if(component.type === 'video' || component.type === 'video-gallery'){
-                                               video_component_count++;
-                                      }
-                                      else{
-                                        if(component.text && component.text.indexOf('youtube') !== -1){
-                                           video_component_count++;
-                                      }
-                                    }
-                                 });
-
-                            }
-                        });
-                data.isVideo = (video_component_count === 0) ? false : true;
                 data.pageStyles = self._getPageStyles(page);
                 if(pageHolder[handle]) {
                     data.title = pageHolder[handle].title || value.website.title;
@@ -453,18 +435,8 @@ _.extend(view.prototype, BaseView.prototype, {
 
                         //self.log.debug('components:', components);
                         var map = {};
-                        var video_component_count = 0;
                         async.eachSeries(components, function(component, _cb){
                             if(component) {
-                                //check for component type. If not video then hide youtube libraries
-                                if(component.type === 'video' || component.type === 'video-gallery'){
-                                    video_component_count++;
-                                }
-                                else{
-                                    if(component.text && component.text.indexOf('youtube') !== -1){
-                                       video_component_count++;
-                                    }
-                                }
                                 var obj = {};
                                 if(component.type === 'shared-navigation-component-link'){
                                     obj.id = '/admin/assets/js/ssb-site-builder/ssb-components/shared/link_2.html';
@@ -491,7 +463,6 @@ _.extend(view.prototype, BaseView.prototype, {
                                 _cb();
                             }
                         }, function done(err){
-                            data.isVideo = (video_component_count === 0) ? false : true;
                             cb(null, webpageData, page);
                         });
 
@@ -590,6 +561,7 @@ _.extend(view.prototype, BaseView.prototype, {
 
                 data.page = page;
                 data.account = value;
+                data.loadYoutubeLib = page.get('manifest')['loadYoutubeLib'] || true;
                 data.canonicalUrl = pageHolder[handle].canonicalUrl || null;
                 data.account.website.themeOverrides = data.account.website.themeOverrides ||{};
                 data.account.website.themeOverrides.styles = data.account.website.themeOverrides.styles || {};
