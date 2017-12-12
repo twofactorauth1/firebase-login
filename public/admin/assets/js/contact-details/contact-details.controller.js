@@ -18,15 +18,57 @@ function contactDetailsController($scope, $state, $stateParams, $attrs, $filter,
         loading: true
     }
 
+    vm.displayAddressFormat = displayAddressFormat;
+
     function loadContactDetails(){
     	ContactService.getContact(vm.state.contactId, function (contact, error) {
     		vm.state.contact = contact;
     		vm.state.fullName = [vm.state.contact.first, vm.state.contact.middle, vm.state.contact.last].join(' ').trim();
     		setTags();
     		vm.uiState.loading = false;
-    	})
-    	
+    	})    	
     }
+
+	function displayAddressFormat(details) {
+      	var _firstRow = "";
+        var _middleRow = "";
+        var _bottomRow = "";
+        separator = "<br>";
+        
+        if (details) {            
+            if(details.address || details.address2)
+            {
+                if(details.address){
+                    _firstRow +=  details.address + " ";     
+                }
+                if(details.address2){
+                    _firstRow += details.address2;    
+                }
+                if(_firstRow.length){
+                    _firstRow += separator;
+                }
+            }
+            if(details.city || details.state || details.zip)
+            {
+                if(details.city){
+                    _middleRow +=  details.city + ", ";     
+                }
+                if(details.state){
+                    _middleRow +=  details.state + " ";  
+                }
+                if(details.zip){
+                    _middleRow +=  details.zip;  
+                }
+                if(_middleRow.length && details.country){
+                    _middleRow += separator;
+                }
+            }
+            if(details.country){
+            	_bottomRow += details.country;
+            }
+        }
+        return _firstRow + _middleRow + _bottomRow;
+	};
 
 	function setTags() {
 		console.log('setTags >>>');

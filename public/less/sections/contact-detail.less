@@ -75,7 +75,6 @@ contact-details-component{
             }
         }
         .contact-stats{
-            border-bottom: 1px solid #eee;
             span.description{
                 display: block;
             }
@@ -101,7 +100,14 @@ contact-details-component{
         }
         .contact-details-tab{
             .tabbable{
-                background: transparent;                
+                background: transparent;
+                .tab-content > .tab-pane{
+                    padding-left: 0 !important;
+                    padding-right: 0 !important;
+                }              
+            }
+            .address-pane{
+                top: 100px;
             }
             .details{
                 margin-bottom: 5px;
@@ -123,6 +129,9 @@ contact-details-component{
                 }
                 .value{
                     margin-left: 5px;
+                }
+                .address-desc{
+                    display: block;
                 }
             }
         }
