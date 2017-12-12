@@ -19,7 +19,7 @@ function contactDetailsController($scope, $state, $stateParams, $attrs, $filter,
     }
 
     vm.displayAddressFormat = displayAddressFormat;
-
+    vm.editContactDetails = editContactDetails;
     function loadContactDetails(){
     	ContactService.getContact(vm.state.contactId, function (contact, error) {
     		vm.state.contact = contact;
@@ -91,6 +91,10 @@ function contactDetailsController($scope, $state, $stateParams, $attrs, $filter,
 		});		
 		vm.state.contact.tags = tempTags;
 	};
+
+	function editContactDetails(){
+		vm.uiState.isEditMode = true;
+	}
 
     function init(element) {
         vm.element = element;

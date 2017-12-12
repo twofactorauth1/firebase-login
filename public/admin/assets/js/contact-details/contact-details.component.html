@@ -78,76 +78,96 @@
             <div class="contact-details-tab">
                 <tabset class="tabbable">
                     <tab heading="Contact Details">
-                        <div class="col-xs-7">
-                            <div class="details">
-                                <span class="full-name">
-                                    {{vm.state.fullName}}                                
-                                </span>
-                                <ul class="contact-tags" >
-                                    <li ng-repeat="tag in vm.state.contact.tags track by $index">
-                                        <a class="btn btn btn-o btn-primary">{{tag.label}}</a>
-                                    </li>
-                                </ul>
-                                <span>{{vm.state.contact.gender}}</span>
+                        <div ng-if="!vm.uiState.isEditMode">
+                            <div class="col-xs-7">
+                                <div class="details">
+                                    <span class="full-name">
+                                        {{vm.state.fullName}}                                
+                                    </span>
+                                    <ul class="contact-tags" >
+                                        <li ng-repeat="tag in vm.state.contact.tags track by $index">
+                                            <a class="btn btn btn-o btn-primary">{{tag.label}}</a>
+                                        </li>
+                                    </ul>
+                                    <span>{{vm.state.contact.gender}}</span>
+                                </div>
+                                <div class="details">
+                                    <span class="description">
+                                        email:
+                                    </span>
+                                    <span class="value">
+                                        {{vm.state.contact.details[0].emails[0].email}}
+                                    </span>
+                                </div>
+                                <div class="details">
+                                    <span class="description">
+                                        Phone:
+                                    </span>
+                                    <span class="value">
+                                        {{vm.state.contact.details[0].phones[0].number}}
+                                    </span>
+                                </div>
+                                <div class="details">
+                                    <span class="description">
+                                        Website URL:
+                                    </span>
+                                    <span class="value">
+                                        {{vm.state.contact.websiteUrl}}
+                                    </span>
+                                </div>
+                                <div class="details">
+                                    <span class="description">
+                                        Facebook URL:
+                                    </span>
+                                    <span class="value">
+                                        {{vm.state.contact.facebookUrl}}
+                                    </span>
+                                </div>
+                                <div class="details">
+                                    <span class="description">
+                                        Linkedin URL:
+                                    </span>
+                                    <span class="value">
+                                        {{vm.state.contact.linkedInUrl}}
+                                    </span>
+                                </div>
+                                <div class="details">
+                                    <span class="description">
+                                        Company Name:
+                                    </span>
+                                    <span class="value">
+                                        {{vm.state.contact.companyName}}
+                                    </span>
+                                </div>
                             </div>
-                            <div class="details">
-                                <span class="description">
-                                    email:
-                                </span>
-                                <span class="value">
-                                    {{vm.state.contact.details[0].emails[0].email}}
-                                </span>
-                            </div>
-                            <div class="details">
-                                <span class="description">
-                                    Phone:
-                                </span>
-                                <span class="value">
-                                    {{vm.state.contact.details[0].phones[0].number}}
-                                </span>
-                            </div>
-                            <div class="details">
-                                <span class="description">
-                                    Website URL:
-                                </span>
-                                <span class="value">
-                                    {{vm.state.contact.websiteUrl}}
-                                </span>
-                            </div>
-                            <div class="details">
-                                <span class="description">
-                                    Facebook URL:
-                                </span>
-                                <span class="value">
-                                    {{vm.state.contact.facebookUrl}}
-                                </span>
-                            </div>
-                            <div class="details">
-                                <span class="description">
-                                    Linkedin URL:
-                                </span>
-                                <span class="value">
-                                    {{vm.state.contact.linkedInUrl}}
-                                </span>
-                            </div>
-                            <div class="details">
-                                <span class="description">
-                                    Company Name:
-                                </span>
-                                <span class="value">
-                                    {{vm.state.contact.companyName}}
-                                </span>
+                            <div class="col-xs-5 address-pane">
+                                <button type="button" class="btn btn-primary btn-o pull-right btn btn-primary btn-o" ng-click="vm.editContactDetails()">
+                                    Add Or Edit
+                                </button>
+                                <div class="details">
+                                    <span class="description address-desc">
+                                        Address:
+                                    </span>
+                                    <span class="value address-value" ng-bind-html="vm.displayAddressFormat(vm.state.contact.details[0].addresses[0])">
+                                    </span>
+                                </div>                            
                             </div>
                         </div>
-                        <div class="col-xs-5 address-pane">
-                            <div class="details">
-                                <span class="description address-desc">
-                                    Address:
-                                </span>
-                                <span class="value address-value" ng-bind-html="vm.displayAddressFormat(vm.state.contact.details[0].addresses[0])">
-                                </span>
+                        <div ng-if="vm.uiState.isEditMode">
+                            <div class="col-xs-12">
+                                <div class="form-group col-xs-6">
+                                    <label class="control-label">
+                                        First Name
+                                    </label>
+                                   <input type="text" placeholder="First Name" class="form-control" ng-model="vm.state.contact.first">                                   
+                                </div>
+                                <div class="form-group col-xs-6">
+                                    <label class="control-label">
+                                        Last Name
+                                    </label>
+                                   <input type="text" placeholder="Last Name" class="form-control" ng-model="vm.state.contact.last">                                   
+                                </div>
                             </div>
-                            
                         </div>
                     </tab>
                     <tab heading="Devices/Browser">
