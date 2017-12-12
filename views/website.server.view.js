@@ -561,7 +561,10 @@ _.extend(view.prototype, BaseView.prototype, {
 
                 data.page = page;
                 data.account = value;
-                data.loadYoutubeLib = page.get('manifest')['loadYoutubeLib'] || true;
+                // data.loadYoutubeLib = page.get('manifest')['loadYoutubeLib'] || true;
+
+                //Temp fix till all scenarios checked.
+                data.loadYoutubeLib = true;
                 data.canonicalUrl = pageHolder[handle].canonicalUrl || null;
                 data.account.website.themeOverrides = data.account.website.themeOverrides ||{};
                 data.account.website.themeOverrides.styles = data.account.website.themeOverrides.styles || {};
