@@ -39,22 +39,6 @@
                             <highchart config="livePlatformTrafficConfig" id="live-platform-traffic-chart"></highchart>
                         </div>
                         <div class="height-215 col-sm-4">
-                            <style>
-                                .slick-prev:hover, 
-                                .slick-prev:focus,
-                                 .slick-next:hover,
-                                  .slick-next:focus { 
-                                        color: #8f8f8f;
-                                        outline: none; 
-                                        background: rgb(124, 181, 236);; 
-                                    }
-                                    .slick-prev,   
-                                  .slick-next { 
-                                        color: #8f8f8f;
-                                        outline: none; 
-                                        background:rgba(124, 181, 236, 0.5); 
-                                    }
-                                </style>
                             <div ind-slider='{  slidesToShow:1, arrows:true, autoplay:false, touchMove:true, draggable:true }'>
                                 <div id="live-platform-visitor-locations-us"></div>
                                 <div id="live-platform-visitor-locations-world"></div>
@@ -67,7 +51,7 @@
         </div>
     </div>
     <div class="clearfix"></div>
-    <live-status live="liveVisitorDetails" active="activeVisitorDetail" loading="livedataLoading" ></live-status> 
+    <live-status live="liveVisitorDetails" active="activeVisitorDetail" loading="livedataLoading" ></live-status>
     <div class="clearfix"></div>
     <div class="row">
         <div class="col-sm-12">
