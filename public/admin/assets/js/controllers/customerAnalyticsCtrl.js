@@ -131,42 +131,54 @@
             $scope.platformTrafficDetails();
 		});
 
-		function loadLivePlatformLocationChart(data) {
+		function loadLivePlatformLocationChart(data) {  
 			var livePlatformLocationsData = [];
-			if (data) {
-				var formattedLocations = [];
-				_.each(data, function (loc) {
-					if (loc['ip_geo_info.province']) {
-						formattedLocations.push(loc);
-					}
-				});
-				// $scope.mostPopularState = _.max(formattedLocations, function (o) {
-				//     return o.result;
-				// });
-				_.each(data, function (location) {
-					var _geo_info = ChartAnalyticsService.stateToAbbr(location['ip_geo_info.province']);
-					if (_geo_info) {
-						var subObj = {},
-							locationExists;
-						subObj.code = _geo_info;
-						subObj.value = location.result;
-						locationExists = _.find(livePlatformLocationsData, function (loc) {
-							return loc.code === location.code;
-						});
-						if (!locationExists && subObj.value) {
-							livePlatformLocationsData.push(subObj);
+			var livePlatformUSData = [];
+			if (data) { 
+					_.each(data, function (location) { 
+						if(location._id=="United States"){
+							_.each(data[0].provinces, function (location) {
+								var _geo_info = ChartAnalyticsService.stateToAbbr(location['name']);
+								if (_geo_info) {
+									var subObj = {},
+										locationExists;
+									subObj.code = _geo_info;
+									subObj.value = location.count;
+									locationExists = _.find(livePlatformUSData, function (loc) {
+										return loc.code === location.code;
+									});
+									if (!locationExists && subObj.value) {
+										livePlatformUSData.push(subObj);
+									}
+								}
+							});
 						}
-					}
-				});
+						var _geo_info = ChartAnalyticsService.countryToAbbr(location._id);
+						if (_geo_info && _geo_info != 'Unknown') {
+							var subObj = {},
+								locationExists;
+							subObj.code = _geo_info;
+							subObj.value = location.count;
+							locationExists = _.find(livePlatformLocationsData, function (loc) {
+								return loc.code === location.code;
+							});
+							if (!locationExists && subObj.value) {
+								livePlatformLocationsData.push(subObj);
+							}
+						}
+					}); 
 			}
+			//$scope.livePlatformLocationsData = livePlatformLocationsData;
 			$scope.livePlatformLocationsData = livePlatformLocationsData;
+			$scope.livePlatformUSData = livePlatformUSData;
 		}
 
 		$scope.$watch('livePlatformLocationsData', function (livePlatformLocationData, oldData) {
 			if (angular.isDefined(livePlatformLocationData) && !angular.equals(livePlatformLocationData, oldData)) {
 				$timeout(function () {
-					var livedata = angular.copy(livePlatformLocationData);
-					ChartAnalyticsService.visitorLocationsPlatform(livedata, Highcharts.maps['countries/us/us-all'], [], Highcharts.maps['custom/world']);
+					var livedata = angular.copy(livePlatformLocationData); 
+					ChartAnalyticsService.visitorLocationsWorldPlatform(livedata);
+					ChartAnalyticsService.visitorLocationsPlatform($scope.livePlatformUSData);
 				}, 200);
 			}
 		});
@@ -228,7 +240,7 @@
 					livePlatformLocationsData;
 				if (chart) {
 					chart.series[0].setData(_.pluck(platformData, 'count'), true);
-				}
+				} 
 				livePlatformLocationsData = platformData[0].locations;
 				loadLivePlatformLocationChart(livePlatformLocationsData);
 
