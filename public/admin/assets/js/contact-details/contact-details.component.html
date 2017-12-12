@@ -1,0 +1,155 @@
+<div class="container-fluid container-fullw">
+    <div class="bg-white" style="
+        border: 1px solid #eee;">
+        <!-- contact details pane -->
+        <div class="col-xs-12 col-sm-6 contact-details-left-pane">
+            <div class="contact-profile-stats">
+                <div class="margin-top-20">
+                    <div class="user-image col-xs-5">
+                        <div class="margin-bottom-5">
+                            <img ng-src="{{ vm.state.contact.photo }}" err-src="/admin/assets/images/default-user.png">
+                        </div>
+                    </div>
+                    <div class="col-xs-7">
+                        <h3>{{vm.state.fullName || 'No Contact Name'}}</h3>
+                        <span>{{vm.state.contact.companyName || '&nbsp;'}}</span>
+                        <div class="contact-social-icons">
+                            <ul class="">
+                                <li>
+                                    <a>
+                                       <span class="ti-world"></span>
+                                    </a> 
+                                </li>
+                                <li>
+                                    <a>
+                                       <span class="fa fa-linkedin btn-linkedin"></span>
+                                    </a> 
+                                </li>
+                                <li>
+                                    <a>
+                                       <span class="fa fa-facebook btn-facebook"></span>
+                                    </a>
+                                </li>
+                                <li></li>
+                            </ul>
+                        </div>
+                        <div class="account-info margin-top-30">
+                            <span>Account</span>: Indigenous
+                        </div>
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+                <div class="contact-stats col-xs-12 margin-top-20 margin-bottom-20">
+                    <div class="sessions">
+                        <span class="description">
+                            Sessions
+                        </span>
+                        <span class="value">4</span>
+                    </div>
+                    <div class="page-views">
+                        <span class="description">
+                            Page Views
+                        </span>
+                        <span class="value">18</span>
+                        
+                    </div>
+                    <div class="session-duration">
+                        <span class="description">
+                            Session Duration
+                        </span>
+                        <span class="value">4:18</span>
+                    </div>
+                    <div class="clicks">
+                        <span class="description">
+                            Clicks
+                        </span>
+                        <span class="value">34</span>
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+            
+            <div class="contact-attribution">
+                Under discussion
+                <div class="clearfix"></div>
+            </div>
+            
+            <div class="contact-details-tab">
+                <tabset class="tabbable">
+                    <tab heading="Contact Details">
+                        <div class="details">
+                            <span class="full-name">
+                                {{vm.state.fullName}}                                
+                            </span>
+                            <ul class="contact-tags" >
+                                <li ng-repeat="tag in vm.state.contact.tags track by $index">
+                                    <a class="btn btn btn-o btn-primary">{{tag.label}}</a>
+                                </li>
+                            </ul>
+                            <span>{{vm.state.contact.gender}}</span>
+                        </div>
+                        <div class="details">
+                            <span class="description">
+                                email:
+                            </span>
+                            <span class="value">
+                                {{vm.state.contact.details[0].emails[0].email}}
+                            </span>
+                        </div>
+                        <div class="details">
+                            <span class="description">
+                                Phone:
+                            </span>
+                            <span class="value">
+                                {{vm.state.contact.details[0].phones[0].number}}
+                            </span>
+                        </div>
+                        <div class="details">
+                            <span class="description">
+                                Website URL:
+                            </span>
+                            <span class="value">
+                                {{vm.state.contact.websiteUrl}}
+                            </span>
+                        </div>
+                        <div class="details">
+                            <span class="description">
+                                Facebook URL:
+                            </span>
+                            <span class="value">
+                                {{vm.state.contact.facebookUrl}}
+                            </span>
+                        </div>
+                        <div class="details">
+                            <span class="description">
+                                Linkedin URL:
+                            </span>
+                            <span class="value">
+                                {{vm.state.contact.linkedInUrl}}
+                            </span>
+                        </div>
+                        <div class="details">
+                            <span class="description">
+                                Company Name:
+                            </span>
+                            <span class="value">
+                                {{vm.state.contact.companyName}}
+                            </span>
+                        </div>
+                    </tab>
+                    <tab heading="Devices/Browser">
+                        Devices/Browser
+                    </tab>
+                    <tab heading="Location & Network">
+                        Location & Network
+                    </tab>
+                </tabset>
+            </div>
+        </div>
+        <!-- contact timeline/notes pane -->
+        <div class="col-xs-12 col-sm-6 contact-details-right-pane">
+            Contact activity goes here
+        </div>
+        <div class="clearfix"></div>
+    </div>
+</div>
