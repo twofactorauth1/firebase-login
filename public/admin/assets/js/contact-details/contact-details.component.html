@@ -1,12 +1,12 @@
 <div class="container-fluid container-fullw">
-    <div class="loading-contacts" ct-fullheight="window" data-ct-fullheight-exclusion="header" ng-if="vm.uiState.loading">
+    <div class="loading-contacts" ct-fullheight="window" data-ct-fullheight-exclusion="header" ng-show="vm.uiState.loading">
         <div class="col-xs-12">
             <h1 class="center"><span class="fa fa-spinner fa-spin"></span><br><br>
              Loading...
             </h1>
         </div>
     </div>
-    <div ng-if="!vm.uiState.loading" class="bg-white" style="
+    <div ng-show="!vm.uiState.loading" class="bg-white" style="
         border: 1px solid #eee;">
         <!-- contact details pane -->
         <div class="col-xs-12 col-sm-6 contact-details-left-pane">
@@ -399,7 +399,7 @@
                     </div>
                 </div>
             </div>
-            <contact-activity single-contact="true" current-page="1" num-per-page="10" contactId="{{vm.state.contactId}}"></contact-activity>
+            <contact-activity single-contact="true" current-page="1" num-per-page="10" contact-id="{{vm.state.contactId}}"></contact-activity>
         </div>
         <div class="clearfix"></div>
     </div>
