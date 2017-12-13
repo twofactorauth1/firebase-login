@@ -5,9 +5,10 @@
         <div class="col-xs-12 col-sm-6 contact-details-left-pane">
             <div class="contact-profile-stats">
                 <div class="margin-top-20">
-                    <div class="user-image col-xs-5">
+                    <div class="contact-image col-xs-5">
                         <div class="margin-bottom-5">
                             <img ng-src="{{ vm.state.contact.photo }}" err-src="/admin/assets/images/default-user.png">
+                            <span class="fa fa-2x fa-edit" ng-click="vm.openMediaModal()"></span>
                         </div>
                     </div>
                     <div class="col-xs-7">

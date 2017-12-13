@@ -100,6 +100,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.post(this.url('importcsv'), this.isAuthApi.bind(this), this.importCsvContacts.bind(this));
         app.get(this.url('export/csv'), this.isAuthApi.bind(this), this.exportCsvContacts.bind(this));
         app.post(this.url('import/csv'), this.secureauth.bind(this, {requiresSub:true, requiresPriv:'MODIFY_CONTACT'}), this.importCSV.bind(this));
+        app.post(this.url(':id/photo'), this.secureauth.bind(this, {requiresSub:true, requiresPriv:'MODIFY_CONTACT'}), this.updateContactPhoto.bind(this));
     },
 
     getMyIp: function(req, resp) {
@@ -257,6 +258,39 @@ _.extend(api.prototype, baseApi.prototype, {
             } else {
                 self.log.debug('contacts ', contact);
                 self.sendResult(resp, {ok:true})
+            }
+        });
+
+    },
+
+    updateContactPhoto: function (req, resp) {
+        var self = this;
+        self.log.debug('>> updateContactPhoto');
+        var accountId = parseInt(self.currentAccountId(req));
+
+        var url = req.body.url;
+        var contactId = req.params.id;
+        contactId = parseInt(contactId);
+        self.checkPermissionForAccount(req, self.sc.privs.MODIFY_CONTACT, accountId, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(resp);
+            } else {
+                contactDao.getContactById(accountId, contactId, function(err, contact) {
+                    self.log.debug('<< getContactById');
+                    if(!err && !contact) {
+                        self.wrapError(resp, 404, null, 'Contact not found.', 'Contact not found.');
+                    }else {
+                        contact.set("photo", url);
+                        contactDao.saveOrUpdateContact(contact, function (err, value) {
+                            if (!err) {
+                                self.log.debug('>> saveOrUpdate', value);
+                                self.sendResult(resp, value);                                
+                            } else {
+                                self.wrapError(resp, 500, "There was an error updating contact", err, value);
+                            }
+                        });
+                    }
+                });
             }
         });
 

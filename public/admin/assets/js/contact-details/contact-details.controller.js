@@ -2,9 +2,9 @@
 
 app.controller('ContactDetailsController', contactDetailsController);
 
-contactDetailsController.$inject = ['$scope', '$state', '$stateParams', '$attrs', '$filter', '$document', '$timeout', 'toaster', 'ContactService', 'CommonService'];
+contactDetailsController.$inject = ['$scope', '$state', '$modal', '$stateParams', '$attrs', '$filter', '$document', '$timeout', 'toaster', 'ContactService', 'CommonService'];
 /* @ngInject */
-function contactDetailsController($scope, $state, $stateParams, $attrs, $filter, $document, $timeout, toaster, ContactService, CommonService) {
+function contactDetailsController($scope, $state, $modal, $stateParams, $attrs, $filter, $document, $timeout, toaster, ContactService, CommonService) {
 
     console.info('contact-details directive init...')
 
@@ -35,6 +35,8 @@ function contactDetailsController($scope, $state, $stateParams, $attrs, $filter,
     vm.removeAddress = removeAddress;
     vm.contactAddAddressFn = contactAddAddressFn;
     vm.saveContactDetails = saveContactDetails;
+    vm.openMediaModal = openMediaModal;
+    vm.insertPhoto = insertPhoto;
     function loadContactDetails(){
     	ContactService.getContact(vm.state.contactId, function (contact, error) {
     		vm.state.contact = contact;
@@ -151,6 +153,44 @@ function contactDetailsController($scope, $state, $stateParams, $attrs, $filter,
 			status = true;
 		return status;
 	};
+
+
+	function openMediaModal () {
+		vm.showInsert = true;
+		vm.modalInstance = $modal.open({
+			templateUrl: 'media-modal',
+			controller: 'MediaModalCtrl',
+			keyboard: true,
+			backdrop: 'static',
+			size: 'lg',
+			resolve: {
+				showInsert: function () {
+					return vm.showInsert;
+				},
+				insertMedia: function () {
+					return vm.insertPhoto;
+				},
+				isSingleSelect: function () {
+					return true;
+				}
+			}
+		});
+	};
+
+	function insertPhoto(asset) {
+		vm.state.contact.photo = asset.url;
+		updateContactPhoto(asset.url);
+	};
+
+	function updateContactPhoto(url){
+		ContactService.updateContactPhoto(vm.state.contactId, url, function(data){
+			if(data){
+				vm.state.contact.photo = data.url;
+				vm.state.originalContact.photo = data.url;
+				toaster.pop('success', 'Image updated.');
+			}
+		})
+	}
 
 	function saveContactDetails(){
 		vm.uiState.saveLoading = true;

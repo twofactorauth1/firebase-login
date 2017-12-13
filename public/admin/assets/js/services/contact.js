@@ -151,6 +151,26 @@
                 });
         };
 
+
+        this.updateContactPhoto = function (contactId, url, fn) {
+            var contacts = this.getCache().get('contacts');
+
+            var apiUrl = baseUrl + ['contact', contactId, 'photo'].join('/');
+            $http.post(apiUrl, {url: url})
+                .success(function (data) {
+                    if (contacts) {
+                        contacts.forEach(function (value, index) {
+                            if (value._id === contactId) {
+                                contacts[index] = data;
+                            }
+                        });
+                        cache.put('contacts', contacts);
+                    }
+                    fn(data);
+                });
+        };
+
+
         this.putContact = function (cache, contact, fn) {
             var contacts = cache.get('contacts');
 
