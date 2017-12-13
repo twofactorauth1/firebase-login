@@ -54,7 +54,7 @@
             $scope.selectedDate = {
                 startDate: _startDate.startOf('day'),
                 endDate: _endDate
-            };  
+            };
 
             $scope.pickerOptions = {
                 startDate: _startDate.toDate(),
@@ -69,10 +69,10 @@
                     'This Month': [moment().startOf('month'), moment().endOf('month')],
                     'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
                 }
-            };        
+            };
         }
 
-        
+
 
         $scope.Math = Math;
 
@@ -103,7 +103,7 @@
                     $scope.runAnalyticsReports();
                 }
                 dateSwitch = true;
-            }    
+            }
         });
 
 
@@ -191,19 +191,24 @@
             if (result0) {
                 var _formattedLocations = [];
                 _.each(result0, function (loc) {
+                    if(loc._id === 'United States') {
+                        _formattedLocations = _formattedLocations.concat(loc.provinces);
+                    }
+                    /*
                     if (loc['ip_geo_info.province']) {
                         _formattedLocations.push(loc);
                     }
+                    */
                 });
                 $scope.mostPopularState = _.max(_formattedLocations, function (o) {
-                    return o.result;
+                    return o.count;
                 });
-                _.each(result0, function (location) {
-                    var _geo_info = ChartAnalyticsService.stateToAbbr(location['ip_geo_info.province']);
+                _.each(_formattedLocations, function (location) {
+                    var _geo_info = ChartAnalyticsService.stateToAbbr(location['name']);
                     if (_geo_info) {
                         var subObj = {};
                         subObj.code = _geo_info;
-                        subObj.value = location.result;
+                        subObj.value = location.count;
                         var locationExists = _.find(locationData, function (loc) {
                             return loc.code === location.code;
                         });
@@ -457,20 +462,25 @@
             if (results.visitorLocationsReport) {
                 var _formattedLocations = [];
                 _.each(results.visitorLocationsReport, function (loc) {
+                    if(loc._id === 'United States') {
+                        _formattedLocations = _formattedLocations.concat(loc.provinces);
+                    }
+                    /*
                     if (loc['ip_geo_info.province']) {
                         _formattedLocations.push(loc);
                     }
+                    */
                 });
                 $scope.mostPopularState = _.max(_formattedLocations, function (o) {
-                    return o.result;
+                    return o.count;
                 });
 
-                _.each(results.visitorLocationsReport, function (location) {
-                    var _geo_info = ChartAnalyticsService.stateToAbbr(location['ip_geo_info.province']);
+                _.each(_formattedLocations, function (location) {
+                    var _geo_info = ChartAnalyticsService.stateToAbbr(location['name']);
                     if (_geo_info) {
                         var subObj = {};
                         subObj.code = _geo_info;
-                        subObj.value = location.result;
+                        subObj.value = location.count;
                         var locationExists = _.find(locationData, function (loc) {
                             return loc.code === location.code;
                         });
@@ -487,7 +497,7 @@
                         _formattedCountryLocations.push(loc);
                     }
                 });
-                
+
                 $scope.mostPopularCountry = _.max(_formattedCountryLocations, function(o){
                     return o.result;
                 });
@@ -658,7 +668,7 @@
             // Cleanup
             //=======================================
             $scope.locationData = locationData;
-            
+
             $scope.locationLabel = 'States';
             $scope.locationsLength = locationData.length;
             $scope.mostPopularLabel = $scope.mostPopularState['ip_geo_info.province'];
@@ -668,7 +678,7 @@
             $scope.locationLabelCountry = 'Countries';
             $scope.locationsLengthCountry = $scope.countryLocationData.length;
             $scope.mostPopularLabelCountry = $scope.mostPopularCountry['ip_geo_info.country'];
-            
+
             $scope.displayVisitors = $scope.visitors > 0;
 
             $scope.renderAnalyticsCharts();
@@ -882,8 +892,8 @@
 
 
         $scope.$on('$renderSingleCustomerAnalytics', function(event, args) {
-            $timeout(function() {                
-                if(!$scope.loadCharts){                  
+            $timeout(function() {
+                if(!$scope.loadCharts){
                     CustomerService.getSingleCustomer($stateParams.customerId, function(err, customer){
                         if(customer.created && customer.created.date)
                         {
@@ -898,14 +908,14 @@
                         $scope.runAnalyticsReports();
                     })
                 }
-                
+
             }, 0);
             reflowCharts();
         });
 
 
         function reflowCharts(){
-            window.Highcharts.charts.forEach(function(chart){                
+            window.Highcharts.charts.forEach(function(chart){
                 $timeout(function() {
                     if(angular.isDefined(chart) && Object.keys(chart).length)
                         chart.reflow();
@@ -1035,7 +1045,7 @@
             legend = legend.replace(/ /g, "_");
             AnalyticsWidgetStateService.setCustomerAnalyticsWidgetStates(legend, value);
         }
-            
+
 
     }]);
 }(angular));
