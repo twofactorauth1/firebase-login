@@ -4432,17 +4432,16 @@ module.exports = {
                 });
                 var fontMap= {};
                 var componentMap = {};
-                var video_component_count = 0;
+                var loadYoutubeLib = false;
                 async.eachSeries(components, function(component, callback){
                     if(component) {
-                        if(video_component_count === 0){
+
+                        if(loadYoutubeLib === false){
                             if(component.type === 'video' || component.type === 'video-gallery'){
-                                   video_component_count++;
+                                   loadYoutubeLib = true;
                             }
                             else{
-                                if(component.text && component.text.indexOf('youtube') !== -1 || component.title && component.title.indexOf('youtube') !== -1){
-                                   video_component_count++;
-                                 }
+                                   loadYoutubeLib = self._checkForYoutube(component);
                             }
                         }
 
@@ -4525,22 +4524,21 @@ module.exports = {
                     }
 
                 }, function done(err){
-                    var isVideo = (video_component_count === 0) ? false : true;
                     self.log.debug('The following fonts are used:', fontMap);
-                    cb(null, page, components, fontMap, componentMap, isVideo);
+                    cb(null, page, components, fontMap, componentMap, loadYoutubeLib);
                 });
             },
-            function(page, componentAry, fontMap, componentMap, isVideo,cb) {
+            function(page, componentAry, fontMap, componentMap, loadYoutubeLib,cb) {
                 pageCacheManager.getS3TemplateContent(accountId, handle, function(err, value){
-                    cb(null, page, componentAry, fontMap, componentMap, value, isVideo);
+                    cb(null, page, componentAry, fontMap, componentMap, value, loadYoutubeLib);
                 });
             },
-            function(page, componentAry, fontMap, componentMap, template, isVideo, cb) {
+            function(page, componentAry, fontMap, componentMap, template, loadYoutubeLib, cb) {
                 var manifest = {
                     fonts:fontMap,
                     components:componentMap,
                     template:template,
-                    loadYoutubeLib : isVideo
+                    loadYoutubeLib : loadYoutubeLib
 
                 };
                 cb(null, manifest, page);
@@ -4571,6 +4569,29 @@ module.exports = {
     _getFontNameFromString: function(string){
         if(string)
             return string.trim().replace('\'', '').replace('\'', '').replace('"', '').replace('"','').split(",")[0];
-    }
+    },
+    _checkForYoutube : function(component){
+        var isVideo = false;
+        var youTubeRegex = /(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|[a-zA-Z0-9_\-]+\?v=)([^#\&\?\n<>\'\"]*)/gi;
+        for (var key in component) {
+            if (component.hasOwnProperty(key) && isVideo === false) {
+                if(typeof component[key] !== 'object'){
+                    var current_value = component[key];
+                        if(current_value !== ""){
+                            current_value = current_value.toString();
+                            if(youTubeRegex.test(current_value) === true){
+                                isVideo = true;
+                            }
+
+                         }
+
+
+                }
+
+            }
+
+        }
+          return isVideo;
+        }
 
 };
