@@ -179,7 +179,7 @@
 
 
         function loadLocationChart(data){
-            var locationData = [];
+           /* var locationData = [];
             if (data) {
                 var _formattedLocations = [];
                 _.each(data, function (loc) {
@@ -206,17 +206,58 @@
                 });
             }
             $scope.locationData = locationData;
+            */
+            var livePlatformLocationsData = [];
+			var livePlatformUSData = [];
+			if (data) {
+					_.each(data, function (location) {
+						if(location._id=="United States"){
+							_.each(data[0].provinces, function (location) {
+								var _geo_info = ChartAnalyticsService.stateToAbbr(location['name']);
+								if (_geo_info) {
+									var subObj = {},
+										locationExists;
+									subObj.code = _geo_info;
+									subObj.value = location.count;
+									locationExists = _.find(livePlatformUSData, function (loc) {
+										return loc.code === location.code;
+									});
+									if (!locationExists && subObj.value) {
+										livePlatformUSData.push(subObj);
+									}
+								}
+							});
+						}
+						var _geo_info = ChartAnalyticsService.countryToAbbr(location._id);
+						if (_geo_info && _geo_info != 'Unknown') {
+							var subObj = {},
+								locationExists;
+							subObj.code = _geo_info;
+							subObj.value = location.count;
+							locationExists = _.find(livePlatformLocationsData, function (loc) {
+								return loc.code === location.code;
+							});
+							if (!locationExists && subObj.value) {
+								livePlatformLocationsData.push(subObj);
+							}
+						}
+					});
+			}
+			//$scope.livePlatformLocationsData = livePlatformLocationsData;
+			$scope.livePlatformLocationsData = livePlatformLocationsData;
+			$scope.livePlatformUSData = livePlatformUSData;
         }
 
-        $scope.$watch('locationData',  function (locationData, oldData) {
-            if(angular.isDefined(locationData) && !angular.equals(locationData, oldData)){
-                $timeout(function () {
-                    var _data = angular.copy(locationData);
-                    ChartAnalyticsService.visitorLocationsDOHY(_data, Highcharts.maps['countries/us/us-all'], [], Highcharts.maps['custom/world']);
-                }, 200);
-            }
+        $scope.$watch('livePlatformLocationsData', function (livePlatformLocationData, oldData) {
+			if (angular.isDefined(livePlatformLocationData) && !angular.equals(livePlatformLocationData, oldData)) {
+				$timeout(function () {
+					var livedata = angular.copy(livePlatformLocationData);
+					ChartAnalyticsService.visitorLocationsWorldPlatform(livedata);
+					ChartAnalyticsService.visitorLocationsPlatform($scope.livePlatformUSData);
+				}, 200);
+			}
         });
-
+        
         $scope.$watch(function() { return DashboardService.liveTraffic;}, function(liveTraffic){
             if(liveTraffic && liveTraffic.length > 0) {
                 if(!$scope.liveTrafficConfig) {
