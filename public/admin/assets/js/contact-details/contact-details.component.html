@@ -1,5 +1,12 @@
 <div class="container-fluid container-fullw">
-    <div class="bg-white" style="
+    <div class="loading-editor" ct-fullheight="window" data-ct-fullheight-exclusion="header" ng-if="vm.uiState.loading">
+        <div class="col-xs-12">
+            <h1 class="center"><span class="fa fa-spinner fa-spin"></span><br><br>
+             Loading...
+            </h1>
+        </div>
+    </div>
+    <div ng-if="!vm.uiState.loading" class="bg-white" style="
         border: 1px solid #eee;">
         <!-- contact details pane -->
         <div class="col-xs-12 col-sm-6 contact-details-left-pane">
@@ -158,10 +165,10 @@
                             <form action="#" name="form" role="form" id="form">
                                 <div class="col-xs-12">
                                     <div class="col-xs-12">
-                                        <button type="button" class="btn btn-primary btn-o pull-right btn btn-primary btn-o" ng-click="vm.cancelContactDetails()">
+                                        <button type="button" ng-disabled="vm.uiState.saveLoading" class="btn btn-primary btn-o pull-right btn btn-primary btn-o" ng-click="vm.cancelContactDetails()">
                                             Cancel
                                         </button>
-                                        <button type="button" class="btn btn-primary btn-o pull-right btn btn-primary btn-o margin-right-5" ng-click="vm.saveContactDetails()">
+                                        <button type="button" ng-disabled="vm.uiState.saveLoading" class="btn btn-primary btn-o pull-right btn btn-primary btn-o margin-right-5" ng-click="vm.saveContactDetails()">
                                             Save
                                         </button>
                                         
