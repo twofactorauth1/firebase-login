@@ -31,13 +31,13 @@
 		$scope.Math = Math;
 		function updateLiveDetailObject(liveVisitorDetails){
 			$scope.liveVisitorDetails=[];
-			_.each(liveVisitorDetails, function(detail){ 
-				var server_time =new Date(); 
+			_.each(liveVisitorDetails, function(detail){
+				var server_time =new Date();
 				if( detail.pageEvents.length>0){
-					server_time =moment(detail.pageEvents[0].pageTime)._d; 
-				} 
+					server_time =moment(detail.pageEvents[0].pageTime)._d;
+				}
 				_.each(detail.pageEvents, function(evn){
-					if(evn.activityType== 'CONTACT_FORM'){ 
+					if(evn.activityType== 'CONTACT_FORM'){
 						_.map(evn.extraFields, function (value, key) {
 							if(key.toLowerCase()=='name'){
 								detail.name=value +" "+(evn.extraFields.last?evn.extraFields.last:"");
@@ -45,12 +45,12 @@
 								detail.email=value
 							}
 						});
-					} 
-				  }); 
+					}
+				  });
 				  var difference = new Date().getTime()-server_time.getTime() ;
-				  var sec=Math.round((difference / 1000) % 60) 
+				  var sec=Math.round((difference / 1000) % 60)
 				  detail.resultInMinutes = Math.round(difference / 60000)+(sec<10?":0"+sec:":"+sec);
-				  
+
 				  $scope.liveVisitorDetails.push(detail);
 			});
 		}
@@ -133,40 +133,52 @@
 
 		function loadLivePlatformLocationChart(data) {
 			var livePlatformLocationsData = [];
+			var livePlatformUSData = [];
 			if (data) {
-				var formattedLocations = [];
-				_.each(data, function (loc) {
-					if (loc['ip_geo_info.province']) {
-						formattedLocations.push(loc);
-					}
-				});
-				// $scope.mostPopularState = _.max(formattedLocations, function (o) {
-				//     return o.result;
-				// });
-				_.each(data, function (location) {
-					var _geo_info = ChartAnalyticsService.stateToAbbr(location['ip_geo_info.province']);
-					if (_geo_info) {
-						var subObj = {},
-							locationExists;
-						subObj.code = _geo_info;
-						subObj.value = location.result;
-						locationExists = _.find(livePlatformLocationsData, function (loc) {
-							return loc.code === location.code;
-						});
-						if (!locationExists && subObj.value) {
-							livePlatformLocationsData.push(subObj);
+					_.each(data, function (location) {
+						if(location._id=="United States"){
+							_.each(data[0].provinces, function (location) {
+								var _geo_info = ChartAnalyticsService.stateToAbbr(location['name']);
+								if (_geo_info) {
+									var subObj = {},
+										locationExists;
+									subObj.code = _geo_info;
+									subObj.value = location.count;
+									locationExists = _.find(livePlatformUSData, function (loc) {
+										return loc.code === location.code;
+									});
+									if (!locationExists && subObj.value) {
+										livePlatformUSData.push(subObj);
+									}
+								}
+							});
 						}
-					}
-				});
+						var _geo_info = ChartAnalyticsService.countryToAbbr(location._id);
+						if (_geo_info && _geo_info != 'Unknown') {
+							var subObj = {},
+								locationExists;
+							subObj.code = _geo_info;
+							subObj.value = location.count;
+							locationExists = _.find(livePlatformLocationsData, function (loc) {
+								return loc.code === location.code;
+							});
+							if (!locationExists && subObj.value) {
+								livePlatformLocationsData.push(subObj);
+							}
+						}
+					});
 			}
+			//$scope.livePlatformLocationsData = livePlatformLocationsData;
 			$scope.livePlatformLocationsData = livePlatformLocationsData;
+			$scope.livePlatformUSData = livePlatformUSData;
 		}
 
 		$scope.$watch('livePlatformLocationsData', function (livePlatformLocationData, oldData) {
 			if (angular.isDefined(livePlatformLocationData) && !angular.equals(livePlatformLocationData, oldData)) {
 				$timeout(function () {
 					var livedata = angular.copy(livePlatformLocationData);
-					ChartAnalyticsService.visitorLocationsPlatform(livedata, Highcharts.maps['countries/us/us-all'], [], Highcharts.maps['custom/world']);
+					ChartAnalyticsService.visitorLocationsWorldPlatform(livedata);
+					ChartAnalyticsService.visitorLocationsPlatform($scope.livePlatformUSData);
 				}, 200);
 			}
 		});
@@ -189,7 +201,7 @@
         $scope.platformTrafficDetails = function() {
             ChartAnalyticsService.getPlatformTrafficDetails(function (liveVisitorDetails) {
 				updateLiveDetailObject(liveVisitorDetails);
-				
+
                 if(liveVisitorDetails && liveVisitorDetails.length){
                     $scope.setActiveVisitorIndex(0, true);
 				}
@@ -220,7 +232,7 @@
                 $scope.activeVisitorDetail = $scope.liveVisitorDetails[index];
             }
 
-        }
+        };
 
 		$scope.updatePlatformTraffic = function () {
 			ChartAnalyticsService.getPlatformTraffic(function (platformData) {
@@ -435,29 +447,33 @@
 						formattedLocations = [],
 						formattedCountryLocations = [];
 					_.each(visitorLocations, function (loc) {
-						if (loc['ip_geo_info.province']) {
-							formattedLocations.push(loc);
-						}
+					    if(loc._id === 'United States') {
+					        formattedLocations = formattedLocations.concat(loc.provinces);
+                        }
+
 					});
 					$scope.mostPopularState = _.max(formattedLocations, function (o) {
-						return o.result;
+						return o.count;
 					});
-
-					_.each(visitorLocations, function (location) {
-						var _geo_info = ChartAnalyticsService.stateToAbbr(location['ip_geo_info.province']);
+                    //console.log('Before each', formattedLocations);
+					_.each(formattedLocations, function (location) {
+						var _geo_info = ChartAnalyticsService.stateToAbbr(location['name']);
 						if (_geo_info) {
 							var subObj = {},
 								locationExists;
 							subObj.code = _geo_info;
-							subObj.value = location.result;
+							subObj.value = location.count;
+
 							locationExists = _.find(locationData, function (loc) {
-								return loc.code === location.code;
+								return loc.name === location.name;
 							});
+
 							if (!locationExists && subObj.value) {
 								locationData.push(subObj);
 							}
 						}
 					});
+                    //console.log('After each:', formattedLocations);
 
 					_.each(visitorLocationsByCountry, function (loc) {
 						if (loc['ip_geo_info.country'] && loc['ip_geo_info.country'] != "Unknown") {
@@ -486,7 +502,7 @@
 
 					$scope.locationLabel = 'States';
 					$scope.locationsLength = locationData.length;
-					$scope.mostPopularLabel = $scope.mostPopularState['ip_geo_info.province'];
+					$scope.mostPopularLabel = $scope.mostPopularState['name'];
 
 					// Country based
 					$scope.countryLocationData = countryLocationData;
