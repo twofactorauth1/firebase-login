@@ -4572,14 +4572,14 @@ module.exports = {
     },
     _checkForYoutube : function(component){
         var isVideo = false;
-        var youTubeRegex = /(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|[a-zA-Z0-9_\-]+\?v=)([^#\&\?\n<>\'\"]*)/gi;
+        var youTubeRegex = /(youtu.be\/|v\/|u\/\w\/|youtube.com\/|watch\?v=|[a-zA-Z0-9_\-]+\?v=)([^#\&\?\n<>\'\"]*)/gi;
         for (var key in component) {
             if (component.hasOwnProperty(key) && isVideo === false) {
                 if(typeof component[key] !== 'object'){
                     var current_value = component[key];
                         if(current_value !== ""){
                             current_value = current_value.toString();
-                            if(youTubeRegex.test(current_value) === true){
+                            if(current_value.match(youTubeRegex) !== null){
                                 isVideo = true;
                             }
 
