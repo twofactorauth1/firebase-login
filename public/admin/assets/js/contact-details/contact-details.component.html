@@ -156,6 +156,15 @@
                         <div ng-if="vm.uiState.isEditMode" class="edit-contact-info">
                             <form action="#" name="form" role="form" id="form">
                                 <div class="col-xs-12">
+                                    <div class="col-xs-12">
+                                        <button type="button" class="btn btn-primary btn-o pull-right btn btn-primary btn-o" ng-click="vm.cancelContactDetails()">
+                                            Cancel
+                                        </button>
+                                        <button type="button" class="btn btn-primary btn-o pull-right btn btn-primary btn-o margin-right-5" ng-click="vm.saveContactDetails()">
+                                            Save
+                                        </button>
+                                        
+                                    </div>
                                     <div class="form-group col-xs-6">
                                         <label class="control-label">
                                             First Name

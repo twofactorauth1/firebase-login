@@ -20,6 +20,7 @@ function contactDetailsController($scope, $state, $stateParams, $attrs, $filter,
 
     vm.displayAddressFormat = displayAddressFormat;
     vm.editContactDetails = editContactDetails;
+    vm.cancelContactDetails = cancelContactDetails;
     vm.tagToContact = tagToContact;
     vm.showAddEmail = showAddEmail;
     vm.removeEmail = removeEmail;
@@ -33,12 +34,14 @@ function contactDetailsController($scope, $state, $stateParams, $attrs, $filter,
     vm.showAddAddress = showAddAddress;
     vm.removeAddress = removeAddress;
     vm.contactAddAddressFn = contactAddAddressFn;
+    vm.saveContactDetails = saveContactDetails;
     function loadContactDetails(){
     	ContactService.getContact(vm.state.contactId, function (contact, error) {
     		vm.state.contact = contact;
     		vm.state.fullName = [vm.state.contact.first, vm.state.contact.middle, vm.state.contact.last].join(' ').trim();
     		setTags();
     		setDefaults();
+    		vm.state.originalContact = angular.copy(vm.state.contact);
     		vm.uiState.loading = false;
     	})    	
     }
@@ -106,9 +109,113 @@ function contactDetailsController($scope, $state, $stateParams, $attrs, $filter,
 		vm.state.contact.tags = tempTags;
 	};
 
+	function unsetTags() {
+		var tempTags = [];
+		vm.state.contact_data = angular.copy(vm.state.contact);
+		_.each(vm.state.contact_data.tags, function (tag) {
+			tempTags.push(tag.data);
+		});
+		if (tempTags) {
+			vm.state.contact_data.tags = _.uniq(tempTags);
+		}
+	};
+
 	function editContactDetails(){
 		vm.uiState.isEditMode = true;
 	}
+
+	function cancelContactDetails(){
+		vm.uiState.isEditMode = false;	
+	}
+
+	/*
+	 * @checkContactValidity
+	 * -
+	 */
+
+	function checkContactValidity() {
+		var fullName = [vm.state.contact.first, vm.state.contact.middle, vm.state.contact.last].join(' ').trim();
+		var email = _.filter(vm.state.contact.details[0].emails, function (mail) {
+			return mail.email !== "";
+		});
+		if ((angular.isDefined(fullName) && fullName !== "") || email.length > 0) {
+			return true;
+		}
+	};
+
+	function inValidateTags () {
+		var status = false;
+		if (!vm.state.contact_data.tags)
+			status = true;
+		else if (!vm.state.contact_data.tags.length)
+			status = true;
+		return status;
+	};
+
+	function saveContactDetails(){
+		vm.uiState.saveLoading = true;
+
+		if (checkContactValidity()) {
+
+			unsetTags();
+
+			if (inValidateTags()) {
+				vm.uiState.saveLoading = false;
+				toaster.pop('warning', 'Please add at least one tag.');
+				return;
+			}
+
+			if (vm.state.contact_data.details) {
+				for (var i = 0; i < vm.state.contact_data.details.length; i++) {
+					if (vm.state.contact_data.details[i].emails) {
+						for (var j = 0; j < vm.state.contact_data.details[i].emails.length; j++) {
+							vm.state.contact_data.details[i].emails[j].email = vm.state.contact_data.details[i].emails[j].email.toLowerCase();
+						}
+					}
+				}
+			}
+			ContactService.checkDuplicateEmail(vm.state.contact_data.details[0].emails[0].email, true, function (data) {
+				if (vm.state.originalContact && !angular.equals(vm.state.contact_data.details[0].emails[0].email, vm.state.originalContact.details[0].emails[0].email) && data && data.length && (data.length > 1 || data[0]._id != vm.state.contact_data._id)) {
+					console.log("duplicate email");
+					SweetAlert.swal({
+						title: "Duplicate Email",
+						text: "Email Already exists, Do you want to continue with changes?",
+						type: "warning",
+						showCancelButton: true,
+						confirmButtonColor: "#DD6B55",
+						confirmButtonText: "Yes, save the changes!",
+						cancelButtonText: "No, do not save the changes!",
+						closeOnConfirm: true,
+						closeOnCancel: true
+					}, function (isConfirm) {
+						if (isConfirm) {
+							saveContactChanges();
+						} else {
+							vm.uiState.saveLoading = false;
+						}
+					});
+				} else {
+					saveContactChanges();
+				}
+			});
+			
+		} else {
+			vm.uiState.saveLoading = false;
+			toaster.pop('warning', 'Contact Name OR Email is required');				
+		}
+	}
+
+
+	function saveContactChanges() {
+		ContactService.saveContact(vm.state.contact_data, function (contact) {
+			vm.state.contact = contact;
+			setDefaults();
+			setTags();
+			vm.uiState.saveLoading = false;
+			vm.state.originalContact = angular.copy(vm.state.contact);
+			toaster.pop('success', 'Contact Saved.');
+		});
+	};
 
 	function tagToContact(value) {
 		return ContactService.tagToContact(value);
