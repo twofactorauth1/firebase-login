@@ -271,15 +271,21 @@ var mainApp = angular
         var runningInterval,
 			isPreview = $location.$$path.indexOf("/preview/") === 0,
 			editorIndex = window.location.search.indexOf("editor=true"),
-            newAnalytics = window.location.search.indexOf('newAnalytics=true');
+            newAnalytics = false;
+
         if (editorIndex == -1 && !isPreview) {
-            if(newAnalytics >=0) {
-                analyticsService.collect(null, function () {
-                });
-            } else {
-                analyticsService.sessionStart(function () {
-                });
-            }
+            analyticsService.getAccountData(function(err, data){
+                (err === null) ? newAnalytics = data.showhide && data.showhide.newAnalytics || false : newAnalytics = false;
+                if(newAnalytics === true) {
+                        console.log('new analytics.');
+                        analyticsService.collect(null, function () {
+                        });
+                } else {
+                        console.log('old analytics.');
+                        analyticsService.sessionStart(function () {
+                        });
+                }
+            });
 
         }
 
@@ -314,7 +320,10 @@ var mainApp = angular
 
             $rootScope.isSocialEnabled = $location.absUrl().search(/\/blog\/.+/) !== -1;
             if (editorIndex == -1 && !isPreview) {
-                if(newAnalytics >=0) {
+                analyticsService.getAccountData(function(err, data){
+                (err === null) ? newAnalytics = data.showhide && data.showhide.newAnalytics || false : newAnalytics = false;
+                if(newAnalytics === true) {
+                    console.log('new collect');
                     analyticsService.collectPage(true, function(){
                         clearInterval(runningInterval);
 
@@ -332,6 +341,7 @@ var mainApp = angular
                         }, 30000);
                     });
                 } else {
+                    console.log('old collect');
                     analyticsService.pageStart(function () {
 
                         analyticsService.pagePing();
@@ -349,7 +359,7 @@ var mainApp = angular
                         }, 15000);
                     });
                 }
-
+              });
             }
         });
 
