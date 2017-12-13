@@ -120,7 +120,7 @@
                                         Facebook URL:
                                     </span>
                                     <span class="value">
-                                        {{vm.state.contact.facebookUrl}}
+                                        {{vm.state.contact.details[0].facebookUrl}}
                                     </span>
                                 </div>
                                 <div class="details">
@@ -128,7 +128,7 @@
                                         Linkedin URL:
                                     </span>
                                     <span class="value">
-                                        {{vm.state.contact.linkedInUrl}}
+                                        {{vm.state.contact.details[0].linkedinUrl}}
                                     </span>
                                 </div>
                                 <div class="details">
@@ -136,7 +136,7 @@
                                         Company Name:
                                     </span>
                                     <span class="value">
-                                        {{vm.state.contact.companyName}}
+                                        {{vm.state.contact.details[0].company}}
                                     </span>
                                 </div>
                             </div>
@@ -153,21 +153,187 @@
                                 </div>                            
                             </div>
                         </div>
-                        <div ng-if="vm.uiState.isEditMode">
-                            <div class="col-xs-12">
-                                <div class="form-group col-xs-6">
-                                    <label class="control-label">
-                                        First Name
-                                    </label>
-                                   <input type="text" placeholder="First Name" class="form-control" ng-model="vm.state.contact.first">                                   
+                        <div ng-if="vm.uiState.isEditMode" class="edit-contact-info">
+                            <form action="#" name="form" role="form" id="form">
+                                <div class="col-xs-12">
+                                    <div class="form-group col-xs-6">
+                                        <label class="control-label">
+                                            First Name
+                                        </label>
+                                       <input type="text" placeholder="First Name" class="form-control" ng-model="vm.state.contact.first">                                   
+                                    </div>
+                                    <div class="form-group col-xs-6">
+                                        <label class="control-label">
+                                            Last Name
+                                        </label>
+                                       <input type="text" placeholder="Last Name" class="form-control" ng-model="vm.state.contact.last">          
+                                    </div>
+                                    <div class="form-group col-xs-6">
+                                        <label class="control-label">
+                                            Middle Name
+                                        </label>
+                                       <input type="text" placeholder="Middle Name" class="form-control" ng-model="vm.state.contact.middle">
+                                    </div>
+                                    <div class="form-group col-xs-6">
+                                        <label class="control-label">
+                                            Gender
+                                        </label>
+                                        <div class="clip-radio radio-primary">
+                                            <input type="radio" ng-checked="vm.state.contact.gender.toLowerCase() == 'female'" id="us-female" name="gender" value="female" ng-model="vm.state.contact.gender">
+                                            <label for="us-female">
+                                                Female
+                                            </label>
+                                            <input type="radio" ng-checked="vm.state.contact.gender.toLowerCase() == 'male'" id="us-male" name="gender" value="male" ng-model="vm.state.contact.gender">
+                                            <label for="us-male">
+                                                Male
+                                            </label>
+                                            <input type="radio" ng-checked="vm.state.contact.gender.toLowerCase() == 'other'" id="us-other" name="gender" value="other" ng-model="vm.state.contact.gender">
+                                            <label for="us-other">
+                                                Other
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-xs-12">
+                                        <label class="control-label">
+                                            Tags
+                                        </label>
+                                        <ui-select tagging="vm.tagToContact" tagging-match-to-key="label" multiple ng-model="vm.state.contact.tags" theme="bootstrap" ng-disabled="disabled">
+                                            <ui-select-match placeholder="Select tags...">{{$item.label}}</ui-select-match>
+                                            <ui-select-choices repeat="tag in vm.contactTags | orderBy:'label' | filter:$select.search">
+                                                {{tag.label}}
+                                            </ui-select-choices>
+                                        </ui-select>
+                                    </div>
+                                    <div class="form-group col-xs-12">
+                                        <label class="control-label">
+                                            Email Address
+                                        </label>                                   
+                                        <div class="form-group" ng-class="{ 'has-error' : form.email_{{$index}}.$invalid}" ng-repeat="email in vm.state.contact.details[0].emails  track by $index">
+                                            <span class="input-icon input-icon-right">
+                                                <input type="email"  ng-pattern="formValidations.email" placeholder="Email address" class="form-control" name="email_{{$index}}" ng-model="vm.state.contact.details[0].emails[$index].email">
+                                                <p ng-show="form.email_{{$index}}.$invalid" class="help-block">Enter a valid email.</p>
+                                                <i ng-if="vm.showAddEmail(email)" ng-click="vm.contactAddEmailFn()" class="ti-plus"></i>
+                                                <i ng-if="!vm.showAddEmail(email)" ng-click="vm.removeEmail($index)" class="ti-minus"></i>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-xs-8">
+                                        <label class="control-label">
+                                            Phone Number
+                                        </label>                                    
+                                        <div class="form-group" ng-repeat="phone in vm.state.contact.details[0].phones track by $index">
+                                            <span class="input-icon input-icon-right">
+                                                <input type="text" placeholder="Phone number" class="form-control" name="phone_{{$index}}" ng-model="vm.state.contact.details[0].phones[$index].number" ind-international-tel-number form="form" phone-field="true">               
+                                                <i ng-if="vm.showAddPhone(phone)" ng-click="vm.contactAddPhoneFn()" class="ti-plus"></i>
+                                                <i ng-if="!vm.showAddPhone(phone)" ng-click="vm.removePhone($index)" class="ti-minus"></i>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-xs-4">
+                                        <label class="control-label">
+                                            Extension
+                                        </label>                                    
+                                        <div class="form-group" ng-repeat="phone in vm.state.contact.details[0].phones track by $index">
+                                            <input type="text" placeholder="Extension" class="form-control" ng-pattern="formValidations.extension" name="extension_{{$index}}" ng-model="vm.state.contact.details[0].phones[$index].extension">
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-xs-12">
+                                        <label class="control-label">
+                                            Website URL
+                                        </label>                                   
+                                        <div class="form-group" ng-repeat="website in vm.state.contact.details[0].websites track by $index">
+                                            <span class="input-icon input-icon-right">
+                                                <input type="text" placeholder="Website URL" class="form-control" name="website_{{$index}}" ng-model="vm.state.contact.details[0].website[$index].website">  
+                                                <i ng-if="vm.showAddWebsite(website)" ng-click="vm.contactAddWebsiteFn()" class="ti-plus"></i>
+                                                <i ng-if="!vm.showAddWebsite(website)" ng-click="vm.removeWebsite($index)" class="ti-minus"></i>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-xs-12">
+                                        <label class="control-label">
+                                            Facebook URL
+                                        </label>
+                                       <input type="text" placeholder="Facebook Url" class="form-control" ng-model="vm.state.contact.details[0].facebookUrl">          
+                                    </div>
+                                    <div class="form-group col-xs-12">
+                                        <label class="control-label">
+                                            Linkedin URL
+                                        </label>
+                                       <input type="text" placeholder="Linkedin Url" class="form-control" ng-model="vm.state.contact.details[0].linkedinUrl">          
+                                    </div>
+                                    <div class="form-group col-xs-12">
+                                        <label class="control-label">
+                                            Company Name
+                                        </label>
+                                       <input type="text" placeholder="Company Name" class="form-control" ng-model="vm.state.contact.details[0].company">          
+                                    </div>
+
+                                    <div class="col-xs-12 address-fields" ng-repeat="address in vm.state.contact.details[0].addresses track by $index"
+                                         ng-if="!($index>0 && address.displayName=='GEOIP')"
+                                         >
+                                        <div class="row">
+                                            <div class="col-xs-6">
+                                                <div class="form-group" ng-class="{'has-error':errorMapData}">
+                                                    <label class="control-label">
+                                                        Address Line 1
+                                                    </label>
+                                                    <input class="form-control" placeholder="Address line 1" type="text" name="addressline1" ng-model="address.address">
+                                                </div>
+                                            </div>
+                                            <div class="col-xs-6">
+                                                <div class="form-group" ng-class="{'has-error':errorMapData}">
+                                                    <label class="control-label">
+                                                        Address Line 2
+                                                    </label>
+                                                    <input class="form-control" placeholder="Address line 2" type="text" name="addressline2" ng-model="address.address2">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-xs-6">
+                                                <div class="form-group" ng-class="{'has-error':errorMapData}">
+                                                    <label class="control-label">
+                                                        City
+                                                    </label>
+                                                    <input class="form-control" placeholder="Enter city" type="text" name="city" ng-model="address.city">
+                                                </div>
+                                            </div>
+                                            <div class="col-xs-6">
+                                                <div class="form-group" ng-class="{'has-error':errorMapData}">
+                                                    <label class="control-label">
+                                                        State
+                                                    </label>
+                                                    <input class="form-control" placeholder="Enter state" type="text" name="state" ng-model="address.state">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-xs-6">
+                                                <div class="form-group" ng-class="{'has-error':errorMapData}">
+                                                    <label class="control-label">
+                                                        Country
+                                                    </label>
+                                                    <input class="form-control" placeholder="Enter country" type="text" name="country" ng-model="address.country">
+                                                </div>
+                                            </div>
+                                            <div class="col-xs-6">
+                                                <div class="form-group" ng-class="{'has-error':errorMapData}">
+                                                    <label class="control-label">
+                                                        Zip Code
+                                                    </label>
+                                                    <input class="form-control" placeholder="Enter postcode" type="text" name="zip" ng-model="address.zip">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <div ng-if="vm.showAddAddress(address)" class="btn btn-wide btn-o btn-primary pull-right" ng-click="vm.contactAddAddressFn()">Add another address</div>
+                                            <div ng-if="!vm.showAddAddress(address)" class="btn btn-wide btn-o btn-warning pull-right" ng-click="vm.removeAddress($index)">Remove address</div>
+                                        </div>
+                                        <div class="clearfix"></div>
+                                    </div>
+
                                 </div>
-                                <div class="form-group col-xs-6">
-                                    <label class="control-label">
-                                        Last Name
-                                    </label>
-                                   <input type="text" placeholder="Last Name" class="form-control" ng-model="vm.state.contact.last">                                   
-                                </div>
-                            </div>
+                            </form>
                         </div>
                     </tab>
                     <tab heading="Devices/Browser">
