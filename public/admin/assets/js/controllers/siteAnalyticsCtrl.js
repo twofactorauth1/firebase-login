@@ -613,20 +613,25 @@
             if (results.visitorLocations) {
                 var _formattedLocations = [];
                 _.each(results.visitorLocations, function (loc) {
+                    if(loc._id === 'United States') {
+                        _formattedLocations = _formattedLocations.concat(loc.provinces);
+                    }
+                    /*
                     if (loc['ip_geo_info.province']) {
                         _formattedLocations.push(loc);
                     }
+                    */
                 });
                 $scope.mostPopularState = _.max(_formattedLocations, function (o) {
-                    return o.result;
+                    return o.count;
                 });
 
-                _.each(results.visitorLocations, function (location) {
-                    var _geo_info = ChartAnalyticsService.stateToAbbr(location['ip_geo_info.province']);
+                _.each(_formattedLocations, function (location) {
+                    var _geo_info = ChartAnalyticsService.stateToAbbr(location['name']);
                     if (_geo_info) {
                         var subObj = {};
                         subObj.code = _geo_info;
-                        subObj.value = location.result;
+                        subObj.value = location.count;
                         var locationExists = _.find(locationData, function (loc) {
                             return loc.code === location.code;
                         });
@@ -670,7 +675,7 @@
 
                 $scope.locationLabel = 'States';
                 $scope.locationsLength = locationData.length;
-                $scope.mostPopularLabel = $scope.mostPopularState['ip_geo_info.province'];
+                $scope.mostPopularLabel = $scope.mostPopularState['name'];
 
                 // Country based
                 $scope.countryLocationData = countryLocationData;

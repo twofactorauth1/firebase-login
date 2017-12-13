@@ -4432,10 +4432,22 @@ module.exports = {
                 });
                 var fontMap= {};
                 var componentMap = {};
+                var video_component_count = 0;
                 async.eachSeries(components, function(component, callback){
                     if(component) {
+                        if(video_component_count === 0){
+                            if(component.type === 'video' || component.type === 'video-gallery'){
+                                   video_component_count++;
+                            }
+                            else{
+                                if(component.text && component.text.indexOf('youtube') !== -1 || component.title && component.title.indexOf('youtube') !== -1){
+                                   video_component_count++;
+                                 }
+                            }
+                        }
+
                         var fontUsed = "";
-                        // SIMPLE FORM, FORM BUILDER, DONATION FORM 
+                        // SIMPLE FORM, FORM BUILDER, DONATION FORM
                         if(component.formSettings && component.formSettings.formFontFamily){
                             fontUsed =  self._getFontNameFromString(component.formSettings.formFontFamily);
                             if(fontUsed)
@@ -4456,7 +4468,7 @@ module.exports = {
                             fontUsed =  self._getFontNameFromString(component.settings.description.fontFamily);
                             if(fontUsed)
                                 fontMap[fontUsed] = fontUsed;
-                        }                        
+                        }
                         // PRODUCT COMPONENT
                         if(component.formSettings && component.formSettings.titleFontFamily){
                             fontUsed =  self._getFontNameFromString(component.formSettings.titleFontFamily);
@@ -4472,14 +4484,14 @@ module.exports = {
                             fontUsed =  self._getFontNameFromString(component.formSettings.descriptionFontFamily);
                             if(fontUsed)
                                 fontMap[fontUsed] = fontUsed;
-                        } 
+                        }
                         // NAVIGATION
                         if(component.nav && component.nav.font && component.nav.font.family){
                             fontUsed =  self._getFontNameFromString(component.nav.font.family);
                             if(fontUsed)
                                 fontMap[fontUsed] = fontUsed;
                         }
-                        // IMAGE GALLERY OVERLAY 
+                        // IMAGE GALLERY OVERLAY
                         if(component.imageOverlay && component.imageOverlay.font && component.imageOverlay.font.fontFamily){
                             fontUsed =  self._getFontNameFromString(component.imageOverlay.font.fontFamily);
                             if(fontUsed)
@@ -4513,20 +4525,23 @@ module.exports = {
                     }
 
                 }, function done(err){
+                    var isVideo = (video_component_count === 0) ? false : true;
                     self.log.debug('The following fonts are used:', fontMap);
-                    cb(null, page, components, fontMap, componentMap);
+                    cb(null, page, components, fontMap, componentMap, isVideo);
                 });
             },
-            function(page, componentAry, fontMap, componentMap, cb) {
+            function(page, componentAry, fontMap, componentMap, isVideo,cb) {
                 pageCacheManager.getS3TemplateContent(accountId, handle, function(err, value){
-                    cb(null, page, componentAry, fontMap, componentMap, value);
+                    cb(null, page, componentAry, fontMap, componentMap, value, isVideo);
                 });
             },
-            function(page, componentAry, fontMap, componentMap, template, cb) {
+            function(page, componentAry, fontMap, componentMap, template, isVideo, cb) {
                 var manifest = {
                     fonts:fontMap,
                     components:componentMap,
-                    template:template
+                    template:template,
+                    loadYoutubeLib : isVideo
+
                 };
                 cb(null, manifest, page);
             }

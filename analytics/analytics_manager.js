@@ -391,7 +391,7 @@ module.exports = {
                                     $gte:targetDate.toDate()
                                 },
                                 fingerprint:{$ne:null},
-                                "maxmind.country":"United States"
+                                "maxmind.country":{$ne:null}
                             }
                         };
                         if(isAggregate === true) {
@@ -402,19 +402,40 @@ module.exports = {
                         }
                         stageAry.push(match);
 
-                        var group1 = {
-                            $group: {
-                                _id: '$maxmind.province',
-                                result: {$sum:1}
+                        stageAry.push({
+                            $group:{
+                                _id:'$maxmind.country',
+                                provinces:{$push:'$maxmind.province'},
+                                result:{$sum:1}
                             }
-                        };
-                        stageAry.push(group1);
+                        });
+                        stageAry.push({ $unwind:'$provinces'})
+                        stageAry.push({
+                            $group:{
+                                _id:'$provinces',
+                                country:{$first:'$_id'},
+                                country_count:{$first:'$result'},
+                                province_count:{$sum:1}
+                            }
+                        })
+                        stageAry.push({
+                            $group:{
+                                _id:'$country',
+                                count:{$first:'$country_count'},
+                                provinces:{
+                                     $push:{
+                                         name:'$_id',
+                                         count:'$province_count'
+                                     }
+                                },
+                            }
+                        })
 
                         self._addAccountFilterByID(accountId, userId, isAggregate, match, function(err, newMatch){
                             dao.aggregateWithCustomStages(stageAry, $$.m.SessionEvent, function(err, value) {
-                                _.each(value, function(result){
+                               /* _.each(value, function(result){
                                     result['ip_geo_info.province'] = result._id;
-                                });
+                                });*/
                                 self.log.trace(accountId, userId, '<< getLiveVisitors');
                                 //fn(err, value);
                                 if(results.length > 0){
@@ -1077,7 +1098,7 @@ module.exports = {
                     $lte:endDate
                 },
                 fingerprint:{$ne:null},
-                "maxmind.country":"United States"
+                "maxmind.country":{$ne:null}
             }
         };
         if(isAggregate === true) {
@@ -1087,14 +1108,34 @@ module.exports = {
             match.$match.orgId = orgId;
         }
         stageAry.push(match);
-
-        var group1 = {
-            $group: {
-                _id: '$maxmind.province',
-                result: {$sum:1}
+        stageAry.push({
+            $group:{
+                _id:'$maxmind.country',
+                provinces:{$push:'$maxmind.province'},
+                result:{$sum:1}
             }
-        };
-        stageAry.push(group1);
+        });
+        stageAry.push({ $unwind:'$provinces'})
+        stageAry.push({
+            $group:{
+                _id:'$provinces',
+                country:{$first:'$_id'},
+                country_count:{$first:'$result'},
+                province_count:{$sum:1}
+            }
+        })
+        stageAry.push({
+            $group:{
+                _id:'$country',
+                count:{$first:'$country_count'},
+                provinces:{
+                     $push:{
+                         name:'$_id',
+                         count:'$province_count'
+                     }
+                },
+            }
+        })
         self._addAccountFilterByID(accountId, userId, isAggregate, match, function(err, match) {
             if (err) {
                 self.log.error(accountId, userId, 'Error adding filter:', err);
@@ -1102,9 +1143,10 @@ module.exports = {
             } else {
                 //match is applied via pass-by-reference
                 dao.aggregateWithCustomStages(stageAry, $$.m.SessionEvent, function(err, value) {
-                    _.each(value, function(result){
+                    /*_.each(value, function(result){
                         result['ip_geo_info.province'] = result._id;
                     });
+                    */
                     self.log.debug(accountId, userId, '<< getVisitorLocationsReport');
                     fn(err, value);
                 });

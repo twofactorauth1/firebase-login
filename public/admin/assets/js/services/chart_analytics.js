@@ -1369,13 +1369,13 @@
             }
         };
 
-        this.visitorLocationsPlatform = function (locationData, highchartsData, countryData, countryMap) {
+        this.visitorLocationsPlatform = function (locationData) {
             var usSeries = {
                 animation: {
                     duration: 0
                 },
                 data: locationData,
-                mapData: highchartsData,
+                mapData:  Highcharts.maps['countries/us/us-all'],
                 joinBy: ['postal-code', 'code'],
                 dataLabels: {
                     enabled: false
@@ -1385,13 +1385,13 @@
                     pointFormat: '{point.code}: {point.value}'
                 }
             };
-            console.log('"BEFORE #live-platform-visitor-locations');
+            console.log('"BEFORE #live-platform-visitor-locations-us');
 
-            if ($("#live-platform-visitor-locations").length) {
-                console.log('"AFTER #live-platform-visitor-locations');
+            if ($("#live-platform-visitor-locations-us").length) {
+                console.log('"AFTER #live-platform-visitor-locations-us');
                 var chart1 = new Highcharts.Map({
                     chart: {
-                        renderTo: 'live-platform-visitor-locations',
+                        renderTo: 'live-platform-visitor-locations-us',
                         height: 240,
                         zoomType : false,
                         backgroundColor:'rgba(255, 255, 255, 0.1)'
@@ -1424,6 +1424,73 @@
 
                     series: [
                         usSeries
+                    ],
+                    xAxis:{
+
+                    },
+                    credits: {
+                        enabled: false
+                    }
+                });
+            }
+        };
+
+
+
+        this.visitorLocationsWorldPlatform = function (countryData) {  
+            var worldSeries = {
+                data: countryData,
+                mapData: Highcharts.maps['custom/world'],
+                joinBy: ['name', 'code'],
+                animation: true,
+                name: '# of Visitors',
+                states: {
+                    hover: {
+                        color: '#BADA55'
+                    }
+                },
+                tooltip: {
+                    pointFormat: '{point.code}: {point.value}'
+                }
+            };
+
+            if ($("#live-platform-visitor-locations-world").length) {
+                console.log('"#live-platform-visitor-locations-world');
+                var chart1 = new Highcharts.Map({
+                    chart: {
+                        renderTo: 'live-platform-visitor-locations-world',
+                        height: 240,
+                        zoomType : false,
+                        backgroundColor:'rgba(255, 255, 255, 0.1)'
+                    },
+
+                    title: {
+                        text: ''
+                    },
+
+                    exporting: {
+                        enabled: false
+                    },
+
+                    legend: {
+                        enabled: false
+                    },
+
+                    mapNavigation: {
+                        enableButtons: false,
+                        enableDoubleClickZoom: false,
+                        enableTouchZoom: false
+                    },
+
+                    colorAxis: {
+                        min: 1,
+                        type: 'logarithmic',
+                        minColor: '#7cb5ec',
+                        maxColor: '#224f5b'
+                    },
+
+                    series: [
+                        worldSeries
                     ],
                     xAxis:{
 
