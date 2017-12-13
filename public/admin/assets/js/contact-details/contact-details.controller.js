@@ -2,9 +2,9 @@
 
 app.controller('ContactDetailsController', contactDetailsController);
 
-contactDetailsController.$inject = ['$scope', '$state', '$modal', '$stateParams', '$attrs', '$filter', '$document', '$timeout', 'toaster', 'ContactService', 'CommonService'];
+contactDetailsController.$inject = ['$scope', '$state', '$modal', '$stateParams', '$attrs', '$filter', '$document', '$timeout', 'toaster', 'ContactService', 'CommonService', 'UserService'];
 /* @ngInject */
-function contactDetailsController($scope, $state, $modal, $stateParams, $attrs, $filter, $document, $timeout, toaster, ContactService, CommonService) {
+function contactDetailsController($scope, $state, $modal, $stateParams, $attrs, $filter, $document, $timeout, toaster, ContactService, CommonService, UserService) {
 
     console.info('contact-details directive init...')
 
@@ -17,7 +17,9 @@ function contactDetailsController($scope, $state, $modal, $stateParams, $attrs, 
     vm.uiState = {
         loading: true
     }
-
+	vm.notesEmail = {
+		enable: false
+	};
     vm.displayAddressFormat = displayAddressFormat;
     vm.editContactDetails = editContactDetails;
     vm.cancelContactDetails = cancelContactDetails;
@@ -37,9 +39,11 @@ function contactDetailsController($scope, $state, $modal, $stateParams, $attrs, 
     vm.saveContactDetails = saveContactDetails;
     vm.openMediaModal = openMediaModal;
     vm.insertPhoto = insertPhoto;
+    vm.addNote = addNote;
     function loadContactDetails(){
     	ContactService.getContact(vm.state.contactId, function (contact, error) {
     		vm.state.contact = contact;
+    		matchUsers(vm.state.contact);
     		vm.state.fullName = [vm.state.contact.first, vm.state.contact.middle, vm.state.contact.last].join(' ').trim();
     		setTags();
     		setDefaults();
@@ -423,6 +427,71 @@ function contactDetailsController($scope, $state, $modal, $stateParams, $attrs, 
 		}
 	};
 
+	function addNote(_note) {
+		var date = moment(),
+			_noteToPush = {
+				note: _note,
+				user_id: $scope.currentUser._id,
+				date: date.toISOString()
+			},
+			contactData = {};
+
+		vm.newNote.text = '';
+		
+		var sendEmail = {};
+		
+		sendEmail = {
+			sendTo: vm.state.contact.details[0].emails[0].email,
+			fromEmail: $scope.currentUser.email,
+			fromName: getUserName(),
+			note_value: _note,
+			enable_note: vm.notesEmail.enable
+		};
+		contactData = {
+			emailData: sendEmail,
+			note: _noteToPush,
+			sendEmailToContact: vm.notesEmail.enable
+		};
+
+		ContactService.addContactNote(contactData, vm.state.contactId, function (data) {			
+			vm.notesEmail = {
+				enable: false
+			};
+			var notes = matchUsers(vm.state.contact, data.notes);
+			vm.state.contact.notes = notes;
+			vm.state.originalContact.notes = notes;
+		});
+	};
+
+	function matchUsers(contact, contactNotes) {
+		var notes = contactNotes || contact.notes;
+		if (notes && notes.length > 0) {
+
+			_.each(notes, function (_note) {
+				var matchingUser = _.find(vm.state.users, function (_user) {
+					return _user._id === _note.user_id;
+				});
+
+				// This code is used to show related user profile image in notes
+
+				if (matchingUser) {
+					if (matchingUser.profilePhotos && matchingUser.profilePhotos[0])
+						_note.user_profile_photo = matchingUser.profilePhotos[0];
+				}
+			});
+
+			return notes;
+		}
+	};
+
+	function getUserName() {
+		var _userName = $scope.currentUser.email;
+		if ($scope.currentUser.first || $scope.currentUser.last) {
+			_userName = $scope.currentUser.first + " " + $scope.currentUser.last;
+		}
+		return _userName.trim();
+	}
+
     function init(element) {
         vm.element = element;
         ContactService.getContactTags(function (tags) {
@@ -434,7 +503,11 @@ function contactDetailsController($scope, $state, $modal, $stateParams, $attrs, 
 				vm.contactTags = tags;
 			});
 		});
-        loadContactDetails();
+		UserService.getUsers(function (users) {
+			vm.state.users = users;
+			loadContactDetails();
+		});
+        
     }
 
 }

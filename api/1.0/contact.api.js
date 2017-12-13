@@ -173,18 +173,39 @@ _.extend(api.prototype, baseApi.prototype, {
 
     addContactNotes: function (req, resp) {
         var self = this;
-        var note = req.body.note.note_value;
-        var emailTo = req.body.note.sendTo;
-        var fromEmail = req.body.note.fromEmail;
-        var fromName = req.body.note.fromName;
-
+        var note = req.body.emailData.note_value;
+        var emailTo = req.body.emailData.sendTo;
+        var fromEmail = req.body.emailData.fromEmail;
+        var fromName = req.body.emailData.fromName;
+        var user_note = req.body.note;
         var accountId = parseInt(self.accountId(req));
+        var contactId = req.params.id;
+        contactId = parseInt(contactId);
         self.checkPermissionForAccount(req, self.sc.privs.MODIFY_CONTACT, accountId, function(err, isAllowed) {
             if (isAllowed !== true) {
                 return self.send403(resp);
             } else {
-                if(req.body.note.enable_note)
-                    self._sendNoteEmail(note, accountId, emailTo, fromEmail, fromName);
+                contactDao.getContactById(accountId, contactId, function(err, contact) {
+                    self.log.debug('<< getContactById');
+                    if(!err && !contact) {
+                        self.wrapError(resp, 404, null, 'Contact not found.', 'Contact not found.');
+                    }else {
+                        var _notes = contact.get("notes") || [];
+                        _notes.push(user_note);
+                        contact.set("notes", _notes);
+                        contactDao.saveOrUpdateContact(contact, function (err, value) {
+                            if (!err) {
+                                self.log.debug('>> saveOrUpdate', value);
+                                self.sendResult(resp, value);
+                                if(req.body.sendEmailToContact)
+                                    self._sendNoteEmail(note, accountId, emailTo, fromEmail, fromName);                            
+                            } else {
+                                self.wrapError(resp, 500, "There was an error updating contact", err, value);
+                            }
+                        });
+                    }
+                });
+                
             }
         });
     },
