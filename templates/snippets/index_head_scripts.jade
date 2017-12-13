@@ -52,7 +52,7 @@ script(type="text/javascript").
 
 if (typeof account.website.theme !== 'undefined' && typeof account.website.themeOverrides !== 'undefined')
     style.
-        .ssb-theme-#{account.website.theme.handle} {
+        .ssb-theme-#{account.website.theme.handle}, .ssb-theme-#{account.website.theme.handle} pre {
             color: #{account.website.themeOverrides.styles.primaryTextColor};
             background-color: #{account.website.themeOverrides.styles.bodyBackgroundColor};
         }
@@ -80,7 +80,7 @@ if (typeof account.website.theme !== 'undefined' && typeof account.website.theme
             color: #{account.website.themeOverrides.styles.primaryTextColor};
         }
 
-        .ssb-theme-{{vm.state.website.theme.handle}} .ssb-page-section-layout-header .navigation-logo, .ssb-theme-#{account.website.theme.handle} .ssb-section-layout.ssb-page-section-layout-header , .ssb-theme-#{account.website.theme.handle} .ssb-page-section-layout-header {
+        .ssb-theme-{{vm.state.website.theme.handle}} .ssb-page-section-layout-header .navigation-logo, .ssb-theme-#{account.website.theme.handle} .ssb-section-layout.ssb-page-section-layout-header , .ssb-theme-#{account.website.theme.handle} .ssb-page-section-layout-header,  .ssb-theme-#{account.website.theme.handle} .ssb-page-section-layout-header pre {
             background-color: #{account.website.themeOverrides.styles.headerBackgroundColor};
             color: #{account.website.themeOverrides.styles.headerTextColor};
         }
@@ -94,7 +94,7 @@ if (typeof account.website.theme !== 'undefined' && typeof account.website.theme
             color: #{account.website.themeOverrides.styles.heroTextColor};
         }
 
-        .ssb-theme-#{account.website.theme.handle} .ssb-page-section-layout-hero [ssb-text-component] ,.ssb-theme-#{account.website.theme.handle} .ssb-page-section-layout-nav-hero [ssb-text-component]{
+        .ssb-theme-#{account.website.theme.handle} .ssb-page-section-layout-hero [ssb-text-component] ,.ssb-theme-#{account.website.theme.handle} .ssb-page-section-layout-nav-hero [ssb-text-component],.ssb-theme-#{account.website.theme.handle} .ssb-page-section-layout-nav-hero [ssb-text-component] pre{
             color: #{account.website.themeOverrides.styles.heroTextColor};
         }
 
