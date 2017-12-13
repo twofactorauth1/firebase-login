@@ -677,6 +677,10 @@ module.exports = {
             styleString += "border-style: " + section.border.style + ";";
             styleString += "border-radius: " + section.border.radius + "%;";
         }
+
+        if(section && section.customStyle && section.customStyle.height) {
+            styleString +='height:' + section.customStyle.height + ';';
+        }
         return styleString;
     },
 
