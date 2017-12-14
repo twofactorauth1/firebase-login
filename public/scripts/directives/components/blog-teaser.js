@@ -78,8 +78,6 @@ app.directive('blogTeaserComponent', ['postsService', '$filter', function (posts
 					return true;
 				}
 			}
-
-
 			function filterCategory(post) {
 				var _categories = $scope.component.postCategories;
 				if (_categories && _categories.length > 0) {
@@ -92,7 +90,6 @@ app.directive('blogTeaserComponent', ['postsService', '$filter', function (posts
 					return true;
 				}
 			}
-
 			function listArticleStyle(item) {
 				var styleString = ' ';
 
@@ -174,19 +171,6 @@ app.directive('blogTeaserComponent', ['postsService', '$filter', function (posts
 					$scope.filteredPosts = $scope.posts;
 				}
 			};
-
-			/*
-			 * @convertInLowerCase
-			 * - convert array value in lowercase
-			 */
-
-			/*function convertInLowerCase(dataItem) {
-				var _item = [];
-				_.each(dataItem, function (tagItem) {
-					_item.push(tagItem.toLowerCase());
-				});
-				return _item;
-			}*/
 		}
 	};
 }]);
