@@ -112,11 +112,11 @@
                 }
 
                 if (component.spacing.ml) {
-                    styleString += component.spacing.ml == 'auto' ? 'margin-left: ' + component.spacing.ml + ';' : 'margin-left: ' + component.spacing.ml + vm.isPxorPercent(component.spacing.ml);
+                    styleString += component.spacing.ml == 'auto' ? 'left: ' + component.spacing.ml + ';' : 'margin-left: ' + component.spacing.ml + vm.isPxorPercent(component.spacing.ml);
                 }
 
                 if (component.spacing.mr) {
-                    styleString += (component.spacing.mr == 'auto') ? 'margin-right: ' + component.spacing.mr + ';' : 'margin-right: ' + component.spacing.mr + vm.isPxorPercent(component.spacing.mr);
+                    styleString += (component.spacing.mr == 'auto') ? 'right: ' + component.spacing.mr + ';' : 'margin-right: ' + component.spacing.mr + vm.isPxorPercent(component.spacing.mr);
                 }
 
 

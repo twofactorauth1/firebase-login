@@ -32,14 +32,23 @@
                              && component.type != 'top-bar'
                              && component.type != 'payment-form'
                              && component.type.indexOf('email-') === -1"
-                         ng-style="{'padding-top': component.spacing.pt + 'px',
-                            'padding-bottom': component.spacing.pb + 'px',
-                            'padding-left': component.spacing.pl + 'px',
-                            'padding-right': component.spacing.pr + 'px',
-                            'margin-top': component.spacing.mt + 'px',
-                            'margin-bottom': component.spacing.mb + 'px',
-                            'margin-left': component.spacing.ml == 'auto' ? component.spacing.ml: component.spacing.ml + 'px',
-                            'margin-right': component.spacing.mr == 'auto' ? component.spacing.mr : component.spacing.mr + 'px',
+                         ng-style="{'padding-top': component.spacing.pt.toString().indexOf('%') !== -1 ?
+                            component.spacing.pt : component.spacing.pt + 'px',
+
+                            'padding-bottom': component.spacing.pb.toString().indexOf('%') !== -1 ?  component.spacing.pb : component.spacing.pb + 'px',
+
+                            'padding-left': component.spacing.pl.toString().indexOf('%') !== -1 ?  component.spacing.pl : component.spacing.pl + 'px',
+
+                            'padding-right': component.spacing.pr.toString().indexOf('%') !== -1 ? component.spacing.pr  : component.spacing.pr + 'px',
+
+                            'margin-top': component.spacing.mt.toString().indexOf('%') !== -1 ? component.spacing.mt : component.spacing.mt + 'px',
+
+                            'margin-bottom': component.spacing.mb.toString().indexOf('%') !== -1 ? component.spacing.mb : component.spacing.mb + 'px',
+
+                            'margin-left': component.spacing.ml == 'auto' ||  component.spacing.ml.toString().indexOf('%') !== -1 ? component.spacing.ml: component.spacing.ml + 'px',
+
+                            'margin-right': component.spacing.mr == 'auto' || component.spacing.mr.toString().indexOf('%') !== -1 ? component.spacing.mr : component.spacing.mr + 'px',
+
                             'max-width': component.spacing.mw == '100%' ||  component.spacing.mw.toString().indexOf('%') !== -1 ? component.spacing.mw : component.spacing.mw  + 'px'}">
                         <div data-ng-include
                              data-src="'/components/'+component.type+'_v'+component.version+'.html'"></div>
@@ -52,14 +61,24 @@
                             || component.type == 'top-bar'
                             || component.type == 'payment-form'
                             && component.type.indexOf('email-') === -1"
-                        ng-style="{'padding-top': component.spacing.pt + 'px',
-                            'padding-bottom': component.spacing.pb + 'px',
-                            'padding-left': component.spacing.pl + 'px',
-                            'padding-right': component.spacing.pr + 'px',
-                            'margin-top': component.spacing.mt + 'px',
-                            'margin-bottom': component.spacing.mb + 'px',
-                            'margin-left': component.spacing.ml == 'auto' ? component.spacing.ml: component.spacing.ml + 'px',
-                            'margin-right': component.spacing.mr == 'auto' ? component.spacing.mr : component.spacing.mr + 'px',
+                        ng-style="{
+                            'padding-top':  component.spacing.pt.toString().indexOf('%') !== -1 ?
+                            component.spacing.pt : component.spacing.pt + 'px',
+
+                            'padding-bottom':  component.spacing.pb.toString().indexOf('%') !== -1 ?  component.spacing.pb : component.spacing.pb + 'px',
+
+                            'padding-left':  component.spacing.pl.toString().indexOf('%') !== -1 ?  component.spacing.pl : component.spacing.pl + 'px',
+
+                            'padding-right': component.spacing.pr.toString().indexOf('%') !== -1 ? component.spacing.pr  : component.spacing.pr + 'px',
+
+                            'margin-top': component.spacing.mt.toString().indexOf('%') !== -1 ? component.spacing.mt : component.spacing.mt + 'px',
+
+                            'margin-bottom': component.spacing.mb.toString().indexOf('%') !== -1 ? component.spacing.mb : component.spacing.mb + 'px',
+
+                            'margin-left': component.spacing.ml == 'auto' ||  component.spacing.ml.toString().indexOf('%') !== -1 ? component.spacing.ml: component.spacing.ml + 'px',
+
+                            'margin-right': component.spacing.mr == 'auto' || component.spacing.mr.toString().indexOf('%') !== -1 ? component.spacing.mr : component.spacing.mr + 'px',
+
                             'max-width': component.spacing.mw == '100%' ||  component.spacing.mw.toString().indexOf('%') !== -1 ? component.spacing.mw : component.spacing.mw  + 'px'}">
                         <div data-ng-include
                              data-src="'/components/'+component.type+'_v'+component.version+'.html'"></div>
