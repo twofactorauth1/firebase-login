@@ -29,12 +29,12 @@
                                     </a> 
                                 </li>
                                 <li>
-                                    <a href="{{vm.state.contact.details[0].facebookUrl}}" target="_blank">
+                                    <a href="{{vm.state.contact.details[0].linkedinUrl}}" target="_blank">
                                        <span class="fa fa-linkedin btn-linkedin"></span>
                                     </a> 
                                 </li>
                                 <li>
-                                    <a href="{{vm.state.contact.details[0].linkedinUrl}}" target="_blank">
+                                    <a href="{{vm.state.contact.details[0].facebookUrl}}" target="_blank">
                                        <span class="fa fa-facebook btn-facebook"></span>
                                     </a>
                                 </li>
@@ -260,7 +260,7 @@
                                         </label>                                   
                                         <div class="form-group" ng-repeat="website in vm.state.contact.details[0].websites track by $index">
                                             <span class="input-icon input-icon-right">
-                                                <input type="text" placeholder="Website URL" class="form-control" name="website_{{$index}}" ng-model="vm.state.contact.details[0].website[$index].website">  
+                                                <input type="text" placeholder="Website URL" class="form-control" name="website_{{$index}}" ng-model="vm.state.contact.details[0].websites[$index].website">  
                                                 <i ng-if="vm.showAddWebsite(website)" ng-click="vm.contactAddWebsiteFn()" class="ti-plus"></i>
                                                 <i ng-if="!vm.showAddWebsite(website)" ng-click="vm.removeWebsite($index)" class="ti-minus"></i>
                                             </span>
