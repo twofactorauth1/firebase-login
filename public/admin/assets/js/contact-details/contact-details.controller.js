@@ -2,9 +2,9 @@
 
 app.controller('ContactDetailsController', contactDetailsController);
 
-contactDetailsController.$inject = ['$scope', '$state', '$modal', '$stateParams', '$attrs', '$filter', '$document', '$timeout', 'toaster', 'ContactService', 'CommonService', 'UserService'];
+contactDetailsController.$inject = ['$scope', '$state', '$window', '$modal', '$stateParams', '$attrs', '$filter', '$document', '$timeout', 'toaster', 'ContactService', 'CommonService', 'UserService', 'OrganizationService'];
 /* @ngInject */
-function contactDetailsController($scope, $state, $modal, $stateParams, $attrs, $filter, $document, $timeout, toaster, ContactService, CommonService, UserService) {
+function contactDetailsController($scope, $state, $window, $modal, $stateParams, $attrs, $filter, $document, $timeout, toaster, ContactService, CommonService, UserService, OrganizationService) {
 
     console.info('contact-details directive init...')
 
@@ -40,6 +40,7 @@ function contactDetailsController($scope, $state, $modal, $stateParams, $attrs, 
     vm.openMediaModal = openMediaModal;
     vm.insertPhoto = insertPhoto;
     vm.addNote = addNote;
+    vm.state.orgId = $window.indigenous.orgId;
     function loadContactDetails(){
     	ContactService.getContact(vm.state.contactId, function (contact, error) {
     		vm.state.contact = contact;
@@ -507,7 +508,10 @@ function contactDetailsController($scope, $state, $modal, $stateParams, $attrs, 
 			vm.state.users = users;
 			loadContactDetails();
 		});
-        
+
+		OrganizationService.getOrganizationById(vm.state.orgId, function(data){
+			vm.state.organization = data;
+		})
     }
 
 }

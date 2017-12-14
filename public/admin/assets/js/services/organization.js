@@ -29,5 +29,14 @@
                 });
             }
         };
+
+        this.getOrganizationById = function (orgId, fn) {
+            $http({
+                url: [baseUrl, orgId].join('/'),
+                method: 'GET'
+            }).success(function (data) {
+                fn(data);
+            });
+        }
     }]);
 }(angular));

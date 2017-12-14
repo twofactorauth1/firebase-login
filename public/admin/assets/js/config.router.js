@@ -123,7 +123,7 @@ app.config(['$stateProvider', '$urlRouterProvider', '$controllerProvider', '$com
 				template: "<contact-details-component></contact-details-component>",
 				title: 'Single Contact',
 				icon: 'ti-layout-media-left-alt',
-				resolve: loadSequence('ContactDetailsComponent', 'ContactDetailsController', 'contactService', 'ngMap', 'offset', 'assetsService', 'toasterService', 'orderService','spectrum')
+				resolve: loadSequence('ContactDetailsComponent', 'ContactDetailsController', 'contactService', 'ngMap', 'offset', 'assetsService', 'toasterService', 'orderService','spectrum', 'organizationService')
 			}).state('app.singleCustomer', {
 				url: '/customers/:customerId',
 				templateUrl: "/admin/assets/views/customer-detail.html",
