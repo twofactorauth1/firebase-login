@@ -5,9 +5,6 @@ app.directive('videoGalleryComponent', function () {
 		scope: {
 			component: '='
 		},
-		templateUrl: '/components/component-wrap.html',
-		link: function () {
-
-		}
+		templateUrl: '/components/component-wrap.html'
 	};
 });

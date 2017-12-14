@@ -1,7 +1,7 @@
 /*global app, angular, window,Fingerprint,CryptoJS,document,console, $*/
 /*jslint unparam:true*/
 /* eslint-disable no-console */
-app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'paymentService', 'userService', 'commonService', 'ipCookie', 'formValidations', '$location', function ($filter, $q, ProductService, PaymentService, UserService, CommonService, ipCookie, formValidations, $location) {
+app.directive('paymentFormComponent', ['$q', 'paymentService', 'userService', 'commonService', 'ipCookie', 'formValidations', '$location', function ($q, PaymentService, UserService, CommonService, ipCookie, formValidations, $location) {
 	'use strict';
 	return {
 		require: [],
