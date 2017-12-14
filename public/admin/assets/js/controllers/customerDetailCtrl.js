@@ -348,7 +348,14 @@
 			});
 		};
         $scope.updateNewAnalytics = function(isEnabled){
-            console.log('isEnabled',isEnabled   );
+            $scope.customer.showhide.newAnalytics = isEnabled;
+            customerService.updateCustomerShowHide($scope.customer, function (err, customer) {
+                if (err) {
+                    toaster.pop('warning', err.message);
+                } else {
+                    toaster.pop('success', 'Customer Analytics Updated.');
+                }
+            });
         };
 		$scope.saveTemplateAccount = function () {
 			updateCustomerDetails(false);

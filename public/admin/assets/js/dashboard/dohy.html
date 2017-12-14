@@ -44,7 +44,11 @@
                                         <a href="/admin/#/website/site-analytics?date_filter=today"><highchart config="liveTrafficConfig" id="live-traffic-chart"></highchart></a>
                                     </div>
                                     <div class="height-215 col-sm-4">
-                                        <div id="visitor_locations" ng-if="locationData"></div>
+                                        <!--div id="visitor_locations" ng-if="locationData"></div-->
+                                        <div ind-slider='{  slidesToShow:1, arrows:false, autoplay:true, touchMove:true, autoplaySpeed:5000, speed:500, infinite:false, draggable:true }'>
+                                                <div id="live-platform-visitor-locations-us"></div>
+                                                <div id="live-platform-visitor-locations-world"></div>
+                                            </div>
                                     </div>
                                 </div>
                                 <div class="panel-footer border-light">

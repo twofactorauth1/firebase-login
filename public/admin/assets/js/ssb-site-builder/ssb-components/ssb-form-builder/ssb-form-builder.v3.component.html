@@ -49,12 +49,12 @@
                                         <textarea ng-if="val.name === 'message'" class="form-control input-lg" name="message" rows="5" ng-model="vm.formBuilder[val.name]" ng-attr-style="{{vm.inputStyle(vm.component.formSettings)}}" name="{{val.name}}" ng-required='!val.optional' ng-pattern="vm.addPattern(val)"></textarea>
                                     </div>
                                     <div class="form-group {{vm.fieldClass()}} input-field-container" ng-if="vm.component.optInRequired"  ng-class="{ 'has-error' : (formBuilder._optin.$invalid || formBuilder._optin.$error.$required) && !formBuilder._optin.$pristine }">
-                                        <span class="required req-opt-in">*</span>
                                         <div class="form-checkbox-field">
                                             <input class="optin-checkbox" type="checkbox" ng-model="vm.formBuilder['_optin']"   name="_optin" ng-required='true' ng-change="vm.formFiedlsCHange('_optin')">
                                         </div>
                                         <div class="form-checkbox-label">
-                                            <div elem ng-model="vm.component.optInText">
+                                           <span class="required req-opt-in">*</span>
+                                            <div  class="label-padding" elem ng-model="vm.component.optInText">
                                             </div>
                                         </div>
                                     </div>

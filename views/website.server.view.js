@@ -561,10 +561,18 @@ _.extend(view.prototype, BaseView.prototype, {
 
                 data.page = page;
                 data.account = value;
-                // data.loadYoutubeLib = page.get('manifest')['loadYoutubeLib'] || true;
+                var isManifestExist = true;
 
-                //Temp fix till all scenarios checked.
-                data.loadYoutubeLib = true;
+                //check if youtube manifest exist, if not then build one
+                if(!page.get('manifest') || page.get('manifest')['loadYoutubeLib'] === undefined)
+                {
+                   isManifestExist = false;
+                   page.get('manifest')['loadYoutubeLib'] = ssbManager._checkFromManifest(page.get('sections'));
+                }
+                else{
+                   data.loadYoutubeLib = page.get('manifest')['loadYoutubeLib'];
+                }
+
                 data.canonicalUrl = pageHolder[handle].canonicalUrl || null;
                 data.account.website.themeOverrides = data.account.website.themeOverrides ||{};
                 data.account.website.themeOverrides.styles = data.account.website.themeOverrides.styles || {};
@@ -722,6 +730,7 @@ _.extend(view.prototype, BaseView.prototype, {
                 } else {
 
                     //self.log.debug('before resp:', self.resp);
+
                     app.render('index', data, function (err, html) {
                         if (err) {
                             self.log.error('Error during render: ' + err);
@@ -730,7 +739,8 @@ _.extend(view.prototype, BaseView.prototype, {
                         self.resp.send(html);
                         //self.cleanUp();
                         self.log.debug('<< renderWebsitePage');
-                        if(!page.get('manifest')) {
+                        if(!page.get('manifest') || isManifestExist === false) {
+
                             var websiteId = value.website._id;
                             ssbManager.buildPageManifest(accountId, null, websiteId, handle, function(err, value){
                                 self.log.debug('built manifest:', value);

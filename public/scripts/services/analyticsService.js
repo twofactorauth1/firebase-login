@@ -195,6 +195,17 @@ mainApp.service('analyticsService', ['$http', '$location', 'ipCookie', function 
 
 	};
 
+    this.getAccountData = function(fn){
+            $http.get(baseUrl+'account/')
+            .success(function (data) {
+              fn(null,data);
+            })
+            .error(function (err) {
+              console.warn('END:Account Service with ERROR');
+              fn(err, null);
+            });
+
+    };
 	this.getSourceType = function (host) {
 		var type = 'direct',
 			organicSources = ['google.com', 'daum.net', 'eniro.se', 'naver.com', 'yahoo.com', 'msn.com', 'bing.com', 'aol.com', 'lycos.com', 'ask.com', 'altavista.com', 'search.netscape.com', 'cnn.com/SEARCH', 'about.com', 'mamma.com', 'alltheweb.com', 'voila.fr', 'search.virgilio.it', 'baidu.com', 'alice.com', 'yandex.com', 'najdi.org.mk', 'aol.com', 'mamma.com', 'seznam.cz', 'search.com', 'wp.pl', 'online.onetcenter.org', 'szukacz.pl', 'yam.com', 'pchome.com', 'kvasir.no', 'sesam.no', 'ozu.es', 'terra.com', 'mynet.com', 'ekolay.net', 'rambler.ru'];
