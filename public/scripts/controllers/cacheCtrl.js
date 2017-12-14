@@ -77,18 +77,12 @@ mainApp.controller('CacheCtrl', ['$scope', '$rootScope', 'embeddedSiteDataServic
 				$window.location.reload();
 			}
 
-		} else {
-			SsbPageSectionService.setSectionOffset(0);
-			$scope.page = data;
-			$rootScope.title = $scope.page.title;
-			$rootScope.pageHandle = $scope.page.handle;
+		} else {			
+			$scope.page = data;			
 			$scope.sections = data.sections;
-			$window.indigenous.firstVisibleElement=false;
 			_.each(data.sections, function (section, index1) {
 				if (section) {
-					if(section.layout== "nav-hero" && firstheroNavId==undefined){
-					    firstheroNavId="section_"+section._id
-					}
+					
 					if (section.ssb === false) {
 						$scope.components = $scope.components.concat(section.components);
 					} else {
@@ -96,8 +90,15 @@ mainApp.controller('CacheCtrl', ['$scope', '$rootScope', 'embeddedSiteDataServic
 						//<ssb-page-section section="section" index="$index" class="ssb-page-section"></ssb-page-section>
 						$scope['sections_' + index1] = section;
 					}
+					if(section.layout== "nav-hero" && firstheroNavId==undefined){
+					    firstheroNavId="section_"+section._id;
+					}
 				}
-			});
+			});		
+			$rootScope.title = $scope.page.title;
+			$rootScope.pageHandle = $scope.page.handle;	
+			$window.indigenous.firstVisibleElement=false;
+			SsbPageSectionService.setSectionOffset(0);
 			_.each($scope.components, function (cmp, index) {
 				$scope['components_' + index] = cmp;
 			});

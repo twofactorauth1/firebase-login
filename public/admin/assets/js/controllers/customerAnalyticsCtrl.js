@@ -137,15 +137,15 @@
 			if (data) {
 					_.each(data, function (location) {
 						if(location._id=="United States"){
-							_.each(data[0].provinces, function (location) {
-								var _geo_info = ChartAnalyticsService.stateToAbbr(location['name']);
+							_.each(location.provinces, function (_location) {
+								var _geo_info = ChartAnalyticsService.stateToAbbr(_location['name']);
 								if (_geo_info) {
 									var subObj = {},
 										locationExists;
 									subObj.code = _geo_info;
-									subObj.value = location.count;
+									subObj.value = _location.count;
 									locationExists = _.find(livePlatformUSData, function (loc) {
-										return loc.code === location.code;
+										return loc.code === _location.code;
 									});
 									if (!locationExists && subObj.value) {
 										livePlatformUSData.push(subObj);
