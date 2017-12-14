@@ -33,7 +33,7 @@ env_check(){
 		export RVLVR_STRIPE_PUBLISHABLE_KEY="pk_live_nmZLNQLPQhMVDWSOrWGsfDk1"
         export GREEN_ENV_NAME="indigeweb-env-green"
 		export AWS_DEFAULT_REGION="us-${REGION}-1"
-		sed -i "s/ENVIRONMENT/prod/g;s/REGION/${REGION}/g" ../.ebextensions/070_awslogs.config
+		sed -i "s/ENVIRONMENT/prod/g;s/REGION/${REGION}/g" ./.ebextensions/070_awslogs.config
 	elif [ "$1" = "develop" ]; then
 		export GOOGLE_CLIENT_ID="277102651227-koaeib7b05jjc355thcq3bqtkbuv1o5r.apps.googleusercontent.com"
 	  	export GOOGLE_CLIENT_SECRET="lg41TWgRgRfZQ22Y9Qd902pH"
@@ -41,7 +41,7 @@ env_check(){
         export S3_BUCKET="elasticbeanstalk-us-west-1-213805526570"
         export ENV_NAME="indiwebTestB-env"
         export APP_NAME="indiweb-test-b"
-		sed -i "s/ENVIRONMENT/test/g;s/REGION/${REGION}/g" ../.ebextensions/070_awslogs.config
+		sed -i "s/ENVIRONMENT/test/g;s/REGION/${REGION}/g" ./.ebextensions/070_awslogs.config
 	else
 		on_err "No environment specified"
 	fi	
