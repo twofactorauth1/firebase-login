@@ -4570,6 +4570,31 @@ module.exports = {
         if(string)
             return string.trim().replace('\'', '').replace('\'', '').replace('"', '').replace('"','').split(",")[0];
     },
+    _checkFromManifest : function(sections){
+        var self = this;
+        var loadYoutubeLib = false;
+            _.each(sections, function(section){
+                if(section) {
+
+                    var components = section.components || [];
+                    _.each(components, function(component){
+
+                        if(component) {
+                        if(loadYoutubeLib === false){
+                            if(component.type === 'video' || component.type === 'video-gallery'){
+                                   loadYoutubeLib = true;
+                            }
+                            else{
+                                   loadYoutubeLib = self._checkForYoutube(component);
+                            }
+                         }
+
+                    }
+                    });
+                }
+            });
+        return loadYoutubeLib;
+    },
     _checkForYoutube : function(component){
         var isVideo = false;
         var youTubeRegex = /(youtu.be\/|v\/|u\/\w\/|youtube.com\/|watch\?v=|[a-zA-Z0-9_\-]+\?v=)([^#\&\?\n<>\'\"]*)/gi;
