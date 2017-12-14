@@ -32,6 +32,7 @@ var mainApp = angular
         "com.2fdevs.videogular.plugins.buffering",
         "com.2fdevs.videogular.plugins.poster",
         "truncate",
+        'angular-jqcloud',
         '720kb.socialshare',
         'slick',
         'wu.masonry',
