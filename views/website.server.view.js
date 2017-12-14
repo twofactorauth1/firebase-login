@@ -567,7 +567,7 @@ _.extend(view.prototype, BaseView.prototype, {
                 if(!page.get('manifest') || page.get('manifest')['loadYoutubeLib'] === undefined)
                 {
                    isManifestExist = false;
-                   page.get('manifest')['loadYoutubeLib'] = ssbManager._checkFromManifest(page.get('sections'));
+                   data.loadYoutubeLib = ssbManager._checkFromManifest(page.get('sections'));
                 }
                 else{
                    data.loadYoutubeLib = page.get('manifest')['loadYoutubeLib'];
