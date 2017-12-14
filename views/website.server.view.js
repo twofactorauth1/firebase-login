@@ -188,7 +188,8 @@ _.extend(view.prototype, BaseView.prototype, {
                 var pageHolder = {};
                 pageHolder['/preview/' + pageId ] = page.toJSON('frontend');
 
-                data.page = pageHolder;                
+                data.page = pageHolder;
+                data.loadYoutubeLib = true;
                 // self.log.debug('pageHolder:', pageHolder);
                 data.account = value;
 
@@ -531,7 +532,18 @@ _.extend(view.prototype, BaseView.prototype, {
                 pageHolder[page.get('handle')] = page.toJSON('frontend');
 
                 data.page = page;
-                data.account = value;               
+                data.account = value;
+                var isManifestExist = true;
+
+                //check if youtube manifest exist, if not then build one
+                if(!page.get('manifest') || page.get('manifest')['loadYoutubeLib'] === undefined)
+                {
+                   isManifestExist = false;
+                   data.loadYoutubeLib = ssbManager._checkFromManifest(page.get('sections'));
+                }
+                else{
+                   data.loadYoutubeLib = page.get('manifest')['loadYoutubeLib'];
+                }
 
                 data.canonicalUrl = pageHolder[handle].canonicalUrl || null;
                 data.account.website.themeOverrides = data.account.website.themeOverrides ||{};
@@ -699,7 +711,8 @@ _.extend(view.prototype, BaseView.prototype, {
                         self.resp.send(html);
                         //self.cleanUp();
                         self.log.debug('<< renderWebsitePage');
-                        if(!page.get('manifest')) {
+                        if(!page.get('manifest') || isManifestExist === false) {
+
                             var websiteId = value.website._id;
                             ssbManager.buildPageManifest(accountId, null, websiteId, handle, function(err, value){
                                 self.log.debug('built manifest:', value);
