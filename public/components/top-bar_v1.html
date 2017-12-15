@@ -39,10 +39,7 @@
                     <li class="phone-block">
                         <div class="navbar-text navbar-right">
                             <i ng-if="component.phone" class="fa fa-phone fa-lg"></i> &nbsp;
-                            <div ng-if="isEditing" elem ng-model="component.phone"></div>
-                            <a href="tel:{{component.phone}}" ng-if="!isEditing">
-                                <div elem ng-model="component.phone" class="inline-block"></div>
-                            </a>
+                            <div elem ng-model="component.phone" class="inline-block"></div>
                         </div>
                     </li>
                     <li class="phone-block">
