@@ -108,8 +108,6 @@
 								classString += ' ssb-fixed-first-element';
 							}
 						}
-
-
 					}
 					if (section.layoutModifiers.grid && section.layoutModifiers.grid.isActive) {
 						classString += ' ssb-page-section-layout-' + section.layout + '-grid';
@@ -934,6 +932,8 @@
 									return angular.element(".ssb-fixed-first-element").height();
 								},
 								function (value) {
+									if (dup)
+                                		dup.css("min-height", value + "px");
 									ssbPageSectionService.setSectionOffset(value);
 								}
 							);

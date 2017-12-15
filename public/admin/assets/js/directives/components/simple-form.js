@@ -166,10 +166,7 @@ app.directive('simpleFormComponent', ["formValidations", "$timeout", function (f
 
 			scope.formStyle = function (form) {
 				var styleString = '';
-				if (form) {
-					if (form.formFontFamily) {
-						styleString += 'font-family: ' + form.formFontFamily + "!important;";
-					}
+				if (form) {					
 					if (form.formTextColor) {
 						styleString += 'color: ' + form.formTextColor + ";";
 					}
