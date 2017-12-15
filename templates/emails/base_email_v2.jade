@@ -72,7 +72,7 @@ html
       //- | </style>
       //- <!--<![endif]-->
   body
-    div(class="body email-body ssb-theme-", style="width: 100%; -webkit-text-size-adjust: 100% !important; -ms-text-size-adjust: 100% !important; margin: 0; padding: 0;background-color:"+email.emailBg+";")
+    div(class="body thisisteupdatedclaodhtihs email-body ssb-theme-", style="width: 100%; -webkit-text-size-adjust: 100% !important; -ms-text-size-adjust: 100% !important; margin: 0; padding: 0;background-color:"+email.emailBg+";")
       table(width='680px', align='center', cellpadding='0', cellspacing='0', border='0', style="border-collapse: collapse;background-color:"+email.tableBgColor+";")
         tr
           td
@@ -234,7 +234,7 @@ html
 
               if component.type === 'email-3-col'
                 - var url=(component.bg && component.bg.img.show === true) ? 'https:'+component.bg.img.url : '';
-                | <div style="max-width:!{component.spacing.mw || '100%'} ;float:left;width: 100%;background-size: cover;background-image: url(!{url});padding-top: !{component.spacing.pt || 0};padding-bottom: !{component.spacing.pb || 0};padding-left: !{component.spacing.pl || 0};padding-right: !{component.spacing.pr || 0};margin-top: !{component.spacing.mt || 0};margin-bottom: !{component.spacing.mb || 0};margin-left: !{component.spacing.ml || 0};margin-right: !{component.spacing.mr || 0};"><table class="email-component-container {{component.type}}-v{{component.version}}" align="center" border="0" cellpadding="0" cellspacing="0" width="100%">
+                | <div style="max-width:!{component.spacing.mw || '100%'} ;float:left;width: 100%;background-color:!{component.bg.color};background-size: cover;background-image: url(!{url});padding-top: !{component.spacing.pt || 0};padding-bottom: !{component.spacing.pb || 0};padding-left: !{component.spacing.pl || 0};padding-right: !{component.spacing.pr || 0};margin-top: !{component.spacing.mt || 0};margin-bottom: !{component.spacing.mb || 0};margin-left: !{component.spacing.ml || 0};margin-right: !{component.spacing.mr || 0};"><table class="email-component-container {{component.type}}-v{{component.version}}" align="center" border="0" cellpadding="0" cellspacing="0" width="100%">
                 if component.title
                     |     <tr>
                     |         <td>
@@ -293,7 +293,7 @@ html
 
               if component.type === 'email-footer'
                 - var url=(component.bg && component.bg.img.show === true) ? 'https:'+component.bg.img.url : '';
-                | <div style="max-width:!{component.spacing.mw || '100%'} ;float:left;width: 100%;;background-color: !{component.bg.color};background-size: cover;background-image: url(!{url});padding-top: !{component.spacing.pt || 0};padding-bottom: !{component.spacing.pb || 0};padding-left: !{component.spacing.pl || 0};padding-right: !{component.spacing.pr || 0};margin-top: !{component.spacing.mt || 0};margin-bottom: !{component.spacing.mb || 0};margin-left: !{component.spacing.ml || 0};margin-right: !{component.spacing.mr || 0};"><table class="email-component-container {{component.type}}-v{{component.version}}" align="center" border="0" cellpadding="0" cellspacing="0" width="100%">
+                | <div style="max-width:!{component.spacing.mw || '100%'} ;float:left;width: 100%;background-color:!{component.bg.color};background-size: cover;background-image: url(!{url});padding-top: !{component.spacing.pt || 0};padding-bottom: !{component.spacing.pb || 0};padding-left: !{component.spacing.pl || 0};padding-right: !{component.spacing.pr || 0};margin-top: !{component.spacing.mt || 0};margin-bottom: !{component.spacing.mb || 0};margin-left: !{component.spacing.ml || 0};margin-right: !{component.spacing.mr || 0};"><table class="email-component-container {{component.type}}-v{{component.version}}" align="center" border="0" cellpadding="0" cellspacing="0" width="100%">
                 |     <tr>
                 |         <td>
                 |             <table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" id="templateColumns">
