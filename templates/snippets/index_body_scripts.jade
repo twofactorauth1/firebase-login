@@ -192,5 +192,12 @@ script(src="scripts/filters/offset.js")
 script(src="scripts/filters/reverse.js")
 script(src="scripts/services/ssbPageSectionService.js")
 
+-if (loadYoutubeLib)
+      script.
+        var tag = document.createElement('script');
+        tag.src = "https://www.youtube.com/iframe_api";
+        var firstScriptTag = document.getElementsByTagName('script')[0];
+        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
 | !{userScripts}
 | !{externalScripts}

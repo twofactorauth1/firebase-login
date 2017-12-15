@@ -16,6 +16,12 @@ script.
 script(src="../js/libs_misc/crypto/hmac-sha256.js")
 script(src="../js/libs_misc/crypto/enc-base64-min.js")
 
+script.
+    var tag = document.createElement('script');
+    tag.src = "https://www.youtube.com/iframe_api";
+    var firstScriptTag = document.getElementsByTagName('script')[0];
+    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
 if environment == 'local'
 
     script(type="text/javascript").
