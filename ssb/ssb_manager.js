@@ -4562,7 +4562,7 @@ module.exports = {
         var self = this;
         var loadYoutubeLib = false;
             _.each(sections, function(section){
-                if(!loadYoutubeLib && section && section.bg && section.bg.video && section.bg.video.id) {
+                if(!loadYoutubeLib && section && section.bg && section.bg.video && section.bg.video.id && section.bg.video.show) {
                     loadYoutubeLib = true;
                 }
             });
