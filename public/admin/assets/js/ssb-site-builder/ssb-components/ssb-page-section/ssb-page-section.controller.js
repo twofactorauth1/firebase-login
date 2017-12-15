@@ -902,48 +902,27 @@
 				var elementIsFirstPosition = vm.index === 0;
 				if ($injector.has("SsbPageSectionService"))
 					ssbPageSectionService = $injector.get("SsbPageSectionService");
-				if (elementIsFirstPosition) {
-					// Preview page
-					var dup ;
-					if ($location.$$path.indexOf("/preview/") == 0) {
-						dup = vm.element.clone();
-						dup.addClass('ssb-fixed-clone-element');
-						dup.attr('id', 'clone_of_' + vm.section._id);
-						dup.insertAfter(vm.element);
+				if (ssbPageSectionService)
+					ssbPageSectionService.isSticky = true;
+				if (elementIsFirstPosition) {					
+					var dup ;					
+					dup = vm.element.clone();
+					dup.addClass('ssb-fixed-clone-element');
+					dup.attr('id', 'clone_of_' + vm.section._id);
+					dup.insertAfter(vm.element);
+					if (ssbPageSectionService) {
 						$scope.$watch(
 							function () {
 								return angular.element(".ssb-fixed-first-element").height();
 							},
 							function (value) {
 								if (dup)
-									dup.css("min-height", value + "px");
-								if (ssbPageSectionService)
-									ssbPageSectionService.setSectionOffset(value);
+                            		dup.css("min-height", value + "px");
+								ssbPageSectionService.setSectionOffset(value);
 							}
 						);
-					} else {
-						dup = vm.element.clone();
-						dup.addClass('ssb-fixed-clone-element');
-						dup.attr('id', 'clone_of_' + vm.section._id);
-						dup.insertAfter(vm.element);
-						if (ssbPageSectionService) {
-							$scope.$watch(
-								function () {
-									return angular.element(".ssb-fixed-first-element").height();
-								},
-								function (value) {
-									if (dup)
-                                		dup.css("min-height", value + "px");
-									ssbPageSectionService.setSectionOffset(value);
-								}
-							);
-						}
-
 					}
-
-				} else {
-					if (ssbPageSectionService)
-						ssbPageSectionService.isSticky = true;
+				} else {					
 					$timeout(function () {
 						$(vm.element[0]).sticky({
 							zIndex: 999
