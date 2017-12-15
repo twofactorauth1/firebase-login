@@ -1265,7 +1265,6 @@
          *
          */
         function extendComponentData(oldSection, newSection) {
-debugger
             var keysToOmitSection = ['$$hashKey', 'anchor', 'version', 'type', 'layout', 'visibility', 'bg', 'border', 'layoutModifiers', 'componentSortOrder', 'thumbnailCollection'];
             var keysToOmitComponent = ['$$hashKey', 'anchor', 'accountId', 'version', 'type', 'layout', 'visibility', 'bg', 'border', 'layoutModifiers', 'componentSortOrder', 'thumbnailCollection', 'nav'];
             var newComponents = angular.copy(newSection.components);
