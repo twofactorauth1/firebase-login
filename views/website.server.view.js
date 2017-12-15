@@ -190,7 +190,6 @@ _.extend(view.prototype, BaseView.prototype, {
 
                 data.page = pageHolder;
                 data.loadYoutubeLib = true;
-                // self.log.debug('pageHolder:', pageHolder);
                 data.account = value;
 
                 if(!data.account.orgId) {
@@ -533,17 +532,7 @@ _.extend(view.prototype, BaseView.prototype, {
 
                 data.page = page;
                 data.account = value;
-                var isManifestExist = true;
-
-                //check if youtube manifest exist, if not then build one
-                if(!page.get('manifest') || page.get('manifest')['loadYoutubeLib'] === undefined)
-                {
-                   isManifestExist = false;
-                   data.loadYoutubeLib = ssbManager._checkFromManifest(page.get('sections'));
-                }
-                else{
-                   data.loadYoutubeLib = page.get('manifest')['loadYoutubeLib'];
-                }
+                data.loadYoutubeLib = ssbManager._checkForYoutube(page.get('sections'));
 
                 data.canonicalUrl = pageHolder[handle].canonicalUrl || null;
                 data.account.website.themeOverrides = data.account.website.themeOverrides ||{};
@@ -711,7 +700,7 @@ _.extend(view.prototype, BaseView.prototype, {
                         self.resp.send(html);
                         //self.cleanUp();
                         self.log.debug('<< renderWebsitePage');
-                        if(!page.get('manifest') || isManifestExist === false) {
+                        if(!page.get('manifest')) {
 
                             var websiteId = value.website._id;
                             ssbManager.buildPageManifest(accountId, null, websiteId, handle, function(err, value){
@@ -921,7 +910,7 @@ _.extend(view.prototype, BaseView.prototype, {
                 data.page = page;
                 data.account = value;
                 data.originalAccountBusiness = originalAccount.get('business');
-
+                data.loadYoutubeLib = ssbManager._checkForYoutube(page.get('sections'));
                 data.canonicalUrl = pageHolder[handle].canonicalUrl || null;
                 data.account.website.themeOverrides = data.account.website.themeOverrides ||{};
                 data.account.website.themeOverrides.styles = data.account.website.themeOverrides.styles || {};
