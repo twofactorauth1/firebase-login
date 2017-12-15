@@ -157,6 +157,7 @@ _.extend(view.prototype, BaseView.prototype, {
                 data.page = page;
                 data.posts = posts;
                 data.account = value;
+                data.loadYoutubeLib = ssbManager._checkForYoutube(page.get('sections'));
                 data.canonicalUrl = pageHolder[handle].canonicalUrl || null;
                 data.account.website.themeOverrides = data.account.website.themeOverrides ||{};
                 data.account.website.themeOverrides.styles = data.account.website.themeOverrides.styles || {};
@@ -776,6 +777,7 @@ _.extend(view.prototype, BaseView.prototype, {
                 data.page = page;
                 data.post = post.toJSON('frontend');
                 data.account = value;
+                data.loadYoutubeLib = ssbManager._checkForYoutube(page.get('sections'));
                 data.canonicalUrl = pageHolder[handle].canonicalUrl || null;
                 data.account.website.themeOverrides = data.account.website.themeOverrides ||{};
                 data.account.website.themeOverrides.styles = data.account.website.themeOverrides.styles || {};

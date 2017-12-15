@@ -508,9 +508,7 @@
                         width: '100%',
                         videoId: vm.section.bg.video.id,
                         events: {
-                            'onReady': vm.onPlayerReady,
-                            'onStateChange': vm.onPlayerStateChange,
-                            'onError': vm.onPlayerError
+                            'onReady': vm.onPlayerReady                            
                         },
                         playerVars: {
                             autohide: 1,
@@ -537,7 +535,6 @@
             vm.player.playVideo();
             vm.player.mute();
         };
-
 
         function init(element) {
             vm.element = element;

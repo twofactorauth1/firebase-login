@@ -4432,18 +4432,8 @@ module.exports = {
                 });
                 var fontMap= {};
                 var componentMap = {};
-                var loadYoutubeLib = false;
                 async.eachSeries(components, function(component, callback){
-                    if(component) {
-
-                        if(loadYoutubeLib === false){
-                            if(component.type === 'video' || component.type === 'video-gallery'){
-                                   loadYoutubeLib = true;
-                            }
-                            else{
-                                   loadYoutubeLib = self._checkForYoutube(component);
-                            }
-                        }
+                    if(component) {                       
 
                         var fontUsed = "";
                         // SIMPLE FORM, FORM BUILDER, DONATION FORM
@@ -4525,21 +4515,19 @@ module.exports = {
 
                 }, function done(err){
                     self.log.debug('The following fonts are used:', fontMap);
-                    cb(null, page, components, fontMap, componentMap, loadYoutubeLib);
+                    cb(null, page, components, fontMap, componentMap);
                 });
             },
-            function(page, componentAry, fontMap, componentMap, loadYoutubeLib,cb) {
+            function(page, componentAry, fontMap, componentMap, cb) {
                 pageCacheManager.getS3TemplateContent(accountId, handle, function(err, value){
-                    cb(null, page, componentAry, fontMap, componentMap, value, loadYoutubeLib);
+                    cb(null, page, componentAry, fontMap, componentMap, value);
                 });
             },
-            function(page, componentAry, fontMap, componentMap, template, loadYoutubeLib, cb) {
+            function(page, componentAry, fontMap, componentMap, template, cb) {
                 var manifest = {
                     fonts:fontMap,
                     components:componentMap,
-                    template:template,
-                    loadYoutubeLib : loadYoutubeLib
-
+                    template:template
                 };
                 cb(null, manifest, page);
             }
@@ -4570,53 +4558,14 @@ module.exports = {
         if(string)
             return string.trim().replace('\'', '').replace('\'', '').replace('"', '').replace('"','').split(",")[0];
     },
-    _checkFromManifest : function(sections){
+    _checkForYoutube : function(sections){
         var self = this;
         var loadYoutubeLib = false;
             _.each(sections, function(section){
-                if(section) {
-
-                    var components = section.components || [];
-                    _.each(components, function(component){
-
-                        if(component) {
-                        if(loadYoutubeLib === false){
-                            if(component.type === 'video' || component.type === 'video-gallery'){
-                                   loadYoutubeLib = true;
-                            }
-                            else{
-                                   loadYoutubeLib = self._checkForYoutube(component);
-                            }
-                         }
-
-                    }
-                    });
+                if(!loadYoutubeLib && section && section.bg && section.bg.video && section.bg.video.id && section.bg.video.show) {
+                    loadYoutubeLib = true;
                 }
             });
         return loadYoutubeLib;
-    },
-    _checkForYoutube : function(component){
-        var isVideo = false;
-        var youTubeRegex = /(youtu.be\/|v\/|u\/\w\/|youtube.com\/|watch\?v=|[a-zA-Z0-9_\-]+\?v=)([^#\&\?\n<>\'\"]*)/gi;
-        for (var key in component) {
-            if (component.hasOwnProperty(key) && isVideo === false) {
-                if(typeof component[key] !== 'object'){
-                    var current_value = component[key];
-                        if(current_value !== ""){
-                            current_value = current_value.toString();
-                            if(current_value.match(youTubeRegex) !== null){
-                                isVideo = true;
-                            }
-
-                         }
-
-
-                }
-
-            }
-
-        }
-          return isVideo;
-        }
-
+    }
 };
