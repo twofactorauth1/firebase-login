@@ -193,7 +193,10 @@
 
 		function formStyle(form) {
 			var styleString = '';
-			if (form) {				
+			if (form) {	
+				if (form.formFontFamily) {
+                    styleString += 'font-family: ' + form.formFontFamily + ";";
+                }			
 				if (form.formTextColor) {
 					styleString += 'color: ' + form.formTextColor + ";";
 				}
