@@ -575,9 +575,9 @@
                     },
                     function (value) {
                         angular.element(".ssb-wrap-fixed-right-nav").css("margin-left", value + "px");
-                        $timeout(function () {
-                            angular.element(".ssb-wrap-fixed-right-nav").css("margin-left", value + "px");
-                        }, 0);
+                        //$timeout(function () {
+                        angular.element(".ssb-wrap-fixed-right-nav").css("margin-left", value + "px");
+                        //}, 0);
                     }
                 );
             }
