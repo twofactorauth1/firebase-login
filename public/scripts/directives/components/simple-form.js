@@ -142,7 +142,7 @@ app.directive('simpleFormComponent', ["ipCookie", '$window', '$timeout', 'userSe
 				var styleString = '';
 				if (form) {
 					if (form.formFontFamily) {
-						styleString += 'font-family: ' + form.formFontFamily + "!important;";
+						styleString += 'font-family: ' + form.formFontFamily + ";";
 					}
 					if (form.formTextColor) {
 						styleString += 'color: ' + form.formTextColor + ";";
