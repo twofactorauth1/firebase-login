@@ -436,7 +436,6 @@
                 var elementIsFirstPosition = vm.index === 0;
                 SsbPageSectionService.isSticky = true;
                 if (elementIsFirstPosition) {
-                    // Preview page
                     var dup ;
                     dup = vm.element.clone();
                     dup.addClass('ssb-fixed-clone-element');
