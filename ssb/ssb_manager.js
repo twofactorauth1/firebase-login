@@ -4432,7 +4432,6 @@ module.exports = {
                 });
                 var fontMap= {};
                 var componentMap = {};
-                var loadYoutubeLib = false;
                 async.eachSeries(components, function(component, callback){
                     if(component) {                       
 
@@ -4519,9 +4518,9 @@ module.exports = {
                     cb(null, page, components, fontMap, componentMap);
                 });
             },
-            function(page, componentAry, fontMap, componentMap,cb) {
+            function(page, componentAry, fontMap, componentMap, cb) {
                 pageCacheManager.getS3TemplateContent(accountId, handle, function(err, value){
-                    cb(null, page, componentAry, fontMap, componentMap, value, loadYoutubeLib);
+                    cb(null, page, componentAry, fontMap, componentMap, value);
                 });
             },
             function(page, componentAry, fontMap, componentMap, template, cb) {
@@ -4529,7 +4528,6 @@ module.exports = {
                     fonts:fontMap,
                     components:componentMap,
                     template:template
-
                 };
                 cb(null, manifest, page);
             }
