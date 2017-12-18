@@ -690,24 +690,12 @@ module.exports = {
 
     getUpdatedWebsiteLinkList: function(list, handle, deletePage, fn){
         var self = this;
+
         var linkList = list.links.filter(function (lnk) {
-        if(lnk.linkTo && lnk.linkTo.type === 'sub-nav'){
-            var isFilter = false ;
-            _.each(lnk.links, function(lnk){
-                if(isFilter === false){
-                    isFilter = lnk.type === 'link' &&
-                               lnk.linkTo && deletePage ? (lnk.linkTo.data === handle || lnk.linkTo.page === handle) : lnk.linkTo && lnk.linkTo.data === handle;
-                }
-            });
-            return isFilter;
-        }
-        else{
-           return lnk.type === 'link' &&
+        return lnk.type === 'link' &&
              lnk.linkTo && deletePage ? (lnk.linkTo.data === handle || lnk.linkTo.page === handle) : lnk.linkTo && lnk.linkTo.data === handle
-         }
         });
         if(linkList){
-
             _.each(linkList, function(link){
                 var _index = list.links.indexOf(link);
                 if(_index > -1)
@@ -725,7 +713,8 @@ module.exports = {
                          _.each(link.links, function(subLink){
                                self.log.debug('>> chekcing sub link --' );
                                self.log.debug( subLink );
-                             if(subLink.linkTo.data !== handle){
+                             if(!(subLink.linkTo.type==modifiedLink.linkTo.type &&
+                             subLink.linkTo.data==modifiedLink.linkTo.data)){
                                  sublist.push(subLink)
                              }else{
                                   self.log.debug('>> removed sub link --' );
@@ -735,11 +724,10 @@ module.exports = {
                         link.links=sublist;
                     });
                 }
-
             });
         }
         self.log.debug('>> updatedLinkList is' + list );
-        self.log.debug(list );
+         self.log.debug(list );
         fn(null, list);
     },
 
@@ -1994,13 +1982,11 @@ module.exports = {
                         _updatedHandle = 'blog';
                     }
                     if (updatedPage.get('mainmenu') === false) {
-
                         self.getWebsiteLinklistsByHandle(accountId, updatedPage.get('websiteId'), "head-menu", function(err, list) {
                             if (err) {
                                 self.log.error(accountId, userId,'Error getting website linklists by handle: ' + err);
                                 cb(err);
                             } else {
-                                console.log('first************',list);
                                 if(list && list.links){
                                     self.getUpdatedWebsiteLinkList(list, _existingHandle, false, function(err, updatedList){
                                         list = updatedList;
@@ -2036,7 +2022,7 @@ module.exports = {
                                     if(_status && pageHandles.indexOf("blog") === -1){
                                         pageHandles.push("blog");
                                     }
-                                    console.log('second************',list);
+
                                     var _exists = false;
                                     list.links = _(list.links).chain()
                                         .map(function(link){
@@ -2052,7 +2038,6 @@ module.exports = {
                                                 _exists = true;
                                             }else if(link.linkTo.type=="sub-nav"){
                                                 _.each(link.links, function(subLink){
-                                                    console.log(subLink.linkTo.data,'***************************',_existingHandle);
                                                     if(subLink.linkTo.data === _existingHandle){
                                                         var _label = updatedPage.get('menuTitle');
                                                         // check if menu title not exists and page title is changed
@@ -4448,7 +4433,7 @@ module.exports = {
                 var fontMap= {};
                 var componentMap = {};
                 async.eachSeries(components, function(component, callback){
-                    if(component) {
+                    if(component) {                       
 
                         var fontUsed = "";
                         // SIMPLE FORM, FORM BUILDER, DONATION FORM
