@@ -13,8 +13,10 @@ app.directive('navigationComponent', ['accountService', '$timeout', function (ac
 					angular.element(".navbar-toggle").click(function(){
 						var ele=angular.element("#component_"+$scope.component._id);
 						if(this.attributes.hasOwnProperty("aria-expanded") && 
-						this.attributes.getNamedItem("aria-expanded").value == 'true'){
-							ele.removeClass("o-open");
+						this.attributes.getNamedItem("aria-expanded").value == 'true'){ 
+							$timeout(function () {
+								ele.removeClass("o-open");
+							},200);
 						} else{
 							ele.addClass("o-open");
 						}
