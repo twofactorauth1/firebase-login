@@ -21,7 +21,7 @@
                                     <span class="help-block" ng-if="vm.checkDuplicateEmail(val)">Email already exists.</span>
                                     <textarea ng-if="val.name === 'message'" class="form-control input-lg" name="message" rows="5" ng-model="vm.formBuilder[val.name]" ng-attr-style="{{vm.inputStyle(vm.component.formSettings)}}" name="{{val.name}}" ng-required='!val.optional' ng-pattern="vm.addPattern(val)"></textarea>
                                 </div>
-                                <div class="form-group {{vm.fieldClass()}} input-field-container" ng-if="vm.component.optInRequired"  ng-class="{ 'has-error' : (formBuilder._optin.$invalid || formBuilder._optin.$error.$required) && !formBuilder._optin.$pristine }"> 
+                                <div class="form-group {{vm.fieldClass()}} input-field-container req-opt-in-container" ng-if="vm.component.optInRequired"  ng-class="{ 'has-error' : (formBuilder._optin.$invalid || formBuilder._optin.$error.$required) && !formBuilder._optin.$pristine }">
 									<div class="form-checkbox-field">
 										<input class="optin-checkbox" type="checkbox" ng-model="vm.formBuilder['_optin']"   name="_optin" ng-required='true' ng-change="vm.formFiedlsCHange('_optin')">
 									</div>
@@ -31,9 +31,9 @@
 									</div>
 								</div>
                                 <div class="clearfix mb15 visible-xs"></div>
-                               
+
                                 <div class="col-sm-12 form-builder-submit-btn-container">
-                 
+
 									<button ng-if="!vm.isEditing" ng-attr-style="{{vm.buttonStyle(vm.component.btn)}}" ng-class="{'ssb-theme-btn form-submit-button': vm.component.submitBtn}" type="submit" class="btn btn-form btn-block pull-right" ng-disabled="formBuilder.$invalid">
                                         <span elem ng-model="vm.component.submitBtn"></span>
                                     </button>
@@ -52,7 +52,7 @@
                                       <textarea ng-if="val.name === 'message'" class="form-control input-lg" name="message" rows="5" ng-model="vm.formBuilder[val.name]" ng-attr-style="{{vm.inputStyle(vm.component.formSettings)}}" name="{{val.name}}" ng-required='!val.optional' ng-pattern="vm.addPattern(val)"></textarea>
                                     </div>
                                 </div>
-                                <div class="form-group {{vm.fieldClass()}} input-field-container" ng-if="vm.component.optInRequired"  ng-class="{ 'has-error' : (formBuilder._optin.$invalid || formBuilder._optin.$error.$required) && !formBuilder._optin.$pristine }">
+                                <div class="form-group {{vm.fieldClass()}} input-field-container  req-opt-in-container" ng-if="vm.component.optInRequired"  ng-class="{ 'has-error' : (formBuilder._optin.$invalid || formBuilder._optin.$error.$required) && !formBuilder._optin.$pristine }">
 									<span class="required req-opt-in">*</span>
 									<div class="form-checkbox-field">
 										<input class="optin-checkbox" type="checkbox" ng-model="vm.formBuilder['_optin']"   name="_optin" ng-required='true' ng-change="vm.formFiedlsCHange('_optin')">
@@ -63,7 +63,7 @@
 								</div>
 								<div class="clearfix mb15 visible-xs"></div>
                                 <div class="col-sm-12 form-builder-submit-btn-container">
-                      
+
 									<button ng-if="!vm.isEditing" ng-attr-style="{{vm.buttonStyle(vm.component.btn)}}" ng-class="{'ssb-theme-btn form-submit-button': vm.component.submitBtn}" type="submit" class="btn btn-form btn-block pull-right" ng-disabled="formBuilder.$invalid">
                                         <span elem ng-model="vm.component.submitBtn"></span>
                                     </button>
@@ -85,7 +85,7 @@
                                       <textarea placeholder="{{val.label || val.type}}" class="form-control input-lg" name="message" rows="5" ng-model="vm.formBuilder[val.name]" ng-attr-style="{{vm.inputStyle(vm.component.formSettings)}}" name="{{val.name}}" ng-required='!val.optional' ng-pattern="vm.addPattern(val)"></textarea>
                                     </div>
                                 </div>
-                                <div class="col-sm-12 input-field-container">
+                                <div class="col-sm-12 input-field-container  req-opt-in-container">
                                     <div class="form-group {{vm.fieldClass()}} input-field-container" ng-if="vm.component.optInRequired"  ng-class="{ 'has-error' : (formBuilder._optin.$invalid || formBuilder._optin.$error.$required) && !formBuilder._optin.$pristine }">
     									<span class="required req-opt-in">*</span>
     									<div class="form-checkbox-field">
@@ -96,10 +96,10 @@
     										</div>
     									</div>
     								</div>
-                                </div>                                
+                                </div>
 								<div class="clearfix mb15 visible-xs"></div>
                                 <div class="col-sm-12 form-builder-submit-btn-container">
-    
+
                                     <button ng-if="!vm.isEditing" ng-attr-style="{{vm.buttonStyle(vm.component.btn)}}" ng-class="{'ssb-theme-btn form-submit-button': vm.component.submitBtn}" type="submit" class="btn btn-form btn-block pull-right" ng-disabled="formBuilder.$invalid">
                                         <span elem ng-model="vm.component.submitBtn"></span>
                                     </button>
@@ -116,7 +116,7 @@
                                     <span class="help-block" ng-if="vm.checkDuplicateEmail(val)">Email already exists.</span>
                                     <textarea ng-if="val.name === 'message'" placeholder="{{val.label || val.type}}" class="form-control input-lg" name="message" rows="5" ng-model="vm.formBuilder[val.name]" ng-attr-style="{{vm.inputStyle(vm.component.formSettings)}}" name="{{val.name}}" ng-required='!val.optional' ng-pattern="vm.addPattern(val)"></textarea>
                                 </div>
-                                <div class="form-group {{vm.fieldClass()}} input-field-container" ng-if="vm.component.optInRequired"  ng-class="{ 'has-error' : (formBuilder._optin.$invalid || formBuilder._optin.$error.$required) && !formBuilder._optin.$pristine }">
+                                <div class="form-group {{vm.fieldClass()}} input-field-container  req-opt-in-container" ng-if="vm.component.optInRequired"  ng-class="{ 'has-error' : (formBuilder._optin.$invalid || formBuilder._optin.$error.$required) && !formBuilder._optin.$pristine }">
                                         <span class="required req-opt-in">*</span>
                                         <div class="form-checkbox-field">
                                             <input class="optin-checkbox" type="checkbox" ng-model="vm.formBuilder['_optin']" name="_optin" ng-required='true' ng-change="vm.formFiedlsCHange('_optin')">
@@ -129,7 +129,7 @@
 
                                 <div class="clearfix mb15 visible-xs"></div>
                                 <div class="col-sm-12 form-builder-submit-btn-container">
-                             
+
                                     <button ng-if="!vm.isEditing" ng-attr-style="{{vm.buttonStyle(vm.component.btn)}}" ng-class="{'ssb-theme-btn form-submit-button': vm.component.submitBtn}" type="submit" class="btn btn-form btn-block pull-right" ng-disabled="formBuilder.$invalid">
                                         <span elem ng-model="vm.component.submitBtn"></span>
                                     </button>
@@ -145,7 +145,7 @@
                                     <span class="help-block" ng-if="vm.checkDuplicateEmail(val)">Email already exists. </span>
                                     <textarea ng-if="val.name === 'message'" class="form-control input-lg" name="message" rows="5" ng-model="vm.formBuilder[val.name]" ng-attr-style="{{vm.inputStyle(vm.component.formSettings)}}" name="{{val.name}}" ng-required='!val.optional' ng-pattern="vm.addPattern(val)" placeholder="{{val.label || val.type}}"></textarea>
                                 </div>
-                                <div class="form-group  input-field-container col-sm-12" ng-if="vm.component.optInRequired"  ng-class="{ 'has-error' : (formBuilder._optin.$invalid || formBuilder._optin.$error.$required) && !formBuilder._optin.$pristine }">
+                                <div class="form-group  input-field-container col-sm-12  req-opt-in-container" ng-if="vm.component.optInRequired"  ng-class="{ 'has-error' : (formBuilder._optin.$invalid || formBuilder._optin.$error.$required) && !formBuilder._optin.$pristine }">
 
 									<div class="form-checkbox-field">
                                         <span class="required req-opt-in">*</span>
@@ -157,7 +157,7 @@
 									</div>
 								</div>
                                 <div class="clearfix mb15 visible-xs"></div>
-             
+
                                 <div class="col-sm-12 form-builder-submit-btn-container">
                                     <button ng-if="!vm.isEditing" ng-attr-style="{{vm.buttonStyle(vm.component.btn)}}" ng-class="{'ssb-theme-btn form-submit-button': vm.component.submitBtn}" type="submit" class="btn btn-form btn-block pull-right" ng-disabled="formBuilder.$invalid || setinvalid">
                                         <span elem ng-model="vm.component.submitBtn"></span>
