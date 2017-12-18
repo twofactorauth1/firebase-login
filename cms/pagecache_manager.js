@@ -440,7 +440,7 @@ module.exports = {
                                     _.each(page.get('components'), function(component, index){
                                         var divName = self.getDirectiveNameDivByType(component.type);
                                         html = html + divName + ' component="components_' + index + '"></div>';
-                                    });
+                                    });j
                                 }
 
                                 cb(null);
@@ -796,7 +796,7 @@ module.exports = {
                 styleString += "background-color: " + section.bg.color + ";";
             }
             if (section.bg.img && section.bg.img.show && section.bg.img.url && section.bg.img.url !== "") {
-                styleString += "background-image: url(" + section.bg.img.url + ")";
+                styleString += 'background-image: url("' + section.bg.img.url + '")';
             }
         }
         return styleString;
@@ -1024,13 +1024,13 @@ module.exports = {
                 }
 
                 if (component.bg.img && component.bg.img.show && component.bg.img.url !== "") {
-                    styleString += "background-image: url(" + component.bg.img.url + ")";
+                    styleString += 'background-image: url("' + component.bg.img.url + '")';
                 }
             }
 
             if (component.src) {
                 if (component.src && component.src !== "") {
-                    styleString += "background-image: url(" + component.src + ")";
+                    styleString += 'background-image: url("' + component.src + '")';
                 }
             }
 
