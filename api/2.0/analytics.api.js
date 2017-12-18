@@ -271,6 +271,7 @@ _.extend(api.prototype, baseApi.prototype, {
         pageEvent.set('server_time', dateTime);
         pageEvent.set('server_time_dt', new Date());
         pageEvent.set('start_time', dateTime);
+        pageEvent.set('ip_address', self.ip(req));
         pageEvent.set('accountId', self.currentAccountId(req));
         if(q.siteId) {
             if(!isNaN(q.siteId)) {
@@ -319,6 +320,7 @@ _.extend(api.prototype, baseApi.prototype, {
         pingEvent.set('server_time', dateTime);
         pingEvent.set('ping_time', dateTime);
         pingEvent.set('server_time_dt', new Date());
+        pingEvent.set('ip_address', self.ip(req));
         pingEvent.set('accountId', self.currentAccountId(req));
         if(q.siteId) {
             if(!isNaN(q.siteId)) {
