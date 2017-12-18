@@ -275,7 +275,7 @@ var mainApp = angular
 
         if (editorIndex == -1 && !isPreview) {
             analyticsService.getAccountData(function(err, data){
-                (err === null) ? newAnalytics = data.showhide && data.showhide.newAnalytics || false : newAnalytics = false;
+                (err === null) ? newAnalytics = data && data.showhide && data.showhide.newAnalytics || false : newAnalytics = false;
                 if(newAnalytics === true) {
                         console.log('new analytics.');
                         analyticsService.collect(null, function () {
@@ -321,7 +321,7 @@ var mainApp = angular
             $rootScope.isSocialEnabled = $location.absUrl().search(/\/blog\/.+/) !== -1;
             if (editorIndex == -1 && !isPreview) {
                 analyticsService.getAccountData(function(err, data){
-                (err === null) ? newAnalytics = data.showhide && data.showhide.newAnalytics || false : newAnalytics = false;
+                (err === null) ? newAnalytics = data && data.showhide && data.showhide.newAnalytics || false : newAnalytics = false;
                 if(newAnalytics === true) {
                     console.log('new collect');
                     analyticsService.collectPage(true, function(){
