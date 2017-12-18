@@ -51,6 +51,7 @@
 			$scope.pvm = pvm;
 
 			if (pvm) {
+				pvm.uiState.activeElement=null;
 				$scope.$watch('pvm.uiState.activeElement', function (activeElement) {
 					if (activeElement) {
 						if (activeElement.id === vm.elementData.id) {
