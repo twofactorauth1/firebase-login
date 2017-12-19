@@ -6,8 +6,9 @@
     .{{component.type}}{{component._id}} {
        opacity: {{component.bg.opacity === 0 ? 0 : component.bg.opacity || 1}};
     }
+    .{{component.type+"_main"}}{margin-top: 0px !important;}
 </style>
-<div class="component-wrap component_wrap_{{component._id}}"
+<div class="component-wrap component_wrap_{{component._id}} {{component.type == 'masthead' ? component.type : ''}}_main"
      ng-if="component.visibility"
      ng-class="{'editing': isEditing,
         'undernav200': component.type == 'masthead',
