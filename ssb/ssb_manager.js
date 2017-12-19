@@ -690,21 +690,32 @@ module.exports = {
 
     getUpdatedWebsiteLinkList: function(list, handle, deletePage, fn){
         var self = this;
-
         var linkList = list.links.filter(function (lnk) {
-        return lnk.type === 'link' &&
-             lnk.linkTo && deletePage ? (lnk.linkTo.data === handle || lnk.linkTo.page === handle) : lnk.linkTo && lnk.linkTo.data === handle
+
+            if(lnk.linkTo && lnk.linkTo.type === 'sub-nav'){
+                var isFilter = false ;
+                _.each(lnk.links, function(lnk){
+                    if(isFilter === false){
+                        isFilter = lnk.type === 'link' &&
+                                   lnk.linkTo && deletePage ? (lnk.linkTo.data === handle || lnk.linkTo.page === handle) : lnk.linkTo && lnk.linkTo.data === handle;
+                    }
+                });
+                return isFilter;
+            }
+            else{
+                return lnk.type === 'link' &&
+                 lnk.linkTo && deletePage ? (lnk.linkTo.data === handle || lnk.linkTo.page === handle) : lnk.linkTo && lnk.linkTo.data === handle
+            }
         });
         if(linkList){
-            _.each(linkList, function(link){
-                var _index = list.links.indexOf(link);
-                if(_index > -1)
-                    list.links.splice(_index, 1);
-            });
+
              // check for subnav
+             var new_links = [];
+             var isSubnav = false;
             _.each(list.links, function(link){
                 self.log.debug("subnav" );
                 self.log.debug(link );
+
                 if(link.linkTo.type=="sub-nav"){
                     _.each(linkList, function(modifiedLink){
                          self.log.debug('>> chekcing modifiedLink link --' );
@@ -713,21 +724,35 @@ module.exports = {
                          _.each(link.links, function(subLink){
                                self.log.debug('>> chekcing sub link --' );
                                self.log.debug( subLink );
-                             if(!(subLink.linkTo.type==modifiedLink.linkTo.type &&
-                             subLink.linkTo.data==modifiedLink.linkTo.data)){
+                             if(subLink.linkTo.data !== handle){
                                  sublist.push(subLink)
                              }else{
+                                  isSubnav = true;
                                   self.log.debug('>> removed sub link --' );
                                   self.log.debug( subLink );
                              }
                          });
                         link.links=sublist;
+                        new_links.push(link);
                     });
                 }
+
+
             });
-        }
+
+            if(isSubnav === false){
+                _.each(linkList, function(link){
+                    var _index = list.links.indexOf(link);
+                  // console.log('&&&&&&&&&_index&&&&&&&&&&&&&&',link);
+                    if(_index > -1)
+                        list.links.splice(_index, 1);
+                });
+            }
+                }
         self.log.debug('>> updatedLinkList is' + list );
-         self.log.debug(list );
+         self.log.debug(new_links);
+
+
         fn(null, list);
     },
 
@@ -4433,7 +4458,7 @@ module.exports = {
                 var fontMap= {};
                 var componentMap = {};
                 async.eachSeries(components, function(component, callback){
-                    if(component) {                       
+                    if(component) {
 
                         var fontUsed = "";
                         // SIMPLE FORM, FORM BUILDER, DONATION FORM
