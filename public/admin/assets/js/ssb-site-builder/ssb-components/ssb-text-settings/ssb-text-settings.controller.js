@@ -246,6 +246,14 @@
 
 						data = pvm.component.elementStyles[vm.elementModelName][vm.elementModelIndex];
 
+					}else{
+						if(pvm.component.elementStyles[vm.elementModelName]){ 
+							var sectionIndex=vm.element.parents(".ssb-page-section").attr("index");
+							var settingData=pvm.component.elementStyles[vm.elementModelName][sectionIndex];
+							if(settingData){
+								data = settingData;
+							}
+						} 
 					}
 
 				}
