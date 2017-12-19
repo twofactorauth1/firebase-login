@@ -16,7 +16,9 @@ app.directive('testimonialsComponent', ['$timeout', function ($timeout) {
 			scope.touchMove = false;
 			scope.draggable = false;
 			scope.autoplay = false;
-			scope.isEditing = true;
+			$timeout(function(){
+				scope.isEditing = true;
+			},0);
 
 			if (!scope.component.slider) {
 				scope.component.slider = {

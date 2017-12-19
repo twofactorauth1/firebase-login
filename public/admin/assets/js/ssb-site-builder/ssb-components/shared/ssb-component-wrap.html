@@ -10,7 +10,7 @@
 	</style>
 	<div class="component-wrap component_wrap_{{vm.component._id}}"
      ng-if="vm.component.visibility"
-     ng-class="{'editing': isEditing,
+     ng-class="{'editing': vm.isEditing,
         'ssb-edit-wrap': vm.component.type !== 'navigation' && vm.component.type !== 'social-link'}">
     	<span ng-if="$parent.ssbEditor" class="editable-title">{{vm.component.type}}</span>
     	<span ng-if="$parent.ssbEditor" class="editable-cover"></span>

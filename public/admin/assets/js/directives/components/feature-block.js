@@ -9,7 +9,9 @@ app.directive('featureBlockComponent', function () {
 		},
 		templateUrl: '/components/component-wrap.html',
 		link: function (scope) {
-			scope.isEditing = true;
+			$timeout(function(){
+				scope.isEditing = true;
+			},0);
 		}
 	};
 });
