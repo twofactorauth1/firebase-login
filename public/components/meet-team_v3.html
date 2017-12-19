@@ -23,7 +23,7 @@
     <div class="row {{isEditing ? 'editing' : ''}} team-member-wrap">
         <div ng-class="{'col-md-12 col-sm-12':component.teamMembers.length === 1, 'col-md-6 col-sm-6':component.teamMembers.length == 2, 'col-md-4 col-sm-4':component.teamMembers.length === 3, 'col-md-3 col-sm-4':component.teamMembers.length > 3 }" class="col-xs-12 text-center team-member-container wow fadeInDown animated meet-team-height {{teamClass()}}" ng-repeat="teamMember in component.teamMembers">
             <div class="team-member {{isEditing ? 'edit-mode' : ''}}">
-                <div ng-if="component.teamSettings.profilepic" class="profile-img meet-team-image" ng-click="addImageFromMedia(component._id, $index, true)" ng-attr-style="background-image: url('{{teamMember.profilepic}}')" style="background-repeat: no-repeat; background-position:center; background-size: cover;height: 240px;">
+                <div ng-if="component.teamSettings.profilepic" class="profile-img meet-team-image team-member-img" ng-click="addImageFromMedia(component._id, $index, true)" ng-attr-style="background-image: url('{{teamMember.profilepic}}')" style="background-repeat: no-repeat; background-position:center; background-size: cover;height: 240px;">
                 </div>
                 <div class="team-member-meta">
                     <div ng-if="component.teamSettings.name" class="name">

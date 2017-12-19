@@ -1,6 +1,6 @@
 /*global app , angular */
 /*jslint unparam:true*/
-app.directive('meetTeamComponent', function () {
+app.directive('meetTeamComponent', ['$timeout', function ($timeout) {
 	'use strict';
 	return {
 		scope: {
@@ -10,8 +10,9 @@ app.directive('meetTeamComponent', function () {
 		},
 		templateUrl: '/components/component-wrap.html',
 		link: function (scope) {
-			scope.isEditing = true;
-
+			$timeout(function(){
+				scope.isEditing = true;
+			},0);
 			scope.addImageFromMedia = function (componentId, index, update) {
 				scope.media({
 					componentId: componentId,
@@ -63,4 +64,4 @@ app.directive('meetTeamComponent', function () {
 
 		}
 	};
-});
+}]);
