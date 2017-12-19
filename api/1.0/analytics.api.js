@@ -75,7 +75,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url('reports/all'), this.isAuthAndSubscribedApi.bind(this), this.allReports.bind(this));
         app.get(this.url('reports/topSearches'), this.isAuthAndSubscribedApi.bind(this), this.topSearches.bind(this));
         app.get(this.url('reports/mostActiveUsers'), this.isAuthAndSubscribedApi.bind(this), this.mostActiveUsers.bind(this));
-        
+
         app.get(this.url('admin/reports/dau'), this.isAuthAndSubscribedApi.bind(this), this.getDailyActiveUsers.bind(this));
         app.get(this.url('admin/reports/visitors'), this.isAuthAndSubscribedApi.bind(this), this.runAdminVisitorsReport.bind(this));
         app.get(this.url('admin/reports/visitorLocations'), this.isAuthAndSubscribedApi.bind(this), this.adminVisitorLocationsReport.bind(this));
@@ -102,8 +102,8 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url('admin/pageViewPerformance'), this.isAuthAndSubscribedApi.bind(this), this.getPageViewPerformance.bind(this));
         app.get(this.url('admin/404s'), this.isAuthAndSubscribedApi.bind(this), this.getAdmin404s.bind(this));
         app.get(this.url('admin/reports/daily404s'), this.isAuthAndSubscribedApi.bind(this), this.getAdminDaily404s.bind(this));
-        
-    },    
+
+    },
 
 
     /**
@@ -883,7 +883,7 @@ _.extend(api.prototype, baseApi.prototype, {
         pageEvent.set('session_id', req.params.id);
         pageEvent.set('server_time', new Date().getTime());
         pageEvent.set('server_time_dt', new Date());
-
+        pageEvent.set('ip_address', self.ip(req));
         pageEvent.set('accountId', self.currentAccountId(req));
         if(!self.currentAccountId) {
             self.log.warn('current account ID is null for request:', req);
@@ -904,6 +904,7 @@ _.extend(api.prototype, baseApi.prototype, {
         pingEvent.set('session_id', req.params.id);
         pingEvent.set('server_time', new Date().getTime());
         pingEvent.set('server_time_dt', new Date());
+        pingEvent.set('ip_address', self.ip(req));
         pingEvent.set('accountId', self.currentAccountId(req));
         analyticsManager.storePingEvent(pingEvent, function(err){
             if(err) {
@@ -1384,7 +1385,7 @@ _.extend(api.prototype, baseApi.prototype, {
             start = moment(start, 'YYYY-MM-DD[T]HH:mm:ss').toDate();
             self.log.debug('start:', start);
         }
-        
+
         analyticsManager.getTopSearches(accountId, userId, start, end, false, null, function(err, results){
             self.log.debug(accountId, userId, '<< topSearches');
             self.sendResultOrError(resp, err, results, 'Error getting report');
@@ -1412,7 +1413,7 @@ _.extend(api.prototype, baseApi.prototype, {
             start = moment(start, 'YYYY-MM-DD[T]HH:mm:ss').toDate();
             self.log.debug('start:', start);
         }
-        
+
         analyticsManager.getMostActiveUsers(accountId, userId, start, end, false, null, function(err, results){
             self.log.debug(accountId, userId, '<< mostActiveUsers');
             self.sendResultOrError(resp, err, results, 'Error getting report');
@@ -2059,7 +2060,7 @@ _.extend(api.prototype, baseApi.prototype, {
         } else {
             start = moment(start, 'YYYY-MM-DD[T]HH:mm:ss').toDate();
             self.log.debug('start:', start);
-        }        
+        }
 
         if(accountId === appConfig.mainAccountID) {
             analyticsManager.getPageViewPerformanceReport(accountId, userId, start, end, null, accountIds, function(err, results){
@@ -2726,7 +2727,7 @@ _.extend(api.prototype, baseApi.prototype, {
             self.sendResultOrError(resp, err, value, 'Error getting report');
         });
 
-    },    
+    },
 
     getAdminLiveVisitors: function(req, resp) {
         var self = this;
@@ -2771,7 +2772,7 @@ _.extend(api.prototype, baseApi.prototype, {
         var accountId = self.accountId(req);
 
         self.log.trace(accountId, userId, '>> getLiveVisitorDetails');
-        
+
         var lookBackInMinutes = req.query.lookBackInMinutes;
 
         if(!lookBackInMinutes || lookBackInMinutes === 0) {
