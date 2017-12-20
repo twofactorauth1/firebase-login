@@ -640,6 +640,7 @@ _.extend(view.prototype, BaseView.prototype, {
         self.log.debug(accountId, null, '>> renderBlogPost');
         var data = {ssbBlog:true};
         var handle = 'blog-post';
+        var posts = [];
 
         async.waterfall([
             function getWebpageData(cb){
@@ -774,6 +775,18 @@ _.extend(view.prototype, BaseView.prototype, {
                 });
             },
 
+            function getBlogPosts(webpageData, page, post, cb) {
+                if(twoColumn === true) {
+                    ssbManager.getPublishedPosts(accountId, null, null, function(err, blogposts){  
+                        posts = blogposts;              
+                        cb(err, webpageData, page, post, cb);
+                    });
+                }
+                else{
+                    cb(null, webpageData, page, post, cb);
+                }
+            },
+
             function addBlogTemplate(webpageData, page, post, cb) {
                 if(twoColumn){
                     pageCacheManager.buildTwoColLayoutTemplate(page, function(err, templateData){
@@ -815,6 +828,8 @@ _.extend(view.prototype, BaseView.prototype, {
 
                 data.page = page;
                 data.post = post.toJSON('frontend');
+                if(twoColumn)
+                    data.posts = posts;
                 data.account = value;
                 data.loadYoutubeLib = ssbManager._checkForYoutube(page.get('sections'));
                 data.canonicalUrl = pageHolder[handle].canonicalUrl || null;

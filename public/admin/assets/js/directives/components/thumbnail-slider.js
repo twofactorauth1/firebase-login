@@ -49,6 +49,22 @@ app.directive('thumbnailSliderComponent', ['$window', '$timeout', function ($win
 			scope.deleteImageFromThumbnail = function (index, parentIndex) {
 				var imageIndex = parentIndex > 0 ? (parentIndex * scope.imagesPerPage + index) : index;
 				scope.component.thumbnailCollection.splice(imageIndex, 1);
+				if(scope.component.elementStyles){
+					var thumbnailCollectionSize = scope.component.thumbnailCollection.length;
+					var data = { "img": {}, "details": {} };
+					for (var i = 0; i < thumbnailCollectionSize; i++) {
+						if (i >= imageIndex) {
+							if (scope.component.elementStyles["image/img"][i]) {
+								data["img"][i] = (i == imageIndex) ? '' : scope.component.elementStyles["image/img"][i];
+							}
+							if (scope.component.elementStyles["image/details"][i]) {
+								data["details"][i] = (i == imageIndex) ? '' : scope.component.elementStyles["image/details"][i];
+							}
+						}
+					}
+					scope.component.elementStyles["image/details"] = data["details"];
+					scope.component.elementStyles["image/img"] = data["img"];
+				}
 				scope.bindThumbnailSlider(winWidth, check_if_mobile);
 			};
 			scope.bindThumbnailSlider(winWidth, check_if_mobile);
