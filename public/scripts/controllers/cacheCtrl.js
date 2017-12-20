@@ -147,7 +147,7 @@ mainApp.controller('CacheCtrl', ['$scope', '$rootScope', 'embeddedSiteDataServic
 			                }
 		            	});
 					}
-					$(window).on('hashchange', function () {
+					$(window).on('hashchange', function () { 
 						var $anchor = $(':target');
 						if ($anchor.length > 0) {
 							var element = document.getElementById($anchor.attr('id'));
@@ -161,6 +161,15 @@ mainApp.controller('CacheCtrl', ['$scope', '$rootScope', 'embeddedSiteDataServic
 							$timeout(function () {
 								$document.scrollToElementAnimated(element, SsbPageSectionService.offset, 1000);
 							}, 200);
+						}else{
+							var hashElement= document.getElementById($location.$$hash) 
+                			|| document.getElementById("section_" + $location.$$hash) 
+							|| document.getElementById("component_" + $location.$$hash);
+							if(hashElement){
+								$timeout(function() { 								
+				                       $document.scrollToElementAnimated(hashElement, SsbPageSectionService.offset, 1000); 
+			                	}, 100);
+							}
 						}
 					});
 				}, 0);
