@@ -23,7 +23,7 @@
             filtered-post-view="vm.filteredPostView" ng-repeat="post in vm.filtered.posts = (vm.blog.posts | ssbPostFilter:vm.component:'':vm) | orderBy:'-created.date' | orderBy:vm.sortBlogPosts:true | ssbPostPageFilter:vm.paging.currentPage:vm.settings track by $index">
         </article>
     </section>
-    <div ng-if="vm.settings.enableBlogPaging && vm.totalFilteredPosts > vm.settings.blogPagePostsPerPage && vm.settings.blogPagePostsPerPage != 0">
+    <div class="center" ng-if="vm.settings.enableBlogPaging && vm.totalFilteredPosts > vm.settings.blogPagePostsPerPage && vm.settings.blogPagePostsPerPage != 0">
         <pagination total-items="vm.totalFilteredPosts" items-per-page="vm.settings.blogPagePostsPerPage" ng-model="vm.paging.currentPage"></pagination>
     </div>
     <div ng-if="vm.blog.posts.length && !vm.filtered.posts.length" class="ssb-in-context-info margin-top-20 padding-30">
