@@ -261,7 +261,10 @@ mainApp.service('analyticsService', ['$http', '$location', 'ipCookie', function 
                 $http.post(apiUrl, pageProperties)
                     .success(function (data) {
                         //self.collect(queryParams, fn);
-                        fn(data);
+                        if(fn) {
+                            fn(data);
+                        }
+
                     });
             });
 		} else {
@@ -289,7 +292,10 @@ mainApp.service('analyticsService', ['$http', '$location', 'ipCookie', function 
             $http.post(apiUrl, pageProperties)
                 .success(function (data) {
                     //self.collect(queryParams, fn);
-                    fn(data);
+                    if(fn) {
+                        fn(data);
+                    }
+
                 });
         }
 

@@ -30,7 +30,7 @@ html(class="no-js", lang="en" ng-app="mainApp" ng-controller="MainCtrl as main",
             meta(name="fragment" content="!")
             meta(property='og:type', content=og.type)
             meta(property='og:title', content=og.title)
-            
+
             //- <!-- EXP headers -->
             meta(http-equiv="Content-Type",content="text/html;charset=utf-8")
             meta(http-equiv="Cache-Control", content="no-cache")
@@ -39,14 +39,14 @@ html(class="no-js", lang="en" ng-app="mainApp" ng-controller="MainCtrl as main",
                 meta(property='og:image', content=og.image)
             base(href="/")
             if account && account.business
-                script(type="text/javascript"). 
+                script(type="text/javascript").
                     window.indigenous = window.indigenous || {};
-                    window.indigenous.precache = window.indigenous.precache || {}; 
+                    window.indigenous.precache = window.indigenous.precache || {};
                     window.indigenous.business ={'name' :'#{account.business.name}', 'logo': '#{account.business.logo}'};
             if originalAccountBusiness
-                script(type="text/javascript"). 
+                script(type="text/javascript").
                     window.indigenous = window.indigenous || {};
-                    window.indigenous.precache = window.indigenous.precache || {}; 
+                    window.indigenous.precache = window.indigenous.precache || {};
                     window.indigenous.business ={'name' :'#{originalAccountBusiness.name}', 'logo': '#{originalAccountBusiness.logo}'};
             if account.website.settings.favicon
                 link(rel="shortcut icon", href=account.website.settings.favicon)
@@ -56,7 +56,7 @@ html(class="no-js", lang="en" ng-app="mainApp" ng-controller="MainCtrl as main",
                 else if account.orgId == 5
                     link(rel="shortcut icon", href='https://s3.amazonaws.com/indigenous-digital-assets/account_1377/favicon_1508748570313.png')
                 else if account && account.orgId == 6
-                    link(rel="shortcut icon", href='https://s3.amazonaws.com/indigenous-digital-assets/account_1395/favicon_1510866844738.png')        
+                    link(rel="shortcut icon", href='https://s3.amazonaws.com/indigenous-digital-assets/account_1395/favicon_1510866844738.png')
                 else
                     link(rel="shortcut icon", href='https://s3.amazonaws.com/indigenous-account-websites/acct_6/favicon.ico')
             if canonicalUrl
@@ -68,7 +68,7 @@ html(class="no-js", lang="en" ng-app="mainApp" ng-controller="MainCtrl as main",
                 script(type="text/javascript").
                     if(window.location.protocol != 'https:') {
                       location.href = location.href.replace("http://", "https://");
-                    }            
+                    }
             if account.showhide.ssbBlog
                 script(type="text/javascript").
                     window.indigenous.ssbBlog = #{account.showhide.ssbBlog};
@@ -78,6 +78,8 @@ html(class="no-js", lang="en" ng-app="mainApp" ng-controller="MainCtrl as main",
 
             script.
                 console.log('orgId:', #{account.orgId});
+                window.indigenous = window.indigenous || {};
+                window.indigenous.newAnalytics = #{account.newAnalytics};
 
         //- script.
         //-     var test = !{JSON.stringify(account.website)};

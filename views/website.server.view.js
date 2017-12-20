@@ -432,7 +432,7 @@ _.extend(view.prototype, BaseView.prototype, {
                         components.push({
                             'id':'/admin/assets/js/ssb-site-builder/ssb-components/ssb-page-section/ssb-page-section-template.component.html',
                             type: 'ssb-section-template'
-                        })
+                        });
 
                         if(_.contains(_.pluck(components, "type"), 'navigation')){
                             components.push({
@@ -565,6 +565,11 @@ _.extend(view.prototype, BaseView.prototype, {
                         data.userScripts = userScripts.join('\n');
                     }
 
+                }
+                if(value.showhide && value.showhide.newAnalytics) {
+                    value.newAnalytics = (value.showhide.newAnalytics===true);
+                } else {
+                    value.newAnalytics = false;
                 }
                 data.customCss = "";
                 value.website.resources.customCss = value.website.resources.customCss || {};
@@ -942,6 +947,11 @@ _.extend(view.prototype, BaseView.prototype, {
                         data.userScripts = userScripts.join('\n');
                     }
 
+                }
+                if(value.showhide && value.showhide.newAnalytics) {
+                    value.newAnalytics = (value.showhide.newAnalytics===true);
+                } else {
+                    value.newAnalytics = false;
                 }
                 data.customCss = "";
                 value.website.resources.customCss = value.website.resources.customCss || {};
