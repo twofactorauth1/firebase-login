@@ -1760,6 +1760,26 @@
                         component.thumbnailCollection[index].url = asset.url;
                         component.thumbnailCollection[index].img = "<img src='"+ asset.url +"'/>";
                     } else {
+                        if(component.elementStyles){
+                            var thumbnailCollectionSize = component.thumbnailCollection.length;
+                            var data = { "img": {}, "details": {} };
+                            for (var t = 0; t < thumbnailCollectionSize; t++) {
+                                var newIndex=t;
+                                if (t > index) {
+                                    newIndex += 1;
+                                }
+                                if (component.elementStyles["image/img"] && 
+                                        component.elementStyles["image/img"][t]) {
+                                        data["img"][newIndex] = component.elementStyles["image/img"][t];
+                                }
+                                if (component.elementStyles["image/details"] && 
+                                        component.elementStyles["image/details"][t]) {
+                                        data["details"][newIndex] = component.elementStyles["image/details"][t];
+                                }
+                            }
+                            component.elementStyles["image/details"] = data["details"];
+                            component.elementStyles["image/img"] = data["img"];
+                        }  
                         component.thumbnailCollection.splice(index + 1, 0, {
                             url: asset.url,
                             img: "<img src='"+ asset.url +"'/>"
