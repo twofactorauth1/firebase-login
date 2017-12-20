@@ -814,6 +814,7 @@ app.constant('JS_REQUIRES', {
     'sortListPages': 'assets/js/filters/sortListPages.js',
     'productTableFilter': 'assets/js/filters/productTableFilter.js',
     'ssbPostFilter': 'assets/js/ssb-site-builder/ssb-components/ssb-filters/ssb-post-filter.js',
+    'ssbPostPageFilter': 'assets/js/ssb-site-builder/ssb-components/ssb-filters/ssb-post-page-filter.js',
     
     //*** Directives
     'mediaModal': 'assets/js/directives/mediadirective.js',

@@ -2,7 +2,7 @@
 /*global app*/
 app.filter('ssbPostFilter', function () {
 	"use strict";
-	return function (posts, component, featured) {
+	return function (posts, component, featured, vm) {
 		return filterPosts(posts);
 		//return posts;
 		function filterPosts(posts) {
@@ -19,6 +19,8 @@ app.filter('ssbPostFilter', function () {
 					return post.featured;
 				});
 			}
+			if(vm)
+				vm.totalFilteredPosts = _filteredPosts.length;
 			return _filteredPosts;
 		}
 
