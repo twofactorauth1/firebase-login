@@ -822,15 +822,13 @@
             ContactService.getContactTags(function (tags) {
                 vm.state.contactTags = tags;
             });
-
+            console.log('vmvm.state.contactTags',vm.state.contactTags);
             ContactService.getContactTagCounts(function(response){
                 var tags = response.count;
+
                 var uniqueLabeledTagObject = {};
                 _.map(tags, function (value, key) {
                     var label = key.trim();
-                    if(label && label !== ''){
-                       vm.state.contactTags.push({label :label, data : label});
-                    }
 
                     var matchingTagObj = _.find(vm.state.contactTags, function (matchTag) {
                         return matchTag.data === label;
@@ -838,6 +836,9 @@
 
                     if(matchingTagObj){
                         label = matchingTagObj.label;
+                    }
+                    else{
+                         vm.state.contactTags.push({label :label, data : label});
                     }
                     if(uniqueLabeledTagObject[label]){
                         uniqueLabeledTagObject[label] = parseInt(value) + parseInt(uniqueLabeledTagObject[label]);
