@@ -532,9 +532,6 @@ _.extend(view.prototype, BaseView.prototype, {
 
                 data.page = page;
                 data.account = value;
-                data.accountString = value;
-                delete data.accountString.credentials;
-                delete data.accountString.billing;
                 data.loadYoutubeLib = ssbManager._checkForYoutube(page.get('sections'));
 
                 data.canonicalUrl = pageHolder[handle].canonicalUrl || null;
@@ -917,9 +914,6 @@ _.extend(view.prototype, BaseView.prototype, {
                 pageHolder[page.get('handle')] = page.toJSON('frontend');
                 data.page = page;
                 data.account = value;
-                data.accountString = value;
-                delete data.accountString.credentials;
-                delete data.accountString.billing;
                 data.originalAccountBusiness = originalAccount.get('business');
                 data.loadYoutubeLib = ssbManager._checkForYoutube(page.get('sections'));
                 data.canonicalUrl = pageHolder[handle].canonicalUrl || null;

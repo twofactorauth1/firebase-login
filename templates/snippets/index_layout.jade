@@ -78,6 +78,8 @@ html(class="no-js", lang="en" ng-app="mainApp" ng-controller="MainCtrl as main",
 
             script.
                 console.log('orgId:', #{account.orgId});
+                window.indigenous = window.indigenous || {};
+                window.indigenous.newAnalytics = #{account.newAnalytics};
 
         //- script.
         //-     var test = !{JSON.stringify(account.website)};
