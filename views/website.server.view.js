@@ -184,6 +184,7 @@ _.extend(view.prototype, BaseView.prototype, {
                 });
             },
             function getPageTemplate(webpageData, page, cb) {
+                data.templateIncludes = [];
                 data.templateIncludes.push({
                     id: 'template.html',
                     data: ""
