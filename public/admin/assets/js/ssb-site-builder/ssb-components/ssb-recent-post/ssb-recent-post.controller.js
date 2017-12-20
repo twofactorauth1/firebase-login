@@ -121,10 +121,9 @@
 						});
 					}
 				}
-				//if(vm.blog.posts.length>5)
-				//   vm.blog.posts=   vm.blog.posts.slice(0, 5)
 				checkHasFeaturedPosts();
 			}
+			vm.blog.posts = posts;
 		}
 
 		function checkHasFeaturedPosts() {
