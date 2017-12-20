@@ -57,9 +57,13 @@
 
 		//get functions from parent text component
 		var limit = 10,
-			pScope = $scope.$parent;
+			pScope = $scope.$parent; 
 		while ((!pScope.vm || pScope.vm && !pScope.vm.uiState) && limit > 0) {
-			pScope = pScope.$parent;
+			if(pScope.$parent){
+				pScope = pScope.$parent;
+			}else{
+				break;
+			}
 			limit--;
 		}
 		var pvm = pScope.vm;
