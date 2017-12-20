@@ -587,8 +587,6 @@ _.extend(router.prototype, BaseRouter.prototype, {
 
     },
 
-
-
     renderBlogPost: function(req, resp) {
         var self = this;
         var accountId = self.unAuthAccountId(req) || appConfig.mainAccountID;
@@ -603,7 +601,11 @@ _.extend(router.prototype, BaseRouter.prototype, {
             } else {
                 var showHide = account.get('showhide');
                 if(showHide && showHide.ssbBlog && showHide.ssbBlog===true) {
-                    new BlogView(req, resp).renderBlogPost(accountId, postName);
+                    var twoColumnView = false;
+                    if(showHide.blogPostSecondCol && showHide.blogPostSecondCol === true) {
+                        twoColumnView = true;
+                    }
+                    new BlogView(req, resp).renderBlogPost(accountId, postName, twoColumnView);
                     self.log.debug(accountId, null, '<< renderBlogPost');
 
                 } else {
@@ -613,7 +615,8 @@ _.extend(router.prototype, BaseRouter.prototype, {
                     }
                     var pageName = req.params.page || 'blog';
                     self.log.debug('>> optimizedIndex ' + accountId + ', ' + pageName);
-                    new WebsiteView(req, resp).renderWebsitePage(accountId, pageName);
+
+                    new WebsiteView(req, resp).renderCachedPage(accountId, pageName);
 
                     self.log.debug('<< optimizedIndex');
                 }

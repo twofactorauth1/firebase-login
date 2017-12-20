@@ -371,6 +371,58 @@ module.exports = {
         fn(null, string);
     },
 
+    buildTwoColLayoutTemplate: function(page, fn){
+        var self = this;
+        var html = '';
+        var layout = page.get('layout');
+        var layoutData = page.get('layoutModifiers');
+        var isBlogCopy = page.get('isBlogCopy');
+        var extraClass = "";            
+        var layoutMarkupString =
+            '<div class="ssb-layout__header_2-col_footer ssb-page-blog-list" >' +
+                '<div class="ssb-page-layout-row-header ssb-page-layout-row">' +
+                    '<div class="col-xs-12">' +
+                        '{{header}}' +
+                    '</div>' +
+                '</div>' +
+                '<div class="ssb-page-layout-row-2-col ssb-page-layout-row">' +
+                    '<div class="col-xs-12 col-md-8">' +
+                        '{{2-col-1}}' +
+                    '</div>' +
+                    '<div class="col-xs-12 col-md-4">' +
+                        '{{2-col-2}}' +
+                    '</div>' +
+                '</div>' +
+                '<div class="ssb-page-layout-row-footer ssb-page-layout-row">' +
+                    '<div class="col-xs-12">' +
+                        '{{footer}}' +
+                    '</div>' +
+                '</div>' +
+            '</div>';
+
+        self.log.debug('buildTemplateMarkup: layoutData', layoutData);
+
+        Object.keys(layoutData).forEach(function(key) {
+
+            var layoutAreaMarkupString = _(layoutData[key]).map(function(index){
+                return '<ssb-page-section section="sections_' + index + '" index="' + index + '" class="ssb-page-section"></ssb-page-section>';
+            });
+
+            layoutMarkupString = layoutMarkupString.replace('{{' + key + '}}', layoutAreaMarkupString.join(''));
+
+
+            self.log.debug('buildTemplateMarkup: layoutAreaMarkupString', layoutAreaMarkupString.join(''));
+            self.log.debug('buildTemplateMarkup: updated layoutMarkupString', layoutMarkupString);
+
+        });
+
+        self.log.debug('buildTemplateMarkup: end layoutMarkupString', layoutMarkupString);
+
+        html = layoutMarkupString;
+
+        fn(null, html);
+    },
+
     getOrCreateS3Template: function(accountId, pageName, update, resp) {
         var self = this;
         self.log.debug(accountId, null, '>> getOrCreateS3Template(' + accountId + ',' + pageName + ',' + update + ')');

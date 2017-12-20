@@ -635,7 +635,7 @@ _.extend(view.prototype, BaseView.prototype, {
         });
     },
 
-    renderBlogPost: function(accountId, postName) {
+    renderBlogPost: function(accountId, postName, twoColumn) {
         var self = this;
         self.log.debug(accountId, null, '>> renderBlogPost');
         var data = {ssbBlog:true};
@@ -695,7 +695,33 @@ _.extend(view.prototype, BaseView.prototype, {
                     cb(err, webpageData, page);
                 });
             },
-            function readComponents(webpageData, page, cb) {
+            function checkAndSetTwoColLayout(webpageData, page, cb){
+                if(twoColumn === true) {
+                    ssbManager.getPublishedPage(accountId, webpageData.website._id, 'blog-list', function(err, blogListPage){                        
+                        var sections=[]
+                        self.log.debug('before:', page.get('sections').length);                        
+                        _.each(blogListPage.get('sections'), function(section, index){
+                            if(index === 1){
+                                section.visibility = false;
+                                sections.push(section);
+                            }
+                            else if(index===2){
+                                sections.push(page.get('sections')[1]);
+                            }else{
+                                sections.push(section);
+                            }
+                        });  
+                        page.set("sections",sections);
+                        self.log.debug('before:', page.get('sections').length);
+                        page.set("layoutModifiers",blogListPage.get("layoutModifiers"));
+                        cb(null, webpageData, page);
+                    });
+                }
+                else{
+                    cb(null, webpageData, page);
+                }
+            },
+            function readComponents(webpageData, page, cb) {                
                 data.templates = '';
                 if(page) {
                     data.templateIncludes = [];
@@ -731,8 +757,6 @@ _.extend(view.prototype, BaseView.prototype, {
                         }, function done(err){
                             cb(null, webpageData, page);
                         });
-
-
                     });
                 } else {
                     cb('Could not find ' + handle);
@@ -751,19 +775,34 @@ _.extend(view.prototype, BaseView.prototype, {
             },
 
             function addBlogTemplate(webpageData, page, post, cb) {
-                //assuming single column layout
-                pageCacheManager.buildTemplateFromPage(page, false, function(err, templateData){
-                    data.templateIncludes.push({
-                        id: 'blogpost.html',
-                        data: templateData
-                    });
-                    data.templateIncludes.push({
-                        id: 'template.html',
-                        data: ""
-                    });
+                if(twoColumn){
+                    pageCacheManager.buildTwoColLayoutTemplate(page, function(err, templateData){
+                        data.templateIncludes.push({
+                            id: 'blogpost.html',
+                            data: templateData
+                        });
+                        data.templateIncludes.push({
+                            id: 'template.html',
+                            data: ""
+                        });
 
-                    cb(null, webpageData, page, post);
-                });
+                        cb(null, webpageData, page, post);
+                    });
+                }
+                else{
+                    pageCacheManager.buildTemplateFromPage(page, false, function(err, templateData){
+                        data.templateIncludes.push({
+                            id: 'blogpost.html',
+                            data: templateData
+                        });
+                        data.templateIncludes.push({
+                            id: 'template.html',
+                            data: ""
+                        });
+
+                        cb(null, webpageData, page, post);
+                    });
+                }
             },
             function buildPageStyles(webpageData, page, post, cb){                
                 pageCacheManager.buildPageStyles(page, function(err, updatedPage){                        
