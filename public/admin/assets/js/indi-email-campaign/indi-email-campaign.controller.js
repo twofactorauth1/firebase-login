@@ -79,7 +79,7 @@
             icon: 'fa-paper-plane',
             value: 'SIGNUP'
         }];
-        vm.checkForDuplicateTags = checkForDuplicateTags;
+
         vm.saveAsDraftFn = saveAsDraftFn;
         vm.sendTestFn = sendTestFn;
         vm.activateCampaignFn = activateCampaignFn;
@@ -217,22 +217,6 @@
         }
 
 
-        function checkForDuplicateTags(campaign){
-            var isDuplicateTag = false;
-            var duplicateTagName = "";
-            if(campaign.searchTags['tags'] && campaign.searchTags['tags'].length > 0){
-               var searchTags = campaign.searchTags['tags'];
-               _.map(searchTags, function (value, key) {
-                  if(isDuplicateTag === false && vm.campaign_tags.indexOf(value.data.toLowerCase()) !== -1){
-                     isDuplicateTag = true;
-                     duplicateTagName = value.data;
-                  }
-
-               });
-
-            }
-            return { isDuplicateTag : isDuplicateTag, duplicateTagName : duplicateTagName};
-        }
         function saveAsDraftFn(isActivation) {
             vm.uiState.allowRedirect = true;
             vm.uiState.dataLoaded = false;
@@ -241,14 +225,6 @@
             if (vm.state.campaignId === 'create') {
                 fn = EmailCampaignService.createCampaign;
             }
-            //check for duplicate tags
-
-            var checkForDuplicateTags = vm.checkForDuplicateTags(vm.state.campaign);
-            if(checkForDuplicateTags.isDuplicateTag === true){
-                    vm.uiState.dataLoaded = true;
-                    toaster.pop('error', "Duplicate Tag '"+checkForDuplicateTags.duplicateTagName+"' ");
-            }
-            else{
                     //resetting status
                     vm.state.campaign.status = 'DRAFT';
 
@@ -315,7 +291,7 @@
                                 });
                             }
                     );
-                }
+                // }
             }
 
         function sendTestFn(address) {
@@ -853,12 +829,13 @@
                 _.map(tags, function (value, key) {
                     var label = key.trim();
                     if(label && label !== ''){
-                       vm.campaign_tags.push(label.toLowerCase());
+                       vm.state.contactTags.push({label :label, data : label});
                     }
 
                     var matchingTagObj = _.find(vm.state.contactTags, function (matchTag) {
                         return matchTag.data === label;
                     });
+
                     if(matchingTagObj){
                         label = matchingTagObj.label;
                     }
