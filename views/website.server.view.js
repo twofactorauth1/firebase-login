@@ -183,7 +183,14 @@ _.extend(view.prototype, BaseView.prototype, {
                     cb(null, webpageData, page);
                 });
             },
-
+            function getPageTemplate(webpageData, page, cb) {
+                data.templateIncludes = [];
+                data.templateIncludes.push({
+                    id: 'template.html',
+                    data: ""
+                });
+                cb(null, webpageData, page);
+            },
             function(value, page, cb) {
                 var pageHolder = {};
                 pageHolder['/preview/' + pageId ] = page.toJSON('frontend');
