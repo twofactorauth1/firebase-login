@@ -374,14 +374,18 @@
                     }
                     sectionElement.find(".single-testimonial .component-slider-image img").css("min-height", sectionElementTextHeight);
                     var windowWidth = angular.element($window).width();
-                    if(sectionElement.hasClass("ssb-page-section-layout-nav-hero-v4") && windowWidth < 768){
-                        sectionElement.find(".flex-container-absolute-column").css("min-height", sectionElementTextHeight);
-                    }
-                    if((sectionElement.hasClass("ssb-section-amm") && windowWidth>768 ) ||
-                       (sectionElement.hasClass("ssb-section-wmm") && windowWidth>768 && windowWidth<1025 )
-                    ){
-                        sectionElement.find("ul.slick-dots").css('top',(sectionElementTextHeight-80)+'px')
-                    }
+                    var heightMargin = 80;
+					if(sectionElement.hasClass("ssb-page-section-layout-nav-hero-v3") && sectionElement.hasClass("ssb-page-section-layout-nav-hero-v4") && windowWidth < 768){
+						sectionElement.find(".flex-container-absolute-column").css("min-height", sectionElementTextHeight);
+					}
+					if((sectionElement.hasClass("ssb-section-amm") && windowWidth>768 ) ||
+					   (sectionElement.hasClass("ssb-section-wmm") && windowWidth>768 && windowWidth<1025 )
+					){
+						if(sectionElement.hasClass("ssb-page-section-layout-nav-hero-v3")){ 
+							heightMargin+=30;
+						}
+						sectionElement.find("ul.slick-dots").css('top',(sectionElementTextHeight-heightMargin)+'px')
+					}
                 }
             }
         }
