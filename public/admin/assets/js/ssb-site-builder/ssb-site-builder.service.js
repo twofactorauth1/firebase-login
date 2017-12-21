@@ -1265,7 +1265,6 @@
          *
          */
         function extendComponentData(oldSection, newSection) {
-debugger
             var keysToOmitSection = ['$$hashKey', 'anchor', 'version', 'type', 'layout', 'visibility', 'bg', 'border', 'layoutModifiers', 'componentSortOrder', 'thumbnailCollection'];
             var keysToOmitComponent = ['$$hashKey', 'anchor', 'accountId', 'version', 'type', 'layout', 'visibility', 'bg', 'border', 'layoutModifiers', 'componentSortOrder', 'thumbnailCollection', 'nav'];
             var newComponents = angular.copy(newSection.components);
@@ -1761,6 +1760,36 @@ debugger
                         component.thumbnailCollection[index].url = asset.url;
                         component.thumbnailCollection[index].img = "<img src='"+ asset.url +"'/>";
                     } else {
+                        if(component.elementStyles){
+                            var thumbnailCollectionSize = component.thumbnailCollection.length;
+                            var data = { "img": {}, "details": {} };
+                            for (var t = 0; t < thumbnailCollectionSize; t++) {
+                                var newIndex=t;
+                                if (t > index) {
+                                    newIndex += 1;
+                                }
+                                if (component.elementStyles["image/img"] && 
+                                        component.elementStyles["image/img"][t]) {
+                                        data["img"][newIndex] = component.elementStyles["image/img"][t];
+                                        if(t!==newIndex){ 
+                                            delete data["img"][newIndex]["_id"];
+                                            delete data["img"][newIndex]["id"];
+                                            delete data["img"][newIndex]["anchor"];
+                                        }
+                                }
+                                if (component.elementStyles["image/details"] && 
+                                        component.elementStyles["image/details"][t]) {
+                                        data["details"][newIndex] = component.elementStyles["image/details"][t];
+                                        if(t!==newIndex){ 
+                                            delete data["details"][newIndex]["_id"];
+                                            delete data["details"][newIndex]["id"];
+                                            delete data["details"][newIndex]["anchor"];
+                                        }
+                                }
+                            }
+                            component.elementStyles["image/details"] = data["details"];
+                            component.elementStyles["image/img"] = data["img"];
+                        }  
                         component.thumbnailCollection.splice(index + 1, 0, {
                             url: asset.url,
                             img: "<img src='"+ asset.url +"'/>"

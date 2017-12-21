@@ -16,6 +16,9 @@
 		vm.init = init;
 		vm.initData = initData;
 		vm.hasFeaturedPosts = false;
+		vm.paging ={
+			currentPage : 1
+		}
 
 		if (path) {
 			path = decodeURI(path);
@@ -148,6 +151,14 @@
 				vm.initData();
 			}
 
+		}
+
+		vm.settings = {};
+		if(vm.website){
+			vm.settings = vm.website.settings
+		}
+		else if(window.indigenous.precache.siteData){
+			vm.settings = window.indigenous.precache.siteData.settings;
 		}
 
 	}

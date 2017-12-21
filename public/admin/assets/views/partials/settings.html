@@ -272,7 +272,7 @@
                     <form class="col-sm-6 form-horizontal">
                         <div class="form-group">
                             <label>Enable Blog Post Second Column</label>
-                            <span tooltip-placement="bottom" tooltip="Enable the blog for your website"><i class="fa fa-info-circle" /></span>
+                            <span tooltip-placement="bottom" tooltip="Enable second column on the blog post page for your website"><i class="fa fa-info-circle" /></span>
                             <switch ng-model="account.showhide.blogPostSecondCol" class="pull-right"></switch>
                         </div>
                         <div class="clearfix"></div>
@@ -291,6 +291,29 @@
                         <div class="clearfix"></div>
                     </form>
                     <div class="clearfix"></div>
+                    <form class="col-sm-6 form-horizontal">
+                        <div class="form-group">
+                            <label>Enable blog paging</label>
+                            <span tooltip-placement="bottom" tooltip="Enable blog paging"><i class="fa fa-info-circle" /></span>
+
+                            <switch ng-model="website.settings.enableBlogPaging" class="pull-right"></switch>
+
+                        </div>
+                        <div class="clearfix"></div>
+                    </form>
+                    <div class="clearfix"></div>
+                    <form class="col-sm-6 form-horizontal">
+                        <div class="form-group">
+                            <label># of Posts per Page</label>
+                            <span tooltip-placement="bottom" tooltip="Number of posts per Page"><i class="fa fa-info-circle" /></span>
+
+                            <input type='number' class='form-control' ng-model="website.settings.blogPagePostsPerPage" min='0' />
+
+                        </div>
+                        <div class="clearfix"></div>
+                    </form>
+                    <div class="clearfix"></div>
+                    
                     <form class="col-sm-6 form-horizontal">
 
                             <div class="form-group ssb-spectrum-color-picker-small">

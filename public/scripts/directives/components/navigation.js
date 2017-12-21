@@ -8,7 +8,20 @@ app.directive('navigationComponent', ['accountService', '$timeout', function (ac
 		},
 		templateUrl: '/components/component-wrap.html',
 		controller: function ($scope, accountService) {
-			$scope.navbarId = _.random(0, 1000);
+			$scope.navbarId = _.random(0, 1000);  
+				$timeout(function () {
+					angular.element(".navbar-toggle").click(function(){
+						var ele=angular.element("#component_"+$scope.component._id);
+						if(this.attributes.hasOwnProperty("aria-expanded") && 
+						this.attributes.getNamedItem("aria-expanded").value == 'true'){ 
+							$timeout(function () {
+								ele.removeClass("o-open");
+							},200);
+						} else{
+							ele.addClass("o-open");
+						}
+					});
+				},1000);
 			$scope.website = {};
 			if (window.indigenous && window.indigenous.precache && window.indigenous.precache.siteData && window.indigenous.precache.siteData.linkList) {
 				$scope.website.linkLists = window.indigenous.precache.siteData.linkList;
@@ -30,7 +43,8 @@ app.directive('navigationComponent', ['accountService', '$timeout', function (ac
 			// Special case for blogs
 			if ($scope.currentpage && ($scope.currentpage.handle === 'blog-list' || $scope.currentpage.handle === 'blog-post')) {
 				$scope.currentpage.handle = 'blog';
-			}		
+			}	
+			
 			
 			$scope.checkIfReloadPage = function (link) {
 				if (link && link.data) {

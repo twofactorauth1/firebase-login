@@ -72,14 +72,14 @@ html
       //- | </style>
       //- <!--<![endif]-->
   body
-    div(class="body email-body ssb-theme-", style="width: 100%; -webkit-text-size-adjust: 100% !important; -ms-text-size-adjust: 100% !important; margin: 0; padding: 0;background-color:"+email.emailBg+";")
+    div(class="body thisisteupdatedclaodhtihs email-body ssb-theme-", style="width: 100%; -webkit-text-size-adjust: 100% !important; -ms-text-size-adjust: 100% !important; margin: 0; padding: 0;background-color:"+email.emailBg+";")
       table(width='680px', align='center', cellpadding='0', cellspacing='0', border='0', style="border-collapse: collapse;background-color:"+email.tableBgColor+";")
         tr
           td
             each component in email.components
               if component.type === 'email'
                 - var url=(component.bg && component.bg.img.show === true) ? 'https:'+component.bg.img.url : '';
-                table(width='680px', align='center', cellpadding='0', cellspacing='0', border='0', style="border-collapse: collapse;background-size: cover;background-image: url(" + url + ");padding-top: "+ component.spacing.pt +";padding-bottom: "+ component.spacing.pb + ";padding-left: "+ component.spacing.pl +";padding-right: "+ component.spacing.pr +";margin-top: "+ component.spacing.mt +";margin-bottom: "+ component.spacing.mb +";margin-left: "+ component.spacing.ml +";margin-right: "+ component.spacing.mr +";background-color: "+ component.bg.color +";")
+                table(width='680px', align='center', cellpadding='0', cellspacing='0', border='0', style="border-collapse: collapse;background-size: cover;background-image: url('" + url + "');padding-top: "+ component.spacing.pt +";padding-bottom: "+ component.spacing.pb + ";padding-left: "+ component.spacing.pl +";padding-right: "+ component.spacing.pr +";margin-top: "+ component.spacing.mt +";margin-bottom: "+ component.spacing.mb +";margin-left: "+ component.spacing.ml +";margin-right: "+ component.spacing.mr +";background-color: "+ component.bg.color +";")
                   tr
                     td
                       div(style='padding-left: 20px;padding-right: 20px;padding-top: 45px;padding-bottom: 45px;')
@@ -120,7 +120,7 @@ html
                     td(align='center', width='100%')
                       if component.logo
                         - var url=(component.bg && component.bg.img.show === true) ? 'https:'+component.bg.img.url : '';
-                        table(align='center', width='100%', cellpadding='0', cellspacing='0', border='0', style="border-collapse: collapse;background-size: cover;background-image: url(" + url + ");padding-top: "+ component.spacing.pt +";padding-bottom: "+ component.spacing.pb + ";padding-left: "+ component.spacing.pl +";padding-right: "+ component.spacing.pr +";margin-top: "+ component.spacing.mt +";margin-bottom: "+ component.spacing.mb +";margin-left: "+ component.spacing.ml +";margin-right: "+ component.spacing.mr +";background-color: "+ component.bg.color +";")
+                        table(align='center', width='100%', cellpadding='0', cellspacing='0', border='0', style="border-collapse: collapse;background-size: cover;background-image: url('" + url + "');padding-top: "+ component.spacing.pt +";padding-bottom: "+ component.spacing.pb + ";padding-left: "+ component.spacing.pl +";padding-right: "+ component.spacing.pr +";margin-top: "+ component.spacing.mt +";margin-bottom: "+ component.spacing.mb +";margin-left: "+ component.spacing.ml +";margin-right: "+ component.spacing.mr +";background-color: "+ component.bg.color +";")
                           tr
                             td.wrapper(width='100%')
                                 table.device-width(width='680', cellpadding='0', cellspacing='0', border='0', style='border-collapse: collapse;margin-top: 45px;')
@@ -143,7 +143,7 @@ html
 
               if component.type === 'email-1-col'
                 - var url=(component.bg && component.bg.img.show === true) ? 'https:'+component.bg.img.url : '';
-                | <div style="max-width:!{component.spacing.mw || '100%' } ;float:left;width: 100%; background-color: !{component.bg.color};padding-top: !{component.spacing.pt || 0};background-size: cover;background-image: url(!{url});padding-bottom: !{component.spacing.pb || 0};padding-left: !{component.spacing.pl || 0};padding-right: !{component.spacing.pr || 0};margin-top: !{component.spacing.mt || 0};margin-bottom: !{component.spacing.mb || 0};margin-left: !{component.spacing.ml || 0};margin-right: !{component.spacing.mr || 0};"> <table class="email-component-container {{component.type}}-v{{component.version}}" align="center" border="0" cellpadding="0" cellspacing="0" width="100%">
+                | <div style="max-width:!{component.spacing.mw || '100%' } ;float:left;width: 100%; background-color: !{component.bg.color};padding-top: !{component.spacing.pt || 0};background-size: cover;background-image: url('!{url}');padding-bottom: !{component.spacing.pb || 0};padding-left: !{component.spacing.pl || 0};padding-right: !{component.spacing.pr || 0};margin-top: !{component.spacing.mt || 0};margin-bottom: !{component.spacing.mb || 0};margin-left: !{component.spacing.ml || 0};margin-right: !{component.spacing.mr || 0};"> <table class="email-component-container {{component.type}}-v{{component.version}}" align="center" border="0" cellpadding="0" cellspacing="0" width="100%">
                 if component.title
                     |     <tr>
                     |         <td>
@@ -184,7 +184,7 @@ html
 
               if component.type === 'email-2-col'
                 - var url=(component.bg && component.bg.img.show === true) ? 'https:'+component.bg.img.url : '';
-                | <div style="max-width:!{component.spacing.mw || '100%'} ;float:left;width: 100%;background-color: !{component.bg.color};padding-top: !{component.spacing.pt || 0};background-size: cover;background-image: url(!{url});padding-bottom: !{component.spacing.pb  || 0};padding-left: !{component.spacing.pl || 0};padding-right: !{component.spacing.pr  || 0};margin-top: !{component.spacing.mt || 0};margin-bottom: !{component.spacing.mb || 0};margin-left: !{component.spacing.ml || 0};margin-right: !{component.spacing.mr || 0};"> <table class="email-component-container  {{component.type}}-v{{component.version}}" align="center" border="0" cellpadding="0" cellspacing="0" width="100%">
+                | <div style="max-width:!{component.spacing.mw || '100%'} ;float:left;width: 100%;background-color: !{component.bg.color};padding-top: !{component.spacing.pt || 0};background-size: cover;background-image: url('!{url}');padding-bottom: !{component.spacing.pb  || 0};padding-left: !{component.spacing.pl || 0};padding-right: !{component.spacing.pr  || 0};margin-top: !{component.spacing.mt || 0};margin-bottom: !{component.spacing.mb || 0};margin-left: !{component.spacing.ml || 0};margin-right: !{component.spacing.mr || 0};"> <table class="email-component-container  {{component.type}}-v{{component.version}}" align="center" border="0" cellpadding="0" cellspacing="0" width="100%">
                 if component.title
                     |     <tr>
                     |         <td>
@@ -234,7 +234,7 @@ html
 
               if component.type === 'email-3-col'
                 - var url=(component.bg && component.bg.img.show === true) ? 'https:'+component.bg.img.url : '';
-                | <div style="max-width:!{component.spacing.mw || '100%'} ;float:left;width: 100%;background-size: cover;background-image: url(!{url});padding-top: !{component.spacing.pt || 0};padding-bottom: !{component.spacing.pb || 0};padding-left: !{component.spacing.pl || 0};padding-right: !{component.spacing.pr || 0};margin-top: !{component.spacing.mt || 0};margin-bottom: !{component.spacing.mb || 0};margin-left: !{component.spacing.ml || 0};margin-right: !{component.spacing.mr || 0};"><table class="email-component-container {{component.type}}-v{{component.version}}" align="center" border="0" cellpadding="0" cellspacing="0" width="100%">
+                | <div style="max-width:!{component.spacing.mw || '100%'} ;float:left;width: 100%;background-color:!{component.bg.color};background-size: cover;background-image: url('!{url}');padding-top: !{component.spacing.pt || 0};padding-bottom: !{component.spacing.pb || 0};padding-left: !{component.spacing.pl || 0};padding-right: !{component.spacing.pr || 0};margin-top: !{component.spacing.mt || 0};margin-bottom: !{component.spacing.mb || 0};margin-left: !{component.spacing.ml || 0};margin-right: !{component.spacing.mr || 0};"><table class="email-component-container {{component.type}}-v{{component.version}}" align="center" border="0" cellpadding="0" cellspacing="0" width="100%">
                 if component.title
                     |     <tr>
                     |         <td>
@@ -293,7 +293,7 @@ html
 
               if component.type === 'email-footer'
                 - var url=(component.bg && component.bg.img.show === true) ? 'https:'+component.bg.img.url : '';
-                | <div style="max-width:!{component.spacing.mw || '100%'} ;float:left;width: 100%;;background-color: !{component.bg.color};background-size: cover;background-image: url(!{url});padding-top: !{component.spacing.pt || 0};padding-bottom: !{component.spacing.pb || 0};padding-left: !{component.spacing.pl || 0};padding-right: !{component.spacing.pr || 0};margin-top: !{component.spacing.mt || 0};margin-bottom: !{component.spacing.mb || 0};margin-left: !{component.spacing.ml || 0};margin-right: !{component.spacing.mr || 0};"><table class="email-component-container {{component.type}}-v{{component.version}}" align="center" border="0" cellpadding="0" cellspacing="0" width="100%">
+                | <div style="max-width:!{component.spacing.mw || '100%'} ;float:left;width: 100%;background-color:!{component.bg.color};background-size: cover;background-image: url('!{url}');padding-top: !{component.spacing.pt || 0};padding-bottom: !{component.spacing.pb || 0};padding-left: !{component.spacing.pl || 0};padding-right: !{component.spacing.pr || 0};margin-top: !{component.spacing.mt || 0};margin-bottom: !{component.spacing.mb || 0};margin-left: !{component.spacing.ml || 0};margin-right: !{component.spacing.mr || 0};"><table class="email-component-container {{component.type}}-v{{component.version}}" align="center" border="0" cellpadding="0" cellspacing="0" width="100%">
                 |     <tr>
                 |         <td>
                 |             <table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" id="templateColumns">
@@ -318,7 +318,7 @@ html
                 | <table class="email-component-container-hr {{component.type}}-v{{component.version}}" align="center" border="0" cellpadding="0" cellspacing="0" width="100%">
                 |     <tr>
                 |         <td>
-                |             <div style="max-width:!{component.spacing.mw || '100%'} ;background-color: !{component.bg.color};background-size: cover;background-image: url(!{url});padding-top: !{component.spacing.pt || 0};padding-bottom: !{component.spacing.pb || 0};padding-left: !{component.spacing.pl || 0};padding-right: !{component.spacing.pr || 0};margin-top: !{component.spacing.mt || 0};margin-bottom: !{component.spacing.mb || 0};margin-left: !{component.spacing.ml || 0};margin-right: !{component.spacing.mr || 0};"><table align="center" border="0" cellpadding="0" cellspacing="0" width="100%">
+                |             <div style="max-width:!{component.spacing.mw || '100%'} ;background-color: !{component.bg.color};background-size: cover;background-image: url('!{url}');padding-top: !{component.spacing.pt || 0};padding-bottom: !{component.spacing.pb || 0};padding-left: !{component.spacing.pl || 0};padding-right: !{component.spacing.pr || 0};margin-top: !{component.spacing.mt || 0};margin-bottom: !{component.spacing.mb || 0};margin-left: !{component.spacing.ml || 0};margin-right: !{component.spacing.mr || 0};"><table align="center" border="0" cellpadding="0" cellspacing="0" width="100%">
                 |                 <tr>
                 |                     <td align="center" style="height:10px; padding-left:20px; padding-right: 20px;">
                 |                         <div class="hr"></div>
@@ -334,7 +334,7 @@ html
                 | <table class="email-component-container  {{component.type}}-v{{component.version}}" align="center" border="0" cellpadding="0" cellspacing="0" width="100%">
                 |     <tr>
                 |         <td>
-                |             <div style="max-width:!{component.spacing.mw || '100%'} ;background-color: !{component.bg.color};background-size: cover;background-image: url(!{url});padding-top: !{component.spacing.pt || 0};padding-bottom: !{component.spacing.pb || 0};padding-left: !{component.spacing.pl || 0};padding-right: !{component.spacing.pr || 0};margin-top: !{component.spacing.mt || 0};margin-bottom: !{component.spacing.mb || 0};margin-left: !{component.spacing.ml || 0};margin-right: !{component.spacing.mr || 0};"><table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" id="templateColumns">
+                |             <div style="max-width:!{component.spacing.mw || '100%'} ;background-color: !{component.bg.color};background-size: cover;background-image: url('!{url}');padding-top: !{component.spacing.pt || 0};padding-bottom: !{component.spacing.pb || 0};padding-left: !{component.spacing.pl || 0};padding-right: !{component.spacing.pr || 0};margin-top: !{component.spacing.mt || 0};margin-bottom: !{component.spacing.mb || 0};margin-left: !{component.spacing.ml || 0};margin-right: !{component.spacing.mr || 0};"><table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" id="templateColumns">
                 |                 <tr>
                 |                     <td align="center" width="100%" class="templateColumnContainer" style="padding-left:20px; padding-right: 20px;">
                 |                         <table border="0" cellpadding="10" cellspacing="0" width="100%" style="color: !{component.txtcolor};">

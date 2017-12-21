@@ -81,7 +81,7 @@ app.config(['$stateProvider', '$urlRouterProvider', '$controllerProvider', '$com
 					init: ['$stateParams', 'SimpleSiteBuilderService', function ($stateParams, SimpleSiteBuilderService) {
 						return SimpleSiteBuilderService.getPage($stateParams.pageId);
             }]
-				}, loadSequence('froala-wysiwyg-editor', 'froala-wysiwyg-editor-plugins', 'custom-froala-wysiwyg-editor', 'userService', 'htmlToPlaintext', 'spectrum', 'angular-slider', 'assetsService', 'toasterService', 'geocodeService', 'productService', 'paymentService', 'accountService', 'toTrusted', 'generateURLforLinks', 'truncate', 'ngSticky', 'slick', 'offset', 'jsVideoUrlParser', 'selectedTags', 'addComponentModalCtrl', 'componentSettingsModalCtrl', 'ssbComponentSettingsModalCtrl', 'googlePlaces', 'ngMap', 'campaignService', 'angular-resizable', 'wu.masonry', 'cleanType', 'filterPages', 'filterSsbSections', 'deep-diff', 'sortListPages', 'generateURLforProduct', 'ssbPostSettingsModalCtrl', 'ssbPostFilter', 'wait-for-images', 'assetsService'))
+				}, loadSequence('froala-wysiwyg-editor', 'froala-wysiwyg-editor-plugins', 'custom-froala-wysiwyg-editor', 'userService', 'htmlToPlaintext', 'spectrum', 'angular-slider', 'assetsService', 'toasterService', 'geocodeService', 'productService', 'paymentService', 'accountService', 'toTrusted', 'generateURLforLinks', 'truncate', 'ngSticky', 'slick', 'offset', 'jqcloud', 'jsVideoUrlParser', 'selectedTags', 'addComponentModalCtrl', 'componentSettingsModalCtrl', 'ssbComponentSettingsModalCtrl', 'googlePlaces', 'ngMap', 'campaignService', 'angular-resizable', 'wu.masonry', 'cleanType', 'filterPages', 'filterSsbSections', 'deep-diff', 'sortListPages', 'generateURLforProduct', 'ssbPostSettingsModalCtrl', 'ssbPostFilter', 'ssbPostPageFilter', 'wait-for-images', 'assetsService'))
 			}).state('app.website.analytics', {
 				url: '/site-analytics',
 				templateUrl: "/admin/assets/views/site-analytics.html",
@@ -253,7 +253,7 @@ app.config(['$stateProvider', '$urlRouterProvider', '$controllerProvider', '$com
 				templateUrl: "/admin/assets/views/editTopics.html",
 				title: 'Topic Single',
 				icon: 'ti-layout-media-left-alt',
-				resolve: loadSequence('froala-wysiwyg-editor', 'froala-wysiwyg-editor-plugins', 'custom-froala-wysiwyg-editor', 'editTopicCtrl', 'userService', 'htmlToPlaintext', 'spectrum', 'angular-slider', 'assetsService', 'toasterService', 'geocodeService', 'productService', 'paymentService', 'accountService', 'toTrusted', 'generateURLforLinks', 'truncate', 'ngSticky', 'slick', 'offset', 'jsVideoUrlParser', 'selectedTags', 'addComponentModalCtrl', 'componentSettingsModalCtrl', 'templateSettingsModalCtrl', 'googlePlaces', 'ngMap', 'campaignService', 'angularCircularNavigation', 'generateURLforProduct')
+				resolve: loadSequence('froala-wysiwyg-editor', 'froala-wysiwyg-editor-plugins', 'custom-froala-wysiwyg-editor', 'editTopicCtrl', 'userService', 'htmlToPlaintext', 'spectrum', 'angular-slider', 'assetsService', 'toasterService', 'geocodeService', 'productService', 'paymentService', 'accountService', 'toTrusted', 'generateURLforLinks', 'truncate', 'ngSticky', 'slick', 'offset', 'jqcloud', 'jsVideoUrlParser', 'selectedTags', 'addComponentModalCtrl', 'componentSettingsModalCtrl', 'templateSettingsModalCtrl', 'googlePlaces', 'ngMap', 'campaignService', 'angularCircularNavigation', 'generateURLforProduct')
 			}).state('app.onboarding', {
 				url: '/onboarding',
 				templateUrl: "/admin/assets/views/onboarding.html",

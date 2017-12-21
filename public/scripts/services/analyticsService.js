@@ -100,7 +100,6 @@ mainApp.service('analyticsService', ['$http', '$location', 'ipCookie', function 
 
 		//get browser fingerprint
         fingerprint = new Fingerprint2();
-		var self = this;
         fingerprint.get(function(result, components) {
             timezone = jstz.determine();
 
@@ -189,7 +188,10 @@ mainApp.service('analyticsService', ['$http', '$location', 'ipCookie', function 
             console.log('session start fullEntrance >>> ', sessionProperties.fullEntrance);
             $http.post(apiUrl, sessionProperties)
                 .success(function (data) {
-                    fn(data);
+                    if(fn) {
+                        fn(data);
+                    }
+
                 });
         });
 
@@ -234,7 +236,37 @@ mainApp.service('analyticsService', ['$http', '$location', 'ipCookie', function 
 		//If it is undefined, set a new one.
 		if (!session_cookie || !session_cookie.id) {
 			console.log('restarting session');
-			this.sessionStart(undefined);
+			this.sessionStart(function(){
+                sessionId = ipCookie("session_cookie").id || Math.uuid();
+
+                pageProperties = {
+                    url: {
+                        source: parsedUrl.attr("source"),
+                        protocol: parsedUrl.attr("protocol"),
+                        domain: parsedUrl.attr("host"),
+                        port: parsedUrl.attr("port"),
+                        path: parsedUrl.attr("path"),
+                        anchor: parsedUrl.attr("anchor")
+                    },
+                    pageActions: [],
+                    start_time: startPageTimer,
+                    end_time: 0,
+                    session_id: sessionId,
+                    entrance: entrance
+                };
+
+                entrance = false;
+                var queryParams = {ev:'pg', fe:parsedUrl.attr('source'), sid:sessionId +'-collect'};
+                apiUrl = baseUrl + ['analytics', 'session', sessionId, 'pageStart'].join('/');
+                $http.post(apiUrl, pageProperties)
+                    .success(function (data) {
+                        //self.collect(queryParams, fn);
+                        if(fn) {
+                            fn(data);
+                        }
+
+                    });
+            });
 		} else {
             sessionId = ipCookie("session_cookie").id || Math.uuid();
 
@@ -260,7 +292,10 @@ mainApp.service('analyticsService', ['$http', '$location', 'ipCookie', function 
             $http.post(apiUrl, pageProperties)
                 .success(function (data) {
                     //self.collect(queryParams, fn);
-                    fn(data);
+                    if(fn) {
+                        fn(data);
+                    }
+
                 });
         }
 

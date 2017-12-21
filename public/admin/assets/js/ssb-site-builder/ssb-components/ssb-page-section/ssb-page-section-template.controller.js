@@ -374,14 +374,18 @@
                     }
                     sectionElement.find(".single-testimonial .component-slider-image img").css("min-height", sectionElementTextHeight);
                     var windowWidth = angular.element($window).width();
-                    if(sectionElement.hasClass("ssb-page-section-layout-nav-hero-v4") && windowWidth < 768){
-                        sectionElement.find(".flex-container-absolute-column").css("min-height", sectionElementTextHeight);
-                    }
-                    if((sectionElement.hasClass("ssb-section-amm") && windowWidth>768 ) ||
-                       (sectionElement.hasClass("ssb-section-wmm") && windowWidth>768 && windowWidth<1025 )
-                    ){
-                        sectionElement.find("ul.slick-dots").css('top',(sectionElementTextHeight-80)+'px')
-                    }
+                    var heightMargin = 80;
+					if(sectionElement.hasClass("ssb-page-section-layout-nav-hero-v3") && sectionElement.hasClass("ssb-page-section-layout-nav-hero-v4") && windowWidth < 768){
+						sectionElement.find(".flex-container-absolute-column").css("min-height", sectionElementTextHeight);
+					}
+					if((sectionElement.hasClass("ssb-section-amm") && windowWidth>768 ) ||
+					   (sectionElement.hasClass("ssb-section-wmm") && windowWidth>768 && windowWidth<1025 )
+					){
+						if(sectionElement.hasClass("ssb-page-section-layout-nav-hero-v3")){ 
+							heightMargin+=30;
+						}
+						sectionElement.find("ul.slick-dots").css('top',(sectionElementTextHeight-heightMargin)+'px')
+					}
                 }
             }
         }
@@ -436,7 +440,6 @@
                 var elementIsFirstPosition = vm.index === 0;
                 SsbPageSectionService.isSticky = true;
                 if (elementIsFirstPosition) {
-                    // Preview page
                     var dup ;
                     dup = vm.element.clone();
                     dup.addClass('ssb-fixed-clone-element');
@@ -508,9 +511,7 @@
                         width: '100%',
                         videoId: vm.section.bg.video.id,
                         events: {
-                            'onReady': vm.onPlayerReady,
-                            'onStateChange': vm.onPlayerStateChange,
-                            'onError': vm.onPlayerError
+                            'onReady': vm.onPlayerReady                            
                         },
                         playerVars: {
                             autohide: 1,
@@ -537,7 +538,6 @@
             vm.player.playVideo();
             vm.player.mute();
         };
-
 
         function init(element) {
             vm.element = element;
@@ -579,9 +579,9 @@
                     },
                     function (value) {
                         angular.element(".ssb-wrap-fixed-right-nav").css("margin-left", value + "px");
-                        $timeout(function () {
-                            angular.element(".ssb-wrap-fixed-right-nav").css("margin-left", value + "px");
-                        }, 0);
+                        //$timeout(function () {
+                        angular.element(".ssb-wrap-fixed-right-nav").css("margin-left", value + "px");
+                        //}, 0);
                     }
                 );
             }

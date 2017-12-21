@@ -28,6 +28,16 @@ require('./model/page_event');
 require('./model/ping_event');
 
 const not404s= [ "/404", "/apple-touch-icon.png", "/apple-touch-icon-120x120.png", "/favicon.ico", "/apple-touch-icon-120x120-precomposed.png", "/apple-touch-icon-precomposed.png", "/favicon-32x32.png", "/favicon-16x16.png", "/safari-pinned-tab.svg" ];
+var fs = require('fs');
+var filteredIPs = [];
+var filteredIPRaw = fs.readFileSync('./analytics/filtered_ips.txt', 'utf8');
+
+_.each(filteredIPRaw.split('\n'), function(line){
+    if(line.indexOf('#') < 0 && line.indexOf('.') > 1) {
+        filteredIPs.push(line.trim());
+    }
+});
+_log.info('filtering [' + filteredIPs.length + '] IPs');
 module.exports = {
 
 
@@ -145,98 +155,108 @@ module.exports = {
     storeSessionEvent: function(sessionEvent, fn) {
         var self = this;
         _log.trace('>> storeSessionEvent ', sessionEvent.get('fingerprint'), sessionEvent.get('session_id'));
-        //check if we have one already....
-        accountDao.getAccountByID(sessionEvent.get('accountId'), function(err, account){
-            var orgId = 0;
-            if(account && account.get('orgId')) {
-                orgId = account.get('orgId');
-                sessionEvent.set('subdomain', account.get('subdomain'));
-            }
-            sessionEvent.set('orgId', orgId);
-
-            orgManager.getOrgById(0,0,orgId, function(err, organization){
-                if(organization) {
-                    sessionEvent.set('orgDomain', organization.get('orgDomain'));
+        //see if we can discard
+        if(filteredIPs && _.contains(filteredIPs, sessionEvent.get('ip_address'))) {
+            _log.info('skipping analytics event from [' + sessionEvent.get('ip_address') + ']');
+            fn();
+        } else {
+            //check if we have one already....
+            accountDao.getAccountByID(sessionEvent.get('accountId'), function(err, account){
+                var orgId = 0;
+                if(account && account.get('orgId')) {
+                    orgId = account.get('orgId');
+                    sessionEvent.set('subdomain', account.get('subdomain'));
                 }
-                dao.findOne({session_id: sessionEvent.get('session_id')}, $$.m.SessionEvent, function(err, value){
-                    _log.debug('>> found session event ', value);
-                    if(err) {
-                        _log.error('Error looking for duplicate sessionEvents: ' + err);
-                        fn(err, null);
-                    } else if(value=== null) {
+                sessionEvent.set('orgId', orgId);
+                if(!sessionEvent.get('subdomain')) {
+                    sessionEvent.set('subdomain', account.get('subdomain'));
+                }
 
-
-                        var fingerprint = sessionEvent.get('fingerprint');
-                        _log.debug('>> searching for contacts that have fingerprint ', fingerprint);
-
-                        $$.dao.ContactDao.findMany({fingerprint:fingerprint}, $$.m.Contact, function(err, list){
-                            if(err) {
-                                _log.error('error creating contact activity for session event: ' + err);
-                            } else {
-                                //_log.trace('>> found contacts with matching fingerprint ', list);
-                                async.each(list, function(contact, cb){
-                                    var contactActivity = new $$.m.ContactActivity({
-                                        accountId: contact.get('accountId'),
-                                        contactId: contact.id(),
-                                        activityType: $$.m.ContactActivity.types.PAGE_VIEW,
-                                        start: new Date(),
-                                        extraFields: {
-                                            page: sessionEvent.fullEntrance,
-                                            timespent: sessionEvent.session_length
-                                        }
-                                    });
-                                    _log.trace('>> createActivity2 ', contactActivity);
-                                    contactActivityManager.createActivity(contactActivity, function(err, val){
-                                        if(err) {
-                                            _log.error('error creating contact activity for session event: ' + err);
-                                            cb(err);
-                                        } else {
-                                            cb();
-                                        }
-                                    });
-                                }, function(err){
-                                    _log.debug('Created contact activities for session event');
-                                    geoiputil.getMaxMindGeoForIP(sessionEvent.get('ip_address'), function(err, ip_geo_info) {
-                                        if (ip_geo_info) {
-                                            var replacementObject = {
-                                                province: ip_geo_info.region,
-                                                city: ip_geo_info.city,
-                                                postal_code: ip_geo_info.postal,
-                                                continent: ip_geo_info.continent,
-                                                country: ip_geo_info.countryName
-                                            };
-                                            sessionEvent.set('maxmind', replacementObject);
-                                        } else {
-                                            var replacementObject = {
-                                                province: '',
-                                                city: '',
-                                                postal_code: '',
-                                                continent: '',
-                                                country: ''
-                                            };
-                                            sessionEvent.set('maxmind', replacementObject);
-                                            _log.warn('Could not find geo info for ' + sessionEvent.get('ip_address'));
-                                        }
-                                        dao.saveOrUpdate(sessionEvent, fn);
-                                    });
-
-                                });
-                            }
-                        });
-                    } else {
-                        //already have one.  Store a ping instead.
-                        var pingEvent = new $$.m.PingEvent({
-                            session_id: sessionEvent.get('session_id'),
-                            server_time: sessionEvent.get('server_time'),
-                            accountId:sessionEvent.get('accountId'),
-                            orgId:sessionEvent.get('orgId')
-                        });
-                        dao.saveOrUpdate(pingEvent, fn);
+                orgManager.getOrgById(0,0,orgId, function(err, organization){
+                    if(organization) {
+                        sessionEvent.set('orgDomain', organization.get('orgDomain'));
                     }
-                });
-            });
+                    dao.findOne({session_id: sessionEvent.get('session_id')}, $$.m.SessionEvent, function(err, value){
+                        _log.debug('>> found session event ', value);
+                        if(err) {
+                            _log.error('Error looking for duplicate sessionEvents: ' + err);
+                            fn(err, null);
+                        } else if(value=== null) {
 
-        });
+
+                            var fingerprint = sessionEvent.get('fingerprint');
+                            _log.debug('>> searching for contacts that have fingerprint ', fingerprint);
+
+                            $$.dao.ContactDao.findMany({fingerprint:fingerprint}, $$.m.Contact, function(err, list){
+                                if(err) {
+                                    _log.error('error creating contact activity for session event: ' + err);
+                                } else {
+                                    //_log.trace('>> found contacts with matching fingerprint ', list);
+                                    async.each(list, function(contact, cb){
+                                        var contactActivity = new $$.m.ContactActivity({
+                                            accountId: contact.get('accountId'),
+                                            contactId: contact.id(),
+                                            activityType: $$.m.ContactActivity.types.PAGE_VIEW,
+                                            start: new Date(),
+                                            extraFields: {
+                                                page: sessionEvent.fullEntrance,
+                                                timespent: sessionEvent.session_length
+                                            }
+                                        });
+                                        _log.trace('>> createActivity2 ', contactActivity);
+                                        contactActivityManager.createActivity(contactActivity, function(err, val){
+                                            if(err) {
+                                                _log.error('error creating contact activity for session event: ' + err);
+                                                cb(err);
+                                            } else {
+                                                cb();
+                                            }
+                                        });
+                                    }, function(err){
+                                        _log.debug('Created contact activities for session event');
+                                        geoiputil.getMaxMindGeoForIP(sessionEvent.get('ip_address'), function(err, ip_geo_info) {
+                                            if (ip_geo_info) {
+                                                var replacementObject = {
+                                                    province: ip_geo_info.region,
+                                                    city: ip_geo_info.city,
+                                                    postal_code: ip_geo_info.postal,
+                                                    continent: ip_geo_info.continent,
+                                                    country: ip_geo_info.countryName
+                                                };
+                                                sessionEvent.set('maxmind', replacementObject);
+                                            } else {
+                                                var replacementObject = {
+                                                    province: '',
+                                                    city: '',
+                                                    postal_code: '',
+                                                    continent: '',
+                                                    country: ''
+                                                };
+                                                sessionEvent.set('maxmind', replacementObject);
+                                                _log.warn('Could not find geo info for ' + sessionEvent.get('ip_address'));
+                                            }
+                                            dao.saveOrUpdate(sessionEvent, fn);
+                                        });
+
+                                    });
+                                }
+                            });
+                        } else {
+                            //already have one.  Store a ping instead.
+                            var pingEvent = new $$.m.PingEvent({
+                                session_id: sessionEvent.get('session_id'),
+                                server_time: sessionEvent.get('server_time'),
+                                accountId:sessionEvent.get('accountId'),
+                                orgId:sessionEvent.get('orgId')
+                            });
+                            dao.saveOrUpdate(pingEvent, fn);
+                        }
+                    });
+                });
+
+            });
+        }
+
 
 
 
@@ -261,27 +281,39 @@ module.exports = {
 
     storePageEvent: function(pageEvent, fn) {
         //_log.debug('>> storePageEvent');
-        accountDao.getAccountByID(pageEvent.get('accountId'), function(err, account) {
-            var orgId = 0;
-            if (account && account.get('orgId')) {
-                orgId = account.get('orgId');
-            }
-            pageEvent.set('orgId', orgId);
-            dao.saveOrUpdate(pageEvent, fn);
-        });
+        if(filteredIPs && _.contains(filteredIPs, pageEvent.get('ip_address'))) {
+            _log.info('skipping analytics event from [' + pageEvent.get('ip_address') + ']');
+            fn();
+        } else {
+            accountDao.getAccountByID(pageEvent.get('accountId'), function(err, account) {
+                var orgId = 0;
+                if (account && account.get('orgId')) {
+                    orgId = account.get('orgId');
+                }
+                pageEvent.set('orgId', orgId);
+                dao.saveOrUpdate(pageEvent, fn);
+            });
+        }
+
 
     },
 
     storePingEvent: function(pingEvent, fn) {
         //_log.debug('>> storePingEvent');
-        accountDao.getAccountByID(pingEvent.get('accountId'), function(err, account) {
-            var orgId = 0;
-            if (account && account.get('orgId')) {
-                orgId = account.get('orgId');
-            }
-            pingEvent.set('orgId', orgId);
-            dao.saveOrUpdate(pingEvent, fn);
-        });
+        if(filteredIPs && _.contains(filteredIPs, pingEvent.get('ip_address'))) {
+            _log.info('skipping analytics event from [' + pingEvent.get('ip_address') + ']');
+            fn();
+        } else {
+            accountDao.getAccountByID(pingEvent.get('accountId'), function(err, account) {
+                var orgId = 0;
+                if (account && account.get('orgId')) {
+                    orgId = account.get('orgId');
+                }
+                pingEvent.set('orgId', orgId);
+                dao.saveOrUpdate(pingEvent, fn);
+            });
+        }
+
     },
 
     getLiveVisitors: function(accountId, userId, lookBackInMinutes, isAggregate, orgId, fn) {
@@ -363,7 +395,7 @@ module.exports = {
                 var group3 = {
                     $group:{_id:'$_id.secondsAgo', count:{$sum:'$count'}}
                 };
-                
+
                 stageAry.push(group3);
                 var sort = {
                     $sort:{'_id':-1}
@@ -487,7 +519,7 @@ module.exports = {
                     localField: "session_id",
                     foreignField: "session_id",
                     as: "page_events"
-                },
+                }
             };
             stageAry.push(lookup);
             var group = {
@@ -505,7 +537,7 @@ module.exports = {
                 } else {
                     self.log.trace('results:', JSON.stringify(results));
                     var _resultDetails = [];
-                    async.forEachLimit(results, 1, function(result, resultCallback){  
+                    async.forEachLimit(results, 1, function(result, resultCallback){
                         var _result = {  _id: result._id,  session_id:[],
                             ip_address:null,  maxmind:null,
                             user_agent:null, timestamp:null,
@@ -539,13 +571,13 @@ module.exports = {
                             }
                             if(session.page_events) {
                                 _result.pageEvents = _result.pageEvents.concat(session.page_events);
-                            } 
-                             
+                            }
+
                             dao.findMany({sessionId: session.session_id},  $$.m.ContactActivity, function(err, list) {
                                 if (err) {
                                     self.log.error('Error finding activities: ' + err);
-                                    return sessionCallback(); 
-                                } else { 
+                                    return sessionCallback();
+                                } else {
                                     if(list) {
                                         _.each(list, function(activity){
                                             _result.pageEvents.push({
@@ -553,17 +585,17 @@ module.exports = {
                                                 extraFields:activity.get("extraFields"),
                                                 start:activity.get("start")
                                             });
-                                        }) 
+                                        });
                                     }
-                                    return sessionCallback(); 
+                                    return sessionCallback();
                                 }
-                            }); 
+                            });
 
-                        }, function(err){ 
+                        }, function(err){
                             _result.session_id = _result.session_id.join(',');
                             var _pageEvents = [];
                             _.each(_result.pageEvents, function(pageEvent){
-                                var obj = {};  
+                                var obj = {};
                                 if(pageEvent.server_time_dt) {
                                     obj.pageTime = pageEvent.server_time_dt;
                                 }
@@ -571,25 +603,25 @@ module.exports = {
                                     obj.pageRequested = pageEvent.url.source;
                                 }
                                 if(pageEvent.activityType){
-                                    obj.activityType=pageEvent.activityType
-                                    obj.extraFields=pageEvent.extraFields
+                                    obj.activityType=pageEvent.activityType;
+                                    obj.extraFields=pageEvent.extraFields;
                                     obj.pageTime = pageEvent.start;
                                 } else {
                                     obj.activityType="PAGE_VIEW";
-                                } 
-                                _pageEvents.push(obj); 
-                            }) 
+                                }
+                                _pageEvents.push(obj);
+                            });
                             _result.pageEvents = _.sortBy(_pageEvents, function(p) {
                                 return p.pageTime;
-                            }); ;
-                            _resultDetails.push(_result); 
+                            });
+                            _resultDetails.push(_result);
                             resultCallback();
-                        }); 
-                    }, function(err){ 
+                        });
+                    }, function(err){
                         _resultDetails = _.sortBy(_resultDetails, function(result){return -result.server_time;});
                         self.log.trace(accountId, userId, '<< getLiveVisitorDetails');
                         fn(err, _resultDetails);
-                    });  
+                    });
                 }
             });
         });
@@ -3091,12 +3123,12 @@ module.exports = {
                         }
                         else if(user){
                             record.user = user.get("username");
-                            cb();    
+                            cb();
                         }
                         else{
                             cb();
                         }
-                        
+
                     })
                 }, function(err){
                     fn(null, value);

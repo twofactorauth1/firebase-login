@@ -195,8 +195,8 @@
 			var styleString = '';
 			if (form) {
 				if (form.formFontFamily) {
-					styleString += 'font-family: ' + form.formFontFamily + ";";
-				}
+                    styleString += 'font-family: ' + form.formFontFamily + ";";
+                }
 				if (form.formTextColor) {
 					styleString += 'color: ' + form.formTextColor + ";";
 				}
@@ -253,7 +253,7 @@
 
 			if ($injector.has("ipCookie")) {
 				ipCookie = $injector.get("ipCookie");
-			} 
+			}
 			var	sendEmailId,
 				skipWelcomeEmail,
 				formBuilderCampaignId,
@@ -479,6 +479,7 @@
 										}
 										vm.setBorderStyle(this, btnHoverStyle);
 									} else {
+                                        vm.removeBorderStyle(this);
 										vm.removeBorderStyleForNewForms(this);
 									}
 									if (btnHoverStyle && btnHoverStyle.txtcolor) {
@@ -491,12 +492,12 @@
 									this.style.setProperty('border-color', (vm.originalData.borderColor || originalData.borderColor), 'important');
 									var btn = vm.originalData.btn || vm.component.btn;
 									if (btn) {
-										//vm.setBorderStyle(this, btn);
-                      vm.removeBorderStyle(this);
+										vm.setBorderStyle(this, btn);
+
 									} else {
 										vm.removeBorderStyleForNewForms(this);
 									}
-								});
+							});
 
 							element.on("mousedown touchstart", function () {
 								if (vm.component.formSettings && vm.component.formSettings.btnStyle && vm.component.formSettings.btnStyle.pressed) {

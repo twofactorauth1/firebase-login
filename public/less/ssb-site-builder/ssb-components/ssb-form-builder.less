@@ -9,6 +9,7 @@
         position: absolute;
         color: #E6674A;
         display: inline;
+        z-index: 1;
     }
     .form-title {
         padding-left: 10px;
@@ -117,10 +118,7 @@
         height: 35px;
     }
     margin: 10px;
-    .form-layout-1{
-         span.required{            
-            margin-top: 5px;
-        }
+    .form-layout-1{ 
         position: relative;
         width: 50%;
         margin: auto;
@@ -189,7 +187,7 @@
                 margin-left: -10px;
             }
         }
-        
+
         position: relative;
         width: 50%;
         margin: auto;
@@ -236,6 +234,13 @@
         margin-bottom: 20px;
 
     }
+}
+.req-opt-in-container {
+    margin: 0 0 0 15px;
+    display: inline-block;
+    .req-opt-in {
+       left: 0;
+   }
 }
 @media(max-width:767px) {
     .form-builder-layout{

@@ -15,13 +15,31 @@
 
 		vm.init = init;
 		vm.hasFeaturedPosts = false;
-
+		vm.initData = initData;
 		vm.blog = SimpleSiteBuilderBlogService.blog || {};
 		vm.blog_tags = [];
 		vm.filteredPostView = false;
 		vm.encodeUrlText = encodeUrlText;
 		vm.titleStyle = titleStyle;
 		vm.descriptionStyle = descriptionStyle;
+		var path = $location.$$url.replace('/page/', '');
+
+		if (path) {
+			path = decodeURI(path);
+		}
+		if (path.indexOf("tag/") > -1) {
+			vm.blog.currentTag = path.replace('/tag/', '');
+			vm.filteredPostView = true;
+		}
+
+		if (path.indexOf("author/") > -1) {
+			vm.blog.currentAuthor = path.replace('/author/', '');
+			vm.filteredPostView = true;
+		}
+		if (path.indexOf("category/") > -1) {
+			vm.blog.currentCategory = path.replace('/category/', '');
+			vm.filteredPostView = true;
+		}
 		$scope.$watchCollection('vm.blog.posts', function (newValue) {
 			if (newValue) {
 				vm.blog_tags = getTags();
@@ -100,9 +118,48 @@
 			return encodeURI(url);
 		}
 
+		function initData() {
+			var posts = SimpleSiteBuilderBlogService.loadDataFromPage('#indigenous-precache-sitedata-posts') || window.indigenous.precache.siteData.posts;
+			if (posts) {
+				if (vm.filteredPostView) {
+					if (vm.blog.currentAuthor) {
+						posts = posts.filter(function (post) {
+							// console.log(post)
+							return post.post_author === vm.blog.currentAuthor;
+						});
+					}
+					if (vm.blog.currentTag) {
+						posts = posts.filter(function (post) {
+							if (post.post_tags) {
+								return _.some(post.post_tags, function (tag) {
+									return tag.toLowerCase() === vm.blog.currentTag.toLowerCase();
+								});
+							}
+						});
+					}
+					if (vm.blog.currentCategory) {
+						posts = posts.filter(function (post) {
+							if (post.post_categories) {
+								return _.some(post.post_categories, function (tag) {
+									if (tag.text) {
+										return tag.text.toLowerCase() === vm.blog.currentCategory.toLowerCase();
+									} else {
+										return tag.toLowerCase() === vm.blog.currentCategory.toLowerCase();
+									}
+								});
+							}
+						});
+					}
+				}
+			}
+			vm.blog.posts = posts;
+		}
 
 		function init(element) {
 			vm.element = element;
+			if (!vm.blog.posts.length) {
+				vm.initData();
+			}
 			vm.blog_tags = getTags();
 			if (vm.blog_tags.length < 1) {
 				element.closest("div.ssb-page-section").css({

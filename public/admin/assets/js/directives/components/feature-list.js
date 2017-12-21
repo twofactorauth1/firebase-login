@@ -9,8 +9,9 @@ app.directive('featureListComponent', ["$window", "$timeout", function ($window,
 		},
 		templateUrl: '/components/component-wrap.html',
 		link: function (scope) {
-
-			scope.isEditing = true;
+			$timeout(function(){
+				scope.isEditing = true;
+			},0);
 			scope.listStyles = listStyles;
 			scope.features = {
 				featureIndex: 0

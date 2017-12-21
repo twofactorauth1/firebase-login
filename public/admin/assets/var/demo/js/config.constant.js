@@ -814,6 +814,7 @@ app.constant('JS_REQUIRES', {
     'sortListPages': 'assets/js/filters/sortListPages.js',
     'productTableFilter': 'assets/js/filters/productTableFilter.js',
     'ssbPostFilter': 'assets/js/ssb-site-builder/ssb-components/ssb-filters/ssb-post-filter.js',
+    'ssbPostPageFilter': 'assets/js/ssb-site-builder/ssb-components/ssb-filters/ssb-post-page-filter.js',
     
     //*** Directives
     'mediaModal': 'assets/js/directives/mediadirective.js',
@@ -930,6 +931,9 @@ app.constant('JS_REQUIRES', {
   }, {
     name: 'slick',
     files: ['../js/libs/slick-carousel/slick/slick.min.js', '../js/libs/angular-slick/dist/slick.min.js']
+  }, {
+    name: 'jqcloud',
+    files: ["../js/libs/jqcloud2/dist/jqcloud.min.js", "../js/libs/angular-jqcloud/angular-jqcloud.js", "../js/libs/jqcloud2/dist/jqcloud.min.css"]
   }, {
     name: 'wu.masonry',
     files: ['../js/libs/angular-masonry/angular-masonry.js', '../js/libs/masonry/dist/masonry.pkgd.min.js', '../js/libs/imagesloaded/imagesloaded.pkgd.min.js']

@@ -1,33 +1,7 @@
 'use strict';
 
 angular.module('angular-parallax', [
-]).directive('parallax', ['$window', function($window) {
-  return {
-    restrict: 'A',
-    scope: {
-      parallaxRatio: '@',
-      parallaxVerticalOffset: '@',
-      parallaxHorizontalOffset: '@',
-    },
-    link: function($scope, elem, $attrs) {
-      var setPosition = function () {
-        // horizontal positioning
-        elem.css('left', $scope.parallaxHorizontalOffset + "px");
-
-        var calcValY = $window.pageYOffset * ($scope.parallaxRatio ? $scope.parallaxRatio : 1.1 );
-        if (calcValY <= $window.innerHeight) {
-          var topVal = (calcValY < $scope.parallaxVerticalOffset ? $scope.parallaxVerticalOffset : calcValY);
-          elem.css('top', topVal + "px");
-        }
-      };
-
-      setPosition();
-
-      angular.element($window).bind("scroll", setPosition);
-      angular.element($window).bind("touchmove", setPosition);
-    }  // link function
-  };
-}]).directive('parallaxBackground', ['$window', function($window) {
+]).directive('parallaxBackground', ['$window', function($window) {
   return {
     restrict: 'A',
     transclude: true,
@@ -139,10 +113,6 @@ angular.module('angular-parallax', [
         setPosition();
         $scope.$apply();
       });
-
-    //  angular.element($window).bind("scroll", setPosition);
-     // angular.element($window).biparallaxCallnd("touchmove", setPosition);
-
     }  // link function
   };
 }]);

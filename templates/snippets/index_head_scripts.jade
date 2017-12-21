@@ -162,7 +162,7 @@ if (typeof account.website.theme !== 'undefined' && typeof account.website.theme
             background-color: #{account.website.themeOverrides.styles.checkoutBtnBgColor}!important;
         }
         .ssb-page-blog-list .ssb-page-layout-row-2-col>div.col-xs-12 .ssb-section-layout, .ssb-page-blog-list .ssb-page-layout-row-2-col>div.col-xs-12{
-             background-color: #{account.website.settings.defaultBlogTemplateBgColor};
+            background-color: #{account.website.settings.defaultBlogTemplateBgColor}!important;
         }
 
         @media screen and (min-width: 768px) {
@@ -178,7 +178,7 @@ if (typeof account.website.theme !== 'undefined' && typeof account.website.theme
                 font-size: #{account.website.themeOverrides.styles.paragraphSize};
             }
 
-            .ssb-page-layout-row-2-col,.ssb-layout__header_2-col_footer .ssb-page-layout-row-footer.ssb-page-layout-row {
+            .ssb-page-layout-row-2-col,.ssb-layout__header_2-col_footer .ssb-wrap-fixed-right-nav .ssb-page-layout-row-footer.ssb-page-layout-row {
                 max-width: #{account.website.settings.defaultBlogTemplateWidth}!important;
             }
         }
@@ -189,7 +189,7 @@ if pageStyles
             background-color: #{pageStyles.bodyBackgroundColor}!important;
         }
         .ssb-theme-#{account.website.theme.handle} .ssb-section-layout {
-            background-color: #{pageStyles.bodyBackgroundColor}!important;
+            background-color: #{pageStyles.bodyBackgroundColor};
         }
         .ssb-theme-#{account.website.theme.handle} .ssb-page-section-layout-header {
             background-color: #{pageStyles.headerBackgroundColor}!important;

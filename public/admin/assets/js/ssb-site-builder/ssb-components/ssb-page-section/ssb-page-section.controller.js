@@ -108,8 +108,6 @@
 								classString += ' ssb-fixed-first-element';
 							}
 						}
-
-
 					}
 					if (section.layoutModifiers.grid && section.layoutModifiers.grid.isActive) {
 						classString += ' ssb-page-section-layout-' + section.layout + '-grid';
@@ -552,13 +550,17 @@
 					}
 					sectionElement.find(".single-testimonial .component-slider-image img").css("min-height", sectionElementTextHeight);
 					var windowWidth = angular.element($window).width();
-					if(sectionElement.hasClass("ssb-page-section-layout-nav-hero-v4") && windowWidth < 768){
+					var heightMargin = 80;
+					if(sectionElement.hasClass("ssb-page-section-layout-nav-hero-v3") && sectionElement.hasClass("ssb-page-section-layout-nav-hero-v4") && windowWidth < 768){
 						sectionElement.find(".flex-container-absolute-column").css("min-height", sectionElementTextHeight);
 					}
 					if((sectionElement.hasClass("ssb-section-amm") && windowWidth>768 ) ||
 					   (sectionElement.hasClass("ssb-section-wmm") && windowWidth>768 && windowWidth<1025 )
 					){
-						sectionElement.find("ul.slick-dots").css('top',(sectionElementTextHeight-80)+'px')
+						if(sectionElement.hasClass("ssb-page-section-layout-nav-hero-v3")){ 
+							heightMargin-=30;
+						}
+						sectionElement.find("ul.slick-dots").css('top',(sectionElementTextHeight-heightMargin)+'px')
 					}
 				}
 			}
@@ -904,46 +906,27 @@
 				var elementIsFirstPosition = vm.index === 0;
 				if ($injector.has("SsbPageSectionService"))
 					ssbPageSectionService = $injector.get("SsbPageSectionService");
-				if (elementIsFirstPosition) {
-					// Preview page
-					var dup ;
-					if ($location.$$path.indexOf("/preview/") == 0) {
-						dup = vm.element.clone();
-						dup.addClass('ssb-fixed-clone-element');
-						dup.attr('id', 'clone_of_' + vm.section._id);
-						dup.insertAfter(vm.element);
+				if (ssbPageSectionService)
+					ssbPageSectionService.isSticky = true;
+				if (elementIsFirstPosition) {					
+					var dup ;					
+					dup = vm.element.clone();
+					dup.addClass('ssb-fixed-clone-element');
+					dup.attr('id', 'clone_of_' + vm.section._id);
+					dup.insertAfter(vm.element);
+					if (ssbPageSectionService) {
 						$scope.$watch(
 							function () {
 								return angular.element(".ssb-fixed-first-element").height();
 							},
 							function (value) {
 								if (dup)
-									dup.css("min-height", value + "px");
-								if (ssbPageSectionService)
-									ssbPageSectionService.setSectionOffset(value);
+                            		dup.css("min-height", value + "px");
+								ssbPageSectionService.setSectionOffset(value);
 							}
 						);
-					} else {
-						dup = vm.element.clone();
-						dup.addClass('ssb-fixed-clone-element');
-						dup.attr('id', 'clone_of_' + vm.section._id);
-						dup.insertAfter(vm.element);
-						if (ssbPageSectionService) {
-							$scope.$watch(
-								function () {
-									return angular.element(".ssb-fixed-first-element").height();
-								},
-								function (value) {
-									ssbPageSectionService.setSectionOffset(value);
-								}
-							);
-						}
-
 					}
-
-				} else {
-					if (ssbPageSectionService)
-						ssbPageSectionService.isSticky = true;
+				} else {					
 					$timeout(function () {
 						$(vm.element[0]).sticky({
 							zIndex: 999

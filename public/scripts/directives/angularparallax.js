@@ -1,32 +1,6 @@
 /*global angular ,$ ,navigator ,document , window */
 angular.module('angular-parallax', [
-]).directive('parallax', ['$window', function ($window) {
-	'use strict';
-	return {
-		restrict: 'A',
-		scope: {
-			parallaxRatio: '@',
-			parallaxVerticalOffset: '@',
-			parallaxHorizontalOffset: '@'
-		},
-		link: function ($scope, elem) {
-			var setPosition = function () {
-				// horizontal positioning
-				elem.css('left', $scope.parallaxHorizontalOffset + "px");
-				var calcValY = $window.pageYOffset * ($scope.parallaxRatio ? $scope.parallaxRatio : 1.1);
-				if (calcValY <= $window.innerHeight) {
-					var topVal = (calcValY < $scope.parallaxVerticalOffset ? $scope.parallaxVerticalOffset : calcValY);
-					elem.css('top', topVal + "px");
-				}
-			};
-
-			setPosition();
-
-			angular.element($window).bind("scroll", setPosition);
-			angular.element($window).bind("touchmove", setPosition);
-		} // link function
-	};
-}]).directive('parallaxBackground', ['$window', '$timeout', function ($window, $timeout) {
+]).directive('parallaxBackground', ['$window', '$timeout', function ($window, $timeout) {
 	return {
 		restrict: 'A',
 		transclude: true,

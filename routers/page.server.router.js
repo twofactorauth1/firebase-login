@@ -135,10 +135,7 @@ _.extend(router.prototype, BaseRouter.prototype, {
     previewIndex: function(req, resp) {
         var self = this;
         self.log.debug('>> previewIndex');
-        var accountId = self.unAuthAccountId(req) || appConfig.mainAccountID;
-        if(accountId === 'new') {//we are on the signup page
-            accountId = appConfig.mainAccountID;
-        }
+        var accountId = self.authenticatedAccountId(req);        
         var pageId = req.params.pageId || 'index';
 
         new WebsiteView(req, resp).renderPreviewPage(accountId, pageId);

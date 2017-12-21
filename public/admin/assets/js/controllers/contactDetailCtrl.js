@@ -403,7 +403,7 @@
 			if ($scope.displayAddressFormat(_address)) {
 				ContactService.getGeoSearchAddress($scope.displayAddressFormat(_address), function (data) {
 					if (data.error === undefined) {
-						fn(data);_userName
+						fn(data);
 					} else {
 						console.warn(data.error);
 						fn();

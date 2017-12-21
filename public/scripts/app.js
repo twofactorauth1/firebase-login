@@ -32,6 +32,7 @@ var mainApp = angular
         "com.2fdevs.videogular.plugins.buffering",
         "com.2fdevs.videogular.plugins.poster",
         "truncate",
+        'angular-jqcloud',
         '720kb.socialshare',
         'slick',
         'wu.masonry',
@@ -270,21 +271,58 @@ var mainApp = angular
         var runningInterval,
 			isPreview = $location.$$path.indexOf("/preview/") === 0,
 			editorIndex = window.location.search.indexOf("editor=true"),
-            newAnalytics = false;
+            newAnalytics = window.indigenous.newAnalytics;
 
         if (editorIndex == -1 && !isPreview) {
-            analyticsService.getAccountData(function(err, data){
-                (err === null) ? newAnalytics = data.showhide && data.showhide.newAnalytics || false : newAnalytics = false;
-                if(newAnalytics === true) {
-                        console.log('new analytics.');
-                        analyticsService.collect(null, function () {
+            if(newAnalytics === true) {
+                console.log('new analytics.');
+                setTimeout(function(){
+                    analyticsService.collect(null, function () {
+                        console.log('new collect');
+                        analyticsService.collectPage(true, function(){
+                            clearInterval(runningInterval);
+
+                            var counter = 0;
+                            //every 15 seconds send page tracking data
+                            runningInterval = setInterval(function () {
+                                analyticsService.collectPage(false, function(){
+                                    counter++;
+
+                                    if (counter >= (1000 * 60 * 60)) {
+                                        clearInterval(runningInterval);
+                                    }
+                                });
+
+                            }, 30000);
                         });
-                } else {
-                        console.log('old analytics.');
-                        analyticsService.sessionStart(function () {
+                    });
+                }, 8000);
+
+            } else {
+                console.log('old analytics.');
+                setTimeout(function(){
+                    analyticsService.sessionStart(function () {
+                        console.log('old collect');
+                        analyticsService.pageStart(function () {
+
+                            analyticsService.pagePing();
+                            clearInterval(runningInterval);
+
+                            var counter = 0;
+                            //every 15 seconds send page tracking data
+                            runningInterval = setInterval(function () {
+                                analyticsService.pagePing();
+                                counter++;
+
+                                if (counter >= (1000 * 60 * 60)) {
+                                    clearInterval(runningInterval);
+                                }
+                            }, 15000);
                         });
-                }
-            });
+                    });
+                }, 8000);
+
+            }
 
         }
 
@@ -318,48 +356,7 @@ var mainApp = angular
         $rootScope.$on("$routeChangeSuccess", function () {
 
             $rootScope.isSocialEnabled = $location.absUrl().search(/\/blog\/.+/) !== -1;
-            if (editorIndex == -1 && !isPreview) {
-                analyticsService.getAccountData(function(err, data){
-                (err === null) ? newAnalytics = data.showhide && data.showhide.newAnalytics || false : newAnalytics = false;
-                if(newAnalytics === true) {
-                    console.log('new collect');
-                    analyticsService.collectPage(true, function(){
-                        clearInterval(runningInterval);
-
-                        var counter = 0;
-                        //every 15 seconds send page tracking data
-                        runningInterval = setInterval(function () {
-                            analyticsService.collectPage(false, function(){
-                                counter++;
-
-                                if (counter >= (1000 * 60 * 60)) {
-                                    clearInterval(runningInterval);
-                                }
-                            });
-
-                        }, 30000);
-                    });
-                } else {
-                    console.log('old collect');
-                    analyticsService.pageStart(function () {
-
-                        analyticsService.pagePing();
-                        clearInterval(runningInterval);
-
-                        var counter = 0;
-                        //every 15 seconds send page tracking data
-                        runningInterval = setInterval(function () {
-                            analyticsService.pagePing();
-                            counter++;
-
-                            if (counter >= (1000 * 60 * 60)) {
-                                clearInterval(runningInterval);
-                            }
-                        }, 15000);
-                    });
-                }
-              });
-            }
+            
         });
 
 

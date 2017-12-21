@@ -150,7 +150,7 @@
                                     </span>
                                 </td>
                                 <td class="hidden-xs text-adjust-col customer-col" ng-hide='tableView == "grid"'><strong>(Qty) Items:</strong>
-                                    <span class="text-adjust-inner-content" tooltip-placement="top" tooltip="{{item.product.name | titleCase}} " ng-repeat="item in order.line_items track by $index">
+                                    <span class="text-adjust-inner-content order-quantity-span" tooltip-placement="top" tooltip="{{item.product.name | titleCase}} " ng-repeat="item in order.line_items track by $index">
                                         <span>{{item.quantity ? '('+item.quantity+')' : '(1)'}}</span>
                                         {{item.product.name || item.name}}<br ng-if="($index+1 < order.line_items.length)" />
                                     </span>
