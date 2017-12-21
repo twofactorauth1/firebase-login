@@ -193,10 +193,10 @@
 
 		function formStyle(form) {
 			var styleString = '';
-			if (form) {	
+			if (form) {
 				if (form.formFontFamily) {
                     styleString += 'font-family: ' + form.formFontFamily + ";";
-                }			
+                }
 				if (form.formTextColor) {
 					styleString += 'color: ' + form.formTextColor + ";";
 				}
@@ -253,7 +253,7 @@
 
 			if ($injector.has("ipCookie")) {
 				ipCookie = $injector.get("ipCookie");
-			} 
+			}
 			var	sendEmailId,
 				skipWelcomeEmail,
 				formBuilderCampaignId,
@@ -491,8 +491,8 @@
 									this.style.setProperty('border-color', (vm.originalData.borderColor || originalData.borderColor), 'important');
 									var btn = vm.originalData.btn || vm.component.btn;
 									if (btn) {
-										//vm.setBorderStyle(this, btn);
-                      vm.removeBorderStyle(this);
+										vm.setBorderStyle(this, btn);
+                                       // vm.removeBorderStyle(this);
 									} else {
 										vm.removeBorderStyleForNewForms(this);
 									}
