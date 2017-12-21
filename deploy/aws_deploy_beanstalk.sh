@@ -13,14 +13,14 @@ env_check(){
 	REGION=${2:-"west"}
 	REGION=$(echo ${REGION} | tr [:upper:] [:lower:])
 
-	if [ "x$AWS_ACCESS_KEY_ID" = "x" ]; then 
+	if [ "x$AWS_ACCESS_KEY_ID" = "x" ]; then
 		on_err "No AWS_ACCESS_KEY_ID defined."
 	fi
 	if [ "x$AWS_SECRET_ACCESS_KEY" = "x" ]; then
 		on_err "No AWS_SECRET_ACCESS_KEY defined.";
 	fi
-	if [ "x$APP_NAME" = "x" ]; then 
-		on_err "No APP_NAME defined."; 
+	if [ "x$APP_NAME" = "x" ]; then
+		on_err "No APP_NAME defined.";
 	fi
 
 
@@ -44,14 +44,14 @@ env_check(){
 		sed -i "s/ENVIRONMENT/test/g;s/REGION/${REGION}/g" ./.ebextensions/070_awslogs.config
 	else
 		on_err "No environment specified"
-	fi	
+	fi
 
 	export APP_VERSION=`git rev-parse --short HEAD`
 }
 
 main(){
 	# clean build artifacts and create the application archive (also ignore any files named .git* in any folder)
-	#git clean -fd	
+	#git clean -fd
 
 	# Generate angular constants file
 	if [ "$1" = "master" ]; then
@@ -73,12 +73,11 @@ main(){
 	# run grunt
 	echo Running grunt production
 	grunt production --optimize=uglify || on_err "$_"
-	#if [ "$1" = "master" ]; then
+	if [ "$1" = "master" ]; then
 	    # copy the minimized jade file
 	mv templates/snippets/index_body_scripts_minimized.jade templates/snippets/index_body_scripts.jade
 	mv templates/snippets/admin_body_scripts_minimized.jade templates/snippets/admin_body_scripts.jade
-	#fi	
-
+	fi
 
 	echo "Remove as much as possible"
     # npm prune --production
@@ -97,7 +96,7 @@ main(){
 	aws elasticbeanstalk describe-application-versions --application-name "${APP_NAME}" --output text \
 	  --query 'ApplicationVersions[*].[VersionLabel,DateCreated,Description]' | \
 	  grep -vi sample | tail -n +${LIMIT_REVISIONS} | \
-	  while read ver date desc; do aws elasticbeanstalk delete-application-version --application-name "${APP_NAME}" --version-label "${ver}" --delete-source-bundle; done	
+	  while read ver date desc; do aws elasticbeanstalk delete-application-version --application-name "${APP_NAME}" --version-label "${ver}" --delete-source-bundle; done
 
 	echo "Uploading to S3"
 	# upload to S3
@@ -109,7 +108,7 @@ main(){
 	interval=5; timeout=90; while [[ ! `aws elasticbeanstalk describe-environments --environment-name "${ENV_NAME}" | grep -i status | grep -i ready` && $timeout > 0 ]]; do sleep $interval; timeout=$((timeout - interval)); done
 
 	[ $timeout > 0 ] && aws elasticbeanstalk update-environment --environment-name "${ENV_NAME}" --version-label "${APP_VERSION}" || exit 0
-	
+
 
 	# Testing?
 
