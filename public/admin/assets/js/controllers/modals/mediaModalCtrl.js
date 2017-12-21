@@ -510,7 +510,6 @@ app.controller('MediaModalCtrl', ['$scope', '$rootScope', 'mediaManagerConstant'
   };
 
   $scope.m.onInsertMedia = function () {
-    debugger
     if ($scope.batch.length > 0) {
       if (insertMedia) {
         if ($scope.isSingleSelect) {
