@@ -107,6 +107,7 @@ var account = $$.m.ModelBase.extend({
             },
             activated:false,
             oem:false,
+            useCDN:true,
             created: {
                 date: new Date(),
                 by: null
