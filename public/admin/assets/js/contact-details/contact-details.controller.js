@@ -41,6 +41,7 @@ function contactDetailsController($scope, $state, $window, $modal, $stateParams,
     vm.insertPhoto = insertPhoto;
     vm.addNote = addNote;
     vm.state.orgId = $window.indigenous.orgId;
+    vm.editContactMode = editContactMode;
     function loadContactDetails(){
     	ContactService.getContact(vm.state.contactId, function (contact, error) {
     		vm.state.contact = contact;
@@ -491,6 +492,14 @@ function contactDetailsController($scope, $state, $window, $modal, $stateParams,
 			_userName = $scope.currentUser.first + " " + $scope.currentUser.last;
 		}
 		return _userName.trim();
+	}
+
+	function editContactMode(field){
+		editContactDetails();
+		$timeout(function() {
+			$("#"+field+"_0").focus();	
+		}, 0);
+		
 	}
 
     function init(element) {

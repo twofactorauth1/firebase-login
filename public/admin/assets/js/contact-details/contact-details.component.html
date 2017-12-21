@@ -24,18 +24,28 @@
                         <div class="contact-social-icons">
                             <ul class="">
                                 <li class="website-icon">
-                                    <a href="{{vm.state.contact.details[0].websites[0].website}}" target="_blank">
+                                    <a ng-if="vm.state.contact.details[0].websites[0].website" href="{{vm.state.contact.details[0].websites[0].website}}" target="_blank">
                                        <span class="ti-world "></span>
-                                    </a> 
+                                    </a>
+                                    <a ng-if="!vm.state.contact.details[0].websites[0].website" href="javascript:void(0)" ng-click="vm.editContactMode('website')">
+                                       <span class="ti-world gray-bg-color"></span>
+                                    </a>
+
                                 </li>
                                 <li>
-                                    <a href="{{vm.state.contact.details[0].linkedinUrl}}" target="_blank">
+                                    <a ng-if="vm.state.contact.details[0].linkedinUrl" href="{{vm.state.contact.details[0].linkedinUrl}}" target="_blank">
                                        <span class="fa fa-linkedin btn-linkedin"></span>
+                                    </a>
+                                    <a ng-if="!vm.state.contact.details[0].linkedinUrl" href="javascript:void(0)" ng-click="vm.editContactMode('linkedin')">
+                                       <span class="fa fa-linkedin btn-linkedin gray-bg"></span>
                                     </a> 
                                 </li>
                                 <li>
-                                    <a href="{{vm.state.contact.details[0].facebookUrl}}" target="_blank">
+                                    <a ng-if="vm.state.contact.details[0].facebookUrl" href="{{vm.state.contact.details[0].facebookUrl}}" target="_blank">
                                        <span class="fa fa-facebook btn-facebook"></span>
+                                    </a>
+                                    <a ng-if="!vm.state.contact.details[0].facebookUrl" href="javascript:void(0)" ng-click="vm.editContactMode('facebook')">
+                                       <span class="fa fa-facebook btn-facebook gray-bg"></span>
                                     </a>
                                 </li>
                                 <li></li>
@@ -255,7 +265,7 @@
                                         </label>                                   
                                         <div class="form-group" ng-repeat="website in vm.state.contact.details[0].websites track by $index">
                                             <span class="input-icon input-icon-right">
-                                                <input type="text" placeholder="Website URL" class="form-control" name="website_{{$index}}" ng-model="vm.state.contact.details[0].websites[$index].website">  
+                                                <input type="text" placeholder="Website URL" class="form-control" name="website_{{$index}}" id="website_{{$index}}" ng-model="vm.state.contact.details[0].websites[$index].website">  
                                                 <i ng-if="vm.showAddWebsite(website)" ng-click="vm.contactAddWebsiteFn()" class="ti-plus"></i>
                                                 <i ng-if="!vm.showAddWebsite(website)" ng-click="vm.removeWebsite($index)" class="ti-minus"></i>
                                             </span>
@@ -265,13 +275,13 @@
                                         <label class="control-label">
                                             Facebook URL
                                         </label>
-                                       <input type="text" placeholder="Facebook Url" class="form-control" ng-model="vm.state.contact.details[0].facebookUrl">          
+                                       <input type="text" placeholder="Facebook Url" class="form-control" name="facebook_0" id="facebook_0" ng-model="vm.state.contact.details[0].facebookUrl">          
                                     </div>
                                     <div class="form-group col-xs-12">
                                         <label class="control-label">
                                             Linkedin URL
                                         </label>
-                                       <input type="text" placeholder="Linkedin Url" class="form-control" ng-model="vm.state.contact.details[0].linkedinUrl">          
+                                       <input type="text" placeholder="Linkedin Url" class="form-control" name="linkedin_0" id="linkedin_0" ng-model="vm.state.contact.details[0].linkedinUrl">          
                                     </div>
                                     <div class="form-group col-xs-12">
                                         <label class="control-label">
