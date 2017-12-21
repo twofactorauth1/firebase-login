@@ -48,23 +48,50 @@ app.directive('thumbnailSliderComponent', ['$window', '$timeout', function ($win
 
 			scope.deleteImageFromThumbnail = function (index, parentIndex) {
 				var imageIndex = parentIndex > 0 ? (parentIndex * scope.imagesPerPage + index) : index;
-				scope.component.thumbnailCollection.splice(imageIndex, 1);
 				if(scope.component.elementStyles){
 					var thumbnailCollectionSize = scope.component.thumbnailCollection.length;
 					var data = { "img": {}, "details": {} };
-					for (var i = 0; i < thumbnailCollectionSize; i++) {
-						if (i >= imageIndex) {
-							if (scope.component.elementStyles["image/img"][i]) {
-								data["img"][i] = (i == imageIndex) ? '' : scope.component.elementStyles["image/img"][i];
+					for (var t = 0; t < thumbnailCollectionSize; t++) {
+						if(t == imageIndex){
+							if (scope.component.elementStyles["image/img"] && 
+							scope.component.elementStyles["image/img"][t]) {
+								data["img"][newIndex] = {};
+									
 							}
-							if (scope.component.elementStyles["image/details"][i]) {
-								data["details"][i] = (i == imageIndex) ? '' : scope.component.elementStyles["image/details"][i];
+							if (scope.component.elementStyles["image/details"] && 
+							scope.component.elementStyles["image/details"][t]) {
+								data["details"][newIndex] = {};
+									 
+							} 
+						}else{
+							var newIndex=t;
+							if (t > imageIndex) {
+								newIndex -= 1;
+							}
+							if (scope.component.elementStyles["image/img"] && 
+							scope.component.elementStyles["image/img"][t]) {
+									data["img"][newIndex] = scope.component.elementStyles["image/img"][t];
+									if(t!==newIndex){ 
+										delete data["img"][newIndex]["_id"];
+										delete data["img"][newIndex]["id"];
+										delete data["img"][newIndex]["anchor"];
+									}
+							}
+							if (scope.component.elementStyles["image/details"] && 
+							scope.component.elementStyles["image/details"][t]) {
+									data["details"][newIndex] = scope.component.elementStyles["image/details"][t];
+									if(t!==newIndex){ 
+										delete data["details"][newIndex]["_id"];
+										delete data["details"][newIndex]["id"];
+										delete data["details"][newIndex]["anchor"];
+									}
 							}
 						}
 					}
 					scope.component.elementStyles["image/details"] = data["details"];
 					scope.component.elementStyles["image/img"] = data["img"];
-				}
+				} 
+				scope.component.thumbnailCollection.splice(imageIndex, 1);
 				scope.bindThumbnailSlider(winWidth, check_if_mobile);
 			};
 			scope.bindThumbnailSlider(winWidth, check_if_mobile);

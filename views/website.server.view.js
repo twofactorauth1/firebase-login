@@ -233,6 +233,11 @@ _.extend(view.prototype, BaseView.prototype, {
                     }
 
                 }
+                if(value.showhide && value.showhide.newAnalytics) {
+                    value.newAnalytics = (value.showhide.newAnalytics===true);
+                } else {
+                    value.newAnalytics = false;
+                }
                 data.customCss = "";
                 value.website.resources.customCss = value.website.resources.customCss || {};
 
