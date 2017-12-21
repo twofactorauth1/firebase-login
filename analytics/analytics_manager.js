@@ -168,6 +168,9 @@ module.exports = {
                     sessionEvent.set('subdomain', account.get('subdomain'));
                 }
                 sessionEvent.set('orgId', orgId);
+                if(!sessionEvent.get('subdomain')) {
+                    sessionEvent.set('subdomain', account.get('subdomain'));
+                }
 
                 orgManager.getOrgById(0,0,orgId, function(err, organization){
                     if(organization) {
@@ -516,7 +519,7 @@ module.exports = {
                     localField: "session_id",
                     foreignField: "session_id",
                     as: "page_events"
-                },
+                }
             };
             stageAry.push(lookup);
             var group = {
@@ -582,7 +585,7 @@ module.exports = {
                                                 extraFields:activity.get("extraFields"),
                                                 start:activity.get("start")
                                             });
-                                        })
+                                        });
                                     }
                                     return sessionCallback();
                                 }
@@ -600,17 +603,17 @@ module.exports = {
                                     obj.pageRequested = pageEvent.url.source;
                                 }
                                 if(pageEvent.activityType){
-                                    obj.activityType=pageEvent.activityType
-                                    obj.extraFields=pageEvent.extraFields
+                                    obj.activityType=pageEvent.activityType;
+                                    obj.extraFields=pageEvent.extraFields;
                                     obj.pageTime = pageEvent.start;
                                 } else {
                                     obj.activityType="PAGE_VIEW";
                                 }
                                 _pageEvents.push(obj);
-                            })
+                            });
                             _result.pageEvents = _.sortBy(_pageEvents, function(p) {
                                 return p.pageTime;
-                            }); ;
+                            });
                             _resultDetails.push(_result);
                             resultCallback();
                         });
