@@ -46,10 +46,14 @@
 }
 
 contact-details-component{
+    .container-fullw{
+        border-bottom: none !important;
+    }
     .loading-contacts{
         position: relative;
     }
     .contact-details-left-pane{
+        border-right: 1px solid rgba(0, 0, 0, 0.07);
         .contact-profile-stats{
             margin-left: -15px;
             padding-left: 15px;
@@ -186,5 +190,10 @@ contact-details-component{
             }
         }
         
+    }
+    .contact-details-right-pane{
+        .panel-white{
+            border: none !important;
+        }
     }
 }
