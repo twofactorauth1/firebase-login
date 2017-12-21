@@ -479,6 +479,7 @@
 										}
 										vm.setBorderStyle(this, btnHoverStyle);
 									} else {
+                                        vm.removeBorderStyle(this);
 										vm.removeBorderStyleForNewForms(this);
 									}
 									if (btnHoverStyle && btnHoverStyle.txtcolor) {
@@ -492,11 +493,11 @@
 									var btn = vm.originalData.btn || vm.component.btn;
 									if (btn) {
 										vm.setBorderStyle(this, btn);
-                                       // vm.removeBorderStyle(this);
+
 									} else {
 										vm.removeBorderStyleForNewForms(this);
 									}
-								});
+							});
 
 							element.on("mousedown touchstart", function () {
 								if (vm.component.formSettings && vm.component.formSettings.btnStyle && vm.component.formSettings.btnStyle.pressed) {

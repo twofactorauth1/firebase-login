@@ -1,0 +1,159 @@
+From 0657b2a7291c4f7a9c8d8687d256d067aa01b51b Mon Sep 17 00:00:00 2001
+From: ryan-avnish <ryan.avnish@gmail.com>
+Date: Tue, 5 Dec 2017 12:52:36 +0530
+Subject: [PATCH] #10306 issue fix
+
+---
+ campaign/campaign_manager.js                       | 25 +++++++++++++---------
+ .../indi-email-campaign.controller.js              | 17 ++++++++-------
+ 2 files changed, 24 insertions(+), 18 deletions(-)
+
+diff --git a/campaign/campaign_manager.js b/campaign/campaign_manager.js
+index b3602b9..3f734f5 100644
+--- a/campaign/campaign_manager.js
++++ b/campaign/campaign_manager.js
+@@ -122,13 +122,13 @@ module.exports = {
+                     name: new RegExp('^'+ title +'$', "i")
+                 }
+             }
+-            
++
+             campaignDao.exists(query, $$.m.Campaign, function(err, value){
+             if(err) {
+                 self.log.error('Error getting campaign:', err);
+                 return fn(err, null);
+             } else {
+-                    return fn(null, value);  
++                    return fn(null, value);
+                 }
+         });
+     },
+@@ -744,13 +744,13 @@ module.exports = {
+                 var campaignType = campaign.get("type");
+                 var contactTags = campaign.get('contactTagData') || [];
+                 contactDao.getContactsByTagArray(accountId, userId, contactTags, function(err, contacts){
+-                    if(contacts) {
++                   /* if(contacts) {
+                         _.each(contacts, function(contact){
+                             if(!_.contains(contacts, contact.id())) {
+                                 contactsArray.push(contact.id());
+                             }
+                         });
+-                    }
++                    }*/
+                     //uniqueify contacts
+                     contactsArray = _.uniq(contactsArray);
+                     campaign.set('contacts', contactsArray || []);
+@@ -780,7 +780,7 @@ module.exports = {
+                                 });
+ 
+                                 campaignDao.batchUpdate(contacts, $$.m.Contact, function(err, updatedContacts){
+-                                    
++
+                                 });
+                             }
+                         });
+@@ -1469,16 +1469,21 @@ module.exports = {
+         var self = this;
+         self.log.debug('>> cancelRunningCampaign');
+         var query = {
+-            accountId: accountId,
+-            campaignId: campaignId,
+-            contactId: contactId
+-        };
++             accountId: accountId,
++             _id: campaignId,
++             contactId: {$in : [contactId]}
++         };
++         var query_flow = {
++              accountId: accountId,
++              campaignId: campaignId,
++              contactId: contactId
++          };
+         campaignDao.exists(query, $$.m.Campaign, function(err, value){
+             if(err) {
+                 self.log.error('Error getting campaign:', err);
+                 return fn(err, null);
+             } else if(value === true) {
+-               campaignDao.removeByQuery(query, $$.m.CampaignFlow, function(err, value){
++               campaignDao.removeByQuery(query_flow, $$.m.CampaignFlow, function(err, value){
+                     if(err) {
+                         self.log.error('Error deleting campaign flow: ' + err);
+                         return fn(err, null);
+diff --git a/public/admin/assets/js/indi-email-campaign/indi-email-campaign.controller.js b/public/admin/assets/js/indi-email-campaign/indi-email-campaign.controller.js
+index 82b93e4..28a6f74 100644
+--- a/public/admin/assets/js/indi-email-campaign/indi-email-campaign.controller.js
++++ b/public/admin/assets/js/indi-email-campaign/indi-email-campaign.controller.js
+@@ -56,7 +56,7 @@
+         vm.state.recipients = [];
+         vm.state.recipientsToRemove = [];
+         vm.state.originalRecipients = [];
+-        
++
+         vm.uiState.selectedContacts = {
+             individuals: [],
+             newEmails: []
+@@ -500,6 +500,7 @@
+             });
+             if (contact) {
+                 existingContactIndex = _.indexOf(vm.state.recipients, contact);
++                vm.state.campaign.contacts.splice(existingContactIndex, 1);
+             }
+ 
+             if (existingContactIndex > -1) {
+@@ -519,9 +520,9 @@
+                 if (!tempTags.length)
+                     tempTags.push('No Tag');
+                 var tagExists = _.intersection(tempTags, tags);
+-                if (tagExists.length === 0) {
++                // if (tagExists.length === 0) {
+                     vm.state.recipients.splice(existingContactIndex, 1);
+-                }
++                // }
+ 
+             }
+             // clear search text
+@@ -610,7 +611,7 @@
+ 
+         function loadSavedTagsFn() {
+             vm.uiState.dataLoaded = false;
+-            _.each(vm.state.campaign.contactTags, function (tag) {  
++            _.each(vm.state.campaign.contactTags, function (tag) {
+                 if (tag && tag === 'No Tag')
+                     vm.toggleSelectionFn(tag);
+                 else{
+@@ -627,11 +628,11 @@
+                         vm.toggleSelectionFn(tag.matchingTag);
+                 }
+             });
+-            
++
+             $timeout(function() {
+                vm.state.originalRecipients = angular.copy(vm.state.recipients);
+             }, 0);
+-            vm.uiState.dataLoaded = true; 
++            vm.uiState.dataLoaded = true;
+         }
+ 
+         function checkIfDirtyFn() {
+@@ -900,7 +901,7 @@
+                         if(campaign.emailSettings) {
+                             var sendAt = campaign.emailSettings.sendAt;
+                             //sendAtDateISOString = moment.utc(campaign.emailSettings.sendAt).subtract('months', 1).toISOString();
+-                            var _dateString = sendAt.month + "/" + sendAt.day + "/" + sendAt.year + " " + sendAt.hour + ":" + sendAt.minute;                                                                                    
++                            var _dateString = sendAt.month + "/" + sendAt.day + "/" + sendAt.year + " " + sendAt.hour + ":" + sendAt.minute;
+                             sendAtDateISOString =  moment.utc(_dateString).toISOString();
+                         }
+ 
+@@ -931,7 +932,7 @@
+                                     vm.loadSavedTagsFn();
+                                 });
+                             } else {
+-                                vm.loadSavedTagsFn();                                
++                                vm.loadSavedTagsFn();
+                                 vm.uiState.contactLimitExceeded = true;
+                             }
+                         })
+-- 
+2.7.4
+
