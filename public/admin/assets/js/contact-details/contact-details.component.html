@@ -104,7 +104,7 @@
                                     </ul>
                                     <span>{{vm.state.contact.gender}}</span>
                                 </div>
-                                <div class="details">
+                                <div class="details" ng-if="vm.state.contact.details[0].emails[0].email">
                                     <span class="description">
                                         email:
                                     </span>
@@ -112,7 +112,7 @@
                                         {{vm.state.contact.details[0].emails[0].email}}
                                     </span>
                                 </div>
-                                <div class="details">
+                                <div class="details" ng-if="vm.state.contact.details[0].phones[0].number">
                                     <span class="description">
                                         Phone:
                                     </span>
@@ -120,7 +120,7 @@
                                         {{vm.state.contact.details[0].phones[0].number}}
                                     </span>
                                 </div>
-                                <div class="details">
+                                <div class="details" ng-if="vm.state.contact.details[0].websites[0].website">
                                     <span class="description">
                                         Website URL:
                                     </span>
@@ -128,7 +128,7 @@
                                         {{vm.state.contact.details[0].websites[0].website}}
                                     </span>
                                 </div>
-                                <div class="details">
+                                <div class="details" ng-if="vm.state.contact.details[0].facebookUrl">
                                     <span class="description">
                                         Facebook URL:
                                     </span>
@@ -136,7 +136,7 @@
                                         {{vm.state.contact.details[0].facebookUrl}}
                                     </span>
                                 </div>
-                                <div class="details">
+                                <div class="details" ng-if="vm.state.contact.details[0].linkedinUrl">
                                     <span class="description">
                                         Linkedin URL:
                                     </span>
@@ -144,7 +144,7 @@
                                         {{vm.state.contact.details[0].linkedinUrl}}
                                     </span>
                                 </div>
-                                <div class="details">
+                                <div class="details" ng-if="vm.state.contact.details[0].company">
                                     <span class="description">
                                         Company Name:
                                     </span>
