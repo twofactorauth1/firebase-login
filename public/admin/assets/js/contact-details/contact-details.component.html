@@ -92,7 +92,12 @@
                 <tabset class="tabbable">
                     <tab heading="Contact Details">
                         <div ng-if="!vm.uiState.isEditMode">
-                            <div class="col-xs-7">
+                            <div class="col-xs-12 visible-xs">
+                                <button type="button" class="btn btn-primary btn-o pull-right btn btn-primary btn-o" ng-click="vm.editContactDetails()">
+                                    Add Or Edit
+                                </button>
+                            </div>
+                            <div class="col-xs-12 col-sm-7">
                                 <div class="details">
                                     <span class="full-name">
                                         {{vm.state.fullName}}                                
@@ -153,8 +158,8 @@
                                     </span>
                                 </div>
                             </div>
-                            <div class="col-xs-5 address-pane">
-                                <button type="button" class="btn btn-primary btn-o pull-right btn btn-primary btn-o" ng-click="vm.editContactDetails()">
+                            <div class="col-xs-12 col-sm-5 address-pane">
+                                <button type="button" class="btn btn-primary btn-o pull-right btn btn-primary btn-o hidden-xs" ng-click="vm.editContactDetails()">
                                     Add Or Edit
                                 </button>
                                 <div class="details">
