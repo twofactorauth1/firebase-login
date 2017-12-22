@@ -5,9 +5,9 @@
 
 	app.controller('SiteBuilderBolgRecentTagComponentController', SiteBuilderBolgRecentTagComponentController);
 
-	SiteBuilderBolgRecentTagComponentController.$inject = ['SimpleSiteBuilderBlogService', '$scope'];
+	SiteBuilderBolgRecentTagComponentController.$inject = ['SimpleSiteBuilderBlogService', '$scope', '$location'];
 	/* @ngInject */
-	function SiteBuilderBolgRecentTagComponentController(SimpleSiteBuilderBlogService, $scope) {
+	function SiteBuilderBolgRecentTagComponentController(SimpleSiteBuilderBlogService, $scope, $location) {
 
 		console.info('ssb-blog-recent-tags directive init...');
 
@@ -22,6 +22,24 @@
 		vm.encodeUrlText = encodeUrlText;
 		vm.titleStyle = titleStyle;
 		vm.descriptionStyle = descriptionStyle;
+		var path = $location.$$url.replace('/page/', '');
+
+		if (path) {
+			path = decodeURI(path);
+		}
+		if (path.indexOf("tag/") > -1) {
+			vm.blog.currentTag = path.replace('/tag/', '');
+			vm.filteredPostView = true;
+		}
+
+		if (path.indexOf("author/") > -1) {
+			vm.blog.currentAuthor = path.replace('/author/', '');
+			vm.filteredPostView = true;
+		}
+		if (path.indexOf("category/") > -1) {
+			vm.blog.currentCategory = path.replace('/category/', '');
+			vm.filteredPostView = true;
+		}
 		$scope.$watchCollection('vm.blog.posts', function (newValue) {
 			if (newValue) {
 				vm.blog_tags = getTags();
