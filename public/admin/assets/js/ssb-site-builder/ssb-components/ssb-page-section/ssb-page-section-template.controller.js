@@ -505,7 +505,7 @@
                 if (vm.playerObject.destroy) {
                     vm.playerObject.destroy();
                 }
-                if (YT && YT.Player) {
+                if (typeof(YT) != 'undefined' && typeof(YT.Player) != 'undefined') {
                     vm.playerObject = new YT.Player('section_video_' + vm.section._id, {
                         height: '100%',
                         width: '100%',
