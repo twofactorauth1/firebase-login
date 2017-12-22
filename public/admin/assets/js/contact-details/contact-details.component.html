@@ -20,7 +20,7 @@
                     </div>
                     <div class="col-xs-7">
                         <h3>{{vm.state.fullName || 'No Contact Name'}}</h3>
-                        <span>{{vm.state.contact.companyName || '&nbsp;'}}</span>
+                        <span>{{vm.state.contact.details[0].company}}</span>
                         <div class="contact-social-icons">
                             <ul class="">
                                 <li class="website-icon">
@@ -58,7 +58,7 @@
                     <div class="clearfix"></div>
                 </div>
                 
-                <div class="contact-stats col-xs-12 margin-top-20 margin-bottom-20">
+                <div class="contact-stats col-xs-12 margin-top-20 margin-bottom-20 hidden">
                     <div class="sessions">
                         <span class="description">
                             Sessions
