@@ -5,9 +5,9 @@
 
 	app.controller('SiteBuilderBolgRecentTagComponentController', SiteBuilderBolgRecentTagComponentController);
 
-	SiteBuilderBolgRecentTagComponentController.$inject = ['SimpleSiteBuilderBlogService', '$scope'];
+	SiteBuilderBolgRecentTagComponentController.$inject = ['SimpleSiteBuilderBlogService', '$scope', '$location'];
 	/* @ngInject */
-	function SiteBuilderBolgRecentTagComponentController(SimpleSiteBuilderBlogService, $scope) {
+	function SiteBuilderBolgRecentTagComponentController(SimpleSiteBuilderBlogService, $scope, $location) {
 
 		console.info('ssb-blog-recent-tags directive init...');
 
