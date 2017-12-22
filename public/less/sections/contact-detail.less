@@ -57,7 +57,7 @@ contact-details-component{
         .contact-profile-stats{
             margin-left: -15px;
             padding-left: 15px;
-            border-bottom: 1px solid #eee;
+            margin-bottom: 15px;
             .contact-image{
                 img{
                     max-width:100%;
@@ -137,7 +137,23 @@ contact-details-component{
                 .tab-content > .tab-pane{
                     padding-left: 0 !important;
                     padding-right: 0 !important;
-                }              
+                }
+                .nav-tabs{
+                    border-bottom: 2px solid #ddd;
+                    li{
+                        margin-bottom: -2px;
+                        a{
+                            box-shadow: none !important;
+                            background: transparent !important;
+                        }
+                        &.active{                            
+                            border-bottom: 2px solid #48b1cc;
+                            a{
+                                color: #48b1cc;
+                            }
+                        }
+                    }
+                }           
             }
             .address-pane{
                 .details{
