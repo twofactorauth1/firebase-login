@@ -505,5 +505,18 @@
     .ssb-nav-hero-text-full-wdith{
         width: 100%
     }
-
+    @media screen and (min-width: 768px) and  (max-width: 820px) {
+        .ssb-page-section-layout-nav-hero-v1 {
+            .flex-container-absolute-column{
+                position: relative ;
+            }
+            [ssb-image-component] {
+                position: absolute; 
+                img {
+                    height: 100%;
+                    width: unset;
+                }
+            }
+        }
+    }
 }
