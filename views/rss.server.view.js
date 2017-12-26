@@ -85,7 +85,7 @@ _.extend(view.prototype, BaseView.prototype, {
                     ttl: '60'
                 };
                 if(image_url) {
-                    feedOptions.image_url = self._getImageUrl(image_url, protocol);
+                    feedOptions.image_url = self._getImageUrl(image_url, xfp);
                 }
                 var feed = new RSS(feedOptions);
                 _.each(posts, function(post){
@@ -122,9 +122,9 @@ _.extend(view.prototype, BaseView.prototype, {
 
     },
 
-    _getImageUrl: function(url, protocol){
+    _getImageUrl: function(url, protocol){        
         if (url && !/http[s]?/.test(url)) {
-            url = protocol + ':' + url;
+            url = protocol || 'http' + ':' + url;
         }
         return url;
     }
