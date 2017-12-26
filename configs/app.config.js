@@ -248,6 +248,18 @@ module.exports = {
         return _serverUrl;
     },
 
+    getRequestDomainUrl: function(host, protocol){
+        if(!protocol)
+            protocol = "http";
+        var _serverUrl = protocol + "://";
+        _serverUrl += host;
+
+        if (process.env.PORT && process.env.PORT != 80 && process.env.PORT != 443 && process.env.PORT != 8080 && process.env.IS_PROXIED != "true") {
+            _serverUrl += ":" + process.env.PORT;
+        }
+        return _serverUrl;
+    },
+
     getServerDomain: function(subdomain, customDomain) {
         if(!subdomain && !customDomain) {
             return wwwUrl;
