@@ -25,9 +25,9 @@ _.extend(api.prototype, baseApi.prototype, {
     dao: dao,
 
     initialize: function () {
-        
+
         app.get(this.url('all'), this.isAuthAndSubscribedApi.bind(this), this.listAllOrganizations.bind(this));
-        
+
     },
 
 
@@ -48,8 +48,8 @@ _.extend(api.prototype, baseApi.prototype, {
                 self.sendResultOrError(resp, err, _(organization).toArray(), 'Error listing organization');
             });
         }
-        
-        
+
+
 
     }
 });

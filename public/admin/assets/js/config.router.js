@@ -129,7 +129,7 @@ app.config(['$stateProvider', '$urlRouterProvider', '$controllerProvider', '$com
 				templateUrl: "/admin/assets/views/customer-detail.html",
 				title: 'Single Customer',
 				icon: 'ti-layout-media-left-alt',
-				resolve: loadSequence('customerDetailCtrl', 'singleCustomerAnalyticsCtrl', 'ngMap', 'customerService', 'toasterService', 'userService', 'chartAnalyticsService', 'highcharts', 'highmaps', 'highmaps-lib', 'secTotime', 'dateRangePicker', 'ipCookie', 'analyticsWidgetStateService','spectrum')
+				resolve: loadSequence('customerDetailCtrl', 'singleCustomerAnalyticsCtrl', 'ngMap', 'customerService', 'toasterService', 'userService', 'organizationService', 'chartAnalyticsService', 'highcharts', 'highmaps', 'highmaps-lib', 'secTotime', 'dateRangePicker', 'ipCookie', 'analyticsWidgetStateService','spectrum')
 			}).state('app.commerce', {
 				url: '/commerce',
 				template: '<div ui-view class="fade-in-up"></div>',
