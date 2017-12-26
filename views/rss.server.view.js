@@ -59,7 +59,7 @@ _.extend(view.prototype, BaseView.prototype, {
                 var secure = self.req.secure;                
                 var xfp = self.req.get('X-Forwarded-Proto');//XFP:http or XFP:https
                 //self.log.debug('protocol:' + protocol + ', secure:' + secure + ', XFP:' + xfp);
-                var url = appConfig.getServerRequestUrl(account.get("subdomain"), account.get("customDomain"), xfp) + self.req.originalUrl;
+                var url = appConfig.getRequestDomainUrl(self.req.host, xfp) + self.req.originalUrl;
                 //console.log('Url', url);
                 var blogUrl = url.replace('/feed/rss', '');
                 if(account.get('business')) {
