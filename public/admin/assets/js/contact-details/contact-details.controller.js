@@ -45,7 +45,7 @@ function contactDetailsController($scope, $state, $window, $modal, $stateParams,
     function loadContactDetails(){
     	ContactService.getContact(vm.state.contactId, function (contact, error) {
     		vm.state.contact = contact;
-    		matchUsers(vm.state.contact);
+    		//matchUsers(vm.state.contact);
     		vm.state.fullName = [vm.state.contact.first, vm.state.contact.middle, vm.state.contact.last].join(' ').trim();
     		setTags();
     		setDefaults();
@@ -513,10 +513,10 @@ function contactDetailsController($scope, $state, $window, $modal, $stateParams,
 				vm.contactTags = tags;
 			});
 		});
-		UserService.getUsers(function (users) {
-			vm.state.users = users;
+		//UserService.getUsers(function (users) {
+			//vm.state.users = users;
 			loadContactDetails();
-		});
+		//});
 
 		OrganizationService.getOrganizationById(vm.state.orgId, function(data){
 			vm.state.organization = data;
