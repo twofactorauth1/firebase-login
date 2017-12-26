@@ -844,7 +844,9 @@ app.constant('JS_REQUIRES', {
 
 		// New Contact details
 		'ContactDetailsComponent': 'assets/js/contact-details/contact-details.component.js',
-		'ContactDetailsController': 'assets/js/contact-details/contact-details.controller.js'
+		'ContactDetailsController': 'assets/js/contact-details/contact-details.controller.js',
+		'ContactActivityComponent': 'assets/js/contact-details/activity/contact-activity.component.js',
+		'ContactActivityController': 'assets/js/contact-details/activity/contact-activity.controller.js'
 
 
 	},
