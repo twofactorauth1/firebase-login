@@ -56,7 +56,7 @@ _.extend(view.prototype, BaseView.prototype, {
                 var image_url = null;
                 //console.log('originalURL:', self.req.originalUrl);
                 var protocol = self.req.protocol;
-                var secure = self.req.secure;
+                var secure = self.req.secure;                
                 var xfp = self.req.get('X-Forwarded-Proto');//XFP:http or XFP:https
                 //self.log.debug('protocol:' + protocol + ', secure:' + secure + ', XFP:' + xfp);
                 var url = appConfig.getServerRequestUrl(account.get("subdomain"), account.get("customDomain"), xfp) + self.req.originalUrl;
@@ -85,7 +85,7 @@ _.extend(view.prototype, BaseView.prototype, {
                     ttl: '60'
                 };
                 if(image_url) {
-                    feedOptions.image_url = image_url;
+                    feedOptions.image_url = self._getImageUrl(image_url, protocol);
                 }
                 var feed = new RSS(feedOptions);
                 _.each(posts, function(post){
@@ -120,6 +120,13 @@ _.extend(view.prototype, BaseView.prototype, {
             }
         });
 
+    },
+
+    _getImageUrl: function(url, protocol){
+        if (url && !/http[s]?/.test(url)) {
+            url = protocol + ':' + url;
+        }
+        return url;
     }
 
 
