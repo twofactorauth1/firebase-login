@@ -64,7 +64,7 @@
 
 				$scope.matchUsers(customer);
 				$scope.originalCustomer = angular.copy($scope.customer);
-				$scope.subdomainURL = $scope.generateSubdomainURL($scope.data.subdomain);
+				$scope.subdomainURL = $scope.generateSubdomainURL($scope.data.subdomain, $scope.customer);
 				$scope.dataloaded = true;
 			});
 
@@ -122,12 +122,37 @@
 				fn();
 			}
 		};
+        $scope.getSubdomain = function(hostname) {
+                var regexParse = new RegExp('[a-z\-0-9]{2,63}\.[a-z\.]{2,5}$');
+                var urlParts = regexParse.exec(hostname);
+                return hostname.replace(urlParts[0],'').slice(0, -1);
+        }
+		$scope.generateSubdomainURL = function (subdomain, customer) {
+            var orgId = customer.orgId || null;
+            var url = '';
+            var get_subdomain = $scope.getSubdomain($location.host());
+            var _subdomain = location.host.split(".")[0];
+            subdomain = get_subdomain.replace(_subdomain, subdomain);
 
-		$scope.generateSubdomainURL = function (subdomain) {
-			var _subdomain = location.host.split(".")[0];
-			var url = $location.protocol() + '://' + location.host.replace(_subdomain, subdomain);
-			return url;
-		};
+            switch(orgId){
+                case 1 :
+                  url =  subdomain + '.gorvlvr.com';
+                break;
+                case 4 :
+                  url =  subdomain + '.techevent.us'
+                break;
+                case 5 :
+                  url =  subdomain + '.leadsource.cc';
+                break;
+                case 6:
+                  url =  subdomain + '.amrvlvr.com';
+                break;
+                default :
+                  url =  subdomain+'.indigenous.io';
+
+            }
+            return $location.protocol() + '://' + url;
+ 		};
 
 		$scope.displayAddressFormat = function (address) {
 			return _.filter([address.address, address.address2, address.city, address.state, address.zip], function (str) {
