@@ -166,7 +166,7 @@
                                     <span class="description address-desc">
                                         Address:
                                     </span>
-                                    <span class="value address-value" ng-bind-html="vm.displayAddressFormat(vm.state.contact.details[0].addresses[0])">
+                                    <span class="value address-value" ng-bind-html="vm.renderAddressFormat(vm.state.contact.details[0].addresses[0])">
                                     </span>
                                 </div>                            
                             </div>
@@ -300,7 +300,7 @@
                                          >
                                         <div class="row">
                                             <div class="col-xs-6">
-                                                <div class="form-group" ng-class="{'has-error':errorMapData}">
+                                                <div class="form-group" ng-class="{'has-error':vm.uiState.errorMapData}">
                                                     <label class="control-label">
                                                         Address Line 1
                                                     </label>
@@ -308,7 +308,7 @@
                                                 </div>
                                             </div>
                                             <div class="col-xs-6">
-                                                <div class="form-group" ng-class="{'has-error':errorMapData}">
+                                                <div class="form-group" ng-class="{'has-error':vm.uiState.errorMapData}">
                                                     <label class="control-label">
                                                         Address Line 2
                                                     </label>
@@ -318,7 +318,7 @@
                                         </div>
                                         <div class="row">
                                             <div class="col-xs-6">
-                                                <div class="form-group" ng-class="{'has-error':errorMapData}">
+                                                <div class="form-group" ng-class="{'has-error':vm.uiState.errorMapData}">
                                                     <label class="control-label">
                                                         City
                                                     </label>
@@ -326,7 +326,7 @@
                                                 </div>
                                             </div>
                                             <div class="col-xs-6">
-                                                <div class="form-group" ng-class="{'has-error':errorMapData}">
+                                                <div class="form-group" ng-class="{'has-error':vm.uiState.errorMapData}">
                                                     <label class="control-label">
                                                         State
                                                     </label>
@@ -336,7 +336,7 @@
                                         </div>
                                         <div class="row">
                                             <div class="col-xs-6">
-                                                <div class="form-group" ng-class="{'has-error':errorMapData}">
+                                                <div class="form-group" ng-class="{'has-error':vm.uiState.errorMapData}">
                                                     <label class="control-label">
                                                         Country
                                                     </label>
@@ -344,7 +344,7 @@
                                                 </div>
                                             </div>
                                             <div class="col-xs-6">
-                                                <div class="form-group" ng-class="{'has-error':errorMapData}">
+                                                <div class="form-group" ng-class="{'has-error':vm.uiState.errorMapData}">
                                                     <label class="control-label">
                                                         Zip Code
                                                     </label>
@@ -367,7 +367,14 @@
                         Devices/Browser
                     </tab>
                     <tab heading="Location & Network">
-                        Location & Network
+                        <div class="map margin-bottom-15">
+                            <map zoom="10" center="{{vm.state.location.lat}}, {{vm.state.location.lon}}" disable-default-u-i="true" scale-control="false" pan-control="false" zoom-control="false" class="height-330" ng-if="!vm.uiState.loadingMap && vm.state.location.lat" scrollwheel="false">
+                                <marker position="{{vm.state.location.lat}}, {{vm.state.location.lon}}"></marker>
+                            </map>
+                            <div class="load1 csspinner height-330" ng-if="vm.uiState.loadingMap"></div>
+                            <div class="height-330" ng-if="!vm.uiState.loadingMap && !vm.state.location.lat">
+                                <h4 class="center text-bold no-location">No Location</h4></div>
+                        </div>
                     </tab>
                 </tabset>
             </div>

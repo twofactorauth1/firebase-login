@@ -12,15 +12,20 @@ function contactDetailsController($scope, $state, $window, $modal, $stateParams,
 
     vm.init = init;    
     vm.state ={
-    	contactId: $stateParams.contactId
+    	contactId: $stateParams.contactId,
+    	location: {},
+    	ip_geo_address: ''
     }
     vm.uiState = {
-        loading: true
+        loading: true,
+        loadingMap: true,
+        errorMapData: false
     }
 	vm.notesEmail = {
 		enable: false
 	};
-    vm.displayAddressFormat = displayAddressFormat;
+
+    vm.renderAddressFormat = renderAddressFormat;
     vm.editContactDetails = editContactDetails;
     vm.cancelContactDetails = cancelContactDetails;
     vm.tagToContact = tagToContact;
@@ -51,10 +56,136 @@ function contactDetailsController($scope, $state, $window, $modal, $stateParams,
     		setDefaults();
     		vm.state.originalContact = angular.copy(vm.state.contact);
     		vm.uiState.loading = false;
+    		getMapData();
     	})    	
     }
 
-	function displayAddressFormat(details) {
+	function getMapData() {
+		var _firstAddress;
+
+		if (vm.state.contact.details[0].addresses.length > -1) {
+			_firstAddress = angular.copy(vm.state.contact.details[0].addresses[0]);
+		}
+
+		//contact has no address
+		if (!_firstAddress) {
+			vm.uiState.loadingMap = false;
+			vm.state.originalContact = angular.copy(vm.state.contact);
+			//TODO: use contact.fingerprint to get address from session_events.maxmind
+		} else {
+			//contact has address and lat/lon
+			if (_firstAddress.lat && _firstAddress.lon && checkIfAddressExists(_firstAddress)) {
+				vm.state.originalContact = angular.copy(vm.state.contact);
+				showMap(_firstAddress.lat, _firstAddress.lon);
+			} else if (checkIfAddressExists(_firstAddress) && (!_firstAddress.lat || !_firstAddress.lon)) {
+				//contact has address but no lat/lon
+				//if contact has a session id get data from Analytics
+				_firstAddress.address2 = '';
+				convertAddressToLatLon(_firstAddress, function (data) {
+					if (data) {
+						_firstAddress.lat = parseFloat(data.lat);
+						_firstAddress.lon = parseFloat(data.lon);
+						showMap(data.lat, data.lon);
+					}
+					vm.state.originalContact = angular.copy(vm.state.contact);
+					vm.uiState.loadingMap = false;
+				});
+				vm.state.originalContact = angular.copy(vm.state.contact);
+
+			} else {
+				vm.state.originalContact = angular.copy(vm.state.contact);
+			}
+		}
+	};
+
+	function refreshMap(fn) {
+		if (vm.state.contact.details.length !== 0 && vm.state.contact.details[0].addresses && vm.state.contact.details[0].addresses.length !== 0) {
+			var formattedAddress = angular.copy(vm.state.contact.details[0].addresses[0]);
+			formattedAddress.address2 = '';
+			vm.state.ip_geo_address = displayAddressFormat(formattedAddress);			
+			vm.uiState.loadingMap = false;
+		}
+		var validMapData = false;
+		if (vm.state.ip_geo_address && !angular.equals(vm.state.originalContact.details[0].addresses[0], vm.state.contact.details[0].addresses[0])) {
+			ContactService.getGeoSearchAddress(vm.state.ip_geo_address, function (data) {
+				if (data.error === undefined) {
+					vm.state.location.lat = parseFloat(data.lat);
+					vm.state.location.lon = parseFloat(data.lon);
+					vm.state.contact_data.details[0].addresses[0].lat = vm.state.location.lat;
+					vm.state.contact_data.details[0].addresses[0].lon = vm.state.location.lon;
+					if (vm.state.markers && vm.state.markers.mainMarker) {
+						vm.state.markers.mainMarker.lat = parseFloat(data.lat);
+						vm.state.markers.mainMarker.lon = parseFloat(data.lon);
+					}
+					vm.uiState.loadingMap = false;
+					validMapData = true;
+				} else {
+					vm.uiState.loadingMap = false;
+					vm.state.location.lat = "";
+					vm.state.location.lon = "";
+					vm.state.contact_data.details[0].addresses[0].lat = "";
+					vm.state.contact_data.details[0].addresses[0].lon = "";
+					if (vm.state.markers && vm.state.markers.mainMarker) {
+						vm.state.markers.mainMarker.lat = "";
+						vm.state.markers.mainMarker.lon = "";
+					}
+				}
+
+				if (fn) {
+					fn(validMapData);
+				}
+			});
+		} else {
+			if (!vm.state.ip_geo_address.length && vm.state.contact_data) {
+				vm.state.location.lat = "";
+				vm.state.location.lon = "";
+				vm.state.contact_data.details[0].addresses[0].lat = "";
+				vm.state.contact_data.details[0].addresses[0].lon = "";
+				if (vm.state.markers && vm.state.markers.mainMarker) {
+					vm.state.markers.mainMarker.lat = "";
+					vm.state.markers.mainMarker.lon = "";
+				}
+			}
+			if (fn) {
+				fn(true);
+			}
+		}
+	};
+
+	function checkIfAddressExists(address) {
+		var _exists = false;
+		if (address.address || address.address2 || address.city || address.state || address.zip || address.country) {
+			_exists = true;
+		}
+		return _exists;
+	};
+
+	function convertAddressToLatLon(_address, fn) {
+		if (displayAddressFormat(_address)) {
+			ContactService.getGeoSearchAddress(displayAddressFormat(_address), function (data) {
+				if (data.error === undefined) {
+					fn(data);
+				} else {
+					console.warn(data.error);
+					fn();
+				}
+			});
+		} else {
+			fn();
+		}
+	};
+
+	function showMap(_lat, _lon) {
+		vm.uiState.loadingMap = false;
+		vm.state.location.lat = parseFloat(_lat);
+		vm.state.location.lon = parseFloat(_lon);
+		if (vm.state.markers && vm.state.markers.mainMarker) {
+			vm.state.markers.mainMarker.lat = parseFloat(_lat);
+			vm.state.markers.mainMarker.lon = parseFloat(_lon);
+		}
+	};
+
+	function renderAddressFormat(details) {
       	var _firstRow = "";
         var _middleRow = "";
         var _bottomRow = "";
@@ -93,6 +224,12 @@ function contactDetailsController($scope, $state, $window, $modal, $stateParams,
             }
         }
         return _firstRow + _middleRow + _bottomRow;
+	};
+
+	function displayAddressFormat(address) {
+		return _.filter([address.address, address.address2, address.city, address.state, address.zip], function (str) {
+			return str !== "";
+		}).join(",");
 	};
 
 	function setTags() {
@@ -211,39 +348,49 @@ function contactDetailsController($scope, $state, $window, $modal, $stateParams,
 				return;
 			}
 
-			if (vm.state.contact_data.details) {
-				for (var i = 0; i < vm.state.contact_data.details.length; i++) {
-					if (vm.state.contact_data.details[i].emails) {
-						for (var j = 0; j < vm.state.contact_data.details[i].emails.length; j++) {
-							vm.state.contact_data.details[i].emails[j].email = vm.state.contact_data.details[i].emails[j].email.toLowerCase();
+			refreshMap(function (validMapData) {
+				if (!validMapData) {					
+					vm.uiState.errorMapData = true;
+					// $scope.saveLoading = false;
+					toaster.pop('warning', 'Address could not be found.');
+				}
+
+				vm.uiState.errorMapData = false;
+
+				if (vm.state.contact_data.details) {
+					for (var i = 0; i < vm.state.contact_data.details.length; i++) {
+						if (vm.state.contact_data.details[i].emails) {
+							for (var j = 0; j < vm.state.contact_data.details[i].emails.length; j++) {
+								vm.state.contact_data.details[i].emails[j].email = vm.state.contact_data.details[i].emails[j].email.toLowerCase();
+							}
 						}
 					}
 				}
-			}
-			ContactService.checkDuplicateEmail(vm.state.contact_data.details[0].emails[0].email, true, function (data) {
-				if (vm.state.originalContact && !angular.equals(vm.state.contact_data.details[0].emails[0].email, vm.state.originalContact.details[0].emails[0].email) && data && data.length && (data.length > 1 || data[0]._id != vm.state.contact_data._id)) {
-					console.log("duplicate email");
-					SweetAlert.swal({
-						title: "Duplicate Email",
-						text: "Email Already exists, Do you want to continue with changes?",
-						type: "warning",
-						showCancelButton: true,
-						confirmButtonColor: "#DD6B55",
-						confirmButtonText: "Yes, save the changes!",
-						cancelButtonText: "No, do not save the changes!",
-						closeOnConfirm: true,
-						closeOnCancel: true
-					}, function (isConfirm) {
-						if (isConfirm) {
-							saveContactChanges();
-						} else {
-							vm.uiState.saveLoading = false;
-						}
-					});
-				} else {
-					saveContactChanges();
-				}
-			});
+				ContactService.checkDuplicateEmail(vm.state.contact_data.details[0].emails[0].email, true, function (data) {
+					if (vm.state.originalContact && !angular.equals(vm.state.contact_data.details[0].emails[0].email, vm.state.originalContact.details[0].emails[0].email) && data && data.length && (data.length > 1 || data[0]._id != vm.state.contact_data._id)) {
+						console.log("duplicate email");
+						SweetAlert.swal({
+							title: "Duplicate Email",
+							text: "Email Already exists, Do you want to continue with changes?",
+							type: "warning",
+							showCancelButton: true,
+							confirmButtonColor: "#DD6B55",
+							confirmButtonText: "Yes, save the changes!",
+							cancelButtonText: "No, do not save the changes!",
+							closeOnConfirm: true,
+							closeOnCancel: true
+						}, function (isConfirm) {
+							if (isConfirm) {
+								saveContactChanges();
+							} else {
+								vm.uiState.saveLoading = false;
+							}
+						});
+					} else {
+						saveContactChanges();
+					}
+				});
+			})	
 			
 		} else {
 			vm.uiState.saveLoading = false;
