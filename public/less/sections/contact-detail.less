@@ -217,5 +217,35 @@ contact-details-component{
         .panel-white{
             border: none !important;
         }
+        .activity-filter{
+            select.form-control{
+                width: 25%;
+                display: inline-block;
+                margin-left: 10px;
+            }
+        } 
+        .timeline-xs{
+            .activity-content{
+                border: 1px solid rgba(0,0,0,.15);
+                &:before{
+                    position: absolute;
+                    top: 11px;
+                    left: 9px;
+                    content: '';
+                    border-right: solid 7px #ccc;
+                    border-bottom: solid 7px transparent;
+                    border-top: solid 7px transparent;
+                }
+                &:after{
+                    position: absolute;
+                    top: 12px;
+                    left: 10px;
+                    content: '';
+                    border-right: solid 6px #fff;
+                    border-bottom: solid 6px transparent;
+                    border-top: solid 6px transparent;
+                }
+            }
+        }   
     }
 }

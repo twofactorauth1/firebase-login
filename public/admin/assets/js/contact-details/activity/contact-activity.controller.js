@@ -9,16 +9,34 @@ function contactActivityController($scope, $state, $window, $modal, $stateParams
     console.info('contact-activity directive init...')
 
     var vm = this;
-    vm.state ={
-
+    vm.state = {
+        activityFilter:{
+            type: 'all',
+            sort: 'asc'
+        }
     };
+    vm.uiState= {
+        loading: true
+    }
     vm.init = init; 
 
     function init(element) {
-        vm.element = element;
-        ContactService.getContact(vm.contactId, function (contact, error) {
-    		vm.state.contact = contact;
-    	})
+        vm.element = element;        
+        ContactService.getContactActivities(vm.contactId, function(activities) {
+            ContactService.getContact(vm.contactId, function (contact) {  
+                
+                _.each(activities, function(activity){
+                    activity.activityDate = $filter('date')(activity.start, "MMMM dd, yyyy")
+                })
+
+                vm.state.activities = _.groupBy(activities, function(activity){ 
+                    return activity.activityDate; 
+                });
+
+                vm.state.contact = contact;
+                vm.uiState.loading = false;
+            })
+        });
     }
 
 }
