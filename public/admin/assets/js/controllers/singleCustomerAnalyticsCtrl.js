@@ -671,7 +671,7 @@
 
             $scope.locationLabel = 'States';
             $scope.locationsLength = locationData.length;
-            $scope.mostPopularLabel = $scope.mostPopularState['ip_geo_info.province'];
+            $scope.mostPopularLabel = $scope.mostPopularState['name'];
 
             // Country based
             $scope.countryLocationData = countryLocationData;
