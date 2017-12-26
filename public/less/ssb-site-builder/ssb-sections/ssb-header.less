@@ -542,18 +542,20 @@
         .ssb-media-query-small-only({
             .ssb-component.ssb-social-link{
                 width: 80% !important;
-                float: left;
-                position: absolute;
+                float: left; 
                 top: 0px;
             }
             .navbar-collapse{
                 width: 100%!important;
             }
             .ssb-component.ssb-navigation{
-                float: unset;
+                float: right;
                 width: unset;
                 min-height: 75px !important;
                 margin-top: 75px;
+            }
+            .o-open.ssb-component.ssb-navigation{
+                float: unset; 
             }
         });
     }
