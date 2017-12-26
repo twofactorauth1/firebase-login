@@ -249,7 +249,9 @@ module.exports = {
     },
 
     getRequestDomainUrl: function(host, protocol){
-        var _serverUrl = protocol || 'http' + "://";
+        if(!protocol)
+            protocol = "http";
+        var _serverUrl = protocol + "://";
         _serverUrl += host;
 
         if (process.env.PORT && process.env.PORT != 80 && process.env.PORT != 443 && process.env.PORT != 8080 && process.env.IS_PROXIED != "true") {

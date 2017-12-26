@@ -122,9 +122,11 @@ _.extend(view.prototype, BaseView.prototype, {
 
     },
 
-    _getImageUrl: function(url, protocol){        
+    _getImageUrl: function(url, protocol){    
+        if(!protocol)
+            protocol = "http";    
         if (url && !/http[s]?/.test(url)) {
-            url = protocol || 'http' + ':' + url;
+            url = protocol + ':' + url;
         }
         return url;
     }
