@@ -24,7 +24,9 @@ function contactActivityController($scope, $state, $window, $modal, $stateParams
         vm.element = element;        
         ContactService.getContactActivities(vm.contactId, function(activities) {
             ContactService.getContact(vm.contactId, function (contact) {  
-                
+                activities = _.filter(activities, function(activity){
+                    return activity.activityType != "PAGE_VIEW"
+                })
                 _.each(activities, function(activity){
                     activity.activityDate = $filter('date')(activity.start, "MMMM dd, yyyy")
                 })
