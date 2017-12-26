@@ -1375,7 +1375,7 @@
     function _initEvents () {
       editor.events.on('mousedown window.mousedown', _markExit);
       editor.events.on('window.touchmove', _unmarkExit);
-      editor.events.on('mouseup window.mouseup', _exitEdit);
+      //editor.events.on('mouseup window.mouseup', _exitEdit);
 
       editor.events.on('commands.mousedown', function ($btn) {
         if ($btn.parents('.fr-toolbar').length > 0) {

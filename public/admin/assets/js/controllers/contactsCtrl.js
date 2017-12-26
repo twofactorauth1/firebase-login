@@ -53,6 +53,18 @@
 			column: '',
 			details: {}
 		};
+
+		if($scope.sortData.column == '' && $scope.pagingParams.sortBy !== undefined) {
+			$scope.sortData.column = $scope.pagingParams.sortBy === "created.date" ? "created" : 
+			$scope.pagingParams.sortBy === "details.emails.email" ? "email" : $scope.pagingParams.sortBy;
+			$scope.sortData.details[$scope.sortData.column] = {
+				direction: $scope.pagingParams.sortDir,
+				sortColum: $scope.sortData.column
+			};
+		}
+		 
+		 
+		 
 		$scope.customTagFilert = function (item) {
 			return ($scope.contact.tags.length > 0 && _.filter($scope.contact.tags, function (tag) {
 				return tag.label === item.label;
