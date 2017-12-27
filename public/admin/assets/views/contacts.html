@@ -174,7 +174,7 @@
                                 <th class="column-width" ng-show="column.name">
                                     <input ng-model="pagingParams.fieldSearch.last" placeholder="Last" class="form-control" type="search" ng-model-options="{ debounce: 800 }"/>
                                 </th>
-                                <th class="column-width hidden-xs" ng-show="column.tags">
+                                <th class="column-width hidden-xs tags_search" ng-show="column.tags">
 
                                     <ui-select ng-model="pagingParams.fieldSearch.tags" on-select="triggerInput('#searchType')" theme="bootstrap">
                                         <ui-select-match placeholder="Select Type">
