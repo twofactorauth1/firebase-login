@@ -3,7 +3,7 @@
 app.controller('importContactModalCtrl', ['$scope', '$location', '$timeout', '$modalInstance', 'FileUploader', 'editableOptions', 'ContactService', 'userConstant', 'SocialConfigService', 'getContacts', 'contactConstant', 'toaster','$filter', function ($scope, $location, $timeout, $modalInstance, FileUploader, editableOptions, ContactService, userConstant, SocialConfigService, getContacts, contactConstant, toaster,$filter) {
   $scope.counter=0;
   $scope.getContacts = getContacts;
-  
+
   /*
    * @editableOptions
    * - editable options for xeditable in preview contacts
@@ -16,7 +16,7 @@ app.controller('importContactModalCtrl', ['$scope', '$location', '$timeout', '$m
   $scope.groupList = false;
   $scope.socialAccounts = {};
   $scope.googlePlusActive = false;
-
+  $scope.uniqueTags = [];
   $scope.contactConstant = contactConstant;
 
   SocialConfigService.getAllSocialConfig(function (config) {
@@ -354,10 +354,10 @@ app.controller('importContactModalCtrl', ['$scope', '$location', '$timeout', '$m
         defaultShipping: false,
         defaultBilling: false
       }],
-      
+
     }],
     extra:[]
-   
+
   };
 
   $scope.addmorefields = function(){
@@ -516,6 +516,17 @@ app.controller('importContactModalCtrl', ['$scope', '$location', '$timeout', '$m
   $scope.updatePreviewSelection=function(selected){
        $timeout(function () { $scope.updatePreview(selected); }, 1000);
   }
+  $scope.compareTag = function(tag, arr){
+    var query = tag.toLowerCase();
+    var index = -1;
+    arr.some(function(element, i) {
+        if (query === element.toLowerCase()) {
+            index = i;
+            return true;
+        }
+    });
+    return index;
+  }
   $scope.updatePreview = function (selected) {
       /* if(selected!=undefined){
           if(selected.name!=undefined){
@@ -542,10 +553,31 @@ app.controller('importContactModalCtrl', ['$scope', '$location', '$timeout', '$m
       else{
           _.each($scope.contactColumns, function (_column) {
               _colVal = _column.value;
-       //blankFormattedContact.custom
+              //blankFormattedContact.custom
+
               _formatIndex = _formattedColumns[_colVal].index;
               if(angular.isDefined(_formatIndex) && _formatIndex !== null)
                   $scope.previewContact[_colVal] = angular.copy($scope.csvResults[$scope.currentRow][_formatIndex]);
+
+                if(_colVal === 'tags'){
+                    var tags_value = $scope.previewContact[_colVal];
+                    var tags_value_arr = tags_value.split('|');
+                    if(tags_value_arr.length > 0){
+                        var new_tags = [];
+                        _.each(tags_value_arr, function(tag){
+                          var tagExist = $scope.compareTag(tag, $scope.uniqueTags);
+                          if(tagExist !== -1){
+                            tag = $scope.uniqueTags[tagExist];
+                          }
+                          else{
+                             $scope.uniqueTags.push(tag);
+                          }
+                          new_tags.push(tag);
+                        });
+                    }
+                    $scope.previewContact[_colVal] = new_tags.join("|");
+                }
+
               if(blankFormattedContact.extra!=undefined){
                   for(var j=0;j< blankFormattedContact.extra.length;j++){
                       if(blankFormattedContact.extra[j]!=undefined){
@@ -604,7 +636,7 @@ app.controller('importContactModalCtrl', ['$scope', '$location', '$timeout', '$m
    * - black formatted contact object for uploading
    */
 
-  
+
 
   /*
    * @uploadMatchedCSV
@@ -662,7 +694,7 @@ app.controller('importContactModalCtrl', ['$scope', '$location', '$timeout', '$m
               _details.websites.push(_website);
             }
 
-            if (_formatVal === 'company') {             
+            if (_formatVal === 'company') {
               _details.company = _csvResult;
             }
 
@@ -689,15 +721,22 @@ app.controller('importContactModalCtrl', ['$scope', '$location', '$timeout', '$m
                       _tagsToBeAdded.push(_tagData[0].data);
                     }
                     else{
-                      _tagsToBeAdded.push(_tag);
+                          var tagExist = $scope.compareTag(_tag, $scope.uniqueTags);
+                          if(tagExist !== -1){
+                            _tag = $scope.uniqueTags[tagExist];
+                          }
+                          else{
+                            $scope.uniqueTags.push(_tag);
+                          }
+                         _tagsToBeAdded.push(_tag);
                     }
                   }
-                }); 
+                });
 
                 if(_tagsToBeAdded.length)
                   _formattedContact[_colVal] = _tagsToBeAdded;
-
             }
+
 
 
           }
@@ -708,6 +747,7 @@ app.controller('importContactModalCtrl', ['$scope', '$location', '$timeout', '$m
         _formattedContact = angular.copy(blankFormattedContact);
       }
     });
+
     $scope.uploadingServerCsv = true;
     ContactService.resetCount();
     ContactService.importCsvContacts(contactsToAdd, function () {
