@@ -38,7 +38,8 @@
 	        	<div collapse="panel_0">
 	        		<ul class="timeline-xs">
 		                <li class="timeline-item success padding-bottom-20 {{vm.getTimelineIcons(activity.activityType, false)}}" ng-repeat="activity in value | orderBy:activity.start:true">
-		                	<i class="fa fa-1 fa-{{vm.getTimelineIcons(activity.activityType, true)}}"></i>
+		                	<i ng-if="activity.activityType !== 'USER_NOTES'" class="fa fa-1 fa-{{vm.getTimelineIcons(activity.activityType, true)}}"></i>
+		                	<img ng-if="activity.activityType === 'USER_NOTES'" src="{{activity.user.user_profile_photo.url ? activity.user.user_profile_photo.url : activity.user.user_profile_photo ? activity.user.user_profile_photo : '/admin/assets/images/default-user.png'}}" class="img-circle">
 		                    <div class="margin-left-30 padding-15 activity-content">
 		                        <div class="text-muted text-small">
 		                            {{activity.start | date:'MMM d, y h:mm:ss a'}} {{getActivityName(activity.activityType)}}
@@ -69,7 +70,6 @@
 		                                    <p ng-if="activity.detail">
 		                                        {{activity.detail}}
 		                                    </p>
-		                                    <!-- <a href="javascript:void(0);" class="btn btn-xs btn-green"><i class="fa fa-reply"></i> Send Welcome Email</a> -->
 		                                </div>
 		                                <div ng-switch-when="ACCOUNT_CREATED">
 		                                    <p>
@@ -81,7 +81,6 @@
 		                                    <p ng-if="activity.detail">
 		                                        {{activity.detail}}
 		                                    </p>
-		                                    <!-- <a href="javascript:void(0);" class="btn btn-xs btn-green"><i class="fa fa-reply"></i> Send Welcome Email</a> -->
 		                                </div>
 		                                <div ng-switch-when="SUBSCRIBE">
 		                                    <p>
@@ -130,7 +129,6 @@
 		                                    <p ng-if="activity.detail">
 		                                        {{activity.detail}}
 		                                    </p>
-		                                    <!-- <a href="javascript:void(0);" class="btn btn-xs btn-green"><i class="fa fa-reply"></i> Send Welcome Email</a> -->
 		                                </div>
 		                                <div ng-switch-when="CONTACT_FORM">
 		                                    <p>
@@ -155,7 +153,6 @@
 		                                    <p ng-if="activity.detail">
 		                                        {{activity.detail}}
 		                                    </p>
-		                                    <!-- <a href="javascript:void(0);" class="btn btn-xs btn-green"><i class="fa fa-file"></i> Read the Email</a> -->
 		                                </div>
 		                                <div ng-switch-when="EMAIL_DELIVERED">
 		                                    <p>
@@ -169,7 +166,6 @@
 		                                    <p ng-if="activity.detail">
 		                                        {{activity.detail}}
 		                                    </p>
-		                                    <!-- <a href="javascript:void(0);" class="btn btn-xs btn-green"><i class="fa fa-file"></i> Read the Email</a> -->
 		                                </div>
 		                                <div ng-switch-when="EMAIL_OPENED">
 		                                    <p>
@@ -183,7 +179,6 @@
 		                                    <p ng-if="activity.detail">
 		                                        {{activity.detail}}
 		                                    </p>
-		                                    <!-- <a href="javascript:void(0);" class="btn btn-xs btn-green"><i class="fa fa-file"></i> Read the Email</a> -->
 		                                </div>
 		                                <div ng-switch-when="EMAIL_CLICKED">
 		                                    <p>
@@ -197,7 +192,6 @@
 		                                    <p ng-if="activity.detail">
 		                                        {{activity.detail}}
 		                                    </p>
-		                                    <!-- <a href="javascript:void(0);" class="btn btn-xs btn-green"><i class="fa fa-file"></i> Read the Email</a> -->
 		                                </div>
 		                                <div ng-switch-when="EMAIL_UNSUB">
 		                                    <p>
@@ -209,7 +203,6 @@
 		                                    <p ng-if="activity.detail">
 		                                        {{activity.detail}}
 		                                    </p>
-		                                    <!-- <a href="javascript:void(0);" class="btn btn-xs btn-green"><i class="fa fa-file"></i> Read the Email</a> -->
 		                                </div>
 		                                <div ng-switch-when="SUBSCRIPTION_PAID">
 		                                    <p>
@@ -221,7 +214,6 @@
 		                                    <p ng-if="activity.detail">
 		                                        {{activity.detail}}
 		                                    </p>
-		                                    <!-- <a href="javascript:void(0);" class="btn btn-xs btn-green"><i class="fa fa-file"></i> Read the Email</a> -->
 		                                </div>
 		                                <div ng-switch-when="EMAIL_BOUNCED">
 		                                    <p>
@@ -242,6 +234,15 @@
 		                                        <span class="label label-info">ORDER CREATED</span> with Order Id
 		                                        
 		                                        <span>'{{activity.extraFields.orderId}}'</span>
+		                                    </p>
+		                                </div>
+		                                <div ng-switch-when="USER_NOTES">
+		                                    <p>
+		                                        <span class="label label-info">User Note</span> 
+		                                        Note from 
+		                                        <span ng-if="activity.user.first" class="text-bold">{{activity.user.first.toString()+' '+activity.user.last.toString()}}</span>
+		                                        <span class="text-bold" ng-if="!activity.user.first">{{activity.user.username}}</span>
+		                                        <span class="block">{{activity.note}}</span>
 		                                    </p>
 		                                </div>
 		                                <div ng-switch-default>

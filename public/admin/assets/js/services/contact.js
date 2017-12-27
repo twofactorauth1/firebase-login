@@ -632,6 +632,14 @@
                 });
         }
 
+        this.getContactNotes = function(id, fn){
+            var apiUrl = baseUrl + ['contact', id, 'notes'].join('/');
+            $http.get(apiUrl)
+                .success(function (data) {
+                    fn(data);
+                });
+        }
+
         this.fomatContactTags = function (tags, fn) {
             var contactTags = contactConstant.contact_tags.dp;
             var extraContactTags = [];

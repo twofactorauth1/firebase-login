@@ -101,6 +101,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url('export/csv'), this.isAuthApi.bind(this), this.exportCsvContacts.bind(this));
         app.post(this.url('import/csv'), this.secureauth.bind(this, {requiresSub:true, requiresPriv:'MODIFY_CONTACT'}), this.importCSV.bind(this));
         app.post(this.url(':id/photo'), this.secureauth.bind(this, {requiresSub:true, requiresPriv:'MODIFY_CONTACT'}), this.updateContactPhoto.bind(this));
+        app.get(this.url(':id/notes'), this.secureauth.bind(this, {requiresSub:true, requiresPriv:'VIEW_CONTACT'}), this.getContactNotes.bind(this));
     },
 
     getMyIp: function(req, resp) {
@@ -206,6 +207,53 @@ _.extend(api.prototype, baseApi.prototype, {
                     }
                 });
                 
+            }
+        });
+    },
+
+    getContactNotes: function(req, resp){
+        var self = this;
+        var contactId = req.params.id;
+        contactId = parseInt(contactId);
+        var accountId = parseInt(self.accountId(req));
+        contactDao.getContactById(accountId, contactId, function(err, contact) {
+            self.log.debug('<< getContactById');
+            if(!err && !contact) {
+                self.wrapError(resp, 404, null, 'Contact not found.', 'Contact not found.');
+            }else {
+                var _notes = contact.get("notes") || [];
+                var userIDMap = {};
+                async.each(_notes, function(note, callback){
+                    if(userIDMap[note.user_id]) {
+                        var _user = userIDMap[note.user_id];
+                        note.user = _user;
+                        callback();
+                    }
+                    else{
+                        userManager.getUserById(note.user_id, function(err, user){
+                            if(err) {
+                                log.error(accountId, userId, 'Error getting user:', err);
+                                //return anyway
+                                callback();
+                            } else {
+                                if(user){
+                                    var _user = {
+                                        _id: user.get("_id"),
+                                        username: user.get("username"),
+                                        first: user.get("first"),
+                                        last: user.get("last"),
+                                        user_profile_photo: user.get("profilePhotos") && user.get("profilePhotos")[0] ? user.get("profilePhotos")[0] : ''
+                                    };
+                                    userIDMap[note.user_id] = _user;
+                                    note.user = _user; 
+                                } 
+                                callback();
+                            }
+                        });
+                    }
+                }, function(err){
+                    self.sendResultOrError(resp, err, _notes, 'There was an error getting contact notes');
+                });
             }
         });
     },
