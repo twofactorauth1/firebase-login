@@ -18,8 +18,55 @@ function contactActivityController($scope, $state, $window, $modal, $stateParams
     vm.uiState= {
         loading: true
     }
-    vm.init = init; 
+    vm.getTimelineIcons = getTimelineIcons;
 
+    vm.init = init; 
+    function getTimelineIcons(activityType, isIcon){
+        var iconClass = ""
+        switch (activityType) {
+            case 'EMAIL':
+            case 'EMAIL_DELIVERED':
+            case 'EMAIL_OPENED':
+            case 'EMAIL_CLICKED':
+            case 'EMAIL_UNSUB':
+            case 'EMAIL_BOUNCED':
+                if(isIcon)
+                    iconClass = "envelope-o"
+                else{
+                    iconClass = "email-type"
+                }
+                break;
+            case 'PAGE_VIEW':
+                if(isIcon)
+                    iconClass = "eye"
+                else{
+                    iconClass = "page-type"
+                }
+                break;
+            case 'CONTACT_CREATED':
+            case 'CONTACT_FORM':
+            case 'FORM_SUBMISSION':
+                if(isIcon)
+                    iconClass = "list-alt"
+                else{
+                    iconClass = "form-type"
+                }
+                break;
+            case 'CREATE_PAYPAL_ORDER':
+            case 'CREATE_ORDER':
+                if(isIcon)
+                    iconClass = "shopping-cart"
+                else{
+                    iconClass = "order-type"
+                }
+                break;        
+            default:
+                iconClass = ""
+                if(isIcon)
+                    iconClass = "sticky-note-o"
+        }
+        return iconClass
+    };
     function init(element) {
         vm.element = element;        
         ContactService.getContactActivities(vm.contactId, function(activities) {

@@ -25,8 +25,8 @@
 	        	<div collapse="panel_0">
 	        		<ul class="timeline-xs">
 
-		                <li class="timeline-item success padding-bottom-20" ng-repeat="activity in value | filter:orderBy:activity.start:true" ng-if="(activity.activityType)">
-		                	<i class="fa fa-eye fa-1"></i>
+		                <li class="timeline-item success padding-bottom-20 {{vm.getTimelineIcons(activity.activityType, false)}}" ng-repeat="activity in value | filter:orderBy:activity.start:true" ng-if="(activity.activityType)">
+		                	<i class="fa fa-1 fa-{{vm.getTimelineIcons(activity.activityType, true)}}"></i>
 		                    <div class="margin-left-30 padding-15 activity-content">
 		                        <div class="text-muted text-small">
 		                            {{activity.start | date:'MMM d, y h:mm:ss a'}} {{getActivityName(activity.activityType)}}

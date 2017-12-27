@@ -214,6 +214,7 @@ contact-details-component{
         
     }
     .contact-details-right-pane{
+        background: #FCFAFD;
         padding-left: 25px;
         .panel-white{
             border: none !important;
@@ -270,6 +271,22 @@ contact-details-component{
                     font-size: 18px;
                     top: 9px;
                 }
+                &.email-type{
+                    &:after{
+                        border-color: #DFF4F7;
+                    }
+                    i.fa{
+                        color: #DFF4F7;
+                    }
+                }
+                &.form-type{
+                    &:after{
+                        border-color: #E1EFDE;
+                    }
+                    i.fa{
+                        color: #E1EFDE;
+                    }
+                }
             }
                 
         }
@@ -289,6 +306,6 @@ contact-details-component{
                 }
                 
             }
-        }  
+        }
     }
 }
