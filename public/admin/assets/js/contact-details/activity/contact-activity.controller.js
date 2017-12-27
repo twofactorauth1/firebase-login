@@ -2,9 +2,9 @@
 
 app.controller('ContactActivityController', contactActivityController);
 
-contactActivityController.$inject = ['$scope', '$state', '$window', '$modal', '$stateParams', '$attrs', '$filter', '$document', '$timeout', 'toaster', 'ContactService'];
+contactActivityController.$inject = ['$scope', '$state', '$window', '$modal', '$stateParams', '$attrs', '$filter', '$document', '$timeout', 'toaster', 'ContactService', 'contactConstant'];
 /* @ngInject */
-function contactActivityController($scope, $state, $window, $modal, $stateParams, $attrs, $filter, $document, $timeout, toaster, ContactService) {
+function contactActivityController($scope, $state, $window, $modal, $stateParams, $attrs, $filter, $document, $timeout, toaster, ContactService, contactConstant) {
 
     console.info('contact-activity directive init...')
 
@@ -12,14 +12,19 @@ function contactActivityController($scope, $state, $window, $modal, $stateParams
     vm.state = {
         activityFilter:{
             type: 'all',
-            sort: 'asc'
-        }
+            sort: 'desc'
+        },
+        contactConstant: contactConstant
     };
+    vm.state.contactConstant.contact_activity_types.dp.push({
+        data: 'all',
+        label : 'All'
+    });
     vm.uiState= {
         loading: true
     }
     vm.getTimelineIcons = getTimelineIcons;
-
+    vm.filterContactActivities = filterContactActivities;
     vm.init = init; 
     function getTimelineIcons(activityType, isIcon){
         var iconClass = ""
@@ -78,14 +83,32 @@ function contactActivityController($scope, $state, $window, $modal, $stateParams
                     activity.activityDate = $filter('date')(activity.start, "MMMM dd, yyyy")
                 })
 
-                vm.state.activities = _.groupBy(activities, function(activity){ 
-                    return activity.activityDate; 
-                });
+                vm.state.activities = activities
+
+                filterContactActivities();
 
                 vm.state.contact = contact;
                 vm.uiState.loading = false;
             })
         });
+    }
+
+    function filterContactActivities(){
+        var activities = angular.copy(vm.state.activities);
+        if(vm.state.activityFilter.type !== 'all'){
+            activities = _.filter(vm.state.activities, function(activity){
+                return activity.activityType === vm.state.activityFilter.type
+            })
+        }
+        vm.state.filteredActivities = activities;
+        getGroupedActivities(activities);
+    }
+
+    function getGroupedActivities(activities){        
+        var groupedActivities = _.groupBy(activities, 'activityDate');
+        vm.state.groupedActivities = _.sortBy(groupedActivities, function(value, key){
+            return vm.state.activityFilter.sort === "asc" ? Date.parse(key) : -Date.parse(key);
+        })
     }
 
 }

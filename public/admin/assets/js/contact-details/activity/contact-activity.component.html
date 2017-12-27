@@ -2,11 +2,10 @@
     <h3>Activity Timeline</h3>
     <div class="activity-filter">
     	<span>Filter</span>
-		<select id="select_activity_type" ng-model="vm.state.activityFilter.type" class="form-control">
-			<option value="all">ALL</option>
+		<select ng-model="vm.state.activityFilter.type" class="form-control" ng-options="type.data as type.label for type in vm.state.contactConstant.contact_activity_types.dp" ng-change="vm.filterContactActivities()">
         </select>
     	<span>Sort</span>
-    	<select id="select_activity_type" ng-model="vm.state.activityFilter.sort" class="form-control">
+    	<select id="select_activity_type" ng-model="vm.state.activityFilter.sort" class="form-control" ng-change="vm.filterContactActivities()">
 			<option value="asc">ASC</option>
             <option value="desc">DESC</option>
         </select>
@@ -16,16 +15,29 @@
     </div>
     <hr></hr>
     <div>
-    	<div ng-repeat="(key, value) in vm.state.activities">
+		<div ng-if="!vm.state.filteredActivities.length">
+            <div class="panel panel-transparent" ng-if="!vm.uiState.loading">
+                <div class="panel-body">
+                    <h4 class="center"><span class="fa fa-comment fa-2x"></span> <br><br> No Activity Availiable</h4>
+                </div>
+            </div>
+            <div class="center" ng-if="vm.uiState.loading" style="
+			    height: 200px;
+			    margin-top: 100px;">
+			    <h4>
+			    	Loading activities...
+			    </h4>
+			</div>
+        </div>
+    	<div ng-if="vm.state.filteredActivities.length" ng-repeat="(key, value) in vm.state.groupedActivities">
     		<div id="panel_0">
     			<div class="panel-heading border-light padding-0 panel-activity">
-		            <h4 class="">{{key}}</h4>		            
+		            <h4 class="">{{value[0].activityDate}}</h4>		            
 		            <ct-paneltool class="panel-tools" tool-collapse="tool-collapse"></ct-paneltool>
 	        	</div>
 	        	<div collapse="panel_0">
 	        		<ul class="timeline-xs">
-
-		                <li class="timeline-item success padding-bottom-20 {{vm.getTimelineIcons(activity.activityType, false)}}" ng-repeat="activity in value | filter:orderBy:activity.start:true" ng-if="(activity.activityType)">
+		                <li class="timeline-item success padding-bottom-20 {{vm.getTimelineIcons(activity.activityType, false)}}" ng-repeat="activity in value | orderBy:activity.start:true">
 		                	<i class="fa fa-1 fa-{{vm.getTimelineIcons(activity.activityType, true)}}"></i>
 		                    <div class="margin-left-30 padding-15 activity-content">
 		                        <div class="text-muted text-small">
@@ -245,17 +257,6 @@
 		            </ul>
 	        	</div>
     		</div>    		
-  		</div>
-    	<div id="activity" class="hidden">
-	    	<div class="panel-body" collapse="activity">
-	            <div ng-if="!vm.state.activities.length && !vm.uiState.loading">
-	                <div class="panel panel-transparent">
-	                    <div class="panel-body">
-	                        <h4 class="center"><span class="fa fa-comment fa-2x"></span> <br><br> No Activity Availiable</h4>
-	                    </div>
-	                </div>
-	            </div>
-	        </div>
-	    </div>    
+  		</div>   
     </div>
 </div>

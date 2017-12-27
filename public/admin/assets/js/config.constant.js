@@ -155,6 +155,7 @@ app.constant('contactConstant', {
 		SUBSCRIPTION_PAID: 'SUBSCRIPTION_PAID',
 		SUBSCRIBE_CANCEL: 'SUBSCRIBE_CANCEL',
 		ACCOUNT_CREATED: 'ACCOUNT_CREATED',
+		CREATE_ORDER: 'CREATE_ORDER',
 		dp: [
 			{
 				label: "Account Created",
@@ -215,6 +216,14 @@ app.constant('contactConstant', {
 			{
 				label: "Subscribe Cancel",
 				data: "SUBSCRIBE_CANCEL"
+			},
+			{
+				label: 'Order Created',
+				data: 'CREATE_ORDER'
+			},
+			{
+				label: 'Paypal Order Created',
+				data: 'CREATE_PAYPAL_ORDER'
 			},
 			{
 				label: "Other",
