@@ -111,7 +111,7 @@ function contactActivityController($scope, $state, $window, $modal, $stateParams
 
     function iterateActivities(activities){
         _.each(activities, function(activity){
-            activity.activityDate = $filter('date')(activity.start, "MMMM dd, yyyy")
+            activity.activityDate = $filter('date')(activity.start, "MMMM dd, yyyy");
         });
         vm.state.activities = activities;
         filterContactActivities();
