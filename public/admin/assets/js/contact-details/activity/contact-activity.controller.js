@@ -84,7 +84,7 @@ function contactActivityController($scope, $state, $window, $modal, $stateParams
                 if(isIcon)
                     iconClass = "sticky-note-o"
         }
-        return iconClass
+        return iconClass;
     };
 
     function init(element) {
