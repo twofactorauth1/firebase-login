@@ -91,7 +91,7 @@ var mainApp = angular
                     if (window.indigenous.ssbBlog === true) {
                         blogPageName = 'blog-list';
                     }
-                    s = '<div class="main-include" ssb-data-styles  data-ng-include="';
+                    s = '<div class="main-include" ssb-data-styles data-ng-include="';
                     s += " '/template/" + blogPageName;
                     if (urlattr.cachebuster) {
                         s += '?cachebuster=' + urlattr.cachebuster;

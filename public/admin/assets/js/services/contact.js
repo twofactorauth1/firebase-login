@@ -151,6 +151,26 @@
                 });
         };
 
+
+        this.updateContactPhoto = function (contactId, url, fn) {
+            var contacts = this.getCache().get('contacts');
+
+            var apiUrl = baseUrl + ['contact', contactId, 'photo'].join('/');
+            $http.post(apiUrl, {url: url})
+                .success(function (data) {
+                    if (contacts) {
+                        contacts.forEach(function (value, index) {
+                            if (value._id === contactId) {
+                                contacts[index] = data;
+                            }
+                        });
+                        cache.put('contacts', contacts);
+                    }
+                    fn(data);
+                });
+        };
+
+
         this.putContact = function (cache, contact, fn) {
             var contacts = cache.get('contacts');
 
@@ -205,11 +225,9 @@
             apiFn(this.getCache(), contact, fn);
         };
 
-        this.addContactNote = function (contact, fn) {
-            var apiUrl = baseUrl +'contact/'+ contact.data_contact+ '/contactDetail';
-            $http.post(apiUrl, {
-                note: contact.email_send
-            }).success(function (data) {
+        this.addContactNote = function (contact, contactId, fn) {
+            var apiUrl = baseUrl +'contact/'+ contactId + '/contactDetail';
+            $http.post(apiUrl, contact).success(function (data) {
                 fn(data);
             });
         };
@@ -608,6 +626,14 @@
 
         this.getContactTagCounts = function(fn){
             var apiUrl = baseUrl + ['contact', 'tagcounts'].join('/');
+            $http.get(apiUrl)
+                .success(function (data) {
+                    fn(data);
+                });
+        }
+
+        this.getContactNotes = function(id, fn){
+            var apiUrl = baseUrl + ['contact', id, 'notes'].join('/');
             $http.get(apiUrl)
                 .success(function (data) {
                     fn(data);
