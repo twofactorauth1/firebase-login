@@ -11,7 +11,8 @@ function contactActivityComponent() {
         controllerAs: 'vm',
         bindToController: true,
         scope: {
-            contactId: '='
+            contactId: '=',
+            contact: '='
         },
         replace: true,
         link: function(scope, element, attrs, ctrl) {

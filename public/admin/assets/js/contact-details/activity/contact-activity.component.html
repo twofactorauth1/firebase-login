@@ -13,7 +13,22 @@
             <span>Add a Note</span>
         </button>
     </div>
-    <hr></hr>
+    <hr />
+	<div class="">
+        <label for="newNote"> New Note</label>
+        <textarea id="newNote" class="form-control margin-bottom-15 autosize area-animated msd-elastic: \n;" ng-model="vm.newNote.text"></textarea>
+        <div class="checkbox clip-check check-success margin-top-10" ng-if="vm.state.contact.details[0].emails[0].email">
+            <input type="checkbox" id="note-editable" ng-model="vm.notesEmail.enable" >
+            <label for="note-editable">
+                Send New Note to Contact
+            </label>
+        </div>
+        <button type="button" ng-disabled="!(vm.newNote.text)" class="btn btn-info btn-block btn-o btn-wide btn-scroll btn-scroll-top ti-plus" ng-click="vm.addNote(vm.newNote.text)">
+            <span>Add</span>
+        </button>
+        <hr />
+    </div>
+    	
     <div>
 		<div ng-if="!vm.state.filteredActivities.length">
             <div class="panel panel-transparent" ng-if="!vm.uiState.loading">
@@ -42,7 +57,7 @@
 		                	<img ng-if="activity.activityType === 'USER_NOTES'" src="{{activity.user.user_profile_photo.url ? activity.user.user_profile_photo.url : activity.user.user_profile_photo ? activity.user.user_profile_photo : '/admin/assets/images/default-user.png'}}" class="img-circle">
 		                    <div class="margin-left-30 padding-15 activity-content">
 		                        <div class="text-muted text-small">
-		                            {{activity.start | date:'MMM d, y h:mm:ss a'}} {{getActivityName(activity.activityType)}}
+		                            {{activity.start | date:'MMM d, yy h:mm:ss a'}} {{getActivityName(activity.activityType)}}
 		                        </div>
 		                        <p>
 		                            <div ng-switch on="activity.activityType">

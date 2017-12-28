@@ -23,10 +23,13 @@ function contactActivityController($scope, $state, $window, $modal, $stateParams
     vm.uiState= {
         loading: true
     };
+    vm.notesEmail = {
+        enable: false
+    };
     vm.getTimelineIcons = getTimelineIcons;
     vm.filterContactActivities = filterContactActivities;
     vm.init = init; 
-
+    vm.addNote = addNote;
     function getTimelineIcons(activityType, isIcon){
         var iconClass = ""
         switch (activityType) {
@@ -84,13 +87,13 @@ function contactActivityController($scope, $state, $window, $modal, $stateParams
     function init(element) {
         vm.element = element;        
         ContactService.getContactActivities(vm.contactId, function(activities) {
-            ContactService.getContact(vm.contactId, function (contact) {  
-                vm.state.contact = contact;
+            //ContactService.getContact(vm.contactId, function (contact) {  
+                vm.state.contact = vm.contact;
 
                 activities = _.filter(activities, function(activity){
                     return activity.activityType != "PAGE_VIEW"
                 })
-                if(contact.notes.length){
+                if(vm.state.contact.notes.length){
                     ContactService.getContactNotes(vm.contactId, function(notes){
                         activities = mergeContactNotes(notes, activities);
                         iterateActivities(activities);
@@ -100,7 +103,7 @@ function contactActivityController($scope, $state, $window, $modal, $stateParams
                     iterateActivities(activities);
                 }                
                 
-            })
+            //})
         });
     };
 
@@ -141,6 +144,48 @@ function contactActivityController($scope, $state, $window, $modal, $stateParams
             activities = activities.concat(notes);
         }
         return activities;
+    };
+
+    function addNote(_note) {
+        var date = moment(),
+            _noteToPush = {
+                note: _note,
+                user_id: $scope.$parent.currentUser._id,
+                date: date.toISOString()
+            },
+            contactData = {};
+
+        vm.newNote.text = '';
+        
+        var sendEmail = {};
+        
+        sendEmail = {
+            sendTo: vm.state.contact.details[0].emails[0].email,
+            fromEmail: $scope.$parent.currentUser.email,
+            fromName: getUserName(),
+            note_value: _note,
+            enable_note: vm.notesEmail.enable
+        };
+        contactData = {
+            emailData: sendEmail,
+            note: _noteToPush,
+            sendEmailToContact: vm.notesEmail.enable
+        };
+
+        ContactService.addContactNote(contactData, vm.contactId, function (data) {            
+            vm.notesEmail = {
+                enable: false
+            };
+            vm.state.contact.notes = data;
+        });
+    };
+
+    function getUserName() {
+        var _userName = $scope.$parent.currentUser.email;
+        if ($scope.$parent.currentUser.first || $scope.$parent.currentUser.last) {
+            _userName = $scope.$parent.currentUser.first + " " + $scope.$parent.currentUser.last;
+        }
+        return _userName.trim();
     }
 
 }
