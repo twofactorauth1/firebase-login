@@ -17,11 +17,11 @@ function contactActivityController($scope, $state, $window, $modal, $stateParams
         contactConstant: contactConstant
     };
     vm.state.contactConstant.contact_activity_types.dp.push({
-        data: 'all',
-        label : 'All'
-    },{
         data: 'USER_NOTES',
         label: 'User Notes'
+    },{
+        data: 'all',
+        label : 'All'
     });
     vm.uiState= {
         loading: true
