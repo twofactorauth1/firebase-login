@@ -366,7 +366,7 @@
                     <tab heading="Devices & Browser">
                         Devices & Browser
                     </tab>
-                    <tab heading="Location & Network">
+                    <tab heading="Location & Network" select="vm.resizeMap()">
                         <div class="map margin-bottom-15">
                             <map zoom="10" center="{{vm.state.location.lat}}, {{vm.state.location.lon}}" disable-default-u-i="true" scale-control="false" pan-control="false" zoom-control="false" class="height-330" ng-if="!vm.uiState.loadingMap && vm.state.location.lat" scrollwheel="false">
                                 <marker position="{{vm.state.location.lat}}, {{vm.state.location.lon}}"></marker>

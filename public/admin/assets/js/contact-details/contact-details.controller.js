@@ -44,6 +44,7 @@ function contactDetailsController($scope, $state, $window, $modal, $stateParams,
     
     vm.state.orgId = $window.indigenous.orgId;
     vm.editContactMode = editContactMode;
+    vm.resizeMap = resizeMap;
     function loadContactDetails(){
     	ContactService.getContact(vm.state.contactId, function (contact, error) {
     		vm.state.contact = contact;    		
@@ -579,6 +580,13 @@ function contactDetailsController($scope, $state, $window, $modal, $stateParams,
 		}, 0);
 		
 	}
+
+	function resizeMap () {
+		vm.uiState.loadingMap = true;
+		$timeout(function () {
+			vm.uiState.loadingMap = false;
+		}, 500);
+	};
 
     function init(element) {
         vm.element = element;
