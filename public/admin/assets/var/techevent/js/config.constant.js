@@ -141,103 +141,145 @@ app.constant('contactConstant', {
     SUBSCRIPTION_PAID: 'SUBSCRIPTION_PAID',
     SUBSCRIBE_CANCEL: 'SUBSCRIBE_CANCEL',
     ACCOUNT_CREATED: 'ACCOUNT_CREATED',
-    dp: [{
-      label: "Account Created",
-      data: "ACCOUNT_CREATED"
-    },{
-      label: "Page View",
-      data: "PAGE_VIEW"
-    }, {
-      label: "Subscribe",
-      data: "SUBSCRIBE"
-    }, {
-      label: "Contact Created",
-      data: "CONTACT_CREATED"
-    }, {
-      label: "Emails",
-      data: "EMAIL"
-    }, {
-      label: "Phone Calls",
-      data: "PHONECALL"
-    }, {
-      label: "Facebook Likes",
-      data: "FACEBOOK_LIKE"
-    }, {
-      label: "Tweets",
-      data: "TWEET"
-    }, {
-      label: "Form Submission",
-      data: "FORM_SUBMISSION"
-    }, {
-      label: "Email Delivered",
-      data: "EMAIL_DELIVERED"
-    }, {
-      label: "Email Opened",
-      data: "EMAIL_OPENED"
-    }, {
-      label: "Email Clicked",
-      data: "EMAIL_CLICKED"
-    }, {
-      label: "Email UnSubscribe",
-      data: "EMAIL_UNSUB"
-    }, {
-      label: "Subscription Paid",
-      data: "SUBSCRIPTION_PAID"
-    }, {
-      label: "Subscribe Cancel",
-      data: "SUBSCRIBE_CANCEL"
-    }, {
-      label: "Other",
-      data: "OTHER"
-    }]
+    CREATE_ORDER: 'CREATE_ORDER',
+    dp: [
+      {
+        label: "Account Created",
+        data: "ACCOUNT_CREATED"
+      },
+      {
+        label: "Page View",
+        data: "PAGE_VIEW"
+      },
+      {
+        label: "Subscribe",
+        data: "SUBSCRIBE"
+      },
+      {
+        label: "Contact Created",
+        data: "CONTACT_CREATED"
+      },
+      {
+        label: "Emails",
+        data: "EMAIL"
+      },
+      {
+        label: "Phone Calls",
+        data: "PHONECALL"
+      },
+      {
+        label: "Facebook Likes",
+        data: "FACEBOOK_LIKE"
+      },
+      {
+        label: "Tweets",
+        data: "TWEET"
+      },
+      {
+        label: "Form Submission",
+        data: "FORM_SUBMISSION"
+      },
+      {
+        label: "Email Delivered",
+        data: "EMAIL_DELIVERED"
+      },
+      {
+        label: "Email Opened",
+        data: "EMAIL_OPENED"
+      },
+      {
+        label: "Email Clicked",
+        data: "EMAIL_CLICKED"
+      },
+      {
+        label: "Email UnSubscribe",
+        data: "EMAIL_UNSUB"
+      },
+      {
+        label: "Subscription Paid",
+        data: "SUBSCRIPTION_PAID"
+      },
+      {
+        label: "Subscribe Cancel",
+        data: "SUBSCRIBE_CANCEL"
+      },
+      {
+        label: 'Order Created',
+        data: 'CREATE_ORDER'
+      },
+      {
+        label: 'Paypal Order Created',
+        data: 'CREATE_PAYPAL_ORDER'
+      },
+      {
+        label: "Other",
+        data: "OTHER"
+      }
+    ]
   },
-  contact_tags:{
-    dp:[{
-      label: "Admin",
-      data: "ad"
-    }, {
-      label: "Affiliate",
-      data: "af"
-    }, {
+  contact_tags: {
+    dp: [
+      {
+        label: "Admin",
+        data: "ad"
+      },
+      {
+        label: "Affiliate",
+        data: "af"
+      },
+      {
         label: 'Anonymous Donor',
         data: 'and'
-    }, {
-      label: "Cancelled Customer",
-      data: "cc"
-    }, {
-      label: "Cancelled Trial Customer",
-      data: "ct"
-    }, {
-      label: "Cheatsheet Lead",
-      data: "cs"
-    }, {
-      label: "Colleague",
-      data: "co"
-    }, {
-      label: "Customer",
-      data: "cu"
-    }, {
-      label: "Expired Trial Customer",
-      data: "ex"
-    }, {
-      label: "Family",
-      data: "fa"
-    }, {
-      label: "Friend",
-      data: "fr"
-    }, {
-      label: "Lead",
-      data: "ld"
-    }, {
-      label: "Member",
-      data: "mb"
-    }, {
-      label: "Other",
-      data: "ot"
-    }, {
-      label: "Trial Customer",
-      data: "tc"
-    }]
+      },
+      {
+        label: "Cancelled Customer",
+        data: "cc"
+      },
+      {
+        label: "Cancelled Trial Customer",
+        data: "ct"
+      },
+      {
+        label: "Cheatsheet Lead",
+        data: "cs"
+      },
+      {
+        label: "Colleague",
+        data: "co"
+      },
+      {
+        label: "Customer",
+        data: "cu"
+      },
+      {
+        label: "Expired Trial Customer",
+        data: "ex"
+      },
+      {
+        label: "Family",
+        data: "fa"
+      },
+      {
+        label: "Friend",
+        data: "fr"
+      },
+      {
+        label: "Lead",
+        data: "ld"
+      },
+      {
+        label: "Member",
+        data: "mb"
+      },
+      {
+        label: "Other",
+        data: "ot"
+      },
+      {
+        label: "Trial Customer",
+        data: "tc"
+      }
+    ]
   }
 
 });
@@ -742,7 +784,13 @@ app.constant('JS_REQUIRES', {
     'ssbPostPageFilter': 'assets/js/ssb-site-builder/ssb-components/ssb-filters/ssb-post-page-filter.js',
     //*** Directives
     'mediaModal': 'assets/js/directives/mediadirective.js',
-    'fixedHeaderTable': 'assets/js/directives/fixed-header-table.js'
+    'fixedHeaderTable': 'assets/js/directives/fixed-header-table.js',
+
+    // New Contact details
+    'ContactDetailsComponent': 'assets/js/contact-details/contact-details.component.js',
+    'ContactDetailsController': 'assets/js/contact-details/contact-details.controller.js',
+    'ContactActivityComponent': 'assets/js/contact-details/activity/contact-activity.component.js',
+    'ContactActivityController': 'assets/js/contact-details/activity/contact-activity.controller.js'
   },
   //*** angularJS Modules
   modules: [
