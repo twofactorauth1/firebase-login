@@ -47,8 +47,7 @@ function contactDetailsController($scope, $state, $window, $modal, $stateParams,
     vm.resizeMap = resizeMap;
     function loadContactDetails(){
     	ContactService.getContact(vm.state.contactId, function (contact, error) {
-    		vm.state.contact = contact;    		
-    		vm.state.fullName = [vm.state.contact.first, vm.state.contact.middle, vm.state.contact.last].join(' ').trim();
+    		vm.state.contact = contact;
     		setTags();
     		setDefaults();
     		vm.state.originalContact = angular.copy(vm.state.contact);
@@ -56,6 +55,11 @@ function contactDetailsController($scope, $state, $window, $modal, $stateParams,
     		getMapData();
     	})    	
     }
+
+    $scope.$watchGroup(['vm.state.contact.first', 'vm.state.contact.middle', 'vm.state.contact.last'], _.debounce(function(id) {
+    	if(vm.state.contact)
+        	vm.state.fullName = [vm.state.contact.first, vm.state.contact.middle, vm.state.contact.last].join(' ').trim();
+    }, 1000), true);
 
 	function getMapData() {
 		var _firstAddress;
