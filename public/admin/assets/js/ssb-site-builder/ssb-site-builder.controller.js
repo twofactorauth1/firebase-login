@@ -1206,6 +1206,8 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
                     //Cancel
                     if (!isConfirm) {
                         section.global = true;
+                    }else{
+                         section.hiddenOnPages={};
                     }
                 });
             }
@@ -1213,16 +1215,13 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
             if(!section.hiddenOnPages){
                 section.hiddenOnPages = {}
             }
-            if(section.visibility === false)
-            {
+            if(section.visibility === false){
                 section.hiddenOnPages[vm.state.page.handle] = true;
                 hideAllControls();
-            }
-            else{
+            }else{
                 delete section.hiddenOnPages[vm.state.page.handle];
             }
-        }
-        else if(section.visibility === false){
+        } else if(section.visibility === false){
             hideAllControls();
         }
     }
