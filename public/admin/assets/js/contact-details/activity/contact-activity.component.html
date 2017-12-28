@@ -66,7 +66,7 @@
 	                            <div ng-switch on="activity.activityType" class="activity-inner-content">
 	                                <div ng-switch-when="OTHER">
 	                                    <div class="activity-title col-xs-12 col-sm-8">
-	                                		OTHER
+	                                		Other
 	                                	</div>
 	                                	<div class="text-muted text-small activity-time col-xs-12 col-sm-4">
 		                            		{{activity.start | date:'M/d @ h:mm a' | lowercase}}
@@ -78,7 +78,7 @@
 	                                </div>
 	                                <div ng-switch-when="EMAIL">
 	                                    <div class="activity-title col-xs-12 col-sm-8">
-	                                		EMAIL SENT
+	                                		Email Sent
 	                                	</div>
 	                                	<div class="text-muted text-small activity-time col-xs-12 col-sm-4">
 		                            		{{activity.start | date:'M/d @ h:mm a' | lowercase}}
@@ -91,7 +91,7 @@
 
 	                                <div ng-switch-when="CONTACT_CREATED">
 	                                    <div class="activity-title col-xs-12 col-sm-8">
-	                                		CONTACT CREATED
+	                                		Contact Created
 	                                	</div>
 	                                	<div class="text-muted text-small activity-time col-xs-12 col-sm-4">
 		                            		{{activity.start | date:'M/d @ h:mm a' | lowercase}}
@@ -108,7 +108,7 @@
 	                                </div>
 	                                <div ng-switch-when="ACCOUNT_CREATED">
 	                                    <div class="activity-title col-xs-12 col-sm-8">
-	                                		CONTACT CREATED
+	                                		Contact Created
 	                                	</div>
 	                                	<div class="text-muted text-small activity-time col-xs-12 col-sm-4">
 		                            		{{activity.start | date:'M/d @ h:mm a' | lowercase}}
@@ -125,7 +125,7 @@
 	                                </div>
 	                                <div ng-switch-when="SUBSCRIBE">
 	                                    <div class="activity-title col-xs-12 col-sm-8">
-	                                		SUBSCRIBE
+	                                		Subscribe
 	                                	</div>
 	                                	<div class="text-muted text-small activity-time col-xs-12 col-sm-4">
 		                            		{{activity.start | date:'M/d @ h:mm a' | lowercase}}
@@ -143,13 +143,13 @@
 	                                </div>
 	                                <div ng-switch-when="TRIAL_CONVERSION">
 	                                    <div class="activity-title col-xs-12 col-sm-8">
-	                                		TRIAL CONVERSION
+	                                		Trial Conversion
 	                                	</div>
 	                                	<div class="text-muted text-small activity-time col-xs-12 col-sm-4">
 		                            		{{activity.start | date:'M/d @ h:mm a' | lowercase}}
 		                        		</div>		                        		
 	                                    <div class="col-xs-12 content-data">
-	                                        Trial Conversion 
+	                                        Trial conversion 
 	                                        <span class="text-bold" ng-if="vm.state.contact.first">{{vm.state.contact.first.toString()+' '+vm.state.contact.last.toString()}}</span>
 	                                        <span class="text-bold" ng-if="!vm.state.contact.first">{{vm.state.contact.details[0].emails[0].email}}</span> 
 	                                        subscribed to <a href="">{{activity.extraFields.plan_name}}</a> for ${{activity.extraFields.amount}}                      
@@ -161,13 +161,13 @@
 	                                </div>
 	                                <div ng-switch-when="SUBSCRIBE_CANCEL">
 	                                    <div class="activity-title col-xs-12 col-sm-8">
-	                                		SUBSCRIPTION CANCELED
+	                                		Subscription Canceled
 	                                	</div>
 	                                	<div class="text-muted text-small activity-time col-xs-12 col-sm-4">
 		                            		{{activity.start | date:'M/d @ h:mm a' | lowercase}}
 		                        		</div>		                        		
 	                                    <div class="col-xs-12 content-data">
-	                                        Subscription Canceled for 
+	                                        Subscription canceled for 
 	                                        <span class="text-bold" ng-if="vm.state.contact.first">{{vm.state.contact.first.toString()+' '+vm.state.contact.last.toString()}}</span>
 	                                        <span class="text-bold" ng-if="!vm.state.contact.first">{{vm.state.contact.details[0].emails[0].email}}</span>	                         
 	                                    </div>
@@ -197,13 +197,13 @@
 	                                </div>
 	                                <div ng-switch-when="FORM_SUBMISSION">
 	                                	<div class="activity-title col-xs-12 col-sm-8">
-	                                		FORM SUBMITTED
+	                                		Form Submitted
 	                                	</div>
 	                                	<div class="text-muted text-small activity-time col-xs-12 col-sm-4">
 		                            		{{activity.start | date:'M/d @ h:mm a' | lowercase}}
 		                        		</div>		                        		
 	                                    <div class="col-xs-12 content-data">
-	                                        Form Submitted for 
+	                                        Form submitted for 
 	                                        <span class="text-bold" ng-if="vm.state.contact.first">{{vm.state.contact.first.toString()+' '+vm.state.contact.last.toString()}}</span>
 	                                        <span class="text-bold" ng-if="!vm.state.contact.first">{{vm.state.contact.details[0].emails[0].email}}</span>
 	                                    </div>	                                    
@@ -215,13 +215,13 @@
 	                                </div>
 	                                <div ng-switch-when="EMAIL_DELIVERED">
 	                                    <div class="activity-title col-xs-12 col-sm-8">
-	                                		EMAIL DELIVERED
+	                                		Email Delivered
 	                                	</div>
 	                                	<div class="text-muted text-small activity-time col-xs-12 col-sm-4">
 		                            		{{activity.start | date:'M/d @ h:mm a' | lowercase}}
 		                        		</div>		                        		
 	                                    <div class="col-xs-12 content-data">
-	                                        Email  
+	                                        Email delivered 
 	                                        <span ng-if='activity.extraFields[0].subject'>with subject "{{activity.extraFields[0].subject}}" to</span>
 	                                        <span ng-if='!activity.extraFields[0].subject'>to</span>
 	                                        <span class="text-bold" ng-if="vm.state.contact.first">{{vm.state.contact.first.toString()+' '+vm.state.contact.last.toString()}}</span>
@@ -234,13 +234,13 @@
 	                                </div>
 	                                <div ng-switch-when="EMAIL_OPENED">
 	                                    <div class="activity-title col-xs-12 col-sm-8">
-	                                		EMAIL OPENED
+	                                		Email Opened
 	                                	</div>
 	                                	<div class="text-muted text-small activity-time col-xs-12 col-sm-4">
 		                            		{{activity.start | date:'M/d @ h:mm a' | lowercase}}
 		                        		</div>		                        		
 	                                    <div class="col-xs-12 content-data">
-	                                        Email Opened 
+	                                        Email opened 
 	                                        <span ng-if='activity.extraFields[0].subject'>with subject "{{activity.extraFields[0].subject}}" by</span>
 	                                        <span ng-if='!activity.extraFields[0].subject'>by</span>
 	                                        <span class="text-bold" ng-if="vm.state.contact.first">{{vm.state.contact.first.toString()+' '+vm.state.contact.last.toString()}}</span>
@@ -254,13 +254,13 @@
 	                                </div>
 	                                <div ng-switch-when="EMAIL_CLICKED">
 	                                	<div class="activity-title col-xs-12 col-sm-8">
-	                                		EMAIL CLICKED
+	                                		Email Clicked
 	                                	</div>
 	                                	<div class="text-muted text-small activity-time col-xs-12 col-sm-4">
 		                            		{{activity.start | date:'M/d @ h:mm a' | lowercase}}
 		                        		</div>		                        		
 	                                    <div class="col-xs-12 content-data">
-	                                        Email Clicked 
+	                                        Email clicked 
 	                                        <span ng-if='activity.extraFields[0].subject'>with subject "{{activity.extraFields[0].subject}}" by</span>
 	                                        <span ng-if='!activity.extraFields[0].subject'>by</span>
 	                                        <span class="text-bold" ng-if="vm.state.contact.first">{{vm.state.contact.first.toString()+' '+vm.state.contact.last.toString()}}</span>
@@ -274,13 +274,13 @@
 	                                </div>
 	                                <div ng-switch-when="EMAIL_UNSUB">
 	                                	<div class="activity-title col-xs-12 col-sm-8">
-	                                		EMAIL UNSUBSCRIBE
+	                                		Email Unsubscribe
 	                                	</div>
 	                                	<div class="text-muted text-small activity-time col-xs-12 col-sm-4">
 		                            		{{activity.start | date:'M/d @ h:mm a' | lowercase}}
 		                        		</div>		                        		
 	                                    <div class="col-xs-12 content-data">
-	                                        Email Unsubscribe for 
+	                                        Email unsubscribe for 
 	                                        <span class="text-bold" ng-if="vm.state.contact.first">{{vm.state.contact.first.toString()+' '+vm.state.contact.last.toString()}}</span>
 	                                        <span class="text-bold" ng-if="!vm.state.contact.first">{{vm.state.contact.details[0].emails[0].email}}</span>
 	                                        <p ng-if="activity.detail">
@@ -291,13 +291,13 @@
 	                                </div>
 	                                <div ng-switch-when="SUBSCRIPTION_PAID">
 	                                	<div class="activity-title col-xs-12 col-sm-8">
-	                                		SUBSCRIPTION PAID
+	                                		Subscription Paid
 	                                	</div>
 	                                	<div class="text-muted text-small activity-time col-xs-12 col-sm-4">
 		                            		{{activity.start | date:'M/d @ h:mm a' | lowercase}}
 		                        		</div>		                        		
 	                                    <div class="col-xs-12 content-data">
-	                                        Subscription Paid for 
+	                                        Subscription paid for 
 	                                        <span class="text-bold" ng-if="vm.state.contact.first">{{vm.state.contact.first.toString()+' '+vm.state.contact.last.toString()}}</span>
 	                                        <span class="text-bold" ng-if="!vm.state.contact.first">{{vm.state.contact.details[0].emails[0].email}}</span>
 	                                        
@@ -309,13 +309,13 @@
 	                                </div>
 	                                <div ng-switch-when="EMAIL_BOUNCED">
 	                                    <div class="activity-title col-xs-12 col-sm-8">
-	                                		Email Bounced
+	                                		Email bounced
 	                                	</div>
 	                                	<div class="text-muted text-small activity-time col-xs-12 col-sm-4">
 		                            		{{activity.start | date:'M/d @ h:mm a' | lowercase}}
 		                        		</div>		                        		
 	                                    <div class="col-xs-12 content-data">
-	                                       Email Bounced for 
+	                                       Email bounced for 
 	                                        <span class="text-bold">'{{activity.email}}'</span>
 	                                    </div>
 	                                    <div class="clearfix"></div>       
