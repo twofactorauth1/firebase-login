@@ -100,6 +100,8 @@ _.extend(api.prototype, baseApi.prototype, {
         app.post(this.url('importcsv'), this.isAuthApi.bind(this), this.importCsvContacts.bind(this));
         app.get(this.url('export/csv'), this.isAuthApi.bind(this), this.exportCsvContacts.bind(this));
         app.post(this.url('import/csv'), this.secureauth.bind(this, {requiresSub:true, requiresPriv:'MODIFY_CONTACT'}), this.importCSV.bind(this));
+        app.post(this.url(':id/photo'), this.secureauth.bind(this, {requiresSub:true, requiresPriv:'MODIFY_CONTACT'}), this.updateContactPhoto.bind(this));
+        app.get(this.url(':id/notes'), this.secureauth.bind(this, {requiresSub:true, requiresPriv:'VIEW_CONTACT'}), this.getContactNotes.bind(this));
     },
 
     getMyIp: function(req, resp) {
@@ -172,18 +174,86 @@ _.extend(api.prototype, baseApi.prototype, {
 
     addContactNotes: function (req, resp) {
         var self = this;
-        var note = req.body.note.note_value;
-        var emailTo = req.body.note.sendTo;
-        var fromEmail = req.body.note.fromEmail;
-        var fromName = req.body.note.fromName;
-
+        var note = req.body.emailData.note_value;
+        var emailTo = req.body.emailData.sendTo;
+        var fromEmail = req.body.emailData.fromEmail;
+        var fromName = req.body.emailData.fromName;
+        var user_note = req.body.note;
         var accountId = parseInt(self.accountId(req));
+        var contactId = req.params.id;
+        contactId = parseInt(contactId);
         self.checkPermissionForAccount(req, self.sc.privs.MODIFY_CONTACT, accountId, function(err, isAllowed) {
             if (isAllowed !== true) {
                 return self.send403(resp);
             } else {
-                if(req.body.note.enable_note)
-                    self._sendNoteEmail(note, accountId, emailTo, fromEmail, fromName);
+                contactDao.getContactById(accountId, contactId, function(err, contact) {
+                    self.log.debug('<< getContactById');
+                    if(!err && !contact) {
+                        self.wrapError(resp, 404, null, 'Contact not found.', 'Contact not found.');
+                    }else {
+                        var _notes = contact.get("notes") || [];
+                        _notes.push(user_note);
+                        contact.set("notes", _notes);
+                        contactDao.saveOrUpdateContact(contact, function (err, value) {
+                            if (!err) {
+                                self.log.debug('>> saveOrUpdate', value);
+                                self.sendResult(resp, value);
+                                if(req.body.sendEmailToContact)
+                                    self._sendNoteEmail(note, accountId, emailTo, fromEmail, fromName);                            
+                            } else {
+                                self.wrapError(resp, 500, "There was an error updating contact", err, value);
+                            }
+                        });
+                    }
+                });
+                
+            }
+        });
+    },
+
+    getContactNotes: function(req, resp){
+        var self = this;
+        var contactId = req.params.id;
+        contactId = parseInt(contactId);
+        var accountId = parseInt(self.accountId(req));
+        contactDao.getContactById(accountId, contactId, function(err, contact) {
+            self.log.debug('<< getContactById');
+            if(!err && !contact) {
+                self.wrapError(resp, 404, null, 'Contact not found.', 'Contact not found.');
+            }else {
+                var _notes = contact.get("notes") || [];
+                var userIDMap = {};
+                async.each(_notes, function(note, callback){
+                    if(userIDMap[note.user_id]) {
+                        var _user = userIDMap[note.user_id];
+                        note.user = _user;
+                        callback();
+                    }
+                    else{
+                        userManager.getUserById(note.user_id, function(err, user){
+                            if(err) {
+                                log.error(accountId, userId, 'Error getting user:', err);
+                                //return anyway
+                                callback();
+                            } else {
+                                if(user){
+                                    var _user = {
+                                        _id: user.get("_id"),
+                                        username: user.get("username"),
+                                        first: user.get("first"),
+                                        last: user.get("last"),
+                                        user_profile_photo: user.get("profilePhotos") && user.get("profilePhotos")[0] ? user.get("profilePhotos")[0] : ''
+                                    };
+                                    userIDMap[note.user_id] = _user;
+                                    note.user = _user; 
+                                } 
+                                callback();
+                            }
+                        });
+                    }
+                }, function(err){
+                    self.sendResultOrError(resp, err, _notes, 'There was an error getting contact notes');
+                });
             }
         });
     },
@@ -257,6 +327,39 @@ _.extend(api.prototype, baseApi.prototype, {
             } else {
                 self.log.debug('contacts ', contact);
                 self.sendResult(resp, {ok:true})
+            }
+        });
+
+    },
+
+    updateContactPhoto: function (req, resp) {
+        var self = this;
+        self.log.debug('>> updateContactPhoto');
+        var accountId = parseInt(self.currentAccountId(req));
+
+        var url = req.body.url;
+        var contactId = req.params.id;
+        contactId = parseInt(contactId);
+        self.checkPermissionForAccount(req, self.sc.privs.MODIFY_CONTACT, accountId, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(resp);
+            } else {
+                contactDao.getContactById(accountId, contactId, function(err, contact) {
+                    self.log.debug('<< getContactById');
+                    if(!err && !contact) {
+                        self.wrapError(resp, 404, null, 'Contact not found.', 'Contact not found.');
+                    }else {
+                        contact.set("photo", url);
+                        contactDao.saveOrUpdateContact(contact, function (err, value) {
+                            if (!err) {
+                                self.log.debug('>> saveOrUpdate', value);
+                                self.sendResult(resp, value);                                
+                            } else {
+                                self.wrapError(resp, 500, "There was an error updating contact", err, value);
+                            }
+                        });
+                    }
+                });
             }
         });
 
