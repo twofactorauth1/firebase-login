@@ -58,8 +58,11 @@ function contactDetailsController($scope, $state, $window, $modal, $stateParams,
     
     //if(vm.state.contact){
     	$scope.$watchGroup(['vm.state.contact.first', 'vm.state.contact.middle', 'vm.state.contact.last'], _.debounce(function(id) {    	
-    		if(id[0] || id[1] || id[2])
-        		vm.state.fullName = [vm.state.contact.first, vm.state.contact.middle, vm.state.contact.last].join(' ').trim();
+    		if(id[0] || id[1] || id[2]){
+    			$timeout(function() {
+    				vm.state.fullName = [vm.state.contact.first, vm.state.contact.middle, vm.state.contact.last].join(' ').trim();
+    			}, 0);
+    		}
     	}, 1000), true);
     //}
 
