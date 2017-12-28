@@ -1747,15 +1747,27 @@ module.exports = {
                                 }
 
                                 // update global sections to set global as false
+                                var sectionsDeleted = [];
                                 _.each(sectionsToBeDeleted, function(section){
-                                    section.set("global", false);
-                                    section.set('modified', {
+                                    var deletedId = section.id();
+                                    var updatedSectionData
+                                    var foundSection = _.find(updatedSections, function(eSection){
+                                        return (eSection.id() === deletedId );
+                                    });
+                                    if(foundSection){
+                                        updatedSectionData=foundSection;
+                                    }else{
+                                        updatedSectionData=section;
+                                    }
+                                    updatedSectionData.set("global", false);
+                                    updatedSectionData.set('modified', {
                                         date: new Date(),
                                         by: userId
                                     });
+                                    sectionsDeleted.push(updatedSectionData)
                                 });
 
-                                sectionDao.batchUpdate(sectionsToBeDeleted, $$.m.ssb.Section, function(err, sectionAry){
+                                sectionDao.batchUpdate(sectionsDeleted, $$.m.ssb.Section, function(err, sectionAry){
                                     if(err) {
                                         self.log.error(accountId, userId, 'Error updating global sections:', err);
                                         cb(err);
