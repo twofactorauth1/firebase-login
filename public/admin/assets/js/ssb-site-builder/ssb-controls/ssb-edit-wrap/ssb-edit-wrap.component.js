@@ -257,8 +257,9 @@ function ssbEditWrap($rootScope, $compile, $timeout, SimpleSiteBuilderService,Ut
                         }
 
                         //show edit-control for this section|component|element
-                        if (isSection) {
-
+                        if (isSection) { 
+                            angular.element('li.nav-active').removeClass("nav-active");
+							angular.element('section.overflow_visible').removeClass("overflow_visible");
                             handleSectionClick(e, el);
 
                         } else if (isComponent) {

@@ -3,8 +3,8 @@
 /* eslint-disable no-console */
 (function (angular) {
 	"use strict";
-	app.controller('CustomerDetailCtrl', ["$scope", "$rootScope", "$location", "$modal", "toaster", "$stateParams", "CustomerService", 'ContactService', 'SweetAlert', '$state', '$window', '$timeout', 'formValidations', 'UserService', function ($scope, $rootScope, $location, $modal, toaster, $stateParams, customerService, contactService, SweetAlert, $state, $window, $timeout, formValidations, UserService) {
-		$scope.isDomainChanged = false;
+	app.controller('CustomerDetailCtrl', ["$scope", "$rootScope", "$location", "$modal", "toaster", "$stateParams", "CustomerService", 'ContactService', 'SweetAlert', '$state', '$window', '$timeout', 'formValidations', 'UserService', 'OrganizationService', function ($scope, $rootScope, $location, $modal, toaster, $stateParams, customerService, contactService, SweetAlert, $state, $window, $timeout, formValidations, UserService, OrganizationService) {
+        $scope.isDomainChanged = false;
 		$scope.cancelaccount = {
 			cancelNow: false
 		};
@@ -64,8 +64,11 @@
 
 				$scope.matchUsers(customer);
 				$scope.originalCustomer = angular.copy($scope.customer);
-				$scope.subdomainURL = $scope.generateSubdomainURL($scope.data.subdomain);
-				$scope.dataloaded = true;
+				$scope.generateSubdomainURL($scope.data.subdomain, $scope.customer, function(url){
+                 $scope.subdomainURL = url;
+                 $scope.dataloaded = true;
+                });
+
 			});
 
 		};
@@ -122,12 +125,33 @@
 				fn();
 			}
 		};
+        $scope.getSubdomain = function(hostname) {
+                var regexParse = new RegExp('[a-z\-0-9]{2,63}\.[a-z\.]{2,5}$');
+                var urlParts = regexParse.exec(hostname);
+                return hostname.replace(urlParts[0],'').slice(0, -1);
+        }
+		$scope.generateSubdomainURL = function (subdomain, customer, fn) {
+            var orgId = customer.orgId || 0;
+            OrganizationService.loadOrganizations(function(organizations){
+                var orgData = organizations.filter(function(org) {
+                      return org._id === orgId;
+                    })[0];
 
-		$scope.generateSubdomainURL = function (subdomain) {
-			var _subdomain = location.host.split(".")[0];
-			var url = $location.protocol() + '://' + location.host.replace(_subdomain, subdomain);
-			return url;
-		};
+            var url = '';
+            var get_subdomain = $scope.getSubdomain($location.host());
+            var _subdomain = location.host.split(".")[0];
+            subdomain = get_subdomain.replace(_subdomain, subdomain);
+
+            if(orgData.signupSettings && orgData.signupSettings.suffix !== undefined){
+               url = $location.protocol() + '://' + subdomain+ '.' + orgData.signupSettings.suffix;
+            }
+            else{
+               url = $location.protocol() + '://' + subdomain+ '.' + 'indigenous.io';
+            }
+            fn(url);
+
+           });
+ 		};
 
 		$scope.displayAddressFormat = function (address) {
 			return _.filter([address.address, address.address2, address.city, address.state, address.zip], function (str) {

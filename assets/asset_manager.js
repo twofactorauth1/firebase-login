@@ -270,8 +270,8 @@ module.exports = {
         
         if(filterType){
             var typeMimes = {
-                image: ['image/png', 'image/jpeg', 'image/gif', 'image/*'],
-                video: ['video/mpeg', 'video/mp4', 'video/webm', 'video/x-flv', 'video/x-ms-wmv', 'video/*' ],
+                image: ['image/png', 'image/jpeg', 'image/gif', 'image/*' ,'image/x-ms-bmp','image/svg+xml'],
+                video: ['video/mpeg', 'video/mp4', 'video/webm', 'video/x-flv', 'video/x-ms-wmv', 'video/*','video/quicktime' ],
                 audio: ['audio/mpeg', 'audio/mp3', 'audio/*'],
                 document: ['application/octet-stream', 'application/pdf', 'text/plain']
             };

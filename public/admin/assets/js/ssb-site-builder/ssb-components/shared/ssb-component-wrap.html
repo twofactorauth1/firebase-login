@@ -45,12 +45,20 @@
 	                             class="bg"
 	                             ng-style="{'background': vm.component.bg.color}"></div>
 
-	                        <div id="px-ele-{{vm.component._id}}" ng-if="vm.component.bg.img.show"
+	                        <div id="px-ele-{{vm.component._id}}" ng-if="vm.component.bg.img.show && !vm.component.bg.img.parallax "
 	                             class="bg"
-	                             ng-class="{parallax:vm.component.bg.img.parallax,
-	                                'blur-image':vm.component.bg.img.blur}"
-	                             {{vm.component.bg.img.parallax ? parallax-background : ""}}
-	                             ng-attr-parallax-ratio="{{vm.component.bg.img.parallax ? '0.4' : '1'}}"
+	                             ng-class="{'blur-image':vm.component.bg.img.blur}"  
+	                             ng-attr-style='
+	                                background: url("{{vm.component.bg.img.url}}") repeat-y;
+	                                background-size: cover;
+	                                background: {{vm.component.bg.img.url}};'
+	                                >
+							</div>
+							<div id="px-ele-{{vm.component._id}}" ng-if="vm.component.bg.img.show && vm.component.bg.img.parallax "
+	                             class="bg parallax"
+								 ng-class="{'blur-image':vm.component.bg.img.blur}"
+								  parallax-background 
+	                             ng-attr-parallax-ratio="0.4"
 	                             ng-attr-style='
 	                                background: url("{{vm.component.bg.img.url}}") repeat-y;
 	                                background-size: cover;

@@ -25,7 +25,7 @@ _.extend(api.prototype, baseApi.prototype, {
     dao: dao,
 
     initialize: function () {
-        
+
         app.get(this.url('all'), this.isAuthAndSubscribedApi.bind(this), this.listAllOrganizations.bind(this));
         app.get(this.url(':id'), this.isAuthApi.bind(this), this.getOrganizationById.bind(this));
     },
@@ -75,8 +75,7 @@ _.extend(api.prototype, baseApi.prototype, {
             }
         });
 
-    },
-
+    }
 
 });
 
