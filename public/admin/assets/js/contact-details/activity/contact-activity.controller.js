@@ -14,7 +14,7 @@ function contactActivityController($scope, $state, $window, $modal, $stateParams
             type: 'all',
             sort: 'desc'
         },
-        contactConstant: contactConstant
+        contactConstant: angular.copy(contactConstant)
     };
     vm.state.contactConstant.contact_activity_types.dp.push({
         data: 'USER_NOTES',
