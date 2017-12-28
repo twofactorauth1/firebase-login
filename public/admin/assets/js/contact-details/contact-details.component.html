@@ -380,29 +380,7 @@
             </div>
         </div>
         <!-- contact timeline/notes pane -->
-        <div class="col-xs-12 col-sm-6 contact-details-right-pane">
-            <div class="panel panel-white hidden" id="notes">
-                <div class="panel-heading border-light">
-                    <h4 class="panel-title">Contact <span class="text-bold">Notes</span></h4>
-                    <ct-paneltool class="panel-tools" tool-collapse="tool-collapse"></ct-paneltool>
-                </div>
-                <div class="panel-wrapper customer-detail" collapse="notes" ng-init="notes=false">
-                    <div class="panel-body no-padding">
-                        <ul class="notes panel-scroll" perfect-scrollbar wheel-propagation="false" suppress-scroll-x="true">
-                            <li ng-repeat="note in vm.state.contact.notes">
-                                <div class="col-xs-2">
-                                    <img src="{{note.user_profile_photo.url ? note.user_profile_photo.url : note.user_profile_photo ? note.user_profile_photo : '/admin/assets/images/default-user.png'}}" class="img-circle pull-left" width="32">
-                                </div>
-                                <div class="col-xs-10">
-                                    <span class="text-small block text-light">{{note.user.first}} {{note.user.last}} <span class="pull-right">{{note.date | date:'dd MMM yy'}}</span></span>
-                                    <span class="user-notes" ng-bind-html="note.note"></span>
-                                </div>
-                                <div class="clearfix"></div>
-                            </li>
-                         </ul>
-                    </div>
-                </div>
-            </div>
+        <div class="col-xs-12 col-sm-6 contact-details-right-pane">       
             <contact-activity-component contact-id="vm.state.contactId" contact="vm.state.contact" ng-if="vm.state.contact"></contact-activity-component>
         </div>
         <div class="clearfix"></div>

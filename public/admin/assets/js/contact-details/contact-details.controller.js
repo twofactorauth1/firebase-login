@@ -55,11 +55,13 @@ function contactDetailsController($scope, $state, $window, $modal, $stateParams,
     		getMapData();
     	})    	
     }
-
-    $scope.$watchGroup(['vm.state.contact.first', 'vm.state.contact.middle', 'vm.state.contact.last'], _.debounce(function(id) {
-    	if(vm.state.contact)
-        	vm.state.fullName = [vm.state.contact.first, vm.state.contact.middle, vm.state.contact.last].join(' ').trim();
-    }, 1000), true);
+    
+    //if(vm.state.contact){
+    	$scope.$watchGroup(['vm.state.contact.first', 'vm.state.contact.middle', 'vm.state.contact.last'], _.debounce(function(id) {    	
+    		if(id[0] || id[1] || id[2])
+        		vm.state.fullName = [vm.state.contact.first, vm.state.contact.middle, vm.state.contact.last].join(' ').trim();
+    	}, 1000), true);
+    //}
 
 	function getMapData() {
 		var _firstAddress;

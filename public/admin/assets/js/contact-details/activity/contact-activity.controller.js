@@ -140,7 +140,13 @@ function contactActivityController($scope, $state, $window, $modal, $stateParams
         if(note){            
             note.start = note.date;
             note.activityType = "USER_NOTES";
-            note.user = $scope.$parent.currentUser;
+            note.user = {
+                _id: $scope.$parent.currentUser._id,
+                username: $scope.$parent.currentUser.username,
+                first: $scope.$parent.currentUser.first,
+                last: $scope.$parent.currentUser.last,
+                user_profile_photo: $scope.$parent.currentUser.profilePhotos && $scope.$parent.currentUserprofilePhotos[0] ? $scope.$parent.currentUser.profilePhotos[0] : {}
+            }
             activities.push(note);
         }       
         else if (notes && notes.length > 0) {
