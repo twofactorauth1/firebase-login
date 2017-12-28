@@ -145,7 +145,7 @@ function contactActivityController($scope, $state, $window, $modal, $stateParams
                 username: $scope.$parent.currentUser.username,
                 first: $scope.$parent.currentUser.first,
                 last: $scope.$parent.currentUser.last,
-                user_profile_photo: $scope.$parent.currentUser.profilePhotos && $scope.$parent.currentUserprofilePhotos[0] ? $scope.$parent.currentUser.profilePhotos[0] : {}
+                user_profile_photo: $scope.$parent.currentUser.profilePhotos && $scope.$parent.currentUser.profilePhotos[0] ? $scope.$parent.currentUser.profilePhotos[0] : {}
             }
             activities.push(note);
         }       
