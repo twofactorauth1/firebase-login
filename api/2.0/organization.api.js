@@ -27,7 +27,7 @@ _.extend(api.prototype, baseApi.prototype, {
     initialize: function () {
 
         app.get(this.url('all'), this.isAuthAndSubscribedApi.bind(this), this.listAllOrganizations.bind(this));
-
+        app.get(this.url(':id'), this.isAuthApi.bind(this), this.getOrganizationById.bind(this));
     },
 
 
@@ -48,10 +48,35 @@ _.extend(api.prototype, baseApi.prototype, {
                 self.sendResultOrError(resp, err, _(organization).toArray(), 'Error listing organization');
             });
         }
+    },
 
+    getOrganizationById: function(req, resp) {
 
+        var self = this;
+        var orgId = req.params.id;
+        var accountId = parseInt(self.accountId(req));
+        if (!orgId) {
+            this.wrapError(resp, 400, null, "Invalid parameter for ID");
+        }
+
+        orgId = parseInt(orgId);
+        var userId = self.userId(req);
+        self.checkPermissionForAccount(req, self.sc.privs.VIEW_ACCOUNT, accountId, function(err, isAllowed){
+            if(isAllowed !== true) {
+                return self.send403(resp);
+            } else {
+                manager.getOrgById(accountId, userId, orgId, function(err, value) {
+                    if (!err && value != null) {
+                        self.sendResultOrError(resp, err, value, "Error Retrieving Organization by Id");
+                    } else {
+                        self.wrapError(resp, 500, null, err, value);
+                    }
+                });
+            }
+        });
 
     }
+
 });
 
 module.exports = new api({version:'2.0'});

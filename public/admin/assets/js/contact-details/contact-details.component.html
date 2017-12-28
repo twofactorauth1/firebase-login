@@ -1,0 +1,410 @@
+<div class="container-fluid container-fullw">
+    <div class="loading-contacts" ct-fullheight="window" data-ct-fullheight-exclusion="header" ng-show="vm.uiState.loading">
+        <div class="col-xs-12">
+            <h1 class="center"><span class="fa fa-spinner fa-spin"></span><br><br>
+             Loading...
+            </h1>
+        </div>
+    </div>
+    <div ng-show="!vm.uiState.loading" class="bg-white" style="
+        border: 1px solid #eee;">
+        <!-- contact details pane -->
+        <div class="col-xs-12 col-sm-6 contact-details-left-pane">
+            <div class="contact-profile-stats">
+                <div class="margin-top-20">
+                    <div class="contact-image col-xs-5">
+                        <div class="margin-bottom-5">
+                            <img ng-src="{{ vm.state.contact.photo }}" err-src="/admin/assets/images/default-user.png">
+                            <span class="fa fa-2x fa-edit" ng-click="vm.openMediaModal()"></span>
+                        </div>
+                    </div>
+                    <div class="col-xs-7">
+                        <h3>{{vm.state.fullName || 'No Contact Name'}}</h3>
+                        <span>{{vm.state.contact.details[0].company}}</span>
+                        <div class="contact-social-icons">
+                            <ul class="">
+                                <li class="website-icon">
+                                    <a ng-if="vm.state.contact.details[0].websites[0].website" href="{{vm.state.contact.details[0].websites[0].website}}" target="_blank">
+                                       <span class="ti-world "></span>
+                                    </a>
+                                    <a ng-if="!vm.state.contact.details[0].websites[0].website" href="javascript:void(0)" ng-click="vm.editContactMode('website')">
+                                       <span class="ti-world gray-bg-color"></span>
+                                    </a>
+
+                                </li>
+                                <li>
+                                    <a ng-if="vm.state.contact.details[0].linkedinUrl" href="{{vm.state.contact.details[0].linkedinUrl}}" target="_blank">
+                                       <span class="fa fa-linkedin btn-linkedin"></span>
+                                    </a>
+                                    <a ng-if="!vm.state.contact.details[0].linkedinUrl" href="javascript:void(0)" ng-click="vm.editContactMode('linkedin')">
+                                       <span class="fa fa-linkedin btn-linkedin gray-bg"></span>
+                                    </a> 
+                                </li>
+                                <li>
+                                    <a ng-if="vm.state.contact.details[0].facebookUrl" href="{{vm.state.contact.details[0].facebookUrl}}" target="_blank">
+                                       <span class="fa fa-facebook btn-facebook"></span>
+                                    </a>
+                                    <a ng-if="!vm.state.contact.details[0].facebookUrl" href="javascript:void(0)" ng-click="vm.editContactMode('facebook')">
+                                       <span class="fa fa-facebook btn-facebook gray-bg"></span>
+                                    </a>
+                                </li>
+                                <li></li>
+                            </ul>
+                        </div>
+                        <div class="account-info margin-top-30">
+                            <span>Account</span>: {{vm.state.organization.name}}
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+                
+                <div class="contact-stats col-xs-12 margin-top-20 margin-bottom-20 hidden">
+                    <div class="sessions">
+                        <span class="description">
+                            Sessions
+                        </span>
+                        <span class="value">4</span>
+                    </div>
+                    <div class="page-views">
+                        <span class="description">
+                            Page Views
+                        </span>
+                        <span class="value">18</span>
+                        
+                    </div>
+                    <div class="session-duration">
+                        <span class="description">
+                            Session Duration
+                        </span>
+                        <span class="value">4:18</span>
+                    </div>
+                    <div class="clicks">
+                        <span class="description">
+                            Clicks
+                        </span>
+                        <span class="value">34</span>
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+            
+            <div class="contact-details-tab">
+                <tabset class="tabbable">
+                    <tab heading="Contact Details">
+                        <div ng-if="!vm.uiState.isEditMode">
+                            <div class="col-xs-12 visible-xs">
+                                <button type="button" class="btn btn-primary btn-o pull-right btn btn-primary btn-o" ng-click="vm.editContactDetails()">
+                                    Add Or Edit
+                                </button>
+                            </div>
+                            <div class="col-xs-12 col-sm-7">
+                                <div class="details">
+                                    <span class="full-name">
+                                        {{vm.state.fullName}}                                
+                                    </span>
+                                    <ul class="contact-tags" >
+                                        <li ng-repeat="tag in vm.state.contact.tags track by $index">
+                                            <a class="btn btn btn-o btn-primary">{{tag.label}}</a>
+                                        </li>
+                                    </ul>
+                                    <span>{{vm.state.contact.gender}}</span>
+                                </div>
+                                <div class="details" ng-if="vm.state.contact.details[0].emails[0].email">
+                                    <span class="description">
+                                        email:
+                                    </span>
+                                    <span class="value">
+                                        {{vm.state.contact.details[0].emails[0].email}}
+                                    </span>
+                                </div>
+                                <div class="details" ng-if="vm.state.contact.details[0].phones[0].number">
+                                    <span class="description">
+                                        Phone:
+                                    </span>
+                                    <span class="value">
+                                        {{vm.state.contact.details[0].phones[0].number}}
+                                    </span>
+                                </div>
+                                <div class="details" ng-if="vm.state.contact.details[0].websites[0].website">
+                                    <span class="description">
+                                        Website URL:
+                                    </span>
+                                    <span class="value">
+                                        {{vm.state.contact.details[0].websites[0].website}}
+                                    </span>
+                                </div>
+                                <div class="details" ng-if="vm.state.contact.details[0].facebookUrl">
+                                    <span class="description">
+                                        Facebook URL:
+                                    </span>
+                                    <span class="value">
+                                        {{vm.state.contact.details[0].facebookUrl}}
+                                    </span>
+                                </div>
+                                <div class="details" ng-if="vm.state.contact.details[0].linkedinUrl">
+                                    <span class="description">
+                                        Linkedin URL:
+                                    </span>
+                                    <span class="value">
+                                        {{vm.state.contact.details[0].linkedinUrl}}
+                                    </span>
+                                </div>
+                                <div class="details" ng-if="vm.state.contact.details[0].company">
+                                    <span class="description">
+                                        Company Name:
+                                    </span>
+                                    <span class="value">
+                                        {{vm.state.contact.details[0].company}}
+                                    </span>
+                                </div>
+                                <div class="details">
+                                    <span class="description address-desc">
+                                        Address:
+                                    </span>
+                                    <span class="value address-value" ng-bind-html="vm.renderAddressFormat(vm.state.contact.details[0].addresses[0])">
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-5 address-pane">
+                                <button type="button" class="btn btn-primary btn-o pull-right btn btn-primary btn-o hidden-xs" ng-click="vm.editContactDetails()">
+                                    Add Or Edit
+                                </button>  
+                            </div>
+                        </div>
+                        <div ng-if="vm.uiState.isEditMode" class="edit-contact-info">
+                            <form action="#" name="form" role="form" id="form">
+                                <div class="col-xs-12">
+                                    <div class="col-xs-12">
+                                        <button type="button" ng-disabled="vm.uiState.saveLoading" class="btn btn-primary btn-o pull-right btn btn-primary btn-o" ng-click="vm.cancelContactDetails()">
+                                            Cancel
+                                        </button>
+                                        <button type="button" ng-disabled="vm.uiState.saveLoading" class="btn btn-primary btn-o pull-right btn btn-primary btn-o margin-right-5" ng-click="vm.saveContactDetails()">
+                                            Save
+                                        </button>
+                                        
+                                    </div>
+                                    <div class="form-group col-xs-6">
+                                        <label class="control-label">
+                                            First Name
+                                        </label>
+                                       <input type="text" placeholder="First Name" class="form-control" ng-model="vm.state.contact.first">                                   
+                                    </div>
+                                    <div class="form-group col-xs-6">
+                                        <label class="control-label">
+                                            Last Name
+                                        </label>
+                                       <input type="text" placeholder="Last Name" class="form-control" ng-model="vm.state.contact.last">          
+                                    </div>
+                                    <div class="form-group col-xs-6">
+                                        <label class="control-label">
+                                            Middle Name
+                                        </label>
+                                       <input type="text" placeholder="Middle Name" class="form-control" ng-model="vm.state.contact.middle">
+                                    </div>
+                                    <div class="form-group col-xs-6">
+                                        <label class="control-label">
+                                            Gender
+                                        </label>
+                                        <div class="clip-radio radio-primary">
+                                            <input type="radio" ng-checked="vm.state.contact.gender.toLowerCase() == 'female'" id="us-female" name="gender" value="female" ng-model="vm.state.contact.gender">
+                                            <label for="us-female">
+                                                Female
+                                            </label>
+                                            <input type="radio" ng-checked="vm.state.contact.gender.toLowerCase() == 'male'" id="us-male" name="gender" value="male" ng-model="vm.state.contact.gender">
+                                            <label for="us-male">
+                                                Male
+                                            </label>
+                                            <input type="radio" ng-checked="vm.state.contact.gender.toLowerCase() == 'other'" id="us-other" name="gender" value="other" ng-model="vm.state.contact.gender">
+                                            <label for="us-other">
+                                                Other
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-xs-12">
+                                        <label class="control-label">
+                                            Tags
+                                        </label>
+                                        <ui-select tagging="vm.tagToContact" tagging-match-to-key="label" multiple ng-model="vm.state.contact.tags" theme="bootstrap" ng-disabled="disabled">
+                                            <ui-select-match placeholder="Select tags...">{{$item.label}}</ui-select-match>
+                                            <ui-select-choices repeat="tag in vm.contactTags | orderBy:'label' | filter:$select.search">
+                                                {{tag.label}}
+                                            </ui-select-choices>
+                                        </ui-select>
+                                    </div>
+                                    <div class="form-group col-xs-12">
+                                        <label class="control-label">
+                                            Email Address
+                                        </label>                                   
+                                        <div class="form-group" ng-class="{ 'has-error' : form.email_{{$index}}.$invalid}" ng-repeat="email in vm.state.contact.details[0].emails  track by $index">
+                                            <span class="input-icon input-icon-right">
+                                                <input type="email"  ng-pattern="formValidations.email" placeholder="Email address" class="form-control" name="email_{{$index}}" ng-model="vm.state.contact.details[0].emails[$index].email">
+                                                <p ng-show="form.email_{{$index}}.$invalid" class="help-block">Enter a valid email.</p>
+                                                <i ng-if="vm.showAddEmail(email)" ng-click="vm.contactAddEmailFn()" class="ti-plus"></i>
+                                                <i ng-if="!vm.showAddEmail(email)" ng-click="vm.removeEmail($index)" class="ti-minus"></i>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-xs-8">
+                                        <label class="control-label">
+                                            Phone Number
+                                        </label>                                    
+                                        <div class="form-group" ng-repeat="phone in vm.state.contact.details[0].phones track by $index">
+                                            <span class="input-icon input-icon-right">
+                                                <input type="text" placeholder="Phone number" class="form-control" name="phone_{{$index}}" ng-model="vm.state.contact.details[0].phones[$index].number" ind-international-tel-number form="form" phone-field="true">               
+                                                <i ng-if="vm.showAddPhone(phone)" ng-click="vm.contactAddPhoneFn()" class="ti-plus"></i>
+                                                <i ng-if="!vm.showAddPhone(phone)" ng-click="vm.removePhone($index)" class="ti-minus"></i>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-xs-4">
+                                        <label class="control-label">
+                                            Extension
+                                        </label>                                    
+                                        <div class="form-group" ng-repeat="phone in vm.state.contact.details[0].phones track by $index">
+                                            <input type="text" placeholder="Extension" class="form-control" ng-pattern="formValidations.extension" name="extension_{{$index}}" ng-model="vm.state.contact.details[0].phones[$index].extension">
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-xs-12">
+                                        <label class="control-label">
+                                            Website URL
+                                        </label>                                   
+                                        <div class="form-group" ng-repeat="website in vm.state.contact.details[0].websites track by $index">
+                                            <span class="input-icon input-icon-right">
+                                                <input type="text" placeholder="Website URL" class="form-control" name="website_{{$index}}" id="website_{{$index}}" ng-model="vm.state.contact.details[0].websites[$index].website">  
+                                                <i ng-if="vm.showAddWebsite(website)" ng-click="vm.contactAddWebsiteFn()" class="ti-plus"></i>
+                                                <i ng-if="!vm.showAddWebsite(website)" ng-click="vm.removeWebsite($index)" class="ti-minus"></i>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-xs-12">
+                                        <label class="control-label">
+                                            Facebook URL
+                                        </label>
+                                       <input type="text" placeholder="Facebook Url" class="form-control" name="facebook_0" id="facebook_0" ng-model="vm.state.contact.details[0].facebookUrl">          
+                                    </div>
+                                    <div class="form-group col-xs-12">
+                                        <label class="control-label">
+                                            Linkedin URL
+                                        </label>
+                                       <input type="text" placeholder="Linkedin Url" class="form-control" name="linkedin_0" id="linkedin_0" ng-model="vm.state.contact.details[0].linkedinUrl">          
+                                    </div>
+                                    <div class="form-group col-xs-12">
+                                        <label class="control-label">
+                                            Company Name
+                                        </label>
+                                       <input type="text" placeholder="Company Name" class="form-control" ng-model="vm.state.contact.details[0].company">          
+                                    </div>
+
+                                    <div class="col-xs-12 address-fields" ng-repeat="address in vm.state.contact.details[0].addresses track by $index"
+                                         ng-if="!($index>0 && address.displayName=='GEOIP')"
+                                         >
+                                        <div class="row">
+                                            <div class="col-xs-6">
+                                                <div class="form-group" ng-class="{'has-error':vm.uiState.errorMapData}">
+                                                    <label class="control-label">
+                                                        Address Line 1
+                                                    </label>
+                                                    <input class="form-control" placeholder="Address line 1" type="text" name="addressline1" ng-model="address.address">
+                                                </div>
+                                            </div>
+                                            <div class="col-xs-6">
+                                                <div class="form-group" ng-class="{'has-error':vm.uiState.errorMapData}">
+                                                    <label class="control-label">
+                                                        Address Line 2
+                                                    </label>
+                                                    <input class="form-control" placeholder="Address line 2" type="text" name="addressline2" ng-model="address.address2">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-xs-6">
+                                                <div class="form-group" ng-class="{'has-error':vm.uiState.errorMapData}">
+                                                    <label class="control-label">
+                                                        City
+                                                    </label>
+                                                    <input class="form-control" placeholder="Enter city" type="text" name="city" ng-model="address.city">
+                                                </div>
+                                            </div>
+                                            <div class="col-xs-6">
+                                                <div class="form-group" ng-class="{'has-error':vm.uiState.errorMapData}">
+                                                    <label class="control-label">
+                                                        State
+                                                    </label>
+                                                    <input class="form-control" placeholder="Enter state" type="text" name="state" ng-model="address.state">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-xs-6">
+                                                <div class="form-group" ng-class="{'has-error':vm.uiState.errorMapData}">
+                                                    <label class="control-label">
+                                                        Country
+                                                    </label>
+                                                    <input class="form-control" placeholder="Enter country" type="text" name="country" ng-model="address.country">
+                                                </div>
+                                            </div>
+                                            <div class="col-xs-6">
+                                                <div class="form-group" ng-class="{'has-error':vm.uiState.errorMapData}">
+                                                    <label class="control-label">
+                                                        Zip Code
+                                                    </label>
+                                                    <input class="form-control" placeholder="Enter postcode" type="text" name="zip" ng-model="address.zip">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <div ng-if="vm.showAddAddress(address)" class="btn btn-wide btn-o btn-primary pull-right" ng-click="vm.contactAddAddressFn()">Add another address</div>
+                                            <div ng-if="!vm.showAddAddress(address)" class="btn btn-wide btn-o btn-warning pull-right" ng-click="vm.removeAddress($index)">Remove address</div>
+                                        </div>
+                                        <div class="clearfix"></div>
+                                    </div>
+
+                                </div>
+                            </form>
+                        </div>
+                    </tab>
+                    <tab heading="Devices & Browser">
+                        Devices & Browser
+                    </tab>
+                    <tab heading="Location & Network" select="vm.resizeMap()">
+                        <div class="map margin-bottom-15">
+                            <map zoom="10" center="{{vm.state.location.lat}}, {{vm.state.location.lon}}" disable-default-u-i="true" scale-control="false" pan-control="false" zoom-control="false" class="height-330" ng-if="!vm.uiState.loadingMap && vm.state.location.lat" scrollwheel="false">
+                                <marker position="{{vm.state.location.lat}}, {{vm.state.location.lon}}"></marker>
+                            </map>
+                            <div class="load1 csspinner height-330" ng-if="vm.uiState.loadingMap"></div>
+                            <div class="height-330" ng-if="!vm.uiState.loadingMap && !vm.state.location.lat">
+                                <h4 class="center text-bold no-location">No Location</h4></div>
+                        </div>
+                    </tab>
+                </tabset>
+            </div>
+        </div>
+        <!-- contact timeline/notes pane -->
+        <div class="col-xs-12 col-sm-6 contact-details-right-pane">
+            <div class="panel panel-white hidden" id="notes">
+                <div class="panel-heading border-light">
+                    <h4 class="panel-title">Contact <span class="text-bold">Notes</span></h4>
+                    <ct-paneltool class="panel-tools" tool-collapse="tool-collapse"></ct-paneltool>
+                </div>
+                <div class="panel-wrapper customer-detail" collapse="notes" ng-init="notes=false">
+                    <div class="panel-body no-padding">
+                        <ul class="notes panel-scroll" perfect-scrollbar wheel-propagation="false" suppress-scroll-x="true">
+                            <li ng-repeat="note in vm.state.contact.notes">
+                                <div class="col-xs-2">
+                                    <img src="{{note.user_profile_photo.url ? note.user_profile_photo.url : note.user_profile_photo ? note.user_profile_photo : '/admin/assets/images/default-user.png'}}" class="img-circle pull-left" width="32">
+                                </div>
+                                <div class="col-xs-10">
+                                    <span class="text-small block text-light">{{note.user.first}} {{note.user.last}} <span class="pull-right">{{note.date | date:'dd MMM yy'}}</span></span>
+                                    <span class="user-notes" ng-bind-html="note.note"></span>
+                                </div>
+                                <div class="clearfix"></div>
+                            </li>
+                         </ul>
+                    </div>
+                </div>
+            </div>
+            <contact-activity-component contact-id="vm.state.contactId" contact="vm.state.contact"></contact-activity-component>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+</div>

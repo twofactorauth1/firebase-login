@@ -12,7 +12,8 @@ app.directive('contactActivity', ['$filter', 'ContactService', '$modal', 'contac
             currentPage: '=currentPage',
             numPerPage: '=numPerPage',
             contactId: "@contactId",
-            hideNewActivity: "@hideNewActivity"
+            hideNewActivity: "@hideNewActivity",
+            contact:'='
         },
         templateUrl: '/admin/assets/views/partials/activity.html',
         link: function(scope, element, attrs, controllers) {
@@ -86,7 +87,7 @@ app.directive('contactActivity', ['$filter', 'ContactService', '$modal', 'contac
 
                 ContactService.postContactActivity(scope.newActivity, function(activity) {
                     if(scope.singleContact) {
-                        activity.contact = scope.$parent.contact;
+                        activity.contact = scope.$parent.contact || scope.contact;
                     }
                     scope.all_activities.push(activity);
                     scope.all_activities = _.sortBy(scope.all_activities, function(o) {
