@@ -329,8 +329,8 @@ function contactDetailsController($scope, $state, $window, $modal, $stateParams,
 	function updateContactPhoto(url){
 		ContactService.updateContactPhoto(vm.state.contactId, url, function(data){
 			if(data){
-				vm.state.contact.photo = data.url;
-				vm.state.originalContact.photo = data.url;
+				vm.state.contact.photo = data.photo;
+				vm.state.originalContact.photo = data.photo;
 				toaster.pop('success', 'Image updated.');
 			}
 		})
