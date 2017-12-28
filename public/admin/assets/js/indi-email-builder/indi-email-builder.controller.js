@@ -252,7 +252,9 @@
                     $(window).trigger('resize');
                 }
                 vm.uiState.dataLoaded = true;
+                vm.uiState.showSectionPanel = false;
                 toaster.pop('warning', 'component deleted');
+
             }, 500);
         });
 
