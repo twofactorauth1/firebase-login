@@ -57,218 +57,310 @@
 		                	<i ng-if="activity.activityType !== 'USER_NOTES'" class="fa fa-1 fa-{{vm.getTimelineIcons(activity.activityType, true)}}"></i>
 		                	<img ng-if="activity.activityType === 'USER_NOTES'" src="{{activity.user.user_profile_photo.url ? activity.user.user_profile_photo.url : activity.user.user_profile_photo ? activity.user.user_profile_photo : '/admin/assets/images/default-user.png'}}" class="img-circle">
 		                    <div class="margin-left-30 padding-15 activity-content">
-		                        <div class="text-muted text-small">
-		                            {{activity.start | date:'MMM d, yy h:mm:ss a'}} {{getActivityName(activity.activityType)}}
-		                        </div>
-		                        <p>
-		                            <div ng-switch on="activity.activityType">
-		                                <div ng-switch-when="OTHER">
-		                                    <p>
-		                                        <span class="label label-default">OTHER</span> {{activity.detail}}
-		                                    </p>
-		                                </div>
-		                                <div ng-switch-when="EMAIL">
-		                                    <p>
-		                                        <span class="label label-default">EMAIL SENT</span> {{activity.detail}}
-		                                    </p>
-		                                    <p>
-		                                        An email was sent
-		                                    </p>
-		                                </div>
+	                            <div ng-switch on="activity.activityType" class="activity-inner-content">
+	                                <div ng-switch-when="OTHER">
+	                                    <div class="activity-title col-xs-12 col-sm-8">
+	                                		OTHER
+	                                	</div>
+	                                	<div class="text-muted text-small activity-time col-xs-12 col-sm-4">
+		                            		{{activity.start | date:'M d @ h:mm a' | lowercase}}
+		                        		</div>		                        		
+	                                    <div class="col-xs-12 content-data">
+	                                        {{activity.detail}}             
+	                                    </div>
+	                                    <div class="clearfix"></div>
+	                                </div>
+	                                <div ng-switch-when="EMAIL">
+	                                    <div class="activity-title col-xs-12 col-sm-8">
+	                                		EMAIL SENT
+	                                	</div>
+	                                	<div class="text-muted text-small activity-time col-xs-12 col-sm-4">
+		                            		{{activity.start | date:'M d @ h:mm a' | lowercase}}
+		                        		</div>		                        		
+	                                    <div class="col-xs-12 content-data">
+	                                        {{activity.detail}}             
+	                                    </div>
+	                                    <div class="clearfix"></div>
+	                                </div>
 
-		                                <div ng-switch-when="CONTACT_CREATED">
-		                                    <p>
-		                                        <span class="label label-info">CONTACT CREATED</span> for
-		                                        <span ng-if="!vm.state.contact">[deleted]</span>
-		                                        <span ng-if="vm.state.contact.first">{{vm.state.contact.first.toString()+' '+vm.state.contact.last.toString()}}</span>
-		                                        <span ng-if="!vm.state.contact.first">{{vm.state.contact.details[0].emails[0].email}}</span>.
-		                                    </p>
-		                                    <p ng-if="activity.detail">
-		                                        {{activity.detail}}
-		                                    </p>
-		                                </div>
-		                                <div ng-switch-when="ACCOUNT_CREATED">
-		                                    <p>
-		                                        <span class="label label-info">CONTACT CREATED</span> for
-		                                        <span ng-if="!vm.state.contact">[deleted]</span>
-		                                        <span ng-if="vm.state.contact.first">{{vm.state.contact.first.toString()+' '+vm.state.contact.last.toString()}}</span>
-		                                        <span ng-if="!vm.state.contact.first">{{vm.state.contact.details[0].emails[0].email}}</span>.
-		                                    </p>
-		                                    <p ng-if="activity.detail">
-		                                        {{activity.detail}}
-		                                    </p>
-		                                </div>
-		                                <div ng-switch-when="SUBSCRIBE">
-		                                    <p>
-		                                        <span class="label label-success">SUBSCRIBE</span> for
-		                                        <span ng-if="!vm.state.contact">[deleted]</span>
-		                                        <span ng-if="vm.state.contact.first">{{vm.state.contact.first.toString()+' '+vm.state.contact.last.toString()}}</span>
-		                                        <span ng-if="!vm.state.contact.first">{{vm.state.contact.details[0].emails[0].email}}</span>subscribed to <a href="">{{activity.extraFields.plan_name}}</a> for ${{activity.extraFields.amount}}.
-		                                    </p>
-		                                    <p ng-if="activity.detail">
-		                                        {{activity.detail}}
-		                                    </p>
-		                                </div>
-		                                <div ng-switch-when="TRIAL_CONVERSION">
-		                                    <p>
-		                                        <span class="label label-success">Trial Conversion</span>
-		                                        <span ng-if="!vm.state.contact">[deleted]</span>
-		                                        <span ng-if="vm.state.contact.first">{{vm.state.contact.first.toString()+' '+vm.state.contact.last.toString()}}</span>
-		                                        <span ng-if="!vm.state.contact.first">{{vm.state.contact.details[0].emails[0].email}}</span> subscribed to <a href="">{{activity.extraFields.plan_name}}</a> for ${{activity.extraFields.amount}}.
-		                                    </p>
-		                                    <p ng-if="activity.detail">
-		                                        {{activity.detail}}
-		                                    </p>
-		                                </div>
-		                                <div ng-switch-when="SUBSCRIBE_CANCEL">
-		                                    <p>
-		                                        <span class="label label-danger">SUBSCRIPTION CANCELED</span> for
-		                                        <span ng-if="!vm.state.contact">[deleted]</span>
-		                                        <span ng-if="vm.state.contact.first">{{vm.state.contact.first.toString()+' '+vm.state.contact.last.toString()}}</span>
-		                                        <span ng-if="!vm.state.contact.first">{{vm.state.contact.details[0].emails[0].email}}</span>.
-		                                    </p>
-		                                    <p ng-if="activity.detail">
-		                                        {{activity.detail}}
-		                                    </p>
-		                                </div>
-		                                <div ng-switch-when="PAGE_VIEW">
-		                                    <p>
-		                                        <span class="label label-default">PAGE VIEW</span>
-		                                    </p>
-		                                    <span ng-if="!vm.state.contact">[deleted]</span>
-		                                    <p ng-if="vm.state.contact && vm.state.contact.first">
-		                                        {{vm.state.contact.first.toString()+' '+vm.state.contact.last.toString()}} viewed {{activity.attributes.page}} for {{activity.attributes.timespent}}.</p>
-		                                    <p ng-if="vm.state.contact && !vm.state.contact.first && vm.state.contact.details[0].emails[0]">
-		                                        {{vm.state.contact.details[0].emails[0].email}} viewed {{activity.attributes.page}} for {{activity.attributes.timespent}}.</p>
-		                                    <p ng-if="vm.state.contact && !vm.state.contact.first && !vm.state.contact.details[0].emails[0]">
-		                                        Unknown viewed {{activity.attributes.page}} for {{activity.attributes.timespent}}.</p>
-		                                    <p ng-if="activity.detail">
-		                                        {{activity.detail}}
-		                                    </p>
-		                                </div>
-		                                <div ng-switch-when="CONTACT_FORM">
-		                                    <p>
-		                                        <span class="label label-default">CONTACT FORM</span> was submitted with the data:
-		                                        <ul class="form-values">
-		                                            <li ng-repeat="(k,v) in activity.extraFields">
-		                                                <b>{{k | formatText}}</b>: {{v}}
-		                                            </li>
-		                                        </ul>
-		                                    </p>
-		                                    <p ng-if="activity.detail">
-		                                        {{activity.detail}}
-		                                    </p>
-		                                </div>
-		                                <div ng-switch-when="FORM_SUBMISSION">
-		                                    <p>
-		                                        <span class="label label-info">FORM SUBMITTED</span> for
-		                                        <span ng-if="!vm.state.contact">[deleted]</span>
-		                                        <span ng-if="vm.state.contact.first">{{vm.state.contact.first.toString()+' '+vm.state.contact.last.toString()}}</span>
-		                                        <span ng-if="!vm.state.contact.first">{{vm.state.contact.details[0].emails[0].email}}</span>.
-		                                    </p>
-		                                    <p ng-if="activity.detail">
-		                                        {{activity.detail}}
-		                                    </p>
-		                                </div>
-		                                <div ng-switch-when="EMAIL_DELIVERED">
-		                                    <p>
-		                                        <span class="label label-info">EMAIL DELIVERED</span>
-		                                        <span ng-if='activity.extraFields[0].subject'>with subject "{{activity.extraFields[0].subject}}" to</span>
-		                                        <span ng-if='!activity.extraFields[0].subject'>to</span>
-		                                        <span ng-if="!vm.state.contact">[deleted]</span>
-		                                        <span ng-if="vm.state.contact.first">{{vm.state.contact.first.toString()+' '+vm.state.contact.last.toString()}}</span>
-		                                        <span ng-if="!vm.state.contact.first">{{vm.state.contact.details[0].emails[0].email}}</span>.
-		                                    </p>
-		                                    <p ng-if="activity.detail">
-		                                        {{activity.detail}}
-		                                    </p>
-		                                </div>
-		                                <div ng-switch-when="EMAIL_OPENED">
-		                                    <p>
-		                                        <span class="label label-info">EMAIL OPENED</span>
-		                                        <span ng-if='activity.extraFields[0].subject'>with subject "{{activity.extraFields[0].subject}}" by</span>
-		                                        <span ng-if='!activity.extraFields[0].subject'>by</span>
-		                                        <span ng-if="!vm.state.contact">[deleted]</span>
-		                                        <span ng-if="vm.state.contact.first">{{vm.state.contact.first.toString()+' '+vm.state.contact.last.toString()}}</span>
-		                                        <span ng-if="!vm.state.contact.first">{{vm.state.contact.details[0].emails[0].email}}</span>.
-		                                    </p>
-		                                    <p ng-if="activity.detail">
-		                                        {{activity.detail}}
-		                                    </p>
-		                                </div>
-		                                <div ng-switch-when="EMAIL_CLICKED">
-		                                    <p>
-		                                        <span class="label label-info">EMAIL CLICKED</span>
-		                                        <span ng-if='activity.extraFields[0].subject'>with subject "{{activity.extraFields[0].subject}}" by</span>
-		                                        <span ng-if='!activity.extraFields[0].subject'>by</span>
-		                                        <span ng-if="!vm.state.contact">[deleted]</span>
-		                                        <span ng-if="vm.state.contact.first">{{vm.state.contact.first.toString()+' '+vm.state.contact.last.toString()}}</span>
-		                                        <span ng-if="!vm.state.contact.first">{{vm.state.contact.details[0].emails[0].email}}</span>.
-		                                    </p>
-		                                    <p ng-if="activity.detail">
-		                                        {{activity.detail}}
-		                                    </p>
-		                                </div>
-		                                <div ng-switch-when="EMAIL_UNSUB">
-		                                    <p>
-		                                        <span class="label label-info">EMAIL UNSUBSCRIBE</span> for
-		                                        <span ng-if="!vm.state.contact">[deleted]</span>
-		                                        <span ng-if="vm.state.contact.first">{{vm.state.contact.first.toString()+' '+vm.state.contact.last.toString()}}</span>
-		                                        <span ng-if="!vm.state.contact.first">{{vm.state.contact.details[0].emails[0].email}}</span>.
-		                                    </p>
-		                                    <p ng-if="activity.detail">
-		                                        {{activity.detail}}
-		                                    </p>
-		                                </div>
-		                                <div ng-switch-when="SUBSCRIPTION_PAID">
-		                                    <p>
-		                                        <span class="label label-info">SUBSCRIPTION PAID</span> for
-		                                        <span ng-if="!vm.state.contact">[deleted]</span>
-		                                        <span ng-if="vm.state.contact.first">{{vm.state.contact.first.toString()+' '+vm.state.contact.last.toString()}}</span>
-		                                        <span ng-if="!vm.state.contact.first">{{vm.state.contact.details[0].emails[0].email}}</span>.
-		                                    </p>
-		                                    <p ng-if="activity.detail">
-		                                        {{activity.detail}}
-		                                    </p>
-		                                </div>
-		                                <div ng-switch-when="EMAIL_BOUNCED">
-		                                    <p>
-		                                        <span class="label label-info">EMAIL BOUNCED</span> for
-		                                        
-		                                        <span>{{activity.email}}</span>
-		                                    </p>
-		                                </div>
-		                                <div ng-switch-when="CREATE_PAYPAL_ORDER">
-		                                    <p>
-		                                        <span class="label label-info">ORDER CREATED</span> with Order Id
-		                                        
-		                                        <span>'{{activity.extraFields.orderId}}'</span>
-		                                    </p>
-		                                </div>
-		                                <div ng-switch-when="CREATE_ORDER">
-		                                    <p>
-		                                        <span class="label label-info">ORDER CREATED</span> with Order Id
-		                                        
-		                                        <span>'{{activity.extraFields.orderId}}'</span>
-		                                    </p>
-		                                </div>
-		                                <div ng-switch-when="USER_NOTES">
-		                                    <p>
-		                                        <span class="label label-info">User Note</span> 
-		                                        Note from 
-		                                        <span ng-if="activity.user.first" class="text-bold">{{activity.user.first.toString()+' '+activity.user.last.toString()}}</span>
-		                                        <span class="text-bold" ng-if="!activity.user.first">{{activity.user.username}}</span>
-		                                        <span class="block">{{activity.note}}</span>
-		                                    </p>
-		                                </div>
-		                                <div ng-switch-default>
-		                                    <p>
-		                                        <span class="label label-default">{{activity.activityType}}</span> {{activity.detail}}
-		                                    </p>
-		                                </div>
+	                                <div ng-switch-when="CONTACT_CREATED">
+	                                    <div class="activity-title col-xs-12 col-sm-8">
+	                                		CONTACT CREATED
+	                                	</div>
+	                                	<div class="text-muted text-small activity-time col-xs-12 col-sm-4">
+		                            		{{activity.start | date:'M d @ h:mm a' | lowercase}}
+		                        		</div>		                        		
+	                                    <div class="col-xs-12 content-data">
+	                                        Contact created for 
+	                                        <span class="text-bold" ng-if="vm.state.contact.first">{{vm.state.contact.first.toString()+' '+vm.state.contact.last.toString()}}</span>
+	                                        <span class="text-bold" ng-if="!vm.state.contact.first">{{vm.state.contact.details[0].emails[0].email}}</span>                
+	                                    </div>
+	                                    <div class="clearfix"></div>
+	                                    <p ng-if="activity.detail">
+                                        	{{activity.detail}}
+                                    	</p>
+	                                </div>
+	                                <div ng-switch-when="ACCOUNT_CREATED">
+	                                    <div class="activity-title col-xs-12 col-sm-8">
+	                                		CONTACT CREATED
+	                                	</div>
+	                                	<div class="text-muted text-small activity-time col-xs-12 col-sm-4">
+		                            		{{activity.start | date:'M d @ h:mm a' | lowercase}}
+		                        		</div>		                        		
+	                                    <div class="col-xs-12 content-data">
+	                                        Contact created for 
+	                                        <span class="text-bold" ng-if="vm.state.contact.first">{{vm.state.contact.first.toString()+' '+vm.state.contact.last.toString()}}</span>
+	                                        <span class="text-bold" ng-if="!vm.state.contact.first">{{vm.state.contact.details[0].emails[0].email}}</span>                
+	                                    </div>
+	                                    <div class="clearfix"></div>
+	                                    <p ng-if="activity.detail">
+                                        	{{activity.detail}}
+                                    	</p>
+	                                </div>
+	                                <div ng-switch-when="SUBSCRIBE">
+	                                    <div class="activity-title col-xs-12 col-sm-8">
+	                                		SUBSCRIBE
+	                                	</div>
+	                                	<div class="text-muted text-small activity-time col-xs-12 col-sm-4">
+		                            		{{activity.start | date:'M d @ h:mm a' | lowercase}}
+		                        		</div>		                        		
+	                                    <div class="col-xs-12 content-data">
+	                                        Subscribe for 
+	                                        <span class="text-bold" ng-if="vm.state.contact.first">{{vm.state.contact.first.toString()+' '+vm.state.contact.last.toString()}}</span>
+	                                        <span class="text-bold" ng-if="!vm.state.contact.first">{{vm.state.contact.details[0].emails[0].email}}</span> 
+	                                        subscribed to <a href="">{{activity.extraFields.plan_name}}</a> for ${{activity.extraFields.amount}}                      
+	                                    </div>
+	                                    <div class="clearfix"></div>
+	                                    <p ng-if="activity.detail">
+                                        	{{activity.detail}}
+                                    	</p>
+	                                </div>
+	                                <div ng-switch-when="TRIAL_CONVERSION">
+	                                    <div class="activity-title col-xs-12 col-sm-8">
+	                                		TRIAL CONVERSION
+	                                	</div>
+	                                	<div class="text-muted text-small activity-time col-xs-12 col-sm-4">
+		                            		{{activity.start | date:'M d @ h:mm a' | lowercase}}
+		                        		</div>		                        		
+	                                    <div class="col-xs-12 content-data">
+	                                        Trial Conversion 
+	                                        <span class="text-bold" ng-if="vm.state.contact.first">{{vm.state.contact.first.toString()+' '+vm.state.contact.last.toString()}}</span>
+	                                        <span class="text-bold" ng-if="!vm.state.contact.first">{{vm.state.contact.details[0].emails[0].email}}</span> 
+	                                        subscribed to <a href="">{{activity.extraFields.plan_name}}</a> for ${{activity.extraFields.amount}}                      
+	                                    </div>
+	                                    <div class="clearfix"></div>
+	                                    <p ng-if="activity.detail">
+                                        	{{activity.detail}}
+                                    	</p>
+	                                </div>
+	                                <div ng-switch-when="SUBSCRIBE_CANCEL">
+	                                    <div class="activity-title col-xs-12 col-sm-8">
+	                                		SUBSCRIPTION CANCELED
+	                                	</div>
+	                                	<div class="text-muted text-small activity-time col-xs-12 col-sm-4">
+		                            		{{activity.start | date:'M d @ h:mm a' | lowercase}}
+		                        		</div>		                        		
+	                                    <div class="col-xs-12 content-data">
+	                                        Subscription Canceled for 
+	                                        <span class="text-bold" ng-if="vm.state.contact.first">{{vm.state.contact.first.toString()+' '+vm.state.contact.last.toString()}}</span>
+	                                        <span class="text-bold" ng-if="!vm.state.contact.first">{{vm.state.contact.details[0].emails[0].email}}</span>	                         
+	                                    </div>
+	                                    <div class="clearfix"></div>
+                                    	<p ng-if="activity.detail">
+                                        	{{activity.detail}}
+                                    	</p>
+	                                </div>
+	                                <div ng-switch-when="CONTACT_FORM">
+	                                    <div class="activity-title col-xs-12 col-sm-8">
+	                                		Submmited the form
+	                                	</div>
+	                                	<div class="text-muted text-small activity-time col-xs-12 col-sm-4">
+		                            		{{activity.start | date:'M d @ h:mm a' | lowercase}}
+		                        		</div>		                        		
+	                                    <div class="col-xs-12 content-data">
+	                                        <ul class="form-values">
+	                                            <li ng-repeat="(k,v) in activity.extraFields">
+	                                                <b>{{k | formatText}}</b>: {{v}}
+	                                            </li>
+	                                        </ul>	                         
+	                                    </div>
+	                                    <div class="clearfix"></div>
+                                    	<p ng-if="activity.detail">
+                                        	{{activity.detail}}
+                                    	</p>
+	                                </div>
+	                                <div ng-switch-when="FORM_SUBMISSION">
+	                                	<div class="activity-title col-xs-12 col-sm-8">
+	                                		FORM SUBMITTED
+	                                	</div>
+	                                	<div class="text-muted text-small activity-time col-xs-12 col-sm-4">
+		                            		{{activity.start | date:'M d @ h:mm a' | lowercase}}
+		                        		</div>		                        		
+	                                    <div class="col-xs-12 content-data">
+	                                        Form Submitted for 
+	                                        <span class="text-bold" ng-if="vm.state.contact.first">{{vm.state.contact.first.toString()+' '+vm.state.contact.last.toString()}}</span>
+	                                        <span class="text-bold" ng-if="!vm.state.contact.first">{{vm.state.contact.details[0].emails[0].email}}</span>
+	                                    </div>	                                    
+	                                    <div class="clearfix"></div> 
+	                                    <p ng-if="activity.detail">
+	                                        {{activity.detail}}
+	                                    </p>
+	                                    
+	                                </div>
+	                                <div ng-switch-when="EMAIL_DELIVERED">
+	                                    <div class="activity-title col-xs-12 col-sm-8">
+	                                		EMAIL DELIVERED
+	                                	</div>
+	                                	<div class="text-muted text-small activity-time col-xs-12 col-sm-4">
+		                            		{{activity.start | date:'M d @ h:mm a' | lowercase}}
+		                        		</div>		                        		
+	                                    <div class="col-xs-12 content-data">
+	                                        Email  
+	                                        <span ng-if='activity.extraFields[0].subject'>with subject "{{activity.extraFields[0].subject}}" to</span>
+	                                        <span ng-if='!activity.extraFields[0].subject'>to</span>
+	                                        <span class="text-bold" ng-if="vm.state.contact.first">{{vm.state.contact.first.toString()+' '+vm.state.contact.last.toString()}}</span>
+	                                        <span class="text-bold" ng-if="!vm.state.contact.first">{{vm.state.contact.details[0].emails[0].email}}</span>	                         
+	                                    </div>
+	                                    <div class="clearfix"></div>
+                                    	<p ng-if="activity.detail">
+                                        	{{activity.detail}}
+                                    	</p>       
+	                                </div>
+	                                <div ng-switch-when="EMAIL_OPENED">
+	                                    <div class="activity-title col-xs-12 col-sm-8">
+	                                		EMAIL OPENED
+	                                	</div>
+	                                	<div class="text-muted text-small activity-time col-xs-12 col-sm-4">
+		                            		{{activity.start | date:'M d @ h:mm a' | lowercase}}
+		                        		</div>		                        		
+	                                    <div class="col-xs-12 content-data">
+	                                        Email Opened 
+	                                        <span ng-if='activity.extraFields[0].subject'>with subject "{{activity.extraFields[0].subject}}" by</span>
+	                                        <span ng-if='!activity.extraFields[0].subject'>by</span>
+	                                        <span class="text-bold" ng-if="vm.state.contact.first">{{vm.state.contact.first.toString()+' '+vm.state.contact.last.toString()}}</span>
+	                                        <span class="text-bold" ng-if="!vm.state.contact.first">{{vm.state.contact.details[0].emails[0].email}}</span>
+	                                        
+	                                    </div>
+	                                    <div class="clearfix"></div> 
+                                    	<p ng-if="activity.detail">
+                                        	{{activity.detail}}
+                                    	</p>
+	                                </div>
+	                                <div ng-switch-when="EMAIL_CLICKED">
+	                                	<div class="activity-title col-xs-12 col-sm-8">
+	                                		EMAIL CLICKED
+	                                	</div>
+	                                	<div class="text-muted text-small activity-time col-xs-12 col-sm-4">
+		                            		{{activity.start | date:'M d @ h:mm a' | lowercase}}
+		                        		</div>		                        		
+	                                    <div class="col-xs-12 content-data">
+	                                        Email Clicked 
+	                                        <span ng-if='activity.extraFields[0].subject'>with subject "{{activity.extraFields[0].subject}}" by</span>
+	                                        <span ng-if='!activity.extraFields[0].subject'>by</span>
+	                                        <span class="text-bold" ng-if="vm.state.contact.first">{{vm.state.contact.first.toString()+' '+vm.state.contact.last.toString()}}</span>
+	                                        <span class="text-bold" ng-if="!vm.state.contact.first">{{vm.state.contact.details[0].emails[0].email}}</span>
+	                                        
+	                                    </div>
+	                                    <div class="clearfix"></div>    
+                                    	<p ng-if="activity.detail">
+                                        	{{activity.detail}}
+                                    	</p>    
+	                                </div>
+	                                <div ng-switch-when="EMAIL_UNSUB">
+	                                	<div class="activity-title col-xs-12 col-sm-8">
+	                                		EMAIL UNSUBSCRIBE
+	                                	</div>
+	                                	<div class="text-muted text-small activity-time col-xs-12 col-sm-4">
+		                            		{{activity.start | date:'M d @ h:mm a' | lowercase}}
+		                        		</div>		                        		
+	                                    <div class="col-xs-12 content-data">
+	                                        Email Unsubscribe for 
+	                                        <span class="text-bold" ng-if="vm.state.contact.first">{{vm.state.contact.first.toString()+' '+vm.state.contact.last.toString()}}</span>
+	                                        <span class="text-bold" ng-if="!vm.state.contact.first">{{vm.state.contact.details[0].emails[0].email}}</span>
+	                                        <p ng-if="activity.detail">
+	                                        	{{activity.detail}}
+	                                    	</p>
+	                                    </div>
+	                                    <div class="clearfix"></div>
+	                                </div>
+	                                <div ng-switch-when="SUBSCRIPTION_PAID">
+	                                	<div class="activity-title col-xs-12 col-sm-8">
+	                                		SUBSCRIPTION PAID
+	                                	</div>
+	                                	<div class="text-muted text-small activity-time col-xs-12 col-sm-4">
+		                            		{{activity.start | date:'M d @ h:mm a' | lowercase}}
+		                        		</div>		                        		
+	                                    <div class="col-xs-12 content-data">
+	                                        Subscription Paid for 
+	                                        <span class="text-bold" ng-if="vm.state.contact.first">{{vm.state.contact.first.toString()+' '+vm.state.contact.last.toString()}}</span>
+	                                        <span class="text-bold" ng-if="!vm.state.contact.first">{{vm.state.contact.details[0].emails[0].email}}</span>
+	                                        
+	                                    </div>
+	                                    <div class="clearfix"></div>
+                                    	<p ng-if="activity.detail">
+                                        	{{activity.detail}}
+                                    	</p>
+	                                </div>
+	                                <div ng-switch-when="EMAIL_BOUNCED">
+	                                    <div class="activity-title col-xs-12 col-sm-8">
+	                                		Email Bounced
+	                                	</div>
+	                                	<div class="text-muted text-small activity-time col-xs-12 col-sm-4">
+		                            		{{activity.start | date:'M d @ h:mm a' | lowercase}}
+		                        		</div>		                        		
+	                                    <div class="col-xs-12 content-data">
+	                                       Email Bounced for 
+	                                        <span class="text-bold">'{{activity.email}}'</span>
+	                                    </div>
+	                                    <div class="clearfix"></div>       
+	                                </div>
+	                                <div ng-switch-when="CREATE_PAYPAL_ORDER">
+	                                    <div class="activity-title col-xs-12 col-sm-8">
+	                                		Order Created
+	                                	</div>
+	                                	<div class="text-muted text-small activity-time col-xs-12 col-sm-4">
+		                            		{{activity.start | date:'M d @ h:mm a' | lowercase}}
+		                        		</div>		                        		
+	                                    <div class="col-xs-12 content-data">
+	                                       An order created with Order Id
+	                                        <span class="text-bold">'{{activity.extraFields.orderId}}'</span>
+	                                    </div>
+	                                    <div class="clearfix"></div>
+	                                </div>
+	                                <div ng-switch-when="CREATE_ORDER">
+	                                	<div class="activity-title col-xs-12 col-sm-8">
+	                                		Order Created
+	                                	</div>
+	                                	<div class="text-muted text-small activity-time col-xs-12 col-sm-4">
+		                            		{{activity.start | date:'M d @ h:mm a' | lowercase}}
+		                        		</div>		                        		
+	                                    <div class="col-xs-12 content-data">
+	                                       An order created with Order Id
+	                                        <span class="text-bold">'{{activity.extraFields.orderId}}'</span>
+	                                    </div>
+	                                    <div class="clearfix"></div>       
+	                                </div>
+	                                <div ng-switch-when="USER_NOTES">
+	                                	<div class="activity-title col-xs-12 col-sm-8">
+	                                		Note from 
+	                                        <span ng-if="activity.user.first" class="text-bold">{{activity.user.first.toString()+' '+activity.user.last.toString()}}</span>
+	                                        <span class="text-bold" ng-if="!activity.user.first">{{activity.user.username}}</span>
+	                                	</div>
+	                                	<div class="text-muted text-small activity-time col-xs-12 col-sm-4">
+		                            		{{activity.start | date:'M d @ h:mm a' | lowercase}}
+		                        		</div>		                        		
+	                                    <div class="col-xs-12 content-data">
+	                                       {{activity.note}}
+	                                    </div>
+	                                    <div class="clearfix"></div>
+	                                </div>
+	                                <div ng-switch-default>
+	                                    <p>
+	                                        <span class="label label-default">{{activity.activityType}}</span> {{activity.detail}}
+	                                    </p>
+	                                </div>
 
-		                            </div>
-		                        </p>
+	                            </div>
 		                    </div>
 		                </li>
 		            </ul>
