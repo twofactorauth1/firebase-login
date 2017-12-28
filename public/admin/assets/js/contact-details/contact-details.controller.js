@@ -574,10 +574,14 @@ function contactDetailsController($scope, $state, $window, $modal, $stateParams,
 	};	
 
 	function editContactMode(field){
-		editContactDetails();
+		$timeout(function() {
+			$(".nav.nav-tabs li:first a").click();
+			editContactDetails();		
+		}, 0);
+			
 		$timeout(function() {
 			$("#"+field+"_0").focus();	
-		}, 0);
+		}, 100);
 		
 	}
 
