@@ -95,8 +95,7 @@ function contactActivityController($scope, $state, $window, $modal, $stateParams
                 })
                 if(vm.state.contact.notes.length){
                     ContactService.getContactNotes(vm.contactId, function(notes){
-                        activities = mergeContactNotes(notes, activities);
-                        iterateActivities(activities);
+                        mergeContactNotes(notes, activities);
                     })
                 }
                 else{
@@ -134,8 +133,14 @@ function contactActivityController($scope, $state, $window, $modal, $stateParams
         })
     };
 
-    function mergeContactNotes(notes, activities){        
-        if (notes && notes.length > 0) {
+    function mergeContactNotes(notes, activities, note){
+        if(note){            
+            note.start = note.date;
+            note.activityType = "USER_NOTES";
+            note.user = $scope.$parent.currentUser;
+            activities.push(note);
+        }       
+        else if (notes && notes.length > 0) {
             _.each(notes, function (_note) {
                 _note.start = _note.date;
                 _note.activityType = "USER_NOTES";
@@ -143,7 +148,7 @@ function contactActivityController($scope, $state, $window, $modal, $stateParams
             activities = activities || [];
             activities = activities.concat(notes);
         }
-        return activities;
+        iterateActivities(activities)
     };
 
     function addNote(_note) {
@@ -176,7 +181,9 @@ function contactActivityController($scope, $state, $window, $modal, $stateParams
             vm.notesEmail = {
                 enable: false
             };
-            vm.state.contact.notes = data;
+            vm.state.contact.notes = data.notes;
+            vm.uiState.showNote = false;
+            mergeContactNotes(null, vm.state.activities, _noteToPush);
         });
     };
 

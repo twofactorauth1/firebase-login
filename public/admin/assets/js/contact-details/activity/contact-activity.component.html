@@ -9,12 +9,15 @@
 			<option value="asc">ASC</option>
             <option value="desc">DESC</option>
         </select>
-		<button type="button" class="btn btn-info btn-o pull-right" ng-click="vm.addNote(vm.newNote.text)">
+		<button type="button" ng-if="!vm.uiState.showNote" class="btn btn-info btn-o pull-right" ng-click="vm.uiState.showNote = true">
             <span>Add a Note</span>
+        </button>
+        <button type="button" ng-if="vm.uiState.showNote" class="btn btn-info btn-o pull-right" ng-click="vm.uiState.showNote = false">
+            <span>Cancel</span>
         </button>
     </div>
     <hr />
-	<div class="">
+	<div ng-if="vm.uiState.showNote">
         <label for="newNote"> New Note</label>
         <textarea id="newNote" class="form-control margin-bottom-15 autosize area-animated msd-elastic: \n;" ng-model="vm.newNote.text"></textarea>
         <div class="checkbox clip-check check-success margin-top-10" ng-if="vm.state.contact.details[0].emails[0].email">
