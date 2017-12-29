@@ -8,6 +8,7 @@
 require('./dao/contactactivity.dao.js');
 var dao = require('./dao/contactactivity.dao.js');
 var log = $$.g.getLogger('contactactivity_manager');
+var pageDao = require('../ssb/dao/page.dao');
 var async = require('async');
 module.exports = {
 
@@ -106,24 +107,116 @@ module.exports = {
       } else {
         log.debug('<< getActivitySessionByContactId');
         // Bind activity with session
+        var activities = [];
         async.each(list, function(activity, cb){
-            if(activity.get("sessionId")){
-              var sessionId = activity.get("sessionId");
-              dao.findOne({session_id: sessionId, accountId: accountId}, $$.m.SessionEvent, function(err, value){
-                if(err) {
+          activities.push(activity);
+          if(activity.get("sessionId")){
+            var sessionId = activity.get("sessionId");
+            var query = {
+              session_id: sessionId, 
+              accountId: accountId
+            }
+            dao.findOne(query, $$.m.SessionEvent, function(err, value){
+              if(err) {
+                  log.error('Error finding session events: ' + err);
+                  cb(err);
+              } else {
+                activity.set("session_event", value);
+                dao.findMany(query, $$.m.PageEvent, function(err, pageEvents){
+                  if(err) {
                     _log.error('Error finding session events: ' + err);
                     cb(err);
-                } else {
-                    activity.set("session_event", value);
-                    cb()
-                }
-              });
-            }
-            else{
-              cb()
-            }
+                  } else {  
+                                                           
+                    if(pageEvents.length){
+                      var page_events = [];
+                      var pageIDMap = {};                      
+                      async.each(pageEvents, function(pageEvent, callback){
+                        var handle = "";
+                        if(pageEvent.get("url") && pageEvent.get("url").path){
+                          handle = pageEvent.get("url").path;
+                        }
+                        if(pageEvent.get("requestedUrl") && pageEvent.get("requestedUrl").path){
+                          handle = pageEvent.get("requestedUrl").path;
+                        }
+                        if(handle){
+                          if (handle.indexOf('/') === 0) {
+                            handle = handle.replace('/', '');
+                          }
+                          if(!handle){
+                            handle = "index";
+                          }
+                          console.log(handle);                     
+                          var singleEvent = {                          
+                            url: pageEvent.get("url"),
+                            server_time: pageEvent.get("server_time"),
+                            start: pageEvent.get("server_time_dt"),
+                            requestedUrl: pageEvent.get("requestedUrl"),
+                            entrance: pageEvent.get("entrance")
+                          }
+                          if(pageIDMap[handle] && pageIDMap[handle].handle) {
+                            singleEvent.page = pageIDMap[handle];
+                            page_events.push(singleEvent);
+                            callback();
+                          } else {
+                            pageDao.getPublishedPageByHandle(handle, accountId, function(err, page) {
+                              if(err) {
+                                  callback(err)
+                              } else {
+                                if(page){                                  
+                                  var _page =  {
+                                    title: page.get("title"),
+                                    handle: page.get("handle")
+                                  }
+                                  singleEvent.page = _page;
+                                  pageIDMap[handle] = _page;
+                                }
+                                page_events.push(singleEvent);
+                                callback();
+                              }
+                            })
+                          }  
+                        }
+                        else{
+                          callback()
+                        }
+                        
+                      }, function(err){
+                        var accountUrl = '';
+                        var entrancePath = '';
+                        page_events = _.sortBy(page_events, function(result){return result.server_time});
+                        if(page_events[0].url && page_events[0].url.protocol && page_events[0].url.domain){
+                          accountUrl = page_events[0].url.protocol + "://" + page_events[0].url.domain;
+                        }
+                        var entranceSession = _.find(page_events, function(event){
+                          return event.entrance
+                        })
+                        if(entranceSession && entranceSession.page){
+                          entrancePath = entranceSession.page.title;
+                        }
+                        activities.push({
+                          activityType: 'PAGE_VIEW',
+                          start: page_events[0].start,
+                          page_events: page_events,
+                          accountUrl: accountUrl,
+                          entrancePath: entrancePath
+                        })
+                        cb();
+                      });
+                    }
+                    else{
+                      cb();
+                    }                    
+                  }
+                })
+              }
+            });
+          }
+          else{
+            cb()
+          }
         }, function(err){
-            fn(null, list);
+          fn(null, activities);
         });
       }
     });

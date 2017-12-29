@@ -351,6 +351,28 @@
 	                                    </div>
 	                                    <div class="clearfix"></div>
 	                                </div>
+	                                <div ng-switch-when="PAGE_VIEW">
+	                                    <div class="activity-title col-xs-12 col-sm-8 text-bold">
+	                                		{{activity.accountUrl}}
+	                                	</div>
+	                                	<div class="text-muted text-small activity-time col-xs-12 col-sm-4">
+		                            		{{activity.start | date:'M/d @ h:mm a' | lowercase}}
+		                        		</div>		                        		
+	                                    <div class="col-xs-12 content-data">
+	                                    	<span ng-if="activity.entrancePath">
+	                                    		Landed on the page <span class="text-bold">{{activity.entrancePath}}</span>
+	                                    	</span>	
+	                                        <ul class="form-values">
+	                                            <li ng-repeat="event in activity.page_events">
+	                                                Viewed the page <span class="text-bold">{{event.page.title || event.requestedUrl.path || event.url.path}}</span>
+	                                            </li>
+	                                        </ul>	                         
+	                                    </div>
+	                                    <div class="clearfix"></div>
+                                    	<p ng-if="activity.detail">
+                                        	{{activity.detail}}
+                                    	</p>
+	                                </div>
 	                                <div ng-switch-default>
 	                                    <p>
 	                                        <span class="label label-default">{{activity.activityType}}</span> {{activity.detail}}
