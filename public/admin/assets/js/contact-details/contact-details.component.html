@@ -52,6 +52,7 @@
                             </ul>
                         </div>
                         <div class="account-info margin-top-30">
+                            <img src="/admin/assets/images/finger-print.png">  
                             <span>Account</span>: {{vm.state.organization.name}}
                         </div>
                     </div>
@@ -363,8 +364,33 @@
                             </form>
                         </div>
                     </tab>
-                    <tab heading="Devices & Browser" class="hidden">
-                        Devices & Browser
+                    <tab heading="Devices & Browser" ng-if="vm.state.contactDeviceDetails.user_agent">
+                        <div class="col-xs-12">
+                            <div class="details">
+                                <span class="description">
+                                    Browser:
+                                </span>
+                                <span class="value">
+                                    {{vm.state.contactDeviceDetails.user_agent.browser.name}} {{vm.state.contactDeviceDetails.user_agent.browser.version}}
+                                </span>
+                            </div>
+                            <div class="details">    
+                                <span class="description">
+                                    OS Details:
+                                </span>
+                                <span class="value">
+                                    {{vm.state.contactDeviceDetails.user_agent.os.name}} {{vm.state.contactDeviceDetails.user_agent.os.version}}
+                                </span>
+                            </div>
+                            <div class="details">    
+                                <span class="description">
+                                    Device:
+                                </span>
+                                <span class="value">
+                                    {{vm.state.contactDeviceDetails.user_agent.device}}
+                                </span>                                
+                            </div>
+                        </div>
                     </tab>
                     <tab heading="Location & Network" select="vm.resizeMap()">
                         <div class="map margin-bottom-15">
@@ -381,7 +407,7 @@
         </div>
         <!-- contact timeline/notes pane -->
         <div class="col-xs-12 col-sm-6 contact-details-right-pane">       
-            <contact-activity-component contact-id="vm.state.contactId" contact="vm.state.contact" ng-if="vm.state.contact"></contact-activity-component>
+            <contact-activity-component contact-id="vm.state.contactId" contact="vm.state.contact" ng-if="vm.state.contact" contact-device-details="vm.state.contactDeviceDetails"></contact-activity-component>
         </div>
         <div class="clearfix"></div>
     </div>

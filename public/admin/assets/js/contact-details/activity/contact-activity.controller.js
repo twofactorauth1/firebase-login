@@ -60,7 +60,7 @@ function contactActivityController($scope, $state, $window, $modal, $stateParams
             case 'CONTACT_FORM':
             case 'FORM_SUBMISSION':
                 if(isIcon)
-                    iconClass = "fa-address-card-o"
+                    iconClass = "address-card-o"
                 else{
                     iconClass = "form-type"
                 }
@@ -109,6 +109,7 @@ function contactActivityController($scope, $state, $window, $modal, $stateParams
         });
         vm.state.activities = activities;
         filterContactActivities();
+        setContactDeviceDetails();
         vm.uiState.loading = false;
     }
 
@@ -205,8 +206,18 @@ function contactActivityController($scope, $state, $window, $modal, $stateParams
             return "fa fa-" + session_activity.session_event.user_agent.device;
          }
        }
-    }
+    };
 
+    function setContactDeviceDetails(){
+        if(vm.contactDeviceDetails && vm.state.activities.length){
+           session_activity = _.find(vm.state.activities, function(id){return id.session_event && id.session_event._id});
+           if(session_activity){
+             if(session_activity.session_event && session_activity.session_event.user_agent){
+                vm.contactDeviceDetails = session_activity.session_event;
+             }
+           } 
+        }
+    }
 }
 
 })();
