@@ -60,7 +60,7 @@ function contactActivityController($scope, $state, $window, $modal, $stateParams
             case 'CONTACT_FORM':
             case 'FORM_SUBMISSION':
                 if(isIcon)
-                    iconClass = "list-alt"
+                    iconClass = "fa-address-card-o"
                 else{
                     iconClass = "form-type"
                 }
