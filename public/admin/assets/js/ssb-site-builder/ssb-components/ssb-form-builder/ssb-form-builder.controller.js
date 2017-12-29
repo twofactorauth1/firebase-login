@@ -478,6 +478,7 @@
 											this.style.setProperty('border-color', btnHoverStyle.bg.color, 'important');
 										}
 										vm.setBorderStyle(this, btnHoverStyle);
+                                        vm.removeBorderStyle(this);
 									} else {
                                         vm.removeBorderStyle(this);
 										vm.removeBorderStyleForNewForms(this);
@@ -509,8 +510,10 @@
 										this.style.setProperty('border-color', btnActiveStyle.bg.color, 'important');
 									}
 									vm.setBorderStyle(this, btnActiveStyle);
+                                    vm.removeBorderStyle(this);
 
 								} else {
+                                    vm.removeBorderStyle(this);
 									vm.removeBorderStyleForNewForms(this);
 								}
 								if (btnActiveStyle && btnActiveStyle.txtcolor) {
