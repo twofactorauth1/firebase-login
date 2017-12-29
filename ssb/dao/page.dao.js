@@ -47,7 +47,11 @@ var dao = {
         self.findOne(query, self.publishedPageObj, fn);
     },
 
-
+    getPublishedPageByHandle: function(pageName, accountId, fn) {
+        var self = this;
+        var query = {handle: pageName, accountId: accountId};
+        self.findOne(query, self.publishedPageObj, fn);
+    },
 
     savePublishedPage: function(page, fn) {
         var self = this;
