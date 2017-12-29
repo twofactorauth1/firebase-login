@@ -145,7 +145,12 @@ contact-details-component{
                         a{
                             box-shadow: none !important;
                             background: transparent !important;
+                            padding: 15px 15px;
                             @media screen and (max-width: 492px) {
+                                padding: 15px 3px;
+                                font-size: 11px;
+                            }
+                            @media screen and (min-width: 768px) and (max-width: 1171px) {
                                 padding: 15px 3px;
                                 font-size: 11px;
                             }
@@ -171,7 +176,7 @@ contact-details-component{
                 ul.contact-tags{
                     list-style: none;
                     display: inline-block;
-                    padding-left: 10px;
+                    padding-left: 0;
                     li{
                         display: inline-block;
                         margin-right: 5px;
@@ -183,6 +188,7 @@ contact-details-component{
                 }
                 .full-name{
                     font-size: 18px;
+                    padding-right: 10px;
                 }
                 .value{
                     margin-left: 5px;
@@ -258,6 +264,9 @@ contact-details-component{
                     }
                     div.content-data{
                         padding-top: 5px;
+                    }
+                    div.activity-time{
+                        text-align: right;
                     }
                 }
             }

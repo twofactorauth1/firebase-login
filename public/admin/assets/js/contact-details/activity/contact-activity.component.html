@@ -54,7 +54,7 @@
     	<div ng-if="vm.state.filteredActivities.length" ng-repeat="(key, value) in vm.state.groupedActivities">
     		<div id="panel_0">
     			<div class="panel-heading border-light padding-0 panel-activity">
-		            <h4 class="">{{value[0].activityDate}}</h4>		            
+		            <h4 class="">{{value[0].start | date:'MMMM dd, yyyy @ h:mm a' | uppercase}}</h4>		            
 		            <ct-paneltool class="panel-tools" tool-collapse="tool-collapse"></ct-paneltool>
 	        	</div>
 	        	<div collapse="panel_0">
