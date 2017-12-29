@@ -561,9 +561,9 @@ app.controller('importContactModalCtrl', ['$scope', '$location', '$timeout', '$m
 
                 if(_colVal === 'tags'){
                     var tags_value = $scope.previewContact[_colVal];
-                    var tags_value_arr = tags_value.split('|');
+                    var tags_value_arr =(tags_value !== undefined) ? tags_value.split('|') : [];
+                    var new_tags = [];
                     if(tags_value_arr.length > 0){
-                        var new_tags = [];
                         _.each(tags_value_arr, function(tag){
                           var tagExist = $scope.compareTag(tag, $scope.uniqueTags);
                           if(tagExist !== -1){
