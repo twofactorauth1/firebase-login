@@ -65,7 +65,7 @@
 		                    <div class="margin-left-30 padding-15 activity-content">
 	                            <div ng-switch on="activity.activityType" class="activity-inner-content">
 	                                <div ng-switch-when="OTHER">
-	                                    <div class="activity-title col-xs-12 col-sm-8">
+	                                    <div class="activity-title col-xs-12 col-sm-8 text-bold">
 	                                		Other
 	                                	</div>
 	                                	<div class="text-muted text-small activity-time col-xs-12 col-sm-4">
@@ -77,7 +77,7 @@
 	                                    <div class="clearfix"></div>
 	                                </div>
 	                                <div ng-switch-when="EMAIL">
-	                                    <div class="activity-title col-xs-12 col-sm-8">
+	                                    <div class="activity-title col-xs-12 col-sm-8 text-bold">
 	                                		Email Sent
 	                                	</div>
 	                                	<div class="text-muted text-small activity-time col-xs-12 col-sm-4">
@@ -90,7 +90,7 @@
 	                                </div>
 
 	                                <div ng-switch-when="CONTACT_CREATED">
-	                                    <div class="activity-title col-xs-12 col-sm-8">
+	                                    <div class="activity-title col-xs-12 col-sm-8 text-bold">
 	                                		Contact Created
 	                                	</div>
 	                                	<div class="text-muted text-small activity-time col-xs-12 col-sm-4">
@@ -107,7 +107,7 @@
                                     	</p>
 	                                </div>
 	                                <div ng-switch-when="ACCOUNT_CREATED">
-	                                    <div class="activity-title col-xs-12 col-sm-8">
+	                                    <div class="activity-title col-xs-12 col-sm-8 text-bold">
 	                                		Contact Created
 	                                	</div>
 	                                	<div class="text-muted text-small activity-time col-xs-12 col-sm-4">
@@ -124,7 +124,7 @@
                                     	</p>
 	                                </div>
 	                                <div ng-switch-when="SUBSCRIBE">
-	                                    <div class="activity-title col-xs-12 col-sm-8">
+	                                    <div class="activity-title col-xs-12 col-sm-8 text-bold">
 	                                		Subscribe
 	                                	</div>
 	                                	<div class="text-muted text-small activity-time col-xs-12 col-sm-4">
@@ -136,13 +136,10 @@
 	                                        <span class="text-bold" ng-if="!vm.state.contact.first">{{vm.state.contact.details[0].emails[0].email}}</span> 
 	                                        subscribed to <a href="">{{activity.extraFields.plan_name}}</a> for ${{activity.extraFields.amount}}                      
 	                                    </div>
-	                                    <div class="clearfix"></div>
-	                                    <p ng-if="activity.detail">
-                                        	{{activity.detail}}
-                                    	</p>
+	                                    <div class="clearfix"></div>	                                    
 	                                </div>
 	                                <div ng-switch-when="TRIAL_CONVERSION">
-	                                    <div class="activity-title col-xs-12 col-sm-8">
+	                                    <div class="activity-title col-xs-12 col-sm-8 text-bold">
 	                                		Trial Conversion
 	                                	</div>
 	                                	<div class="text-muted text-small activity-time col-xs-12 col-sm-4">
@@ -160,7 +157,7 @@
                                     	</p>
 	                                </div>
 	                                <div ng-switch-when="SUBSCRIBE_CANCEL">
-	                                    <div class="activity-title col-xs-12 col-sm-8">
+	                                    <div class="activity-title col-xs-12 col-sm-8 text-bold">
 	                                		Subscription Canceled
 	                                	</div>
 	                                	<div class="text-muted text-small activity-time col-xs-12 col-sm-4">
@@ -171,13 +168,10 @@
 	                                        <span class="text-bold" ng-if="vm.state.contact.first">{{vm.state.contact.first.toString()+' '+vm.state.contact.last.toString()}}</span>
 	                                        <span class="text-bold" ng-if="!vm.state.contact.first">{{vm.state.contact.details[0].emails[0].email}}</span>	                         
 	                                    </div>
-	                                    <div class="clearfix"></div>
-                                    	<p ng-if="activity.detail">
-                                        	{{activity.detail}}
-                                    	</p>
+	                                    <div class="clearfix"></div>      	
 	                                </div>
 	                                <div ng-switch-when="CONTACT_FORM">
-	                                    <div class="activity-title col-xs-12 col-sm-8">
+	                                    <div class="activity-title col-xs-12 col-sm-8 text-bold">
 	                                		Submmited the form
 	                                	</div>
 	                                	<div class="text-muted text-small activity-time col-xs-12 col-sm-4">
@@ -196,7 +190,7 @@
                                     	</p>
 	                                </div>
 	                                <div ng-switch-when="FORM_SUBMISSION">
-	                                	<div class="activity-title col-xs-12 col-sm-8">
+	                                	<div class="activity-title col-xs-12 col-sm-8 text-bold">
 	                                		Form Submitted
 	                                	</div>
 	                                	<div class="text-muted text-small activity-time col-xs-12 col-sm-4">
@@ -214,7 +208,7 @@
 	                                    
 	                                </div>
 	                                <div ng-switch-when="EMAIL_DELIVERED">
-	                                    <div class="activity-title col-xs-12 col-sm-8">
+	                                    <div class="activity-title col-xs-12 col-sm-8 text-bold">
 	                                		Email Delivered
 	                                	</div>
 	                                	<div class="text-muted text-small activity-time col-xs-12 col-sm-4">
@@ -233,7 +227,7 @@
                                     	</p>       
 	                                </div>
 	                                <div ng-switch-when="EMAIL_OPENED">
-	                                    <div class="activity-title col-xs-12 col-sm-8">
+	                                    <div class="activity-title col-xs-12 col-sm-8 text-bold">
 	                                		Email Opened
 	                                	</div>
 	                                	<div class="text-muted text-small activity-time col-xs-12 col-sm-4">
@@ -253,7 +247,7 @@
                                     	</p>
 	                                </div>
 	                                <div ng-switch-when="EMAIL_CLICKED">
-	                                	<div class="activity-title col-xs-12 col-sm-8">
+	                                	<div class="activity-title col-xs-12 col-sm-8 text-bold">
 	                                		Email Clicked
 	                                	</div>
 	                                	<div class="text-muted text-small activity-time col-xs-12 col-sm-4">
@@ -273,7 +267,7 @@
                                     	</p>    
 	                                </div>
 	                                <div ng-switch-when="EMAIL_UNSUB">
-	                                	<div class="activity-title col-xs-12 col-sm-8">
+	                                	<div class="activity-title col-xs-12 col-sm-8 text-bold">
 	                                		Email Unsubscribe
 	                                	</div>
 	                                	<div class="text-muted text-small activity-time col-xs-12 col-sm-4">
@@ -283,14 +277,12 @@
 	                                        Email unsubscribe for 
 	                                        <span class="text-bold" ng-if="vm.state.contact.first">{{vm.state.contact.first.toString()+' '+vm.state.contact.last.toString()}}</span>
 	                                        <span class="text-bold" ng-if="!vm.state.contact.first">{{vm.state.contact.details[0].emails[0].email}}</span>
-	                                        <p ng-if="activity.detail">
-	                                        	{{activity.detail}}
-	                                    	</p>
+	                                        
 	                                    </div>
 	                                    <div class="clearfix"></div>
 	                                </div>
 	                                <div ng-switch-when="SUBSCRIPTION_PAID">
-	                                	<div class="activity-title col-xs-12 col-sm-8">
+	                                	<div class="activity-title col-xs-12 col-sm-8 text-bold">
 	                                		Subscription Paid
 	                                	</div>
 	                                	<div class="text-muted text-small activity-time col-xs-12 col-sm-4">
@@ -303,12 +295,9 @@
 	                                        
 	                                    </div>
 	                                    <div class="clearfix"></div>
-                                    	<p ng-if="activity.detail">
-                                        	{{activity.detail}}
-                                    	</p>
 	                                </div>
 	                                <div ng-switch-when="EMAIL_BOUNCED">
-	                                    <div class="activity-title col-xs-12 col-sm-8">
+	                                    <div class="activity-title col-xs-12 col-sm-8 text-bold">
 	                                		Email bounced
 	                                	</div>
 	                                	<div class="text-muted text-small activity-time col-xs-12 col-sm-4">
@@ -321,7 +310,7 @@
 	                                    <div class="clearfix"></div>       
 	                                </div>
 	                                <div ng-switch-when="CREATE_PAYPAL_ORDER">
-	                                    <div class="activity-title col-xs-12 col-sm-8">
+	                                    <div class="activity-title col-xs-12 col-sm-8 text-bold">
 	                                		Order Created
 	                                	</div>
 	                                	<div class="text-muted text-small activity-time col-xs-12 col-sm-4">
@@ -334,7 +323,7 @@
 	                                    <div class="clearfix"></div>
 	                                </div>
 	                                <div ng-switch-when="CREATE_ORDER">
-	                                	<div class="activity-title col-xs-12 col-sm-8">
+	                                	<div class="activity-title col-xs-12 col-sm-8 text-bold">
 	                                		Order Created
 	                                	</div>
 	                                	<div class="text-muted text-small activity-time col-xs-12 col-sm-4">
