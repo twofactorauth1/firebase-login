@@ -848,15 +848,7 @@ app.constant('JS_REQUIRES', {
 		'ssbPostPageFilter': 'assets/js/ssb-site-builder/ssb-components/ssb-filters/ssb-post-page-filter.js',
 		//*** Directives
 		'mediaModal': 'assets/js/directives/mediadirective.js',
-		'fixedHeaderTable': 'assets/js/directives/fixed-header-table.js',
-
-
-		// New Contact details
-		'ContactDetailsComponent': 'assets/js/contact-details/contact-details.component.js',
-		'ContactDetailsController': 'assets/js/contact-details/contact-details.controller.js',
-		'ContactActivityComponent': 'assets/js/contact-details/activity/contact-activity.component.js',
-		'ContactActivityController': 'assets/js/contact-details/activity/contact-activity.controller.js'
-
+		'fixedHeaderTable': 'assets/js/directives/fixed-header-table.js'	
 
 	},
 	//*** angularJS Modules
