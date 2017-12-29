@@ -33,6 +33,7 @@ function contactActivityController($scope, $state, $window, $modal, $stateParams
     vm.filterContactActivities = filterContactActivities;
     vm.init = init; 
     vm.addNote = addNote;
+    vm.getSessionIcon = getSessionIcon;
     function getTimelineIcons(activityType, isIcon){
         var iconClass = ""
         switch (activityType) {
@@ -89,23 +90,16 @@ function contactActivityController($scope, $state, $window, $modal, $stateParams
 
     function init(element) {
         vm.element = element;        
-        ContactService.getContactActivities(vm.contactId, function(activities) {
-            //ContactService.getContact(vm.contactId, function (contact) {  
-                vm.state.contact = vm.contact;
-
-                activities = _.filter(activities, function(activity){
-                    return activity.activityType != "PAGE_VIEW"
+        ContactService.getContactSessionActivities(vm.contactId, function(activities) {            
+            vm.state.contact = vm.contact;
+            if(vm.state.contact.notes.length){
+                ContactService.getContactNotes(vm.contactId, function(notes){
+                    mergeContactNotes(notes, activities);
                 })
-                if(vm.state.contact.notes.length){
-                    ContactService.getContactNotes(vm.contactId, function(notes){
-                        mergeContactNotes(notes, activities);
-                    })
-                }
-                else{
-                    iterateActivities(activities);
-                }                
-                
-            //})
+            }
+            else{
+                iterateActivities(activities);
+            } 
         });
     };
 
@@ -202,6 +196,15 @@ function contactActivityController($scope, $state, $window, $modal, $stateParams
             _userName = $scope.$parent.currentUser.first + " " + $scope.$parent.currentUser.last;
         }
         return _userName.trim();
+    };
+
+    function getSessionIcon(activity){
+       session_activity = _.find(activity, function(id){return id.session_event && id.session_event._id});
+       if(session_activity){
+         if(session_activity.session_event && session_activity.session_event.user_agent && session_activity.session_event.user_agent.device){
+            return "fa fa-" + session_activity.session_event.user_agent.device;
+         }
+       }
     }
 
 }

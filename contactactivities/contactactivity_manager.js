@@ -8,7 +8,7 @@
 require('./dao/contactactivity.dao.js');
 var dao = require('./dao/contactactivity.dao.js');
 var log = $$.g.getLogger('contactactivity_manager');
-
+var async = require('async');
 module.exports = {
 
   createActivity: function(contactActivity, fn) {
@@ -89,6 +89,46 @@ module.exports = {
       }
     });
   },
+
+  getActivitySessionByContactId: function(accountId, contactId, skip, limit, fn) {
+    var self = this;
+    log.debug('>> getActivitySessionByContactId');
+    var queryObj = {
+      'accountId': accountId,
+      'contactId': contactId,
+      'activityType': {$ne: 'PAGE_VIEW'}
+    };
+
+    dao.findAllWithFieldsAndLimit(queryObj, skip, limit, null, null, $$.m.ContactActivity, function(err, list) {
+      if (err) {
+        log.error('Error listing activities by contactId: ' + err);
+        fn(err, null);
+      } else {
+        log.debug('<< getActivitySessionByContactId');
+        // Bind activity with session
+        async.each(list, function(activity, cb){
+            if(activity.get("sessionId")){
+              var sessionId = activity.get("sessionId");
+              dao.findOne({session_id: sessionId, accountId: accountId}, $$.m.SessionEvent, function(err, value){
+                if(err) {
+                    _log.error('Error finding session events: ' + err);
+                    cb(err);
+                } else {
+                    activity.set("session_event", value);
+                    cb()
+                }
+              });
+            }
+            else{
+              cb()
+            }
+        }, function(err){
+            fn(null, list);
+        });
+      }
+    });
+  },
+
 
   findActivities: function(accountId, contactId, activityTypeAry, noteText, detailText, beforeTimestamp,
     afterTimestamp, skip, limit, isRead, includeDeleted, fn) {

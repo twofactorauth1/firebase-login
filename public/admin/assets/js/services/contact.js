@@ -442,6 +442,15 @@
                     fn(data);
                 });
         };
+
+        this.getContactSessionActivities = function (contactId, fn) {
+            var apiUrl = baseUrl + ['contact', contactId, 'activity', 'session'].join('/');
+            $http.get(apiUrl)
+                .success(function (data) {
+                    fn(data);
+                });
+        };
+
         this.getContactUnreadActivities = function (contactId, fn) {
             var apiUrl = baseUrl + ['contact', contactId, 'activity', 'unread'].join('/');
             $http.get(apiUrl)

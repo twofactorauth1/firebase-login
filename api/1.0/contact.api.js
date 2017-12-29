@@ -80,6 +80,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url(':id/activity/all'), this.isAuthAndSubscribedApi.bind(this), this.getActivityByContactId.bind(this));
         app.get(this.url(':id/activity/read'), this.isAuthAndSubscribedApi.bind(this), this.getReadActivityByContactId.bind(this));
         app.get(this.url(':id/activity/unread'), this.isAuthAndSubscribedApi.bind(this), this.getUnreadActivityByContactId.bind(this));
+        app.get(this.url(':id/activity/session'), this.isAuthAndSubscribedApi.bind(this), this.getActivitySessionByContactId.bind(this));
 
         app.get(this.url('activity/:id'), this.isAuthAndSubscribedApi.bind(this), this.getActivityById.bind(this));
         app.post(this.url('activity'), this.isAuthAndSubscribedApi.bind(this), this.createActivity.bind(this));
@@ -1356,6 +1357,40 @@ _.extend(api.prototype, baseApi.prototype, {
         });
 
     },
+
+    getActivitySessionByContactId: function (req, resp) {
+
+        var self = this;
+        self.log.debug('>> getActivitySessionByContactId');
+
+        var contactId = req.params.id;
+        var accountId = parseInt(self.accountId(req));
+        if (!contactId) {
+            return self.wrapError(resp, 400, null, "Invalid parameter for contact id");
+        }
+        contactId = parseInt(contactId);
+
+        self.checkPermissionForAccount(req, self.sc.privs.VIEW_CONTACT, accountId, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(resp);
+            } else {
+                var skip, limit;
+                if(req.query.skip) {
+                    skip = parseInt(req.query.skip);
+                }
+                if(req.query.limit) {
+                    limit = parseInt(req.query.limit);
+                }
+
+                contactActivityManager.getActivitySessionByContactId(accountId, contactId, skip, limit, function(err, value){
+                    self.log.debug('<< getActivitySessionByContactId');
+                    self.sendResultOrError(resp, err, value, "Error getting activity by contactId.");
+                    self = null;
+                });
+            }
+        });
+
+    },    
 
     getReadActivityByContactId: function(req, resp) {
         var self = this;
