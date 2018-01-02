@@ -171,6 +171,23 @@ mainApp.controller('CacheCtrl', ['$scope', '$rootScope', 'embeddedSiteDataServic
 			                	}, 100);
 							}
 						}
+					}); 
+					$('a:not(.ssb-sub-nav-menu)').on('click', function(event) {
+						var hash = this.hash; 
+						if(hash){
+							hash=hash.substring(1);
+							var hashElement= document.getElementById(hash);
+							if(!hashElement){ 
+								event.preventDefault();
+								hashElement= document.getElementById("section_" + hash) 
+									|| document.getElementById("component_" + hash);
+								if(hashElement){
+									$timeout(function() { 								
+										$document.scrollToElementAnimated(hashElement, SsbPageSectionService.offset, 1000); 
+									}, 100);
+								}
+							} 
+						} 	
 					});
 				}, 0);
 			});
