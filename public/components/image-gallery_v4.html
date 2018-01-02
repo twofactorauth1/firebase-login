@@ -8,7 +8,7 @@
 <div ng-class="component.type+'-v'+component.version">
     <div class="img-container" ng-class="{'slider-dot-color': component.slider.sliderDotColor, 'slider-active-dot-color': component.slider.sliderActiveDotColor, 'slider-dot-color-opacity': component.slider.sliderDotColorOpacity ||component.slider.sliderDotColorOpacity==0 }">
         <div ng-if="dataLoaded" class="slider-main slider-main-{{component._id}}" ind-slider='{slidesToShow:1, touchMove:{{touchMove}}, draggable:{{draggable}}, dots:true, arrows:false,  slidesToScroll:1, autoplay:{{autoplay}},  asNavFor: ".slider-nav-thumbnails-{{component._id}}"}'>
-            <div class="img-row col-sm-12 col-xs-12 image-wrap {{isEditing ? 'editing' : ''}}" ng-repeat="image in component.images">
+            <div class="img-row col-sm-12 col-xs-12 image-wrap {{isEditing ? 'editing' : ''}}" ng-repeat="image in component.images track by $index">
 
                     <div class="img-responsive img-gallery-{{$index}} image-gallery center" data-index="{{$index}}" alt="{{image.label}}" ng-attr-style="background-image: url('{{image.url}}')">
                          <div ng-if="component.halfOverlay" elem ng-model="image.details" class="image-50-details pull-{{component.halfOverlayPosition}}"></div>
