@@ -1841,9 +1841,8 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                 } else {
                      cookieKey = 'cart_cookie_' + account._id + '_' + account.subdomain;
 
-                     cookieData = localStorageService.get(cookieKey) || [];
+                     cookieData = localStorageService.get(cookieKey) || {  products : [] };
 
-                ;
                 cookieData.products.forEach(function(entry, index) {
                     scope.reloadCartDetails(entry.product, entry.variation, entry.quantity);
                 });
