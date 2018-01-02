@@ -10,6 +10,7 @@ var passport = require('passport');
 var userDao = require('../dao/user.dao');
 var authenticationDao = require('../dao/authentication.dao');
 var accountDao = require('../dao/account.dao');
+var accountManager = require('../accounts/account.manager');
 var cookies = require("../utils/cookieutil");
 var FacebookConfig = require('../configs/facebook.config');
 var LoginView = require('../views/login.server.view');
@@ -360,7 +361,8 @@ _.extend(router.prototype, BaseRouter.prototype, {
                             });
                         } else {
                             self.log.debug('redirecting to account by subdomain');
-                            accountDao.getAccountBySubdomain(subObject.subdomain, function(err, value){
+                            var parsedHost = urlUtils.getSubdomainFromRequest(req);
+                            accountManager.getAccountBySubdomainAndOrgDomain(subObject.subdomain, parsedHost.orgDomain, function(err, value){
                                 if(err) {
                                     self.log.error('Error finding account:' + err);
                                     self.log.debug('redirecting to /home');
@@ -390,6 +392,7 @@ _.extend(router.prototype, BaseRouter.prototype, {
                                     self = null;
                                 });
                             });
+
                         }
 
                     }
@@ -455,15 +458,15 @@ _.extend(router.prototype, BaseRouter.prototype, {
         var token = req.params.token;
         self.log.debug('email: ' + email);
         if (password !== password2) {
-           
+
             new ForgotPasswordView(req, resp).ForgotPasswordMismatch(token, email);
             // req.flash("error", "Passwords do not match");
             // self.log.error('Passwords do not match');
             // return resp.redirect("/forgotpassword/reset/" + token);
         } else {
-            new ForgotPasswordView(req, resp).handleResetByToken(token, password, email); 
+            new ForgotPasswordView(req, resp).handleResetByToken(token, password, email);
         }
-       
+
     },
     //endregion
 

@@ -147,7 +147,7 @@ _.extend(api.prototype, baseApi.prototype, {
                         var _user = user.toJSON('manage', {accountId:accountId});
                         return self.sendResultOrError(resp, err, _user, 'Error creating user', null);
                     }
-                    
+
                 });
             }
         });
@@ -495,10 +495,10 @@ _.extend(api.prototype, baseApi.prototype, {
         var accountId = parseInt(self.currentAccountId(req));
         var userId = self.userId(req);
         self.log.debug(accountId, userId, '>> sendEmailToDevs');
-        
+
         var script = req.body.script;
         var emailTo = req.body.emailTo;
-       
+
         var component = {};
         component.script = script;
         var fromEmail = notificationConfig.ACTIVATE_ACCOUNT_FROM_EMAIL;
@@ -518,7 +518,7 @@ _.extend(api.prototype, baseApi.prototype, {
                    // if(emailToArray && emailToArray.length){
                         //_.each(emailToArray, function(emailTo){
                             emailMessageManager.sendBasicDetailsEmail(fromEmail, fromName, emailTo, null, emailSubject, html, accountId, [], '', null, null, function(err, result){
-                            
+
                                 self.sendResultOrError(resp, err, result, "Error sending email");
                             });
                        // })
@@ -821,40 +821,47 @@ _.extend(api.prototype, baseApi.prototype, {
     },
 
     getAccountBySubdomain:function(req,resp){
-           accountDao.getAccountBySubdomain(req.query.subdomain,function(err,value){
-            if(!err){
-               if(value!=null)
-                  resp.send(value.toJSON("public"));
-               else
-                  resp.send({});
-            }
-            else{
-                  resp.wrapError(resp,500,null,err,value);
-            }
+        var self = this;
+        self.getOrgId(null, null, req, function(err, orgId) {
+            var subdomain = '' || req.query.subdomain;
+            accountManager.getAccountBySubdomainAndOrgId(subdomain.toLowerCase(), orgId, function (err, value) {
+                if(!err){
+                    if(value!=null){
+                        resp.send(value.toJSON("public"));
+                    } else {
+                        resp.send({});
+                    }
+                } else{
+                    resp.wrapError(resp,500,null,err,value);
+                }
+            });
         });
+
     },
 
     checkSubdomainAvailability: function(req, res) {
         var self = this;
         self.log.debug('>> checkSubdomainAvailability');
         var subdomain = req.params.subdomain.toLowerCase();
-        accountDao.getAccountBySubdomain(subdomain, function(err, value){
-            if(err) {
-                res.wrapError(res,500,null,err,value);
-            } else if(value === null) {
-                if(cookies.getAccountToken(req) === undefined) {
-                    self.log.debug('Creating tmp account');
-                    self._createTmpAccount(res, function(){
-                        res.send('true');
-                    });
-                } else {
-                    res.send('true');
-                }
-            } else {
-                res.send('false');
-            }
-        });
 
+        self.getOrgId(null, null, req, function(err, orgId){
+            accountManager.getAccountBySubdomainAndOrgId(subdomain, orgId, function(err, value){
+                if(err) {
+                    res.wrapError(res,500,null,err,value);
+                } else if(value === null) {
+                    if(cookies.getAccountToken(req) === undefined) {
+                        self.log.debug('Creating tmp account');
+                        self._createTmpAccount(res, function(){
+                            res.send('true');
+                        });
+                    } else {
+                        res.send('true');
+                    }
+                } else {
+                    res.send('false');
+                }
+            });
+        });
     },
 
     checkSubdomainDuplicacy: function(req, res) {
@@ -865,15 +872,16 @@ _.extend(api.prototype, baseApi.prototype, {
         accountId = parseInt(accountId);
         self.log.debug('>> subdomain = ' + subdomain );
         self.log.debug('>> accountId = ' + accountId );
-
-        accountDao.getAccountsBySubdomain(subdomain, accountId, function(err, value){
-            if(err) {
-                res.wrapError(res,500,null,err,value);
-            } else if(value === null) {
-                res.send("false");
-            } else {
-                res.send("true");
-            }
+        self.getOrgId(null, null, req, function(err, orgId){
+            accountManager.getAccountsBySubdomainAndOrgId(accountId, subdomain, orgId, function(err, value){
+                if(err) {
+                    res.wrapError(res,500,null,err,value);
+                } else if(value === null) {
+                    res.send("false");
+                } else {
+                    res.send("true");
+                }
+            });
         });
 
     },
@@ -886,16 +894,18 @@ _.extend(api.prototype, baseApi.prototype, {
 
         self.log.debug('>> subdomain = ' + subdomain );
         self.log.debug('>> accountId = ' + accountId );
-
-        accountDao.getAccountsBySubdomain(subdomain, accountId, function(err, value){
-            if(err) {
-                res.wrapError(res,500,null,err,value);
-            } else if(value === null) {
-                res.send({isDuplicate: false, candidateDomain: subdomain});
-            } else {
-                res.send({isDuplicate: true, candidateDomain: subdomain});
-            }
+        self.getOrgId(null, null, req, function(err, orgId) {
+            accountManager.getAccountBySubdomainAndOrgId(subdomain, orgId, function (err, value) {
+                if(err) {
+                    res.wrapError(res,500,null,err,value);
+                } else if(value === null) {
+                    res.send({isDuplicate: false, candidateDomain: subdomain});
+                } else {
+                    res.send({isDuplicate: true, candidateDomain: subdomain});
+                }
+            });
         });
+
     },
 
     _addTrialDaysToAccount: function(account) {

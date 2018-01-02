@@ -39,6 +39,12 @@ var dao = {
     },
 
 
+    /**
+     * @deprecated
+     * @param subdomain
+     * @param accountId
+     * @param fn
+     */
     getAccountsBySubdomain: function (subdomain, accountId, fn) {
         this.findOne({
             _id: {
@@ -48,10 +54,21 @@ var dao = {
         }, fn);
     },
 
+    /**
+     * @deprecated
+     * @param subdomain
+     * @param fn
+     */
     getAccountBySubdomain: function (subdomain, fn) {
         this.findOne({
             'subdomain': subdomain
         }, fn);
+    },
+
+
+    _getAccountBySubdomainAndOrgId: function(subdomain, orgId, fn) {
+        orgId = orgId || 0;
+        this.findOne({orgId:orgId, subdomain:subdomain}, $$.m.Account, fn);
     },
 
 
@@ -184,18 +201,12 @@ var dao = {
             return this.getAccountBySubdomainAndOrg(parsed.subdomain, parsed.orgDomain, fn);
         }
         if (parsed.subdomain != null || parsed.domain != null) {
-            var cb = function (err, value) {
-                if (err) {
-                    return fn(err, value);
-                } else {
-                    return fn(null, value);
-                }
-            };
 
             if (parsed.subdomain !== null && parsed.subdomain !== "") {
-                return this.getAccountBySubdomain(parsed.subdomain, cb);
+                //return this.getAccountBySubdomain(parsed.subdomain, cb);
+                return this.getAccountBySubdomainAndOrg(parsed.subdomain, parsed.orgDomain, fn);
             } else if (parsed.domain != null) {
-                return this.getAccountByDomain(parsed.domain, cb);
+                return this.getAccountByDomain(parsed.domain, fn);
             }
         }
     },
@@ -262,7 +273,7 @@ var dao = {
         var p = $.Deferred();
         var subdomain = account.getOrGenerateSubdomain();
         if (String.isNullOrEmpty(account.get("subdomain")) == false) {
-            this.getAccountBySubdomain(account.get("subdomain"), function (err, value) {
+            this._getAccountBySubdomainAndOrgId(account.get('subdomain'), account.get('orgId'), function(err, value){
                 if (!err) {
                     if (value != null) {
                         var subdomain = account.get("subdomain");
@@ -692,7 +703,7 @@ var dao = {
                 async.waterfall([
                     function validateSubdomain(callback) {
                         if (account.get('subdomain') !== modifiedAccount.get('subdomain')) {
-                            self.getAccountBySubdomain(modifiedAccount.get('subdomain'), function (err, value) {
+                            self._getAccountBySubdomainAndOrgId(modifiedAccount.get('subdomain'), modifiedAccount.get('orgId'), function(err, value){
                                 if (err) {
                                     self.log.error('Error verifying subdomain: ' + err);
                                     return fn(err, null);
@@ -704,6 +715,7 @@ var dao = {
                                     return fn('Subdomain [' + modifiedAccount.get('subdomain') + '] already exists');
                                 }
                             });
+
                         } else {
                             callback(null);
                         }
@@ -737,7 +749,7 @@ var dao = {
 
     listAccountTemplates: function(accountId, userId, fn){
         var self = this;
-        
+
         this.getAccountByID(accountId, function(err, account){
             if(err) {
                 self.log.error('Exception retrieving current account: ' + err);
