@@ -224,7 +224,9 @@ function contactActivityController($scope, $state, $window, $modal, $stateParams
            session_activity = _.find(vm.state.activities, function(id){return id.session_event && id.session_event._id});
            if(session_activity){
              if(session_activity.session_event && session_activity.session_event.user_agent){
-                vm.contactDeviceDetails = session_activity.session_event;
+                $timeout(function() {
+                    vm.contactDeviceDetails = session_activity.session_event;
+                }, 0);
              }
            } 
         }

@@ -335,18 +335,22 @@
         </div>
       </div>
       <div class="row processing" style="" ng-if="checkoutModalState == 4">
-        <h3 style="margin-top: 110px;text-align: center;">Order Processing</h3>
-        <div class="text-center">
-          <span class="fa fa-spinner fa-spin fa-4x"></span>
+        <div style="margin:30px 0px">
+          <h3 class="center">Order Processing</h3>
+          <div class="text-center padding-20">
+            <span class="fa fa-spinner fa-spin fa-4x"></span>
+          </div>
+          <div style="margin-bottom:30px"></div>
         </div>
-        <div style="margin-bottom:30px"></div>
       </div>
       <div class="row thank-you" style="" ng-if="checkoutModalState == 5">
-        <h3 class="center mb20">Thank you for your Purchase.</h3>
-        <p class="center">You will be receiving an order summary by email shortly.</p>
-        <div class="clearfix" style="margin-bottom:30px"></div>
-        <div class="col-xs-12 text-center">
-          <span class="fa fa-check-circle fa-5x text-green"></span>
+        <div style="margin:30px 0px">
+            <h3 class="center mb20">Thank you for your Purchase.</h3>
+            <p class="center">You will be receiving an order summary by email shortly.</p>
+            <div class="clearfix" style="margin-bottom:30px"></div>
+            <div class="text-center">
+              <span class="fa fa-check-circle fa-5x text-green"></span>
+            </div>
         </div>
       </div>
       <div class="row thank-you" style="" ng-if="checkoutModalState == 6">

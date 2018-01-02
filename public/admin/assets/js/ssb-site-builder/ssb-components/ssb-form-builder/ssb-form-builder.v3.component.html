@@ -146,7 +146,7 @@
                                     <div class="form-group {{vm.fieldClass()}} input-field-container" ng-if="vm.component.optInRequired"  ng-class="{ 'has-error' : (formBuilder._optin.$invalid || formBuilder._optin.$error.$required) && !formBuilder._optin.$pristine }">
                                         <span class="required req-opt-in">*</span>
                                         <div class="form-checkbox-field">
-                                            <input class="optin-checkbox" type="checkbox" ng-model="vm.formBuildreq-opt-iner['_optin']"   name="_optin" ng-required='true' ng-change="vm.formFiedlsCHange('_optin')">
+                                            <input class="optin-checkbox" type="checkbox" ng-model="vm.formBuilder['_optin']" name="_optin" ng-required='true' ng-change="vm.formFiedlsCHange('_optin')">
                                         </div>
                                         <div class="form-checkbox-label">
                                             <div elem ng-model="vm.component.optInText">
