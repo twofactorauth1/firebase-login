@@ -160,7 +160,7 @@ exports.stripe_dao_test = {
             var card = {
                 'number': '4242424242424242',
                 'exp_month': '12',
-                'exp_year':'2017'
+                'exp_year':'2018'
 
             };
 
@@ -420,7 +420,7 @@ exports.stripe_dao_test = {
         var card = {
             'number': '5555555555554444',
             'exp_month': '12',
-            'exp_year':'2017',
+            'exp_year':'2018',
             'cvc': '111'
         };
 
@@ -462,7 +462,7 @@ exports.stripe_dao_test = {
         var cardId = testContext.cardId;
         var name = 'New Name';
         var newMonth = '12';
-        var newYear = '2017';
+        var newYear = '2018';
 
         stripeDao.updateStripeCard(customerId, cardId, name, null, null, null, null, null, null,newMonth, newYear, null,
             function(err, card){
