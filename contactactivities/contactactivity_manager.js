@@ -146,6 +146,9 @@ module.exports = {
                           if(!handle){
                             handle = "index";
                           }
+                          if(handle == 'blog'){
+                            handle = 'blog-list';
+                          }
                           console.log(handle);                     
                           var singleEvent = {                          
                             url: pageEvent.get("url"),
@@ -173,7 +176,9 @@ module.exports = {
                                 }
                                 else
                                 {
-                                  singleEvent.page = {};
+                                  singleEvent.page = {
+                                    handle: handle
+                                  };
                                 }
                                 page_events.push(singleEvent);
                                 callback();
