@@ -39,7 +39,7 @@
                 </label>
                 <ui-select multiple tagging="tagToContact" tagging-match-to-key="label" ng-model="contact.tags" theme="bootstrap" ng-disabled="disabled">
                     <ui-select-match placeholder="Select tags...">{{$item.label}}</ui-select-match>
-                    <ui-select-choices repeat="tag in contactTags | orderBy:'label' | filter:$select.search |filter:customTagFilert" >
+                    <ui-select-choices repeat="tag in contactTags | orderBy:'label' | filter:$select.search" >
                         {{tag.label}}
                     </ui-select-choices>
                 </ui-select>
