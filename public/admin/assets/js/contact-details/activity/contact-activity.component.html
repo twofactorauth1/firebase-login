@@ -70,7 +70,7 @@
 	        		<ul class="timeline-xs">
 		                <li class="timeline-item success padding-bottom-20 {{vm.getTimelineIcons(activity.activityType, false)}}" ng-repeat="activity in value | orderBy:'start'">
 		                	<i ng-if="activity.activityType !== 'USER_NOTES'" class="fa fa-1 fa-{{vm.getTimelineIcons(activity.activityType, true)}}"></i>
-		                	<img ng-if="activity.activityType === 'USER_NOTES'" src="{{activity.user.user_profile_photo.url ? activity.user.user_profile_photo.url : '/admin/assets/images/default-user.png'}}" class="img-circle">
+		                	<img ng-if="activity.activityType === 'USER_NOTES'" ng-src="{{ activity.user.user_profile_photo }}" err-src="/admin/assets/images/default-user.png" class="img-circle">
 		                    <div class="margin-left-30 padding-15 activity-content">
 	                            <div ng-switch on="activity.activityType" class="activity-inner-content">
 	                                <div ng-switch-when="OTHER">
