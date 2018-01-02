@@ -370,8 +370,8 @@
 	                                    		Landed on the page <span class="text-bold">{{activity.entrancePath}}</span>
 	                                    	</span>	
 	                                        <ul class="form-values">
-	                                            <li ng-repeat="event in activity.page_events">
-	                                                Viewed the page <span class="text-bold">{{event.page.title || event.requestedUrl.path || event.url.path}}</span>
+	                                            <li ng-repeat="event in activity.page_events | filter: { entrance: false }">
+	                                                Viewed the page <span class="text-bold">{{event.page.title || event.page.handle || event.requestedUrl.path || event.url.path}}</span>
 	                                            </li>
 	                                        </ul>	                         
 	                                    </div>

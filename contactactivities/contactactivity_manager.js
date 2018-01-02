@@ -146,13 +146,16 @@ module.exports = {
                           if(!handle){
                             handle = "index";
                           }
+                          if(handle == 'blog'){
+                            handle = 'blog-list';
+                          }
                           console.log(handle);                     
                           var singleEvent = {                          
                             url: pageEvent.get("url"),
                             server_time: pageEvent.get("server_time"),
                             start: pageEvent.get("server_time_dt"),
                             requestedUrl: pageEvent.get("requestedUrl"),
-                            entrance: pageEvent.get("entrance")
+                            entrance: pageEvent.get("entrance") || false
                           }
                           if(pageIDMap[handle] && pageIDMap[handle].handle) {
                             singleEvent.page = pageIDMap[handle];
@@ -171,6 +174,12 @@ module.exports = {
                                   singleEvent.page = _page;
                                   pageIDMap[handle] = _page;
                                 }
+                                else
+                                {
+                                  singleEvent.page = {
+                                    handle: handle
+                                  };
+                                }
                                 page_events.push(singleEvent);
                                 callback();
                               }
@@ -184,7 +193,12 @@ module.exports = {
                       }, function(err){
                         var accountUrl = '';
                         var entrancePath = '';
+
                         page_events = _.sortBy(page_events, function(result){return result.server_time});
+                        // Unique page events
+                        page_events = _.uniq(page_events, function(result){
+                          return result.page.handle
+                        });
                         if(page_events[0].url && page_events[0].url.protocol && page_events[0].url.domain){
                           accountUrl = page_events[0].url.protocol + "://" + page_events[0].url.domain;
                         }
