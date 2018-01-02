@@ -1,5 +1,12 @@
 <div class="margin-top-20 activity-timeline">
-    <h3>Activity Timeline</h3>
+	
+	<div class="col-xs-8 col-sm-8 col-md-7 padding-left-0 padding-right-0 activity-date-filter pull-right">
+		<span class="filter-label">Jump to:</span>
+		<indi-datepicker ng-model="vm.state.dateFilter" popup="MM/dd/yy"></indi-datepicker>
+	</div>
+	<div class="col-xs-12 col-sm-12 col-md-5 padding-left-0 padding-right-0">
+		<h3 class="inline-block">Activity Timeline</h3>
+	</div>
     <div class="activity-filter">
     	<div class="col-xs-12 col-md-10 col-sm-8 padding-left-0 padding-right-0">
 	    	<span>Filter</span>
@@ -63,7 +70,7 @@
 	        		<ul class="timeline-xs">
 		                <li class="timeline-item success padding-bottom-20 {{vm.getTimelineIcons(activity.activityType, false)}}" ng-repeat="activity in value | orderBy:'start'">
 		                	<i ng-if="activity.activityType !== 'USER_NOTES'" class="fa fa-1 fa-{{vm.getTimelineIcons(activity.activityType, true)}}"></i>
-		                	<img ng-if="activity.activityType === 'USER_NOTES'" src="{{activity.user.user_profile_photo.url ? activity.user.user_profile_photo.url : '/admin/assets/images/default-user.png'}}" class="img-circle">
+		                	<img ng-if="activity.activityType === 'USER_NOTES'" ng-src="{{ activity.user.user_profile_photo }}" err-src="/admin/assets/images/default-user.png" class="img-circle">
 		                    <div class="margin-left-30 padding-15 activity-content">
 	                            <div ng-switch on="activity.activityType" class="activity-inner-content">
 	                                <div ng-switch-when="OTHER">

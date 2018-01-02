@@ -105,7 +105,8 @@ function contactDetailsController($scope, $state, $window, $modal, $stateParams,
 		if (vm.state.contact.details.length !== 0 && vm.state.contact.details[0].addresses && vm.state.contact.details[0].addresses.length !== 0) {
 			var formattedAddress = angular.copy(vm.state.contact.details[0].addresses[0]);
 			formattedAddress.address2 = '';
-			vm.state.ip_geo_address = displayAddressFormat(formattedAddress);			
+			vm.state.ip_geo_address = displayAddressFormat(formattedAddress);
+			vm.state.ip_geo_address_with_country = displayAddressFormatWithCountry(formattedAddress);		
 			vm.uiState.loadingMap = false;
 		}
 		var validMapData = false;
@@ -139,7 +140,7 @@ function contactDetailsController($scope, $state, $window, $modal, $stateParams,
 				}
 			});
 		} else {
-			if (!vm.state.ip_geo_address.length && vm.state.contact_data) {
+			if (!vm.state.ip_geo_address_with_country.length && vm.state.contact_data) {
 				vm.state.location.lat = "";
 				vm.state.location.lon = "";
 				vm.state.contact_data.details[0].addresses[0].lat = "";
@@ -231,6 +232,12 @@ function contactDetailsController($scope, $state, $window, $modal, $stateParams,
 
 	function displayAddressFormat(address) {
 		return _.filter([address.address, address.address2, address.city, address.state, address.zip], function (str) {
+			return str !== "";
+		}).join(",");
+	};
+
+	function displayAddressFormatWithCountry(address) {
+		return _.filter([address.address, address.address2, address.city, address.state, address.zip, address.country], function (str) {
 			return str !== "";
 		}).join(",");
 	};
