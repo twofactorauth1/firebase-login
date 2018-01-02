@@ -234,6 +234,34 @@ contact-details-component{
         .panel-white{
             border: none !important;
         }
+        .activity-date-filter{
+            span.filter-label{
+                position: absolute;
+                left: 10%;
+                margin-top: 5px;
+            }
+            .input-group{
+                width:100%;
+                float:right;
+                margin-top:-10px;
+                .dropdown-menu{
+                    left: 10px !important;
+                    @media screen and (max-width: 991px) {
+                        padding: 15px 3px;
+                        left: -25% !important;
+                    }
+                }
+                input{
+                    border: none;
+                    background: none !important;
+                    border-bottom: 1px solid #e1e1e1;
+                    width: 50%;
+                    float:right;
+                    right: 10px;
+                }
+            }
+            
+        }
         .activity-filter{
             select.form-control{
                 width: 30%;

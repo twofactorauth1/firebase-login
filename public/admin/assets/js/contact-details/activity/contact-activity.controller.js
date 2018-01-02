@@ -120,6 +120,11 @@ function contactActivityController($scope, $state, $window, $modal, $stateParams
                 return activity.activityType === vm.state.activityFilter.type
             })
         }
+        if(vm.state.dateFilter){
+            activities = _.filter(activities, function(activity){
+                return $filter('date')(activity.activityDate, "MMMM dd, yyyy") === $filter('date')(vm.state.dateFilter, "MMMM dd, yyyy")
+            })
+        }
         vm.state.filteredActivities = activities;
         getGroupedActivities(activities);
     };
@@ -190,6 +195,12 @@ function contactActivityController($scope, $state, $window, $modal, $stateParams
             mergeContactNotes(null, vm.state.activities, _noteToPush);
         });
     };
+
+    $scope.$watch("vm.state.dateFilter", function(_date){
+        if(angular.isDefined(_date) && vm.state.activities && vm.state.activities.length){
+            filterContactActivities();
+        }
+    })
 
     function getUserName() {
         var _userName = $scope.$parent.currentUser.email;
