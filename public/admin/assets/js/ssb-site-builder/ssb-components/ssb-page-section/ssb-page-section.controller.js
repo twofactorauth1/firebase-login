@@ -30,9 +30,9 @@
 		vm.setFixedPosition = setFixedPosition;
 
 		vm.screenLayout = screenLayout();
-
-		$scope.$watch('vm.section.bg.video.id', function (_id) {
-			if (_id && vm.section.bg.video.show) {
+		
+		$scope.$watchGroup(['vm.section.bg.video.id', 'vm.section.bg.video.show'], function(id) {    	
+			if(id[0] && id[1]){
 				$timeout(function () {
 					vm.setupVideoBackground();
 				}, 1000);
