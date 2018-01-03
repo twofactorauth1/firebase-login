@@ -986,7 +986,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
                     var diff1 = jsondiff1[i].lhs;
                     var diff2 = jsondiff1[i].rhs;
                     var changedPath = jsondiff1[i].path;
-                    if (dataIsCompiledAdded(diff1, diff2) || dataIsCompiledRemoved(diff1, diff2) || dataIsPublishedDate(diff1, diff2, changedPath) || dataIsSliderInitialized(diff1, diff2, changedPath) || isDataCompiledChanged(diff1, diff2) || isEmptyStyleAdded(diff1, diff2, changedPath)) {
+                    if (dataIsCompiledAdded(diff1, diff2) || dataIsCompiledRemoved(diff1, diff2) || dataIsPublishedDate(diff1, diff2, changedPath) || dataIsSliderInitialized(diff1, diff2, changedPath) || isDataCompiledChanged(diff1, diff2) || isEmptyStyleAdded(diff1, diff2, changedPath) || isStyleManipulated(diff1, diff2)) {
 
                         console.debug('change to ignore detected @: ', jsondiff1[i].path);
 
@@ -1141,6 +1141,29 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
                 var compareString2 = diff2.replace(/ style=''/g, "");
 
                 return angular.equals(compareString1, compareString2);
+            }
+    };
+
+    function isStyleManipulated(diff1, diff2) {
+        if(diff1 &&
+                diff2 &&
+                angular.isDefined(diff1) && angular.isDefined(diff2))
+            {
+                if(!_.isString(diff1)) {
+                    diff1 = "" + diff1;
+                }
+                if(!_.isString(diff2)) {
+                    diff2 = "" + diff2;
+                }
+                // Compare Styles
+                var regex = /style="([^"]*)"/;
+                var styleArr1 = diff1.match(regex);
+                var styleArr2 = diff2.match(regex);
+                if(styleArr1 && styleArr2 && styleArr1.length && styleArr2.length && styleArr1.length == styleArr2.length){
+                    var compareString1 = diff1.replace(regex, styleArr1[0].replace(/;/, ""));
+                    var compareString2 = diff2.replace(regex, styleArr2[0].replace(/;/, ""));                    
+                    return angular.equals(compareString1, compareString2);
+                }
             }
     };
 
