@@ -49,7 +49,7 @@
                     <!-- First -->
                     <div id="first" class="hidden form-group col-xs-12 col-sm-6 has-feedback" >
                         <label>First Name</label>
-                        <input class="form-control input-lg" type="text" ng-change="checkFirstName(newAccount)" ng-model-options="{ debounce: 800 }" ng-model="newAccount.first" placeholder="{{newAccount.first}}" />
+                        <input class="form-control input-lg" type="text" ng-change="checkFirstName(newAccount)" ng-model-options="{ debounce: 800 }" ng-model="newAccount.first" ng-attr-placeholder="{{newAccount.first}}" />
                         <span class="glyphicon form-control-feedback"></span>
                         <span class="error help-block" />
                     </div>
