@@ -1,6 +1,7 @@
 
 var LOG = $$.g.getLogger("account.manager");
 var accountDao = require('../dao/account.dao');
+var orgDao = require('../organizations/dao/organization.dao');
 var appConfig = require('../configs/app.config');
 var assetManager = require('../assets/asset_manager');
 var websiteDao = require('../ssb/dao/website.dao');
@@ -210,7 +211,7 @@ var accountManager = {
                     cb('source account with id[' + srcAccountId + '] not found');
                 } else {
                     //fetch destination account
-                    srcAccount = account;                    
+                    srcAccount = account;
                     accountDao.getAccountByID(destAccountId, cb);
                 }
             },
@@ -222,7 +223,7 @@ var accountManager = {
                     cb('Could not find destination account');
                 } else {
                     self.log.debug(accountId, userId, 'Found destination account with id:' + account.id());
-                    self._copyAccountSettings(accountId, userId, srcAccountId, account.id(), account, srcAccount, function(err, updatedAccount){                        
+                    self._copyAccountSettings(accountId, userId, srcAccountId, account.id(), account, srcAccount, function(err, updatedAccount){
                         cb(err, account);
                     });
                 }
@@ -230,8 +231,8 @@ var accountManager = {
             function(account, cb){
                 /*
                  * COPY ASSETS
-                 */                
-                self._copyAssets(accountId, userId, srcAccountId, account.id(), idMap, function(err, updatedIdMap){                    
+                 */
+                self._copyAssets(accountId, userId, srcAccountId, account.id(), idMap, function(err, updatedIdMap){
                     //I don't think we need the udpatedIdMap... the reference should hold
                     cb(err, account);
                 });
@@ -305,8 +306,8 @@ var accountManager = {
                                 cb(null, account);
                             }
                         });
-                    } 
-                });      
+                    }
+                });
             },
             function(account, cb) {
                 /*
@@ -367,15 +368,15 @@ var accountManager = {
                         self.log.error(accountId, userId, 'Error getting old emails:', err);
                         cb(err);
                     } else {
-                        
+
                         async.eachSeries(emails, function(email, callback){
-                            
+
                             email.set('latest', false);
                             emailDao.saveOrUpdate(email, function(err, savedEmail){
                                 if(err) {
                                     self.log.error(accountId, userId, 'Error saving old email:', err);
                                     callback(err);
-                                } else {                                    
+                                } else {
                                     callback();
                                 }
                             });
@@ -623,9 +624,9 @@ var accountManager = {
         async.waterfall([
             function(cb) {
                 // validate new account
-                accountDao.getAccountBySubdomain(subdomain, function(err, existingAccount){
+                self.getAccountBySubdomainAndOrgId(subdomain, orgId, function(err, existingAccount){
                     if(err || existingAccount) {
-                        cb(err || 'Account with subdomain [' + subdomain + '] already exists');
+                        cb(err || 'Account with subdomain [' + subdomain + '] and orgId [' + orgId + '] already exists');
                     } else {
                         cb();
                     }
@@ -840,14 +841,55 @@ var accountManager = {
         });
     },
 
-    _updateBlogPages: function(accountId, userId, page, fn){  
-        
+    /**
+     * Used to check for existance of account
+     * @param accountId - accountId to exclude from results.
+     * @param subdomain - subdomain we are looking for
+     * @param orgId - organization of the account.
+     * @param fn
+     */
+    getAccountsBySubdomainAndOrgId: function(accountId, subdomain, orgId, fn) {
+        var query = {
+            _id:{$ne:accountId},
+            subdomain:subdomain,
+            orgId:orgId
+        };
+        accountDao.findOne(query, $$.m.Account, fn);
+    },
+
+    getAccountBySubdomainAndOrgId: function(subdomain, orgId, fn) {
+        var self = this;
+        self.log.debug('>> getAccountBySubdomainAndOrgId(' + subdomain + ',' + orgId + ')');
+        orgId = orgId || 0;
+        accountDao.findOne({orgId:orgId, subdomain:subdomain}, $$.m.Account, fn);
+    },
+
+    getAccountBySubdomainAndOrgDomain: function(subdomain, domain, fn) {
+        var self = this;
+        self.log.debug('>> getAccountBySubdomainAndOrg(' + subdomain + ', ' + domain + ', fn)');
+        orgDao.getByOrgDomain(domain, function(err, organization){
+            if(err) {
+                fn(err);
+            } else if(!organization){
+                fn('No organization found');
+            } else {
+                if(subdomain) {
+                    accountDao.findOne({orgId:organization.id(), subdomain:subdomain}, $$.m.Account, fn);
+                } else {
+                    accountDao.findOne({_id:organization.get('adminAccount')}, $$.m.Account, fn);
+                }
+            }
+        });
+    },
+
+    _updateBlogPages: function(accountId, userId, page, fn){
+
         page.set('latest', false);
         page.set('version', 0);
         //var currentVersion = 0;
         // page.set('_id', page.id() + '_' + currentVersion);
         pageDao.saveOrUpdate(page, function(err, value){
-            if(err) {                
+            if(err) {
                 self.log.error(accountId, userId, 'Error saving page:', err);
                 fn(err);
             } else {
@@ -931,7 +973,7 @@ var accountManager = {
                             }
                         });
                     }
-                    
+
                 }
             });
         }, function(err){
@@ -1121,7 +1163,7 @@ var accountManager = {
         destAccount.set("showhide", _showHideSettings);
         destAccount.set("email_preferences", _email_preferences);
         destAccount.set("commerceSettings", _commerceSettings);
-        var modified = {date:new Date(), by:userId};        
+        var modified = {date:new Date(), by:userId};
         destAccount.set('modified', modified);
         accountDao.saveOrUpdate(destAccount, function(err, updatedAccount){
             if(err) {

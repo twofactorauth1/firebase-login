@@ -159,7 +159,7 @@ module.exports = {
             subdomain:"apitest",
             domain:""
         });
-        accountDao.getAccountBySubdomain('apitest', function(err, value){
+        accountDao._getAccountBySubdomainAndOrgId('apitest', 0, function(err, value){
             if(err || !value) {
                 //it doesn't exist yet.  Let's create it.
                 accountDao.saveOrUpdate(account, function(err, value){
@@ -172,8 +172,9 @@ module.exports = {
                 fn(null, value);
             }
         });
+
     },
-    
+
     getOrCreateAPITestingUser: function(testcontext, fn) {
         var testUser = new $$.m.User({
 

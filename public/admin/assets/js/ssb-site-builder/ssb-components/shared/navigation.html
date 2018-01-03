@@ -161,7 +161,7 @@
                                                   </select>
                                                   <select ng-if="sublink.linkTo.type=='page'" placeholder="Select a page" ng-change="setPageLinkTitle(sublink.linkTo.data, true, sublink, '{{sublink.linkTo.data}}')" ng-model="sublink.linkTo.data" class="form-control margin-bottom-0">
                                                       <option value="" disabled>Select a Page</option>
-                                                      <option ng-repeat="page in filteredPages track by $index" data-ng-if="page.title && page.handle && page.mainmenu != false" value="{{page.handle}}" ng-selected="{{sublink.linkTo.data == page.handle}}">{{page.title}}</option>
+                                                      <option  ng-repeat="page in filteredPages track by $index" data-ng-if="page.title && page.handle && page.mainmenu == false" value="{{page.handle}}" ng-selected="{{sublink.linkTo.data == page.handle}}">{{page.title}}</option>
                                                   </select>
                                                   <input class="form-control" type="text" ng-if="sublink.linkTo.type=='external'" ng-model="sublink.linkTo.data" placeholder="Enter External URL">
                                               </div>

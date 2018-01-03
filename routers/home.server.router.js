@@ -20,6 +20,7 @@ var userActivityManager = require('../useractivities/useractivity_manager');
 var sitemigration_middleware = require('../sitemigration/middleware/sitemigration_middleware');
 var userManager = require('../dao/user.manager');
 var accountDao = require('../dao/account.dao');
+var accountManager = require('../accounts/account.manager');
 var pageCacheManager = require('../cms/pagecache_manager');
 var BlogView = require('../views/blog.server.view');
 var RSSView = require('../views/rss.server.view');
@@ -350,8 +351,9 @@ _.extend(router.prototype, BaseRouter.prototype, {
 
         var userId = self.userId(req);
         var roleAry = ['super','admin','member'];
+        var parsedHost = urlUtils.getSubdomainFromRequest(req);
 
-        accountDao.getAccountBySubdomain(subdomain, function(err, account){
+        accountManager.getAccountBySubdomainAndOrgDomain(subdomain, parsedHost.orgDomain, function(err, account){
             if(err || !account) {
                 self.log.error('Error finding account by subdomain:', err);
                 resp.redirect('/home');
@@ -361,7 +363,7 @@ _.extend(router.prototype, BaseRouter.prototype, {
                     userId: userId,
                     activityType:$$.m.UserActivity.types.ADD_USER_TO_ACCOUNT_OK
                 });
-                //check if user is in whitelist://TODO: switch to permissions for account
+
                 userManager.getUserAccountPermissions(userId, appConfig.mainAccountID, function(err, perms){
                     if(err) {
                         self.log.error('Error getting account permissions:', err);
@@ -405,11 +407,8 @@ _.extend(router.prototype, BaseRouter.prototype, {
                         });
                     }
                 });
-
-
             }
         });
-
     },
 
     externalRedirect: function(req, resp) {
@@ -509,7 +508,7 @@ _.extend(router.prototype, BaseRouter.prototype, {
                     //TODO: this can be simplified
                     accountDao.getAccountByID(accountId, function(err, account){
                         new WebsiteView(req, resp).renderActivateSetupPage(account, adminAccountId, pageName);
-                    })
+                    });
                     self.log.debug('<< optimizedIndexWithOrgChecks');
                 } else {
                     resp.status(500);

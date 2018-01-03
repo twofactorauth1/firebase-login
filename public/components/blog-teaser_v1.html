@@ -48,7 +48,7 @@
                     <div class="col-xs-12">
                         <p></p>
                         <p>
-                            <span data-ng-if="post.post_author"><i class="fa fa-user"></i> by <a ng-bind-html="post.post_author" target="_self" href="/author/{{post.post_author}}" class="btn-link ssb-theme-btn"></a></span> | <i class="fa fa-calendar"></i> {{post.publish_date || post.created.date | amDateFormat:'MM/DD/YYYY'}} <span data-ng-if="post.post_tags">| <i class="fa fa-tag"></i> Tags :</span>
+                            <span data-ng-if="post.post_author"><i class="fa fa-user"></i> by <a ng-bind-html="post.post_author" target="_self" href="/author/{{post.post_author}}" class="btn-link ssb-theme-btn"></a></span> | <i class="fa fa-calendar"></i> {{post.publish_date || post.created.date | amDateFormat:'MM/DD/YYYY'}} <span data-ng-if="post.post_tags.length">| <i class="fa fa-tag"></i> Tags :</span>
                             <a href="/tag/{{post_tags}}" target="_self" data-ng-repeat="post_tags in post.post_tags track by $index" class="btn ssb-theme-btn post-tag-btn">{{post_tags}}</a>
                         </p>
                     </div>
