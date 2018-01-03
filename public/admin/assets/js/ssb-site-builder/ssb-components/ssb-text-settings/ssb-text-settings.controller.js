@@ -52,7 +52,8 @@
 			'hideOnlyMobile': false,
 			'showOnlyMobile': false,
 			'visibility': true,
-			'spacing': {}
+			'spacing': {},
+			'isGrid': false
 		};
 		vm.showHide = showHide;
 		vm.verticalAlignment = verticalAlignment;

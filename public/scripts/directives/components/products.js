@@ -1839,13 +1839,15 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                 if (err) {
                     console.log('Controller:MainCtrl -> Method:accountService Error: ' + err);
                 } else {
-                     cookieKey = 'cart_cookie_' + account._id + '_' + account.subdomain;
+                    cookieKey = 'cart_cookie_' + account._id + '_' + account.subdomain;
 
-                     cookieData = localStorageService.get(cookieKey) || {  products : [] };
-
-                cookieData.products.forEach(function(entry, index) {
-                    scope.reloadCartDetails(entry.product, entry.variation, entry.quantity);
-                });
+                cookieData = localStorageService.get(cookieKey) || {  products : [] };
+                if(cookieData && cookieData.products && cookieData.products.length){
+                    cookieData.products.forEach(function(entry, index) {
+                        scope.reloadCartDetails(entry.product, entry.variation, entry.quantity);
+                    }); 
+                }
+                
                 CartDetailsService.calculateTotalCharges(scope.cart_discount);
 
                 if (cookieData.state) {
@@ -1924,11 +1926,13 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
             };
 
             scope.cookieUpdateQuantityFn = function(item) {
-                cookieData.products.forEach(function(product, index) {
-                    if (item._id == product.product._id) {
-                        product.quantity = parseInt(item.quantity);
-                    }
-                });
+                if(cookieData && cookieData.products && cookieData.products.length){
+                    cookieData.products.forEach(function(product, index) {
+                        if (item._id == product.product._id) {
+                            product.quantity = parseInt(item.quantity);
+                        }
+                    });
+                }    
                 localStorageService.set(cookieKey, cookieData);
             };
 
@@ -2015,7 +2019,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                         isValid = false;
                     }
                 });
-                return isValid
+                return isValid;
             };
 
             scope.isImage = function(src) {

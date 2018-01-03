@@ -50,5 +50,17 @@
         .header , .desc {
             height: 60px;
         }
+        &.mouse-off{
+            display: block;
+        }
+        &.mouse-on {
+            display: none
+        }
+    }
+    div.image-gallery-images:hover div.image-overlay.mouse-on{
+        display: block;
+    }
+    div.image-gallery-images:hover div.image-overlay.mouse-off{
+        display: none;
     }
 }
