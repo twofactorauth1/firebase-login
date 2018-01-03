@@ -6,7 +6,21 @@
         <switch ng-model="defaultSpacing" ng-change="vm.uiState.setDefaultSpacing(component, defaultSpacing)" class="pull-right"></switch>
     </div>
 </div>
+<div class="form-group" ng-if="(component.components[0].type === 'testimonials' && component.components[0].version == 2)">
+    <label>
+        Width of Testimonials
+        <span tooltip-placement="top" tooltip-append-to-body="true" tooltip="Set Width of Testimonials "><i class="fa fa-info-circle" /></span>
+    </label>
+    <ui-select on-select="vm.uiState.updatetestimonialWidth(component);vm.resizeWindow()" ng-model-options="{ debounce: 500 }" ng-model="component.components[0].customWidth" theme="bootstrap" ng-disabled="component.spacing.usePage">
+        <ui-select-match placeholder="Select a Resolution">
+            <small ng-bind-html="$select.selected"></small>
+        </ui-select-match>
+        <ui-select-choices repeat="res in [320, 360, 480, 720, 768, 960, 1024, 1280, 1360, 1366, 1440, 1600, 1680, 1920, '100%'] | filter: $select.search track by $index">
+            <small ng-bind-html="res | highlight: $select.search"></small>
+        </ui-select-choices>
+    </ui-select>
 
+</div>
 <div class="row padding-10 padding-top-0" ng-class="{'padding-top-10 padding-bottom-0': !component.components[0]}">
     <div class="form-group">
         <a ng-click="vm.uiState.resetDefaultSpacing(component)">Reset to default spacing<span tooltip-placement="top" tooltip-append-to-body="true" tooltip="Resets any overrides that have been applied (below)."></a>
