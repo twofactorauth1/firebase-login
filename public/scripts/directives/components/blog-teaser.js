@@ -1,6 +1,6 @@
 /*global app, angular*/
 /*jslint unparam:true*/
-app.directive('blogTeaserComponent', ['postsService', '$filter', function (postsService, $filter) {
+app.directive('blogTeaserComponent', ['postsService', '$filter', '$location', function (postsService, $filter, $location) {
 	'use strict';
 	return {
 		scope: {
@@ -111,7 +111,8 @@ app.directive('blogTeaserComponent', ['postsService', '$filter', function (posts
 				});
 				$scope.teaserposts = angular.copy(posts);
 				filterPosts(posts, function () {
-					$scope.pageChanged(1);
+					var pageNumber = $location.search().page || 1;
+					$scope.pageChanged(pageNumber);
 					$scope.loading = false;
 				});
 			});
@@ -158,6 +159,7 @@ app.directive('blogTeaserComponent', ['postsService', '$filter', function (posts
 			$scope.pageChanged = function (pageNo) {
 				$scope.currentPostPage = pageNo;
 				if ($scope.posts && $scope.component.numberOfPostsPerPage) {
+					$location.search('page', pageNo);
 					var begin = (($scope.currentPostPage - 1) * $scope.component.numberOfPostsPerPage),
 						numDisplay = $scope.component.numberOfPostsPerPage,
 						end;
