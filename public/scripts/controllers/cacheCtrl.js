@@ -172,8 +172,8 @@ mainApp.controller('CacheCtrl', ['$scope', '$rootScope', 'embeddedSiteDataServic
 							}
 						}
 					}); 
-					$('a:not(.ssb-sub-nav-menu)').on('click', function(event) {
-						var hash = this.hash; 
+					$('a[du-smooth-scroll]:not(.ssb-sub-nav-menu)').on('click', function(event) {
+						var hash = this.hash;  
 						if(hash){
 							hash=hash.substring(1);
 							var hashElement= document.getElementById(hash);
