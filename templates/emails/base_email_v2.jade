@@ -115,32 +115,50 @@ html
                                       div !{component.text}
 
               if component.type === 'email-header'
-                table(width='100%', align='center', cellpadding='0', cellspacing='0', border='0', style="border-collapse: collapse;")
-                  tr
-                    td(align='center', width='100%')
-                      if component.logo
-                        - var url=(component.bg && component.bg.img.show === true) ? 'https:'+component.bg.img.url : '';
-                        table(align='center', width='100%', cellpadding='0', cellspacing='0', border='0', style="border-collapse: collapse;background-size: cover;background-image: url('" + url + "');padding-top: "+ component.spacing.pt +";padding-bottom: "+ component.spacing.pb + ";padding-left: "+ component.spacing.pl +";padding-right: "+ component.spacing.pr +";margin-top: "+ component.spacing.mt +";margin-bottom: "+ component.spacing.mb +";margin-left: "+ component.spacing.ml +";margin-right: "+ component.spacing.mr +";background-color: "+ component.bg.color +";")
-                          tr
-                            td.wrapper(width='100%')
-                                table.device-width(width='680', cellpadding='0', cellspacing='0', border='0', style='border-collapse: collapse;margin-top: 45px;')
-                                  tr
-                                    td.device-width(width='100%')
-                                      table.device-width(width='100%', cellpadding='0', cellspacing='0', border='0', style='border-collapse: collapse;')
-                                        tr
-                                          td.device-width(width='100%', style='text-align: center; padding-bottom: 15px; padding-left:20px;padding-right:20px')
-                                            div.logo-img
-                                              |!{component.logo}
-
-                      if component.title
-                        table.device-width(width='680', align='center', cellpadding='0', cellspacing='0', border='0', style='border-collapse: collapse;')
-                          tr
-                            td(align='center', width='100%')
-                              table.device-width(align='center', width='100%', cellpadding='0', cellspacing='0', border='0', style='border-collapse: collapse;')
-                                tr
-                                  td.wrapper(width='100%', style='padding-left: 20px; padding-right: 20px; padding-top: 45px; padding-bottom: 45px;')
-                                    div !{component.title}
-
+                  | <table width="100%" align="center"  border="0" cellpadding="0" cellspacing="0" style="border-collapse: collapse;" >
+                  |   <tr>
+                  |     <td align="center"  width="100%" >
+                  if component.logo
+                  - var url=(component.bg && component.bg.img.show === true) ? 'https:'+component.bg.img.url : '';
+                    | <div style="max-width:!{component.spacing.mw || '100%' } ;float:left;width: 100%; background-color: !{component.bg.color};padding-top: !{component.spacing.pt || 0};background-size: cover;background-image: url('!{url}');padding-bottom: !{component.spacing.pb || 0};padding-left: !{component.spacing.pl || 0};padding-right: !{component.spacing.pr || 0};margin-top: !{component.spacing.mt || 0};margin-bottom: !{component.spacing.mb || 0};margin-left: !{component.spacing.ml || 0};margin-right: !{component.spacing.mr || 0};"> <table class="email-component-container {{component.type}}-v{{component.version}}" align="center" border="0" cellpadding="0" cellspacing="0" width="100%" >
+                    |      <table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" id="templateColumns">
+                    |            <tr>
+                    |                <td align="center" width="100%" class="wrapper">
+                    |                    <table class="device-width" width='100%' cellpadding='0' cellspacing='0' border='0' style='border-collapse: collapse;margin-top: 45px;'>
+                    |                        <tr>
+                    |                            <td class="device-width" width='100%'>
+                    |                                <table class="device-width" width='100%' cellpadding='0' cellspacing='0' border='0' style='border-collapse: collapse;margin-top: 45px;'>
+                    |                                    <tr>
+                    |                                        <td class="device-width" width='100%'>
+                    |                                            !{component.logo}
+                    |                                        </td>
+                    |                                    </tr>
+                    |                                </table>
+                    |                            </td>
+                    |                        </tr>
+                    |                    </table>
+                    |                </td>
+                    |            </tr>
+                    |     </table>
+                    | </div> 
+                    
+                  if component.title 
+                    | <table class="device-width" width='100%' cellpadding='0' cellspacing='0' border='0' style='border-collapse: collapse;margin-top: 45px;'>
+                    |     <tr>
+                    |         <td class="device-width" width='100%'>
+                    |                 <table class="device-width" width='100%' cellpadding='0' cellspacing='0' border='0' style='border-collapse: collapse;margin-top: 45px;'>
+                    |                         <tr>
+                    |                             <td class="device-width" width='100%' style='padding-left: 20px; padding-right: 20px; padding-top: 45px; padding-bottom: 45px;'>
+                    |                                 !{component.title}
+                    |                             </td>
+                    |                         </tr>
+                    |                  </table>
+                    |             </td>
+                    |        </tr>
+                    | </table>
+                  |      </td>
+                  |     </tr>
+                  |  </table>
               if component.type === 'email-1-col'
                 - var url=(component.bg && component.bg.img.show === true) ? 'https:'+component.bg.img.url : '';
                 | <div style="max-width:!{component.spacing.mw || '100%' } ;float:left;width: 100%; background-color: !{component.bg.color};padding-top: !{component.spacing.pt || 0};background-size: cover;background-image: url('!{url}');padding-bottom: !{component.spacing.pb || 0};padding-left: !{component.spacing.pl || 0};padding-right: !{component.spacing.pr || 0};margin-top: !{component.spacing.mt || 0};margin-bottom: !{component.spacing.mb || 0};margin-left: !{component.spacing.ml || 0};margin-right: !{component.spacing.mr || 0};"> <table class="email-component-container {{component.type}}-v{{component.version}}" align="center" border="0" cellpadding="0" cellspacing="0" width="100%">

@@ -328,7 +328,7 @@ app.directive("elem", function ($rootScope, $timeout, $compile, SimpleSiteBuilde
 									}
 								}
 
-								if(cmd=== 'tableRows' || cmd === 'tableHeader'){
+								if(cmd=== 'tableRows' || cmd === 'tableHeader'  || cmd === 'tableColumns'){
 									if(editor.$el.find('.fr-selected-cell').length){
 										var padding = editor.$el.find('.fr-selected-cell').css("padding");
 										var border = editor.$el.find('.fr-selected-cell').css("border-width")

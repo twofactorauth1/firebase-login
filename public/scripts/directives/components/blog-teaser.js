@@ -156,6 +156,11 @@ app.directive('blogTeaserComponent', ['postsService', '$filter', '$location', fu
 				return styleString;
 			};
 
+			$scope.getHref = function(page){
+				if(page)
+					return $location.$$path + "?page="  + page;
+			}
+
 			$scope.pageChanged = function (pageNo) {
 				$scope.currentPostPage = pageNo;
 				if ($scope.posts && $scope.component.numberOfPostsPerPage) {
