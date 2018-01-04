@@ -359,9 +359,19 @@ module.exports = {
         var self = this;
         var html = "";
         var string = "";
-        if(page.get('sections') != null && page.get('sections').length > 0) {
-            html = self.buildPageTemplateMarkup(page);
+        var layout = page.get('layout');
+        if (layout === 'ssb-layout__header_2-col_footer') {
+
+            self.buildTwoColLayoutTemplate(page, function(err, _html){
+                html = _html;
+            })
         }
+        else{
+            if(page.get('sections') != null && page.get('sections').length > 0) {
+                html = self.buildPageTemplateMarkup(page);
+            } 
+        }
+        
         if(wrapHtml){
             string = self.buildRenderTemplateHtml(html);
         }
