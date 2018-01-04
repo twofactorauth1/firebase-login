@@ -522,6 +522,15 @@ module.exports = {
                 }
             };
             stageAry.push(lookup);
+            var lookup2 = {
+                $lookup:{
+                    from: 'ping_events',
+                    localField: 'session_id',
+                    foreignField: 'session_id',
+                    as: 'ping_events'
+                }
+            };
+            stageAry.push(lookup2);
             var group = {
                 $group:{
                     _id: '$fingerprint',
@@ -542,7 +551,7 @@ module.exports = {
                             ip_address:null,  maxmind:null,
                             user_agent:null, timestamp:null,
                             server_time:null,  subdomain:null,
-                            fingerprint:null,  pageEvents:[]
+                            fingerprint:null,  pageEvents:[], pingEvents:[]
                         };
                         async.forEachLimit(result.sessions, 1, function(session, sessionCallback){
                             if(!_.contains(_result.session_id, session.session_id)){
@@ -571,6 +580,9 @@ module.exports = {
                             }
                             if(session.page_events) {
                                 _result.pageEvents = _result.pageEvents.concat(session.page_events);
+                            }
+                            if(session.ping_events) {
+                                _result.pingEvents = _result.pingEvents.concat(session.ping_events);
                             }
 
                             dao.findMany({sessionId: session.session_id},  $$.m.ContactActivity, function(err, list) {
@@ -614,6 +626,16 @@ module.exports = {
                             _result.pageEvents = _.sortBy(_pageEvents, function(p) {
                                 return p.pageTime;
                             });
+                            _result.pingEvents = _.sortBy(_result.pingEvents, function(p){
+                                return -p.server_time;
+                            });
+                            if(_result.pingEvents.length > 1) {
+                                _result.difference = Math.round(_result.pingEvents[0].server_time - _result.pingEvents[_result.pingEvents.length -1].server_time);
+                            } else {
+                                _result.difference = 0;
+                            }
+                            delete _result.pingEvents;
+                            
                             _resultDetails.push(_result);
                             resultCallback();
                         });
