@@ -430,29 +430,35 @@ var securityManager = {
                             //log.info('using accessToken:', creds.accessToken);
                             accessToken = creds.accessToken;
                         }
-                        stripeDao.getStripeSubscription(billing.stripeCustomerId, billing.subscriptionId, accessToken, function(err, subscription){
-                            if(err || !subscription) {
-                                log.error('Error getting stripe subscription: ' + err);
-                                return cb(err, false);
-                            } else if(subscription.status === 'active' || subscription.status === 'trialing') {
+                        if(billing.stripeCustomerId && billing.subscriptionId) {
+                            stripeDao.getStripeSubscription(billing.stripeCustomerId, billing.subscriptionId, accessToken, function(err, subscription){
+                                if(err || !subscription) {
+                                    log.error('Error getting stripe subscription: ' + err);
+                                    return cb(err, false);
+                                } else if(subscription.status === 'active' || subscription.status === 'trialing') {
 
-                                var planId = subscription.plan.id;
-                                var planName = subscription.plan.name;
-                                subscriptionPrivilegeDao.getByPlanId(accountId, planId, function(err, subPrivs){
-                                    if(err || !subPrivs) {
-                                        log.error('Error getting subscription privileges for plan [' + planId + '] with accountId [' + accountId + ']: ' + err);
-                                        return cb(err, false);
-                                    }
+                                    var planId = subscription.plan.id;
+                                    var planName = subscription.plan.name;
+                                    subscriptionPrivilegeDao.getByPlanId(accountId, planId, function(err, subPrivs){
+                                        if(err || !subPrivs) {
+                                            log.error('Error getting subscription privileges for plan [' + planId + '] with accountId [' + accountId + ']: ' + err);
+                                            return cb(err, false);
+                                        }
 
-                                    log.trace('<< verifySubscriptionWithoutSettingSessionVariables(true)');
-                                    return cb(null, true);
-                                });
-                            } else {
-                                //TODO: If the sub is expired, put in privs here
-                                log.warn('The subscription for account ' + accountId + ' appears to be expired.');
-                                return cb(null, false);
-                            }
-                        });
+                                        log.trace('<< verifySubscriptionWithoutSettingSessionVariables(true)');
+                                        return cb(null, true);
+                                    });
+                                } else {
+                                    //TODO: If the sub is expired, put in privs here
+                                    log.warn('The subscription for account ' + accountId + ' appears to be expired.');
+                                    return cb(null, false);
+                                }
+                            });
+                        } else {
+                            log.warn('Expired trial and no Stripe account.');
+                            cb(null, false);
+                        }
+
                     }
                 });
             } else {
