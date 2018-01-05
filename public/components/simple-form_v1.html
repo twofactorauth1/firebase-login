@@ -58,10 +58,10 @@
                         </div>
                         <div class="clearfix mb15 visible-xs"></div>
                         <div class="col-sm-12">
-                            <button ng-if="!isEditing" type="submit" ng-attr-style="{{buttonStyle(component.btn, component.formSettings.btnStyle)}}" class="btn btn-form btn-block ssb-theme-btn form-submit-button" ng-disabled="simpleForm.$invalid || isBusy" ng-class="{'custom-orange': component.customBtn, 'btn-no-bg-color': !component.submitBtn}">
+                            <button ng-if="!isEditing" type="submit" ng-attr-style="{{buttonStyle(component.btn, component.formSettings.btnStyle)}}" class="btn btn-form btn-block ssb-theme-btn form-submit-button" ng-disabled="simpleForm.$invalid || isBusy" ng-class="{'custom-orange': component.customBtn}">
                                 <span elem ng-model="component.submitBtn"></span>
                             </button>
-                            <div ng-if="isEditing" ng-attr-style="{{buttonStyle(component.btn, component.formSettings.btnStyle)}}" ng-class="{'custom-orange': component.customBtn, 'ssb-theme-btn': component.submitBtn, 'btn-no-bg-color': !component.submitBtn}" class="btn btn-form btn-block ssb-theme-btn editable-btn-form form-submit-button">
+                            <div ng-if="isEditing" ng-attr-style="{{buttonStyle(component.btn, component.formSettings.btnStyle)}}" ng-class="{'custom-orange': component.customBtn}" class="btn btn-form btn-block  ssb-theme-btn editable-btn-form form-submit-button">
                                 <span class-name="btn-form-text" elem ng-model="component.submitBtn"></span>
                             </div>
                         </div>

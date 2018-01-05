@@ -127,8 +127,12 @@ module.exports = {
                     _log.error('Error finding session events: ' + err);
                     cb(err);
                   } else {  
-                                                           
-                    if(pageEvents.length){
+                    
+                    pageEvents = _.reject(pageEvents, function(_event){
+                     return _event.get("requestedUrl") && _event.get("requestedUrl").path && _event.get("requestedUrl").path.indexOf("/%7B%7B") == 0;
+                    });
+
+                    if(pageEvents && pageEvents.length){
                       var page_events = [];
                       var pageIDMap = {};                      
                       async.each(pageEvents, function(pageEvent, callback){
