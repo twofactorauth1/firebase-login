@@ -153,6 +153,16 @@
 
 		}
 
+
+		$scope.getHref = function(page){
+			if(vm.component){
+				var pageNo = page || 1;
+	            var pageKey = vm.component._id + "_page";
+	            var queryStringSeparator = "?";
+	            return $location.$$path + queryStringSeparator + pageKey + "="  + pageNo;
+			}            
+        }
+
 		vm.settings = {};
 		if(vm.website){
 			vm.settings = vm.website.settings

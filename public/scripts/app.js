@@ -100,7 +100,8 @@ var mainApp = angular
                     s += ' "></div>';
                     return s;
                 },
-                controller: 'CacheCtrl as cacheCtrl'
+                controller: 'CacheCtrl as cacheCtrl',
+                reloadOnSearch: false
             })
             .when('/page/blog/:postName', {
                 template: function (urlattr) {
@@ -117,7 +118,8 @@ var mainApp = angular
                         return s;
                     }
                 },
-                controller: 'CacheCtrl as cacheCtrl'
+                controller: 'CacheCtrl as cacheCtrl',
+                reloadOnSearch: false
             })
             .when('/author/:author', {
                 template: function (urlattr) {
@@ -135,7 +137,8 @@ var mainApp = angular
                     s += ' "></div>';
                     return s;
                 },
-                controller: 'CacheCtrl as cacheCtrl'
+                controller: 'CacheCtrl as cacheCtrl',
+                reloadOnSearch: false
             })
             .when('/tag/:tag', {
                 template: function (urlattr) {
@@ -153,7 +156,8 @@ var mainApp = angular
 					s += ' "></div>';
 					return s;
                 },
-                controller: 'CacheCtrl as cacheCtrl'
+                controller: 'CacheCtrl as cacheCtrl',
+                reloadOnSearch: false
             })
             .when('/category/:category', {
                 template: function (urlattr) {
@@ -170,7 +174,8 @@ var mainApp = angular
 					s += ' "></div>';
 					return s;
                 },
-                controller: 'CacheCtrl as cacheCtrl'
+                controller: 'CacheCtrl as cacheCtrl',
+                reloadOnSearch: false
             })
             .when('/blog/:postName', {
                 template: function (urlattr) {
@@ -188,7 +193,8 @@ var mainApp = angular
                     }
 
                 },
-                controller: 'CacheCtrl as cacheCtrl'
+                controller: 'CacheCtrl as cacheCtrl',
+                reloadOnSearch: false
             })
             .when('/:name', {
                 templateUrl:'template.html',
