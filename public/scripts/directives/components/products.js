@@ -201,7 +201,8 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                         scope.productSortOrder.order = "most_recent";
                     }
                     filterProducts(scope.originalProducts, function() {
-                        scope.pageChanged(1);
+                        var pageNumber = $location.search()[scope.component._id + "_page"] || 1;
+                        scope.pageChanged(pageNumber);
                     });
                     if(!reload)
                         cookieProcessFn();
@@ -2177,7 +2178,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                 {
                     return url.replace(/^https?\:/i, "");
                 }
-            }
+            }            
 
             scope.productSortOrderOptions = [
                 {
@@ -2196,7 +2197,13 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
 
         },
         controller: function($scope) {
-
+            $scope.getHref = function(page){
+                if(page){
+                    var pageKey = $scope.component._id + "_page";
+                    var queryStringSeparator = "?";
+                    return $location.$$path + queryStringSeparator + pageKey + "="  + page;
+                }
+            }
         }
     };
 }]);
