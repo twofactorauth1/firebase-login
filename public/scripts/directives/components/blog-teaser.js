@@ -111,7 +111,7 @@ app.directive('blogTeaserComponent', ['postsService', '$filter', '$location', fu
 				});
 				$scope.teaserposts = angular.copy(posts);
 				filterPosts(posts, function () {
-					var pageNumber = $location.search().page || 1;
+					var pageNumber = $location.search()[$scope.component._id + "_page"] || 1;
 					$scope.pageChanged(pageNumber);
 					$scope.loading = false;
 				});
@@ -157,14 +157,16 @@ app.directive('blogTeaserComponent', ['postsService', '$filter', '$location', fu
 			};
 
 			$scope.getHref = function(page){
-				if(page)
-					return $location.$$path + "?page="  + page;
+				if(page){
+					var pageKey = $scope.component._id + "_page";
+					var queryStringSeparator = "?";
+					return $location.$$path + queryStringSeparator + pageKey + "="  + page;
+				}
 			}
 
 			$scope.pageChanged = function (pageNo) {
 				$scope.currentPostPage = pageNo;
-				if ($scope.posts && $scope.component.numberOfPostsPerPage) {
-					$location.search('page', pageNo);
+				if ($scope.posts && $scope.component.numberOfPostsPerPage) {					
 					var begin = (($scope.currentPostPage - 1) * $scope.component.numberOfPostsPerPage),
 						numDisplay = $scope.component.numberOfPostsPerPage,
 						end;
