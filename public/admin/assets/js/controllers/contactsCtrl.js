@@ -83,6 +83,8 @@
 				//ContactPagingService.setTotalCount(response.total);
 				//$scope.totalItemCount = ContactPagingService.totalCount;
 				//$scope.totalItemCount = response.total;
+
+				$scope.selectAllChecked = false;
 				_.each(contacts, function (contact) {
 					contact.bestEmail = $scope.checkBestEmail(contact);
 					contact.hasFacebookId = $scope.checkFacebookId(contact);
@@ -750,6 +752,7 @@
 			ContactPagingService.showFilter = $scope.pagingParams.showFilter;
 			ContactPagingService.sortBy = $scope.pagingParams.sortBy;
 			ContactPagingService.sortDir = $scope.pagingParams.sortDir;
+
 		}
 
 
