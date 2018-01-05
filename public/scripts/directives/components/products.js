@@ -2198,11 +2198,10 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
         },
         controller: function($scope) {
             $scope.getHref = function(page){
-                if(page){
-                    var pageKey = $scope.component._id + "_page";
-                    var queryStringSeparator = "?";
-                    return $location.$$path + queryStringSeparator + pageKey + "="  + page;
-                }
+                var pageNo = page || 1;
+                var pageKey = $scope.component._id + "_page";
+                var queryStringSeparator = "?";
+                return $location.$$path + queryStringSeparator + pageKey + "="  + pageNo;
             }
         }
     };

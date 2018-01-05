@@ -157,15 +157,15 @@ app.directive('blogTeaserComponent', ['postsService', '$filter', '$location', fu
 			};
 
 			$scope.getHref = function(page){
-				if(page){
-					var pageKey = $scope.component._id + "_page";
-					var queryStringSeparator = "?";
-					return $location.$$path + queryStringSeparator + pageKey + "="  + page;
-				}
+				var pageNo = page || 1;
+				var pageKey = $scope.component._id + "_page";
+				var queryStringSeparator = "?";
+				return $location.$$path + queryStringSeparator + pageKey + "="  + pageNo;				
 			}
 
 			$scope.pageChanged = function (pageNo) {
-				$scope.currentPostPage = pageNo;
+				var page = angular.copy(pageNo);
+				$scope.currentPostPage = page;
 				if ($scope.posts && $scope.component.numberOfPostsPerPage) {					
 					var begin = (($scope.currentPostPage - 1) * $scope.component.numberOfPostsPerPage),
 						numDisplay = $scope.component.numberOfPostsPerPage,
