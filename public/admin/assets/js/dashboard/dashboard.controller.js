@@ -15,14 +15,14 @@
         };
         function updateLiveDetailObject(liveVisitorDetails){
 			vm.state.liveVisitorDetails=[];
-			_.each(liveVisitorDetails, function(detail){  
-				var server_time =new Date(); 
+			_.each(liveVisitorDetails, function(detail){
+				var server_time =new Date();
 				if( detail.pageEvents.length>0){
                     server_time =
-                    moment(detail.pageEvents[0].pageTime)._d; 
-                } 
+                    moment(detail.pageEvents[0].pageTime)._d;
+                }
                 _.each(detail.pageEvents, function(evn){
-					if(evn.activityType== 'CONTACT_FORM'){ 
+					if(evn.activityType== 'CONTACT_FORM'){
 						_.map(evn.extraFields, function (value, key) {
 							if(key.toLowerCase()=='name'){
 								detail.name=value +" "+(evn.extraFields.last?evn.extraFields.last:"");
@@ -30,13 +30,16 @@
 								detail.email=value
 							}
 						});
-					} 
-				  }); 
-				  var difference = new Date().getTime()-server_time.getTime() ;
-				  var sec=Math.round((difference / 1000) % 60) 
-				  detail.resultInMinutes = Math.round(difference / 60000)+(sec<10?":0"+sec:":"+sec);
-				  
-				  vm.state.liveVisitorDetails.push(detail);
+					}
+				  });
+				//console.log('calculating difference between now and ', server_time);
+				//var difference = new Date().getTime()-server_time.getTime() ;
+                var difference = detail.difference;
+				//console.log('difference:', difference);
+				var sec=Math.floor((difference / 1000) % 60);
+				detail.resultInMinutes = Math.floor(difference / 60000)+(sec<10?":0"+sec:":"+sec);
+
+				vm.state.liveVisitorDetails.push(detail);
 			});
 		}
         vm.showInsert = true;
@@ -47,7 +50,7 @@
         vm.workstreamDisplayOrder = _.invert(_.object(_.pairs(DashboardService.workstreamDisplayOrder)));
         vm.analyticDisplayOrder = _.invert(_.object(_.pairs(DashboardService.analyticDisplayOrder)));
         vm.convertUtcToLocal = convertUtcToLocal;
-        vm.livedataLoading= true
+        vm.livedataLoading= true;
         $scope.$watch(function() { return DashboardService.state }, function(state) {
 
             state.workstreams = _.sortBy(state.workstreams, function(x) {
@@ -257,7 +260,7 @@
 				}, 200);
 			}
         });
-        
+
         $scope.$watch(function() { return DashboardService.liveTraffic;}, function(liveTraffic){
             if(liveTraffic && liveTraffic.length > 0) {
                 if(!$scope.liveTrafficConfig) {
@@ -293,7 +296,7 @@
         });
 
 
-        $scope.$watch(function() { return DashboardService.liveVisitorDetails;}, function(liveVisitorDetails){            
+        $scope.$watch(function() { return DashboardService.liveVisitorDetails;}, function(liveVisitorDetails){
             vm.livedataLoading=false
             updateLiveDetailObject(liveVisitorDetails);
             if(liveVisitorDetails && liveVisitorDetails.length){
@@ -327,11 +330,11 @@
                 vm.selectedVisitorIndex = index;
                 vm.activeVisitorDetail = vm.state.liveVisitorDetails[index];
             }
-            
+
         }
 
         function reflowCharts(){
-            window.Highcharts.charts.forEach(function(chart){                
+            window.Highcharts.charts.forEach(function(chart){
                 $timeout(function() {
                     if(angular.isDefined(chart) && Object.keys(chart).length)
                         chart.reflow();
