@@ -157,11 +157,40 @@ app.directive('blogTeaserComponent', ['postsService', '$filter', '$location', fu
 			};
 
 			$scope.getHref = function(page){
-				var pageNo = page || 1;
-				var pageKey = $scope.component._id + "_page";
-				var queryStringSeparator = "?";
-				return $location.$$path + queryStringSeparator + pageKey + "="  + pageNo;				
-			}
+                var pageNo = page || 1;
+                var pageKey = $scope.component._id + "_page";
+                var queryStringSeparator = "?";
+                var queryString = "";
+                var hrefUrl = "";
+                if($location.$$search && Object.keys($location.$$search).length){
+                	var stringArr = Object.keys($location.$$search);
+                	stringArr.push(pageKey);
+                	stringArr = _.uniq(stringArr);
+                    _.each(stringArr, function(key){
+                        if(key != pageKey){
+                            queryString = appendQueryString(key, $location.$$search[key], queryString);                            
+                        }
+                        else{
+                            queryString = appendQueryString(pageKey, pageNo, queryString);
+                        }
+                    })
+                    hrefUrl = $location.$$path + queryString;
+                }
+                else{
+                    hrefUrl = $location.$$path + queryStringSeparator + pageKey + "="  + pageNo;
+                }
+                return hrefUrl;
+            }
+
+            function appendQueryString(key, value, queryString){
+                if(queryString){
+                    queryString +="&" + key + "=" + value;
+                }
+                else{
+                    queryString +="?" + key + "=" + value;
+                }
+                return queryString;
+            }
 
 			$scope.pageChanged = function (pageNo) {
 				var page = angular.copy(pageNo);
