@@ -4,7 +4,6 @@
 		return {
             restrict: 'E',
             transclude: false,
-            restrict: 'E',
 			scope: {
 				liveVisitorDetails: "=live",
                 activeVisitorDetail: '=active',
