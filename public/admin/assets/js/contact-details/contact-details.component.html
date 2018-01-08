@@ -59,7 +59,7 @@
                     <div class="clearfix"></div>
                 </div>
                 
-                <div class="contact-stats col-xs-12 margin-top-20 margin-bottom-20" ng-if="vm.state.contactSessionDetails.sessionsCount">
+                <div class="contact-stats col-xs-12 margin-top-20" ng-if="vm.state.contactSessionDetails.sessionsCount">
                     <div class="sessions">
                         <span class="description">
                             Sessions
@@ -86,6 +86,23 @@
                     </div>
                 </div>
                 <div class="clearfix"></div>
+
+                <div class="contact-attribution col-xs-12 margin-top-20" ng-if="vm.state.contactAttributionDetails.length">
+                    <div class="margin-bottom-10">
+                        <span class="description ">
+                            Attribution
+                        </span>                        
+                    </div>
+                    1st:
+                    <div class="padding-left-20 inline-block">
+                       <a class="contact-attribution-btn" ng-repeat="attribution in vm.state.contactAttributionDetails">
+                           campgn: <span class="text-bold">{{attribution.extraFields.utm_campaign}}</span>
+                       </a>
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+
+
             </div>
             
             <div class="contact-details-tab">
@@ -406,7 +423,7 @@
         </div>
         <!-- contact timeline/notes pane -->
         <div class="col-xs-12 col-sm-6 contact-details-right-pane">       
-            <contact-activity-component contact-id="vm.state.contactId" contact="vm.state.contact" ng-if="vm.state.contact" contact-device-details="vm.state.contactDeviceDetails" contact-session-details="vm.state.contactSessionDetails"></contact-activity-component>
+            <contact-activity-component contact-id="vm.state.contactId" contact="vm.state.contact" ng-if="vm.state.contact" contact-device-details="vm.state.contactDeviceDetails" contact-session-details="vm.state.contactSessionDetails" contact-attribution-details="vm.state.contactAttributionDetails"></contact-activity-component>
         </div>
         <div class="clearfix"></div>
     </div>

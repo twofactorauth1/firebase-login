@@ -110,6 +110,7 @@ function contactActivityController($scope, $state, $window, $modal, $stateParams
         vm.state.activities = activities;
         filterContactActivities();
         setContactDeviceDetails();
+        setContactAttributionDetails();
         setContactSessionDetails();
         vm.uiState.loading = false;
     }
@@ -230,6 +231,15 @@ function contactActivityController($scope, $state, $window, $modal, $stateParams
                     }, 0);
                 }
             } 
+        }
+    }
+
+    function setContactAttributionDetails(){
+        if(vm.contactAttributionDetails && vm.state.activities.length){
+            var extraFields = [];
+            vm.contactAttributionDetails = _.filter(vm.state.activities, function(activity){
+                return activity.extraFields && activity.extraFields.utm_campaign
+            })
         }
     }
 

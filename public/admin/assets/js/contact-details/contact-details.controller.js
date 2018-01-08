@@ -16,7 +16,8 @@ function contactDetailsController($scope, $state, $window, $modal, $stateParams,
     	location: {},
     	ip_geo_address: '',
     	contactDeviceDetails: {},
-    	contactSessionDetails: {}
+    	contactSessionDetails: {},
+    	contactAttributionDetails: []
     }
     vm.uiState = {
         loading: true,
