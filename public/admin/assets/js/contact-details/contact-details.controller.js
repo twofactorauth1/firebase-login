@@ -63,6 +63,9 @@ function contactDetailsController($scope, $state, $window, $modal, $stateParams,
 		if(id[0] || id[1] || id[2]){
 			vm.state.fullName = [vm.state.contact.first, vm.state.contact.middle, vm.state.contact.last].join(' ').trim();			
 		}
+		else{
+			vm.state.fullName = "";
+		}
 	}, true);
 
 	function getMapData() {
