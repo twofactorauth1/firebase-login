@@ -26,7 +26,7 @@
         </div>
         <div ng-if="dataLoaded" class="slider-nav-thumbnails slider-nav-thumbnails-{{component._id}} hidden-xs" ind-slider='{slidesToShow:6, touchMove:{{touchMove}}, draggable:true, dots:false, arrows:false,  slidesToScroll:1, autoplay:false, asNavFor: ".slider-main-{{component._id}}", focusOnSelect: true}' ng-class="{'slick-slide-right': component.images.length <= 6}">
             <div  ng-repeat="image in component.images track by $index">
-                <img ng-src="{{image.url}}"/>
+                <img src="{{image.url}}" />
             </div>
         </div>
 
