@@ -49,6 +49,7 @@
                       class: 'fontWeight_' + val
                   });
               }
+              $("span.custom-span").removeClass("custom-span");
           }
       },
       // Callback on refresh.
