@@ -95,9 +95,12 @@
                     </div>
                     1st:
                     <div class="padding-left-20 inline-block">
-                       <a class="contact-attribution-btn" ng-repeat="attribution in vm.state.contactAttributionDetails">
-                           campaign: <span class="text-bold">{{attribution.extraFields.utm_campaign}}</span>
+                       <a ng-repeat="attribution in vm.state.contactAttributionDetails">
+                           <span ng-if="attribution.extraFields.utm_source"><span class="contact-attribution-btn"">source: <span class="text-bold">{{attribution.extraFields.utm_source}}</span></span> </span>
+                           <span ng-if="attribution.extraFields.utm_medium"><span class="contact-attribution-btn"">medium: <span class="text-bold">{{attribution.extraFields.utm_medium}}</span></span> </span>
+                           <span ng-if="attribution.extraFields.utm_campaign"><span class="contact-attribution-btn"">campaign: <span class="text-bold">{{attribution.extraFields.utm_campaign}}</span></span></span>
                        </a>
+
                     </div>
                 </div>
                 <div class="clearfix"></div>
