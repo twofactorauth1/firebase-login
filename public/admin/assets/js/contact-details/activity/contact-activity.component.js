@@ -13,7 +13,9 @@ function contactActivityComponent() {
         scope: {
             contactId: '=',
             contact: '=',
-            contactDeviceDetails: '='
+            contactDeviceDetails: '=',
+            contactSessionDetails: '=',
+            contactAttributionDetails: '='
         },
         replace: true,
         link: function(scope, element, attrs, ctrl) {

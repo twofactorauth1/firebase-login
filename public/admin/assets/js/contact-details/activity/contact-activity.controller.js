@@ -110,6 +110,8 @@ function contactActivityController($scope, $state, $window, $modal, $stateParams
         vm.state.activities = activities;
         filterContactActivities();
         setContactDeviceDetails();
+        setContactAttributionDetails();
+        setContactSessionDetails();
         vm.uiState.loading = false;
     }
 
@@ -221,14 +223,57 @@ function contactActivityController($scope, $state, $window, $modal, $stateParams
 
     function setContactDeviceDetails(){
         if(vm.contactDeviceDetails && vm.state.activities.length){
-           session_activity = _.find(vm.state.activities, function(id){return id.session_event && id.session_event._id});
-           if(session_activity){
-             if(session_activity.session_event && session_activity.session_event.user_agent){
-                $timeout(function() {
-                    vm.contactDeviceDetails = session_activity.session_event;
-                }, 0);
-             }
-           } 
+            var session_activity = _.find(vm.state.activities, function(id){return id.session_event && id.session_event._id});
+            if(session_activity){
+                if(session_activity.session_event && session_activity.session_event.user_agent){
+                    $timeout(function() {
+                        vm.contactDeviceDetails = session_activity.session_event;
+                    }, 0);
+                }
+            } 
+        }
+    }
+
+    function setContactAttributionDetails(){
+        if(vm.contactAttributionDetails && vm.state.activities.length){
+            var extraFields = [];
+            vm.contactAttributionDetails = _.filter(vm.state.activities, function(activity){
+                return activity.extraFields && activity.extraFields.utm_campaign
+            })
+        }
+    }
+
+    function setContactSessionDetails(){
+        if(vm.contactSessionDetails && vm.state.activities.length){
+            var session_activities = _.filter(vm.state.activities, function(id){
+                return id.session_event && id.session_event._id
+            });
+            if(session_activities && session_activities.length){
+                vm.contactSessionDetails.sessionsCount = session_activities.length;
+                var _time = 0;
+                _.each(session_activities, function(activity){
+                    if(activity.session_event.timeDifference){
+                        _time += activity.session_event.timeDifference;
+                    }
+                    else if(activity.session_event.session_length){
+                        _time += Math.round(activity.session_event.session_length);
+                    }
+                })
+                if(_time > 0){
+                    var sec = Math.floor((_time / 1000) % 60);
+                    vm.contactSessionDetails.sessionsDuration = Math.floor(_time / 60000)+(sec<10?":0"+sec:":"+sec);
+                }
+            }
+
+            var pageViewActivity = _.find(vm.state.activities, function(id){
+                return id.activityType && id.activityType === 'PAGE_VIEW'
+            });
+
+            if(pageViewActivity){
+                if(pageViewActivity && pageViewActivity.page_events && pageViewActivity.page_events.length){
+                    vm.contactSessionDetails.pageView = pageViewActivity.page_events.length;                    
+                }
+            }
         }
     }
 }

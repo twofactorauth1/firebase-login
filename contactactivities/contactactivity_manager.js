@@ -121,112 +121,124 @@ module.exports = {
                   log.error('Error finding session events: ' + err);
                   cb(err);
               } else {
-                activity.set("session_event", value);
-                dao.findMany(query, $$.m.PageEvent, function(err, pageEvents){
+                dao.findMany(query, $$.m.PingEvent, function(err, pingEvents){
                   if(err) {
                     _log.error('Error finding session events: ' + err);
                     cb(err);
-                  } else {  
-                    
-                    pageEvents = _.reject(pageEvents, function(_event){
-                     return _event.get("requestedUrl") && _event.get("requestedUrl").path && _event.get("requestedUrl").path.indexOf("/%7B%7B") == 0;
-                    });
+                  } else {
+                    if(pingEvents && pingEvents.length > 1){
+                        pingEvents = _.sortBy(pingEvents, function(p){
+                            return -p.get("server_time");
+                        });
+                        value.set("timeDifference", Math.round(pingEvents[0].get("server_time") - pingEvents[pingEvents.length -1].get("server_time")));
+                    }
+                    activity.set("session_event", value);
+                    dao.findMany(query, $$.m.PageEvent, function(err, pageEvents){
+                      if(err) {
+                        _log.error('Error finding session events: ' + err);
+                        cb(err);
+                      } else {
+                        pageEvents = _.reject(pageEvents, function(_event){
+                         return _event.get("requestedUrl") && _event.get("requestedUrl").path && _event.get("requestedUrl").path.indexOf("/%7B%7B") == 0;
+                        });
 
-                    if(pageEvents && pageEvents.length){
-                      var page_events = [];
-                      var pageIDMap = {};                      
-                      async.each(pageEvents, function(pageEvent, callback){
-                        var handle = "";
-                        if(pageEvent.get("url") && pageEvent.get("url").path){
-                          handle = pageEvent.get("url").path;
-                        }
-                        if(pageEvent.get("requestedUrl") && pageEvent.get("requestedUrl").path){
-                          handle = pageEvent.get("requestedUrl").path;
-                        }
-                        if(handle){
-                          if (handle.indexOf('/') === 0) {
-                            handle = handle.replace('/', '');
-                          }
-                          if(!handle){
-                            handle = "index";
-                          }
-                          if(handle == 'blog'){
-                            handle = 'blog-list';
-                          }
-                          console.log(handle);                     
-                          var singleEvent = {                          
-                            url: pageEvent.get("url"),
-                            server_time: pageEvent.get("server_time"),
-                            start: pageEvent.get("server_time_dt"),
-                            requestedUrl: pageEvent.get("requestedUrl"),
-                            entrance: pageEvent.get("entrance") || false
-                          }
-                          if(pageIDMap[handle] && pageIDMap[handle].handle) {
-                            singleEvent.page = pageIDMap[handle];
-                            page_events.push(singleEvent);
-                            callback();
-                          } else {
-                            pageDao.getPublishedPageByHandle(handle, accountId, function(err, page) {
-                              if(err) {
-                                  callback(err)
-                              } else {
-                                if(page){                                  
-                                  var _page =  {
-                                    title: page.get("title"),
-                                    handle: page.get("handle")
-                                  }
-                                  singleEvent.page = _page;
-                                  pageIDMap[handle] = _page;
-                                }
-                                else
-                                {
-                                  singleEvent.page = {
-                                    handle: handle
-                                  };
-                                }
+                        if(pageEvents && pageEvents.length){
+                          var page_events = [];
+                          var pageIDMap = {};                      
+                          async.each(pageEvents, function(pageEvent, callback){
+                            var handle = "";
+                            if(pageEvent.get("url") && pageEvent.get("url").path){
+                              handle = pageEvent.get("url").path;
+                            }
+                            if(pageEvent.get("requestedUrl") && pageEvent.get("requestedUrl").path){
+                              handle = pageEvent.get("requestedUrl").path;
+                            }
+                            if(handle){
+                              if (handle.indexOf('/') === 0) {
+                                handle = handle.replace('/', '');
+                              }
+                              if(!handle){
+                                handle = "index";
+                              }
+                              if(handle == 'blog'){
+                                handle = 'blog-list';
+                              }
+                              console.log(handle);                     
+                              var singleEvent = {                          
+                                url: pageEvent.get("url"),
+                                server_time: pageEvent.get("server_time"),
+                                start: pageEvent.get("server_time_dt"),
+                                requestedUrl: pageEvent.get("requestedUrl"),
+                                entrance: pageEvent.get("entrance") || false
+                              }
+                              if(pageIDMap[handle] && pageIDMap[handle].handle) {
+                                singleEvent.page = pageIDMap[handle];
                                 page_events.push(singleEvent);
                                 callback();
-                              }
+                              } else {
+                                pageDao.getPublishedPageByHandle(handle, accountId, function(err, page) {
+                                  if(err) {
+                                      callback(err)
+                                  } else {
+                                    if(page){                                  
+                                      var _page =  {
+                                        title: page.get("title"),
+                                        handle: page.get("handle")
+                                      }
+                                      singleEvent.page = _page;
+                                      pageIDMap[handle] = _page;
+                                    }
+                                    else
+                                    {
+                                      singleEvent.page = {
+                                        handle: handle
+                                      };
+                                    }
+                                    page_events.push(singleEvent);
+                                    callback();
+                                  }
+                                })
+                              }  
+                            }
+                            else{
+                              callback()
+                            }
+                            
+                          }, function(err){
+                            var accountUrl = '';
+                            var entrancePath = '';
+
+                            page_events = _.sortBy(page_events, function(result){return result.server_time});
+                            // Unique page events
+                            page_events = _.uniq(page_events, function(result){
+                              return result.page.handle
+                            });
+                            if(page_events[0].url && page_events[0].url.protocol && page_events[0].url.domain){
+                              accountUrl = page_events[0].url.protocol + "://" + page_events[0].url.domain;
+                            }
+                            var entranceSession = _.find(page_events, function(event){
+                              return event.entrance
                             })
-                          }  
+                            if(entranceSession && entranceSession.page){
+                              entrancePath = entranceSession.page.title;
+                            }
+                            activities.push({
+                              activityType: 'PAGE_VIEW',
+                              start: page_events[0].start,
+                              page_events: page_events,
+                              accountUrl: accountUrl,
+                              entrancePath: entrancePath
+                            })
+                            cb();
+                          });
                         }
                         else{
-                          callback()
-                        }
-                        
-                      }, function(err){
-                        var accountUrl = '';
-                        var entrancePath = '';
-
-                        page_events = _.sortBy(page_events, function(result){return result.server_time});
-                        // Unique page events
-                        page_events = _.uniq(page_events, function(result){
-                          return result.page.handle
-                        });
-                        if(page_events[0].url && page_events[0].url.protocol && page_events[0].url.domain){
-                          accountUrl = page_events[0].url.protocol + "://" + page_events[0].url.domain;
-                        }
-                        var entranceSession = _.find(page_events, function(event){
-                          return event.entrance
-                        })
-                        if(entranceSession && entranceSession.page){
-                          entrancePath = entranceSession.page.title;
-                        }
-                        activities.push({
-                          activityType: 'PAGE_VIEW',
-                          start: page_events[0].start,
-                          page_events: page_events,
-                          accountUrl: accountUrl,
-                          entrancePath: entrancePath
-                        })
-                        cb();
-                      });
-                    }
-                    else{
-                      cb();
-                    }                    
-                  }
-                })
+                          cb();
+                        }                    
+                      }
+                    })
+                  }  
+                })                
               }
             });
           }
