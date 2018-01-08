@@ -1019,7 +1019,7 @@ app.constant('JS_REQUIRES', {
 				"../js/libs_misc/froala-wysiwyg-editor/js/plugins/font_family.js",
 				"../js/libs/froala-wysiwyg-editor/js/plugins/font_size.min.js",
 				"../js/libs_misc/froala-wysiwyg-editor/js/plugins/image-manager.js",
-				"../js/libs_misc/froala-wysiwyg-editor/js/plugins/font_weight.js",
+				"../js/libs_misc/froala-wysiwyg-editor/js/plugins/font_weight.min.js",
 				"../js/libs_misc/froala-wysiwyg-editor/js/plugins/letter_spacing_control.js",
 				"../js/libs/froala-wysiwyg-editor/js/plugins/inline_style.min.js",
 				"../js/libs/froala-wysiwyg-editor/js/plugins/line_breaker.min.js",

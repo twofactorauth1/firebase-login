@@ -33,10 +33,10 @@
                   });
               }
           }else {
-              if(selection.is('span') && $(selection[0], "span [class*='fontWeight_']")) {
-                  $(selection[0], "span [class*='fontWeight_']").removeAttr('class');
-                  selection.attr('class', 'fontWeight_'+val);
-
+              $("span.custom-span [class*='fontWeight_']").removeAttr('class'); 
+              if(selection.is('span') && $(selection[0], "span[class*='fontWeight_']")) {
+                  $(selection[0], "span[class*='fontWeight_']").removeAttr('class');
+                  selection.attr('class', 'fontWeight_'+val); 
                   this.format.apply('span', {
                       class:'fontWeight_'+val
                   });
@@ -49,6 +49,7 @@
                       class: 'fontWeight_' + val
                   });
               }
+              $("span.custom-span").removeClass("custom-span");
           }
       },
       // Callback on refresh.
