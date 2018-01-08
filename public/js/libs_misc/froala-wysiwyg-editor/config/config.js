@@ -107,7 +107,8 @@ $.FroalaEditor.build = _.memoize(function(type) {
         imageStyles: {
             'img-rounded': 'Rounded Square',
             'img-thumbnail': 'Square with Border',
-            'img-circle': 'Circle'
+            'img-circle': 'Circle',
+            'img-full-width' : 'Full Width'
         },
         imageDefaultWidth: 'auto',
         linkStyles:{
@@ -240,8 +241,7 @@ $.FroalaEditor.build = _.memoize(function(type) {
 
     };
 
-    if (type === 'ssbBlogEditor') {
-        $.FroalaEditor.config.imageStyles['img-full-width'] = 'Full Width';
+    if (type === 'ssbBlogEditor') { 
         insertToolbarButton($.FroalaEditor.config.toolbarButtons, 'quote', 'insertImage');
         insertToolbarButton($.FroalaEditor.config.toolbarButtonsMD, 'quote', 'insertImage');
         insertToolbarButton($.FroalaEditor.config.toolbarButtonsSM, 'quote', 'insertImage');
@@ -249,6 +249,11 @@ $.FroalaEditor.build = _.memoize(function(type) {
     }
 
     if (type === 'ssbEmailEditor') {
+        $.FroalaEditor.config.imageStyles= {
+            'img-rounded': 'Rounded Square',
+            'img-thumbnail': 'Square with Border',
+            'img-circle': 'Circle'
+        };
         var emailToolbarButtons = _.without(toolbarbuttons, 'fontAwesomeIcons', 'insertVideo','letterSpacingControl');
         _.extend($.FroalaEditor.config, {
             toolbarButtons: emailToolbarButtons,
@@ -261,6 +266,11 @@ $.FroalaEditor.build = _.memoize(function(type) {
     }
 
     if (type === 'broadcastMessageEditor') {
+        $.FroalaEditor.config.imageStyles= {
+            'img-rounded': 'Rounded Square',
+            'img-thumbnail': 'Square with Border',
+            'img-circle': 'Circle'
+        };
         var messageToolbarButtons = [
             'bold',
             'italic',
