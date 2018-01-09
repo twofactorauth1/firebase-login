@@ -13,6 +13,7 @@
         vm.uiState = {
             openWorkstream: { _id: undefined }
         };
+        
         function updateLiveDetailObject(liveVisitorDetails){
 			vm.state.liveVisitorDetails=[];
 			_.each(liveVisitorDetails, function(detail){
@@ -29,6 +30,9 @@
 							}else if(key.toLowerCase()=='email'){
 								detail.email=value
 							}
+                            else if(key.toLowerCase()=='first'){
+                                detail.fullname = value +" "+(evn.extraFields.last?evn.extraFields.last:"");
+                            }
 						});
                         detail.contactId = evn.contactId;
 					}

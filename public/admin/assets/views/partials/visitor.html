@@ -38,7 +38,7 @@
                                 <p><strong>Name: </strong> 
                                     <span ng-if="activeVisitorDetail.contactId">
                                         <a href="javascript:void(0)" ng-click="goToContactDetails(activeVisitorDetail.contactId)">
-                                        {{activeVisitorDetail.name || 'No Contact Name'}}
+                                        {{activeVisitorDetail.name || activeVisitorDetail.fullname || 'No Contact Name'}}
                                         </a>
                                     </span>
                                     <span ng-if="!activeVisitorDetail.contactId">
