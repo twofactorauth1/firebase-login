@@ -235,8 +235,7 @@ function contactActivityController($scope, $state, $window, $modal, $stateParams
     }
 
     function setContactAttributionDetails(){
-        if(vm.contactAttributionDetails && vm.state.activities.length){
-            var extraFields = [];
+        if(vm.contactAttributionDetails && vm.state.activities.length){            
             vm.contactAttributionDetails = _.filter(vm.state.activities, function(activity){
                 return activity.extraFields && activity.extraFields.utm_campaign
             })

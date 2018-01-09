@@ -22,7 +22,7 @@
                         <h3>{{vm.state.fullName || 'No Contact Name'}}</h3>
                         <span>{{vm.state.contact.details[0].company}}</span>
                         <div class="contact-social-icons">
-                            <ul class="">
+                            <ul>
                                 <li class="website-icon">
                                     <a ng-if="vm.state.contact.details[0].websites[0].website" href="{{vm.state.contact.details[0].websites[0].website}}" target="_blank">
                                        <span class="ti-world "></span>
@@ -96,9 +96,9 @@
                     1st:
                     <div class="padding-left-20 inline-block">
                        <a ng-repeat="attribution in vm.state.contactAttributionDetails">
-                           <span ng-if="attribution.extraFields.utm_source"><span class="contact-attribution-btn"">source: <span class="text-bold">{{attribution.extraFields.utm_source}}</span></span> </span>
-                           <span ng-if="attribution.extraFields.utm_medium"><span class="contact-attribution-btn"">medium: <span class="text-bold">{{attribution.extraFields.utm_medium}}</span></span> </span>
-                           <span ng-if="attribution.extraFields.utm_campaign"><span class="contact-attribution-btn"">campaign: <span class="text-bold">{{attribution.extraFields.utm_campaign}}</span></span></span>
+                           <span ng-if="attribution.extraFields.utm_source"><span class="contact-attribution-btn">source: <span class="text-bold">{{attribution.extraFields.utm_source}}</span></span> </span>
+                           <span ng-if="attribution.extraFields.utm_medium"><span class="contact-attribution-btn">medium: <span class="text-bold">{{attribution.extraFields.utm_medium}}</span></span> </span>
+                           <span ng-if="attribution.extraFields.utm_campaign"><span class="contact-attribution-btn">campaign: <span class="text-bold">{{attribution.extraFields.utm_campaign}}</span></span></span>
                        </a>
 
                     </div>
