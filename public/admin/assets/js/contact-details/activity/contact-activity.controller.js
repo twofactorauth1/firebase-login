@@ -237,9 +237,16 @@ function contactActivityController($scope, $state, $window, $modal, $stateParams
     function setContactAttributionDetails(){
         if(vm.contactAttributionDetails && vm.state.activities.length){            
             vm.contactAttributionDetails = _.filter(vm.state.activities, function(activity){
-                return activity.extraFields && activity.extraFields.utm_campaign
+                return activity.extraFields && 
+                checkIfAttributionActivity(activity.extraFields)
             })
         }
+    }
+
+    function checkIfAttributionActivity(fields){
+        return _.find(Object.keys(fields), function(k){
+            return k.indexOf("utm_") === 0
+        })
     }
 
     function setContactSessionDetails(){
