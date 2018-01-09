@@ -13,14 +13,7 @@
         vm.uiState = {
             openWorkstream: { _id: undefined }
         };
-        function checkAndSetFullName(detail, key){
-            if(key.toLowerCase()=='first'){
-                detail.firstName = 
-            }
-            else if(key.toLowerCase()=='last'){
-                detail.lastName = 
-            }
-        }
+        
         function updateLiveDetailObject(liveVisitorDetails){
 			vm.state.liveVisitorDetails=[];
 			_.each(liveVisitorDetails, function(detail){
