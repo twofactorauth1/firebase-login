@@ -7,15 +7,13 @@
 			scope: {
 				liveVisitorDetails: "=live",
                 activeVisitorDetail: '=active',
-                loading:"=",
-               // loading:"="
+                loading:"="
 			},
             templateUrl: '/admin/assets/views/partials/visitor.html',
-			controller: ['$scope', '$injector', function ($scope, $injector) {  
-                
-               if(! angular.isDefined($scope.loading)){
+			controller: ['$scope', '$state', function ($scope, $state) {
+                if(!angular.isDefined($scope.loading)){
                     $scope.loading=true;
-               }
+                }
                 $scope.selectedVisitorIndex=0;
                 $scope.convertUtcToLocal = function(_date){
                     if(_date){
@@ -43,8 +41,11 @@
                     } else{
                         $scope.selectedVisitorIndex = index;
                         $scope.activeVisitorDetail = $scope.liveVisitorDetails[index];
-                    }
-        
+                    }        
+                };
+
+                $scope.goToContactDetails = function(contactId){
+                    $state.go('app.singleContact', {contactId: contactId});
                 }
 			}]
 		};

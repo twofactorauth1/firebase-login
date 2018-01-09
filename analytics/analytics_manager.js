@@ -595,7 +595,8 @@ module.exports = {
                                             _result.pageEvents.push({
                                                 activityType:activity.get("activityType"),
                                                 extraFields:activity.get("extraFields"),
-                                                start:activity.get("start")
+                                                start:activity.get("start"),
+                                                contactId: activity.get("contactId")
                                             });
                                         });
                                     }
@@ -618,6 +619,7 @@ module.exports = {
                                     obj.activityType=pageEvent.activityType;
                                     obj.extraFields=pageEvent.extraFields;
                                     obj.pageTime = pageEvent.start;
+                                    obj.contactId = pageEvent.contactId;
                                 } else {
                                     obj.activityType="PAGE_VIEW";
                                 }
