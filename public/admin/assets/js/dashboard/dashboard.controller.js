@@ -30,6 +30,7 @@
 								detail.email=value
 							}
 						});
+                        detail.contactId = evn.contactId;
 					}
 				  });
 				//console.log('calculating difference between now and ', server_time);

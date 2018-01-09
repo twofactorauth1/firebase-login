@@ -35,7 +35,16 @@
                                 <img src="/admin/assets/images/default-user.png"  class="ng-isolate-scope logo">
                             </div>
                             <div class="col-xs-10">
-                                <p><strong>Name: </strong> {{activeVisitorDetail.name}}</p>
+                                <p><strong>Name: </strong> 
+                                    <span ng-if="activeVisitorDetail.contactId">
+                                        <a href="javascript:void(0)" ng-click="goToContactDetails(activeVisitorDetail.contactId)">
+                                        {{activeVisitorDetail.name || 'No Contact Name'}}
+                                        </a>
+                                    </span>
+                                    <span ng-if="!activeVisitorDetail.contactId">
+                                        {{activeVisitorDetail.name}}
+                                    </span>
+                                </p>
                                 <p><strong>Email: </strong> {{activeVisitorDetail.email}}</p>
                                 <p><strong>ID: </strong> {{activeVisitorDetail.fingerprint}}</p>
                             </div>
