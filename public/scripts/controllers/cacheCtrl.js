@@ -172,6 +172,13 @@ mainApp.controller('CacheCtrl', ['$scope', '$rootScope', 'embeddedSiteDataServic
 							}
 						}
 					}); 
+					$(window).on('scroll', function () {   
+						if (angular.element(".sticky-wrapper.is-sticky").length>0){
+							angular.element(".ssb-fixed-first-element").hide();
+						}else{
+							angular.element(".ssb-fixed-first-element").show();
+						} 
+					});
 					$('a[du-smooth-scroll]:not(.ssb-sub-nav-menu)').on('click', function(event) {
 						var hash = this.hash;  
 						if(hash){

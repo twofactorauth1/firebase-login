@@ -651,7 +651,7 @@
 								}
 							}
 
-							if (component.spacing.mlxs || component.spacing.mlsm || component.spacing.mlmd || component.spacing.ml) {
+							if (component.spacing.mlmd || component.spacing.ml) {
 								var _ml = component.spacing.mlmd || component.spacing.ml;
 								if(_ml.indexOf('%') > 0){
 									_style = "";
