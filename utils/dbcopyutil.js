@@ -136,6 +136,10 @@ var copyutil = {
         var self = this;
         self._updateBlogPages(cb);
     },
+    updateInnerIds: function(cb) {
+        var self = this;
+        self._updateInnerIds(cb);
+    },
     enableSiteBuilderOnLegacyAccountOnTest : function(accountId, cb) {
         var self = this;
         self._enableSiteBuilderOnLegacyAccount(accountId, mongoConfig.TEST_MONGODB_CONNECT, cb);
@@ -1192,8 +1196,52 @@ var copyutil = {
             });
         });
     },
-
-
+    _updateInnerIds:function(fn) { 
+        console.log('_updateInnerIds');
+        var srcURL = mongoConfig.PROD_MONGODB_CONNECT,
+        //var srcURL = mongoConfig.PROD_MONGODB_CONNECT
+            srcMongo = mongoskin.db(srcURL, {safe: true}) , 
+            sectionCollection = srcMongo.collection('sections');  
+        async.waterfall([
+            function opration(cb){ 
+                sectionCollection.find({ 
+                    $or: [
+                        { "components.type": "ssb-recent-category" },
+                        { "components.type": "ssb-recent-post" },
+                        { "components.type": "ssb-recent-tag" },
+                    ] 
+                }).toArray(function(err, sectionArray){
+                    cb(null,sectionArray) 
+                }) 
+            },
+            function update_section(sectionArray ,cb){
+                var records=sectionArray.length
+                async.eachSeries(sectionArray, function(sectionObj, callback){ 
+                    sectionCollection.update({ _id: sectionObj._id } ,
+                         { $set: {  "components.0._id" : utils.idutils.generateUUID() }},function(err, result){
+                        if(err){
+                            console.log('err'+err);
+                            callback(err);
+                        }else{ 
+                            records--
+                            console.log('record left-'+records);
+                            callback();
+                        } 
+                    }) 
+                },function(err){
+                    if(err){
+                        cb(err);
+                    }else{
+                        cb();
+                    }
+                })
+                 
+            }
+        ], function done(err){
+            srcMongo.close(); 
+            fn(err);
+        });
+    }, 
     _updateBlogPages :function(fn) {
 
         var srcURL = mongoConfig.PROD_MONGODB_CONNECT,

@@ -574,6 +574,9 @@ module.exports = function(grunt) {
         doUpdateBlogPages: {
 
         },
+        doUpdateInnerIds:{
+
+        },
         postcss: {
             options: {
                 // map: true,
@@ -703,6 +706,12 @@ module.exports = function(grunt) {
 
         var done = this.async();
         dbcopyutil.updateBlogPages( done);
+
+    });
+    grunt.registerTask('doUpdateInnerIds', 'A task to update blog pages', function(){
+
+        var done = this.async();
+        dbcopyutil.updateInnerIds( done);
 
     });
 
