@@ -173,7 +173,7 @@ app.directive('paymentFormComponent', ['$q', 'paymentService', 'userService', 'c
 							if (data && results.length === 1) {
 								var addressObj = results[0];
 								if(addressObj.types && addressObj.types.length){
-									if(_.contains(address.types, 'postal_code')){
+									if(_.contains(addressObj.types, 'postal_code')){
 										var obj = _.find(addressObj.address_components, function(c){
 											return _.contains( c.types, 'administrative_area_level_1')
 										})
@@ -401,7 +401,7 @@ app.directive('paymentFormComponent', ['$q', 'paymentService', 'userService', 'c
 							if (data && results.length === 1) {
 								var addressObj = results[0];
 								if(addressObj.types && addressObj.types.length){
-									if(_.contains(address.types, 'postal_code')){
+									if(_.contains(addressObj.types, 'postal_code')){
 										var obj = _.find(addressObj.address_components, function(c){
 											return _.contains( c.types, 'administrative_area_level_1')
 										})
