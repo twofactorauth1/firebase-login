@@ -410,6 +410,7 @@ _.extend(api.prototype, baseApi.prototype, {
         var middle = req.body.middle;
         var campaignId = req.body.campaignId;
         var existingUser = req.body.existingUser;
+        var billingPostalCode = req.body.billingPostalCode;
         var orgId = req.body.orgId || 0;
         if(orgId && parseInt(orgId) === 1) {
             setupFee = 150000;//$1500.00
@@ -525,6 +526,11 @@ _.extend(api.prototype, baseApi.prototype, {
                 billingObj.setupFee = setupFee;
                 billingObj.signupDate = new Date();
                 billingObj.trialLength = trialLength;
+                if(billingPostalCode){
+                    billingObj.details = {
+                        zip: billingPostalCode
+                    }
+                }
                 account.set('ownerUser', user.id());
                 accountDao.saveOrUpdate(account, function (err, updatedAccount) {
                     if(err || updatedAccount === null) {

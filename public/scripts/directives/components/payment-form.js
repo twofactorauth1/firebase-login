@@ -178,8 +178,9 @@ app.directive('paymentFormComponent', ['$q', 'paymentService', 'userService', 'c
 								first: newAccount.first,
 								middle: newAccount.middle,
 								last: newAccount.last,
-								existingUser: newAccount.existingUser,
-								orgId: 1
+								existingUser: newAccount.existingUser,								
+								orgId: 1,
+								billingPostalCode: newAccount.billingPostalCode
 							};
 
 							PaymentService.getStripeCardToken(newAccount.card, function (token, error) {
@@ -387,7 +388,8 @@ app.directive('paymentFormComponent', ['$q', 'paymentService', 'userService', 'c
 								first: newAccount.first,
 								middle: newAccount.middle,
 								last: newAccount.last,
-								existingUser: newAccount.existingUser
+								existingUser: newAccount.existingUser,
+								billingPostalCode: newAccount.billingPostalCode
 							};
 
 							PaymentService.getStripeCardToken(newAccount.card, function (token, error) {
@@ -753,7 +755,8 @@ app.directive('paymentFormComponent', ['$q', 'paymentService', 'userService', 'c
 									middle: newAccount.middle,
 									last: newAccount.last,
 									campaignId: scope.component.campaignId,
-									existingUser: newAccount.existingUser
+									existingUser: newAccount.existingUser,
+									billingPostalCode: newAccount.billingPostalCode
 								};
 
 								newUser.plan = '';
