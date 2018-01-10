@@ -360,7 +360,7 @@
         </div>
     </div>
 </div>
-<div ng-if="(vm.component.components[0] && vm.component.components[0].src) || (component.bg.img.show && component.bg.img.url) || (component.bg.video.show && component.bg.video.url)">
+<div ng-if="(vm.component.components[0] && vm.component.components[0].src) || component.bg.img.show || (component.bg.video.show && component.bg.video.url)">
 
     <h4 class="ssb-sidebar-sub-heading-separator">Effects</h4>
 
@@ -412,7 +412,7 @@
                 </label>
                 <switch ng-model="component.bg.img.fullscreen" class="pull-right"></switch>
             </div> -->
-            <div class="form-group">
+            <div class="form-group" ng-show="component.bg.img.show || component.bg.video.show">
                 <label for="bg_overlay">
                     Add overlay
                     <span tooltip-placement="top" tooltip-append-to-body="true" tooltip="Add/remove Overlay to background image.">
