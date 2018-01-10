@@ -221,7 +221,7 @@ function ssbSiteBuilderSidebarSettingsPanelController($scope, $attrs, $filter, $
 
     function changeButtonDesign(version) {
         var button = vm.uiState.activeElement;
-        
+        var updateVersion=true;
         var elementId = vm.uiState.activeElement._id.replace("button-element_", "");
         if(elementId){
             var selectedButton = $(".ssb-theme-btn[data-compiled='"+elementId+"']");
@@ -230,8 +230,19 @@ function ssbSiteBuilderSidebarSettingsPanelController($scope, $attrs, $filter, $
                     return c.match(/ssb-theme-btn-style-\d+/g) && c.match(/ssb-theme-btn-style-\d+/g).join(" ");
                 });
             }
+            if(button.version){
+                var versionIsNumber = button.version && typeof button.version === "number";
+                if(versionIsNumber)	 {
+                    updateVersion= button.version!=version;
+                }else{
+                    updateVersion = !button.version['ssb-theme-btn-style-' + version];
+                } 
+                delete button.version;
+            }
         }
-        button.version = version;
+        if(updateVersion){
+            button.version = version;
+        }
     }
 
     function openCal($event, type) {

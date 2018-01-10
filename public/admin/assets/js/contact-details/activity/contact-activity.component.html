@@ -181,7 +181,7 @@
 	                                </div>
 	                                <div ng-switch-when="CONTACT_FORM">
 	                                    <div class="activity-title col-xs-12 col-sm-8 text-bold">
-	                                		Submmited the form
+	                                		Submmited form
 	                                	</div>
 	                                	<div class="text-muted text-small activity-time col-xs-12 col-sm-4">
 		                            		{{activity.start | date:'M/d @ h:mm a' | lowercase}}
@@ -197,24 +197,6 @@
                                     	<p ng-if="activity.detail">
                                         	{{activity.detail}}
                                     	</p>
-	                                </div>
-	                                <div ng-switch-when="FORM_SUBMISSION">
-	                                	<div class="activity-title col-xs-12 col-sm-8 text-bold">
-	                                		Form Submitted
-	                                	</div>
-	                                	<div class="text-muted text-small activity-time col-xs-12 col-sm-4">
-		                            		{{activity.start | date:'M/d @ h:mm a' | lowercase}}
-		                        		</div>		                        		
-	                                    <div class="col-xs-12 content-data">
-	                                        Form submitted for 
-	                                        <span class="text-bold" ng-if="vm.state.contact.first">{{vm.state.contact.first.toString()+' '+vm.state.contact.last.toString()}}</span>
-	                                        <span class="text-bold" ng-if="!vm.state.contact.first">{{vm.state.contact.details[0].emails[0].email}}</span>
-	                                    </div>	                                    
-	                                    <div class="clearfix"></div> 
-	                                    <p ng-if="activity.detail">
-	                                        {{activity.detail}}
-	                                    </p>
-	                                    
 	                                </div>
 	                                <div ng-switch-when="EMAIL_DELIVERED">
 	                                    <div class="activity-title col-xs-12 col-sm-8 text-bold">
@@ -379,13 +361,7 @@
                                     	<p ng-if="activity.detail">
                                         	{{activity.detail}}
                                     	</p>
-	                                </div>
-	                                <div ng-switch-default>
-	                                    <p>
-	                                        <span class="label label-default">{{activity.activityType}}</span> {{activity.detail}}
-	                                    </p>
-	                                </div>
-
+	                                </div>	                                
 	                            </div>
 		                    </div>
 		                </li>

@@ -117,7 +117,7 @@ html
               if component.type === 'email-header'
                   | <table width="100%" align="center"  border="0" cellpadding="0" cellspacing="0" style="border-collapse: collapse;" >
                   |   <tr>
-                  |     <td align="center"  width="100%" >
+                  |     <td align="center" width="100%" >
                   if component.logo
                   - var url=(component.bg && component.bg.img.show === true) ? 'https:'+component.bg.img.url : '';
                     | <div style="max-width:!{component.spacing.mw || '100%' } ;float:left;width: 100%; background-color: !{component.bg.color};padding-top: !{component.spacing.pt || 0};background-size: cover;background-image: url('!{url}');padding-bottom: !{component.spacing.pb || 0};padding-left: !{component.spacing.pl || 0};padding-right: !{component.spacing.pr || 0};margin-top: !{component.spacing.mt || 0};margin-bottom: !{component.spacing.mb || 0};margin-left: !{component.spacing.ml || 0};margin-right: !{component.spacing.mr || 0};"> <table class="email-component-container {{component.type}}-v{{component.version}}" align="center" border="0" cellpadding="0" cellspacing="0" width="100%" >
@@ -129,7 +129,7 @@ html
                     |                            <td class="device-width" width='100%'>
                     |                                <table class="device-width" width='100%' cellpadding='0' cellspacing='0' border='0' style='border-collapse: collapse;margin-top: 45px;'>
                     |                                    <tr>
-                    |                                        <td class="device-width" width='100%'>
+                    |                                        <td align="center" class="device-width" width='100%'>
                     |                                            !{component.logo}
                     |                                        </td>
                     |                                    </tr>
