@@ -130,7 +130,7 @@
         ssbService.contentSectionDisplayOrderLeadSource = [
             'navigation',
             'carousels',
-            'services',            
+            'services',
             'forms',
             'gallery',
             'text',
@@ -223,7 +223,7 @@
         };
 
         // function to get component sort order
-        function getComponentSortOrder(newComponents, newSection){          
+        function getComponentSortOrder(newComponents, newSection){
             if(newSection && newSection.componentSortOrder)
                return newSection.componentSortOrder;
             else
@@ -1152,6 +1152,11 @@
 
                     var _section = checkAndSetGlobalHeader(response);
                     var insertSection = ssbService.setTempUUIDForSection(_section);
+
+                    //setting opacity for testimonial slider dots
+                    if(insertSection.name && insertSection.components[0].slider && insertSection.name == "testimonials"){
+                        insertSection.components[0].slider['sliderDotColorOpacity'] = 1;
+                    }
                     ssbService.page.sections.splice(insertAt, 0, insertSection);
                     ssbService.setActiveSection(insertAt);
                     ssbService.setActiveComponent(null);
@@ -1268,9 +1273,9 @@
             var keysToOmitSection = ['$$hashKey', 'anchor', 'version', 'type', 'layout', 'visibility', 'bg', 'border', 'layoutModifiers', 'componentSortOrder', 'thumbnailCollection'];
             var keysToOmitComponent = ['$$hashKey', 'anchor', 'accountId', 'version', 'type', 'layout', 'visibility', 'bg', 'border', 'layoutModifiers', 'componentSortOrder', 'thumbnailCollection', 'nav'];
             var newComponents = angular.copy(newSection.components);
-            
+
             var newComponentsOrder =  getComponentSortOrder(newComponents, newSection); // ['componentType1', 'componentType2', ...]
-         
+
             var oldComponents = _(angular.copy(oldSection.components)).chain()
 
                                     .sortBy(function(x) { // sort by order of newComponents
@@ -1278,8 +1283,8 @@
                                     })
 
                                     .value(); // return the new array
-   
-            if(newSection.componentSortOrder){             
+
+            if(newSection.componentSortOrder){
                 // get current sort order
                 var componentOrder =  angular.copy(getComponentSortOrder(newComponents));
                 //arrange components in requested order
@@ -1294,9 +1299,9 @@
             var oldSectionComponentCopy = newSection.components;
             delete oldSection.components;
 
-             
-            if(newSection.componentSortOrder){            
-               
+
+            if(newSection.componentSortOrder){
+
                 newSection.components = _.map(newComponents, function(c, index) {
                     var component = _.findWhere(oldComponents, { type: c.type });
                     if(!component){
@@ -1306,7 +1311,7 @@
                     }
                     return $.extend({}, c, _.omit(component || oldComponents[index], keysToOmitComponent));
                 });
-                
+
                 // set current sort order
                 newSection.components = _(newSection.components).chain().sortBy(function(section){
                     return componentOrder[section.type] && parseInt(componentOrder[section.type], 10);
@@ -1318,10 +1323,10 @@
                     var component = _.findWhere(oldComponents, { type: c.type });
                     return $.extend({}, c, _.omit(component || oldComponents[index], keysToOmitComponent));
                 });
- 
+
             }
             else{
-                
+
                 newSection.components = _.map(newComponents, function(c, index) {
 
                   if(newSection.layout==="nav-hero" && c.type === "ssb-text" ){
@@ -1331,9 +1336,9 @@
                  }else{
                    return $.extend({}, c, _.omit(oldComponents[index], keysToOmitComponent));
                  }
-               
+
                 });
-                
+
 
             }
 
@@ -1768,19 +1773,19 @@
                                 if (t > index) {
                                     newIndex += 1;
                                 }
-                                if (component.elementStyles["image/img"] && 
+                                if (component.elementStyles["image/img"] &&
                                         component.elementStyles["image/img"][t]) {
                                         data["img"][newIndex] = component.elementStyles["image/img"][t];
-                                        if(t!==newIndex){ 
+                                        if(t!==newIndex){
                                             delete data["img"][newIndex]["_id"];
                                             delete data["img"][newIndex]["id"];
                                             delete data["img"][newIndex]["anchor"];
                                         }
                                 }
-                                if (component.elementStyles["image/details"] && 
+                                if (component.elementStyles["image/details"] &&
                                         component.elementStyles["image/details"][t]) {
                                         data["details"][newIndex] = component.elementStyles["image/details"][t];
-                                        if(t!==newIndex){ 
+                                        if(t!==newIndex){
                                             delete data["details"][newIndex]["_id"];
                                             delete data["details"][newIndex]["id"];
                                             delete data["details"][newIndex]["anchor"];
@@ -1789,7 +1794,7 @@
                             }
                             component.elementStyles["image/details"] = data["details"];
                             component.elementStyles["image/img"] = data["img"];
-                        }  
+                        }
                         component.thumbnailCollection.splice(index + 1, 0, {
                             url: asset.url,
                             img: "<img src='"+ asset.url +"'/>"
