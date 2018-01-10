@@ -411,6 +411,7 @@ _.extend(api.prototype, baseApi.prototype, {
         var campaignId = req.body.campaignId;
         var existingUser = req.body.existingUser;
         var billingPostalCode = req.body.billingPostalCode;
+        var billingState = req.body.billingState;
         var orgId = req.body.orgId || 0;
         if(orgId && parseInt(orgId) === 1) {
             setupFee = 150000;//$1500.00
@@ -528,7 +529,8 @@ _.extend(api.prototype, baseApi.prototype, {
                 billingObj.trialLength = trialLength;
                 if(billingPostalCode){
                     billingObj.details = {
-                        zip: billingPostalCode
+                        zip: billingPostalCode,
+                        state: billingState
                     }
                 }
                 account.set('ownerUser', user.id());
