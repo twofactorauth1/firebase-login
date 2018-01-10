@@ -1157,6 +1157,16 @@
                     if(insertSection.name && insertSection.components[0].slider && insertSection.name == "testimonials"){
                         insertSection.components[0].slider['sliderDotColorOpacity'] = 1;
                     }
+                    //setup opacity for image-gallery
+                    if(insertSection.components[0] && insertSection.components[0].type == "image-gallery"){
+                        insertSection.components[0].slider = {
+                                sliderDotColorOpacity : 1
+                        }    ;
+                    }
+                    //setting opacity for nav + hero
+                    if(insertSection.name && insertSection.components[0].slider && insertSection.name == "Nav + Hero"){
+                        insertSection.components[0].slider['sliderDotColorOpacity'] = 1;
+                    }
                     ssbService.page.sections.splice(insertAt, 0, insertSection);
                     ssbService.setActiveSection(insertAt);
                     ssbService.setActiveComponent(null);
