@@ -1,15 +1,16 @@
 <div data-edit ng-class="component.type+'-v'+component.version">
     <div class="title mb30">
         <div elem ng-model="component.title"></div>
-    </div> 
+    </div>
     <span  ng-show="scroll.element.left" ng-click="moveLeft()" class="feature-left  fa fa-chevron-left" ></span>
     <span  ng-show="(scroll.hasScroll && scroll.started==0) || scroll.element.right"  ng-click="moveRight()" class="feature-right fa fa-chevron-right" ></span>
-    <div class="row features-wrap feature-list-container" ng-init="setSelectedFeatureIndex(0)">
+    <div class="row features-wrap feature-list-container" ng-init="setSelectedFeatureIndex(0)" ng-show="component.features.length != 0">
+
         <ul class="list-features list-features-{{component._id}} col-xs-12" ng-class="{'ul-col-5-layout':component.features.length >= 5}" >
             <li class="feature" ng-attr-style="{{listStyles(component, $index == features.featureIndex)}}" ng-repeat="feature in component.features" ng-click="setSelectedFeatureIndex($index)" ng-class="{'feature-col-5-layout':component.features.length >= 5, 'feature-col-4-layout':component.features.length == 4, 'feature-col-3-layout':component.features.length == 3, 'feature-col-2-layout':component.features.length == 2, 'feature-col-1-layout':component.features.length == 1, 'active': $index == features.featureIndex}">
                 <a class="feature-heading" ng-attr-style="{{setStyles(component.formSettings)}}">
-                    <div class="fetaure-tabs-icon"> 
-                        <div elem ng-model="feature.top"></div>    
+                    <div class="fetaure-tabs-icon">
+                        <div elem ng-model="feature.top"></div>
                     </div>
                     <div class="features-tabs-heading">
                         <div elem ng-model="feature.heading"></div>
@@ -22,10 +23,11 @@
                             <i class='fa fa-plus'></i>
                         </div>
                     </div>
-                </a>                
+                </a>
             </li>
         </ul>
-        <div data-repeat-index-id="{{features.featureIndex}}">
+
+        <div data-repeat-index-id="{{features.featureIndex}}" >
             <div class="feature-tab-content" ng-if="!loading && isEditing" >
                 <div class="col-md-5">
                     <div ng-if="component.features.length>0" elem ng-model="component.features[features.featureIndex].media"></div>
@@ -36,17 +38,22 @@
                      <div ng-if="component.features.length<=0" elem ng-model="component.features[features.featureIndex].content"></div>
                 </div>
             </div>
-            <div class="feature-tab-content" ng-if="!isEditing"> 
+            <div class="feature-tab-content" ng-if="!isEditing">
                 <div ng-repeat="feature in component.features" ng-if="$index == features.featureIndex">
                     <div class="{{updateFeatureClass(component.elementStyles,features.featureIndex)?'col-md-5':'ng-hide'}}">
                             <div elem ng-model="component.features[features.featureIndex].media"></div>
                     </div>
                     <div class="{{updateFeatureClass(component.elementStyles,features.featureIndex)?'col-md-7':'col-md-12'}}">
-                        <div elem ng-model="component.features[features.featureIndex].content"></div> 
+                        <div elem ng-model="component.features[features.featureIndex].content"></div>
                     </div>
                 </div>
             </div>
         </div>
-        
-    </div> 
+
+    </div>
+    <div ng-show="component.features.length == 0" class="col-xs-12">
+        <a ng-click="addFeatureService(0)" class="center btn btn-primary btn-lg btn-wide btn-o add-feature"> <i class="fa fa-plus"></i>
+         Add New Feature
+        </a>
+    </div>
 </div>
