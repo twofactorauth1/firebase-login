@@ -97,7 +97,7 @@ module.exports = {
     var queryObj = {
       'accountId': accountId,
       'contactId': contactId,
-      'activityType': {$ne: 'PAGE_VIEW'}
+      'activityType': {$nin: ['PAGE_VIEW', 'FORM_SUBMISSION']}
     };
 
     dao.findAllWithFieldsAndLimit(queryObj, skip, limit, null, null, $$.m.ContactActivity, function(err, list) {

@@ -189,7 +189,8 @@
 	                                    <div class="col-xs-12 content-data">
 	                                        <ul class="form-values">
 	                                            <li ng-repeat="(k,v) in activity.extraFields">
-	                                                <b>{{k | formatText}}</b>: {{v}}
+	                                                <b>{{k | formatText}}</b>: 
+	                                                <span title="{{v}}" class="activity-text-wrap">{{v}}</span>
 	                                            </li>
 	                                        </ul>	                         
 	                                    </div>
@@ -361,13 +362,7 @@
                                     	<p ng-if="activity.detail">
                                         	{{activity.detail}}
                                     	</p>
-	                                </div>
-	                                <div ng-switch-default>
-	                                    <p>
-	                                        <span class="label label-default">{{activity.activityType}}</span> {{activity.detail}}
-	                                    </p>
-	                                </div>
-
+	                                </div>	                                
 	                            </div>
 		                    </div>
 		                </li>
