@@ -189,7 +189,8 @@
 	                                    <div class="col-xs-12 content-data">
 	                                        <ul class="form-values">
 	                                            <li ng-repeat="(k,v) in activity.extraFields">
-	                                                <b>{{k | formatText}}</b>: {{v}}
+	                                                <b>{{k | formatText}}</b>: 
+	                                                <span title="{{v}}" class="activity-text-wrap">{{v}}</span>
 	                                            </li>
 	                                        </ul>	                         
 	                                    </div>
