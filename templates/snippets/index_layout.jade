@@ -37,6 +37,7 @@ html(class="no-js", lang="en" ng-app="mainApp" ng-controller="MainCtrl as main",
             meta(http-equiv="Expires", content="0")
             if og.image
                 meta(property='og:image', content=og.image)
+                meta(property='og:hasodsdkfsdlfsjdfldksfj', content=og.image)
             base(href="/")
             if account && account.business
                 script(type="text/javascript").
@@ -83,7 +84,7 @@ html(class="no-js", lang="en" ng-app="mainApp" ng-controller="MainCtrl as main",
         //- script.
         //-     var test = !{JSON.stringify(account.website)};
 
-    body(data-styles, class='theme-main navbar-v#{ account.website.nav_version } ssb-main ng-cloak', class=(account.website.theme && account.website.theme.handle ? 'ssb-theme-' + account.website.theme.handle : 'ssb-theme-default'), class=( account && account.showhide && account.showhide.blogSocialSharing === false ? 'ssb-blog-hide-social-share' : ''), ng-cloak)
+    body(data-styles, class='theme-main navbar-v#{ account.website.nav_version } ssb-main ng-cloak', id="ssb-main" class=(account.website.theme && account.website.theme.handle ? 'ssb-theme-' + account.website.theme.handle : 'ssb-theme-default'), class=( account && account.showhide && account.showhide.blogSocialSharing === false ? 'ssb-blog-hide-social-share' : ''), ng-cloak)
         block body_content
             div(id='fb-root')
             div(id='toolbar')

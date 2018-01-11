@@ -142,9 +142,9 @@ if (typeof account.website.theme !== 'undefined' && typeof account.website.theme
         }
 
 
-        .ssb-theme-#{account.website.theme.handle} .ssb-section-layout [testimonials-component] .slick-dots li button:before,.ssb-theme-#{account.website.theme.handle} .ssb-section-layout [image-gallery-component] .slick-dots li button:before, .ssb-theme-#{account.website.theme.handle} .ssb-section-layout .ssb-blog-featured-slider .slick-dots li button:before {
+        #ssb-main.ssb-theme-#{account.website.theme.handle} .ssb-section-layout [testimonials-component] .slick-dots li button:before,#ssb-main.ssb-theme-#{account.website.theme.handle} .ssb-section-layout [image-gallery-component] .slick-dots li button:before, #ssb-main.ssb-theme-#{account.website.theme.handle} .ssb-section-layout .ssb-blog-featured-slider .slick-dots li button:before {
             color: #{account.website.themeOverrides.styles.primarySliderDotColor};
-            opacity: #{account.website.themeOverrides.styles.primarySliderDotColorOpacity};
+            opacity: #{account.website.themeOverrides.styles.primarySliderDotColorOpacity} !important;
         }
 
 
