@@ -2136,6 +2136,87 @@ var emailMessageManager = {
             }
         });
     },
+
+    sendUnsubscribeSubstitutions: function(fn) {
+        var self = this;
+
+        self.log.debug('>> sendUnsubscribeSubstitutions');
+        var subject = 'Testing unsubscribe';
+
+
+        var request = sg.emptyRequest();
+        request.body = {
+            "categories": [
+                "server"
+            ],
+            "content": [
+                {
+                    "type": "text/html",
+                    "value": 'This is a sample message.  To unsubscribe, go to <a href="[unsubscribe_url]">[unsubscribe_url]</a>'
+                }
+            ],
+            "from": {
+                "email": 'kyle@indigenous.io'
+            },
+            "headers": {},
+            "personalizations": [
+                {
+                    "headers": {
+                        "X-Accept-Language": "en"
+                    },
+                    "subject": subjectPrefix + subject,
+
+                    "to": [
+                        {
+                            "email": 'millkyl@gmail.com'
+                        }
+                    ],
+                    substitutions:{
+                        unsubscribe_url:'http://www.url1.com'
+                    }
+                },
+                {
+                    "headers": {
+                        "X-Accept-Language": "en"
+                    },
+                    "subject": subjectPrefix + subject,
+
+                    "to": [
+                        {
+                            "email": 'kyle@kyle-miller.com'
+                        }
+                    ],
+                    substitutions:{
+                        unsubscribe_url:'http://www.url2.com'
+                    }
+                }
+            ],
+            "tracking_settings": {
+                "click_tracking": {
+                    "enable": true,
+                    "enable_text": true
+                },
+                "subscription_tracking":{enable:true,substitution_tag:'unsubscribe_url'}
+            }
+        };
+        request.method = 'POST';
+        request.path = '/v3/mail/send';
+
+
+
+        sg.API(request, function (error, response) {
+            self.log.debug(response.statusCode);
+            self.log.debug(response.body);
+            self.log.debug(response.headers);
+            if (error) {
+                self.log.error('Error sending email:', error);
+                return fn(error);
+            } else {
+                self.log.debug(null, null, '<< sendUnsubscribeSubstitutions');
+                return fn(null, response);
+            }
+        });
+    },
     /* ********************************************************************
      *
      *
@@ -3588,7 +3669,7 @@ var emailMessageManager = {
         return arr;
     },
 
-    contentTransformations: function(email) {      
+    contentTransformations: function(email) {
         var self = this;
         var components = [];
         var keys = ['logo','title','text','text1','text2','text3'];
