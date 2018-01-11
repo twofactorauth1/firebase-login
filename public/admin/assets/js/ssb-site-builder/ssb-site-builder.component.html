@@ -22,18 +22,21 @@
 }
 
 
-.ssb-theme-{{vm.state.website.theme.handle}} .ssb-section-layout {
+.ssb-theme-{{vm.state.website.theme.handle}} .ssb-section-layout, .ssb-theme-{{vm.state.website.theme.handle}} .ssb-blog-editor-post-body {
     font-family: {{vm.state.website.themeOverrides.defaultFontStack}};
     background-color: {{vm.state.page.styles.bodyBackgroundColor || vm.state.website.themeOverrides.styles.bodyBackgroundColor}};
 }
 
-.ssb-theme-{{vm.state.website.theme.handle}} .ssb-section-layout .ssb-component .element-wrap, .ssb-theme-{{vm.state.website.theme.handle}} .ssb-section-layout .ssb-component .footer-container .powered-by {
+.ssb-theme-{{vm.state.website.theme.handle}} .ssb-section-layout .ssb-component .element-wrap, .ssb-theme-{{vm.state.website.theme.handle}} .ssb-section-layout .ssb-component .footer-container .powered-by,
+   .ssb-theme-{{vm.state.website.theme.handle}} .ssb-blog-editor-post-body
+   {
     font-size: {{vm.state.website.themeOverrides.styles.fontSize}}px;
     font-family: {{vm.state.website.themeOverrides.styles.fontFamily}};
     letter-spacing: {{vm.state.website.themeOverrides.styles.letterSpacing}}px;
     font-weight: {{vm.state.website.themeOverrides.styles.fontWeight}};
 }
-.ssb-theme-{{vm.state.website.theme.handle}} .ssb-section-layout .ssb-component .element-wrap .ssb-element-button{
+.ssb-theme-{{vm.state.website.theme.handle}} .ssb-section-layout .ssb-component .element-wrap .ssb-element-button,
+    .ssb-theme-{{vm.state.website.theme.handle}} .ssb-blog-editor-post-body .ssb-element-button{
     font-size: {{vm.state.website.themeOverrides.styles.fontSize}}px !important;
     font-family: {{vm.state.website.themeOverrides.styles.fontFamily}};
     letter-spacing: {{vm.state.website.themeOverrides.styles.letterSpacing}}px;
@@ -69,7 +72,9 @@
     font-size: {{vm.state.website.themeOverrides.styles.paragraphSize}};
 }
 
-.ssb-theme-{{vm.state.website.theme.handle}} .ssb-theme-btn, .ssb-theme-{{vm.state.website.theme.handle}} .ssb-theme-btn:hover , .ssb-theme-{{vm.state.website.theme.handle}} .fr-view span[style~="color:"] a.ssb-theme-btn{
+.ssb-theme-{{vm.state.website.theme.handle}} .ssb-theme-btn, .ssb-theme-{{vm.state.website.theme.handle}} .ssb-theme-btn:hover , .ssb-theme-{{vm.state.website.theme.handle}} .fr-view span[style~="color:"] a.ssb-theme-btn,
+  .ssb-theme-{{vm.state.website.theme.handle}} .ssb-blog-editor-post-body .ssb-element-button
+  {
     background-color: {{vm.state.website.themeOverrides.styles.primaryBtnBackgroundColor}};
     color: {{vm.state.website.themeOverrides.styles.primaryBtnTextColor}};
     border-color: {{vm.state.website.themeOverrides.styles.primaryBtnBackgroundColor}};
