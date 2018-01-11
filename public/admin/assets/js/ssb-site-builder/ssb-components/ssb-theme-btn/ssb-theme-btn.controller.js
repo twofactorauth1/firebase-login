@@ -18,6 +18,7 @@
 		vm.init = init;
 		vm.elementClass = elementClass;
 		vm.elementStyle = elementStyle;
+        vm.getElementProperty = getElementProperty;
 
 		vm.elementDataOriginal;
 		vm.elementData = {
@@ -57,7 +58,7 @@
 
 		//get functions from parent text component
 		var limit = 10,
-			pScope = $scope.$parent; 
+			pScope = $scope.$parent;
 		while ((!pScope.vm || pScope.vm && !pScope.vm.uiState) && limit > 0) {
 			if(pScope.$parent){
 				pScope = pScope.$parent;
@@ -275,6 +276,10 @@
 			return vm.element.attr("class") && vm.element.attr("class").indexOf("ssb-theme-btn-style-") > -1;
 		}
 
+        function getElementProperty(value){
+            value = value.toString();
+            return value.indexOf('%') === -1 ? value + 'px;' : value + ';';
+        };
 		function elementStyle(el) {
 
 			var styleString = ' ',
@@ -283,28 +288,28 @@
 				component = vm.elementData;
 			if (component.spacing) {
 				if (component.spacing.pt) {
-					styleString += 'padding-top: ' + component.spacing.pt + 'px;';
+					styleString += 'padding-top: ' + getElementProperty(component.spacing.pt);
 				}
 				if (component.spacing.pb) {
-					styleString += 'padding-bottom: ' + component.spacing.pb + 'px;';
+					styleString += 'padding-bottom: ' + getElementProperty(component.spacing.pb);
 				}
 				if (component.spacing.pl) {
-					styleString += 'padding-left: ' + component.spacing.pl + 'px;';
+					styleString += 'padding-left: ' + getElementProperty(component.spacing.pl);
 				}
 				if (component.spacing.pr) {
-					styleString += 'padding-right: ' + component.spacing.pr + 'px;';
+					styleString += 'padding-right: ' + getElementProperty(component.spacing.pr);
 				}
 				if (component.spacing.mt) {
-					styleString += 'margin-top: ' + component.spacing.mt + 'px;';
+					styleString += 'margin-top: ' + getElementProperty(component.spacing.mt);
 				}
 				if (component.spacing.mb) {
-					styleString += 'margin-bottom: ' + component.spacing.mb + 'pspacing.mwx;';
+					styleString += 'margin-bottom: ' + getElementProperty(component.spacing.mb);
 				}
 				if (component.spacing.ml) {
-					styleString += component.spacing.ml == 'auto' ? 'margin-left: ' + component.spacing.ml + ';float: none;' : 'margin-left: ' + component.spacing.ml + 'px;';
+					styleString += component.spacing.ml == 'auto' ? 'margin-left: ' + component.spacing.ml + ';float: none;' : 'margin-left: ' + getElementProperty(component.spacing.ml);
 				}
 				if (component.spacing.mr) {
-					styleString += (component.spacing.mr == 'auto') ? 'margin-right: ' + component.spacing.mr + ';float: none;' : 'margin-right: ' + component.spacing.mr + 'px;';
+					styleString += (component.spacing.mr == 'auto') ? 'margin-right: ' + component.spacing.mr + ';float: none;' : 'margin-right: ' + getElementProperty(component.spacing.mr);
 				}
 
 				if (component.spacing.mw) {
