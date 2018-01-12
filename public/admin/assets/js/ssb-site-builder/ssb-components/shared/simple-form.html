@@ -92,7 +92,7 @@
                             <small ng-bind-html="$select.selected.title"></small>
                             <span style="position:absolute; right:-15px" class="fa fa-times text-danger" ng-click="component.emailId = null;" ng-show='$select.selected.title'></span>
                         </ui-select-match>
-                        <ui-select-choices repeat="email._id as email in emails | filter: $select.search track by $index">
+                        <ui-select-choices class="sm-ui-select-choices" repeat="email._id as email in emails | filter: $select.search track by $index">
                             <small ng-bind-html="email.title | highlight: $select.search"></small>
                         </ui-select-choices>
                     </ui-select>
