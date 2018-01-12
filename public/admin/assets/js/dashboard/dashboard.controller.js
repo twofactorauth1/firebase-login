@@ -22,21 +22,25 @@
                     server_time =
                     moment(detail.pageEvents[0].pageTime)._d;
                 }
-                _.each(detail.pageEvents, function(evn){
-					if(evn.activityType== 'CONTACT_FORM'){
-						_.map(evn.extraFields, function (value, key) {
-							if(key.toLowerCase()=='name'){
-								detail.name=value +" "+(evn.extraFields.last?evn.extraFields.last:"");
-							}else if(key.toLowerCase()=='email'){
-								detail.email=value
-							}
+                // get last page event having 'contact form activity'
+                if(detail.pageEvents.length){
+                    var evn = _.find(detail.pageEvents.reverse(), function(activity){
+                        return activity.activityType== 'CONTACT_FORM'
+                    })
+                    if(evn){
+                        _.map(evn.extraFields, function (value, key) {
+                            if(key.toLowerCase()=='name'){
+                                detail.name=value +" "+(evn.extraFields.last?evn.extraFields.last:"");
+                            }else if(key.toLowerCase()=='email'){
+                                detail.email=value
+                            }
                             else if(key.toLowerCase()=='first'){
                                 detail.fullname = value +" "+(evn.extraFields.last?evn.extraFields.last:"");
                             }
-						});
+                        });
                         detail.contactId = evn.contactId;
-					}
-				  });
+                    }
+                }
 				//console.log('calculating difference between now and ', server_time);
 				//var difference = new Date().getTime()-server_time.getTime() ;
                 var difference = detail.difference;
