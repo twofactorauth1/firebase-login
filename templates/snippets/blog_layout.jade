@@ -12,7 +12,7 @@ doctype html
 //if IE 8
     html(class="no-js ie8 oldie", lang="en")
 // [if gt IE 8] <!
-html(class="no-js", lang="en" ng-app="mainApp" ng-controller="MainCtrl as main", ng-init='init(\''+account.website._id+'\')', ng-class="{'hideIntercom': hideIntercom}")
+html(class="no-js", lang="en" ng-app="mainApp" ng-controller="MainCtrl as main", ng-init='init(\''+account.website._id+'\')')
     // <![endif]
     head
         block head
@@ -65,7 +65,7 @@ html(class="no-js", lang="en" ng-app="mainApp" ng-controller="MainCtrl as main",
                 else if account && account.orgId == 5
                     link(rel="shortcut icon", href='https://s3.amazonaws.com/indigenous-digital-assets/account_1377/favicon_1508748570313.png')
                 else if account && account.orgId == 6
-                    link(rel="shortcut icon", href='https://s3.amazonaws.com/indigenous-digital-assets/account_1395/favicon_1510866844738.png')        
+                    link(rel="shortcut icon", href='https://s3.amazonaws.com/indigenous-digital-assets/account_1395/favicon_1510866844738.png')
                 else
                     link(rel="shortcut icon", href='https://s3.amazonaws.com/indigenous-account-websites/acct_6/favicon.ico')
             if canonicalUrl
@@ -78,7 +78,7 @@ html(class="no-js", lang="en" ng-app="mainApp" ng-controller="MainCtrl as main",
                     if(window.location.protocol != 'https:') {
                       location.href = location.href.replace("http://", "https://");
                     }
-            
+
             script(type="text/javascript").
                 //we know this is an ssbBlog
                 window.indigenous = window.indigenous || {};
@@ -87,9 +87,9 @@ html(class="no-js", lang="en" ng-app="mainApp" ng-controller="MainCtrl as main",
             if account.showhide.blogSocialSharing
                 script(type="text/javascript").
                     window.indigenous.blogSocialSharing = #{account.showhide.blogSocialSharing};
-            
+
             if account && account.business
-                script(type="text/javascript").  
+                script(type="text/javascript").
                     window.indigenous.business ={'name' :'#{account.business.name}', 'logo': '#{account.business.logo}'};
 
             if jsonld
@@ -99,7 +99,7 @@ html(class="no-js", lang="en" ng-app="mainApp" ng-controller="MainCtrl as main",
     body(
             data-styles,
             class='theme-main navbar-v#{ account.website.nav_version } ssb-main ng-cloak',
-            class=(account.website.theme && account.website.theme.handle ? 'ssb-theme-' + account.website.theme.handle : 'ssb-theme-default'), class=( account && account.showhide && account.showhide.blogSocialSharing === false ? 'ssb-blog-hide-social-share' : ''), 
+            class=(account.website.theme && account.website.theme.handle ? 'ssb-theme-' + account.website.theme.handle : 'ssb-theme-default'), class=( account && account.showhide && account.showhide.blogSocialSharing === false ? 'ssb-blog-hide-social-share' : ''),
             ng-class="{ 'ssb-social-enabled': isSocialEnabled, 'ssb-social-share-hidden': !isSocialEnabled}",
             ng-cloak
         )
