@@ -145,7 +145,11 @@
                                     <span class="error help-block" />
                                 </div>
 
-
+                                <!-- billing Postal Code -->
+                                <div id="zip" class="form-group col-xs-12 col-sm-12 has-feedback">
+                                    <input class="form-control" type="text" ng-model="newAccount.billingPostalCode" ng-model-options="{ debounce: 800 }" name="zip" placeholder="Billing Postal Code"/>
+                                    <span class="glyphicon form-control-feedback"></span><span class="error help-block" />
+                                </div>
 
                                 <!-- Business Name -->
                                 <div id="business-name"
