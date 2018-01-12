@@ -40,12 +40,13 @@
             this.popups.onShow('link.edit', function () {
                 var rmLink = this.popups.get("link.edit").find("button[data-cmd='linkRemove']");
                 var rmLinkButton = this.popups.get("link.edit").find("button[data-cmd='linkRemoveBtn']");
-                if($(this.link.get()).hasClass("ssb-theme-btn"))
-                {
+                if($(this.link.get()).hasClass("ssb-theme-btn")){
                     rmLink.hide();
                     rmLinkButton.show();
-                }
-                else{
+                    if(this.link.get().href == ""){
+                        rmLinkButton.hide();
+                    }
+                } else{
                     rmLink.show();
                     rmLinkButton.hide();
                 }
