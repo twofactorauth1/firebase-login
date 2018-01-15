@@ -1,7 +1,7 @@
 /*global app, angular, window,Fingerprint,CryptoJS,document,console, $*/
 /*jslint unparam:true*/
 /* eslint-disable no-console */
-app.directive('paymentFormComponent', ['$q', 'paymentService', 'userService', 'commonService', 'ipCookie', 'formValidations', '$location', function ($q, PaymentService, UserService, CommonService, ipCookie, formValidations, $location) {
+app.directive('paymentFormComponent', ['$q', 'paymentService', 'userService', 'commonService', 'ipCookie', 'formValidations', '$location', 'geocodeService', function ($q, PaymentService, UserService, CommonService, ipCookie, formValidations, $location, geocodeService) {
 	'use strict';
 	return {
 		require: [],
@@ -168,130 +168,149 @@ app.directive('paymentFormComponent', ['$q', 'paymentService', 'userService', 'c
 						scope.showFooter(false);
 						scope.loading = true;
 						scope.isFormValid = true;
-						UserService.saveOrUpdateTmpAccount(tmpAccount, function (data) {
-							var newUser = {
-								username: newAccount.email,
-								password: newAccount.password,
-								email: newAccount.email,
-								accountToken: data.token,
-								coupon: newAccount.coupon,
-								first: newAccount.first,
-								middle: newAccount.middle,
-								last: newAccount.last,
-								existingUser: newAccount.existingUser,
-								orgId: 1
-							};
-
-							PaymentService.getStripeCardToken(newAccount.card, function (token, error) {
-								if (error) {
-									console.info(error);
-									scope.$apply(function () {
-										scope.isFormValid = false;
-										scope.showFooter(true);
-										scope.loading = false;
-									});
-
-									switch (error.param) {
-										case "number":
-											showErrorMessage("card_number", error.message);
-											break;
-										case "exp_year":
-											showErrorMessage("card_expiry", error.message);
-											break;
-										case "cvc":
-											showErrorMessage("card_cvc", error.message);
-											break;
-										case "exp_month":
-											showErrorMessage("card_expiry", error.message);
-											break;
-										default:
-											showErrorMessage("card_number", error.message);
-											break;
+						var billingState = null;
+						geocodeService.getAddressWithZip(newAccount.billingPostalCode, function (data, results) {
+							if (data && results.length === 1) {
+								var addressObj = results[0];
+								if(addressObj.types && addressObj.types.length){
+									if(_.contains(addressObj.types, 'postal_code')){
+										var obj = _.find(addressObj.address_components, function(c){
+											return _.contains( c.types, 'administrative_area_level_1')
+										})
+										if(obj){
+											billingState = obj.short_name;
+										}
 									}
-								} else {
-									newUser.cardToken = token;
-									newUser.plan = scope.newAccount.plan;
-									newUser.anonymousId = window.analytics ? window.analytics.user().anonymousId() : null;
-									newUser.permanent_cookie = ipCookie("permanent_cookie");
-                                    new Fingerprint2().get(function(fingerprint, components){
-                                        newUser.fingerprint = fingerprint;
-                                        newUser.setupFee = 150000; //1500.00
-
-
-                                        UserService.initializeUser(newUser, function (err, data) {
-                                            if (data && data.accountUrl) {
-
-
-
-                                                console.log('$location ', $location);
-                                                console.log('data.accountUrl ', data.accountUrl);
-                                                //we don't want to record purchases in non-prod environments
-                                                if ($location.host() === 'indigenous.io' || $location.host() === 'www.indigenous.io') {
-                                                    var hash = CryptoJS.HmacSHA256(newUser.email, "vZ7kG_bS_S-jnsNq4M2Vxjsa5mZCxOCJM9nezRUQ");
-                                                    //send data to intercom
-                                                    window.intercomSettings = {
-                                                        name: newUser.username,
-                                                        email: newUser.email,
-                                                        user_hash: hash.toString(CryptoJS.enc.Hex),
-                                                        created_at: Math.floor(Date.now() / 1000),
-                                                        app_id: "b3st2skm"
-                                                    };
-                                                    //send facebook tracking info
-                                                    window._fbq = window._fbq || [];
-                                                    window._fbq.push(['track', '6032779610613', {
-                                                        'value': '0.00',
-                                                        'currency': 'USD'
-                                                    }]);
-
-
-                                                    if (typeof _gaw === "undefined") {
-                                                        var adWordsInjectable =
-                                                            'var google_conversion_id = 941009161;' +
-                                                            'var google_conversion_language = "en";' +
-                                                            'var google_conversion_format = "3";' +
-                                                            'var google_conversion_color = "ffffff";' +
-                                                            'var google_conversion_label = "eRTgCNSRo2EQidLawAM";' +
-                                                            'var google_remarketing_only = false;',
-                                                            gaw_vars = document.createElement('script'),
-                                                            gaw_scr;
-                                                        gaw_vars.type = 'text/javascript';
-                                                        gaw_vars.innerText = adWordsInjectable;
-                                                        document.getElementsByTagName('head')[0].appendChild(gaw_vars);
-
-                                                        gaw_scr = document.createElement('script');
-                                                        gaw_scr.onload = function () {
-                                                            redirectFn(data.accountUrl);
-                                                        };
-                                                        gaw_scr.type = 'text/javascript';
-                                                        gaw_scr.src = '//www.googleadservices.com/pagead/conversion.js';
-                                                        document.getElementsByTagName('head')[0].appendChild(gaw_scr);
-
-                                                    }
-
-                                                } else {
-                                                    redirectFn(data.accountUrl);
-                                                }
-
-                                            } else {
-                                                scope.isFormValid = false;
-                                                scope.loading = false;
-                                                if (err.message === 'card_declined') {
-                                                    showErrorMessage("card_number", 'There was an error charging your card.');
-                                                } else if (err.message === 'incorrect_cvc') {
-                                                    showErrorMessage("card_cvc", "Your card's security code is incorrect");
-                                                } else {
-                                                    showErrorMessage("card_number", err.message);
-                                                }
-                                                scope.showFooter(true);
-                                            }
-                                        });
-                                    });
-
+								}								
+							}
+							UserService.saveOrUpdateTmpAccount(tmpAccount, function (data) {
+								var newUser = {
+									username: newAccount.email,
+									password: newAccount.password,
+									email: newAccount.email,
+									accountToken: data.token,
+									coupon: newAccount.coupon,
+									first: newAccount.first,
+									middle: newAccount.middle,
+									last: newAccount.last,
+									existingUser: newAccount.existingUser,								
+									orgId: 1,
+									billingPostalCode: newAccount.billingPostalCode
+								};
+								if(billingState){
+									newUser.billingState = billingState;
 								}
+								PaymentService.getStripeCardToken(newAccount.card, function (token, error) {
+									if (error) {
+										console.info(error);
+										scope.$apply(function () {
+											scope.isFormValid = false;
+											scope.showFooter(true);
+											scope.loading = false;
+										});
+
+										switch (error.param) {
+											case "number":
+												showErrorMessage("card_number", error.message);
+												break;
+											case "exp_year":
+												showErrorMessage("card_expiry", error.message);
+												break;
+											case "cvc":
+												showErrorMessage("card_cvc", error.message);
+												break;
+											case "exp_month":
+												showErrorMessage("card_expiry", error.message);
+												break;
+											default:
+												showErrorMessage("card_number", error.message);
+												break;
+										}
+									} else {
+										newUser.cardToken = token;
+										newUser.plan = scope.newAccount.plan;
+										newUser.anonymousId = window.analytics ? window.analytics.user().anonymousId() : null;
+										newUser.permanent_cookie = ipCookie("permanent_cookie");
+	                                    new Fingerprint2().get(function(fingerprint, components){
+	                                        newUser.fingerprint = fingerprint;
+	                                        newUser.setupFee = 150000; //1500.00
+
+
+	                                        UserService.initializeUser(newUser, function (err, data) {
+	                                            if (data && data.accountUrl) {
+
+
+
+	                                                console.log('$location ', $location);
+	                                                console.log('data.accountUrl ', data.accountUrl);
+	                                                //we don't want to record purchases in non-prod environments
+	                                                if ($location.host() === 'indigenous.io' || $location.host() === 'www.indigenous.io') {
+	                                                    var hash = CryptoJS.HmacSHA256(newUser.email, "vZ7kG_bS_S-jnsNq4M2Vxjsa5mZCxOCJM9nezRUQ");
+	                                                    //send data to intercom
+	                                                    window.intercomSettings = {
+	                                                        name: newUser.username,
+	                                                        email: newUser.email,
+	                                                        user_hash: hash.toString(CryptoJS.enc.Hex),
+	                                                        created_at: Math.floor(Date.now() / 1000),
+	                                                        app_id: "b3st2skm"
+	                                                    };
+	                                                    //send facebook tracking info
+	                                                    window._fbq = window._fbq || [];
+	                                                    window._fbq.push(['track', '6032779610613', {
+	                                                        'value': '0.00',
+	                                                        'currency': 'USD'
+	                                                    }]);
+
+
+	                                                    if (typeof _gaw === "undefined") {
+	                                                        var adWordsInjectable =
+	                                                            'var google_conversion_id = 941009161;' +
+	                                                            'var google_conversion_language = "en";' +
+	                                                            'var google_conversion_format = "3";' +
+	                                                            'var google_conversion_color = "ffffff";' +
+	                                                            'var google_conversion_label = "eRTgCNSRo2EQidLawAM";' +
+	                                                            'var google_remarketing_only = false;',
+	                                                            gaw_vars = document.createElement('script'),
+	                                                            gaw_scr;
+	                                                        gaw_vars.type = 'text/javascript';
+	                                                        gaw_vars.innerText = adWordsInjectable;
+	                                                        document.getElementsByTagName('head')[0].appendChild(gaw_vars);
+
+	                                                        gaw_scr = document.createElement('script');
+	                                                        gaw_scr.onload = function () {
+	                                                            redirectFn(data.accountUrl);
+	                                                        };
+	                                                        gaw_scr.type = 'text/javascript';
+	                                                        gaw_scr.src = '//www.googleadservices.com/pagead/conversion.js';
+	                                                        document.getElementsByTagName('head')[0].appendChild(gaw_scr);
+
+	                                                    }
+
+	                                                } else {
+	                                                    redirectFn(data.accountUrl);
+	                                                }
+
+	                                            } else {
+	                                                scope.isFormValid = false;
+	                                                scope.loading = false;
+	                                                if (err.message === 'card_declined') {
+	                                                    showErrorMessage("card_number", 'There was an error charging your card.');
+	                                                } else if (err.message === 'incorrect_cvc') {
+	                                                    showErrorMessage("card_cvc", "Your card's security code is incorrect");
+	                                                } else {
+	                                                    showErrorMessage("card_number", err.message);
+	                                                }
+	                                                scope.showFooter(true);
+	                                            }
+	                                        });
+	                                    });
+
+									}
+
+								});
 
 							});
-
-						});
+						})
 					} else {
 						scope.isFormValid = false;
 						scope.showFooter(true);
@@ -377,131 +396,151 @@ app.directive('paymentFormComponent', ['$q', 'paymentService', 'userService', 'c
 						scope.showFooter(false);
 						scope.loading = true;
 						scope.isFormValid = true;
-						UserService.saveOrUpdateTmpAccount(tmpAccount, function (data) {
-							var newUser = {
-								username: newAccount.email,
-								password: newAccount.password,
-								email: newAccount.email,
-								accountToken: data.token,
-								coupon: newAccount.coupon,
-								first: newAccount.first,
-								middle: newAccount.middle,
-								last: newAccount.last,
-								existingUser: newAccount.existingUser
-							};
-
-							PaymentService.getStripeCardToken(newAccount.card, function (token, error) {
-								if (error) {
-									scope.buttonDisabled = false;
-									console.info(error);
-									scope.$apply(function () {
-										scope.isFormValid = false;
-										scope.buttonDisabled = false;
-										scope.showFooter(true);
-										scope.loading = false;
-									});
-									switch (error.param) {
-										case "number":
-											showErrorMessage("card_number", error.message);
-											break;
-										case "exp_year":
-											showErrorMessage("card_expiry", error.message);
-											break;
-										case "cvc":
-											showErrorMessage("card_cvc", error.message);
-											break;
-										case "exp_month":
-											showErrorMessage("card_expiry", error.message);
-											break;
-										default:
-											showErrorMessage("card_number", error.message);
-											break;
+						var billingState = null;
+						geocodeService.getAddressWithZip(newAccount.billingPostalCode, function (data, results) {
+							if (data && results.length === 1) {
+								var addressObj = results[0];
+								if(addressObj.types && addressObj.types.length){
+									if(_.contains(addressObj.types, 'postal_code')){
+										var obj = _.find(addressObj.address_components, function(c){
+											return _.contains( c.types, 'administrative_area_level_1')
+										})
+										if(obj){
+											billingState = obj.short_name;
+										}
 									}
-								} else {
-									scope.buttonDisabled = false;
-									newUser.cardToken = token;
-									newUser.plan = scope.newAccount.plan;
-									newUser.anonymousId = window.analytics ? window.analytics.user().anonymousId() : null;
-									newUser.permanent_cookie = ipCookie("permanent_cookie");
-                                    new Fingerprint2().get(function(fingerprint, components){
-                                        newUser.fingerprint = fingerprint;
-                                        newUser.setupFee = 0;
-                                        if (newAccount.addSignupFee === true) {
-                                            newUser.setupFee = 150000; //$1500.00
-                                        }
-
-                                        UserService.initializeUser(newUser, function (err, data) {
-                                            if (data && data.accountUrl) {
-                                                console.log('$location ', $location);
-                                                console.log('data.accountUrl ', data.accountUrl);
-                                                //we don't want to record purchases in non-prod environments
-                                                if ($location.host() === 'indigenous.io' || $location.host() === 'www.indigenous.io') {
-                                                    var hash = CryptoJS.HmacSHA256(newUser.email, "vZ7kG_bS_S-jnsNq4M2Vxjsa5mZCxOCJM9nezRUQ");
-                                                    //send data to intercom
-                                                    window.intercomSettings = {
-                                                        name: newUser.username,
-                                                        email: newUser.email,
-                                                        user_hash: hash.toString(CryptoJS.enc.Hex),
-                                                        created_at: Math.floor(Date.now() / 1000),
-                                                        app_id: "b3st2skm"
-                                                    };
-                                                    //send facebook tracking info
-                                                    window._fbq = window._fbq || [];
-                                                    window._fbq.push(['track', '6032779610613', {
-                                                        'value': '0.00',
-                                                        'currency': 'USD'
-                                                    }]);
-
-
-                                                    if (typeof _gaw === "undefined") {
-                                                        var adWordsInjectable =
-                                                            'var google_conversion_id = 941009161;' +
-                                                            'var google_conversion_language = "en";' +
-                                                            'var google_conversion_format = "3";' +
-                                                            'var google_conversion_color = "ffffff";' +
-                                                            'var google_conversion_label = "eRTgCNSRo2EQidLawAM";' +
-                                                            'var google_remarketing_only = false;',
-                                                            gaw_vars = document.createElement('script'),
-                                                            gaw_scr;
-
-                                                        gaw_vars.type = 'text/javascript';
-                                                        gaw_vars.innerText = adWordsInjectable;
-                                                        document.getElementsByTagName('head')[0].appendChild(gaw_vars);
-
-                                                        gaw_scr = document.createElement('script');
-                                                        gaw_scr.onload = function () {
-                                                            redirectFn(data.accountUrl);
-                                                        };
-                                                        gaw_scr.type = 'text/javascript';
-                                                        gaw_scr.src = '//www.googleadservices.com/pagead/conversion.js';
-                                                        document.getElementsByTagName('head')[0].appendChild(gaw_scr);
-
-                                                    }
-
-                                                } else {
-                                                    redirectFn(data.accountUrl);
-                                                }
-
-                                            } else {
-                                                scope.isFormValid = false;
-                                                scope.buttonDisabled = false;
-                                                scope.loading = false;
-                                                if (err.message === 'card_declined') {
-                                                    showErrorMessage("card_number", 'There was an error charging your card.');
-                                                } else if (err.message === 'incorrect_cvc') {
-                                                    showErrorMessage("card_cvc", "Your card's security code is incorrect");
-                                                } else {
-                                                    showErrorMessage("card_number", err.message);
-                                                }
-                                                scope.showFooter(true);
-                                            }
-                                        });
-                                    });
-
+								}								
+							}
+							
+							UserService.saveOrUpdateTmpAccount(tmpAccount, function (data) {
+								var newUser = {
+									username: newAccount.email,
+									password: newAccount.password,
+									email: newAccount.email,
+									accountToken: data.token,
+									coupon: newAccount.coupon,
+									first: newAccount.first,
+									middle: newAccount.middle,
+									last: newAccount.last,
+									existingUser: newAccount.existingUser,
+									billingPostalCode: newAccount.billingPostalCode
+								};
+								if(billingState){
+									newUser.billingState = billingState;
 								}
+								PaymentService.getStripeCardToken(newAccount.card, function (token, error) {
+									if (error) {
+										scope.buttonDisabled = false;
+										console.info(error);
+										scope.$apply(function () {
+											scope.isFormValid = false;
+											scope.buttonDisabled = false;
+											scope.showFooter(true);
+											scope.loading = false;
+										});
+										switch (error.param) {
+											case "number":
+												showErrorMessage("card_number", error.message);
+												break;
+											case "exp_year":
+												showErrorMessage("card_expiry", error.message);
+												break;
+											case "cvc":
+												showErrorMessage("card_cvc", error.message);
+												break;
+											case "exp_month":
+												showErrorMessage("card_expiry", error.message);
+												break;
+											default:
+												showErrorMessage("card_number", error.message);
+												break;
+										}
+									} else {
+										scope.buttonDisabled = false;
+										newUser.cardToken = token;
+										newUser.plan = scope.newAccount.plan;
+										newUser.anonymousId = window.analytics ? window.analytics.user().anonymousId() : null;
+										newUser.permanent_cookie = ipCookie("permanent_cookie");
+	                                    new Fingerprint2().get(function(fingerprint, components){
+	                                        newUser.fingerprint = fingerprint;
+	                                        newUser.setupFee = 0;
+	                                        if (newAccount.addSignupFee === true) {
+	                                            newUser.setupFee = 150000; //$1500.00
+	                                        }
+
+	                                        UserService.initializeUser(newUser, function (err, data) {
+	                                            if (data && data.accountUrl) {
+	                                                console.log('$location ', $location);
+	                                                console.log('data.accountUrl ', data.accountUrl);
+	                                                //we don't want to record purchases in non-prod environments
+	                                                if ($location.host() === 'indigenous.io' || $location.host() === 'www.indigenous.io') {
+	                                                    var hash = CryptoJS.HmacSHA256(newUser.email, "vZ7kG_bS_S-jnsNq4M2Vxjsa5mZCxOCJM9nezRUQ");
+	                                                    //send data to intercom
+	                                                    window.intercomSettings = {
+	                                                        name: newUser.username,
+	                                                        email: newUser.email,
+	                                                        user_hash: hash.toString(CryptoJS.enc.Hex),
+	                                                        created_at: Math.floor(Date.now() / 1000),
+	                                                        app_id: "b3st2skm"
+	                                                    };
+	                                                    //send facebook tracking info
+	                                                    window._fbq = window._fbq || [];
+	                                                    window._fbq.push(['track', '6032779610613', {
+	                                                        'value': '0.00',
+	                                                        'currency': 'USD'
+	                                                    }]);
+
+
+	                                                    if (typeof _gaw === "undefined") {
+	                                                        var adWordsInjectable =
+	                                                            'var google_conversion_id = 941009161;' +
+	                                                            'var google_conversion_language = "en";' +
+	                                                            'var google_conversion_format = "3";' +
+	                                                            'var google_conversion_color = "ffffff";' +
+	                                                            'var google_conversion_label = "eRTgCNSRo2EQidLawAM";' +
+	                                                            'var google_remarketing_only = false;',
+	                                                            gaw_vars = document.createElement('script'),
+	                                                            gaw_scr;
+
+	                                                        gaw_vars.type = 'text/javascript';
+	                                                        gaw_vars.innerText = adWordsInjectable;
+	                                                        document.getElementsByTagName('head')[0].appendChild(gaw_vars);
+
+	                                                        gaw_scr = document.createElement('script');
+	                                                        gaw_scr.onload = function () {
+	                                                            redirectFn(data.accountUrl);
+	                                                        };
+	                                                        gaw_scr.type = 'text/javascript';
+	                                                        gaw_scr.src = '//www.googleadservices.com/pagead/conversion.js';
+	                                                        document.getElementsByTagName('head')[0].appendChild(gaw_scr);
+
+	                                                    }
+
+	                                                } else {
+	                                                    redirectFn(data.accountUrl);
+	                                                }
+
+	                                            } else {
+	                                                scope.isFormValid = false;
+	                                                scope.buttonDisabled = false;
+	                                                scope.loading = false;
+	                                                if (err.message === 'card_declined') {
+	                                                    showErrorMessage("card_number", 'There was an error charging your card.');
+	                                                } else if (err.message === 'incorrect_cvc') {
+	                                                    showErrorMessage("card_cvc", "Your card's security code is incorrect");
+	                                                } else {
+	                                                    showErrorMessage("card_number", err.message);
+	                                                }
+	                                                scope.showFooter(true);
+	                                            }
+	                                        });
+	                                    });
+
+									}
+
+								});
 
 							});
-
 						});
 					} else {
 						scope.isFormValid = false;
@@ -753,7 +792,8 @@ app.directive('paymentFormComponent', ['$q', 'paymentService', 'userService', 'c
 									middle: newAccount.middle,
 									last: newAccount.last,
 									campaignId: scope.component.campaignId,
-									existingUser: newAccount.existingUser
+									existingUser: newAccount.existingUser,
+									billingPostalCode: newAccount.billingPostalCode
 								};
 
 								newUser.plan = '';

@@ -7,7 +7,8 @@
 			scope: {
 				liveVisitorDetails: "=live",
                 activeVisitorDetail: '=active',
-                loading:"="
+                loading:"=",
+                selectedVisitorIndex: "=index"
 			},
             templateUrl: '/admin/assets/views/partials/visitor.html',
 			controller: ['$scope', '$state', function ($scope, $state) {

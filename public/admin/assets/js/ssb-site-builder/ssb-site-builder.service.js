@@ -1280,38 +1280,29 @@
          *
          */
         function extendComponentData(oldSection, newSection) {
-            var keysToOmitSection = ['$$hashKey', 'anchor', 'version', 'type', 'layout', 'visibility', 'bg', 'border', 'layoutModifiers', 'componentSortOrder', 'thumbnailCollection'];
-            var keysToOmitComponent = ['$$hashKey', 'anchor', 'accountId', 'version', 'type', 'layout', 'visibility', 'bg', 'border', 'layoutModifiers', 'componentSortOrder', 'thumbnailCollection', 'nav'];
-            var newComponents = angular.copy(newSection.components);
+            var keysToOmitSection = ['$$hashKey', 'anchor', 'version', 'type', 'layout', 'visibility', 'bg', 'border', 'layoutModifiers', 'componentSortOrder', 'thumbnailCollection'],
+             keysToOmitComponent = ['$$hashKey', 'anchor', 'accountId', 'version', 'type', 'layout', 'visibility', 'bg', 'border', 'layoutModifiers', 'componentSortOrder', 'thumbnailCollection', 'nav'],
+              newComponents = angular.copy(newSection.components),
+              isHeroTestimonials= oldSection.layout==="hero" && oldSection.components[0].type=="testimonials";
 
             var newComponentsOrder =  getComponentSortOrder(newComponents, newSection); // ['componentType1', 'componentType2', ...]
 
-            var oldComponents = _(angular.copy(oldSection.components)).chain()
-
-                                    .sortBy(function(x) { // sort by order of newComponents
+            var oldComponents = _(angular.copy(oldSection.components)).chain().sortBy(function(x) { // sort by order of newComponents
                                         return newComponentsOrder[x.type] && parseInt(newComponentsOrder[x.type], 10);
-                                    })
-
-                                    .value(); // return the new array
-
+                                    }).value(); // return the new array
             if(newSection.componentSortOrder){
                 // get current sort order
                 var componentOrder =  angular.copy(getComponentSortOrder(newComponents));
                 //arrange components in requested order
-                newComponents = _(newComponents).chain()
-                                    .sortBy(function(x) { // sort by order of newComponents
+                newComponents = _(newComponents).chain().sortBy(function(x) { // sort by order of newComponents
                                         return newComponentsOrder[x.type] && parseInt(newComponentsOrder[x.type], 10);
                                     }).value(); // return the new array
-            }
-
-
+            } 
             delete newSection.components;
             var oldSectionComponentCopy = newSection.components;
             delete oldSection.components;
-
-
+            
             if(newSection.componentSortOrder){
-
                 newSection.components = _.map(newComponents, function(c, index) {
                     var component = _.findWhere(oldComponents, { type: c.type });
                     if(!component){
@@ -1326,20 +1317,16 @@
                 newSection.components = _(newSection.components).chain().sortBy(function(section){
                     return componentOrder[section.type] && parseInt(componentOrder[section.type], 10);
                 }).value();
-            }
-            else if(checkIfDiffrentLenthSection(newSection)){
+            } else if(checkIfDiffrentLenthSection(newSection)) {
 
                 newSection.components = _.map(newComponents, function(c, index) {
                     var component = _.findWhere(oldComponents, { type: c.type });
                     return $.extend({}, c, _.omit(component || oldComponents[index], keysToOmitComponent));
                 });
 
-            }
-            else{
-
-                newSection.components = _.map(newComponents, function(c, index) {
-
-                  if(newSection.layout==="nav-hero" && c.type === "ssb-text" ){
+            } else{ 
+                newSection.components = _.map(newComponents, function(c, index) { 
+                  if(isHeroTestimonials ||(newSection.layout==="nav-hero" && c.type === "ssb-text") ){
 
                     return $.extend({}, c, _.omit(newComponents[index], keysToOmitComponent));
 

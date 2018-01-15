@@ -360,7 +360,9 @@ var insightsManager = {
                 } else if(account.get("orgId") == 5){
                     siteUrl = account.get('subdomain') + '.leadsource.cc';
                 }
-
+                else if(account.get("orgId") == 6){
+                    siteUrl = account.get('subdomain') + '.amrvlvr.com';
+                }
                 vars.push({
                     name:'SITEURL',
                     content:siteUrl
@@ -421,10 +423,6 @@ var insightsManager = {
                         row.lastWeek = prefix + numeral(row.lastWeek).format('0,0[.]00') + suffix;
                         row.previousWeek = prefix + numeral(row.previousWeek).format('0,0[.]00') + suffix;
                      }
-
-
-
-
                     return row;
                 };
 
@@ -515,6 +513,7 @@ var insightsManager = {
             function(account, sectionDataMap, html, contact, vars, cb) {
                 var siteUrl = account.get('subdomain') + '.' + appConfig.subdomain_suffix;
                 //TODO: put these is org settings
+                // rvlvr
                 if(account.get("orgId") == 1){
                     var suffix = '.gorvlvr.com'; // Todo: Get domain from orgId
                     if(appConfig.nonProduction === true) {
@@ -522,13 +521,24 @@ var insightsManager = {
                     }
                     siteUrl = account.get('subdomain') + suffix;
                     vars.push({name:'ORGLOGO', content:'https://s3.amazonaws.com/indigenous-digital-assets/account_1301/rvlvr_logo_350.png'});
-                } else if(account.get("orgId") == 5) {
+                }
+                // leadsource
+                else if(account.get("orgId") == 5) {
                     var suffix = '.leadsource.cc'; // Todo: Get domain from orgId
                     if (appConfig.nonProduction === true) {
                         suffix = '.test' + suffix;
                     }
                     siteUrl = account.get('subdomain') + suffix;
                     vars.push({name:'ORGLOGO', content:'https://s3-us-west-2.amazonaws.com/indigenous-admin/TESSCO_LOGO_DRAFT.jpg'});
+                }
+                // amrvlvr
+                else if(account.get("orgId") == 6) {
+                    var suffix = '.amrvlvr.com'; // Todo: Get domain from orgId
+                    if (appConfig.nonProduction === true) {
+                        suffix = '.test' + suffix;
+                    }
+                    siteUrl = account.get('subdomain') + suffix;
+                    vars.push({name:'ORGLOGO', content:'https://s3.amazonaws.com/indigenous-digital-assets/account_1395/am_logo.png'});
                 } else {
                     vars.push({name:'ORGLOGO', content:'https://s3.amazonaws.com/indigenous-digital-assets/account_6/Indigenous-Logo_EmailSafe_1495057493172.png'});
                 }

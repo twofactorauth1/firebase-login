@@ -78,4 +78,22 @@ mainApp.service('geocodeService', ['$http', function ($http) {
 		return '//maps.google.com/maps?saddr=' + urlEncodedStartAddress + '&daddr=' + urlEncodedDestinationAddress;
 	};
 
+	this.getAddressWithZip = function (zip, fn) {
+		if(!zip){
+			fn(false. null);
+		}
+		if (typeof google === 'object') {
+			var geocoder = new google.maps.Geocoder()			
+			geocoder.geocode({					
+				'address': zip
+			}, function (results, status) {
+				if (status === google.maps.GeocoderStatus.OK) {
+					fn(true, results);
+				} else {
+					fn(false, null);
+				}
+			});
+		}
+	}
+
 }]);
