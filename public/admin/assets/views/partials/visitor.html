@@ -14,15 +14,18 @@
                             <thead>
                                 <tr>
                                     <th style="min-width:30%">User ID</th>
-                                    <th>Account</th>
-                                    <th style="width: 135px;">Last Seen</th>
+                                    <th ng-click="sortLiveDetails('account', 'subdomain')">
+                                    <span class="fa fa-sort" ng-class="{'fa-sort-desc' :  sortData.details['account'].direction === 1, 'fa-sort-asc' :  sortData.details['account'].direction === -1}"></span>
+                                        Account
+                                    </th>
+                                    <th ng-click="sortLiveDetails('last', 'server_time')" style="width: 135px;"><span class="fa fa-sort" ng-class="{'fa-sort-desc' :  sortData.details['last'].direction === 1, 'fa-sort-asc' :  sortData.details['last'].direction === -1}"></span> Last Seen</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr ng-class="{'active-visitor-detail': selectedVisitorIndex === $index}"
                                     ng-repeat="visitorDetail in liveVisitorDetails track by $index"
                                     ng-click="setActiveVisitorIndex($index)" class="cursor-pointer" >
-                                    <td >{{visitorDetail.email||visitorDetail.fingerprint}}</td>
+                                    <td >{{visitorDetail.email || visitorDetail.fingerprint}}</td>
                                     <td >{{visitorDetail.subdomain}}</td>
                                     <td  >{{convertUtcToLocal(visitorDetail.server_time)}}</td>
                                 </tr>
