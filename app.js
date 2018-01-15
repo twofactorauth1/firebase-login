@@ -270,6 +270,17 @@ function virtualHostSession(req, res, next) {
                 key: 'amrvlvr_connect.sid'
             };
             hostSession = mwCache[host] = express.session(sess);
+        } else if(host && host.replace(':3000', '').endsWith('newplatform.net')){
+            var sess = {
+                store: mongoStore,
+                secret: 'mys3cr3t',
+                cookie: {
+                    maxAge: 24 * 60 * 60 * 1000,
+                    domain: '.newplatform.net'
+                }, //stay open for 1 day of inactivity across all subdomains
+                key: 'newplatform_connect.sid'
+            };
+            hostSession = mwCache[host] = express.session(sess);
         } else {
             //console.log('creating session for ' + appConfig.cookie_subdomain);
             var sess1 = {
