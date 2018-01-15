@@ -209,11 +209,11 @@
                                 <td ng-if="tableView == 'grid'" class="id-col"><span style="display:inline-block;line-height:50px;"><img ng-src="{{ customer.business.logo }}" id="business_photo_{{customer.business.logo}}" err-src="/admin/assets/images/default-user.png" is-contact="contact" err-contact="contact" class="customer-business-logo" alt="image"></span></td>
                                 <td class="id-col"><strong>ID: </strong>{{customer._id}}</td>
                                 <td class="text-adjust-col subDomain-col"><strong>Subdomain: </strong>{{customer.subdomain}}</td>
-                                <td class="hidden-xs text-adjust-col customDomain-col"><strong>Domain: </strong>{{customer.customDomain}}<span ng-if="!customer.customDomain">--</span></td>
+                                <td class="hidden-xs text-adjust-col customDomain-col" style="white-space:nowrap;"><strong>Domain: </strong>{{customer.customDomain}}<span ng-if="!customer.customDomain">--</span></td>
                                 <td class="hidden-xs signup-col"><strong>Signup: </strong>{{customer.billing.signupDate | date:'M/d/yy'}}</td>
                                 <td class="hidden-xs trial-col" ng-if="customer.billing.plan == 'NO_PLAN_ARGUMENT'"><strong>Trial Days: </strong>{{customer.trialDaysRemaining}}</td>
                                 <td class="hidden-xs trial-col" ng-if="customer.billing.plan != 'NO_PLAN_ARGUMENT'"><strong>Trial Days: </strong>NA</td>
-                                <td class="text-adjust-col plan-col hidden-xs"><strong>Plan: </strong>{{customer.billing.plan}}</td>
+                                <td class="text-adjust-col plan-col hidden-xs" style="white-space:nowrap;"><strong>Plan: </strong>{{customer.billing.plan}}</td>
 
                                 <td class="text-adjust-col hidden-xs zip-col"><strong>Postcode: </strong>{{customer.billing.details.zip}}</td>
                                 <td class="text-adjust-col hidden-xs state-col"><strong>State: </strong>{{customer.billing.details.state}}</td>
