@@ -11,11 +11,18 @@
                 selectedVisitorIndex: "=index"
 			},
             templateUrl: '/admin/assets/views/partials/visitor.html',
-			controller: ['$scope', '$state', function ($scope, $state) {
+			controller: ['$scope', '$state', '$filter', function ($scope, $state, $filter) {
                 if(!angular.isDefined($scope.loading)){
                     $scope.loading=true;
                 }
                 $scope.selectedVisitorIndex=0;
+                $scope.sortData = {
+                    column: '',
+                    details: {}
+                }
+                $scope.currentSortData = {
+
+                }
                 $scope.convertUtcToLocal = function(_date){
                     if(_date){
                         return moment.utc(_date).local().format('YYYY-MM-DD HH:mm:ss')
@@ -47,6 +54,43 @@
 
                 $scope.goToContactDetails = function(contactId){
                     $state.go('app.singleContact', {contactId: contactId});
+                };
+
+                $scope.$watch('liveVisitorDetails', function(newData, oldData){
+                    if(newData && $scope.currentSortData.key && !angular.equals(newData, oldData)){
+                        sortData();
+                    }
+                })
+
+                $scope.sortLiveDetails = function(name, key){
+                    if($scope.sortData.column !== name){
+                        $scope.sortData.details = {};
+                    }
+                    $scope.sortData.column = name;
+                    if($scope.sortData.details[name]){
+                        if($scope.sortData.details[name].direction === 1){
+                            $scope.sortData.details[name].direction = -1;
+                        }
+                        else{
+                            $scope.sortData.details[name].direction = 1;
+                        }
+                    }
+                    else{
+                        $scope.sortData.details[name] = {
+                            direction: 1
+                        }
+                    }
+                    var sortOrder = $scope.sortData.details[name].direction === 1 ? true : false;                    
+                    $scope.currentSortData = {
+                        key : key,
+                        data: sortOrder
+                    }
+                    sortData();                    
+                }
+
+                function sortData(){
+                    $scope.liveVisitorDetails = $filter('orderBy')($scope.liveVisitorDetails, $scope.currentSortData.key, $scope.currentSortData.data);
+                    $scope.setActiveVisitorIndex($scope.selectedVisitorIndex, true);
                 }
 			}]
 		};

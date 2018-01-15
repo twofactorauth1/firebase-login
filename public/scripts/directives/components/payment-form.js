@@ -41,6 +41,7 @@ app.directive('paymentFormComponent', ['$q', 'paymentService', 'userService', 'c
 
 			//scope.domainExistsAlready = false;  // needs to be undefined to begin with
 			scope.emptyBusinessName = false;
+			scope.emptyPostalCode = false;
 			scope.validBusinessName = true;
 			scope.dotComExt = false;
 
@@ -329,6 +330,11 @@ app.directive('paymentFormComponent', ['$q', 'paymentService', 'userService', 'c
 					checkIfFormValid = false;
 				}
 
+				if (!scope.newAccount.billingPostalCode) {		
+					scope.checkPostalCode(scope.newAccount);
+					checkIfFormValid = false;
+				}
+
 				scope.checkPasswordLength(scope.newAccount);
 
 				if (!scope.newAccount.password && !scope.newAccount.tempUserId && !scope.newAccount.hidePassword) {
@@ -560,6 +566,11 @@ app.directive('paymentFormComponent', ['$q', 'paymentService', 'userService', 'c
 
 				if (!scope.newAccount.email) {
 					scope.checkEmailExists(scope.newAccount);
+					checkIfFormValid = false;
+				}
+
+				if (!scope.newAccount.billingPostalCode) {		
+					scope.checkPostalCode(scope.newAccount);
 					checkIfFormValid = false;
 				}
 
@@ -991,6 +1002,14 @@ app.directive('paymentFormComponent', ['$q', 'paymentService', 'userService', 'c
 				} else {
 					removeErrorMessage("password");
 					scope.passwordIsValid = true;
+				}
+			};
+
+			scope.checkPostalCode = function (newAccount) {
+				if (!newAccount.billingPostalCode) {
+					showErrorMessage("zip", "Billing Postal Code Required");
+				} else {
+					removeErrorMessage("zip");
 				}
 			};
 
