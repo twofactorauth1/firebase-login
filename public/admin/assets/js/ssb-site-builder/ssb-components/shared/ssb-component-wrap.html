@@ -22,14 +22,14 @@
 	                    'color':vm.component.txtcolor||primaryTextColor}">
 	                <div ng-class="{'component-inner': vm.component.type != 'footer' || vm.component.type != 'navigation'}">
 	                    <div class="container inner-page"
-	                         ng-style="{'padding-top': vm.component.spacing.pt + 'px',
-	                            'padding-bottom': vm.component.spacing.pb + 'px',
-	                            'padding-left': vm.component.spacing.pl + 'px',
-	                            'padding-right': vm.component.spacing.pr + 'px',
-	                            'margin-top': vm.component.spacing.mt + 'px',
-	                            'margin-bottom': vm.component.spacing.mb + 'px',
-	                            'margin-left': vm.component.spacing.ml == 'auto' ? vm.component.spacing.ml: vm.component.spacing.ml + 'px',
-	                            'margin-right': vm.component.spacing.mr == 'auto' ? vm.component.spacing.mr : vm.component.spacing.mr + 'px',
+	                         ng-style="{'padding-top': vm.component.spacing.pt.toString().indexOf('%') !== -1 ?  vm.component.spacing.pt  : vm.component.spacing.pt + 'px',
+	                            'padding-bottom': vm.component.spacing.pb.toString().indexOf('%') !== -1 ?  vm.component.spacing.pb  :vm.component.spacing.pb + 'px',
+	                            'padding-left':vm.component.spacing.pl.toString().indexOf('%') !== -1 ?  vm.component.spacing.pl  :  vm.component.spacing.pl + 'px',
+	                            'padding-right':vm.component.spacing.pr.toString().indexOf('%') !== -1 ?  vm.component.spacing.pr  : vm.component.spacing.pr + 'px',
+	                            'margin-top':vm.component.spacing.mt.toString().indexOf('%') !== -1 ?  vm.component.spacing.mt  :  vm.component.spacing.mt + 'px',
+	                            'margin-bottom': vm.component.spacing.mb.toString().indexOf('%') !== -1 ?  vm.component.spacing.mb  :vm.component.spacing.mb + 'px',
+	                            'margin-left': vm.component.spacing.ml == 'auto' || vm.component.spacing.ml.toString().indexOf('%') !== -1 ? vm.component.spacing.ml: vm.component.spacing.ml + 'px',
+	                            'margin-right': vm.component.spacing.mr == 'auto' || vm.component.spacing.mr.toString().indexOf('%') !== -1? vm.component.spacing.mr : vm.component.spacing.mr + 'px',
 	                            'max-width': vm.component.spacing.mw == '100%' ||  vm.component.spacing.mw.toString().indexOf('%') !== -1 ? vm.component.spacing.mw : vm.component.spacing.mw  + 'px'}">
 	                        <div ng-if="vm.component.version==0 || vm.component.version==1" data-ng-include
 	         					data-src="'/admin/assets/js/ssb-site-builder/ssb-components/'+vm.component.type+'/'+vm.component.type+'.component.html'"></div>
@@ -38,6 +38,7 @@
 	                    </div>
 	                </div>
 	            </div>
+
 	            <div ng-if="vm.component.bg.img.url && vm.component.type != 'email' " class="ipad-bg">
 	                <div>
 	                    <div class="component-inner">
@@ -47,7 +48,7 @@
 
 	                        <div id="px-ele-{{vm.component._id}}" ng-if="vm.component.bg.img.show && !vm.component.bg.img.parallax "
 	                             class="bg"
-	                             ng-class="{'blur-image':vm.component.bg.img.blur}"  
+	                             ng-class="{'blur-image':vm.component.bg.img.blur}"
 	                             ng-attr-style='
 	                                background: url("{{vm.component.bg.img.url}}") repeat-y;
 	                                background-size: cover;
@@ -57,7 +58,7 @@
 							<div id="px-ele-{{vm.component._id}}" ng-if="vm.component.bg.img.show && vm.component.bg.img.parallax "
 	                             class="bg parallax"
 								 ng-class="{'blur-image':vm.component.bg.img.blur}"
-								  parallax-background 
+								  parallax-background
 	                             ng-attr-parallax-ratio="0.4"
 	                             ng-attr-style='
 	                                background: url("{{vm.component.bg.img.url}}") repeat-y;
