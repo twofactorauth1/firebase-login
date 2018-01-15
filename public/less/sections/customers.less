@@ -1,38 +1,7 @@
 .customers{
-    .column-width {
-        width: 14%;
-    }
+    
     table.table-list-view{
-        .sticky-header-class {
-            .customer-filter-header {
-                th.check-col {
-                    width: 5%;
-                }
-                th.id-col {
-                    width: 10%;
-                }
-                th.subDomain-col {
-                    width: 17%;
-                }
-                th.customDomain-col {
-                    width: 20%;
-                }
-                th.column-last {
-                    width: 48%;
-                }
-            }
-        }
-        tbody {
-            tr > td {
-                width: 16%;
-            }
-            td.check-col, td.id-col, td.trial-col {
-                width: 10%;
-            }
-            td.customDomain-col {
-                width: 22%;
-            }
-        }
+        
         td.text-adjust-col{
 		    overflow: hidden;
 		    text-overflow: ellipsis;
@@ -43,26 +12,36 @@
             display:inline-block;
             max-width: 100%;
         }
-    }
-    table {
-        .sticky-header-class {
-            tr > th {
-                width: 16%;
-            }
-            th.id-col, th.trial-col {
-                width: 10%;
-            }
-            th.check-col {
-                width: 5%;
-            }
-            th.customDomain-col {
-                width: 22%;
-            }
-            th.signup-col {
-                width: 15%;
-            }
+
+        .check-col{
+            width: 5%;
+        }
+        .id-col{
+            width: 8%;
+        }
+        .subDomain-col{
+            width: 15%;
+        }
+        .customDomain-col{
+            width: 15%;
+        }
+        .signup-col{
+            width: 11%;
+        }
+        .trial-col{
+            width: 10%;
+        }
+        .plan-col{
+            width: 14%;
+        }
+        .zip-col{
+            width: 12%;
+        }
+        .state-col{
+            width: 10%;
         }
     }
+    
     .customer-filter-header {
         background: #fff;
     }
@@ -102,11 +81,7 @@
                     width: 25%;
                 }
             }
-
         }
-    }
-    th.customDomain-col {
-        width: 25% !important;
     }
 }
 
