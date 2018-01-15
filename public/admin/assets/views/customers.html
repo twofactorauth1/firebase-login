@@ -1,4 +1,4 @@
-<div class="contacts customers" ng-controller="CustomersCtrl">
+<div class="customers" ng-controller="CustomersCtrl">
     <section id="page-title" class="padding-top-15 padding-bottom-15">
         <div class="row">
             <div class="col-sm-8">
@@ -173,13 +173,14 @@
                         <thead ng-class="{'bg-white': tableView == 'grid'}" sticky offset="65" sticky-class="sticky-header-class">
                             <tr>
                                 <th ng-class="{'column-width': tableView == 'grid'}" ng-click='selectAllClickFn($event)' ng-show='displayedCustomers.length' class="check-col"><i class="fa fa-2x" ng-class='{"fa-check-circle": selectAllChecked, "fa-circle-o": !selectAllChecked}'></i></th>
-                                <th st-sort="_id" st-sort-default="reverse" ng-show="column._id" ng-class="{'column-width': tableView == 'grid'}" class="id-col">ID</th>
-                                <th st-sort="subdomain" ng-show="column.subdomain" style="margin-top: 1px;" ng-class="{'column-width': tableView == 'grid'}" class="subdomain-col">Subdomain</th>
+                                <th st-sort="_id" st-sort-default="reverse" ng-class="{'column-width': tableView == 'grid'}" class="id-col">ID</th>
+                                <th st-sort="subdomain" style="margin-top: 1px;" ng-class="{'column-width': tableView == 'grid'}" class="subdomain-col">Subdomain</th>
                                 <th class="hidden-xs customDomain-col" st-sort="customDomain" ng-show="column.customDomain" ng-class="{'column-width': tableView == 'grid'}">Custom Domain</th>
-                                <th class="hidden-xs signup-col" st-sort="billing.signupDate" ng-show="column.signupDate" ng-class="{'column-width': tableView == 'grid'}" style="white-space: nowrap;">Signup</th>
-                                <th class="hidden-xs trial-col" st-sort="getters.trialDays" ng-show="column.trialDays" ng-class="{'column-width': tableView == 'grid', 'tag-width': tableView == 'list'}" style="white-space: nowrap;">Trial Days</th>
-                                <th class="hidden-xs plan-col" st-sort="billing.plan" ng-show="column.plan" ng-class="{'column-width': tableView == 'grid'}">Plan</th>
-
+                                <th class="hidden-xs signup-col" st-sort="billing.signupDate" ng-class="{'column-width': tableView == 'grid'}" style="white-space: nowrap;">Signup</th>
+                                <th class="hidden-xs trial-col" st-sort="getters.trialDays" ng-class="{'column-width': tableView == 'grid', 'tag-width': tableView == 'list'}" style="white-space: nowrap;">Trial Days</th>
+                                <th class="hidden-xs plan-col" st-sort="billing.plan" ng-class="{'column-width': tableView == 'grid'}">Plan</th>
+                                <th class="hidden-xs zip-col" st-sort="billing.details.zip" ng-class="{'column-width': tableView == 'grid'}">Postcode</th>
+                                <th class="hidden-xs state-col" st-sort="billing.details.state" ng-class="{'column-width': tableView == 'grid'}">State</th>
                                 <!-- <th class="hidden-xs" st-sort="getters.modified" ng-show="column.modified">Modified</th> -->
                             </tr>
                             <tr ng-if="showFilter" class="customer-filter-header">
@@ -195,20 +196,27 @@
                                 <th class="column-width customDomain-col hidden-xs">
                                     <input st-search="customDomain" placeholder="Custom Domain" class="form-control" type="search" />
                                 </th>
-                                <th class="column-last hidden-xs"></th>
+                                <th class="hidden-xs signup-col"></th>
+                                <th class="hidden-xs trial-col"></th>
+                                <th class="hidden-xs plan-col"></th>
+                                <th class="hidden-xs zip-col"></th>
+                                <th class="hidden-xs state-col"></th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr ng-repeat="customer in displayedCustomers" ng-click="viewSingle(customer)">
                                 <td ng-show='displayedCustomers.length' class="check-col"><i class="fa fa-2x" ng-click='customerSelectClickFn($event, customer)' ng-class='{"fa-check-circle": customer.isSelected, "fa-circle-o": !customer.isSelected}'></i></td>
                                 <td ng-if="tableView == 'grid'" class="id-col"><span style="display:inline-block;line-height:50px;"><img ng-src="{{ customer.business.logo }}" id="business_photo_{{customer.business.logo}}" err-src="/admin/assets/images/default-user.png" is-contact="contact" err-contact="contact" class="customer-business-logo" alt="image"></span></td>
-                                <td ng-show="column._id" class="id-col"><strong>ID: </strong>{{customer._id}}</td>
-                                <td class="text-adjust-col" ng-show="column.subdomain"><strong>Subdomain: </strong>{{customer.subdomain}}</td>
-                                <td class="hidden-xs text-adjust-col customDomain-col" ng-show="column.customDomain"><strong>Domain: </strong>{{customer.customDomain}}<span ng-if="!customer.customDomain">--</span></td>
-                                <td class="hidden-xs" ng-show="column.signupDate"><strong>Signup: </strong>{{customer.billing.signupDate | date:'M/d/yy'}}</td>
-                                <td class="hidden-xs trial-col" ng-show="column.trialDays" ng-if="customer.billing.plan == 'NO_PLAN_ARGUMENT'"><strong>Trial Days: </strong>{{customer.trialDaysRemaining}}</td>
-                                <td class="hidden-xs trial-col" ng-show="column.trialDays" ng-if="customer.billing.plan != 'NO_PLAN_ARGUMENT'"><strong>Trial Days: </strong>NA</td>
-                                <td class="text-adjust-col" ng-show="column.plan" class="hidden-xs"><strong>Plan: </strong>{{customer.billing.plan}}</td>
+                                <td class="id-col"><strong>ID: </strong>{{customer._id}}</td>
+                                <td class="text-adjust-col subDomain-col"><strong>Subdomain: </strong>{{customer.subdomain}}</td>
+                                <td class="hidden-xs text-adjust-col customDomain-col"><strong>Domain: </strong>{{customer.customDomain}}<span ng-if="!customer.customDomain">--</span></td>
+                                <td class="hidden-xs signup-col"><strong>Signup: </strong>{{customer.billing.signupDate | date:'M/d/yy'}}</td>
+                                <td class="hidden-xs trial-col" ng-if="customer.billing.plan == 'NO_PLAN_ARGUMENT'"><strong>Trial Days: </strong>{{customer.trialDaysRemaining}}</td>
+                                <td class="hidden-xs trial-col" ng-if="customer.billing.plan != 'NO_PLAN_ARGUMENT'"><strong>Trial Days: </strong>NA</td>
+                                <td class="text-adjust-col plan-col hidden-xs"><strong>Plan: </strong>{{customer.billing.plan}}</td>
+
+                                <td class="text-adjust-col hidden-xs zip-col"><strong>Postcode: </strong>{{customer.billing.details.zip}}</td>
+                                <td class="text-adjust-col hidden-xs state-col"><strong>State: </strong>{{customer.billing.details.state}}</td>
 
                             </tr>
                         </tbody>
