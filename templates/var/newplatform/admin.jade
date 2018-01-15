@@ -1,0 +1,52 @@
+//-
+    * COPYRIGHT INDIGENOUS SOFTWARE, INC., LLC 2014
+    *
+    * All use or reproduction of any or all of this content must be approved.
+    * Please contact info@indigenous.io for approval or questions.
+doctype html
+html(lang='en', data-ng-app='indigenousApp', class="light-admin-chrome")
+    head
+        meta(charset='utf-8')
+        meta(name='viewport', content='width=device-width, initial-scale=1, maximum-scale=1')
+        meta(name='description', content='{{app.description}}')
+        meta(name='keywords', content='app, responsive, angular, bootstrap, dashboard, admin')
+        meta(http-equiv='X-UA-Compatible', content='IE=edge,chrome=1')
+        meta(name='viewport', content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no')
+        meta(name='HandheldFriendly', content='true')
+        meta(name='apple-touch-fullscreen', content='yes')
+        link(rel="shortcut icon", href='assets/var/leadsource/images/leadsource-logo.png')
+        title(data-ng-bind='pageTitle()') LeadSource Admin
+        // Bootstrap
+        link(rel='stylesheet', href='../js/libs/bootstrap/dist/css/bootstrap.min.css')
+        // Font Awesome
+        link(rel='stylesheet', href='../js/libs/font-awesome/css/font-awesome.min.css')
+        // Themify Icons
+        link(rel='stylesheet', href='../js/libs/themify-icons/themify-icons.css')
+        // Loading Bar
+        link(rel='stylesheet', href='../js/libs/angular-loading-bar/build/loading-bar.min.css')
+        // Animate Css
+        link(rel='stylesheet', href='../js/libs/animate.css/animate.min.css')
+        // CSS
+        link(rel='stylesheet', href='/admin/assets/css/styles.css')
+        link(rel='stylesheet', href='/admin/assets/css/frontend-admin.css')
+        //- link(rel='stylesheet', href='/admin/assets/css/plugins.css')
+        // Theme
+        link(rel='stylesheet', data-ng-href='/admin/assets/css/theme.css')
+        // Social Links
+        link(rel='stylesheet', href='/js/libs/bootstrap-social/bootstrap-social.css')
+        link(rel='stylesheet', href='../js/libs_misc/ng-joyride/ng-joyride.css')
+        link(rel='stylesheet', href='../js/libs/allmighty-autocomplete/style/autocomplete.css')
+        // EDITOR
+        link(rel='stylesheet', href='/js/libs/slick-carousel/slick/slick.css')
+        link(rel='stylesheet', href='/js/libs/slick-carousel/slick/slick-theme.css')
+        link(rel='stylesheet', href='/js/libs_misc/intl-tel-input/build/css/intlTelInput.css')
+        // EMAIL
+        // link(rel='stylesheet', href='/admin/assets/css/email.css')
+        script(type="text/javascript").
+            window.indigenous = window.indigenous || {};
+            window.indigenous.orgId = #{account.orgId};
+    body(ng-controller='AppCtrl')
+        #app(ui-view='', ng-class="{'app-mobile' : app.isMobile, 'app-navbar-fixed' : app.layout.isNavbarFixed, 'app-sidebar-fixed' : app.layout.isSidebarFixed, 'app-sidebar-closed':app.layout.isSidebarClosed, 'app-footer-fixed':app.layout.isFooterFixed, 'app-minimal-admin-chrome': app.layout.isMinimalAdminChrome, 'app-minimal-admin-chrome-light': app.layout.isMinimalAdminChromeLight, 'app-analytics-dashboard-mode':  app.layout.isAnalyticsDashboardMode}")
+        block body_scripts
+            include admin_body_scripts
+        include _serverprops
