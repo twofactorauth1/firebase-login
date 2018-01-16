@@ -625,6 +625,14 @@ module.exports = {
                                 }
                                 _pageEvents.push(obj);
                             });
+                            if(!isAggregate) {
+                                _result.pageEvents = _.filter(_result.pageEvents, function(event){
+                                    return event.accountId == accountId
+                                })
+                                _result.pingEvents = _.filter(_result.pingEvents, function(event){
+                                    return event.accountId == accountId
+                                })
+                            }
                             
                             _result.pageEvents = _.sortBy(_pageEvents, function(p) {
                                 return p.pageTime;
