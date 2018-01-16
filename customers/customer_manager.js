@@ -722,18 +722,15 @@ module.exports = {
             var regex = new RegExp('\.*'+term+'\.*', 'i');
             var orQuery = [
                 {_id:parseInt(term)},            
-                {first:regex},
-                {middle:regex},
-                {last:regex},
-                {tags:regex},
-                {'details.emails.email':regex},
-                {'details.phones.number':regex},
-                {'details.addresses.address':regex},
-                {'details.addresses.address2':regex},
-                {'details.addresses.city':regex},
-                {'details.addresses.state':regex},
-                {'details.addresses.zip':regex},
-                {'details.addresses.country':regex}
+                {subdomain:regex},
+                {domain:regex},
+                {customDomain:regex},
+                {accountUrl: regex},
+                {'business.name':regex},
+                {'billing.plan':regex},
+                {'billing.signupDate':regex},
+                {'billing.details.zip':regex},
+                {'billing.details.state':regex}
             ];
             query["$or"] = orQuery;
         }
