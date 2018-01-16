@@ -116,37 +116,6 @@
             "created": true,
             "modified": true
         };
-
-
-        $scope.selectAllClickFn = function ($event) {
-            $event.stopPropagation();
-            if ($scope.selectAllChecked) {
-                $scope.selectAllChecked = false;
-            } else {
-                $scope.selectAllChecked = true;
-            }
-            $scope.displayedCustomers.forEach(function(customer, index) {
-                customer.isSelected = $scope.selectAllChecked;
-            });
-        };
-
-
-        $scope.customerSelectClickFn = function ($event, customer) {
-            $event.stopPropagation();
-            if (customer.isSelected) {
-                customer.isSelected = false;
-            } else {
-                customer.isSelected = true;
-            }
-        };
-
-        $scope.clearSelectionFn = function () {
-            $scope.selectAllChecked = false;
-            $scope.displayedCustomers.forEach(function(customer, index) {
-                customer.isSelected = $scope.selectAllChecked;
-            });
-        };
-
         $scope.openSimpleModal = function (modal) {
             //$scope.orgId = LocalAcObject.getter().orgId;
             var _modal = {
@@ -393,5 +362,53 @@
             $scope.username = "";
             $scope.password = "";
         }
+        /// EXPORT
+
+        $scope.selectAllClickFn = function ($event) {
+            $event.stopPropagation();
+            if ($scope.selectAllChecked) {
+                $scope.selectAllChecked = false;
+            } else {
+                $scope.selectAllChecked = true;
+            }
+            $scope.displayedCustomers.forEach(function (customer) {
+                customer.isSelected = $scope.selectAllChecked;
+            });
+        };
+
+        $scope.clearSelectionFn = function () {
+            $scope.selectAllChecked = false;
+            $scope.displayedCustomers.forEach(function (customer) {
+                customer.isSelected = $scope.selectAllChecked;
+            });
+        };
+
+        $scope.customerSelectClickFn = function ($event, customer) {
+            $event.stopPropagation();
+            if (customer.isSelected) {
+                customer.isSelected = false;
+            } else {
+                customer.isSelected = true;
+            }
+        };
+
+        $scope.selectedCustomersFn = function () {
+            var exportCustomers = _.filter($scope.displayedCustomers, function (customer) {
+                return customer.isSelected;
+            });
+            $scope.exportText = exportCustomers.length ? "Export Selected " + exportCustomers.length : "Export";
+            return exportCustomers;
+        };
+
+        $scope.exportCustomersFn = function () {
+            if ($scope.selectedCustomersFn().length > 0) {
+                CustomerService.exportCsvCustomers(_.pluck($scope.selectedCustomersFn(), '_id'), null);
+            } else {
+                CustomerService.exportCsvCustomers(null, $scope.pagingParams);
+            }
+            $scope.clearSelectionFn();
+            toaster.pop('success', 'Customer export started.');
+        };
+
     }]);
 }(angular));
