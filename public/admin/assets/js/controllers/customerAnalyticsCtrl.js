@@ -37,9 +37,10 @@
 					server_time =moment(detail.pageEvents[0].pageTime)._d;
 				}
 				if(detail.pageEvents.length){
-                    var evn = _.find(detail.pageEvents.reverse(), function(activity){
+					var copyPageEvets=angular.copy(detail.pageEvents);
+                    var evn = _.find(copyPageEvets.reverse(), function(activity){
                         return activity.activityType== 'CONTACT_FORM'
-                    })
+                    });
                     if(evn){
                         _.map(evn.extraFields, function (value, key) {
                             if(key.toLowerCase()=='name'){
