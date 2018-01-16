@@ -69,9 +69,13 @@
          */
 
 
-        $scope.filterCustomers = function () {
-          $scope.showFilter = !$scope.showFilter;
-        };
+        $scope.showFilter = function() {
+            $scope.pagingParams.showFilter = !$scope.pagingParams.showFilter;
+            setDefaults();
+            if (!$scope.pagingParams.showFilter){
+                clearFilter();
+            }
+        }
 
 
 

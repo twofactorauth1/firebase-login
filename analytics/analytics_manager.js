@@ -510,6 +510,7 @@ module.exports = {
             match.$match.orgId = orgId;
         }
 
+
         stageAry.push(match);
         self._addAccountFilterByID(accountId, userId, isAggregate, match, function(err, newMatch){
             var lookup = {
@@ -624,14 +625,6 @@ module.exports = {
                                 }
                                 _pageEvents.push(obj);
                             });
-                            if(!isAggregate) {
-                                _result.pageEvents = _.filter(_result.pageEvents, event){
-                                    return event.accountId == accountId
-                                })
-                                _result.pingEvents = _.filter(_result.pingEvents, event){
-                                    return event.accountId == accountId
-                                })
-                            }
                             
                             _result.pageEvents = _.sortBy(_pageEvents, function(p) {
                                 return p.pageTime;
