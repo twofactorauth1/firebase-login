@@ -369,9 +369,9 @@ module.exports = {
         else{
             if(page.get('sections') != null && page.get('sections').length > 0) {
                 html = self.buildPageTemplateMarkup(page);
-            } 
+            }
         }
-        
+
         if(wrapHtml){
             string = self.buildRenderTemplateHtml(html);
         }
@@ -387,7 +387,7 @@ module.exports = {
         var layout = page.get('layout');
         var layoutData = page.get('layoutModifiers');
         var isBlogCopy = page.get('isBlogCopy');
-        var extraClass = "";            
+        var extraClass = "";
         var layoutMarkupString =
             '<div class="ssb-layout__header_2-col_footer ssb-page-blog-list" >' +
                 '<div class="ssb-page-layout-row-header ssb-page-layout-row">' +
@@ -502,7 +502,7 @@ module.exports = {
                                     _.each(page.get('components'), function(component, index){
                                         var divName = self.getDirectiveNameDivByType(component.type);
                                         html = html + divName + ' component="components_' + index + '"></div>';
-                                    });j
+                                    });
                                 }
 
                                 cb(null);
