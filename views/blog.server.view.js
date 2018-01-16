@@ -207,7 +207,7 @@ _.extend(view.prototype, BaseView.prototype, {
                         data.customCss = customCss.join('\n');
                     }
                 }
-                data.externalScripts = self._loadExternalScripts(page);
+                data.externalScripts = self._loadComponentsAndExternalScripts(page, data);
                 data.pageStyles = self._getPageStyles(page);
                 if(pageHolder[handle]) {
                     data.title = pageHolder[handle].title || value.website.title;
@@ -559,7 +559,7 @@ _.extend(view.prototype, BaseView.prototype, {
                         data.customCss = customCss.join('\n');
                     }
                 }
-                data.externalScripts = self._loadExternalScripts(page);
+                data.externalScripts = self._loadComponentsAndExternalScripts(page, data);
                 data.pageStyles = self._getPageStyles(page);
                 if(pageHolder[handle]) {
                     data.title = pageHolder[handle].title || value.website.title;
@@ -880,7 +880,7 @@ _.extend(view.prototype, BaseView.prototype, {
                         data.customCss = customCss.join('\n');
                     }
                 }
-                data.externalScripts = self._loadExternalScripts(page);
+                data.externalScripts = self._loadComponentsAndExternalScripts(page, data);
                 data.pageStyles = self._getPageStyles(page);
                 if(pageHolder[handle]) {
                     data.title = pageHolder[handle].title || value.website.title;
@@ -1020,11 +1020,13 @@ _.extend(view.prototype, BaseView.prototype, {
         return _styleFonts;        
     },
 
-    _loadExternalScripts: function(page, preview){
+    _loadComponentsAndExternalScripts: function(page, data){
         var _types = _.uniq(_.pluck(_.flatten(_.pluck(page.get("sections"), 'components')), 'type'))
         var scriptList = [];
         var externalScripts = "";
+        var componentTypes = [];
         _types.forEach(function (c) {
+            componentTypes.push(c);
             for (var k in externalScriptLookup.EXTERNAL_SCRIPT_LOOKUP) {
                 if ((externalScriptLookup.EXTERNAL_SCRIPT_LOOKUP[k].indexOf(c) > -1) && (scriptList.indexOf(k) === -1)) {
                     scriptList.push(k);
@@ -1032,6 +1034,8 @@ _.extend(view.prototype, BaseView.prototype, {
                 }
             }
         });
+        componentTypes = _.uniq(componentTypes);
+        data.componentTypes = componentTypes;
         return externalScripts;
     },
 
