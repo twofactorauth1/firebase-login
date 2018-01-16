@@ -36,22 +36,29 @@
 				if( detail.pageEvents.length>0){
 					server_time =moment(detail.pageEvents[0].pageTime)._d;
 				}
-				_.each(detail.pageEvents, function(evn){
-					if(evn.activityType== 'CONTACT_FORM'){
-						_.map(evn.extraFields, function (value, key) {
-							if(key.toLowerCase()=='name'){
-								detail.name=value +" "+(evn.extraFields.last?evn.extraFields.last:"");
-							}else if(key.toLowerCase()=='email'){
-								detail.email=value
-							}
-						});
-					}
-				  });
-				  var difference = new Date().getTime()-server_time.getTime() ;
-				  var sec=Math.round((difference / 1000) % 60)
-				  detail.resultInMinutes = Math.round(difference / 60000)+(sec<10?":0"+sec:":"+sec);
+				if(detail.pageEvents.length){
+                    var evn = _.find(detail.pageEvents.reverse(), function(activity){
+                        return activity.activityType== 'CONTACT_FORM'
+                    })
+                    if(evn){
+                        _.map(evn.extraFields, function (value, key) {
+                            if(key.toLowerCase()=='name'){
+                                detail.name=value +" "+(evn.extraFields.last?evn.extraFields.last:"");
+                            }else if(key.toLowerCase()=='email'){
+                                detail.email=value
+                            }
+                            else if(key.toLowerCase()=='first'){
+                                detail.fullname = value +" "+(evn.extraFields.last?evn.extraFields.last:"");
+                            }
+                        });
+                        detail.contactId = evn.contactId;
+                    }
+                }
+				var difference = new Date().getTime()-server_time.getTime() ;
+				var sec=Math.round((difference / 1000) % 60)
+				detail.resultInMinutes = Math.round(difference / 60000)+(sec<10?":0"+sec:":"+sec);
 
-				  $scope.liveVisitorDetails.push(detail);
+				$scope.liveVisitorDetails.push(detail);
 			});
 		}
 		var dateSwitch = false,

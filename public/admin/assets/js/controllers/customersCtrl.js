@@ -62,8 +62,6 @@
 
 
         $scope.viewSingle = function (customer) {
-            var tableState = $scope.getSortOrder();
-            $state.current.sort = tableState.sort;
             $location.path('/customers/' + customer._id);
         };
 
