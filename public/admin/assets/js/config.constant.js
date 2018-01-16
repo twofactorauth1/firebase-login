@@ -824,6 +824,7 @@ app.constant('JS_REQUIRES', {
 		'broadcastMessagesService': 'assets/js/messages/messages.service.js',
 		'utilService': 'assets/js/services/util.js',
 		'contactPagingService': 'assets/js/services/contactPagingService.js',
+		'customerPagingService': 'assets/js/services/customerPagingService.js',
 		'jobsService': 'assets/js/jobs/jobs.service.js',
 		//*** Filters
 		'htmlToPlaintext': 'assets/js/filters/htmlToPlaintext.js',
