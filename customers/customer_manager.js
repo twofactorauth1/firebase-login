@@ -28,14 +28,45 @@ module.exports = {
 
     log:log,
 
-    getMainCustomers: function(accountId, userId, sortBy, sortDir, skip, limit, term, fieldSearch, fn) {
+    getMainCustomers: function(accountId, userId, sortBy, sortDir, skip, limit, fn) {
+        var self = this;
+        self.log.debug(accountId, userId, '>> getMainCustomers');
+        var query = {
+            _id: {$nin: ['__counter__', 6]}
+        };
+        var fields = null;
+        accountDao.findWithFieldsLimitOrderAndTotal(query, skip, limit, sortBy, fields, $$.m.Account, sortDir, function(err, accounts){
+            if(err) {
+                self.log.error(accountId, userId, 'Error finding accounts:', err);
+                return fn(err);
+            } else {
+                _.each(accounts.results, function(account){
+
+                    var billing = account.get('billing') || {};
+                    var trialDays = billing.trialLength || appConfig.trialLength;//using 15 instead of 14 to give 14 FULL days
+                    var endDate = moment(billing.signupDate).add(trialDays, 'days');
+
+                    var trialDaysRemaining = endDate.diff(moment(), 'days');
+                    if(trialDaysRemaining < 0) {
+                        trialDaysRemaining = 0;
+                    }
+                    account.set('trialDaysRemaining', trialDaysRemaining);
+                });
+                self.log.debug(accountId, userId, '<< getMainCustomers');
+                return fn(null, accounts);
+            }
+
+        });
+    },
+
+    getMainPagedCustomers: function(accountId, userId, sortBy, sortDir, skip, limit, term, fieldSearch, ids, fn) {
         var self = this;
         self.log.debug(accountId, userId, '>> getMainCustomers');
         var query = {
             _id: {$nin: ['__counter__', 6]}
         };
 
-        query = self._concatQuery(query, term, fieldSearch);
+        query = self._concatQuery(query, term, fieldSearch, ids);
 
         var fields = null;
         accountDao.findWithFieldsLimitOrderAndTotal(query, skip, limit, sortBy, fields, $$.m.Account, sortDir, function(err, accounts){
@@ -62,13 +93,12 @@ module.exports = {
         });
     },
 
-    getOrganizationCustomers: function(accountId, userId, orgId, sortBy, sortDir, skip, limit, term, fieldSearch, fn) {
+    getOrganizationCustomers: function(accountId, userId, orgId, sortBy, sortDir, skip, limit, fn) {
         var self = this;
         self.log.debug(accountId, userId, '>> getOrganizationCustomers');
         var query = {
             orgId: orgId
         };
-        query = self._concatQuery(query, term, fieldSearch);
         var fields = null;
         accountDao.findWithFieldsLimitOrderAndTotal(query, skip,limit, sortBy, fields, $$.m.Account, sortDir, function(err, accounts){
             if(err) {
@@ -93,7 +123,38 @@ module.exports = {
         });
     },
 
-    getCustomers: function(accountId, userId, sortBy, sortDir, skip, limit, term, fieldSearch, fn) {
+    getOrganizationPagedCustomers: function(accountId, userId, orgId, sortBy, sortDir, skip, limit, term, fieldSearch, ids, fn) {
+        var self = this;
+        self.log.debug(accountId, userId, '>> getOrganizationCustomers');
+        var query = {
+            orgId: orgId
+        };
+        query = self._concatQuery(query, term, fieldSearch, ids);
+        var fields = null;
+        accountDao.findWithFieldsLimitOrderAndTotal(query, skip,limit, sortBy, fields, $$.m.Account, sortDir, function(err, accounts){
+            if(err) {
+                self.log.error(accountId, userId, 'Error finding accounts:', err);
+                return fn(err);
+            } else {
+                _.each(accounts.results, function(account){
+
+                    var billing = account.get('billing') || {};
+                    var trialDays = billing.trialLength || appConfig.trialLength;//using 15 instead of 14 to give 14 FULL days
+                    var endDate = moment(billing.signupDate).add(trialDays, 'days');
+
+                    var trialDaysRemaining = endDate.diff(moment(), 'days');
+                    if(trialDaysRemaining < 0) {
+                        trialDaysRemaining = 0;
+                    }
+                    account.set('trialDaysRemaining', trialDaysRemaining);
+                });
+                self.log.debug(accountId, userId, '<< getOrganizationCustomers');
+                return fn(null, accounts);
+            }
+        });
+    },
+
+    getCustomers: function(accountId, userId, sortBy, sortDir, skip, limit, fn) {
         fn(null, null);
     },
 
@@ -714,48 +775,57 @@ module.exports = {
         });
     },
 
-    _concatQuery: function(query, term, fieldSearch){
+    _concatQuery: function(query, term, fieldSearch, ids){
         var self = this;
-        if(term){
-
-            term = term.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');   
-            var regex = new RegExp('\.*'+term+'\.*', 'i');
-            var orQuery = [
-                {_id:parseInt(term)},            
-                {subdomain:regex},
-                {domain:regex},
-                {customDomain:regex},
-                {accountUrl: regex},
-                {'business.name':regex},
-                {'billing.plan':regex},
-                {'billing.signupDate':regex},
-                {'billing.details.zip':regex},
-                {'billing.details.state':regex}
-            ];
-            query["$or"] = orQuery;
-        }
-        if(fieldSearch){
-            var fieldSearchArr = [];
-            for(var i=0; i <= Object.keys(fieldSearch).length - 1; i++){
-                var key = Object.keys(fieldSearch)[i];
-                var value = fieldSearch[key];
-                self.log.debug('value:', value);                
-                var obj = {};
-                value = value.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
-                // Filter on email address
-                
-                if(value){
-                    if(key == "_id"){
-                        obj[key] = parseInt(value);    
-                    } else {
-                        obj[key] = new RegExp(value, 'i');
-                    }
-                    
-                    fieldSearchArr.push(obj);
-                }
+        if(ids) {
+            if (_.isArray(ids)) {
+                query['_id'] = {'$in': _.map(ids, function (x) {return parseInt(x);})};
+            } else {
+                query['_id'] = parseInt(ids);
             }
-            if(fieldSearchArr.length){
-                query["$and"] = fieldSearchArr;
+        }
+        else{
+            if(term){
+
+                term = term.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');   
+                var regex = new RegExp('\.*'+term+'\.*', 'i');
+                var orQuery = [
+                    {_id:parseInt(term)},            
+                    {subdomain:regex},
+                    {domain:regex},
+                    {customDomain:regex},
+                    {accountUrl: regex},
+                    {'business.name':regex},
+                    {'billing.plan':regex},
+                    {'billing.signupDate':regex},
+                    {'billing.details.zip':regex},
+                    {'billing.details.state':regex}
+                ];
+                query["$or"] = orQuery;
+            }
+            if(fieldSearch){
+                var fieldSearchArr = [];
+                for(var i=0; i <= Object.keys(fieldSearch).length - 1; i++){
+                    var key = Object.keys(fieldSearch)[i];
+                    var value = fieldSearch[key];
+                    self.log.debug('value:', value);                
+                    var obj = {};
+                    value = value.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+                    // Filter on email address
+                    
+                    if(value){
+                        if(key == "_id"){
+                            obj[key] = parseInt(value);    
+                        } else {
+                            obj[key] = new RegExp(value, 'i');
+                        }
+                        
+                        fieldSearchArr.push(obj);
+                    }
+                }
+                if(fieldSearchArr.length){
+                    query["$and"] = fieldSearchArr;
+                }
             }
         }
         return query;
