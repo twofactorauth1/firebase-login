@@ -69,7 +69,15 @@
          */
 
 
-        $scope.showFilter = function() {
+        $scope.filterCustomers = function () {
+            $scope.pagingParams.showFilter = !$scope.pagingParams.showFilter;
+            setDefaults();
+            if (!$scope.pagingParams.showFilter){
+                clearFilter();
+            }
+        };
+
+        function showFilter() {
             $scope.pagingParams.showFilter = !$scope.pagingParams.showFilter;
             setDefaults();
             if (!$scope.pagingParams.showFilter){
@@ -288,16 +296,6 @@
                 }
             }
         }, true);
-
-
-        function showFilter() {
-            $scope.pagingParams.showFilter = !$scope.pagingParams.showFilter;
-            setDefaults();
-            if (!$scope.pagingParams.showFilter){
-                clearFilter();
-            }
-        }
-
 
         function clearFilter() {
             $scope.pagingParams.fieldSearch = {};
