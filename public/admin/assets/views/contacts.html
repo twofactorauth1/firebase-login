@@ -215,7 +215,7 @@
                                 <span class="text-adjust-inner-content">{{contactTagsFn(contact)||'--'}}</span></td>
                             <td ng-show="column.email" class="hidden-xs text-adjust-col email-col"><strong>Email: </strong> <span ng-if="contact.bestEmail"><a href="mailto:{{contact.bestEmail}}"><span class="text-adjust-inner-content  contact-email-address" tooltip-placement="top" tooltip="{{contact.bestEmail}}">{{contact.bestEmail}}</span></a>
                                     </span><span ng-if="!contact.bestEmail">--</span></td>
-                            <td ng-show="column.address" class="hidden-xs text-adjust-col address-col"><strong>Address: </strong>
+                            <td ng-show="column.address" class="hidden-xs text-adjust-col address-col" style="white-space:nowrap;"><strong>Address: </strong>
                                 <span ng-if="contact.details[0].addresses[0]" tooltip-placement="top" tooltip="{{contact.bestAddress}}" class="text-adjust-inner-content">{{contact.bestAddress}}</span>
                                 <span ng-if="!contact.details[0].addresses[0]">--</span>
                             </td>

@@ -49,7 +49,7 @@ if (process.env.IS_PROXIED == null) {
 if (process.env.ROOT_HOST == null) {
     if (process.env.NODE_ENV == environments.DEVELOPMENT || process.env.NODE_ENV == environments.TESTING) {
         process.env.ROOT_HOST = "indigenous.local";
-        process.env.ORG_ROOT_HOSTS = 'test.gorvlvr.com,gorvlvr.com,test.techevent.us,techevent.us,test.leadsource.cc,leadsource.cc';
+        process.env.ORG_ROOT_HOSTS = 'test.gorvlvr.com,gorvlvr.com,test.techevent.us,techevent.us,test.leadsource.cc,leadsource.cc,newplatform.net';
     } else {
         process.env.ROOT_HOST = "indigenous.io";
         process.env.ORG_ROOT_HOSTS = 'gorvlvr.com,techevent.us,leadsource.cc';

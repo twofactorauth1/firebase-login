@@ -118,6 +118,9 @@ _.extend(view.prototype, BaseView.prototype, {
                             } else if(data.account.orgId && data.account.orgId === 6){
                                 logger.debug('Rendering AMRVLVR admin');
                                 self.resp.render('var/am/admin', data);
+                            } else if(data.account.orgId && data.account.orgId === 7){
+                                logger.debug('Rendering NEWPLATFORM admin');
+                                self.resp.render('var/newplatform/admin', data);
                             } else {
                                 self.resp.render('admin', data);
                             }
