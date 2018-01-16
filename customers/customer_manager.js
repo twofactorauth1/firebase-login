@@ -28,12 +28,14 @@ module.exports = {
 
     log:log,
 
-    getMainCustomers: function(accountId, userId, sortBy, sortDir, skip, limit, fn) {
+    getMainCustomers: function(accountId, userId, sortBy, sortDir, skip, limit, term, fieldSearch, fn) {
         var self = this;
         self.log.debug(accountId, userId, '>> getMainCustomers');
         var query = {
             _id: {$nin: ['__counter__', 6]}
         };
+
+        query = self._concatQuery(query, term, fieldSearch);
 
         var fields = null;
         accountDao.findWithFieldsLimitOrderAndTotal(query, skip, limit, sortBy, fields, $$.m.Account, sortDir, function(err, accounts){
@@ -60,12 +62,13 @@ module.exports = {
         });
     },
 
-    getOrganizationCustomers: function(accountId, userId, orgId, sortBy, sortDir, skip, limit, fn) {
+    getOrganizationCustomers: function(accountId, userId, orgId, sortBy, sortDir, skip, limit, term, fieldSearch, fn) {
         var self = this;
         self.log.debug(accountId, userId, '>> getOrganizationCustomers');
         var query = {
             orgId: orgId
         };
+        query = self._concatQuery(query, term, fieldSearch);
         var fields = null;
         accountDao.findWithFieldsLimitOrderAndTotal(query, skip,limit, sortBy, fields, $$.m.Account, sortDir, function(err, accounts){
             if(err) {
@@ -90,8 +93,48 @@ module.exports = {
         });
     },
 
-    getCustomers: function(accountId, userId, sortBy, sortDir, skip, limit, fn) {
+    getCustomers: function(accountId, userId, sortBy, sortDir, skip, limit, term, fieldSearch, fn) {
         fn(null, null);
+    },
+
+
+    getMainCustomerCount: function(accountId, userId, fn) {
+        var self = this;
+        self.log.debug(accountId, userId, '>> getMainCustomerCount');
+        var query = {
+            _id: {$nin: ['__counter__', 6]}
+        };
+        accountDao.findCount(query, $$.m.Account, function(err, count){
+            if(err) {
+                self.log.error(accountId, userId, 'Error getting customer count:', err);
+                fn(err);
+            } else {
+                self.log.debug(accountId, userId, '<< getMainCustomerCount', count);
+                fn(null, count);
+            }
+        });
+    },
+
+    getOrganizationCustomerCount: function(accountId, userId, orgId, fn) {
+        var self = this;
+        self.log.debug(accountId, userId, '>> getOrganizationCustomerCount');
+        var query = {
+            orgId: orgId
+        };
+        
+        accountDao.findCount(query, $$.m.Account, function(err, count){
+            if(err) {
+                self.log.error(accountId, userId, 'Error getting customer count:', err);
+                fn(err);
+            } else {
+                self.log.debug(accountId, userId, '<< getOrganizationCustomerCount', count);
+                fn(null, count);
+            }
+        });
+    },
+
+    getCustomerCount: function(accountId, userId, fn) {
+        fn(null, 0);
     },
 
     getOrgCustomer: function(req,accountId, userId, customerId, orgDomain, fn) {
@@ -669,6 +712,56 @@ module.exports = {
             }
             callback(file);
         });
+    },
+
+    _concatQuery: function(query, term, fieldSearch){
+        var self = this;
+        if(term){
+
+            term = term.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');   
+            var regex = new RegExp('\.*'+term+'\.*', 'i');
+            var orQuery = [
+                {_id:parseInt(term)},            
+                {first:regex},
+                {middle:regex},
+                {last:regex},
+                {tags:regex},
+                {'details.emails.email':regex},
+                {'details.phones.number':regex},
+                {'details.addresses.address':regex},
+                {'details.addresses.address2':regex},
+                {'details.addresses.city':regex},
+                {'details.addresses.state':regex},
+                {'details.addresses.zip':regex},
+                {'details.addresses.country':regex}
+            ];
+            query["$or"] = orQuery;
+        }
+        if(fieldSearch){
+            var fieldSearchArr = [];
+            for(var i=0; i <= Object.keys(fieldSearch).length - 1; i++){
+                var key = Object.keys(fieldSearch)[i];
+                var value = fieldSearch[key];
+                self.log.debug('value:', value);                
+                var obj = {};
+                value = value.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+                // Filter on email address
+                
+                if(value){
+                    if(key == "_id"){
+                        obj[key] = parseInt(value);    
+                    } else {
+                        obj[key] = new RegExp(value, 'i');
+                    }
+                    
+                    fieldSearchArr.push(obj);
+                }
+            }
+            if(fieldSearchArr.length){
+                query["$and"] = fieldSearchArr;
+            }
+        }
+        return query;
     }
 
 };

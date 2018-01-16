@@ -111,7 +111,7 @@ app.config(['$stateProvider', '$urlRouterProvider', '$controllerProvider', '$com
 				templateUrl: "/admin/assets/views/customers.html",
 				title: 'Customers',
 				icon: 'ti-layout-media-left-alt',
-				resolve: loadSequence('customersCtrl', 'customerService','organizationService','spectrum')
+				resolve: loadSequence('customersCtrl', 'customerService','organizationService','spectrum', 'customerPagingService')
 			}).state('app.customeranalytics', {
 				url: '/customers/analytics',
 				templateUrl: "/admin/assets/views/customer-analytics.html",

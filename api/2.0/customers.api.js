@@ -38,8 +38,9 @@ _.extend(api.prototype, baseApi.prototype, {
         app.post(this.url('customer/:id/insights'), this.isAuthAndSubscribedApi.bind(this), this.updateCustomerInsights.bind(this));
         app.post(this.url('customer/:id/showhide'), this.isAuthAndSubscribedApi.bind(this), this.updateCustomerShowHide.bind(this));
         //app.delete(this.url(':type/:key'), this.isAuthAndSubscribedApi.bind(this), this.deleteComponentData.bind(this));
-
-
+        app.get(this.url('paged/list'), this.isAuthAndSubscribedApi.bind(this), this.listPagedCustomers.bind(this));
+        app.get(this.url('paged/list/filter'), this.isAuthAndSubscribedApi.bind(this), this.filterCustomers.bind(this)); // filter customers
+        app.get(this.url('customer/count'), this.isAuthAndSubscribedApi.bind(this), this.getCustomerCount.bind(this));
     },
 
     listCustomers: function(req, resp) {
@@ -345,7 +346,141 @@ _.extend(api.prototype, baseApi.prototype, {
                 }
             });
         }
-    }
+    },
+
+    listPagedCustomers: function (req, resp) {
+        var self = this;
+        var accountId = parseInt(self.accountId(req));
+        var skip = parseInt(req.query['skip'] || 0);
+        var limit = parseInt(req.query['limit'] || 50);
+        var sortBy = req.query.sortBy || "created.date";
+        var sortDir = parseInt(req.query.sortDir) || -1;
+        var term = req.query.term;
+        self.log.debug('>> listPagedCustomers');
+        var userId = self.userId(req);
+
+        if(accountId === appConfig.mainAccountID) {
+            manager.getMainCustomers(accountId, userId, sortBy, sortDir, skip, limit, term, null, function(err, customers){
+                self.log.debug(accountId, userId, '<< listAllCustomers');
+                self.sendResultOrError(resp, err, customers, 'Error listing customers');
+            });
+        } else if(urlUtils.getSubdomainFromRequest(req).isOrgRoot === true){
+            orgDao.getByOrgDomain(urlUtils.getSubdomainFromRequest(req).orgDomain, function(err, organization){
+                if(err) {
+                    self.log.error(accountId, userId, 'Error getting organization:', err);
+                    self.wrapError(resp, 500, 'Error getting Organization', 'Error getting organization');
+                } else {
+                    if(organization.get('adminAccount') === accountId) {
+                        manager.getOrganizationCustomers(accountId, userId, organization.id(), sortBy, sortDir, skip, limit, term, null, function(err, customers){
+                            self.log.debug(accountId, userId, '<< listAllCustomers');
+                            self.sendResultOrError(resp, err, customers, 'Error listing customers');
+                        });
+                    } else {
+                        manager.getCustomers(accountId, userId, sortBy, sortDir, skip, limit, term, null, function(err, customers){
+                            self.log.debug(accountId, userId, '<< listAllCustomers');
+                            self.sendResultOrError(resp, err, customers, 'Error listing customers');
+                        });
+                    }
+                }
+            });
+        } else {
+            manager.getCustomers(accountId, userId, sortBy, sortDir, skip, limit, term, null, function(err, customers){
+                self.log.debug(accountId, userId, '<< listAllCustomers');
+                self.sendResultOrError(resp, err, customers, 'Error listing customers');
+            });
+        }
+    },
+
+    filterCustomers: function(req, resp) {
+        var self = this;
+        var accountId = parseInt(self.accountId(req));
+        var userId = self.userId(req);
+        self.log.debug(accountId, userId, '>> filterCustomers');
+        var skip = parseInt(req.query.skip) || 0;
+        var limit = parseInt(req.query.limit) || 0;
+        var sortBy = req.query.sortBy || null;
+        var sortDir = parseInt(req.query.sortDir) || null;
+        var fieldSearch = req.query;
+        var term = req.query.term;
+        delete fieldSearch.term;
+        delete fieldSearch.skip;
+        delete fieldSearch.limit;
+        delete fieldSearch.sortBy;
+        delete fieldSearch.sortDir;
+        
+        /*
+         * Search across the fields
+         */
+
+        if(accountId === appConfig.mainAccountID) {
+            manager.getMainCustomers(accountId, userId, sortBy, sortDir, skip, limit, term, fieldSearch, function(err, customers){
+                self.log.debug(accountId, userId, '<< listAllCustomers');
+                self.sendResultOrError(resp, err, customers, 'Error listing customers');
+            });
+        } else if(urlUtils.getSubdomainFromRequest(req).isOrgRoot === true){
+            orgDao.getByOrgDomain(urlUtils.getSubdomainFromRequest(req).orgDomain, function(err, organization){
+                if(err) {
+                    self.log.error(accountId, userId, 'Error getting organization:', err);
+                    self.wrapError(resp, 500, 'Error getting Organization', 'Error getting organization');
+                } else {
+                    if(organization.get('adminAccount') === accountId) {
+                        manager.getOrganizationCustomers(accountId, userId, organization.id(), sortBy, sortDir, skip, limit, term, fieldSearch, function(err, customers){
+                            self.log.debug(accountId, userId, '<< listAllCustomers');
+                            self.sendResultOrError(resp, err, customers, 'Error listing customers');
+                        });
+                    } else {
+                        manager.getCustomers(accountId, userId, sortBy, sortDir, skip, limit, term, fieldSearch, function(err, customers){
+                            self.log.debug(accountId, userId, '<< listAllCustomers');
+                            self.sendResultOrError(resp, err, customers, 'Error listing customers');
+                        });
+                    }
+                }
+            });
+        } else {
+            manager.getCustomers(accountId, userId, sortBy, sortDir, skip, limit, term, fieldSearch, function(err, customers){
+                self.log.debug(accountId, userId, '<< listAllCustomers');
+                self.sendResultOrError(resp, err, customers, 'Error listing customers');
+            });
+        }
+       
+    },
+    getCustomerCount: function(req, resp) {
+        var self = this;
+        var accountId = parseInt(self.accountId(req));
+        var userId = self.userId(req);
+        self.log.debug(accountId, userId, '>> getCustomerCount');
+
+        if(accountId === appConfig.mainAccountID) {
+            manager.getMainCustomerCount(accountId, userId, function(err, count){
+                self.log.debug(accountId, userId, '<< getCustomerCount');
+                self.sendResultOrError(resp, err, {count:count}, 'Error getting customer count');
+            });
+        } else if(urlUtils.getSubdomainFromRequest(req).isOrgRoot === true){
+            orgDao.getByOrgDomain(urlUtils.getSubdomainFromRequest(req).orgDomain, function(err, organization){
+                if(err) {
+                    self.log.error(accountId, userId, 'Error getting organization:', err);
+                    self.wrapError(resp, 500, 'Error getting Organization', 'Error getting organization');
+                } else {
+                    if(organization.get('adminAccount') === accountId) {
+                        manager.getOrganizationCustomerCount(accountId, userId, organization.id(), function(err, count){
+                            self.log.debug(accountId, userId, '<< getCustomerCount');
+                            self.sendResultOrError(resp, err, {count:count}, 'Error getting customer count');
+                        });
+                    } else {
+                        manager.getCustomerCount(accountId, userId, function(err, count){
+                            self.log.debug(accountId, userId, '<< getCustomerCount');
+                            self.sendResultOrError(resp, err, {count:count}, 'Error getting customer count');
+                        });
+                    }
+                }
+            });
+        } else {
+            manager.getCustomerCount(accountId, userId, function(err, customers){
+                self.log.debug(accountId, userId, '<< getCustomerCount');
+                self.sendResultOrError(resp, err, {count:count}, 'Error getting customer count');
+            });
+        }
+    },
 });
 
 module.exports = new api({version:'2.0'});

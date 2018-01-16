@@ -68,6 +68,36 @@
             }
         };
 
+        this.getPagedCustomers = function (pagingParams, isFieldSearchEnabled, fn) {
+            var urlParts = ['paged', 'list'];
+            var _method = "GET";
+            var _qString = "?limit=" + pagingParams.limit + "&skip=" + pagingParams.skip;
+            if (pagingParams.sortBy) {
+                _qString += "&sortBy=" + pagingParams.sortBy + "&sortDir=" + pagingParams.sortDir;
+            }
+            if (pagingParams.globalSearch) {
+                _qString += "&term=" + encodeURIComponent(pagingParams.globalSearch);
+            }
+            if (isFieldSearchEnabled) {
+                _method = "GET";
+                urlParts.push('filter');
+                _.each(pagingParams.fieldSearch, function (value, key) {
+                    if(value != null){
+                        _qString += '&' + key + '=' + encodeURIComponent(value);
+                    }
+                });
+            }
+            var apiUrl = baseUrl + "/" + urlParts.join('/') + _qString;
+            return $http({
+                url: apiUrl,
+                method: _method,
+                data: angular.toJson(pagingParams.fieldSearch)
+            })
+            .success(function (data) {
+                fn(data);
+            });
+        };
+
         this.refreshCustomers = function(fn) {
             var apiUrl = [baseUrl, 'all'].join('/');
             var cache = this.getCache();
@@ -343,6 +373,17 @@
                 fn(null, data);
             }).error(function(err){
                 fn(err);
+            });
+        };
+
+        this.getTotalCustomers = function (fn) {
+            var apiUrl = baseUrl + "/" + ['customer' ,'count'].join('/');
+            var _method = 'GET';
+            return $http({
+                url: apiUrl,
+                method: _method
+            }).success(function (data) {
+                fn(data)
             });
         };
 
