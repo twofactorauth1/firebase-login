@@ -167,8 +167,28 @@ var account = $$.m.ModelBase.extend({
             subdomain = subdomain.trim().replace(" ", "");
             this.set({subdomain:subdomain});
         }
-    }
+    },
 
+    getSignUpDate: function(){
+        if(this.get("billing") && this.get("billing").signupDate){
+            return moment(this.get("billing").signupDate).format("M/d/YY");
+        }
+    },
+    getBillingZip: function(){
+        if(this.get("billing") && this.get("billing").details){
+            return this.get("billing").details.zip;
+        }
+    },
+    getBillingState: function(){
+        if(this.get("billing") && this.get("billing").details){
+            return this.get("billing").details.state;
+        }
+    },
+    getBillingPlan: function(){
+        if(this.get("billing")){
+            return this.get("billing").plan;
+        }
+    }
 
 }, {
     db: {

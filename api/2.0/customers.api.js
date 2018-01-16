@@ -12,7 +12,7 @@ var manager = require('../../customers/customer_manager');
 var appConfig = require('../../configs/app.config');
 var urlUtils = require('../../utils/urlutils');
 var orgDao = require('../../organizations/dao/organization.dao');
-
+var async = require('async');
 var api = function () {
     this.init.apply(this, arguments);
 };
@@ -41,7 +41,8 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url('paged/list'), this.isAuthAndSubscribedApi.bind(this), this.listPagedCustomers.bind(this));
         app.get(this.url('paged/list/filter'), this.isAuthAndSubscribedApi.bind(this), this.filterCustomers.bind(this)); // filter customers
         app.get(this.url('customer/count'), this.isAuthAndSubscribedApi.bind(this), this.getCustomerCount.bind(this));
-    },
+        app.get(this.url('export/csv'), this.isAuthApi.bind(this), this.exportCsvCustomers.bind(this));
+    },  
 
     listCustomers: function(req, resp) {
         var self = this;
@@ -352,7 +353,7 @@ _.extend(api.prototype, baseApi.prototype, {
         var self = this;
         var accountId = parseInt(self.accountId(req));
         var skip = parseInt(req.query['skip'] || 0);
-        var limit = parseInt(req.query['limit'] || 50);
+        var limit = parseInt(req.query['limit'] || 0);
         var sortBy = req.query.sortBy || "created.date";
         var sortDir = parseInt(req.query.sortDir) || -1;
         var term = req.query.term;
@@ -360,7 +361,7 @@ _.extend(api.prototype, baseApi.prototype, {
         var userId = self.userId(req);
 
         if(accountId === appConfig.mainAccountID) {
-            manager.getMainCustomers(accountId, userId, sortBy, sortDir, skip, limit, term, null, function(err, customers){
+            manager.getMainPagedCustomers(accountId, userId, sortBy, sortDir, skip, limit, term, null, null, function(err, customers){
                 self.log.debug(accountId, userId, '<< listAllCustomers');
                 self.sendResultOrError(resp, err, customers, 'Error listing customers');
             });
@@ -371,22 +372,12 @@ _.extend(api.prototype, baseApi.prototype, {
                     self.wrapError(resp, 500, 'Error getting Organization', 'Error getting organization');
                 } else {
                     if(organization.get('adminAccount') === accountId) {
-                        manager.getOrganizationCustomers(accountId, userId, organization.id(), sortBy, sortDir, skip, limit, term, null, function(err, customers){
-                            self.log.debug(accountId, userId, '<< listAllCustomers');
-                            self.sendResultOrError(resp, err, customers, 'Error listing customers');
-                        });
-                    } else {
-                        manager.getCustomers(accountId, userId, sortBy, sortDir, skip, limit, term, null, function(err, customers){
+                        manager.getOrganizationPagedCustomers(accountId, userId, organization.id(), sortBy, sortDir, skip, limit, term, null, null, function(err, customers){
                             self.log.debug(accountId, userId, '<< listAllCustomers');
                             self.sendResultOrError(resp, err, customers, 'Error listing customers');
                         });
                     }
                 }
-            });
-        } else {
-            manager.getCustomers(accountId, userId, sortBy, sortDir, skip, limit, term, null, function(err, customers){
-                self.log.debug(accountId, userId, '<< listAllCustomers');
-                self.sendResultOrError(resp, err, customers, 'Error listing customers');
             });
         }
     },
@@ -413,7 +404,7 @@ _.extend(api.prototype, baseApi.prototype, {
          */
 
         if(accountId === appConfig.mainAccountID) {
-            manager.getMainCustomers(accountId, userId, sortBy, sortDir, skip, limit, term, fieldSearch, function(err, customers){
+            manager.getMainPagedCustomers(accountId, userId, sortBy, sortDir, skip, limit, term, fieldSearch, null, function(err, customers){
                 self.log.debug(accountId, userId, '<< listAllCustomers');
                 self.sendResultOrError(resp, err, customers, 'Error listing customers');
             });
@@ -424,26 +415,16 @@ _.extend(api.prototype, baseApi.prototype, {
                     self.wrapError(resp, 500, 'Error getting Organization', 'Error getting organization');
                 } else {
                     if(organization.get('adminAccount') === accountId) {
-                        manager.getOrganizationCustomers(accountId, userId, organization.id(), sortBy, sortDir, skip, limit, term, fieldSearch, function(err, customers){
-                            self.log.debug(accountId, userId, '<< listAllCustomers');
-                            self.sendResultOrError(resp, err, customers, 'Error listing customers');
-                        });
-                    } else {
-                        manager.getCustomers(accountId, userId, sortBy, sortDir, skip, limit, term, fieldSearch, function(err, customers){
+                        manager.getOrganizationPagedCustomers(accountId, userId, organization.id(), sortBy, sortDir, skip, limit, term, fieldSearch, null, function(err, customers){
                             self.log.debug(accountId, userId, '<< listAllCustomers');
                             self.sendResultOrError(resp, err, customers, 'Error listing customers');
                         });
                     }
                 }
             });
-        } else {
-            manager.getCustomers(accountId, userId, sortBy, sortDir, skip, limit, term, fieldSearch, function(err, customers){
-                self.log.debug(accountId, userId, '<< listAllCustomers');
-                self.sendResultOrError(resp, err, customers, 'Error listing customers');
-            });
-        }
-       
+        }    
     },
+
     getCustomerCount: function(req, resp) {
         var self = this;
         var accountId = parseInt(self.accountId(req));
@@ -466,21 +447,94 @@ _.extend(api.prototype, baseApi.prototype, {
                             self.log.debug(accountId, userId, '<< getCustomerCount');
                             self.sendResultOrError(resp, err, {count:count}, 'Error getting customer count');
                         });
-                    } else {
-                        manager.getCustomerCount(accountId, userId, function(err, count){
-                            self.log.debug(accountId, userId, '<< getCustomerCount');
-                            self.sendResultOrError(resp, err, {count:count}, 'Error getting customer count');
+                    }
+                }
+            });
+        }
+    },
+    
+    exportCsvCustomers: function(req, resp) {
+        var self = this;
+        var accountId = parseInt(self.accountId(req));
+        var userId = self.userId(req);
+        self.log.debug(accountId, userId, '>> exportCsvCustomers');
+        var skip = parseInt(req.query.skip) || 0;
+        var limit = parseInt(req.query.limit) || 0;
+        var sortBy = req.query.sortBy || null;
+        var sortDir = parseInt(req.query.sortDir) || null;
+        var fieldSearch = req.query;
+        var term = req.query.term;
+        var ids = req.query.ids;
+        delete fieldSearch.term;
+        delete fieldSearch.skip;
+        delete fieldSearch.limit;
+        delete fieldSearch.sortBy;
+        delete fieldSearch.sortDir;        
+        
+        if(accountId === appConfig.mainAccountID) {
+            manager.getMainPagedCustomers(accountId, userId, sortBy, sortDir, skip, limit, term, fieldSearch, ids, function(err, customers){
+                self.log.debug(accountId, userId, '<< listAllCustomers');
+                self._asyncMakeCSV(customers, function(err, csv){
+                    self.log.debug(accountId, userId, '<< exportCsvContacts');
+                    resp.set('Content-Type', 'text/csv');
+                    resp.set("Content-Disposition",  "attachment;filename=csv.csv");
+                    self.sendResult(resp, csv);
+                });
+            });
+        } else if(urlUtils.getSubdomainFromRequest(req).isOrgRoot === true){
+            orgDao.getByOrgDomain(urlUtils.getSubdomainFromRequest(req).orgDomain, function(err, organization){
+                if(err) {
+                    self.log.error(accountId, userId, 'Error getting organization:', err);
+                    self.wrapError(resp, 500, 'Error getting Organization', 'Error getting organization');
+                } else {
+                    if(organization.get('adminAccount') === accountId) {
+                        manager.getOrganizationPagedCustomers(accountId, userId, organization.id(), sortBy, sortDir, skip, limit, term, fieldSearch, ids, function(err, customers){
+                            self.log.debug(accountId, userId, '<< listAllCustomers');
+                            self._asyncMakeCSV(customers, function(err, csv){
+                                self.log.debug(accountId, userId, '<< exportCsvContacts');
+                                resp.set('Content-Type', 'text/csv');
+                                resp.set("Content-Disposition",  "attachment;filename=csv.csv");
+                                self.sendResult(resp, csv);
+                            });
                         });
                     }
                 }
             });
-        } else {
-            manager.getCustomerCount(accountId, userId, function(err, customers){
-                self.log.debug(accountId, userId, '<< getCustomerCount');
-                self.sendResultOrError(resp, err, {count:count}, 'Error getting customer count');
-            });
-        }
+        }      
     },
+
+    _asyncMakeCSV: function(results, cb) {
+        var headers = ['ID', 'Subdomain', 'Custom Domain', 'Signup', 'Trial Days', 'Plan', 'Postcode', 'State'];
+        
+        var csv = headers.join(',') + '\n';
+        var customers = results.results; 
+        async.eachLimit(customers, 10, function(contact, callback){            
+            var parseString=function (text){
+                if(text==undefined)
+                    return ',';
+                // "" added for number value
+                text=""+text;
+                if(text.indexOf(',')>-1 ||  /\r|\n/.exec(text))
+                    return "\""+text.replace(/\r?\n|\r/g, " ")+"\",";
+                else
+                    return text+",";
+            };
+            csv += parseString(contact.get('_id'));
+            csv += parseString(contact.get('subdomain'));
+            csv += parseString(contact.get('customDomain'));
+            csv += parseString(contact.getSignUpDate());
+            csv += parseString(contact.get('trialDaysRemaining'));
+            csv += parseString(contact.getBillingPlan());
+            csv += parseString(contact.getBillingZip());
+            csv += parseString(contact.getBillingState());
+            csv += '\n';
+            callback();
+        }, function(err){
+            cb(err, csv);
+        });
+    },
+
+
 });
 
 module.exports = new api({version:'2.0'});

@@ -12,10 +12,7 @@
         $scope.organizations=[];
 
         $scope.loadingFilter = true;
-        if (!$state.current.sort) {
-            $scope.order = "reverse";
-        }
-
+        
         $scope.default_image_url = "/admin/assets/images/default-user.png";
 
         $scope.bulkActionChoices = [
@@ -30,7 +27,7 @@
 
 
         $scope.getCustomers = function () {
-            CustomerService.getPagedCustomers($scope.pagingParams, checkIfFieldSearch(), function(customers){
+            CustomerService.getPagedCustomers($scope.pagingParams, checkIfFieldSearch(), function(customers){                
                 $scope.customers = customers.results;
                 $scope.customerCount = customers.total;
                 drawPages();
@@ -62,8 +59,6 @@
 
 
         $scope.viewSingle = function (customer) {
-            var tableState = $scope.getSortOrder();
-            $state.current.sort = tableState.sort;
             $location.path('/customers/' + customer._id);
         };
 
@@ -73,30 +68,22 @@
          * - getters for the sort on the table
          */
 
-        $scope.getters = {
-            created: function (value) {
-                return value.created.date || -1;
-            },
-            modified: function (value) {
-                return value.modified.date;
-            },
 
-            trialDays: function(value){
-                var _days = 'N/A';
-                if(value.billing && value.billing.plan == 'NO_PLAN_ARGUMENT'){
-                    _days = value.trialDaysRemaining
-                }
-                if(value.billing && value.billing.plan != 'NO_PLAN_ARGUMENT'){
-                    _days = 'N/A';
-                }
-                return _days;
+        $scope.filterCustomers = function () {
+            $scope.pagingParams.showFilter = !$scope.pagingParams.showFilter;
+            setDefaults();
+            if (!$scope.pagingParams.showFilter){
+                clearFilter();
             }
         };
 
-
-        $scope.filterCustomers = function () {
-          $scope.showFilter = !$scope.showFilter;
-        };
+        function showFilter() {
+            $scope.pagingParams.showFilter = !$scope.pagingParams.showFilter;
+            setDefaults();
+            if (!$scope.pagingParams.showFilter){
+                clearFilter();
+            }
+        }
 
 
 
@@ -116,37 +103,6 @@
             "created": true,
             "modified": true
         };
-
-
-        $scope.selectAllClickFn = function ($event) {
-            $event.stopPropagation();
-            if ($scope.selectAllChecked) {
-                $scope.selectAllChecked = false;
-            } else {
-                $scope.selectAllChecked = true;
-            }
-            $scope.displayedCustomers.forEach(function(customer, index) {
-                customer.isSelected = $scope.selectAllChecked;
-            });
-        };
-
-
-        $scope.customerSelectClickFn = function ($event, customer) {
-            $event.stopPropagation();
-            if (customer.isSelected) {
-                customer.isSelected = false;
-            } else {
-                customer.isSelected = true;
-            }
-        };
-
-        $scope.clearSelectionFn = function () {
-            $scope.selectAllChecked = false;
-            $scope.displayedCustomers.forEach(function(customer, index) {
-                customer.isSelected = $scope.selectAllChecked;
-            });
-        };
-
         $scope.openSimpleModal = function (modal) {
             //$scope.orgId = LocalAcObject.getter().orgId;
             var _modal = {
@@ -270,13 +226,13 @@
 
 
         function setDefaults() {
-            CustomerPagingService.skip = $scope.pagingParams.skip;
-            CustomerPagingService.page = $scope.pagingParams.curPage;
+            CustomerPagingService.skip = angular.copy($scope.pagingParams.skip);
+            CustomerPagingService.page = angular.copy($scope.pagingParams.curPage);
             CustomerPagingService.globalSearch = angular.copy($scope.pagingParams.globalSearch);
             CustomerPagingService.fieldSearch = angular.copy($scope.pagingParams.fieldSearch);
-            CustomerPagingService.showFilter = $scope.pagingParams.showFilter;
-            CustomerPagingService.sortBy = $scope.pagingParams.sortBy;
-            CustomerPagingService.sortDir = $scope.pagingParams.sortDir;
+            CustomerPagingService.showFilter = angular.copy($scope.pagingParams.showFilter);
+            CustomerPagingService.sortBy = angular.copy($scope.pagingParams.sortBy);
+            CustomerPagingService.sortDir = angular.copy($scope.pagingParams.sortDir);
 
         }
 
@@ -341,16 +297,6 @@
             }
         }, true);
 
-
-        function showFilter() {
-            $scope.pagingParams.showFilter = !$scope.pagingParams.showFilter;
-            setDefaults();
-            if (!$scope.pagingParams.showFilter){
-                clearFilter();
-            }
-        }
-
-
         function clearFilter() {
             $scope.pagingParams.fieldSearch = {};
         }
@@ -393,5 +339,53 @@
             $scope.username = "";
             $scope.password = "";
         }
+        /// EXPORT
+
+        $scope.selectAllClickFn = function ($event) {
+            $event.stopPropagation();
+            if ($scope.selectAllChecked) {
+                $scope.selectAllChecked = false;
+            } else {
+                $scope.selectAllChecked = true;
+            }
+            $scope.customers.forEach(function (customer) {
+                customer.isSelected = $scope.selectAllChecked;
+            });
+        };
+
+        $scope.clearSelectionFn = function () {
+            $scope.selectAllChecked = false;
+            $scope.customers.forEach(function (customer) {
+                customer.isSelected = $scope.selectAllChecked;
+            });
+        };
+
+        $scope.customerSelectClickFn = function ($event, customer) {
+            $event.stopPropagation();
+            if (customer.isSelected) {
+                customer.isSelected = false;
+            } else {
+                customer.isSelected = true;
+            }
+        };
+
+        $scope.selectedCustomersFn = function () {
+            var exportCustomers = _.filter($scope.customers, function (customer) {
+                return customer.isSelected;
+            });
+            $scope.exportText = exportCustomers.length ? "Export Selected " + exportCustomers.length : "Export";
+            return exportCustomers;
+        };
+
+        $scope.exportCustomersFn = function () {
+            if ($scope.selectedCustomersFn().length > 0) {
+                CustomerService.exportCsvCustomers(_.pluck($scope.selectedCustomersFn(), '_id'), null);
+            } else {
+                CustomerService.exportCsvCustomers(null, $scope.pagingParams);
+            }
+            $scope.clearSelectionFn();
+            toaster.pop('success', 'Customer export started.');
+        };
+
     }]);
 }(angular));
