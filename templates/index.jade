@@ -14,7 +14,9 @@ block content
             script(type="text/ng-template" id="cachedTemplate")
                 | !{templates}
         div(ng-view, class="page")
-
-        include ../public/scripts/modals/product-details-modal.html
-        include ../public/scripts/modals/donation-modal.html
-        include ../public/scripts/modals/product-cart-modal.html
+        if _.contains(componentTypes, 'products')
+            include ../public/scripts/modals/product-details-modal.html        
+            include ../public/scripts/modals/product-cart-modal.html
+        
+        if _.contains(componentTypes, 'ssb-form-donate')
+            include ../public/scripts/modals/donation-modal.html
