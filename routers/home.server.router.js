@@ -491,7 +491,7 @@ _.extend(router.prototype, BaseRouter.prototype, {
          *  - if(orgId===5 && account.activated===false)
          *      serve the page from org admin host
          */
-        if(req.session.orgId === 5 && req.session.activated === false) {
+        if(req.session.activated === false && (req.session.orgId === 5 || req.session.orgId === 7)) {
             self.log.debug('Serving orgAdmin page');
             orgManager.getAdminAccountByOrgId(accountId, null, 5, function(err, adminAccount){
                 if(adminAccount && adminAccount.id()) {
