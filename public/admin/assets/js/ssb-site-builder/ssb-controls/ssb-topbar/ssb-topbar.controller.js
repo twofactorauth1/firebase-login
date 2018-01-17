@@ -71,7 +71,8 @@ function ssbSiteBuilderTopbarController($scope, $rootScope, $timeout, $attrs, $f
         vm.state.pendingWebsiteChanges = false;
         SimpleSiteBuilderService.website = angular.copy(vm.state.originalWebsite);
         SimpleSiteBuilderService.page = angular.copy(vm.state.originalPage);
-        vm.hideActiveToolTips();
+        vm.hideActiveToolTips(); 
+        vm.uiState.activeElement = {};
     }
 
     function saveWebsite() {
