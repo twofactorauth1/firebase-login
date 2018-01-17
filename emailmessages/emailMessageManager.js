@@ -25,9 +25,12 @@ var serialize = require('node-serialize');
 var sanitizeHtml = require('sanitize-html');
 var sg = require('sendgrid')(sendgridConfig.API_KEY);
 var subjectPrefix = '';
+var promotionUnsubscribeUrl =  sendgridConfig.PROD_UN_SUBSCRIBE_URL;
 if(appConfig.nonProduction === true) {
     subjectPrefix = '[TEST] ';
+    promotionUnsubscribeUrl =  sendgridConfig.TEST_UN_SUBSCRIBE_URL;
 }
+require('../promotions/model/promotionUnsubscribe');
 
 var s3dao = require('../dao/integrations/s3.dao');
 var s3Config = require('../configs/aws.config');
@@ -1723,6 +1726,32 @@ var emailMessageManager = {
                     cb(null);
                 });
             },
+            function(cb){
+                var optRegexp = [];
+                toAddressAry.forEach(function(opt){
+                    optRegexp.push(  new RegExp(opt, "i") );
+                });
+                var query = {
+                    email: {$in:optRegexp}
+                }
+                dao.findMany(query, $$.m.promotionUnsubscribe, function(err, list){
+                    if(err) {
+                        self.log.warn('Error getting unsubscribed emails:', err);
+                        cb(null, null);
+                    } else {
+                        var emailLists = [];
+                        _.each(list, function(email){
+                            if(email && email.get("email")){
+                                emailLists.push(email.get("email"));
+                            }
+                        })
+                        emailLists = _.map(emailLists, function(email){return email.toLowerCase()});  
+                        toAddressAry = _.map(toAddressAry, function(email){return email.toLowerCase()});        
+                        toAddressAry = _.difference(toAddressAry, emailLists);
+                        cb();
+                    }
+                })
+            },
             function(cb) {
                 var request = sg.emptyRequest();
                 request.method = 'POST';
@@ -1756,7 +1785,10 @@ var emailMessageManager = {
                                 var p = {
                                     to: [
                                         {email:email}
-                                    ]
+                                    ],
+                                    substitutions:{
+                                        unsubscribe_url: 'To stop receiving this (Promotion Report) email, <a href=' + promotionUnsubscribeUrl + email + '>click here</a>'
+                                    }
                                 };
                                 personalizations.push(p);
                                 i++;
@@ -1787,7 +1819,7 @@ var emailMessageManager = {
                         content: [
                             {
                                 type:'text/html',
-                                value:html
+                                value: html + 'unsubscribe_url'
                             }
                         ],
                         "subject": subjectPrefix + subject,
@@ -1797,6 +1829,10 @@ var emailMessageManager = {
                             "click_tracking": {
                                 "enable": true,
                                 "enable_text": true
+                            },
+                            "subscription_tracking":{
+                                "enable": true,
+                                "substitution_tag": 'unsubscribe_url'
                             }
                         },
                         "attachments": [
