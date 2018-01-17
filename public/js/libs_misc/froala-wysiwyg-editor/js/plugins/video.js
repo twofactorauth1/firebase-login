@@ -584,15 +584,20 @@
 
     // insert media manager video
     function insertByMediaAsset (link, current_video) {
-
+      var width = editor.opts.videoDefaultWidth;
       $current_video = current_video;
-      var width = current_video[0].children[0].clientWidth ||editor.opts.videoDefaultWidth;
-      var height = current_video[0].children[0].clientHeight || 360;
-
-      if (width && width != 'auto') {
-        width = width + 'px';
+      var video="";
+      if($current_video !== undefined){
+           width = current_video[0].children[0].clientWidth || editor.opts.videoDefaultWidth;
+           height = current_video[0].children[0].clientHeight || 360;
+           video = '<video height="'+height+'" width="'+width+'" controls><source src="'+link+'"></video>';
       }
-      var video = '<video height="'+height+'" width="'+width+'" controls><source src="'+link+'"></video>';
+      else{
+          if (width && width != 'auto') {
+            width = width + 'px';
+          }
+          video = '<video  width="'+width+'" controls><source src="'+link+'"></video>';
+      }
 
       if (video) {
         insert(video);
