@@ -211,10 +211,8 @@
             console.warn('After setStyles:', vm.elementData);
 		}
 
-		function getStylesForModel() {
-
-			var data = {};
-
+		function getStylesForModel() { 
+			var data = {};  
 			if (pvm.component.elementStyles && pvm.component.elementStyles[vm.elementModelName]) {
 				if (!vm.isNestedModelProp) {
 
@@ -479,8 +477,8 @@
 
 						}
 		                break;
-		            case 1:
-		                if (component && component.spacing) {
+					case 1: 
+					 if (component && component.spacing) {
 							if (component.spacing.ptsm || component.spacing.ptmd || component.spacing.pt) {
 								_style = (component.spacing.ptsm || component.spacing.ptmd || component.spacing.pt);
 								if(_style.indexOf('%') > 0){
@@ -545,11 +543,10 @@
 								var _ml = component.spacing.mlsm || component.spacing.mlmd || component.spacing.ml;
 								if(_ml.indexOf('%') > 0){
 									_style = "";
-								}
-								else{
-									_style = "px";
-								}
-								styleString += _ml == 'auto' ? 'margin-left: ' + _ml + ';float: none;' : 'margin-left: ' +  + _style + ';';
+								} else if(typeof _ml ==="number" || !isNaN(_ml)){ 
+									_ml=_ml+ "px";
+								} 
+								styleString += _ml == 'auto' ? 'margin-left: ' + _ml + ';float: none;' : 'margin-left: ' + _ml  + ';';
 							}
 
 							if (component.spacing.mrsm || component.spacing.mrmd || component.spacing.mr) {
@@ -786,9 +783,7 @@
                                        var isPx = "";
                                        (component.spacing.mw.toLowerCase().indexOf('px') === -1) ? isPx="px" : isPx = "";
                                        styleString +=  'max-width: ' + component.spacing.mw + isPx +';margin-left:auto!important;margin-right:auto!important;';
-                                    }
-                                    else
-                                    {
+                                    }else{
                                        styleString +=  'max-width: ' + component.spacing.mw + ';margin-left:auto!important;margin-right:auto!important;';
                                     }
 
@@ -912,7 +907,7 @@
 				applyStyles();
 			}
 
-			if(!$attrs.isEdit){
+			if(!$attrs.isEdit){ 
 				//$timeout(function() {
 					vm.elementStyleVar = elementStyle(false);
 					vm.showHideClassVar = showHideClass();
