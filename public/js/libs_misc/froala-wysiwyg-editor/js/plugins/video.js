@@ -32,7 +32,7 @@
     }
 }(function ($) {
 
-  
+
 
   $.extend($.FE.POPUP_TEMPLATES, {
     'video.insert': '[_BUTTONS_][_BY_URL_LAYER_][_EMBED_LAYER_][_UPLOAD_LAYER_][_MEDIA_LAYER_][_PROGRESS_BAR_]',
@@ -314,8 +314,9 @@
       var replaced = false;
 
       // If current video found we have to replace it.
+      var classes = 'fr-jiv fr-video';
       if ($current_video) {
-
+         classes = $current_video[0].className;
         // Remove the old video.
         remove();
 
@@ -323,7 +324,7 @@
         replaced = true;
       }
 
-      editor.html.insert('<span contenteditable="false" draggable="true" class="fr-jiv fr-video">' + embedded_code + '</span>', false, editor.opts.videoSplitHTML);
+      editor.html.insert('<span contenteditable="false" draggable="true" class="'+classes+'">' + embedded_code + '</span>', false, editor.opts.videoSplitHTML);
 
       editor.popups.hide('video.insert');
 
@@ -531,7 +532,7 @@
       $message_header.focus();
     }
 
-    
+
 
     /**
      * Insert video by URL.
@@ -582,14 +583,16 @@
 
 
     // insert media manager video
-    function insertByMediaAsset (link, current_video) {     
-      
-      $current_video = current_video;       
-      var width = editor.opts.videoDefaultWidth;
+    function insertByMediaAsset (link, current_video) {
+
+      $current_video = current_video;
+      var width = current_video[0].children[0].clientWidth ||editor.opts.videoDefaultWidth;
+      var height = current_video[0].children[0].clientHeight || 360;
+
       if (width && width != 'auto') {
         width = width + 'px';
       }
-      var video = '<video width="'+width+'" controls><source src="'+link+'"></video>';
+      var video = '<video height="'+height+'" width="'+width+'" controls><source src="'+link+'"></video>';
 
       if (video) {
         insert(video);
@@ -605,13 +608,13 @@
 
     // insert video using iframe src
     function insertUsingIframe (link) {
-      var _iframe = '<iframe width="640" height="360" src="{url}" frameborder="0" allowfullscreen></iframe>' 
+      var _iframe = '<iframe width="640" height="360" src="{url}" frameborder="0" allowfullscreen></iframe>'
       var stringToAppend = "?autoplay=false";
       if(link.indexOf("?") > -1){
         stringToAppend = "&autoplay=false";
       }
       link += stringToAppend;
-      var video = _iframe.replace(/\{url\}/, link);   
+      var video = _iframe.replace(/\{url\}/, link);
 
       if (video) {
         insert(video);

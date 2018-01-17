@@ -175,11 +175,16 @@ app.directive('paymentFormComponent', ['$q', 'paymentService', 'userService', 'c
 								var addressObj = results[0];
 								if(addressObj.types && addressObj.types.length){
 									if(_.contains(addressObj.types, 'postal_code')){
-										var obj = _.find(addressObj.address_components, function(c){
-											return _.contains( c.types, 'administrative_area_level_1')
+										var countryObj = _.find(addressObj.address_components, function(c){
+											return _.contains( c.types, 'country')
 										})
-										if(obj){
-											billingState = obj.short_name;
+										if(countryObj && countryObj.short_name == 'US'){
+											var obj = _.find(addressObj.address_components, function(c){
+												return _.contains( c.types, 'administrative_area_level_1')
+											})
+											if(obj){
+												billingState = obj.short_name;
+											}
 										}
 									}
 								}								
@@ -408,11 +413,16 @@ app.directive('paymentFormComponent', ['$q', 'paymentService', 'userService', 'c
 								var addressObj = results[0];
 								if(addressObj.types && addressObj.types.length){
 									if(_.contains(addressObj.types, 'postal_code')){
-										var obj = _.find(addressObj.address_components, function(c){
-											return _.contains( c.types, 'administrative_area_level_1')
+										var countryObj = _.find(addressObj.address_components, function(c){
+											return _.contains( c.types, 'country')
 										})
-										if(obj){
-											billingState = obj.short_name;
+										if(countryObj && countryObj.short_name == 'US'){
+											var obj = _.find(addressObj.address_components, function(c){
+												return _.contains( c.types, 'administrative_area_level_1')
+											})
+											if(obj){
+												billingState = obj.short_name;
+											}
 										}
 									}
 								}								
