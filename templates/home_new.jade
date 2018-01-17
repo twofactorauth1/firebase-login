@@ -31,8 +31,8 @@ block content
                   a(href="/reauth/#{val.id}")
                     div(class="account-logo")
                       if val.logo
-                        img(src="#{val.logo}")                    
-                    if val.orgId != 1 && val.orgId != 4 && val.orgId !=5 && val.orgId !=6
+                        img(src="#{val.logo}")
+                    if val.orgId != 1 && val.orgId != 4 && val.orgId !=5 && val.orgId !=6 && val.orgId !=7
                       span=val.subdomain+ domainPrefix + '.indigenous.io'
                     if val.subdomain && val.orgId == 1
                       span=val.subdomain+ domainPrefix + '.gorvlvr.com'
@@ -42,6 +42,8 @@ block content
                       span=val.subdomain + domainPrefix + '.leadsource.cc'
                     if val.subdomain && val.orgId == 6
                       span=val.subdomain + domainPrefix + '.amrvlvr.com'
+                    if val.subdomain && val.orgId == 7
+                      span=val.subdomain + domainPrefix + '.newplatform.net'
                     i.fa.fa-chevron-right.pull-right
                   div.clearfix
         // start: COPYRIGHT

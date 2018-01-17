@@ -765,7 +765,7 @@ var dao = {
                 };
                 self.findMany(query, fn);
             }
-        })
+        });
     },
 
     getAccountsByOrg: function(orgId, fn) {
