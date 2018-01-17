@@ -2530,6 +2530,32 @@ var copyutil = {
         });
 
 
+    },
+
+    updateAccountSignupDate :function(fn) {
+        var srcURL = mongoConfig.TEST_MONGODB_CONNECT;
+        //var srcURL = mongoConfig.PROD_MONGODB_CONNECT
+        var srcMongo = mongoskin.db(srcURL, {safe: true});
+
+        var accounts = srcMongo.collection('accounts');
+
+        accounts.find().toArray(function(err, accountArr){
+            async.each(accountArr, function(account, cb){
+                if(account.billing && account.billing.signupDate && _.isString(account.billing.signupDate)){
+                    account.billing.signupDate = moment(account.billing.signupDate).toDate();
+                    accounts.save(account, function(){
+                        cb();
+                    });
+                }
+                else{
+                    cb();
+                }
+                
+            }, function done(){
+                console.log('done');
+                fn();
+            });
+        });
     }
 };
 

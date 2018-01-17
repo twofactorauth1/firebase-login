@@ -854,6 +854,12 @@ module.exports = function(grunt) {
         dbCopyUtil.updateContactActivityTypes(done);
     });
 
+    grunt.registerTask('updateAccountSignupDate', 'updateAccountSignupDate', function(){
+        var done = this.async();
+        var dbCopyUtil = require('./utils/dbcopyutil');
+        dbCopyUtil.updateAccountSignupDate(done);
+    });
+
     grunt.registerTask('sendWebhookData', 'sendWebhookData', function() {
         var done = this.async();
         var jsonldbuilder = require('./utils/jsonldbuilder');
