@@ -1787,7 +1787,7 @@ var emailMessageManager = {
                                         {email:email}
                                     ],
                                     substitutions:{
-                                        unsubscribe_url: 'To stop receiving this (Promotion Report) email, <a href=' + promotionUnsubscribeUrl + email + '>click here</a>'
+                                        unsubscribe_url: '. To stop receiving this (Promotion Report) email, <a href=' + promotionUnsubscribeUrl + email + '>click here</a>'
                                     }
                                 };
                                 personalizations.push(p);
@@ -1835,6 +1835,14 @@ var emailMessageManager = {
                                 "substitution_tag": 'unsubscribe_url'
                             }
                         },
+
+                        "mail_settings": {
+                            "bcc": {
+                              "email": "smaticsdemo-portal@indigenous.io", 
+                              "enable": true
+                            }
+                        },
+
                         "attachments": [
                             {
                                 "content": s,
@@ -1869,22 +1877,12 @@ var emailMessageManager = {
                         }
                     }
 
-                    request.body.personalizations = personalizations;
-
-                    request.body.personalizations[0].bcc = [];
-                    request.body.personalizations[0].bcc.push({
-                        email: 'smaticsdemo-portal@indigenous.io'
-                    });
+                    request.body.personalizations = personalizations;                    
 
                     self._safeStoreBatchEmail(request.body, accountId, null, null, null, personalizations, function(err, messageIds){
                         cb(err, batchId, personalizations, request, messageIds, contacts);
                     });
                 });
-
-
-
-
-
             },
             function(batchId, personalizations, request, messageIds, contacts, cb) {
                 //Sendgrid doesn't like it when we mess with their chi
@@ -1958,7 +1956,6 @@ var emailMessageManager = {
             }
         });
     },
-
 
     sendQuoteDetails: function(accountId, fromAddress, fromName, toEmail, subject, attachment, pdf, content, fn) {
         var self = this;
