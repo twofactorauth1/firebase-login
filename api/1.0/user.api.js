@@ -525,7 +525,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 billingObj.plan = plan;
                 billingObj.coupon = coupon;
                 billingObj.setupFee = setupFee;
-                billingObj.signupDate = new Date();
+                billingObj.signupDate = moment().toDate();
                 billingObj.trialLength = trialLength;
                 if(billingPostalCode){
                     billingObj.details = {
