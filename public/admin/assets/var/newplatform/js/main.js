@@ -42,8 +42,8 @@ function ($rootScope, $state, $stateParams, $injector, $window, ENV) {
             isFooterFixed: false, // true if you want to initialize the template with fixed footer
             isMinimalAdminChrome: false, //minimal admin chrome for site builder experience
             theme: 'theme-6', // indicate the theme chosen for your project
-            logo: 'https://s3.amazonaws.com/indigenous-digital-assets/account_1377/LS_Logo_RGBsm.png', // relative path of the project logo
-            logo2: 'https://s3.amazonaws.com/indigenous-digital-assets/account_1377/LS_Logo_RGBsm.png', // relative path of the project logo
+            logo: 'https://s3.amazonaws.com/indigenous-digital-assets/test_account_3043/logo_1516225638512.png', // relative path of the project logo
+            logo2: 'https://s3.amazonaws.com/indigenous-digital-assets/test_account_3043/logo_1516225638512.png', // relative path of the project logo
             isAnalyticsDashboardMode: false // relative path of the project logo
 
 }
