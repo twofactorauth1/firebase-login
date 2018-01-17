@@ -504,7 +504,7 @@ _.extend(api.prototype, baseApi.prototype, {
     },
 
     _asyncMakeCSV: function(results, cb) {
-        var headers = ['ID', 'Subdomain', 'Custom Domain', 'Signup', 'Trial Days', 'Plan', 'Postcode', 'State'];
+        var headers = ['Customer Id', 'Subdomain', 'Custom Domain', 'Signup', 'Trial Days', 'Plan', 'Postcode', 'State'];
         
         var csv = headers.join(',') + '\n';
         var customers = results.results; 
