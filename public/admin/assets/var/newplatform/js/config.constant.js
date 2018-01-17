@@ -709,7 +709,7 @@ app.constant('JS_REQUIRES', {
 
 
 
-    'asideCtrl': 'assets/var/leadsource/js/controllers/asideCtrl.js',
+    'asideCtrl': 'assets/var/newplatform/js/controllers/asideCtrl.js',
     'toasterCtrl': 'assets/js/controllers/toasterCtrl.js',
     'sweetAlertCtrl': 'assets/js/controllers/sweetAlertCtrl.js',
     'mapsCtrl': 'assets/js/controllers/mapsCtrl.js',

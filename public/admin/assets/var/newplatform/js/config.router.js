@@ -37,7 +37,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
     // Set up the states
     $stateProvider.state('app', {
         url: "",
-        templateUrl: "/admin/assets/var/leadsource/views/app.html",
+        templateUrl: "/admin/assets/var/newplatform/views/app.html",
         resolve: loadSequence('modernizr', 'underscore', 'moment', 'angularMoment', 'uiSwitch', 'perfect-scrollbar-plugin', 'toaster', 'ngAside', 'chartjs', 'tc.chartjs', 'oitozero.ngSweetAlert', 'chatCtrl', 'smart-table', 'touchspin-plugin', 'slugifier', 'commonService', 'timeAgoFilter','angularFileUpload', 'ngTextTruncate', 'infinite-scroll', 'ui.select', 'blueimp', 'ngTagsInput', 'titleCase', 'bootstrap-confirmation', 'ladda', 'angular-ladda', 'uuid', 'formatText', 'asideCtrl', 'settingsCtrl', 'assetsService', 'mediaModalCtrl', 'xeditable', 'angular-percentage-filter', 'angular-clipboard', 'google-fonts', 'dashboardService', 'videogular', 'indi-login-modal', 'productTableFilter', 'ngCurrency', 'utilService', 'ngSticky', 'fixedHeaderTable','spectrum'),
         abstract: true
     }).state('app.dashboard', {
@@ -262,7 +262,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         resolve: loadSequence('onboardingCtrl')
     }).state('app.dohy', {
         url: '/dashboard',
-        templateUrl: "/admin/assets/var/leadsource/js/dashboard/dohy.html",
+        templateUrl: "/admin/assets/var/newplatform/js/dashboard/dohy.html",
         title: 'Dashboard',
         icon: 'ti-layout-media-left-alt',
         resolve: loadSequence('DOHYCtrl', 'dashboardService', 'DashboardWorkstreamTileComponentController', 'DashboardAnalyticTileComponentController', 'DashboardInboxComponentController', 'jsVideoUrlParser', 'highcharts', 'highmaps', 'highmaps-lib')
