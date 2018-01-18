@@ -120,7 +120,7 @@
                     <form>
                         <div class="col-sm-6 col-xs-12">
                             <div class="form-group margin-bottom-10">
-                                <p class="margin-top-10">Your Lead Source subdomain is <span class="text-bold">{{originalAccount.subdomain}}.leadsource.cc</span>
+                                <p class="margin-top-10">Your subdomain is <span class="text-bold">{{originalAccount.subdomain}}.newplatform.net</span>
                                     <span class="cl-effect-1">
                                         <a class="text-dark" ng-click="modifysub.show=true" ng-hide="modifysub.show">Modify</a>
                                         <a class="text-dark" ng-click="revertSubdomain()" ng-show="modifysub.show">Cancel</a>
@@ -169,7 +169,7 @@
                                     <span class="help-block">A favicon (pronounced “fave-icon”) is a small, iconic image that represents your website. Favicons are most often found in the address bar of your web browser, but they can also be used in lists of bookmarks in web browsers.</span>
                                     <div class="favicon-image">
                                         <p class="pagetitle text-adjust">{{website.title}}</p>
-                                        <p class="pageurl"><span ng-if="!account.domain">http://{{account.subdomain}}.leadsource.cc</span><span ng-if="account.domain">http://{{account.domain}}</span></p>
+                                        <p class="pageurl"><span ng-if="!account.domain">http://{{account.subdomain}}.newplatform.net</span><span ng-if="account.domain">http://{{account.domain}}</span></p>
 
                                         <img class="top-favicon" ng-if="website.settings.favicon" ng-src="{{ website.settings.favicon }}" err-src="assets/var/leadsource/images/leadsource-logo.png">
 

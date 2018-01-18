@@ -21,7 +21,7 @@ function ($rootScope, $state, $stateParams, $injector, $window, ENV) {
     // GLOBAL APP SCOPE
     // set below basic information
     $rootScope.app = {
-        name: 'LeadSource Portal', // name of your project
+        name: 'NewPlatform Portal', // name of your project
         author: 'Indigenous Software, INC', // author's name or company name
         description: 'An all in one solution for small to medium sized businesses.', // brief description
         version: '1.0', // current version
@@ -42,8 +42,8 @@ function ($rootScope, $state, $stateParams, $injector, $window, ENV) {
             isFooterFixed: false, // true if you want to initialize the template with fixed footer
             isMinimalAdminChrome: false, //minimal admin chrome for site builder experience
             theme: 'theme-6', // indicate the theme chosen for your project
-            logo: 'https://s3.amazonaws.com/indigenous-digital-assets/account_1377/LS_Logo_RGBsm.png', // relative path of the project logo
-            logo2: 'https://s3.amazonaws.com/indigenous-digital-assets/account_1377/LS_Logo_RGBsm.png', // relative path of the project logo
+            logo: 'https://s3.amazonaws.com/indigenous-digital-assets/test_account_3043/logo_1516225638512.png', // relative path of the project logo
+            logo2: 'https://s3.amazonaws.com/indigenous-digital-assets/test_account_3043/logo_1516225638512.png', // relative path of the project logo
             isAnalyticsDashboardMode: false // relative path of the project logo
 
 }
