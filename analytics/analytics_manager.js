@@ -3179,7 +3179,7 @@ module.exports = {
         var stageAry = [];
         var match = {
             $match:{
-                accountId:accountId                
+                accountId: accountId               
             }
         };
         if(isAggregate === true) {
@@ -3195,9 +3195,16 @@ module.exports = {
             var group = {
                 $group:{
                     _id: '$fingerprint',
-                    sessions:{$push:'$$ROOT'}
+                    sessions:{
+                         $push:{
+                            server_time_dt:'$server_time_dt',
+                            user_agent:'$user_agent',
+                            accountId:'$accountId',
+                            subdomain:'$subdomain'
+                         }
+                    }
                 }
-            };
+            }
             stageAry.push(group);
 
             dao.aggregateWithCustomStages(stageAry, $$.m.SessionEvent, function(err, results) {
