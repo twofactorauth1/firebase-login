@@ -3192,19 +3192,16 @@ module.exports = {
 
         stageAry.push(match);
         self._addAccountFilterByID(accountId, userId, isAggregate, match, function(err, newMatch){            
+            var sort = {
+                $sort:{'server_time':-1}
+            };
             var group = {
                 $group:{
-                    _id: '$fingerprint',
-                    sessions:{
-                         $push:{
-                            server_time_dt:'$server_time_dt',
-                            user_agent:'$user_agent',
-                            accountId:'$accountId',
-                            subdomain:'$subdomain'
-                         }
-                    }
+                    _id: '$fingerprint',                    
+                    sessions:{$push:'$$ROOT'}
                 }
-            }
+            };
+            stageAry.push(sort);
             stageAry.push(group);
 
             dao.aggregateWithCustomStages(stageAry, $$.m.SessionEvent, function(err, results) {
@@ -3212,7 +3209,20 @@ module.exports = {
                     self.log.error('Error getting fingerprints:', err);
                     fn(err);
                 } else {
-                    fn(err, results);
+                    var resultArr = [];
+                    _.each(results, function(result){
+                        if(result.sessions && result.sessions.length){
+                            resultArr.push({
+                                _id: result._id,
+                                server_time_dt: result.sessions[0].server_time_dt,
+                                accountId: result.sessions[0].accountId,
+                                subdomain: result.sessions[0].subdomain,
+                                orgId: result.sessions[0].orgId,
+                                user_agent: result.sessions[0].user_agent
+                            })
+                        }
+                    })
+                    fn(err, resultArr);
                 }
             });
         });

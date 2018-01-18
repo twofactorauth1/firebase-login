@@ -19,7 +19,13 @@ function siteTrafficController($scope, $state, $window, $modal, $stateParams, $a
         itemPerPage: 100,
 		showPages: 15
     }
-    
+
+	vm.viewFingerprintDetails = viewFingerprintDetails;
+
+	function viewFingerprintDetails(fingerprint){
+		$state.go('app.anonymousContact', {fingerprintId: fingerprint._id});
+	}    
+
     function init(element) {
         vm.element = element;
         TrafficService.getTrafficFingerprints().then(function(response){
