@@ -124,6 +124,12 @@ app.config(['$stateProvider', '$urlRouterProvider', '$controllerProvider', '$com
 				title: 'Single Contact',
 				icon: 'ti-layout-media-left-alt',
 				resolve: loadSequence('contactService', 'ngMap', 'offset', 'assetsService', 'toasterService', 'orderService','spectrum', 'organizationService')
+			}).state('app.website.traffic', {
+				url: '/site-traffic',
+				template: "<site-traffic-component></site-traffic-component>",
+				title: 'Anonymous Contact',
+				icon: 'ti-layout-media-left-alt',
+				resolve: loadSequence('siteTrafficController', 'trafficService')
 			}).state('app.anonymousContact', {
 				url: '/contacts/fingerprint/:fingerprintId',
 				template: "<anonymous-contact-details-component></anonymous-contact-details-component>",

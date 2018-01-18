@@ -3171,6 +3171,54 @@ module.exports = {
 
     },
 
+    getTrafficFingerprints: function(accountId, userId, isAggregate, orgId, fn) {
+        var self = this;
+        self.log = _log;
+        self.log.trace(accountId, userId, '>> getTrafficFingerprints');
+        
+        var stageAry = [];
+        var match = {
+            $match:{
+                accountId: accountId               
+            }
+        };
+        if(isAggregate === true) {
+            delete match.$match.accountId;
+        }
+        if(orgId !== null) {
+            match.$match.orgId = orgId;
+        }
+
+
+        stageAry.push(match);
+        self._addAccountFilterByID(accountId, userId, isAggregate, match, function(err, newMatch){            
+            var group = {
+                $group:{
+                    _id: '$fingerprint',
+                    sessions:{
+                         $push:{
+                            server_time_dt:'$server_time_dt',
+                            user_agent:'$user_agent',
+                            accountId:'$accountId',
+                            subdomain:'$subdomain'
+                         }
+                    }
+                }
+            }
+            stageAry.push(group);
+
+            dao.aggregateWithCustomStages(stageAry, $$.m.SessionEvent, function(err, results) {
+                if(err) {
+                    self.log.error('Error getting fingerprints:', err);
+                    fn(err);
+                } else {
+                    fn(err, results);
+                }
+            });
+        });
+
+    },
+
     /*
      * If duration is 7 days or less, granularity will be 'hours'.  Else 'days'
      */

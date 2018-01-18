@@ -103,6 +103,8 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url('admin/404s'), this.isAuthAndSubscribedApi.bind(this), this.getAdmin404s.bind(this));
         app.get(this.url('admin/reports/daily404s'), this.isAuthAndSubscribedApi.bind(this), this.getAdminDaily404s.bind(this));
 
+        app.get(this.url('traffic/list/fingerprint'), this.isAuthAndSubscribedApi.bind(this), this.getTrafficFingerprints.bind(this));
+
     },
 
 
@@ -2942,7 +2944,21 @@ _.extend(api.prototype, baseApi.prototype, {
             self.log.warn(accountId, userId, 'Non-main account attempted to call admin reports!');
             return self.send403(resp);
         }
-    }
+    },
+
+
+    getTrafficFingerprints: function(req, resp) {
+        var self = this;
+        var userId = self.userId(req);
+        var accountId = self.accountId(req);
+        self.log.trace(accountId, userId, '>> getTrafficFingerprints');
+
+        analyticsManager.getTrafficFingerprints(accountId, userId, null, null, function(err, value){
+            self.log.trace(accountId, userId, '<< getTrafficFingerprints');
+            self.sendResultOrError(resp, err, value, 'Error getting fingerprints');
+        });
+
+    },
 });
 
 module.exports = new api();
