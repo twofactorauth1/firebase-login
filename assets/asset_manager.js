@@ -6,7 +6,8 @@
  */
 
 
-var assetDao = require('./dao/asset.dao.js');
+var assetDao = require('./dao/asset.dao.js'); 
+var accountDao = require('../dao/account.dao');
 var log = $$.g.getLogger("asset_manager");
 var s3dao = require('../dao/integrations/s3.dao.js');
 var awsConfig = require('../configs/aws.config');
@@ -260,52 +261,63 @@ module.exports = {
 
     listPagedAssets: function(accountId, skip, limit, filterType, search, fn) {
         var self = this;
-        self.log = log;
-        
-        var query = {
-            'accountId': accountId
-        };
-
-        var andQuery = [];
-        
-        if(filterType){
-            var typeMimes = {
-                image: ['image/png', 'image/jpeg', 'image/gif', 'image/*' ,'image/x-ms-bmp','image/svg+xml',"image/bmp"],
-                video: ['video/mpeg', 'video/mp4', 'video/webm', 'video/x-flv', 'video/x-ms-wmv', 'video/*','video/quicktime' ],
-                audio: ['audio/mpeg', 'audio/mp3', 'audio/*'],
-                document: ['application/octet-stream', 'application/pdf', 'text/plain']
-            };
-            var mimeTypesArray = typeMimes[filterType];
-            console.log(filterType)
-            if(filterType === 'fonts'){
-                andQuery.push({'type': 'fonts'}); 
+        self.log = log; 
+        var query = { 'accountId': accountId };
+        async.waterfall([
+            function (cb) {
+                accountDao.getAccountByID(accountId, function (err, account) { 
+                    var orgId = account.get("orgId") || 0;
+                    cb(err, orgId);
+                });
+            },
+            function (orgId, cb) {
+                var andQuery = [];
+                if (filterType && filterType !== 'shared') {
+                    var typeMimes = {
+                        image: ['image/png', 'image/jpeg', 'image/gif', 'image/*', 'image/x-ms-bmp', 'image/svg+xml', "image/bmp"],
+                        video: ['video/mpeg', 'video/mp4', 'video/webm', 'video/x-flv', 'video/x-ms-wmv', 'video/*', 'video/quicktime'],
+                        audio: ['audio/mpeg', 'audio/mp3', 'audio/*'],
+                        document: ['application/octet-stream', 'application/pdf', 'text/plain'],
+                    };
+                    var mimeTypesArray = typeMimes[filterType];
+                    console.log(filterType)
+                    if (filterType === 'fonts') {
+                        andQuery.push({ 'type': 'fonts' });
+                    } else {
+                        andQuery.push({ 'mimeType': { $in: mimeTypesArray } });
+                    }
+                }
+                if (search) {
+                    search = search.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+                    var regex = new RegExp('\\.*' + search + '\.*', 'i');
+                    var searchQuery = { filename: regex };
+                    andQuery.push(searchQuery);
+                }
+                self.log.debug('>> listPagedAssets');
+                if (andQuery.length) {
+                    query["$and"] = andQuery;
+                }
+                var sharedQuery={'$and': [ { isShared: true }, { orgId: orgId} ]};
+                if(filterType === 'shared'){
+                    query=sharedQuery;
+                }else{
+                    query={'$or':[query,sharedQuery]};
+                }
+                console.log(query);
+                assetDao.findWithFieldsLimitOrderAndTotal(query, skip, limit, 'created.date', null, $$.m.Asset, -1, function (err, list) {
+                    cb(err, list);
+                });
             }
-            else{
-                andQuery.push({'mimeType': {$in: mimeTypesArray}});
-            }       
-        }
-
-        if(search){
-            search = search.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');            
-            var regex = new RegExp('\\.*'+search+'\.*', 'i');
-            var searchQuery = {filename:regex};
-            andQuery.push(searchQuery);
-        }
-        self.log.debug('>> listPagedAssets');
-        if(andQuery.length){
-             query["$and"] = andQuery;
-        }
-        assetDao.findWithFieldsLimitOrderAndTotal(query, skip, limit, 'created.date', null, $$.m.Asset, -1, function(err, list){
-            if(err) {
+        ], function (err, list) {
+            if (err) {
                 self.log.error('Exception in listPagedAssets: ' + err);
                 fn(err, null);
             } else {
                 self.log.debug('<< listPagedAssets');
                 fn(null, list);
             }
-        });
-    },
-
+        }) 
+    }, 
     updateAssetChangeUrl: function(asset, userId, fn) {
         var self = this;
         self.log = log;

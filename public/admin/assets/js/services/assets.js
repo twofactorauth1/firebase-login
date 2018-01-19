@@ -66,8 +66,18 @@
     };
 
 
-      this.updateMatadata = function (asset, fn) {
+    this.updateMatadata = function (asset, fn) {
       var apiUrl = baseUrl + ['assets','cache', asset._id].join('/');
+      $http.post(apiUrl, asset)
+        .error(function (data, status) {
+          fn(data, status);
+        })
+        .success(function (data, status) {
+          fn(data, status);
+        });
+    };
+    this.shareUnshare = function (asset, fn) {
+      var apiUrl = baseUrl + ['assets','shareUnshare', asset._id].join('/');
       $http.post(apiUrl, asset)
         .error(function (data, status) {
           fn(data, status);

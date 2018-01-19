@@ -47,6 +47,9 @@
                         <a href="" data-active="font" ng-click="insertMediaType !== undefined && insertMediaType !== 'fonts' || m.filterAssets('fonts', true)" ng-class="{'disabled': insertMediaType !== undefined && insertMediaType !== 'fonts'}">
                                 Fonts
                             </a>
+                        <a href="" data-active="shared" ng-click="insertMediaType !== undefined && insertMediaType !== 'shared' || m.filterAssets('shared', true)" ng-class="{'disabled': insertMediaType !== undefined && insertMediaType !== 'shared'}">
+                             Shared
+                        </a>
                     </li>
                 </ul>
                 <div class="clearfix"></div>
@@ -83,7 +86,7 @@
                             <div class="btn-group fm-group" style="display: block;z-index:1;">
                                 <button type="button" class="btn btn-default dropdown-toggle fm-toggle" data-toggle="dropdown"><span class="caret"></span>
                                 </button>
-                                <ul class="dropdown-menu fm-menu" role="menu">
+                                <ul class="dropdown-menu fm-menu" role="menu" ng-if="asset.isShared !== true || (asset.isShared==true && account.isOrgAdmin == true) ">
                                     <li class="hidden">
                                         <a href="#"><i class="fa fa-share"></i> Share</a>
                                     </li>
@@ -108,9 +111,20 @@
                                     <li>
                                         <a href="" ng-click="m.deleteAsset(asset)"><i class="fa fa-trash-o"></i> Delete</a>
                                     </li>
-                                    <li>
+                                    <li >
                                         <a href="" ng-click="m.addRemoveAssetFromCache(asset)"><i class="fa fa-database"></i> {{asset.isCached==false? "Cache ":"Don't Cache"}}</a>
                                     </li>
+                                    <li ng-if="account.isOrgAdmin == true" >
+                                        <a href="" ng-click="m.shareUnshare(asset)"><i class="fa fa fa-share-alt"></i> {{asset.isShared==true? "UnShare ":"Share"}}</a>
+                                    </li>
+                                </ul>
+                                <ul class="dropdown-menu fm-menu" role="menu" ng-if="(asset.isShared == true && account.isOrgAdmin !== true)"> 
+                                    <li>
+                                        <a clipboard text="'https:' + asset.url" on-copied="successCopy()"><i class="fa fa-link"></i> Copy Link</a>
+                                    </li>
+                                    <li>
+                                        <a href="{{asset.url}}" target="_blank" download><i class="fa fa-download"></i> Download</a>
+                                    </li> 
                                 </ul>
                             </div>
                             <div class="thmb-prev">
@@ -124,9 +138,12 @@
                                     <span ng-switch-default class="fa fa-file-o" style="font-size: 96px;"></span>
                                 </div>
                             </div>
-                            <h5 class="fm-title">
-                                    <a editable-text='asset.filename' e-required e-placeholder='Enter name' onaftersave='m.onAssetUpdateCallback(asset)' onbeforesave="validateAsset($data)"><span class="text-adjust-span">{{asset.filename}}{{asset.isCached==false?' (Uncached)':''}}</span></a>
-                                </h5>
+                            <h5 class="fm-title" ng-if="asset.isShared !== true || (asset.isShared==true && account.isOrgAdmin == true) ">
+                                <a editable-text='asset.filename' e-required e-placeholder='Enter name' onaftersave='m.onAssetUpdateCallback(asset)' onbeforesave="validateAsset($data)"><span class="text-adjust-span">{{asset.filename}}{{asset.isCached==false?' (Uncached)':''}}</span></a>
+                            </h5>
+                            <h5  class="fm-title" ng-if="(asset.isShared == true && account.isOrgAdmin !== true)">
+                                <a  class="ng-scope editable editable-click" ><span class="text-adjust-span">{{asset.filename}}{{asset.isCached==false?' (Uncached)':''}}</span></a>
+                            </h5>
                             <small class="text-muted">{{asset.created.date | timeAgoFilter}}</small>
                         </div>
                     </div>

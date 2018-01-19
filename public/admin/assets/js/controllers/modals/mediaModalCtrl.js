@@ -565,6 +565,19 @@ app.controller('MediaModalCtrl', ['$scope', '$rootScope', 'mediaManagerConstant'
       }
     });
   };
+  $scope.m.shareUnshare = function (asset) { 
+    var originalAsset = angular.copy(asset);
+    originalAsset.isShared = originalAsset.isShared==false?true:false;
+    originalAsset.accountId = $scope.account._id;
+    AssetsService.shareUnshare(originalAsset, function (data, status) {
+      if (status == 200) {
+        $scope.cachebuster = new Date().getTime();
+        asset.url=data.url;
+        asset.isShared=data.isShared;
+        ToasterService.show('success', asset.isShared?'Asset shared.':'Asset unshared.');
+      }
+    });
+  };
 
 
 

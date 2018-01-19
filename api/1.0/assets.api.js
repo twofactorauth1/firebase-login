@@ -31,6 +31,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url('paged/list'), this.isAuthAndSubscribedApi.bind(this), this.listPagedAssets.bind(this));
         app.post(this.url(':id'), this.isAuthAndSubscribedApi.bind(this), this.updateAsset.bind(this));
         app.post(this.url('cache/:id'), this.isAuthAndSubscribedApi.bind(this), this.updateAssetMetadata.bind(this));
+        app.post(this.url('shareUnshare/:id'), this.isAuthAndSubscribedApi.bind(this), this.shareUnshare.bind(this));
         app.delete(this.url(':id'), this.isAuthAndSubscribedApi.bind(this), this.deleteAsset.bind(this));
 
         app.get(this.url('type/:type'), this.isAuthAndSubscribedApi.bind(this), this.getAssetsByType.bind(this));
@@ -519,7 +520,45 @@ _.extend(api.prototype, baseApi.prototype, {
 
     sendEditorUploadResult: function (resp, err, value) {
         resp.send({'link':value.url});
-    }
+    },
+    shareUnshare :function(req, res) {
+        var self = this;
+        self.log.debug('>> shareUnshare'); 
+        var assetId = req.params.id;
+        var accountId = parseInt(self.accountId(req));
+        var userId = self.userId(req);
+        assetManager.getAsset(assetId, function(err, savedAsset){
+            if(err) {
+                return self.wrapError(res, 404, 'Asset not found', 'Could not find asset with id [' + assetId + '].');
+            }
+            self.checkPermissionForAccount(req, self.sc.privs.MODIFY_ASSET, savedAsset.get('accountId'), function(err, isAllowed){
+                if(isAllowed !== true) {
+                    return self.send403(res);
+                } else {
+                    self.isOrgAdminUser(accountId, userId, req, function(err, isOrgAdminUser){
+                        self.getOrgId(accountId, userId, req, function(err, orgId){
+                            if(isOrgAdminUser === true) {
+                                var asset = new $$.m.Asset(req.body);
+                                asset.set('_id', assetId);
+                                asset.set('orgId', orgId);
+                                var created = asset.get('created'); 
+                                if (created && _.isString(asset.get('created').date)) {
+                                    created.date = moment(asset.date).toDate();
+                                } 
+                                assetManager.updateAsset(asset, userId, function(err, value) {
+                                    self.log.debug('<< shareUnshare');
+                                    self.sendResultOrError(res, err, value, "Error shareUnshare Asset");
+                                    self.createUserActivity(req, 'UPDATE_ASSET', null, null, function(){});
+                                });
+                            }else{
+                                return self.send403(res);
+                            }
+                        });
+                    }); 
+                }
+            });
+        });
+    },
 });
 
 module.exports = new api();
