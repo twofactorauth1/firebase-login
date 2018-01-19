@@ -1,0 +1,65 @@
+<section id="page-title" class="padding-top-15 padding-bottom-15">
+    <div class="row">
+        <div class="col-sm-8">
+            <h1 class="mainTitle">Customer Traffic</h1>
+            <span class="mainDescription" ng-if="!vm.uiState.loading"><widget-header-label count="{{vm.state.fingerPrints.length || 0}}" item="fingerprint"></widget-header-label>. <span ng-if="showFilteredRecords()"> ({{filteredCollection.length || 0 | number : 0}} in filtered view)</span></span>
+            <span class="mainDescription" ng-if="vm.uiState.loading">Loading fingerprints..</span>
+        </div>
+    </div>
+</section>
+<div st-table="displayedFingerprints" st-safe-src="vm.state.fingerPrints" st-filtered-collection ng-init="tableView='list'">
+        <div class="container-fluid container-fullw bg-white padding-top-0 padding-bottom-0">
+            <div class="col-sm-12">
+                <div class="panel panel-transparent row margin-bottom-0 btn-area-res">
+                    <div class="panel-body padding-left-0 padding-right-0">
+                        <div class="mob-row">
+                            <div class="fix-btn-1 padding-0">
+                                    <span class="input-icon">
+                                        <input type="text" st-search placeholder="Search by fingerprint, subdomain..." class="form-control">
+                                        <i class="ti-search"></i>
+                                    </span>
+                            </div>
+                            
+                        </div>
+                        <div class="mob-row">
+                            <div class="mob-sub-row padding-0 text-right   text-right " style="display: inline-block;float: right;">
+                                <div class="fix-btn grp padding-0 " >
+                                    <div class="btn-group ">
+                                        <button class="btn btn-info" ng-class="{'active': tableView == 'list'}" href="" ng-click="tableView = 'list'" tooltip-placement="top" tooltip="List">
+                                            <span class="fa fa-th-list"></span>
+                                        </button>
+                                        <button class="btn btn-info right-round" ng-class="{'active': tableView == 'grid'}" href="" ng-click="tableView = 'grid'" tooltip-placement="top" tooltip="Grid">
+                                            <span class="fa fa-th"></span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <table class="table table-striped table-hover bg-white margin-bottom-0" ng-class="{'grid': tableView == 'grid', 'bg-white table-list-view': tableView == 'list'}" fixed-header-table>
+            <thead ng-class="{'bg-white': tableView == 'grid'}" sticky offset="65" sticky-class="sticky-header-class">
+                <tr>                        
+                    <th st-sort="_id">Fingerprint</th>
+                    <th st-sort="subdomain">Subdomain</th>
+                    <th st-sort="server_time_dt">Last Seen</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="fingerprint in displayedFingerprints" class="" ng-click="vm.viewFingerprintDetails(fingerprint)">
+                    <td class="text-adjust-col"><strong>Fingerprint: </strong><span class="text-adjust-inner-content">{{fingerprint._id}}</span></td>
+                    <td class="text-adjust-col"><strong>Subdomain: </strong><span class="text-adjust-inner-content">{{fingerprint.subdomain}}</span></td>
+                    <td class="text-adjust-col"><strong>Last Seen: </strong><span class="text-adjust-inner-content">{{fingerprint.server_time_dt | date:'MMM d yy'}}</span></td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td class="text-center" st-custom-pagination="" st-displayed-pages="vm.uiState.showPages" st-items-by-page="vm.uiState.itemPerPage" colspan="6">
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+        <div class="load1 csspinner height-400" ng-show="vm.uiState.loading"></div>    
+</div>

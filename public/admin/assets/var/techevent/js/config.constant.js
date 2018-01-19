@@ -784,7 +784,17 @@ app.constant('JS_REQUIRES', {
     'ssbPostPageFilter': 'assets/js/ssb-site-builder/ssb-components/ssb-filters/ssb-post-page-filter.js',
     //*** Directives
     'mediaModal': 'assets/js/directives/mediadirective.js',
-    'fixedHeaderTable': 'assets/js/directives/fixed-header-table.js'
+    'fixedHeaderTable': 'assets/js/directives/fixed-header-table.js',
+    // Anonymous contact
+
+    'anonymousContactDetailsController': 'assets/js/contact-details/anonymous/anonymous-contact-details.controller.js',
+    'anonymousContactActivityController': 'assets/js/contact-details/anonymous/anonymous-contact-activity/anonymous-contact-activity.controller.js',
+    // Site Traffic
+    'siteTrafficController': 'assets/js/traffic/site-traffic/site-traffic.controller.js',
+    // Customer Traffic
+    'customerTrafficController': 'assets/js/traffic/customer-traffic/customer-traffic.controller.js',
+
+    'trafficService': 'assets/js/traffic/traffic-service.js'
   },
   //*** angularJS Modules
   modules: [

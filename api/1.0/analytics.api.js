@@ -104,6 +104,8 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url('admin/reports/daily404s'), this.isAuthAndSubscribedApi.bind(this), this.getAdminDaily404s.bind(this));
 
         app.get(this.url('traffic/list/fingerprint'), this.isAuthAndSubscribedApi.bind(this), this.getTrafficFingerprints.bind(this));
+        app.get(this.url('admin/traffic/list/fingerprint'), this.isAuthAndSubscribedApi.bind(this), this.getAdminTrafficFingerprints.bind(this));
+        app.get(this.url('traffic/:fingerprintId/activities'), this.isAuthAndSubscribedApi.bind(this), this.getFingerprintActivities.bind(this));
 
     },
 
@@ -2959,6 +2961,58 @@ _.extend(api.prototype, baseApi.prototype, {
         });
 
     },
+
+
+    getAdminTrafficFingerprints: function(req, resp) {
+        var self = this;
+        var userId = self.userId(req);
+        var accountId = self.accountId(req);
+        self.log.trace(accountId, userId, '>> getAdminTrafficFingerprints');
+        
+        if(accountId === appConfig.mainAccountID) {
+            analyticsManager.getTrafficFingerprints(accountId, userId, true, null, function(err, value){
+                self.log.trace(accountId, userId, '<< getAdminTrafficFingerprints');
+                self.sendResultOrError(resp, err, value, 'Error getting fingerprints');
+            });
+        } else if(urlUtils.getSubdomainFromRequest(req).isOrgRoot === true){
+            /*
+             * Check if we are a org admin
+             */
+            organizationDao.getByOrgDomain(urlUtils.getSubdomainFromRequest(req).orgDomain, function(err, organization){
+                if(err || !organization) {
+                    self.log.warn(accountId, userId, 'Non-main account attempted to call admin reports!');
+                    return self.send403(resp);
+                } else {
+                    if(organization.get('adminAccount') === accountId) {
+                        analyticsManager.getTrafficFingerprints(accountId, userId, true, organization.id(), function(err, value){                        
+                            self.log.trace(accountId, userId, '<< getAdminTrafficFingerprints');
+                            self.sendResultOrError(resp, err, value, 'Error getting fingerprints');
+                        });
+                    } else {
+                        self.log.warn(accountId, userId, 'Non-orgAdmin account attempted to call admin reports!');
+                        return self.send403(resp);
+                    }
+                }
+            });
+        } else {
+            self.log.warn(accountId, userId, 'Non-main account attempted to call admin reports!');
+            return self.send403(resp);
+        }
+    },
+
+    getFingerprintActivities: function(req, resp) {
+        var self = this;
+        var userId = self.userId(req);
+        var accountId = self.accountId(req);
+        var fingerprintId = req.params.fingerprintId;
+        self.log.trace(accountId, userId, '>> getFingerprintActivities');
+
+        analyticsManager.getFingerprintActivities(accountId, userId, fingerprintId, function(err, value){
+            self.log.trace(accountId, userId, '<< getFingerprintActivities');
+            self.sendResultOrError(resp, err, value, 'Error getting fingerprint activities');
+        });
+
+    }
 });
 
 module.exports = new api();

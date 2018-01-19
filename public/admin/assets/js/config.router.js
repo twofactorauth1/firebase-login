@@ -118,6 +118,12 @@ app.config(['$stateProvider', '$urlRouterProvider', '$controllerProvider', '$com
 				title: 'Customer Analytics',
 				icon: 'ti-layout-media-left-alt',
 				resolve: loadSequence('customerAnalyticsCtrl', 'customerService', 'userService', 'chartAnalyticsService', 'highcharts', 'highmaps', 'highmaps-lib', 'secTotime', 'dateRangePicker', 'ipCookie', 'analyticsWidgetStateService','spectrum')
+			}).state('app.customerTraffic', {
+				url: '/customer-traffic',
+				template: "<customer-traffic-component></customer-traffic-component>",
+				title: 'Platform Traffic',
+				icon: 'ti-layout-media-left-alt',
+				resolve: loadSequence('customerTrafficController', 'trafficService')
 			}).state('app.singleContact', {
 				url: '/contacts/:contactId',
 				template: "<contact-details-component></contact-details-component>",
@@ -127,7 +133,7 @@ app.config(['$stateProvider', '$urlRouterProvider', '$controllerProvider', '$com
 			}).state('app.website.traffic', {
 				url: '/site-traffic',
 				template: "<site-traffic-component></site-traffic-component>",
-				title: 'Anonymous Contact',
+				title: 'Site Traffic',
 				icon: 'ti-layout-media-left-alt',
 				resolve: loadSequence('siteTrafficController', 'trafficService')
 			}).state('app.anonymousContact', {
@@ -135,7 +141,7 @@ app.config(['$stateProvider', '$urlRouterProvider', '$controllerProvider', '$com
 				template: "<anonymous-contact-details-component></anonymous-contact-details-component>",
 				title: 'Anonymous Contact',
 				icon: 'ti-layout-media-left-alt',
-				resolve: loadSequence('contactService', 'ngMap', 'offset', 'assetsService', 'toasterService', 'orderService','spectrum', 'organizationService')
+				resolve: loadSequence('anonymousContactDetailsController', 'anonymousContactActivityController', 'contactService', 'ngMap', 'offset', 'assetsService', 'toasterService','spectrum', 'organizationService', 'trafficService')
 			}).state('app.singleCustomer', {
 				url: '/customers/:customerId',
 				templateUrl: "/admin/assets/views/customer-detail.html",
