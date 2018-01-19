@@ -29,28 +29,24 @@
             }
         });
         function getMaxWidth(_ml, _mr, _mw){
-                var _float = "float:none;";
-                var maxWidthStyle = "";
-                if(_ml === 'auto' && _mr === 'auto'){
-                    _float = 'float:none;margin-left:auto!important;margin-right:auto!important;'
-                }
-                _mw = _mw.toString();
-                    if(_mw == '100%' || _mw == 'auto') {
-                       maxWidthStyle =  'max-width: ' + _mw + ';' ;
-                    }
-                    else{
-                        if(_mw && _mw !== "" && _mw.indexOf("%") === -1){
-                           var isPx = "";
-                           (_mw.toLowerCase().indexOf('px') === -1) ? isPx="px" : isPx = "";
-                           maxWidthStyle =  'max-width: ' + _mw + isPx + ';' + _float;
-                        }
-                        else
-                        {
-                           maxWidthStyle =  'max-width: ' + _mw + ';' + _float;
-                        }
-
-              }
-             return maxWidthStyle;
+            var _float = "float:none;";
+            var maxWidthStyle = "";
+            if(_ml === 'auto' && _mr === 'auto'){
+                _float = 'float:none;margin-left:auto!important;margin-right:auto!important;'
+            }
+            _mw = _mw.toString();
+            if(_mw == '100%' || _mw == 'auto') {
+                maxWidthStyle =  'max-width: ' + _mw + ';' ;
+            }else{
+                if(_mw && _mw !== "" && _mw.indexOf("%") === -1){
+                    var isPx = "";
+                    (_mw.toLowerCase().indexOf('px') === -1) ? isPx="px" : isPx = "";
+                    maxWidthStyle =  'max-width: ' + _mw + isPx + ';' + _float;
+                } else{
+                    maxWidthStyle =  'max-width: ' + _mw + ';' + _float;
+                } 
+            }
+            return maxWidthStyle;
         }
         function sectionClass(section) {
             var classString = ' '; //col-xs-12 was messing up legacy
@@ -354,8 +350,12 @@
 
         function resizeSliderImagesToFullHeight(section) {
             if (section) {
+                if(section._id=="488a05d3-69aa-4a4b-9975-5591cbefa4b1")debugger
                 var sectionElement = angular.element("#section_" + section._id);
-                if (sectionElement.hasClass("ssb-page-section-layout-nav-hero-v2") || sectionElement.hasClass("ssb-page-section-layout-nav-hero-v3") || sectionElement.hasClass("ssb-page-section-layout-nav-hero-v4")) {
+                var isHeroWithTestimonal = sectionElement.hasClass("ssb-page-section-layout-nav-hero-v2") ||
+                     sectionElement.hasClass("ssb-page-section-layout-nav-hero-v3") ||
+                      sectionElement.hasClass("ssb-page-section-layout-nav-hero-v4");
+                if (isHeroWithTestimonal) {
                     var sectionElementTextHeight = 120,
                         innerSectionHeaderElement = sectionElement.find(".navigation-header"),
                         innerSectionTextElement;
@@ -365,26 +365,22 @@
                     innerSectionTextElement = sectionElement.find(".ssb-nav-hero-text");
                     if (innerSectionHeaderElement.length) {
                         sectionElementTextHeight += innerSectionTextElement.height();
-                    }
-                    if (sectionElement.hasClass("ssb-page-section-layout-nav-hero-v3")) {
-                        var innerSectionText2Element = sectionElement.find(".ssb-nav-hero-text-full-wdith");
-                        if (innerSectionText2Element.length) {
-                            sectionElementTextHeight += innerSectionText2Element.height();
-                        }
-                    }
+                    } 
+                    var innerSectionText2Element = sectionElement.find(".ssb-nav-hero-text-full-wdith");
+                    if (innerSectionText2Element.length) {
+                        sectionElementTextHeight += innerSectionText2Element.height();
+                    } 
                     sectionElement.find(".single-testimonial .component-slider-image img").css("min-height", sectionElementTextHeight);
                     var windowWidth = angular.element($window).width();
                     var heightMargin = 80;
-					if(sectionElement.hasClass("ssb-page-section-layout-nav-hero-v3") && sectionElement.hasClass("ssb-page-section-layout-nav-hero-v4") && windowWidth < 768){
+                    if(windowWidth < 768){
 						sectionElement.find(".flex-container-absolute-column").css("min-height", sectionElementTextHeight);
 					}
 					if((sectionElement.hasClass("ssb-section-amm") && windowWidth>768 ) ||
-					   (sectionElement.hasClass("ssb-section-wmm") && windowWidth>768 && windowWidth<1025 )
-					){
-						if(sectionElement.hasClass("ssb-page-section-layout-nav-hero-v3")){ 
-							heightMargin+=30;
-						}
-						sectionElement.find("ul.slick-dots").css('top',(sectionElementTextHeight-heightMargin)+'px')
+					   (sectionElement.hasClass("ssb-section-wmm") &&  windowWidth>768 && windowWidth<1025 )){ 
+                            heightMargin+=30; 
+                            sectionElement.find(".flex-container-absolute-column").css("min-height", sectionElementTextHeight);
+						    sectionElement.find("ul.slick-dots").css('top',(sectionElementTextHeight-heightMargin)+'px');
 					}
                 }
             }

@@ -43,13 +43,13 @@
             <thead ng-class="{'bg-white': tableView == 'grid'}" sticky offset="65" sticky-class="sticky-header-class">
                 <tr>                        
                     <th st-sort="_id">Fingerprint</th>
-                    <th class="hidden">Last Seen</th>
+                    <th st-sort="server_time_dt">Last Seen</th>
                 </tr>
             </thead>
             <tbody>
-                <tr ng-repeat="fingerprint in displayedFingerprints" class="" ng-click="viewSingleProduct(product)">                        
+                <tr ng-repeat="fingerprint in displayedFingerprints" class="" ng-click="vm.viewFingerprintDetails(fingerprint)">
                     <td class="text-adjust-col"><strong>Fingerprint: </strong><span class="text-adjust-inner-content">{{fingerprint._id}}</span></td>
-                    <td class="text-adjust-col hidden"><strong>Last Seen: </strong><span class="text-adjust-inner-content">{{fingerprint.sessions[0].server_time_dt}}</span></td>
+                    <td class="text-adjust-col"><strong>Last Seen: </strong><span class="text-adjust-inner-content">{{fingerprint.server_time_dt | date:'MMM d yy'}}</span></td>
                 </tr>
             </tbody>
             <tfoot>
