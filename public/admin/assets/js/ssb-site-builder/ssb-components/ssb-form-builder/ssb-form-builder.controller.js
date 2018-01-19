@@ -72,7 +72,7 @@
 			currentElement.style.setProperty('border-color', "transparent", 'important');
 			currentElement.style.setProperty('border-width', '1px', 'important');
 			currentElement.style.setProperty('border-radius', '4px', 'important'); // old default is 4px
-			currentElement.style.setProperty('border-style', "solid", 'important');
+			currentElement.style.setProperty('border-style', "transparent", 'important');
 		}
 
 		function removeBorderStyleForNewForms(currentElement) { // for new
