@@ -118,6 +118,12 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         title: 'Customer Analytics',
         icon: 'ti-layout-media-left-alt',
         resolve: loadSequence('customerAnalyticsCtrl', 'customerService', 'userService', 'chartAnalyticsService','highcharts', 'highmaps', 'highmaps-lib', 'secTotime', 'dateRangePicker', 'ipCookie', 'analyticsWidgetStateService')
+    }).state('app.customerTraffic', {
+        url: '/customer-traffic',
+        template: "<customer-traffic-component></customer-traffic-component>",
+        title: 'Platform Traffic',
+        icon: 'ti-layout-media-left-alt',
+        resolve: loadSequence('customerTrafficController', 'trafficService')
     }).state('app.singleContact', {
         url: '/contacts/:contactId',
         template: "<contact-details-component></contact-details-component>",
