@@ -92,6 +92,7 @@
       "website": {
         "MAIN": "Website",
         "ANALYTICS": "Site Analytics",
+        "TRAFFIC": "Site Traffic",
         "PAGES": "Pages",
         "POSTS": "Blog Posts",
         "TEMPLATES": "Templates",
@@ -106,6 +107,7 @@
           "MAIN": "Platform",
           "MANAGE": "Customers",
           "ANALYTICS": "Platform Analytics",
+          "TRAFFIC": "Platform Traffic",
           "BROADCAST": "Broadcast Message",
           "JOBS": "Scheduled Jobs"
       },
