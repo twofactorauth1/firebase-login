@@ -3229,6 +3229,160 @@ module.exports = {
 
     },
 
+    getFingerprintActivities: function(accountId, userId, fingerprint, fn) {
+        var self = this;
+        self.log = _log;
+        self.log.trace('>> getFingerprintActivities');
+        // var queryObj = {
+        //   'accountId': accountId,
+        //   'contactId': contactId,
+        //   'activityType': {$nin: ['PAGE_VIEW', 'FORM_SUBMISSION']}
+        // };
+        var stageAry = [];
+        var match = {
+            $match:{
+                accountId:accountId,
+                fingerprint: fingerprint                
+            }
+        };
+        stageAry.push(match);
+        var lookup = {
+            $lookup: {
+                from: "page_events",
+                localField: "session_id",
+                foreignField: "session_id",
+                as: "page_events"
+            }
+        };
+        stageAry.push(lookup);
+        var lookup2 = {
+            $lookup:{
+                from: 'ping_events',
+                localField: 'session_id',
+                foreignField: 'session_id',
+                as: 'ping_events'
+            }
+        };
+        stageAry.push(lookup2);
+        var group = {
+            $group:{
+                _id: '$fingerprint',
+                sessions:{$push:'$$ROOT'}
+            }
+        };
+        stageAry.push(group);
+        dao.aggregateWithCustomStages(stageAry, $$.m.SessionEvent, function(err, results) {
+            if(err) {
+                self.log.error('Error getting analytics:', err);
+                fn(err);
+            } else {
+                self.log.trace('results:', JSON.stringify(results));
+                var _resultDetails = [];
+                async.forEachLimit(results, 1, function(result, resultCallback){
+                    var _result = {  _id: result._id,  session_id:[],
+                        ip_address:null,  maxmind:null,
+                        user_agent:null, timestamp:null,
+                        server_time:null,  subdomain:null,
+                        fingerprint:null,  pageEvents:[], pingEvents:[]
+                    };
+                    async.forEachLimit(result.sessions, 1, function(session, sessionCallback){
+                        if(!_.contains(_result.session_id, session.session_id)){
+                            _result.session_id.push(session.session_id);
+                        }
+                        if(!_result.ip_address) {
+                            _result.ip_address = session.ip_address;
+                        }
+                        if(!_result.fingerprint) {
+                            _result.fingerprint = session.fingerprint;
+                        }
+                        if(!_result.subdomain) {
+                            _result.subdomain = session.subdomain;
+                        }
+                        if(!_result.maxmind) {
+                            _result.maxmind = session.maxmind;
+                        }
+                        if(!_result.user_agent) {
+                            _result.user_agent = session.user_agent;
+                        }
+                        if(!_result.timestamp) {
+                            _result.timestamp = session.timestamp;
+                        }
+                        if(!_result.server_time) {
+                            _result.server_time = session.server_time;
+                        }
+                        if(session.page_events) {
+                            _result.pageEvents = _result.pageEvents.concat(session.page_events);
+                        }
+                        if(session.ping_events) {
+                            _result.pingEvents = _result.pingEvents.concat(session.ping_events);
+                        }
+
+                        dao.findMany({sessionId: session.session_id},  $$.m.ContactActivity, function(err, list) {
+                            if (err) {
+                                self.log.error('Error finding activities: ' + err);
+                                return sessionCallback();
+                            } else {
+                                if(list) {
+                                    _.each(list, function(activity){
+                                        _result.pageEvents.push({
+                                            activityType:activity.get("activityType"),
+                                            extraFields:activity.get("extraFields"),
+                                            start:activity.get("start"),
+                                            contactId: activity.get("contactId")
+                                        });
+                                    });
+                                }
+                                return sessionCallback();
+                            }
+                        });
+
+                    }, function(err){
+                        _result.session_id = _result.session_id.join(',');
+                        var _pageEvents = [];
+                        _.each(_result.pageEvents, function(pageEvent){
+                            var obj = {};
+                            if(pageEvent.server_time_dt) {
+                                obj.pageTime = pageEvent.server_time_dt;
+                            }
+                            if(pageEvent.url && pageEvent.url.source) {
+                                obj.pageRequested = pageEvent.url.source;
+                            }
+                            if(pageEvent.activityType){
+                                obj.activityType=pageEvent.activityType;
+                                obj.extraFields=pageEvent.extraFields;
+                                obj.pageTime = pageEvent.start;
+                                obj.contactId = pageEvent.contactId;
+                            } else {
+                                obj.activityType="PAGE_VIEW";
+                            }
+                            _pageEvents.push(obj);
+                        });
+                        
+                        _result.pageEvents = _.sortBy(_pageEvents, function(p) {
+                            return p.pageTime;
+                        });
+                        _result.pingEvents = _.sortBy(_result.pingEvents, function(p){
+                            return -p.server_time;
+                        });
+                        if(_result.pingEvents.length > 1) {
+                            _result.difference = Math.round(_result.pingEvents[0].server_time - _result.pingEvents[_result.pingEvents.length -1].server_time);
+                        } else {
+                            _result.difference = 0;
+                        }
+                        delete _result.pingEvents;
+                        
+                        _resultDetails.push(_result);
+                        resultCallback();
+                    });
+                }, function(err){
+                    _resultDetails = _.sortBy(_resultDetails, function(result){return -result.server_time;});
+                    self.log.trace(accountId, userId, '<< getFingerprintActivities');
+                    fn(err, _resultDetails);
+                });
+            }
+        });
+    },
+
     /*
      * If duration is 7 days or less, granularity will be 'hours'.  Else 'days'
      */

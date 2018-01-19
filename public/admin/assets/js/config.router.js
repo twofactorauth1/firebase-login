@@ -127,7 +127,7 @@ app.config(['$stateProvider', '$urlRouterProvider', '$controllerProvider', '$com
 			}).state('app.website.traffic', {
 				url: '/site-traffic',
 				template: "<site-traffic-component></site-traffic-component>",
-				title: 'Anonymous Contact',
+				title: 'Site Traffic',
 				icon: 'ti-layout-media-left-alt',
 				resolve: loadSequence('siteTrafficController', 'trafficService')
 			}).state('app.anonymousContact', {
@@ -135,7 +135,7 @@ app.config(['$stateProvider', '$urlRouterProvider', '$controllerProvider', '$com
 				template: "<anonymous-contact-details-component></anonymous-contact-details-component>",
 				title: 'Anonymous Contact',
 				icon: 'ti-layout-media-left-alt',
-				resolve: loadSequence('contactService', 'ngMap', 'offset', 'assetsService', 'toasterService', 'orderService','spectrum', 'organizationService')
+				resolve: loadSequence('anonymousContactDetailsController', 'anonymousContactActivityController', 'contactService', 'ngMap', 'offset', 'assetsService', 'toasterService','spectrum', 'organizationService', 'trafficService')
 			}).state('app.singleCustomer', {
 				url: '/customers/:customerId',
 				templateUrl: "/admin/assets/views/customer-detail.html",

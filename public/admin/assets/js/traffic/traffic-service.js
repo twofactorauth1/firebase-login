@@ -13,7 +13,7 @@
         
         trafficService.loading = {value:0};
         trafficService.getTrafficFingerprints = getTrafficFingerprints;
-
+        trafficService.getFingerprintSessionActivities = getFingerprintSessionActivities;
         /**
          * A wrapper around API requests
          * @param {function} fn - callback
@@ -33,6 +33,19 @@
 
 
         function getTrafficFingerprints() {            
+            function success(data) {
+                
+            }
+
+            function error(error) {
+                console.error('TrafficService getTrafficFingerprints error: ', JSON.stringify(error));
+            }
+
+            return trafficRequest($http.get(baseAnalyticsAPIUrl + ["traffic", "list", "fingerprint"].join("/")).success(success).error(error));
+        }
+
+
+        function getFingerprintSessionActivities(fingerprintId){
             function success(data) {
                 
             }
