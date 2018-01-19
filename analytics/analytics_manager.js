@@ -3216,7 +3216,7 @@ module.exports = {
                                 _id: result._id,
                                 server_time_dt: result.sessions[0].server_time_dt,
                                 accountId: result.sessions[0].accountId,
-                                subdomain: result.sessions[0].subdomain,
+                                subdomain: result.sessions[0].subdomain || "",
                                 orgId: result.sessions[0].orgId,
                                 user_agent: result.sessions[0].user_agent
                             })
