@@ -849,7 +849,12 @@ app.constant('JS_REQUIRES', {
 		'ssbPostPageFilter': 'assets/js/ssb-site-builder/ssb-components/ssb-filters/ssb-post-page-filter.js',
 		//*** Directives
 		'mediaModal': 'assets/js/directives/mediadirective.js',
-		'fixedHeaderTable': 'assets/js/directives/fixed-header-table.js'	
+		'fixedHeaderTable': 'assets/js/directives/fixed-header-table.js',
+
+		// Site Traffic
+
+		'siteTrafficController': 'assets/js/traffic/site-traffic/site-traffic.controller.js',
+		'trafficService': 'assets/js/traffic/traffic-service.js'
 
 	},
 	//*** angularJS Modules

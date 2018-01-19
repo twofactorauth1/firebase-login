@@ -3171,6 +3171,64 @@ module.exports = {
 
     },
 
+    getTrafficFingerprints: function(accountId, userId, isAggregate, orgId, fn) {
+        var self = this;
+        self.log = _log;
+        self.log.trace(accountId, userId, '>> getTrafficFingerprints');
+        
+        var stageAry = [];
+        var match = {
+            $match:{
+                accountId: accountId               
+            }
+        };
+        if(isAggregate === true) {
+            delete match.$match.accountId;
+        }
+        if(orgId !== null) {
+            match.$match.orgId = orgId;
+        }
+
+
+        stageAry.push(match);
+        self._addAccountFilterByID(accountId, userId, isAggregate, match, function(err, newMatch){            
+            var sort = {
+                $sort:{'server_time':-1}
+            };
+            var group = {
+                $group:{
+                    _id: '$fingerprint',                    
+                    sessions:{$push:'$$ROOT'}
+                }
+            };
+            stageAry.push(sort);
+            stageAry.push(group);
+
+            dao.aggregateWithCustomStages(stageAry, $$.m.SessionEvent, function(err, results) {
+                if(err) {
+                    self.log.error('Error getting fingerprints:', err);
+                    fn(err);
+                } else {
+                    var resultArr = [];
+                    _.each(results, function(result){
+                        if(result.sessions && result.sessions.length){
+                            resultArr.push({
+                                _id: result._id,
+                                server_time_dt: result.sessions[0].server_time_dt,
+                                accountId: result.sessions[0].accountId,
+                                subdomain: result.sessions[0].subdomain,
+                                orgId: result.sessions[0].orgId,
+                                user_agent: result.sessions[0].user_agent
+                            })
+                        }
+                    })
+                    fn(err, resultArr);
+                }
+            });
+        });
+
+    },
+
     /*
      * If duration is 7 days or less, granularity will be 'hours'.  Else 'days'
      */
