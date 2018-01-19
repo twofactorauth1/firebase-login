@@ -104,6 +104,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url('admin/reports/daily404s'), this.isAuthAndSubscribedApi.bind(this), this.getAdminDaily404s.bind(this));
 
         app.get(this.url('traffic/list/fingerprint'), this.isAuthAndSubscribedApi.bind(this), this.getTrafficFingerprints.bind(this));
+        app.get(this.url('traffic/:fingerprintId/activities'), this.isAuthAndSubscribedApi.bind(this), this.getFingerprintActivities.bind(this));
 
     },
 
@@ -2959,6 +2960,20 @@ _.extend(api.prototype, baseApi.prototype, {
         });
 
     },
+
+    getFingerprintActivities: function(req, resp) {
+        var self = this;
+        var userId = self.userId(req);
+        var accountId = self.accountId(req);
+        var fingerprintId = req.params.fingerprintId;
+        self.log.trace(accountId, userId, '>> getFingerprintActivities');
+
+        analyticsManager.getFingerprintActivities(accountId, userId, fingerprintId, function(err, value){
+            self.log.trace(accountId, userId, '<< getFingerprintActivities');
+            self.sendResultOrError(resp, err, value, 'Error getting fingerprint activities');
+        });
+
+    }
 });
 
 module.exports = new api();

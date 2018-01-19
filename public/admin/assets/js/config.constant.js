@@ -851,6 +851,10 @@ app.constant('JS_REQUIRES', {
 		'mediaModal': 'assets/js/directives/mediadirective.js',
 		'fixedHeaderTable': 'assets/js/directives/fixed-header-table.js',
 
+		// Anonymous contact
+
+		'anonymousContactDetailsController': 'assets/js/contact-details/anonymous/anonymous-contact-details.controller.js',
+		'anonymousContactActivityController': 'assets/js/contact-details/anonymous/anonymous-contact-activity/anonymous-contact-activity.controller.js',
 		// Site Traffic
 
 		'siteTrafficController': 'assets/js/traffic/site-traffic/site-traffic.controller.js',
