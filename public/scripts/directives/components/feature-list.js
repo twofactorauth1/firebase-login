@@ -17,7 +17,7 @@ app.directive('featureListComponent', [function () {
 					}
 					else
 						color = $(".list-features-" + component._id + " li.active .fr-view span:not('.fr-marker'):not('.fr-placeholder'):not(:empty):last").css("color");
-					
+
 					if (!color) {
 						color = $(".list-features-" + component._id + " li.active").css("color");
 					}
@@ -47,7 +47,7 @@ app.directive('featureListComponent', [function () {
 				styleString += 'color: ' + component.accordionIconColor;
 				return styleString;
 			}
-			
+
 			scope.featureStyle = function (component) {
 				var styleString = " ";
 				if (component && component.blockBorder && component.blockBorder.show && component.blockBorder.color) {
@@ -61,7 +61,11 @@ app.directive('featureListComponent', [function () {
 				}
 				return styleString;
 			};
-			scope.setSelectedFeatureIndex = function (index) {
+			scope.setSelectedFeatureIndex = function (index, id) {
+                if(id !== undefined){
+                    $(".list-features-" + id + " li.active").removeClass("active");
+                    $(".list-features-" + id).children().eq(index).addClass("active");
+                }
 				scope.loading = true;
 				scope.features.featureIndex = index;
 				scope.loading = false;
@@ -84,8 +88,8 @@ app.directive('featureListComponent', [function () {
 				}
 				return styleString;
 			};
-			scope.updateFeatureClass=function(styles,index){  
-				var visibility=true; 
+			scope.updateFeatureClass=function(styles,index){
+				var visibility=true;
 				if(styles && styles['features[features/featureIndex]/media'] && styles['features[features/featureIndex]/media'][index] ){
 					var mediaObj= styles['features[features/featureIndex]/media'][index];
 					if(mediaObj.visibility===false || mediaObj.showOnlyMobile) {
@@ -97,24 +101,24 @@ app.directive('featureListComponent', [function () {
 			var move=100;
 			scope.moveLeft = function (){
 				var view = $(".list-features-"+scope.component._id);
-				scope.scroll.element = { left:true, right:true } ; 
+				scope.scroll.element = { left:true, right:true } ;
 				view.animate( { scrollLeft: '-=100' }, 400);
-				if(view.scrollLeft()<1){ 
+				if(view.scrollLeft()<1){
 					scope.scroll.element.left = false ;
-				} 
+				}
 			}
 			scope.moveRight = function (){
 				scope.scroll.started=1;
 				var view = $(".list-features-"+scope.component._id);
 				scope.scroll.element = { left:true, right:true } ;
 				view.animate({ scrollLeft: '+=100' }, 400);
-				if((view[0].scrollWidth-view.width()) <= view.scrollLeft()) { 
+				if((view[0].scrollWidth-view.width()) <= view.scrollLeft()) {
 					scope.scroll.element.right = false ;
-				} 
-			}  
+				}
+			}
 			scope.$watch(function(){
 				var view = $(".list-features-"+scope.component._id);
-				if(view.length && window.innerWidth<426){   
+				if(view.length && window.innerWidth<426){
 					return  (view.width() - view[0].scrollWidth) < 0;
 				}
 				return false;
