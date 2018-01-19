@@ -124,6 +124,18 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         title: 'Single Contact',
         icon: 'ti-layout-media-left-alt',
         resolve: loadSequence('contactService', 'ngMap', 'offset', 'assetsService', 'toasterService', 'orderService','spectrum', 'organizationService')
+    }).state('app.website.traffic', {
+        url: '/site-traffic',
+        template: "<site-traffic-component></site-traffic-component>",
+        title: 'Site Traffic',
+        icon: 'ti-layout-media-left-alt',
+        resolve: loadSequence('siteTrafficController', 'trafficService')
+    }).state('app.anonymousContact', {
+        url: '/contacts/fingerprint/:fingerprintId',
+        template: "<anonymous-contact-details-component></anonymous-contact-details-component>",
+        title: 'Anonymous Contact',
+        icon: 'ti-layout-media-left-alt',
+        resolve: loadSequence('anonymousContactDetailsController', 'anonymousContactActivityController', 'contactService', 'ngMap', 'offset', 'assetsService', 'toasterService','spectrum', 'organizationService', 'trafficService')
     }).state('app.singleCustomer', {
         url: '/customers/:customerId',
         templateUrl: "/admin/assets/views/customer-detail.html",
