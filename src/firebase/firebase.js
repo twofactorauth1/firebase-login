@@ -1,4 +1,4 @@
-import firebase from 'firebase/app';
+import firebase from 'firebase';
 import 'firebase/auth';
 import 'firebase/database';
 
@@ -23,15 +23,17 @@ const devConfig = {
 const config = process.env.NODE_ENV === 'production'
   ? prodConfig
   : devConfig;
-
+let initializedApp;
 if (!firebase.apps.length) {
-  firebase.initializeApp(config);
+   firebase.initializeApp(config);
 }
 
+console.log('initializedApp',initializedApp);
 const db = firebase.database().ref('mvp');
 const auth = firebase.auth();
 
 export {
   db,
   auth,
+  firebase
 };
