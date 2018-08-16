@@ -24,7 +24,7 @@ app.directive('featureListComponent', ["$window", "$timeout", function ($window,
 
 				var newFeature = {
 					"top": "<div style='text-align:center'><span class=\"fa fa-arrow-right\" style=\"font-size:96px;\">&zwnj;</span></div>",
-					"content": "<div style=\"text-align: center;\"><br><span style=\"font-size:24px;\">Feature Title</span></div><div style=\"text-align: center;\"><br>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nisi ab, placeat. Officia qui molestiae incidunt est adipisci.</div><div style=\"text-align: center;\"><br><a class=\"btn ssb-theme-btn\" data-cke-saved-href=\"http://\" href=\"http://\">Learn More</a></div>"
+					"content": "<div style=\"text-align: center;\"><br><span style=\"font-size:24px;\">Feature Title</span></div><div style=\"text-align: center;\"><br>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nisi ab, placeat. Officia qui molestiae incidunt est adipisci.</div><div style=\"text-align: center;\"><br><a class=\"btn ssb-theme-btn\" data-cke-saved-href=\"http://\" href=\"http://\"><span>Learn More</a>&nbsp;</span></div>"
 				};
 
 				if(scope.component.version == 7){
@@ -119,7 +119,7 @@ app.directive('featureListComponent', ["$window", "$timeout", function ($window,
 					}
 					else
 						color = $(".list-features-" + component._id + " li.active .fr-view span:not('.fr-marker'):not('.fr-placeholder'):not(:empty):last").css("color");
-					
+
 					if (!color) {
 						color = $(".list-features-" + component._id + " li.active").css("color");
 					}
